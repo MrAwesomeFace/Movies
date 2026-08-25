@@ -2,22 +2,7 @@
 // Updated by BW's Movie Catalog Updater
 
 const movies = [
-  {
-    "title": "007: A View to a Kill",
-    "type": "movie",
-    "tmdbId": 707,
-    "poster": "https://image.tmdb.org/t/p/w500/arJF829RP9cYvh0NU70dC5TtXSa.jpg",
-    "year": "1985",
-    "runtime": "131m",
-    "genre": "Adventure / Action / Thriller",
-    "director": "John Glen",
-    "cast": "Roger Moore, Tanya Roberts, Christopher Walken, Grace Jones, Patrick Macnee, Patrick Bauchau",
-    "synopsis": "A newly-developed microchip designed by Zorin Industries for the British Government that can survive the electromagnetic radiation caused by a nuclear explosion has landed in the hands of the KGB. James Bond must find out how and why. His suspicions soon lead him to big industry leader Max Zorin who forms a plan to destroy his only competition in Silicon Valley by triggering a massive earthquake in the San Francisco Bay.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
+
   {
     "title": "007: Casino Royale",
     "tmdbTitle": "Casino Royale",
@@ -35,22 +20,7 @@ const movies = [
     ],
     "digital": []
   },
-  {
-    "title": "007: Diamonds Are Forever",
-    "type": "movie",
-    "tmdbId": 681,
-    "poster": "https://image.tmdb.org/t/p/w500/ooDT0eKrWCxJCsn9JehPkD0QYNj.jpg",
-    "year": "1971",
-    "runtime": "120m",
-    "genre": "Action / Thriller",
-    "director": "Guy Hamilton",
-    "cast": "Sean Connery, Jill St. John, Charles Gray, Lana Wood, Jimmy Dean, Bruce Cabot",
-    "synopsis": "Diamonds are stolen only to be sold again in the international market. James Bond infiltrates a smuggling mission to find out who's guilty. The mission takes him to Las Vegas where Bond meets his archenemy Blofeld.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
+
   {
     "title": "007: Die Another Day",
     "tmdbTitle": "Die Another Day",
@@ -68,182 +38,8 @@ const movies = [
     ],
     "digital": []
   },
-  {
-    "title": "007: Dr. No",
-    "type": "movie",
-    "tmdbId": 646,
-    "poster": "https://image.tmdb.org/t/p/w500/9zCOLJmLNst0sCPZlkW1IRoH65E.jpg",
-    "year": "1962",
-    "runtime": "110m",
-    "genre": "Adventure / Action / Thriller",
-    "director": "Terence Young",
-    "cast": "Sean Connery, Ursula Andress, Joseph Wiseman, Jack Lord, Anthony Dawson, Zena Marshall",
-    "synopsis": "Agent 007 battles mysterious Dr. No, a scientific genius bent on destroying the U.S. space program. As the countdown to disaster begins, Bond must go to Jamaica, where he encounters beautiful Honey Ryder, to confront a megalomaniacal villain in his massive island headquarters.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
-  {
-    "title": "007: For Your Eyes Only",
-    "type": "movie",
-    "tmdbId": 699,
-    "poster": "https://image.tmdb.org/t/p/w500/xV4Nnr6DjjERlqNikqDQX8LUgua.jpg",
-    "year": "1981",
-    "runtime": "128m",
-    "genre": "Adventure / Action / Thriller",
-    "director": "John Glen",
-    "cast": "Roger Moore, Carole Bouquet, Chaim Topol, Julian Glover, Lynn-Holly Johnson, Cassandra Harris",
-    "synopsis": "A British spy ship has sunk and on board was a hi-tech encryption device. James Bond is sent to find the device that holds British launching instructions before the enemy Soviets get to it first.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
-  {
-    "title": "007: From Russia with Love",
-    "type": "movie",
-    "tmdbId": 657,
-    "poster": "https://image.tmdb.org/t/p/w500/zx4V17FP8oclNvOpTgs2iCCtiYk.jpg",
-    "year": "1963",
-    "runtime": "115m",
-    "genre": "Action / Thriller / Adventure",
-    "director": "Terence Young",
-    "cast": "Sean Connery, Daniela Bianchi, Pedro Armendáriz, Robert Shaw, Lotte Lenya, Bernard Lee",
-    "synopsis": "Agent 007 is back in the second installment of the James Bond series, this time battling a secret crime organization known as SPECTRE. Russians Rosa Klebb and Kronsteen are out to snatch a decoding device known as the Lektor, using the ravishing Tatiana to lure Bond into helping them. Bond willingly travels to meet Tatiana in Istanbul, where he must rely on his wits to escape with his life in a series of deadly encounters with the enemy.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
-  {
-    "title": "007: GoldenEye",
-    "type": "movie",
-    "tmdbId": 710,
-    "poster": "https://image.tmdb.org/t/p/w500/z0ljRnNxIO7CRBhLEO0DvLgAFPR.jpg",
-    "year": "1995",
-    "runtime": "130m",
-    "genre": "Adventure / Action / Thriller",
-    "director": "Martin Campbell",
-    "cast": "Pierce Brosnan, Sean Bean, Izabella Scorupco, Famke Janssen, Joe Don Baker, Judi Dench",
-    "synopsis": "When a powerful secret defense system is stolen, James Bond is assigned to stop a Russian crime syndicate from using it.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
-  {
-    "title": "007: Goldfinger",
-    "type": "movie",
-    "tmdbId": 658,
-    "poster": "https://image.tmdb.org/t/p/w500/aKNFzaqQgPzsGXnsMc4kJH5hFIV.jpg",
-    "year": "1964",
-    "runtime": "110m",
-    "genre": "Adventure / Action / Thriller",
-    "director": "Guy Hamilton",
-    "cast": "Sean Connery, Gert Fröbe, Honor Blackman, Harold Sakata, Shirley Eaton, Tania Mallet",
-    "synopsis": "Special agent 007 comes face to face with one of the most notorious villains of all time, and now he must outwit and outgun the powerful tycoon to prevent him from cashing in on a devious scheme to raid Fort Knox -- and obliterate the world's economy.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
-  {
-    "title": "007: Licence to Kill",
-    "type": "movie",
-    "tmdbId": 709,
-    "poster": "https://image.tmdb.org/t/p/w500/8nzJve63EXA79HGAyidZwivZrQ2.jpg",
-    "year": "1989",
-    "runtime": "133m",
-    "genre": "Adventure / Action / Thriller",
-    "director": "John Glen",
-    "cast": "Timothy Dalton, Carey Lowell, Robert Davi, Talisa Soto, Anthony Zerbe, Frank McRae",
-    "synopsis": "After capturing the notorious drug lord Franz Sanchez, Bond's close friend and former CIA agent Felix Leiter is left for dead and his wife is murdered. Bond goes rogue and seeks vengeance on those responsible, as he infiltrates Sanchez's organization from the inside.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
-  {
-    "title": "007: Live and Let Die",
-    "type": "movie",
-    "tmdbId": 253,
-    "poster": "https://image.tmdb.org/t/p/w500/39qkrjqMZs6utwNmihVImC3ghas.jpg",
-    "year": "1973",
-    "runtime": "121m",
-    "genre": "Adventure / Action / Thriller",
-    "director": "Guy Hamilton",
-    "cast": "Roger Moore, Yaphet Kotto, Jane Seymour, Clifton James, Julius Harris, Geoffrey Holder",
-    "synopsis": "James Bond must investigate a mysterious murder case of a British agent in New Orleans. Soon he finds himself up against a gangster boss named Mr. Big.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
-  {
-    "title": "007: Moonraker",
-    "type": "movie",
-    "tmdbId": 698,
-    "poster": "https://image.tmdb.org/t/p/w500/6LrJdXNmu5uHOVALZxVYd44Lva0.jpg",
-    "year": "1979",
-    "runtime": "126m",
-    "genre": "Action / Adventure / Thriller / Science Fiction",
-    "director": "Lewis Gilbert",
-    "cast": "Roger Moore, Lois Chiles, Michael Lonsdale, Richard Kiel, Corinne Cléry, Bernard Lee",
-    "synopsis": "After Drax Industries' Moonraker space shuttle is hijacked, secret agent James Bond is assigned to investigate, traveling to California to meet the company's owner, the mysterious Hugo Drax. With the help of scientist Dr. Holly Goodhead, Bond soon uncovers Drax's nefarious plans for humanity, all the while fending off an old nemesis, Jaws, and venturing to Venice, Rio, the Amazon...and even outer space.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
-  {
-    "title": "007: No Time to Die",
-    "type": "movie",
-    "tmdbId": 370172,
-    "poster": "https://image.tmdb.org/t/p/w500/iUgygt3fscRoKWCV1d0C7FbM9TP.jpg",
-    "year": "2021",
-    "runtime": "163m",
-    "genre": "Action / Thriller / Adventure",
-    "director": "Cary Joji Fukunaga",
-    "cast": "Daniel Craig, Léa Seydoux, Rami Malek, Lashana Lynch, Ralph Fiennes, Ben Whishaw",
-    "synopsis": "Bond has left active service and is enjoying a tranquil life in Jamaica. His peace is short-lived when his old friend Felix Leiter from the CIA turns up asking for help. The mission to rescue a kidnapped scientist turns out to be far more treacherous than expected, leading Bond onto the trail of a mysterious villain armed with dangerous new technology.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
-  {
-    "title": "007: Octopussy",
-    "type": "movie",
-    "tmdbId": 700,
-    "poster": "https://image.tmdb.org/t/p/w500/yoosZitM9igSk3Sd0sBXIhKlAh1.jpg",
-    "year": "1983",
-    "runtime": "131m",
-    "genre": "Adventure / Action / Thriller",
-    "director": "John Glen",
-    "cast": "Roger Moore, Maud Adams, Louis Jourdan, Kristina Wayborn, Kabir Bedi, Steven Berkoff",
-    "synopsis": "James Bond is sent to investigate after a fellow “00” agent is found dead with a priceless Fabergé egg. Bond follows the mystery and uncovers a smuggling scandal and a Russian General who wants to provoke a new World War.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
-  {
-    "title": "007: On Her Majesty's Secret Service",
-    "type": "movie",
-    "tmdbId": 668,
-    "poster": "https://image.tmdb.org/t/p/w500/m3KfbxvqaiAvRJ6MpguA3GuLdDQ.jpg",
-    "year": "1969",
-    "runtime": "142m",
-    "genre": "Adventure / Action / Thriller",
-    "director": "Peter R. Hunt",
-    "cast": "George Lazenby, Diana Rigg, Telly Savalas, Gabriele Ferzetti, Ilse Steppat, Bernard Lee",
-    "synopsis": "With the help of Marc-Ange Draco, head of the Unione Corse crime syndicate, and Draco's troubled daughter Tracy, James Bond tracks his archnemesis, Ernst Stravro Blofeld, to a mountaintop retreat in the Swiss Alps, where he is training an army of beautiful, lethal women.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
+
+ 
   {
     "title": "007: Skyfall",
     "tmdbTitle": "Skyfall",
@@ -279,118 +75,7 @@ const movies = [
     ],
     "digital": []
   },
-  {
-    "title": "007: The Living Daylights",
-    "type": "movie",
-    "tmdbId": 708,
-    "poster": "https://image.tmdb.org/t/p/w500/1oRlmWX9hewpn2B44wawBjHd7dx.jpg",
-    "year": "1987",
-    "runtime": "130m",
-    "genre": "Action / Adventure / Thriller",
-    "director": "John Glen",
-    "cast": "Timothy Dalton, Maryam D'Abo, Joe Don Baker, Art Malik, John Rhys-Davies, Jeroen Krabbé",
-    "synopsis": "After a defecting Russian general reveals a plot to assassinate foreign spies, James Bond is assigned a secret mission to dispatch the new head of the KGB to prevent an escalation of tensions between the Soviet Union and the West.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
-  {
-    "title": "007: The Man with the Golden Gun",
-    "type": "movie",
-    "tmdbId": 682,
-    "poster": "https://image.tmdb.org/t/p/w500/xVkbKwGnBVNQ122GN5bCTMyPbWz.jpg",
-    "year": "1974",
-    "runtime": "125m",
-    "genre": "Adventure / Action / Thriller",
-    "director": "Guy Hamilton",
-    "cast": "Roger Moore, Christopher Lee, Britt Ekland, Maud Adams, Hervé Villechaize, Clifton James",
-    "synopsis": "Cool government operative James Bond searches for a stolen invention that can turn the sun's heat into a destructive weapon. He soon crosses paths with the menacing Francisco Scaramanga, a hitman so skilled he has a seven-figure working fee. Bond then joins forces with the swimsuit-clad Mary Goodnight, and together they track Scaramanga to a Thai tropical isle hideout where the killer-for-hire lures the slick spy into a deadly maze for a final duel.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
-  {
-    "title": "007: The Spy Who Loved Me",
-    "type": "movie",
-    "tmdbId": 691,
-    "poster": "https://image.tmdb.org/t/p/w500/3ZxHKFxMYvAko680DsRgAZKWcLi.jpg",
-    "year": "1977",
-    "runtime": "125m",
-    "genre": "Adventure / Action / Thriller",
-    "director": "Lewis Gilbert",
-    "cast": "Roger Moore, Barbara Bach, Curd Jürgens, Richard Kiel, Caroline Munro, Walter Gotell",
-    "synopsis": "Russian and British submarines with nuclear missiles on board both vanish from sight without a trace. England and Russia both blame each other as James Bond tries to solve the riddle of the disappearing ships. But the KGB also has an agent on the case.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
-  {
-    "title": "007: The World Is Not Enough",
-    "type": "movie",
-    "tmdbId": 36643,
-    "poster": "https://image.tmdb.org/t/p/w500/wCb2msgoZPK01WIqry24M4xsM73.jpg",
-    "year": "1999",
-    "runtime": "128m",
-    "genre": "Adventure / Action / Thriller",
-    "director": "Michael Apted",
-    "cast": "Pierce Brosnan, Sophie Marceau, Robert Carlyle, Denise Richards, Robbie Coltrane, Judi Dench",
-    "synopsis": "Greed, revenge, world dominance and high-tech terrorism – it's all in a day's work for Bond, who's on a mission to protect a beautiful oil heiress from a notorious terrorist. In a race against time that culminates in a dramatic submarine showdown, Bond works to defuse the international power struggle that has the world's oil supply hanging in the balance.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
-  {
-    "title": "007: Thunderball",
-    "type": "movie",
-    "tmdbId": 660,
-    "poster": "https://image.tmdb.org/t/p/w500/wCc4qllaTDsQN8zgGkAgQrKO6N9.jpg",
-    "year": "1965",
-    "runtime": "130m",
-    "genre": "Adventure / Action / Thriller",
-    "director": "Terence Young",
-    "cast": "Sean Connery, Claudine Auger, Adolfo Celi, Luciana Paluzzi, Rik Van Nutter, Guy Doleman",
-    "synopsis": "A criminal organization has obtained two nuclear bombs and are asking for a 100 million pound ransom in the form of diamonds in seven days or they will use the weapons. The secret service sends James Bond to the Bahamas to once again save the world.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
-  {
-    "title": "007: Tomorrow Never Dies",
-    "type": "movie",
-    "tmdbId": 714,
-    "poster": "https://image.tmdb.org/t/p/w500/gZm002w7q9yLOkltxT76TWGfdZX.jpg",
-    "year": "1997",
-    "runtime": "119m",
-    "genre": "Adventure / Action / Thriller",
-    "director": "Roger Spottiswoode",
-    "cast": "Pierce Brosnan, Jonathan Pryce, Michelle Yeoh, Teri Hatcher, Ricky Jay, Götz Otto",
-    "synopsis": "A deranged media mogul is staging international incidents to pit the world's superpowers against each other. Now James Bond must take on this evil mastermind in an adrenaline-charged battle to end his reign of terror and prevent global pandemonium.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
-  {
-    "title": "007: You Only Live Twice",
-    "type": "movie",
-    "tmdbId": 667,
-    "poster": "https://image.tmdb.org/t/p/w500/gIhS0VC7YzI8pj6zfS3KxsxV0dS.jpg",
-    "year": "1967",
-    "runtime": "117m",
-    "genre": "Action / Thriller / Adventure",
-    "director": "Lewis Gilbert",
-    "cast": "Sean Connery, Akiko Wakabayashi, Mie Hama, Tetsuro Tamba, Teru Shimada, Karin Dor",
-    "synopsis": "A mysterious spacecraft captures Russian and American space capsules and brings the two superpowers to the brink of war. James Bond investigates the case in Japan and comes face to face with his archenemy Blofeld.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
+  
   {
     "title": "101 Dalmatians",
     "tmdbTitle": "101 Dalmatians",
@@ -408,22 +93,7 @@ const movies = [
     ],
     "digital": []
   },
-  {
-    "title": "2 Fast 2 Furious",
-    "type": "movie",
-    "tmdbId": 584,
-    "poster": "https://image.tmdb.org/t/p/w500/6nDZExrDKIXvSAghsFKVFRVJuSf.jpg",
-    "year": "2003",
-    "runtime": "108m",
-    "genre": "Action / Crime / Thriller",
-    "director": "John Singleton",
-    "cast": "Paul Walker, Tyrese Gibson, Eva Mendes, Cole Hauser, Ludacris, James Remar",
-    "synopsis": "It's a major double-cross when former police officer Brian O'Conner teams up with his ex-con buddy Roman Pearce to transport a shipment of \"dirty\" money for shady Miami-based import-export dealer Carter Verone. But the guys are actually working with undercover agent Monica Fuentes to bring Verone down.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
+
   {
     "title": "21",
     "tmdbTitle": "21",
@@ -826,23 +496,7 @@ const movies = [
     ],
     "digital": []
   },
-  {
-    "title": "Ace Ventura Collection",
-    "tmdbTitle": "",
-    "type": "misc",
-    "tmdbId": null,
-    "poster": "",
-    "year": "",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
-    "synopsis": "",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
+
   {
     "title": "Ace Ventura: Pet Detective",
     "type": "movie",
@@ -3285,57 +2939,7 @@ const movies = [
     ],
     "digital": []
   },
-  {
-    "title": "Despicable Me",
-    "tmdbTitle": "Despicable Me",
-    "type": "movie",
-    "tmdbId": 20352,
-    "poster": "https://image.tmdb.org/t/p/w500/b1BT309QWjtFUlJPLmXmrcHOWEL.jpg",
-    "year": "2010",
-    "runtime": "95m",
-    "genre": "Animation / Comedy / Crime / Science Fiction / Family",
-    "director": "Pierre Coffin, Chris Renaud",
-    "cast": "Steve Carell, Jason Segel, Russell Brand, Julie Andrews, Will Arnett, Kristen Wiig",
-    "synopsis": "Determined to prove he's the world's greatest supervillain, Gru hatches an audacious plan to steal the Moon. To pull it off, he adopts three orphaned girls—Margo, Edith, and Agnes—intending to use them as pawns in his scheme. But the unexpected bond they form forces him to question the criminal life he's always known.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
-  {
-    "title": "Despicable Me 2",
-    "tmdbTitle": "Despicable Me 2",
-    "type": "movie",
-    "tmdbId": 93456,
-    "poster": "https://image.tmdb.org/t/p/w500/5Fh4NdoEnCjCK9wLjdJ9DJNFl2b.jpg",
-    "year": "2013",
-    "runtime": "98m",
-    "genre": "Animation / Comedy / Family / Science Fiction",
-    "director": "Chris Renaud, Pierre Coffin",
-    "cast": "Steve Carell, Kristen Wiig, Benjamin Bratt, Miranda Cosgrove, Dana Gaier Ellis, Elsie Fisher",
-    "synopsis": "Gru is recruited by the Anti-Villain League to help deal with a powerful new super criminal.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
-  {
-    "title": "Despicable Me 3",
-    "tmdbTitle": "Despicable Me 3",
-    "type": "movie",
-    "tmdbId": 324852,
-    "poster": "https://image.tmdb.org/t/p/w500/e72KCMHNkbZ6USRJmABeqwmaJ5n.jpg",
-    "year": "2017",
-    "runtime": "90m",
-    "genre": "Action / Animation / Comedy / Family / Adventure",
-    "director": "Pierre Coffin, Kyle Balda",
-    "cast": "Steve Carell, Kristen Wiig, Trey Parker, Miranda Cosgrove, Dana Gaier Ellis, Nhev Scharrel",
-    "synopsis": "Gru and his wife Lucy must stop former '80s child star Balthazar Bratt from achieving world domination.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
+  
   {
     "title": "The Devil's Advocate",
     "type": "movie",
@@ -5317,23 +4921,7 @@ const movies = [
     ],
     "digital": []
   },
-  {
-    "title": "Harry Potter - Hogwarts Collection",
-    "tmdbTitle": "",
-    "type": "misc",
-    "tmdbId": null,
-    "poster": "",
-    "year": "",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
-    "synopsis": "",
-    "physical": [
-      "Blu-ray + DVD"
-    ],
-    "digital": []
-  },
+
   {
     "title": "Heartbreakers",
     "tmdbTitle": "Heartbreakers",
@@ -7852,23 +7440,7 @@ const movies = [
     ],
     "digital": []
   },
-  {
-    "title": "Minions",
-    "tmdbTitle": "Minions",
-    "type": "movie",
-    "tmdbId": 211672,
-    "poster": "https://image.tmdb.org/t/p/w500/dr02BdCNAUPVU07aOodwPYv6HCf.jpg",
-    "year": "2015",
-    "runtime": "91m",
-    "genre": "Family / Animation / Adventure / Comedy",
-    "director": "Kyle Balda, Pierre Coffin",
-    "cast": "Sandra Bullock, Jon Hamm, Michael Keaton, Allison Janney, Steve Coogan, Jennifer Saunders",
-    "synopsis": "Minions Stuart, Kevin and Bob are recruited by Scarlet Overkill, a super-villain who, alongside her inventor husband Herb, hatches a plot to take over the world.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
+
   {
     "title": "Minority Report",
     "tmdbTitle": "Minority Report",
@@ -8735,23 +8307,7 @@ const movies = [
     ],
     "digital": []
   },
-  {
-    "title": "P.S. I Love You",
-    "tmdbTitle": "P.S. I Love You",
-    "type": "movie",
-    "tmdbId": 6023,
-    "poster": "https://image.tmdb.org/t/p/w500/x6M9nlTpgpI4AOw0tMkOAVbhL5z.jpg",
-    "year": "2007",
-    "runtime": "126m",
-    "genre": "Drama / Romance",
-    "director": "Richard LaGravenese",
-    "cast": "Hilary Swank, Gerard Butler, Lisa Kudrow, Harry Connick Jr., Gina Gershon, Jeffrey Dean Morgan",
-    "synopsis": "A young widow discovers that her late husband has left her 10 messages intended to help ease her pain and start a new life.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
+ 
   {
     "title": "Pan",
     "type": "movie",
@@ -11374,22 +10930,7 @@ const movies = [
     ],
     "digital": []
   },
-  {
-    "title": "To Gillian on Her 37th Birthday",
-    "type": "movie",
-    "tmdbId": 30500,
-    "poster": "https://image.tmdb.org/t/p/w500/7HGWS6WlsPzBsB7NG5JM4P8NrIv.jpg",
-    "year": "1996",
-    "runtime": "93m",
-    "genre": "Drama / Romance",
-    "director": "Michael Pressman",
-    "cast": "Peter Gallagher, Michelle Pfeiffer, Claire Danes, Freddie Prinze Jr., Seth Green, Laurie Fortier",
-    "synopsis": "David loves his wife, Gillian. Unfortunately, she died two years ago. David deals with his grief by continuing his romance with Gillian during walks with her \"ghost\" on the beach at night. While David lives in the past, other family problems crop up in the present in the real world....",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
+
   {
     "title": "Tombstone",
     "type": "movie",
@@ -12778,7 +12319,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "X-Men 1.5",
+    "title": "X-Men",
     "tmdbTitle": "X-Men",
     "type": "movie",
     "tmdbId": 36657,
