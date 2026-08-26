@@ -1414,22 +1414,7 @@ const movies = [
     ],
     "digital": []
   },
-  {
-    "title": "Benchwarmers",
-    "type": "movie",
-    "tmdbId": 821767,
-    "poster": "",
-    "year": "2021",
-    "runtime": "7m",
-    "genre": "Drama",
-    "director": "Andrew Gorell",
-    "cast": "Mariah Burks, Jeffrey Grover",
-    "synopsis": "A father and daughter meet for the first time in months, during a pandemic, still grieving from an earlier loss. This is a story of connection and disconnection, forming a \"pod\", and continuing to live.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
+
   {
     "title": "The Best Christmas Pageant Ever",
     "type": "movie",
@@ -3521,7 +3506,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Ex",
+    "title": "Benchwarmers",
     "type": "movie",
     "tmdbId": 9957,
     "poster": "https://image.tmdb.org/t/p/w500/5yMPCr4qhuNg6fT538xicHaMaG7.jpg",
