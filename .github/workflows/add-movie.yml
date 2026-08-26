@@ -1,0 +1,295 @@
+name: Add Movie
+
+on:
+  workflow_dispatch:
+    inputs:
+      tmdb_id:
+        description: "TMDB movie or TV ID"
+        required: true
+        type: string
+
+      media_type:
+        description: "movie or tv"
+        required: true
+        default: "movie"
+        type: choice
+        options:
+          - movie
+          - tv
+
+      format:
+        description: "Physical format (DVD, Blu-ray, 4K, etc.)"
+        required: true
+        default: "DVD"
+        type: string
+
+      categories:
+        description: "Optional categories, comma-separated (baseball, christmas, etc.)"
+        required: false
+        default: ""
+        type: string
+
+      animated:
+        description: "Animated? yes/no"
+        required: true
+        default: "no"
+        type: choice
+        options:
+          - no
+          - yes
+
+jobs:
+  add-movie:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Add movie
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+          TMDB_ID: ${{ inputs.tmdb_id }}
+          MEDIA_TYPE: ${{ inputs.media_type }}
+          FORMAT: ${{ inputs.format }}
+          CATEGORIES: ${{ inputs.categories }}
+          ANIMATED: ${{ inputs.animated }}
+        run: |
+          cat > add_movie.py <<'PYTHON'
+          import json
+          import os
+          import re
+          import urllib.request
+
+          API_KEY = os.environ["TMDB_API_KEY"]
+          TMDB_ID = os.environ["TMDB_ID"]
+          MEDIA_TYPE = os.environ["MEDIA_TYPE"]
+          FORMAT = os.environ["FORMAT"]
+          CATEGORIES = os.environ.get("CATEGORIES", "")
+          ANIMATED = os.environ["ANIMATED"].lower() == "yes"
+
+          if MEDIA_TYPE not in ("movie", "tv"):
+              raise SystemExit("ERROR: media_type must be movie or tv")
+
+          # ---------------------------------------------------------
+          # Fetch TMDB data
+          # ---------------------------------------------------------
+
+          url = (
+              f"https://api.themoviedb.org/3/{MEDIA_TYPE}/"
+              f"{TMDB_ID}?api_key={API_KEY}&language=en-US"
+          )
+
+          request = urllib.request.Request(
+              url,
+              headers={"User-Agent": "BW-Movie-Collection"}
+          )
+
+          with urllib.request.urlopen(request) as response:
+              data = json.load(response)
+
+          # ---------------------------------------------------------
+          # Basic information
+          # ---------------------------------------------------------
+
+          if MEDIA_TYPE == "movie":
+              title = data.get("title", "")
+              year = data.get("release_date", "")[:4]
+              runtime_value = data.get("runtime")
+              cast_url_type = "movie"
+          else:
+              title = data.get("name", "")
+              year = data.get("first_air_date", "")[:4]
+              runtime_value = None
+              cast_url_type = "tv"
+
+          if not title:
+              raise SystemExit("ERROR: TMDB returned no title")
+
+          runtime = ""
+          if runtime_value:
+              runtime = f"{runtime_value}m"
+          elif data.get("episode_run_time"):
+              runtime = f"{data['episode_run_time'][0]}m"
+
+          # ---------------------------------------------------------
+          # Check whether this TMDB ID already exists
+          # ---------------------------------------------------------
+
+          with open("movies.js", "r", encoding="utf-8") as f:
+              existing = f.read()
+
+          id_pattern = rf'"tmdbId"\s*:\s*{re.escape(str(TMDB_ID))}\b'
+
+          if re.search(id_pattern, existing):
+              raise SystemExit(
+                  f"STOP: TMDB ID {TMDB_ID} already exists in movies.js. "
+                  "Nothing was changed."
+              )
+
+          # ---------------------------------------------------------
+          # Fetch credits
+          # ---------------------------------------------------------
+
+          credits_url = (
+              f"https://api.themoviedb.org/3/{MEDIA_TYPE}/"
+              f"{TMDB_ID}/credits?api_key={API_KEY}&language=en-US"
+          )
+
+          request = urllib.request.Request(
+              credits_url,
+              headers={"User-Agent": "BW-Movie-Collection"}
+          )
+
+          with urllib.request.urlopen(request) as response:
+              credits = json.load(response)
+
+          cast = [
+              person["name"]
+              for person in credits.get("cast", [])[:6]
+              if person.get("name")
+          ]
+
+          directors = [
+              person["name"]
+              for person in credits.get("crew", [])
+              if person.get("job") == "Director"
+          ]
+
+          # ---------------------------------------------------------
+          # Genres
+          # ---------------------------------------------------------
+
+          genres = [
+              genre["name"]
+              for genre in data.get("genres", [])
+              if genre.get("name")
+          ]
+
+          # Automatically recognize animation from TMDB.
+          if any(g.lower() == "animation" for g in genres):
+              ANIMATED = True
+
+          # ---------------------------------------------------------
+          # Poster
+          # ---------------------------------------------------------
+
+          poster_path = data.get("poster_path")
+
+          poster = ""
+          if poster_path:
+              poster = (
+                  "https://image.tmdb.org/t/p/w500"
+                  + poster_path
+              )
+
+          # ---------------------------------------------------------
+          # Categories
+          # ---------------------------------------------------------
+
+          categories = []
+
+          if CATEGORIES.strip():
+              categories = [
+                  x.strip()
+                  for x in CATEGORIES.split(",")
+                  if x.strip()
+              ]
+
+          # ---------------------------------------------------------
+          # Build movie object
+          # ---------------------------------------------------------
+
+          movie = {
+              "title": title,
+              "tmdbTitle": title,
+              "type": MEDIA_TYPE,
+              "tmdbId": int(TMDB_ID),
+              "poster": poster,
+              "year": year,
+              "runtime": runtime,
+              "genre": " / ".join(genres),
+              "director": ", ".join(directors),
+              "cast": ", ".join(cast),
+              "synopsis": data.get("overview", ""),
+              "physical": [FORMAT],
+              "digital": [],
+          }
+
+          # Only add these fields when they were requested.
+          if categories:
+              movie["categories"] = categories
+
+          if ANIMATED:
+              movie["animated"] = True
+
+          # ---------------------------------------------------------
+          # Insert alphabetically into movies.js
+          # ---------------------------------------------------------
+
+          # Convert the existing JS array into JSON-compatible data.
+          start = existing.find("[")
+          end = existing.rfind("]")
+
+          if start == -1 or end == -1:
+              raise SystemExit("ERROR: Could not locate movies array.")
+
+          array_text = existing[start:end + 1]
+
+          movies = json.loads(array_text)
+
+          movies.append(movie)
+
+          movies.sort(
+              key=lambda m: m.get("title", "").lower()
+          )
+
+          new_array = json.dumps(
+              movies,
+              indent=2,
+              ensure_ascii=False
+          )
+
+          new_content = (
+              existing[:start]
+              + new_array
+              + existing[end + 1:]
+          )
+
+          with open("movies.js", "w", encoding="utf-8") as f:
+              f.write(new_content)
+
+          print("")
+          print("========================================")
+          print("MOVIE ADDED")
+          print("========================================")
+          print(f"Title:      {title}")
+          print(f"Year:       {year}")
+          print(f"TMDB ID:    {TMDB_ID}")
+          print(f"Type:       {MEDIA_TYPE}")
+          print(f"Format:     {FORMAT}")
+          print(f"Animated:   {ANIMATED}")
+          print(f"Categories: {', '.join(categories) or 'none'}")
+          print("")
+          print("movies.js updated successfully.")
+          PYTHON
+
+          python add_movie.py
+
+      - name: Commit updated movies.js
+        run: |
+          git config user.name "BW Movie Catalog"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add movies.js
+          git commit -m "Add movie: ${{ inputs.tmdb_id }}"
+          git push
