@@ -5896,7 +5896,7 @@ const movies = [
   {
     "title": "Major League",
     "type": "movie",
-    "tmdbId": 9040,
+    "tmdbId": 9942,
     "poster": "https://image.tmdb.org/t/p/w500/pRagfd10PPWryFRSzLPIivfAXHJ.jpg",
     "year": "1973",
     "runtime": "129m",
