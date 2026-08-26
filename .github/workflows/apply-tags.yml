@@ -1,0 +1,437 @@
+name: Apply Movie Tags
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply-tags:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # =========================================
+      # GET CURRENT MOVIE CATALOG
+      # =========================================
+
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+
+      # =========================================
+      # SET UP PYTHON
+      # =========================================
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+
+      # =========================================
+      # CREATE TAG APPLICATION SCRIPT
+      # =========================================
+
+      - name: Create tag application script
+        run: |
+
+          cat > apply_tags.py <<'PYTHON'
+
+          import json
+          import re
+          import shutil
+          from datetime import datetime
+
+
+          MOVIES_FILE = "movies.js"
+          APPROVED_FILE = "approved-tags.json"
+
+
+          # =========================================
+          # LOAD MOVIES.JS
+          # =========================================
+
+          with open(
+              MOVIES_FILE,
+              "r",
+              encoding="utf-8"
+          ) as f:
+              original_text = f.read()
+
+
+          start = original_text.find("[")
+
+          end = original_text.rfind("]")
+
+
+          if start == -1 or end == -1:
+              raise SystemExit(
+                  "Could not locate movies array in movies.js"
+              )
+
+
+          movies_text = original_text[start:end + 1]
+
+
+          try:
+
+              movies = json.loads(movies_text)
+
+          except json.JSONDecodeError as e:
+
+              raise SystemExit(
+                  f"Could not parse movies.js as JSON: {e}"
+              )
+
+
+          # =========================================
+          # LOAD APPROVED TAGS
+          # =========================================
+
+          try:
+
+              with open(
+                  APPROVED_FILE,
+                  "r",
+                  encoding="utf-8"
+              ) as f:
+
+                  approved = json.load(f)
+
+          except FileNotFoundError:
+
+              raise SystemExit(
+                  "approved-tags.json was not found."
+              )
+
+
+          if not isinstance(approved, list):
+
+              raise SystemExit(
+                  "approved-tags.json must contain a list."
+              )
+
+
+          # =========================================
+          # BACKUP ORIGINAL FILE
+          # =========================================
+
+          timestamp = datetime.now().strftime(
+              "%Y%m%d-%H%M%S"
+          )
+
+          backup_file = (
+              f"movies-backup-{timestamp}.js"
+          )
+
+
+          shutil.copy2(
+              MOVIES_FILE,
+              backup_file
+          )
+
+
+          print(
+              f"Backup created: {backup_file}"
+          )
+
+
+          # =========================================
+          # APPLY TAGS
+          # =========================================
+
+          applied = []
+
+          skipped = []
+
+          errors = []
+
+
+          for item in approved:
+
+              if not isinstance(item, dict):
+
+                  errors.append(
+                      "Invalid item in approved-tags.json"
+                  )
+
+                  continue
+
+
+              index = item.get("index")
+
+              tag = item.get("tag")
+
+
+              if not isinstance(index, int):
+
+                  errors.append(
+                      f"Invalid movie index: {index}"
+                  )
+
+                  continue
+
+
+              if not isinstance(tag, str) or not tag:
+
+                  errors.append(
+                      f"Invalid tag for index {index}"
+                  )
+
+                  continue
+
+
+              if index < 0 or index >= len(movies):
+
+                  errors.append(
+                      f"Movie index out of range: {index}"
+                  )
+
+                  continue
+
+
+              movie = movies[index]
+
+
+              title = movie.get(
+                  "title",
+                  f"Movie #{index}"
+              )
+
+
+              # Make sure categories exists.
+
+              categories = movie.get(
+                  "categories",
+                  []
+              )
+
+
+              if categories is None:
+
+                  categories = []
+
+
+              if isinstance(categories, str):
+
+                  categories = [categories]
+
+
+              if not isinstance(categories, list):
+
+                  errors.append(
+                      f"{title}: categories is not a list"
+                  )
+
+                  continue
+
+
+              # Don't duplicate tags.
+
+              if tag in categories:
+
+                  skipped.append(
+                      f"{title} already has {tag}"
+                  )
+
+                  continue
+
+
+              categories.append(tag)
+
+
+              movie["categories"] = categories
+
+
+              applied.append({
+                  "index": index,
+                  "title": title,
+                  "tag": tag
+              })
+
+
+          # =========================================
+          # WRITE UPDATED MOVIES.JS
+          # =========================================
+
+          updated_array = json.dumps(
+              movies,
+              indent=2,
+              ensure_ascii=False
+          )
+
+
+          new_text = (
+              original_text[:start]
+              + updated_array
+              + original_text[end + 1:]
+          )
+
+
+          with open(
+              MOVIES_FILE,
+              "w",
+              encoding="utf-8"
+          ) as f:
+
+              f.write(new_text)
+
+
+          # =========================================
+          # REPORT
+          # =========================================
+
+          print("")
+          print("========================================")
+          print("TAG APPLICATION COMPLETE")
+          print("========================================")
+          print("")
+          print(
+              f"Movies in catalog: {len(movies)}"
+          )
+          print(
+              f"Approved tags received: {len(approved)}"
+          )
+          print(
+              f"Tags applied: {len(applied)}"
+          )
+          print(
+              f"Already present: {len(skipped)}"
+          )
+          print(
+              f"Errors: {len(errors)}"
+          )
+          print("")
+
+
+          if applied:
+
+              print("TAGS APPLIED:")
+              print("")
+
+              for item in applied:
+
+                  print(
+                      f"  {item['title']} "
+                      f"→ {item['tag']}"
+                  )
+
+
+          if skipped:
+
+              print("")
+              print("ALREADY PRESENT:")
+              print("")
+
+              for item in skipped:
+
+                  print(
+                      f"  {item}"
+                  )
+
+
+          if errors:
+
+              print("")
+              print("ERRORS:")
+              print("")
+
+              for error in errors:
+
+                  print(
+                      f"  {error}"
+                  )
+
+
+          print("")
+          print(
+              f"Updated file: {MOVIES_FILE}"
+          )
+          print(
+              f"Backup file:  {backup_file}"
+          )
+
+          PYTHON
+
+
+      # =========================================
+      # ACCEPT APPROVED-TAGS.JSON
+      # =========================================
+
+      - name: Upload approved tags
+        uses: actions/upload-artifact@v4
+        with:
+          name: approved-tags-template
+          path: approved-tags.json
+          if-no-files-found: ignore
+
+
+      # =========================================
+      # CHECK FOR APPROVED FILE
+      # =========================================
+
+      - name: Check for approved tags
+        run: |
+
+          if [ ! -f "approved-tags.json" ]; then
+
+            echo ""
+            echo "========================================"
+            echo "APPROVED TAG FILE NOT FOUND"
+            echo "========================================"
+            echo ""
+            echo "You need to place approved-tags.json"
+            echo "in the repository before running Apply Tags."
+            echo ""
+            echo "The Movie Tag Review workflow creates"
+            echo "this file after you review the suggestions."
+            echo ""
+
+            exit 1
+
+          fi
+
+
+      # =========================================
+      # APPLY THE TAGS
+      # =========================================
+
+      - name: Apply approved tags
+        run: |
+
+          python apply_tags.py
+
+
+      # =========================================
+      # SAVE BACKUP AS ARTIFACT
+      # =========================================
+
+      - name: Upload backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: movies-backup
+          path: "movies-backup-*.js"
+          retention-days: 30
+
+
+      # =========================================
+      # COMMIT UPDATED MOVIES.JS
+      # =========================================
+
+      - name: Commit updated catalog
+        run: |
+
+          git config user.name "github-actions[bot]"
+
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add movies.js
+
+          git commit \
+            -m "Apply approved movie tags" \
+            || echo "No changes to commit."
+
+          git push
