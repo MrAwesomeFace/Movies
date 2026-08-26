@@ -295,7 +295,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "A Good Day to Die Hard",
+    "title": "Die Hard 5: A Good Day to Die Hard",
     "type": "movie",
     "tmdbId": 47964,
     "poster": "https://image.tmdb.org/t/p/w500/qJ0csDXAVFMsNn0cRcjy6W6PxAK.jpg",
@@ -579,7 +579,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "Allegiant",
+    "title": "Divergent Saga: Allegiant",
     "type": "movie",
     "tmdbId": 262504,
     "poster": "https://image.tmdb.org/t/p/w500/faq9JlF8znUGQ5p3En1W61Fi5p0.jpg",
@@ -3072,7 +3072,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "Divergent",
+    "title": "Divergent Saga: Divergent",
     "type": "movie",
     "tmdbId": 157350,
     "poster": "https://image.tmdb.org/t/p/w500/aNh4Q3iuPKDMPi2SL7GgOpiLukX.jpg",
@@ -3587,7 +3587,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "F9: The Fast Saga",
+    "title": "Fast & Furious: F 9",
     "tmdbTitle": "F9",
     "type": "movie",
     "tmdbId": 385128,
@@ -3757,7 +3757,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "Fast & Furious",
+    "title": "Fast & Furious: Fast 4",
     "tmdbTitle": "Fast & Furious",
     "type": "movie",
     "tmdbId": 13804,
@@ -3775,7 +3775,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "Fast & Furious 6",
+    "title": "Fast & Furious: Fast 6",
     "tmdbTitle": "Fast & Furious 6",
     "type": "movie",
     "tmdbId": 82992,
@@ -3793,7 +3793,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Fast and the Furious",
+    "title": "Fast & Furious: Fast 1",
     "type": "movie",
     "tmdbId": 9799,
     "poster": "https://image.tmdb.org/t/p/w500/gqY0ITBgT7A82poL9jv851qdnIb.jpg",
@@ -3810,7 +3810,7 @@ const movies = [
   },
 
   {
-    "title": "Fast Five",
+    "title": "Fast & Furious: Fast 5",
     "tmdbTitle": "Fast Five",
     "type": "movie",
     "tmdbId": 51497,
@@ -3828,7 +3828,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "Fast X",
+    "title": "Fast & Furious: Fast 10",
     "type": "movie",
     "tmdbId": 385687,
     "poster": "https://image.tmdb.org/t/p/w500/fiVW06jE7z9YnO4trhaMEdclSiC.jpg",
@@ -3844,7 +3844,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Fate of the Furious",
+    "title": "Fast & Furious: Fast 8",
     "tmdbTitle": "The Fate of the Furious",
     "type": "movie",
     "tmdbId": 337339,
@@ -4262,7 +4262,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "Furious 7",
+    "title": "Fast & Furious: Fast 7",
     "tmdbTitle": "Furious 7",
     "type": "movie",
     "tmdbId": 168259,
@@ -5730,7 +5730,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "Insurgent",
+    "title": "Divergent Saga: Insurgent",
     "type": "movie",
     "tmdbId": 262500,
     "poster": "https://image.tmdb.org/t/p/w500/dP5Fb6YRfzmCQtRbHOr2kO7tJW9.jpg",
@@ -6746,7 +6746,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "Live Free or Die Hard",
+    "title": "Die Hard 4: Live Free or Die Hard",
     "type": "movie",
     "tmdbId": 1571,
     "poster": "https://image.tmdb.org/t/p/w500/31TT47YjBl7a7uvJ3ff1nrirXhP.jpg",
