@@ -1,0 +1,461 @@
+name: Movie Tag Review
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tag-review:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Generate tag review page
+        run: |
+          cat > tag_review.py <<'PYTHON'
+          import json
+          import html
+
+          TAGS = ["baseball", "animated", "christmas"]
+
+          with open("movies.js", "r", encoding="utf-8") as f:
+              text = f.read()
+
+          start = text.find("[")
+          end = text.rfind("]")
+
+          if start == -1 or end == -1:
+              raise SystemExit("Could not locate movies array in movies.js")
+
+          movies = json.loads(text[start:end + 1])
+
+          def combined(movie):
+              return " ".join([
+                  str(movie.get("title", "")),
+                  str(movie.get("tmdbTitle", "")),
+                  str(movie.get("genre", "")),
+                  str(movie.get("synopsis", "")),
+                  str(movie.get("cast", "")),
+                  str(movie.get("director", ""))
+              ]).lower()
+
+          def guess_tags(movie):
+              text = combined(movie)
+              title = str(movie.get("title", "")).lower()
+              guesses = []
+
+              # -----------------------------
+              # ANIMATED
+              # -----------------------------
+
+              if (
+                  movie.get("animated")
+                  or "animation" in text
+                  or "animated" in text
+              ):
+                  guesses.append("animated")
+
+              # -----------------------------
+              # BASEBALL
+              # -----------------------------
+
+              baseball_terms = [
+                  "baseball",
+                  "major league",
+                  "field of dreams",
+                  "moneyball",
+                  "bull durham",
+                  "the natural",
+                  "sandlot",
+                  "rookie of the year",
+                  "a league of their own",
+                  "eight men out",
+                  "61*",
+                  "mr. baseball",
+                  "bang the drum slowly",
+                  "hardball",
+                  "the scout",
+                  "pride of the yankees",
+                  "fever pitch",
+                  "major league 2",
+                  "major league: back to the minors"
+              ]
+
+              if any(
+                  term in text or term in title
+                  for term in baseball_terms
+              ):
+                  guesses.append("baseball")
+
+              # -----------------------------
+              # CHRISTMAS
+              # -----------------------------
+
+              christmas_terms = [
+                  "christmas",
+                  "santa clause",
+                  "scrooge",
+                  "grinch",
+                  "rudolph",
+                  "frosty",
+                  "white christmas",
+                  "home alone",
+                  "jingle all the way",
+                  "bad santa",
+                  "deck the halls",
+                  "family stone",
+                  "four christmas",
+                  "surviving christmas",
+                  "love actually",
+                  "polar express",
+                  "christmas story",
+                  "christmas with the kranks",
+                  "fred claus",
+                  "arthur christmas",
+                  "night before",
+                  "holdovers",
+                  "violent night",
+                  "elf"
+              ]
+
+              if any(
+                  term in text or term in title
+                  for term in christmas_terms
+              ):
+                  guesses.append("christmas")
+
+              return guesses
+
+          suggestions = []
+
+          for index, movie in enumerate(movies):
+
+              guessed = guess_tags(movie)
+
+              existing = movie.get("categories", []) or []
+
+              if isinstance(existing, str):
+                  existing = [existing]
+
+              for tag in guessed:
+
+                  # Don't suggest something already assigned.
+                  if tag in existing:
+                      continue
+
+                  suggestions.append({
+                      "index": index,
+                      "title": movie.get("title", ""),
+                      "year": movie.get("year", ""),
+                      "tmdbId": movie.get("tmdbId"),
+                      "tag": tag
+                  })
+
+          # -------------------------------------------------
+          # BUILD HTML REVIEW PAGE
+          # -------------------------------------------------
+
+          sections = []
+
+          for tag in TAGS:
+
+              tag_items = [
+                  item for item in suggestions
+                  if item["tag"] == tag
+              ]
+
+              if not tag_items:
+                  continue
+
+              rows = []
+
+              for item in tag_items:
+
+                  title = html.escape(str(item["title"]))
+                  year = html.escape(str(item["year"] or ""))
+                  tmdb = html.escape(str(item["tmdbId"] or ""))
+
+                  label = title
+
+                  if year:
+                      label += f" ({year})"
+
+                  if tmdb:
+                      label += f" — TMDB {tmdb}"
+
+                  rows.append(f"""
+                  <label class="movie">
+                    <input
+                      type="checkbox"
+                      name="tag"
+                      value="{item['index']}|{item['tag']}"
+                      checked
+                    >
+                    <span>{label}</span>
+                  </label>
+                  """)
+
+              section = f"""
+              <section>
+                <h2>{html.escape(tag.title())}</h2>
+                {''.join(rows)}
+              </section>
+              """
+
+              sections.append(section)
+
+          total = len(suggestions)
+
+          page = f"""<!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+
+            <title>Movie Tag Review</title>
+
+            <style>
+              * {{
+                box-sizing: border-box;
+              }}
+
+              body {{
+                margin: 0;
+                padding: 30px;
+                font-family: Arial, sans-serif;
+                background: #111;
+                color: #eee;
+              }}
+
+              .container {{
+                max-width: 900px;
+                margin: auto;
+              }}
+
+              h1 {{
+                margin-bottom: 5px;
+              }}
+
+              .summary {{
+                color: #aaa;
+                margin-bottom: 30px;
+              }}
+
+              section {{
+                background: #1c1c1c;
+                border-radius: 12px;
+                padding: 20px;
+                margin-bottom: 20px;
+              }}
+
+              h2 {{
+                margin-top: 0;
+                text-transform: capitalize;
+              }}
+
+              .movie {{
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 11px 8px;
+                border-bottom: 1px solid #333;
+                cursor: pointer;
+              }}
+
+              .movie:last-child {{
+                border-bottom: none;
+              }}
+
+              .movie:hover {{
+                background: #252525;
+              }}
+
+              input[type="checkbox"] {{
+                width: 20px;
+                height: 20px;
+                flex-shrink: 0;
+              }}
+
+              .instructions {{
+                background: #202a36;
+                border-radius: 10px;
+                padding: 15px;
+                margin-bottom: 25px;
+                line-height: 1.5;
+              }}
+
+              .save {{
+                background: #222;
+                border-radius: 10px;
+                padding: 20px;
+                margin-top: 30px;
+              }}
+
+              button {{
+                padding: 12px 18px;
+                border: none;
+                border-radius: 8px;
+                font-size: 16px;
+                cursor: pointer;
+              }}
+
+              .download {{
+                background: #eee;
+                color: #111;
+              }}
+
+              .count {{
+                margin-left: 10px;
+                color: #aaa;
+              }}
+            </style>
+          </head>
+
+          <body>
+
+          <div class="container">
+
+            <h1>BW's Movie Tag Review</h1>
+
+            <div class="summary">
+              {total} suggested tags found
+            </div>
+
+            <div class="instructions">
+              <strong>Review the suggestions below.</strong><br>
+              Leave a box checked if the movie should have that category.
+              Uncheck anything that is incorrect.
+              Nothing in <code>movies.js</code> will be changed by this page.
+            </div>
+
+            <form id="reviewForm">
+
+              {''.join(sections)}
+
+              <div class="save">
+
+                <strong>When you're finished:</strong>
+
+                <p>
+                  Click the button below to create the approved tag list.
+                  The resulting file will be used by the separate Apply step.
+                </p>
+
+                <button
+                  type="button"
+                  class="download"
+                  onclick="downloadApproved()"
+                >
+                  Download Approved Tags
+                </button>
+
+                <span class="count" id="count"></span>
+
+              </div>
+
+            </form>
+
+          </div>
+
+          <script>
+
+            function downloadApproved() {{
+
+              const checked =
+                document.querySelectorAll(
+                  'input[name="tag"]:checked'
+                );
+
+              const results = [];
+
+              checked.forEach(box => {{
+
+                const parts = box.value.split("|");
+
+                results.push({{
+                  index: Number(parts[0]),
+                  tag: parts[1]
+                }});
+
+              }});
+
+              const data = JSON.stringify(
+                results,
+                null,
+                2
+              );
+
+              const blob = new Blob(
+                [data],
+                {{type: "application/json"}}
+              );
+
+              const url =
+                URL.createObjectURL(blob);
+
+              const link =
+                document.createElement("a");
+
+              link.href = url;
+
+              link.download =
+                "approved-tags.json";
+
+              link.click();
+
+              URL.revokeObjectURL(url);
+
+              document.getElementById("count").textContent =
+                results.length +
+                " approved tags selected.";
+
+            }}
+
+          </script>
+
+          </body>
+          </html>
+          """
+
+          with open(
+              "tag-review.html",
+              "w",
+              encoding="utf-8"
+          ) as f:
+              f.write(page)
+
+          print("========================================")
+          print("TAG REVIEW CREATED")
+          print("========================================")
+          print(f"Movies scanned:     {len(movies)}")
+          print(f"Suggestions found:  {len(suggestions)}")
+          print("")
+          print("movies.js was NOT modified.")
+          print("Review the HTML artifact before applying changes.")
+
+          PYTHON
+
+          python tag_review.py
+
+      - name: Upload interactive review page
+        uses: actions/upload-artifact@v4
+        with:
+          name: movie-tag-review
+          path: tag-review.html
+          retention-days: 7
+
+      - name: Upload tag data
+        uses: actions/upload-artifact@v4
+        with:
+          name: tag-review-data
+          path: movies.js
+          retention-days: 7
