@@ -83,7 +83,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "21",
@@ -216,7 +219,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "baseball"
+    ]
   },
   {
     "title": "8 Mile",
@@ -250,7 +256,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "A Christmas Story",
@@ -266,7 +275,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "A Few Good Men",
@@ -300,7 +312,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "A Guy Thing",
@@ -350,7 +365,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "baseball"
+    ]
   },
   {
     "title": "A Man Apart",
@@ -401,7 +419,10 @@ const movies = [
       "Blu-ray",
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "Abraham Lincoln: Vampire Hunter",
@@ -650,7 +671,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "An American Tail: Fievel Goes West",
@@ -667,7 +691,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Angels & Demons",
@@ -784,7 +811,11 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated",
+      "christmas"
+    ]
   },
   {
     "title": "Assassins",
@@ -967,7 +998,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "Ballerina",
@@ -1017,7 +1051,10 @@ const movies = [
     "physical": [
       "Blu-ray"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Bandits",
@@ -1050,7 +1087,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "baseball"
+    ]
   },
   {
     "title": "Basic Instinct 2",
@@ -1133,7 +1173,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Baywatch",
@@ -1235,7 +1278,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "baseball"
+    ]
   },
   {
     "title": "Big Daddy",
@@ -1385,7 +1431,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Brave",
@@ -1402,7 +1451,10 @@ const movies = [
     "physical": [
       "Blu-ray"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Braveheart",
@@ -1517,7 +1569,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Bruce Almighty",
@@ -1550,7 +1605,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "baseball"
+    ]
   },
   {
     "title": "Bullet to the Head",
@@ -1653,7 +1711,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Cars 2",
@@ -1670,7 +1731,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Chasing Amy",
@@ -1704,7 +1768,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Chitty Chitty Bang Bang",
@@ -1737,7 +1804,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "Cinderella",
@@ -1771,7 +1841,10 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "animated": true
+    "animated": true,
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Cinderella II",
@@ -1788,7 +1861,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Cinderella III",
@@ -1805,7 +1881,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Clerks",
@@ -2295,7 +2374,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "Definitely, Maybe",
@@ -2852,7 +2934,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Edward Scissorhands",
@@ -2885,7 +2970,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "baseball"
+    ]
   },
   {
     "title": "Elf",
@@ -2902,7 +2990,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "Empire Records",
@@ -3037,7 +3128,11 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "baseball",
+      "animated"
+    ]
   },
   {
     "title": "Eye See You",
@@ -3104,7 +3199,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Family Guy Presents Stewie Griffin: The Untold Story",
@@ -3121,7 +3219,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Fantasia",
@@ -3138,7 +3239,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Fantasia 2000",
@@ -3155,7 +3259,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Fast & Furious: F 9",
@@ -3312,7 +3419,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Ferris Bueller's Day Off",
@@ -3345,7 +3455,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "baseball"
+    ]
   },
   {
     "title": "Fight Club",
@@ -3411,7 +3524,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Finding Neverland",
@@ -3511,7 +3627,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "Fred Claus",
@@ -3528,7 +3647,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "Frequency",
@@ -3578,7 +3700,11 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated",
+      "christmas"
+    ]
   },
   {
     "title": "Frozen",
@@ -3595,7 +3721,10 @@ const movies = [
     "physical": [
       "Blu-ray"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Fun with Dick and Jane",
@@ -3944,7 +4073,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "baseball"
+    ]
   },
   {
     "title": "Harold & Kumar Go to White Castle",
@@ -4121,7 +4253,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "baseball"
+    ]
   },
   {
     "title": "Hercules",
@@ -4138,7 +4273,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Heroes - Season 1",
@@ -4205,7 +4343,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "Home Alone 2: Lost in New York",
@@ -4222,7 +4363,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "Home Alone 3",
@@ -4239,7 +4383,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "Home Improvement - Season 1",
@@ -4305,7 +4452,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Hot Rod",
@@ -4390,7 +4540,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "Hudson Hawk",
@@ -4522,7 +4675,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Ice Age: Dawn of the Dinosaurs",
@@ -4539,7 +4695,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Ice Age: The Meltdown",
@@ -4556,7 +4715,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Identity",
@@ -4724,7 +4886,10 @@ const movies = [
     "physical": [
       "Blu-ray"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Iron Man",
@@ -4791,7 +4956,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "Jerry Maguire",
@@ -4841,7 +5009,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "John Wick",
@@ -5359,7 +5530,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Last Holiday",
@@ -5626,7 +5800,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "Love Potion No. 9",
@@ -5658,7 +5835,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "Lucky # Slevin",
@@ -5692,7 +5872,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Maggie",
@@ -5724,7 +5907,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "baseball"
+    ]
   },
   {
     "title": "Major League II",
@@ -5740,7 +5926,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "baseball"
+    ]
   },
   {
     "title": "Major League: Back to the Minors",
@@ -5756,7 +5945,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "baseball"
+    ]
   },
   {
     "title": "Maleficent",
@@ -5938,7 +6130,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Meg 2: The Trench",
@@ -6039,7 +6234,11 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated",
+      "christmas"
+    ]
   },
   {
     "title": "Mickey's Once Upon a Christmas",
@@ -6056,7 +6255,11 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated",
+      "christmas"
+    ]
   },
   {
     "title": "Mike and Dave Need Wedding Dates",
@@ -6190,7 +6393,10 @@ const movies = [
     "physical": [
       "Blu-ray"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "baseball"
+    ]
   },
   {
     "title": "Monsters, Inc.",
@@ -6207,7 +6413,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Mortal Kombat",
@@ -6307,7 +6516,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Music and Lyrics",
@@ -6374,7 +6586,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "National Lampoon's European Vacation",
@@ -6671,7 +6886,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "Oliver & Company",
@@ -6688,7 +6906,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Open Season",
@@ -6705,7 +6926,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Open Season 2",
@@ -6722,7 +6946,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Our Idiot Brother",
@@ -7007,7 +7234,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Planes, Trains and Automobiles",
@@ -7041,7 +7271,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Point Break",
@@ -7108,7 +7341,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "baseball"
+    ]
   },
   {
     "title": "Primal Fear",
@@ -7245,7 +7481,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Real Steel",
@@ -7377,7 +7616,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Riddick",
@@ -7476,7 +7718,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Robin Hood: Prince of Thieves",
@@ -7575,7 +7820,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "baseball"
+    ]
   },
   {
     "title": "Rounders",
@@ -7607,7 +7855,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "Rudy",
@@ -7904,7 +8155,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "Scrubs - Complete Eighth Season",
@@ -8003,7 +8257,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Shazam!",
@@ -8119,7 +8376,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Shrek 2",
@@ -8136,7 +8396,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Sideways",
@@ -8203,7 +8466,10 @@ const movies = [
     "physical": [
       "Blu-ray + DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Singles",
@@ -8254,7 +8520,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Sleeping with the Enemy",
@@ -8305,7 +8574,10 @@ const movies = [
     "physical": [
       "Blu-ray"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Something's Gotta Give",
@@ -8603,7 +8875,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "Sweeney Todd: The Demon Barber of Fleet Street",
@@ -8717,7 +8992,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Tango & Cash",
@@ -8750,7 +9028,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Ted Lasso - The Richmond Way",
@@ -8965,7 +9246,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "The Avengers",
@@ -9030,7 +9314,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "The Blind Side",
@@ -9382,7 +9669,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "The Expendables",
@@ -9433,7 +9723,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "The Family Stone",
@@ -9450,7 +9743,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "The Fan",
@@ -9532,7 +9828,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "The Fox and the Hound 2",
@@ -9549,7 +9848,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "The Gentlemen",
@@ -9650,7 +9952,11 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated",
+      "christmas"
+    ]
   },
   {
     "title": "The Hangover",
@@ -9717,7 +10023,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "The Holiday",
@@ -9734,7 +10043,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "The Hunchback of Notre Dame",
@@ -9751,7 +10063,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "The Hunger Games",
@@ -9886,7 +10201,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "The Invention of Lying",
@@ -9919,7 +10237,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "The Last Samurai",
@@ -9952,7 +10273,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "The Lego Movie",
@@ -9968,7 +10292,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "The Lego Movie 2: The Second Part",
@@ -9984,7 +10311,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "The Lion King",
@@ -10018,7 +10348,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "The Longest Yard",
@@ -10052,7 +10385,10 @@ const movies = [
     "physical": [
       "Blu-ray + DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "The Lost World: Jurassic Park",
@@ -10085,7 +10421,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "The Matador",
@@ -10263,7 +10602,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "baseball"
+    ]
   },
   {
     "title": "The Negotiator",
@@ -10296,7 +10638,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "The Number 23",
@@ -10379,7 +10724,11 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated",
+      "christmas"
+    ]
   },
   {
     "title": "The Prestige",
@@ -10413,7 +10762,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "The Program",
@@ -10528,7 +10880,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "The Rescuers Down Under",
@@ -10545,7 +10900,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "The Running Man",
@@ -10578,7 +10936,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "baseball"
+    ]
   },
   {
     "title": "The Santa Clause",
@@ -10595,7 +10956,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "The Santa Clause 2",
@@ -10612,7 +10976,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "The Santa Clause 3",
@@ -10629,7 +10996,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "The Scorpion King",
@@ -10661,7 +11031,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "baseball"
+    ]
   },
   {
     "title": "The Secret Life of Pets",
@@ -10678,7 +11051,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "The Shawshank Redemption",
@@ -10712,7 +11088,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "The Specialist",
@@ -10761,7 +11140,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "The Terminator",
@@ -11159,7 +11541,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Toy Story 2",
@@ -11176,7 +11561,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Toy Story 3",
@@ -11193,7 +11581,10 @@ const movies = [
     "physical": [
       "Blu-ray"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Toys",
@@ -11259,7 +11650,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Transformers: Age of Extinction",
@@ -11395,7 +11789,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "Trolls",
@@ -11412,7 +11809,10 @@ const movies = [
     "physical": [
       "Blu-ray"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Tropic Thunder",
@@ -11446,7 +11846,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "baseball"
+    ]
   },
   {
     "title": "Troy",
@@ -11664,7 +12067,10 @@ const movies = [
     "physical": [
       "Blu-ray + DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "V for Vendetta",
@@ -11780,7 +12186,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "Walk the Line",
@@ -12081,7 +12490,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
   },
   {
     "title": "White Men Can't Jump",
@@ -12229,7 +12641,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "WWE From the Vault: Shawn Michaels",
