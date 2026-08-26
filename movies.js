@@ -1,8 +1,4 @@
-// BW's Movie Collection
-// Updated by BW's Movie Catalog Updater
-
 const movies = [
-
   {
     "title": "007: Casino Royale",
     "tmdbTitle": "Casino Royale",
@@ -20,7 +16,6 @@ const movies = [
     ],
     "digital": []
   },
-
   {
     "title": "007: Die Another Day",
     "tmdbTitle": "Die Another Day",
@@ -38,8 +33,6 @@ const movies = [
     ],
     "digital": []
   },
-
- 
   {
     "title": "007: Skyfall",
     "tmdbTitle": "Skyfall",
@@ -75,7 +68,6 @@ const movies = [
     ],
     "digital": []
   },
-  
   {
     "title": "101 Dalmatians",
     "tmdbTitle": "101 Dalmatians",
@@ -93,7 +85,6 @@ const movies = [
     ],
     "digital": []
   },
-
   {
     "title": "21",
     "tmdbTitle": "21",
@@ -496,7 +487,6 @@ const movies = [
     ],
     "digital": []
   },
-
   {
     "title": "Ace Ventura: Pet Detective",
     "type": "movie",
@@ -1414,7 +1404,6 @@ const movies = [
     ],
     "digital": []
   },
-
   {
     "title": "The Best Christmas Pageant Ever",
     "type": "movie",
@@ -2118,7 +2107,6 @@ const movies = [
     ],
     "digital": []
   },
-
   {
     "title": "Christmas with the Kranks",
     "tmdbTitle": "Christmas with the Kranks",
@@ -2908,7 +2896,6 @@ const movies = [
     ],
     "digital": []
   },
-  
   {
     "title": "The Devil's Advocate",
     "type": "movie",
@@ -3793,7 +3780,6 @@ const movies = [
     ],
     "digital": []
   },
-
   {
     "title": "Fast & Furious: Fast 5",
     "tmdbTitle": "Fast Five",
@@ -4875,7 +4861,6 @@ const movies = [
     ],
     "digital": []
   },
-
   {
     "title": "Heartbreakers",
     "tmdbTitle": "Heartbreakers",
@@ -7394,7 +7379,6 @@ const movies = [
     ],
     "digital": []
   },
-
   {
     "title": "Minority Report",
     "tmdbTitle": "Minority Report",
@@ -7681,7 +7665,6 @@ const movies = [
     ],
     "digital": []
   },
-
   {
     "title": "Music and Lyrics",
     "tmdbTitle": "Music and Lyrics",
@@ -8245,7 +8228,6 @@ const movies = [
     ],
     "digital": []
   },
- 
   {
     "title": "Pan",
     "type": "movie",
@@ -10868,7 +10850,6 @@ const movies = [
     ],
     "digital": []
   },
-
   {
     "title": "Tombstone",
     "type": "movie",
@@ -12105,7 +12086,6 @@ const movies = [
     ],
     "digital": []
   },
-
   {
     "title": "The Wolverine",
     "tmdbTitle": "The Wolverine",
@@ -12459,5 +12439,15 @@ const movies = [
       "DVD"
     ],
     "digital": []
+  },
+  {
+    "title": "The Meg 2: The Trench",
+    "year": 2023,
+    "category": "movie",
+    "physical": [
+      "Blu-ray"
+    ],
+    "digital": [],
+    "tmdb_id": 615656
   }
 ];
