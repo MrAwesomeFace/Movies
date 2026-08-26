@@ -1756,6 +1756,24 @@ const movies = [
     "digital": []
   },
   {
+    "title": "Cinderella",
+    "tmdbTitle": "Cinderella",
+    "type": "movie",
+    "tmdbId": 11224,
+    "poster": "https://image.tmdb.org/t/p/w500/4nssBcQUBadCTBjrAkX46mVEKts.jpg",
+    "year": "1950",
+    "runtime": "74m",
+    "genre": "Family / Fantasy / Animation / Romance",
+    "director": "Clyde Geronimi, Wilfred Jackson, Hamilton Luske",
+    "cast": "Ilene Woods, Eleanor Audley, Verna Felton, Claire Du Brey, Rhoda Williams, James MacDonald",
+    "synopsis": "Cinderella has faith her dreams of a better life will come true. With help from her loyal mice friends and a wave of her Fairy Godmother's wand, Cinderella's rags are magically turned into a glorious gown and off she goes to the Royal Ball. But when the clock strikes midnight, the spell is broken, leaving a single glass slipper... the only key to the ultimate fairy-tale ending!",
+    "physical": [
+      "DVD"
+    ],
+    "digital": [],
+    "animated": true
+  },
+  {
     "title": "Cinderella II",
     "tmdbTitle": "Cinderella II: Dreams Come True",
     "type": "movie",
