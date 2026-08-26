@@ -9147,7 +9147,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The A-Team",
+    "title": "A-Team, The",
     "tmdbTitle": "The A-Team",
     "type": "movie",
     "tmdbId": 34544,
@@ -9164,7 +9164,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Accountant",
+    "title": "Accountant, The",
     "tmdbTitle": "The Accountant",
     "type": "movie",
     "tmdbId": 302946,
@@ -9182,7 +9182,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Accountant 2",
+    "title": "Accountant 2, The",
     "type": "movie",
     "tmdbId": 870028,
     "poster": "https://image.tmdb.org/t/p/w500/lUvfTcOZiK0sdcX0WNLPbMyKjGm.jpg",
@@ -9198,7 +9198,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Amazing Spider-Man",
+    "title": "Amazing Spider-Man, The",
     "tmdbTitle": "The Amazing Spider-Man",
     "type": "movie",
     "tmdbId": 1930,
@@ -9215,7 +9215,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Amazing Spider-Man 2",
+    "title": "Amazing Spider-Man 2, The",
     "tmdbTitle": "The Amazing Spider-Man 2",
     "type": "movie",
     "tmdbId": 102382,
@@ -9232,7 +9232,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Aristocats",
+    "title": "Aristocats, The",
     "tmdbTitle": "The Aristocats",
     "type": "movie",
     "tmdbId": 10112,
@@ -9252,7 +9252,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Avengers",
+    "title": "Avengers, The",
     "type": "movie",
     "tmdbId": 24428,
     "poster": "https://image.tmdb.org/t/p/w500/RYMX2wcKCBAr24UyPD7xwmjaTn.jpg",
@@ -9268,7 +9268,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Batman",
+    "title": "Batman, The",
     "type": "movie",
     "tmdbId": 414906,
     "poster": "https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg",
@@ -9285,7 +9285,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Beekeeper",
+    "title": "Beekeeper, The",
     "type": "movie",
     "tmdbId": 866398,
     "poster": "https://image.tmdb.org/t/p/w500/A7EByudX0eOzlkQ2FIbogzyazm2.jpg",
@@ -9301,7 +9301,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Best Christmas Pageant Ever",
+    "title": "Best Christmas Pageant Ever, The",
     "type": "movie",
     "tmdbId": 1206617,
     "poster": "https://image.tmdb.org/t/p/w500/6XjvhydAlXbQodoWbIf77H0Dd9R.jpg",
@@ -9320,7 +9320,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Blind Side",
+    "title": "Blind Side, The",
     "tmdbTitle": "The Blind Side",
     "type": "movie",
     "tmdbId": 22881,
@@ -9337,7 +9337,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Bodyguard",
+    "title": "Bodyguard, The",
     "tmdbTitle": "The Bodyguard",
     "type": "movie",
     "tmdbId": 619,
@@ -9354,7 +9354,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Bourne Identity",
+    "title": "Bourne Identity, The",
     "tmdbTitle": "The Bourne Identity",
     "type": "movie",
     "tmdbId": 2501,
@@ -9371,7 +9371,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Bourne Legacy",
+    "title": "Bourne Legacy, The",
     "tmdbTitle": "The Bourne Legacy",
     "type": "movie",
     "tmdbId": 49040,
@@ -9388,7 +9388,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Bourne Supremacy",
+    "title": "Bourne Supremacy, The",
     "tmdbTitle": "The Bourne Supremacy",
     "type": "movie",
     "tmdbId": 2502,
@@ -9405,7 +9405,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Bourne Ultimatum",
+    "title": "Bourne Ultimatum, The",
     "tmdbTitle": "The Bourne Ultimatum",
     "type": "movie",
     "tmdbId": 2503,
@@ -9422,7 +9422,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Break-Up",
+    "title": "Break-Up, The",
     "type": "movie",
     "tmdbId": 9767,
     "poster": "https://image.tmdb.org/t/p/w500/ghCLIPRZNAndBoIZJ8f7lN5Mlly.jpg",
@@ -9438,7 +9438,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Breakfast Club",
+    "title": "Breakfast Club, The",
     "tmdbTitle": "The Breakfast Club",
     "type": "movie",
     "tmdbId": 2108,
@@ -9455,7 +9455,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Burbs",
+    "title": "Burbs, The",
     "tmdbTitle": "The 'Burbs",
     "type": "movie",
     "tmdbId": 11974,
@@ -9472,7 +9472,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Cable Guy",
+    "title": "Cable Guy, The",
     "tmdbTitle": "The Cable Guy",
     "type": "movie",
     "tmdbId": 9894,
@@ -9489,7 +9489,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Cell",
+    "title": "Cell, The",
     "type": "movie",
     "tmdbId": 8843,
     "poster": "https://image.tmdb.org/t/p/w500/1LX8AOUGDSrBDzgC4KLtRvyJFgY.jpg",
@@ -9505,7 +9505,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Chicago Cubs: Legends, Great Games & Collector's Edition",
+    "title": "Chicago Cubs: Legends, Great Games & Collector's Edition, The",
     "tmdbTitle": "",
     "type": "misc",
     "tmdbId": null,
@@ -9522,7 +9522,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Chronicles of Riddick",
+    "title": "Chronicles of Riddick, The",
     "tmdbTitle": "The Chronicles of Riddick",
     "type": "movie",
     "tmdbId": 2789,
@@ -9539,7 +9539,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Count of Monte Cristo",
+    "title": "Count of Monte Cristo, The",
     "type": "movie",
     "tmdbId": 11362,
     "poster": "https://image.tmdb.org/t/p/w500/ifMgDAUXVQLY4DeOu3VTTi55jSP.jpg",
@@ -9555,7 +9555,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Da Vinci Code",
+    "title": "Da Vinci Code, The",
     "tmdbTitle": "The Da Vinci Code",
     "type": "movie",
     "tmdbId": 591,
@@ -9572,7 +9572,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Dark Knight",
+    "title": "Dark Knight, The",
     "tmdbTitle": "The Dark Knight",
     "type": "movie",
     "tmdbId": 155,
@@ -9589,7 +9589,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Dark Knight Rises",
+    "title": "Dark Knight Rises, The",
     "tmdbTitle": "The Dark Knight Rises",
     "type": "movie",
     "tmdbId": 49026,
@@ -9606,7 +9606,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Day After Tomorrow",
+    "title": "Day After Tomorrow, The",
     "tmdbTitle": "The Day After Tomorrow",
     "type": "movie",
     "tmdbId": 435,
@@ -9623,7 +9623,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Devil's Advocate",
+    "title": "Devil's Advocate, The",
     "type": "movie",
     "tmdbId": 1813,
     "poster": "https://image.tmdb.org/t/p/w500/5ZzBGpxy55OQzHxKVY11IpY6a0o.jpg",
@@ -9639,7 +9639,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Dukes of Hazzard",
+    "title": "Dukes of Hazzard, The",
     "type": "movie",
     "tmdbId": 65759,
     "poster": "https://image.tmdb.org/t/p/w500/2gWiQ4mn85jcXtREVePlVViupeV.jpg",
@@ -9655,7 +9655,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Emperor's New Groove",
+    "title": "Emperor's New Groove, The",
     "tmdbTitle": "The Emperor's New Groove",
     "type": "movie",
     "tmdbId": 11688,
@@ -9675,7 +9675,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Expendables",
+    "title": "Expendables, The",
     "tmdbTitle": "The Expendables",
     "type": "movie",
     "tmdbId": 27578,
@@ -9692,7 +9692,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Expendables 2",
+    "title": "Expendables 2, The",
     "tmdbTitle": "The Expendables 2",
     "type": "movie",
     "tmdbId": 76163,
@@ -9709,7 +9709,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Family Man",
+    "title": "Family Man, The",
     "tmdbTitle": "The Family Man",
     "type": "movie",
     "tmdbId": 5994,
@@ -9729,7 +9729,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Family Stone",
+    "title": "Family Stone, The",
     "tmdbTitle": "The Family Stone",
     "type": "movie",
     "tmdbId": 9043,
@@ -9749,7 +9749,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Fan",
+    "title": "Fan, The",
     "type": "movie",
     "tmdbId": 11517,
     "poster": "https://image.tmdb.org/t/p/w500/jWBDz6Mf9aQVBiUS76JQsEhvoJl.jpg",
@@ -9765,7 +9765,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Fifth Element",
+    "title": "Fifth Element, The",
     "type": "movie",
     "tmdbId": 18,
     "poster": "https://image.tmdb.org/t/p/w500/fPtlCO1yQtnoLHOwKtWz7db6RGU.jpg",
@@ -9781,7 +9781,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Fighter",
+    "title": "Fighter, The",
     "type": "movie",
     "tmdbId": 45317,
     "poster": "https://image.tmdb.org/t/p/w500/xfsFerGhO1h6rLk8vwLgMyQ8WVJ.jpg",
@@ -9797,7 +9797,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Flash",
+    "title": "Flash, The",
     "tmdbTitle": "The Flash",
     "type": "movie",
     "tmdbId": 298618,
@@ -9814,7 +9814,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Fox and the Hound",
+    "title": "Fox and the Hound, The",
     "tmdbTitle": "The Fox and the Hound",
     "type": "movie",
     "tmdbId": 10948,
@@ -9834,7 +9834,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Fox and the Hound 2",
+    "title": "Fox and the Hound 2, The",
     "tmdbTitle": "The Fox and the Hound 2",
     "type": "movie",
     "tmdbId": 9948,
@@ -9854,7 +9854,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Gentlemen",
+    "title": "Gentlemen, The",
     "type": "movie",
     "tmdbId": 522627,
     "poster": "https://image.tmdb.org/t/p/w500/jtrhTYB7xSrJxR1vusu99nvnZ1g.jpg",
@@ -9870,7 +9870,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Gift",
+    "title": "Gift, The",
     "tmdbTitle": "The Gift",
     "type": "movie",
     "tmdbId": 1413,
@@ -9887,7 +9887,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Girl with the Dragon Tattoo",
+    "title": "Girl with the Dragon Tattoo, The",
     "tmdbTitle": "The Girl with the Dragon Tattoo",
     "type": "movie",
     "tmdbId": 65754,
@@ -9904,7 +9904,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Goonies",
+    "title": "Goonies, The",
     "tmdbTitle": "The Goonies",
     "type": "movie",
     "tmdbId": 9340,
@@ -9921,7 +9921,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Greatest Showman",
+    "title": "Greatest Showman, The",
     "tmdbTitle": "The Greatest Showman",
     "type": "movie",
     "tmdbId": 316029,
@@ -9938,7 +9938,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Grinch",
+    "title": "Grinch, The",
     "tmdbTitle": "The Grinch",
     "type": "movie",
     "tmdbId": 360920,
@@ -9959,7 +9959,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Hangover",
+    "title": "Hangover, The",
     "tmdbTitle": "The Hangover",
     "type": "movie",
     "tmdbId": 18785,
@@ -9976,7 +9976,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Hangover Part II",
+    "title": "Hangover Part II, The",
     "tmdbTitle": "The Hangover Part II",
     "type": "movie",
     "tmdbId": 45243,
@@ -9993,7 +9993,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Heat",
+    "title": "Heat, The",
     "tmdbTitle": "The Heat",
     "type": "movie",
     "tmdbId": 136795,
@@ -10010,7 +10010,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Holdovers",
+    "title": "Holdovers, The",
     "type": "movie",
     "tmdbId": 840430,
     "poster": "https://image.tmdb.org/t/p/w500/VHSzNBTwxV8vh7wylo7O9CLdac.jpg",
@@ -10029,7 +10029,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Holiday",
+    "title": "Holiday, The",
     "tmdbTitle": "The Holiday",
     "type": "movie",
     "tmdbId": 1581,
@@ -10049,7 +10049,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Hunchback of Notre Dame",
+    "title": "Hunchback of Notre Dame, The",
     "tmdbTitle": "The Hunchback of Notre Dame",
     "type": "movie",
     "tmdbId": 10545,
@@ -10069,7 +10069,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Hunger Games",
+    "title": "Hunger Games, The",
     "tmdbTitle": "The Hunger Games",
     "type": "movie",
     "tmdbId": 70160,
@@ -10086,7 +10086,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Hunger Games: Catching Fire",
+    "title": "Hunger Games: Catching Fire, The",
     "tmdbTitle": "The Hunger Games: Catching Fire",
     "type": "movie",
     "tmdbId": 101299,
@@ -10103,7 +10103,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Hunger Games: Mockingjay - Part 1",
+    "title": "Hunger Games: Mockingjay - Part 1, The",
     "tmdbTitle": "The Hunger Games: Mockingjay - Part 1",
     "type": "movie",
     "tmdbId": 131631,
@@ -10120,7 +10120,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Hunger Games: Mockingjay - Part 2",
+    "title": "Hunger Games: Mockingjay - Part 2, The",
     "tmdbTitle": "The Hunger Games: Mockingjay - Part 2",
     "type": "movie",
     "tmdbId": 131634,
@@ -10137,7 +10137,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Illusionist",
+    "title": "Illusionist, The",
     "tmdbTitle": "The Illusionist",
     "type": "movie",
     "tmdbId": 1491,
@@ -10154,7 +10154,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Incredible Burt Wonderstone",
+    "title": "Incredible Burt Wonderstone, The",
     "type": "movie",
     "tmdbId": 124459,
     "poster": "https://image.tmdb.org/t/p/w500/Bl95sg5Ljo3Hu9SSL0JOvLerLh.jpg",
@@ -10170,7 +10170,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Incredible Hulk",
+    "title": "Incredible Hulk, The",
     "tmdbTitle": "The Incredible Hulk",
     "type": "movie",
     "tmdbId": 1724,
@@ -10187,7 +10187,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Incredibles",
+    "title": "Incredibles, The",
     "tmdbTitle": "The Incredibles",
     "type": "movie",
     "tmdbId": 9806,
@@ -10207,7 +10207,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Invention of Lying",
+    "title": "Invention of Lying, The",
     "type": "movie",
     "tmdbId": 34769,
     "poster": "https://image.tmdb.org/t/p/w500/a1ce5xYYkwSCqIHh0nGKnh7Zs7Q.jpg",
@@ -10223,7 +10223,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Jungle Book",
+    "title": "Jungle Book, The",
     "tmdbTitle": "The Jungle Book",
     "type": "movie",
     "tmdbId": 9325,
@@ -10243,7 +10243,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Last Samurai",
+    "title": "Last Samurai, The",
     "tmdbTitle": "The Last Samurai",
     "type": "movie",
     "tmdbId": 616,
@@ -10260,7 +10260,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Lego Batman Movie",
+    "title": "Lego Batman Movie, The",
     "type": "movie",
     "tmdbId": 324849,
     "poster": "https://image.tmdb.org/t/p/w500/e1TliRWOdXQ73pRunbpFiGst6Kd.jpg",
@@ -10279,7 +10279,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Lego Movie",
+    "title": "Lego Movie, The",
     "type": "movie",
     "tmdbId": 137106,
     "poster": "https://image.tmdb.org/t/p/w500/lbctonEnewCYZ4FYoTZhs8cidAl.jpg",
@@ -10298,7 +10298,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Lego Movie 2: The Second Part",
+    "title": "Lego Movie 2: The Second Part, The",
     "type": "movie",
     "tmdbId": 280217,
     "poster": "https://image.tmdb.org/t/p/w500/QTESAsBVZwjtGJNDP7utiGV37z.jpg",
@@ -10317,7 +10317,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Lion King",
+    "title": "Lion King, The",
     "tmdbTitle": "The Lion King",
     "type": "movie",
     "tmdbId": 858,
@@ -10334,7 +10334,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Little Mermaid",
+    "title": "Little Mermaid, The",
     "tmdbTitle": "The Little Mermaid",
     "type": "movie",
     "tmdbId": 10144,
@@ -10354,7 +10354,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Longest Yard",
+    "title": "Longest Yard, The",
     "tmdbTitle": "The Longest Yard",
     "type": "movie",
     "tmdbId": 9291,
@@ -10371,7 +10371,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Lorax",
+    "title": "Lorax, The",
     "tmdbTitle": "The Lorax",
     "type": "movie",
     "tmdbId": 73723,
@@ -10391,7 +10391,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Lost World: Jurassic Park",
+    "title": "Lost World: Jurassic Park, The",
     "type": "movie",
     "tmdbId": 330,
     "poster": "https://image.tmdb.org/t/p/w500/7st3JW0xpMAkwB3dYfv3iqAwD8Y.jpg",
@@ -10407,7 +10407,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Many Adventures of Winnie the Pooh",
+    "title": "Many Adventures of Winnie the Pooh, The",
     "tmdbTitle": "The Many Adventures of Winnie the Pooh",
     "type": "movie",
     "tmdbId": 250480,
@@ -10427,7 +10427,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Matador",
+    "title": "Matador, The",
     "tmdbTitle": "The Matador",
     "type": "movie",
     "tmdbId": 9515,
@@ -10444,7 +10444,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Matrix",
+    "title": "Matrix, The",
     "tmdbTitle": "The Matrix",
     "type": "movie",
     "tmdbId": 603,
@@ -10461,7 +10461,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Matrix Reloaded",
+    "title": "Matrix Reloaded, The",
     "tmdbTitle": "The Matrix Reloaded",
     "type": "movie",
     "tmdbId": 604,
@@ -10478,7 +10478,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Matrix Revolutions",
+    "title": "Matrix Revolutions, The",
     "tmdbTitle": "The Matrix Revolutions",
     "type": "movie",
     "tmdbId": 605,
@@ -10495,7 +10495,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Mechanic",
+    "title": "Mechanic, The",
     "tmdbTitle": "The Mechanic",
     "type": "movie",
     "tmdbId": 27582,
@@ -10512,7 +10512,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Meg",
+    "title": "Meg, The",
     "type": "movie",
     "tmdbId": 345940,
     "poster": "https://image.tmdb.org/t/p/w500/eyWICPcxOuTcDDDbTMOZawoOn8d.jpg",
@@ -10528,7 +10528,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Meg 2: The Trench",
+    "title": "Meg 2: The Trench, The",
     "year": 2023,
     "category": "movie",
     "physical": [
@@ -10538,7 +10538,7 @@ const movies = [
     "tmdb_id": 615656
   },
   {
-    "title": "The Mummy",
+    "title": "Mummy, The",
     "type": "movie",
     "tmdbId": 564,
     "poster": "https://image.tmdb.org/t/p/w500/yhIsVvcUm7QxzLfT6HW2wLf5ajY.jpg",
@@ -10555,7 +10555,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Mummy Returns",
+    "title": "Mummy Returns, The",
     "type": "movie",
     "tmdbId": 1734,
     "poster": "https://image.tmdb.org/t/p/w500/kdJsW7hcy1lrj7tdMPycTAQPAiR.jpg",
@@ -10572,7 +10572,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Mummy: Tomb of the Dragon Emperor",
+    "title": "Mummy: Tomb of the Dragon Emperor, The",
     "type": "movie",
     "tmdbId": 1735,
     "poster": "https://image.tmdb.org/t/p/w500/A3acM1lX5PNWQa6r5qeMAJOxbnT.jpg",
@@ -10589,7 +10589,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Natural",
+    "title": "Natural, The",
     "type": "movie",
     "tmdbId": 11702,
     "poster": "https://image.tmdb.org/t/p/w500/6q96xjyGTQllKAKgmwyBsk5JSe5.jpg",
@@ -10608,7 +10608,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Negotiator",
+    "title": "Negotiator, The",
     "tmdbTitle": "The Negotiator",
     "type": "movie",
     "tmdbId": 9631,
@@ -10625,7 +10625,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Night Before",
+    "title": "Night Before, The",
     "type": "movie",
     "tmdbId": 38966,
     "poster": "https://image.tmdb.org/t/p/w500/o3GOrWh7ytlKsdOGI77WFauZORr.jpg",
@@ -10644,7 +10644,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Number 23",
+    "title": "Number 23, The",
     "type": "movie",
     "tmdbId": 3594,
     "poster": "https://image.tmdb.org/t/p/w500/iPJwdvgX3I5dEw9QhDOG3hxUvMp.jpg",
@@ -10660,7 +10660,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Object of My Affection",
+    "title": "Object of My Affection, The",
     "type": "movie",
     "tmdbId": 10216,
     "poster": "https://image.tmdb.org/t/p/w500/8LSBi0bHACZtIiVErUBQ2UXNYLA.jpg",
@@ -10676,7 +10676,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Office - Season 1",
+    "title": "Office - Season 1, The",
     "tmdbTitle": "The Office",
     "type": "tv",
     "tmdbId": 2316,
@@ -10693,7 +10693,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Other Guys",
+    "title": "Other Guys, The",
     "tmdbTitle": "The Other Guys",
     "type": "movie",
     "tmdbId": 27581,
@@ -10710,7 +10710,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Polar Express",
+    "title": "Polar Express, The",
     "tmdbTitle": "The Polar Express",
     "type": "movie",
     "tmdbId": 5255,
@@ -10731,7 +10731,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Prestige",
+    "title": "Prestige, The",
     "tmdbTitle": "The Prestige",
     "type": "movie",
     "tmdbId": 1124,
@@ -10748,7 +10748,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Princess and the Frog",
+    "title": "Princess and the Frog, The",
     "tmdbTitle": "The Princess and the Frog",
     "type": "movie",
     "tmdbId": 10198,
@@ -10768,7 +10768,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Program",
+    "title": "Program, The",
     "type": "movie",
     "tmdbId": 10425,
     "poster": "https://image.tmdb.org/t/p/w500/sgIthxRLUBTbaetVXvXwQEmbfn2.jpg",
@@ -10784,7 +10784,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Proposal",
+    "title": "Proposal, The",
     "tmdbTitle": "The Proposal",
     "type": "movie",
     "tmdbId": 18240,
@@ -10801,7 +10801,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Punisher",
+    "title": "Punisher, The",
     "tmdbTitle": "The Punisher",
     "type": "movie",
     "tmdbId": 7220,
@@ -10818,7 +10818,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Recruit",
+    "title": "Recruit, The",
     "type": "movie",
     "tmdbId": 9613,
     "poster": "https://image.tmdb.org/t/p/w500/zvm4WuYxTiGkRagRqHUey0meRQL.jpg",
@@ -10834,7 +10834,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Ref",
+    "title": "Ref, The",
     "type": "movie",
     "tmdbId": 9634,
     "poster": "https://image.tmdb.org/t/p/w500/rFOjlEGk5pfc1ZQQPs5xHBOejle.jpg",
@@ -10850,7 +10850,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Replacements",
+    "title": "Replacements, The",
     "type": "movie",
     "tmdbId": 10393,
     "poster": "https://image.tmdb.org/t/p/w500/6qerI41HqkdRlio1sG0d5HLZcFN.jpg",
@@ -10866,7 +10866,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Rescuers",
+    "title": "Rescuers, The",
     "tmdbTitle": "The Rescuers",
     "type": "movie",
     "tmdbId": 11319,
@@ -10886,7 +10886,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Rescuers Down Under",
+    "title": "Rescuers Down Under, The",
     "tmdbTitle": "The Rescuers Down Under",
     "type": "movie",
     "tmdbId": 11135,
@@ -10906,7 +10906,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Running Man",
+    "title": "Running Man, The",
     "tmdbTitle": "The Running Man",
     "type": "movie",
     "tmdbId": 865,
@@ -10923,7 +10923,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Sandlot",
+    "title": "Sandlot, The",
     "type": "movie",
     "tmdbId": 11528,
     "poster": "https://image.tmdb.org/t/p/w500/7PYqz0viEuW8qTvuGinUMjDWMnj.jpg",
@@ -10942,7 +10942,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Santa Clause",
+    "title": "Santa Clause, The",
     "tmdbTitle": "The Santa Clause",
     "type": "movie",
     "tmdbId": 11395,
@@ -10962,7 +10962,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Santa Clause 2",
+    "title": "Santa Clause 2, The",
     "tmdbTitle": "The Santa Clause 2",
     "type": "movie",
     "tmdbId": 9021,
@@ -10982,7 +10982,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Santa Clause 3",
+    "title": "Santa Clause 3, The",
     "tmdbTitle": "The Santa Clause 3: The Escape Clause",
     "type": "movie",
     "tmdbId": 13767,
@@ -11002,7 +11002,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Scorpion King",
+    "title": "Scorpion King, The",
     "type": "movie",
     "tmdbId": 9334,
     "poster": "https://image.tmdb.org/t/p/w500/aITIsX20tACn6jgtyDcCYpRT216.jpg",
@@ -11018,7 +11018,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Scout",
+    "title": "Scout, The",
     "type": "movie",
     "tmdbId": 14295,
     "poster": "https://image.tmdb.org/t/p/w500/7mGFmij1FZD5eUnNwvUjmpqrDl6.jpg",
@@ -11037,7 +11037,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Secret Life of Pets",
+    "title": "Secret Life of Pets, The",
     "tmdbTitle": "The Secret Life of Pets",
     "type": "movie",
     "tmdbId": 328111,
@@ -11057,7 +11057,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Shawshank Redemption",
+    "title": "Shawshank Redemption, The",
     "tmdbTitle": "The Shawshank Redemption",
     "type": "movie",
     "tmdbId": 278,
@@ -11074,7 +11074,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Simpsons - Complete Eighth Season",
+    "title": "Simpsons - Complete Eighth Season, The",
     "tmdbTitle": "The Simpsons",
     "type": "tv",
     "tmdbId": 456,
@@ -11094,7 +11094,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Specialist",
+    "title": "Specialist, The",
     "type": "movie",
     "tmdbId": 2636,
     "poster": "https://image.tmdb.org/t/p/w500/9CVAjtkSaFs9FyddGfThj11ZuQq.jpg",
@@ -11110,7 +11110,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Sweetest Thing",
+    "title": "Sweetest Thing, The",
     "type": "movie",
     "tmdbId": 11812,
     "poster": "https://image.tmdb.org/t/p/w500/qLysz4B5YmiDq52Op0zq4eD75LC.jpg",
@@ -11126,7 +11126,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Sword in the Stone",
+    "title": "Sword in the Stone, The",
     "tmdbTitle": "The Sword in the Stone",
     "type": "movie",
     "tmdbId": 9078,
@@ -11146,7 +11146,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Terminator",
+    "title": "Terminator, The",
     "type": "movie",
     "tmdbId": 218,
     "poster": "https://image.tmdb.org/t/p/w500/qvktm0BHcnmDpul4Hz01GIazWPr.jpg",
@@ -11162,7 +11162,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Tick",
+    "title": "Tick, The",
     "type": "tv",
     "tmdbId": 1855,
     "poster": "https://image.tmdb.org/t/p/w500/gNS5tRSG3UlXodCxznKKOKweqxh.jpg",
@@ -11178,7 +11178,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Tick",
+    "title": "Tick, The",
     "tmdbTitle": "The Tick",
     "type": "tv",
     "tmdbId": 14651,
@@ -11195,7 +11195,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Town",
+    "title": "Town, The",
     "tmdbTitle": "The Town",
     "type": "movie",
     "tmdbId": 23168,
@@ -11212,7 +11212,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Twilight Saga: Breaking Dawn - Part 1",
+    "title": "Twilight Saga: Breaking Dawn - Part 1, The",
     "tmdbTitle": "The Twilight Saga: Breaking Dawn - Part 1",
     "type": "movie",
     "tmdbId": 50619,
@@ -11229,7 +11229,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Twilight Saga: Breaking Dawn - Part 2",
+    "title": "Twilight Saga: Breaking Dawn - Part 2, The",
     "tmdbTitle": "The Twilight Saga: Breaking Dawn - Part 2",
     "type": "movie",
     "tmdbId": 50620,
@@ -11246,7 +11246,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Twilight Saga: Eclipse",
+    "title": "Twilight Saga: Eclipse, The",
     "tmdbTitle": "The Twilight Saga: Eclipse",
     "type": "movie",
     "tmdbId": 24021,
@@ -11263,7 +11263,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Twilight Saga: New Moon",
+    "title": "Twilight Saga: New Moon, The",
     "tmdbTitle": "The Twilight Saga: New Moon",
     "type": "movie",
     "tmdbId": 18239,
@@ -11280,7 +11280,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Way of the Gun",
+    "title": "Way of the Gun, The",
     "type": "movie",
     "tmdbId": 1619,
     "poster": "https://image.tmdb.org/t/p/w500/wrjMMdgn1a4ChlaBmlzKnb78nr6.jpg",
@@ -11296,7 +11296,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Wedding Singer",
+    "title": "Wedding Singer, The",
     "tmdbTitle": "The Wedding Singer",
     "type": "movie",
     "tmdbId": 11003,
@@ -11313,7 +11313,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Whole Nine Yards",
+    "title": "Whole Nine Yards, The",
     "tmdbTitle": "The Whole Nine Yards",
     "type": "movie",
     "tmdbId": 2069,
@@ -11330,7 +11330,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Whole Ten Yards",
+    "title": "Whole Ten Yards, The",
     "type": "movie",
     "tmdbId": 2122,
     "poster": "https://image.tmdb.org/t/p/w500/4fbglyCpPqK1u40fhncLXKAF74A.jpg",
@@ -11346,7 +11346,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "The Wolverine",
+    "title": "Wolverine, The",
     "tmdbTitle": "The Wolverine",
     "type": "movie",
     "tmdbId": 76170,
