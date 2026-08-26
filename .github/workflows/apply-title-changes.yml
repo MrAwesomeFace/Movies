@@ -1,0 +1,371 @@
+name: Apply Movie Title Changes
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply-title-changes:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # ==========================================================
+      # CHECK OUT CURRENT REPOSITORY
+      # ==========================================================
+
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+
+      # ==========================================================
+      # SET UP PYTHON
+      # ==========================================================
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+
+      # ==========================================================
+      # APPLY APPROVED TITLE CHANGES
+      # ==========================================================
+
+      - name: Apply approved title changes
+        run: |
+
+          python <<'PYTHON'
+
+          import json
+          import shutil
+          import re
+
+
+          # ======================================================
+          # LOAD FILES
+          # ======================================================
+
+          with open(
+              "approved-title-changes.json",
+              "r",
+              encoding="utf-8"
+          ) as f:
+
+              changes = json.load(f)
+
+
+          with open(
+              "movies.js",
+              "r",
+              encoding="utf-8"
+          ) as f:
+
+              source = f.read()
+
+
+          # ======================================================
+          # PARSE MOVIES
+          # ======================================================
+
+          start = source.find("[")
+          end = source.rfind("]")
+
+
+          if start == -1 or end == -1:
+
+              raise SystemExit(
+                  "Could not locate movies array in movies.js"
+              )
+
+
+          array_text = source[
+              start:end + 1
+          ]
+
+
+          try:
+
+              movies = json.loads(
+                  array_text
+              )
+
+          except json.JSONDecodeError as e:
+
+              raise SystemExit(
+                  f"Could not parse movies.js: {e}"
+              )
+
+
+          # ======================================================
+          # BACKUP
+          # ======================================================
+
+          shutil.copyfile(
+              "movies.js",
+              "movies.js.before-title-changes"
+          )
+
+
+          # ======================================================
+          # APPLY CHANGES
+          # ======================================================
+
+          applied = 0
+          skipped = 0
+          errors = 0
+
+
+          for change in changes:
+
+              index = change.get(
+                  "index"
+              )
+
+              old_title = change.get(
+                  "oldTitle"
+              )
+
+              new_title = change.get(
+                  "newTitle"
+              )
+
+              tmdb_id = change.get(
+                  "tmdbId"
+              )
+
+
+              # --------------------------------------------------
+              # Validate index
+              # --------------------------------------------------
+
+              if not isinstance(
+                  index,
+                  int
+              ):
+
+                  print(
+                      f"ERROR: Invalid index "
+                      f"for {old_title}"
+                  )
+
+                  errors += 1
+
+                  continue
+
+
+              if index < 0 or index >= len(movies):
+
+                  print(
+                      f"ERROR: Index {index} "
+                      f"out of range for "
+                      f"{old_title}"
+                  )
+
+                  errors += 1
+
+                  continue
+
+
+              movie = movies[index]
+
+
+              # --------------------------------------------------
+              # Verify old title
+              # --------------------------------------------------
+
+              current_title = str(
+                  movie.get(
+                      "title",
+                      ""
+                  )
+              )
+
+
+              if current_title != old_title:
+
+                  print(
+                      f"SKIPPED: Index {index} "
+                      f"no longer matches."
+                  )
+
+                  print(
+                      f"  Expected: "
+                      f"{old_title}"
+                  )
+
+                  print(
+                      f"  Found:    "
+                      f"{current_title}"
+                  )
+
+                  skipped += 1
+
+                  continue
+
+
+              # --------------------------------------------------
+              # Verify TMDB ID when available
+              # --------------------------------------------------
+
+              if tmdb_id is not None:
+
+                  current_tmdb = movie.get(
+                      "tmdbId"
+                  )
+
+                  if str(current_tmdb) != str(tmdb_id):
+
+                      print(
+                          f"SKIPPED: TMDB mismatch "
+                          f"for {old_title}"
+                      )
+
+                      print(
+                          f"  Expected TMDB: "
+                          f"{tmdb_id}"
+                      )
+
+                      print(
+                          f"  Found TMDB:    "
+                          f"{current_tmdb}"
+                      )
+
+                      skipped += 1
+
+                      continue
+
+
+              # --------------------------------------------------
+              # Apply ONLY the title change
+              # --------------------------------------------------
+
+              movie["title"] = new_title
+
+              applied += 1
+
+
+              print(
+                  f"UPDATED: "
+                  f"{old_title} "
+                  f"→ "
+                  f"{new_title}"
+              )
+
+
+          # ======================================================
+          # WRITE UPDATED MOVIES.JS
+          # ======================================================
+
+          new_array = json.dumps(
+              movies,
+              indent=2,
+              ensure_ascii=False
+          )
+
+
+          new_source = (
+              source[:start]
+              + new_array
+              + source[end + 1:]
+          )
+
+
+          with open(
+              "movies.js",
+              "w",
+              encoding="utf-8"
+          ) as f:
+
+              f.write(new_source)
+
+
+          # ======================================================
+          # RESULTS
+          # ======================================================
+
+          print("")
+          print("========================================")
+          print("TITLE UPDATE COMPLETE")
+          print("========================================")
+          print("")
+          print(
+              f"Approved changes: {len(changes)}"
+          )
+          print(
+              f"Applied:          {applied}"
+          )
+          print(
+              f"Skipped:          {skipped}"
+          )
+          print(
+              f"Errors:           {errors}"
+          )
+          print("")
+
+
+          if errors > 0:
+
+              raise SystemExit(
+                  "Errors occurred. "
+                  "Review the output before using "
+                  "the updated catalog."
+              )
+
+          PYTHON
+
+
+      # ==========================================================
+      # SHOW CHANGES
+      # ==========================================================
+
+      - name: Show movie title changes
+        run: |
+
+          echo "========================================"
+          echo "MOVIE.JS CHANGES"
+          echo "========================================"
+
+          git diff -- movies.js
+
+
+      # ==========================================================
+      # COMMIT UPDATED MOVIES.JS
+      # ==========================================================
+
+      - name: Commit updated movies.js
+        run: |
+
+          git config user.name "github-actions[bot]"
+
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add movies.js
+
+          if git diff --cached --quiet; then
+
+            echo "No changes to commit."
+
+          else
+
+            git commit \
+              -m "Normalize movie titles for catalog sorting"
+
+            git push
+
+          fi
+
+
+      # ==========================================================
+      # UPLOAD BACKUP
+      # ==========================================================
+
+      - name: Upload pre-change backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: movies-js-before-title-changes
+          path: movies.js.before-title-changes
+          retention-days: 30
