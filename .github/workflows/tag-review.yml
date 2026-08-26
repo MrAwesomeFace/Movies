@@ -12,15 +12,29 @@ jobs:
 
     steps:
 
+      # ==========================================================
+      # CHECK OUT CURRENT MOVIE CATALOG
+      # ==========================================================
+
       - name: Check out repository
         uses: actions/checkout@v4
+
+
+      # ==========================================================
+      # SET UP PYTHON
+      # ==========================================================
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
 
-      - name: Generate tag review page
+
+      # ==========================================================
+      # BUILD REVIEW PAGE
+      # ==========================================================
+
+      - name: Create tag review tool
         run: |
 
           cat > tag_review.py <<'PYTHON'
@@ -29,22 +43,29 @@ jobs:
           import html
 
 
-          # =====================================================
-          # TAGS TO CHECK
+          # ======================================================
+          # CATEGORIES
           #
-          # Add more tags here later.
-          # =====================================================
+          # Add future categories here.
+          #
+          # Example:
+          #
+          # "halloween",
+          # "favorites",
+          # "action",
+          #
+          # ======================================================
 
-          TAGS = [
+          CATEGORIES = [
               "baseball",
-              "animated",
-              "christmas"
+              "christmas",
+              "animated"
           ]
 
 
-          # =====================================================
+          # ======================================================
           # LOAD MOVIES.JS
-          # =====================================================
+          # ======================================================
 
           with open(
               "movies.js",
@@ -66,12 +87,16 @@ jobs:
               )
 
 
-          movies_text = source[start:end + 1]
+          movies_text = source[
+              start:end + 1
+          ]
 
 
           try:
 
-              movies = json.loads(movies_text)
+              movies = json.loads(
+                  movies_text
+              )
 
           except json.JSONDecodeError as e:
 
@@ -80,284 +105,185 @@ jobs:
               )
 
 
-          # =====================================================
-          # TEXT USED FOR TAG DETECTION
-          # =====================================================
+          # ======================================================
+          # SORT MOVIES ALPHABETICALLY
+          #
+          # This only affects the review page.
+          # It does NOT change movies.js.
+          # ======================================================
 
-          def combined(movie):
+          movies = sorted(
+              movies,
+              key=lambda movie:
+                  str(
+                      movie.get(
+                          "title",
+                          ""
+                      )
+                  ).lower()
+          )
 
-              return " ".join([
-                  str(movie.get("title", "")),
-                  str(movie.get("tmdbTitle", "")),
-                  str(movie.get("genre", "")),
-                  str(movie.get("synopsis", "")),
-                  str(movie.get("cast", "")),
-                  str(movie.get("director", ""))
-              ]).lower()
+
+          # ======================================================
+          # BUILD MOVIE ROWS
+          # ======================================================
+
+          movie_rows = []
 
 
-          # =====================================================
-          # TAG DETECTION
-          # =====================================================
-
-          def guess_tags(movie):
-
-              text = combined(movie)
+          for index, movie in enumerate(movies):
 
               title = str(
-                  movie.get("title", "")
-              ).lower()
-
-              guesses = []
-
-
-              # -------------------------------------------------
-              # ANIMATED
-              # -------------------------------------------------
-
-              if (
-                  movie.get("animated")
-                  or "animation" in text
-                  or "animated" in text
-              ):
-
-                  guesses.append("animated")
+                  movie.get(
+                      "title",
+                      ""
+                  )
+              )
 
 
-              # -------------------------------------------------
-              # BASEBALL
-              # -------------------------------------------------
-
-              baseball_terms = [
-
-                  "baseball",
-                  "major league",
-                  "field of dreams",
-                  "moneyball",
-                  "bull durham",
-                  "the natural",
-                  "sandlot",
-                  "rookie of the year",
-                  "a league of their own",
-                  "eight men out",
-                  "61*",
-                  "mr. baseball",
-                  "bang the drum slowly",
-                  "hardball",
-                  "the scout",
-                  "pride of the yankees",
-                  "fever pitch",
-                  "major league 2",
-                  "major league: back to the minors"
-
-              ]
+              year = str(
+                  movie.get(
+                      "year",
+                      ""
+                  )
+              )
 
 
-              if any(
-                  term in text or term in title
-                  for term in baseball_terms
-              ):
-
-                  guesses.append("baseball")
-
-
-              # -------------------------------------------------
-              # CHRISTMAS
-              # -------------------------------------------------
-
-              christmas_terms = [
-
-                  "christmas",
-                  "santa clause",
-                  "scrooge",
-                  "grinch",
-                  "rudolph",
-                  "frosty",
-                  "white christmas",
-                  "home alone",
-                  "jingle all the way",
-                  "bad santa",
-                  "deck the halls",
-                  "family stone",
-                  "four christmas",
-                  "surviving christmas",
-                  "love actually",
-                  "polar express",
-                  "christmas story",
-                  "christmas with the kranks",
-                  "fred claus",
-                  "arthur christmas",
-                  "night before",
-                  "holdovers",
-                  "violent night",
-                  "elf"
-
-              ]
-
-
-              if any(
-                  term in text or term in title
-                  for term in christmas_terms
-              ):
-
-                  guesses.append("christmas")
-
-
-              return guesses
-
-
-          # =====================================================
-          # CREATE SUGGESTIONS
-          # =====================================================
-
-          suggestions = []
-
-
-          for movie in movies:
-
-              guessed = guess_tags(movie)
+              tmdb_id = movie.get(
+                  "tmdbId"
+              )
 
 
               existing = movie.get(
                   "categories",
                   []
-              ) or []
+              )
 
 
-              if isinstance(existing, str):
+              if existing is None:
 
-                  existing = [existing]
-
-
-              for tag in guessed:
-
-                  if tag in existing:
-
-                      continue
+                  existing = []
 
 
-                  suggestions.append({
+              if isinstance(
+                  existing,
+                  str
+              ):
 
-                      "title": movie.get(
-                          "title",
-                          ""
-                      ),
-
-                      "year": movie.get(
-                          "year",
-                          ""
-                      ),
-
-                      "tmdbId": movie.get(
-                          "tmdbId"
-                      ),
-
-                      "tag": tag
-
-                  })
+                  existing = [
+                      existing
+                  ]
 
 
-          # =====================================================
-          # BUILD HTML
-          # =====================================================
+              if not isinstance(
+                  existing,
+                  list
+              ):
 
-          sections = []
-
-
-          for tag in TAGS:
-
-              items = [
-                  item
-                  for item in suggestions
-                  if item["tag"] == tag
-              ]
+                  existing = []
 
 
-              if not items:
+              # --------------------------------------------------
+              # DISPLAY INFORMATION
+              # --------------------------------------------------
 
-                  continue
+              display_title = html.escape(
+                  title
+              )
 
 
-              rows = []
+              if year:
 
-
-              for item in items:
-
-                  title = html.escape(
-                      str(item["title"])
-                  )
-
-                  year = html.escape(
-                      str(item["year"] or "")
-                  )
-
-                  tmdb = html.escape(
-                      str(item["tmdbId"] or "")
+                  display_title += (
+                      f" ({html.escape(year)})"
                   )
 
 
-                  label = title
+              if tmdb_id is not None:
 
-
-                  if year:
-
-                      label += (
-                          f" ({year})"
-                      )
-
-
-                  if tmdb:
-
-                      label += (
-                          f" — TMDB {tmdb}"
-                      )
-
-
-                  # Store title + TMDB ID rather than a
-                  # numeric array position.
-
-                  safe_title = html.escape(
-                      str(item["title"]),
-                      quote=True
+                  display_title += (
+                      f" "
+                      f"<span class='tmdb'>"
+                      f"TMDB {html.escape(str(tmdb_id))}"
+                      f"</span>"
                   )
 
-                  safe_tmdb = html.escape(
-                      str(item["tmdbId"] or ""),
-                      quote=True
+
+              checkboxes = []
+
+
+              for category in CATEGORIES:
+
+                  checked = (
+                      category in existing
                   )
 
-                  safe_tag = html.escape(
-                      str(item["tag"]),
+
+                  checked_text = (
+                      "checked"
+                      if checked
+                      else ""
+                  )
+
+
+                  safe_category = html.escape(
+                      category,
                       quote=True
                   )
 
 
-                  rows.append(f"""
-                  <label class="movie">
-                    <input
-                      type="checkbox"
-                      class="tag-choice"
-                      data-title="{safe_title}"
-                      data-tmdb="{safe_tmdb}"
-                      data-tag="{safe_tag}"
-                      checked
-                    >
-                    <span>{label}</span>
-                  </label>
+                  checkboxes.append(f"""
+                    <label class="category">
+                      <input
+                        type="checkbox"
+                        class="category-check"
+                        data-category="{safe_category}"
+                        {checked_text}
+                      >
+                      <span>
+                        {html.escape(category.title())}
+                      </span>
+                    </label>
                   """)
 
 
-              sections.append(f"""
-              <section>
-                <h2>{html.escape(tag.title())}</h2>
-                {''.join(rows)}
-              </section>
+              movie_rows.append(f"""
+                <div
+                  class="movie-row"
+                  data-title="{html.escape(title.lower(), quote=True)}"
+                  data-tmdb="{html.escape(str(tmdb_id or ''), quote=True)}"
+                >
+
+                  <div class="movie-title">
+                    {display_title}
+                  </div>
+
+                  <div class="categories">
+                    {''.join(checkboxes)}
+                  </div>
+
+                </div>
               """)
 
 
-          # =====================================================
-          # HTML PAGE
-          # =====================================================
+          # ======================================================
+          # BUILD HTML
+          # ======================================================
+
+          category_headers = []
+
+
+          for category in CATEGORIES:
+
+              category_headers.append(
+                  f"<span>{html.escape(category.title())}</span>"
+              )
+
+
+          category_header_html = "".join(
+              category_headers
+          )
+
 
           page = f"""<!DOCTYPE html>
 
@@ -372,7 +298,7 @@ jobs:
             content="width=device-width, initial-scale=1"
           >
 
-          <title>BW's Movie Tag Review</title>
+          <title>BW's Movie Tag Manager</title>
 
 
           <style>
@@ -386,10 +312,11 @@ jobs:
 
             margin: 0;
 
-            padding: 30px;
+            padding: 25px;
 
             font-family:
               Arial,
+              Helvetica,
               sans-serif;
 
             background: #111;
@@ -401,9 +328,9 @@ jobs:
 
           .container {{
 
-            max-width: 900px;
+            max-width: 1100px;
 
-            margin: auto;
+            margin: 0 auto;
 
           }}
 
@@ -415,69 +342,11 @@ jobs:
           }}
 
 
-          .summary {{
+          .subtitle {{
 
             color: #aaa;
 
-            margin-bottom: 30px;
-
-          }}
-
-
-          section {{
-
-            background: #1c1c1c;
-
-            border-radius: 12px;
-
-            padding: 20px;
-
-            margin-bottom: 20px;
-
-          }}
-
-
-          h2 {{
-
-            margin-top: 0;
-
-            text-transform: capitalize;
-
-          }}
-
-
-          .movie {{
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 12px;
-
-            padding: 11px 8px;
-
-            border-bottom:
-              1px solid #333;
-
-            cursor: pointer;
-
-          }}
-
-
-          .movie:hover {{
-
-            background: #252525;
-
-          }}
-
-
-          input[type="checkbox"] {{
-
-            width: 20px;
-
-            height: 20px;
-
-            flex-shrink: 0;
+            margin-bottom: 25px;
 
           }}
 
@@ -486,59 +355,320 @@ jobs:
 
             background: #202a36;
 
+            padding: 18px;
+
             border-radius: 10px;
 
-            padding: 15px;
-
-            margin-bottom: 25px;
+            margin-bottom: 20px;
 
             line-height: 1.5;
 
           }}
 
 
-          .save {{
+          .toolbar {{
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 10;
+
+            background: #111;
+
+            padding: 12px 0;
+
+            border-bottom:
+              1px solid #333;
+
+            margin-bottom: 10px;
+
+          }}
+
+
+          #search {{
+
+            width: 100%;
+
+            padding: 12px;
+
+            font-size: 16px;
+
+            border-radius: 8px;
+
+            border:
+              1px solid #444;
 
             background: #222;
 
-            border-radius: 10px;
+            color: #fff;
 
-            padding: 20px;
+            margin-bottom: 12px;
 
-            margin-top: 30px;
+          }}
+
+
+          .toolbar-buttons {{
+
+            display: flex;
+
+            gap: 8px;
+
+            flex-wrap: wrap;
 
           }}
 
 
           button {{
 
-            padding: 12px 18px;
+            padding: 9px 14px;
 
-            border: none;
+            border: 0;
 
-            border-radius: 8px;
-
-            font-size: 16px;
+            border-radius: 7px;
 
             cursor: pointer;
+
+            background: #333;
+
+            color: #fff;
 
           }}
 
 
-          .download {{
+          button:hover {{
+
+            background: #444;
+
+          }}
+
+
+          .save-button {{
 
             background: #eee;
 
             color: #111;
 
+            font-weight: bold;
+
           }}
 
 
-          .count {{
+          .save-button:hover {{
 
-            margin-left: 10px;
+            background: #ddd;
+
+          }}
+
+
+          .table-header {{
+
+            display: grid;
+
+            grid-template-columns:
+              minmax(300px, 1fr)
+              360px;
+
+            gap: 20px;
+
+            padding: 10px 14px;
 
             color: #aaa;
+
+            font-size: 13px;
+
+            text-transform: uppercase;
+
+            letter-spacing: .05em;
+
+          }}
+
+
+          .category-header {{
+
+            display: grid;
+
+            grid-template-columns:
+              repeat(3, 1fr);
+
+            gap: 8px;
+
+            text-align: center;
+
+          }}
+
+
+          .movie-row {{
+
+            display: grid;
+
+            grid-template-columns:
+              minmax(300px, 1fr)
+              360px;
+
+            gap: 20px;
+
+            align-items: center;
+
+            padding: 12px 14px;
+
+            background: #1b1b1b;
+
+            border-bottom:
+              1px solid #303030;
+
+          }}
+
+
+          .movie-row:nth-child(even) {{
+
+            background: #181818;
+
+          }}
+
+
+          .movie-title {{
+
+            font-size: 15px;
+
+          }}
+
+
+          .tmdb {{
+
+            color: #777;
+
+            font-size: 12px;
+
+          }}
+
+
+          .categories {{
+
+            display: grid;
+
+            grid-template-columns:
+              repeat(3, 1fr);
+
+            gap: 8px;
+
+          }}
+
+
+          .category {{
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 5px;
+
+            padding: 7px 3px;
+
+            border-radius: 6px;
+
+            cursor: pointer;
+
+            background: #252525;
+
+            font-size: 13px;
+
+          }}
+
+
+          .category:hover {{
+
+            background: #303030;
+
+          }}
+
+
+          .category input {{
+
+            width: 17px;
+
+            height: 17px;
+
+          }}
+
+
+          .stats {{
+
+            color: #aaa;
+
+            margin-top: 10px;
+
+          }}
+
+
+          .bottom {{
+
+            margin-top: 25px;
+
+            padding: 20px;
+
+            background: #1b1b1b;
+
+            border-radius: 10px;
+
+          }}
+
+
+          .warning {{
+
+            color: #bbb;
+
+            line-height: 1.5;
+
+          }}
+
+
+          @media (max-width: 750px) {{
+
+            body {{
+
+              padding: 12px;
+
+            }}
+
+
+            .table-header {{
+
+              display: none;
+
+            }}
+
+
+            .movie-row {{
+
+              display: block;
+
+              padding: 15px;
+
+            }}
+
+
+            .movie-title {{
+
+              margin-bottom: 10px;
+
+            }}
+
+
+            .categories {{
+
+              width: 100%;
+
+            }}
+
+
+            .category {{
+
+              padding: 10px 3px;
+
+            }}
 
           }}
 
@@ -554,14 +684,13 @@ jobs:
 
 
             <h1>
-              BW's Movie Tag Review
+              BW's Movie Tag Manager
             </h1>
 
 
-            <div class="summary">
+            <div class="subtitle">
 
-              {len(suggestions)}
-              suggested tags found
+              {len(movies)} movies in catalog
 
             </div>
 
@@ -569,63 +698,155 @@ jobs:
             <div class="instructions">
 
               <strong>
-                Review the suggestions below.
+                Review your entire collection.
               </strong>
 
               <br>
 
-              Leave a box checked if the
-              category is correct.
+              Check every category that applies
+              to each movie.
 
-              Uncheck anything that is wrong.
+              Existing categories are already
+              checked.
 
               <br><br>
 
-              Nothing in
-              <code>movies.js</code>
-              will be changed during this review.
+              Changes are not made to
+              <code>movies.js</code> during this
+              review.
+
+              When finished, click
+              <strong>Download Approved Tags</strong>.
 
             </div>
 
 
-            <form id="reviewForm">
-
-              {''.join(sections)}
+            <div class="toolbar">
 
 
-              <div class="save">
+              <input
+                id="search"
+                type="search"
+                placeholder="Filter movies..."
+                autocomplete="off"
+              >
 
-                <strong>
-                  Finished reviewing?
-                </strong>
 
+              <div class="toolbar-buttons">
 
-                <p>
-
-                  Click below to download
-                  the approved tags.
-
-                </p>
+                <button
+                  type="button"
+                  onclick="checkAll('baseball')"
+                >
+                  Check All Baseball
+                </button>
 
 
                 <button
                   type="button"
-                  class="download"
-                  onclick="downloadApproved()"
+                  onclick="uncheckAll('baseball')"
                 >
-                  Download Approved Tags
+                  Clear Baseball
                 </button>
 
 
-                <span
-                  class="count"
-                  id="count"
-                ></span>
+                <button
+                  type="button"
+                  onclick="checkAll('christmas')"
+                >
+                  Check All Christmas
+                </button>
+
+
+                <button
+                  type="button"
+                  onclick="uncheckAll('christmas')"
+                >
+                  Clear Christmas
+                </button>
+
+
+                <button
+                  type="button"
+                  onclick="checkAll('animated')"
+                >
+                  Check All Animated
+                </button>
+
+
+                <button
+                  type="button"
+                  onclick="uncheckAll('animated')"
+                >
+                  Clear Animated
+                </button>
 
               </div>
 
 
-            </form>
+              <div
+                class="stats"
+                id="stats"
+              >
+                Showing {len(movies)} movies
+              </div>
+
+
+            </div>
+
+
+            <div class="table-header">
+
+              <div>
+                Movie
+              </div>
+
+              <div class="category-header">
+
+                {category_header_html}
+
+              </div>
+
+            </div>
+
+
+            <div id="movies">
+
+              {''.join(movie_rows)}
+
+            </div>
+
+
+            <div class="bottom">
+
+              <p class="warning">
+
+                When you click the button below,
+                the current state of every movie's
+                categories will be exported.
+
+                <br><br>
+
+                This does <strong>not</strong>
+                update GitHub by itself.
+
+                Upload the resulting
+                <code>approved-tags.json</code>
+                to the repository and then run
+                <strong>Apply Movie Tags</strong>.
+
+              </p>
+
+
+              <button
+                class="save-button"
+                type="button"
+                onclick="downloadApproved()"
+              >
+                Download Approved Tags
+              </button>
+
+            </div>
 
 
           </div>
@@ -633,87 +854,270 @@ jobs:
 
           <script>
 
-          function downloadApproved() {{
 
-              const boxes =
-                document.querySelectorAll(
-                  ".tag-choice:checked"
-                );
+          // ====================================================
+          // SEARCH
+          // ====================================================
 
-
-              const results = [];
-
-
-              boxes.forEach(box => {{
-
-                  results.push({{
-
-                      title:
-                        box.dataset.title,
-
-                      tmdbId:
-                        box.dataset.tmdb || null,
-
-                      tag:
-                        box.dataset.tag
-
-                  }});
-
-              }});
+          const search =
+            document.getElementById(
+              "search"
+            );
 
 
-              const data =
-                JSON.stringify(
-                  results,
-                  null,
-                  2
-                );
+          const rows =
+            document.querySelectorAll(
+              ".movie-row"
+            );
 
 
-              const blob =
-                new Blob(
-                  [data],
-                  {{
-                    type:
-                      "application/json"
+          const stats =
+            document.getElementById(
+              "stats"
+            );
+
+
+          search.addEventListener(
+            "input",
+            function() {{
+
+              const query =
+                search.value
+                  .trim()
+                  .toLowerCase();
+
+
+              let visible = 0;
+
+
+              rows.forEach(
+                function(row) {{
+
+                  const title =
+                    row.dataset.title;
+
+
+                  const matches =
+                    !query ||
+                    title.includes(query);
+
+
+                  row.style.display =
+                    matches
+                    ? ""
+                    : "grid";
+
+
+                  if (
+                    matches
+                  ) {{
+
+                    visible++;
+
+                  }} else {{
+
+                    row.style.display =
+                      "none";
+
                   }}
-                );
 
-
-              const url =
-                URL.createObjectURL(
-                  blob
-                );
-
-
-              const link =
-                document.createElement(
-                  "a"
-                );
-
-
-              link.href = url;
-
-
-              link.download =
-                "approved-tags.json";
-
-
-              link.click();
-
-
-              URL.revokeObjectURL(
-                url
+                }}
               );
 
 
-              document.getElementById(
-                "count"
-              ).textContent =
-                results.length +
-                " approved tags selected.";
+              stats.textContent =
+                "Showing "
+                + visible
+                + " movies";
+
+            }}
+          );
+
+
+          // ====================================================
+          // CHECK / UNCHECK ENTIRE CATEGORY
+          // ====================================================
+
+          function setCategory(
+            category,
+            checked
+          ) {{
+
+            document
+              .querySelectorAll(
+                '.category-check[data-category="' +
+                category +
+                '"]'
+              )
+              .forEach(
+                function(box) {{
+
+                  box.checked =
+                    checked;
+
+                }}
+              );
 
           }}
+
+
+          function checkAll(
+            category
+          ) {{
+
+            setCategory(
+              category,
+              true
+            );
+
+          }}
+
+
+          function uncheckAll(
+            category
+          ) {{
+
+            setCategory(
+              category,
+              false
+            );
+
+          }}
+
+
+          // ====================================================
+          // EXPORT
+          // ====================================================
+
+          function downloadApproved() {{
+
+            const results = [];
+
+
+            rows.forEach(
+              function(row) {{
+
+                const title =
+                  row.dataset.title;
+
+
+                const tmdbId =
+                  row.dataset.tmdb ||
+                  null;
+
+
+                const categories = [];
+
+
+                row
+                  .querySelectorAll(
+                    ".category-check"
+                  )
+                  .forEach(
+                    function(box) {{
+
+                      if (
+                        box.checked
+                      ) {{
+
+                        categories.push(
+                          box.dataset.category
+                        );
+
+                      }}
+
+                    }}
+                  );
+
+
+                results.push({{
+
+                  title:
+                    row.querySelector(
+                      ".movie-title"
+                    ).innerText
+                      .replace(
+                        /\\s+TMDB.*$/,
+                        ""
+                      )
+                      .trim(),
+
+                  tmdbId:
+                    tmdbId,
+
+                  categories:
+                    categories
+
+                }});
+
+              }}
+            );
+
+
+            const data =
+              JSON.stringify(
+                results,
+                null,
+                2
+              );
+
+
+            const blob =
+              new Blob(
+                [data],
+                {{
+                  type:
+                    "application/json"
+                }}
+              );
+
+
+            const url =
+              URL.createObjectURL(
+                blob
+              );
+
+
+            const link =
+              document.createElement(
+                "a"
+              );
+
+
+            link.href =
+              url;
+
+
+            link.download =
+              "approved-tags.json";
+
+
+            document.body.appendChild(
+              link
+            );
+
+
+            link.click();
+
+
+            document.body.removeChild(
+              link
+            );
+
+
+            URL.revokeObjectURL(
+              url
+            );
+
+
+            alert(
+              "Approved tags exported for "
+              + results.length
+              + " movies."
+            );
+
+          }}
+
 
           </script>
 
@@ -724,6 +1128,10 @@ jobs:
           """
 
 
+          # ======================================================
+          # WRITE REVIEW PAGE
+          # ======================================================
+
           with open(
               "tag-review.html",
               "w",
@@ -733,20 +1141,16 @@ jobs:
               f.write(page)
 
 
-          # =====================================================
-          # SUMMARY
-          # =====================================================
-
           print("")
           print("========================================")
-          print("TAG REVIEW CREATED")
+          print("FULL CATALOG TAG REVIEW CREATED")
           print("========================================")
           print("")
           print(
-              f"Movies scanned:    {len(movies)}"
+              f"Movies included: {len(movies)}"
           )
           print(
-              f"Suggestions found: {len(suggestions)}"
+              f"Categories: {', '.join(CATEGORIES)}"
           )
           print("")
           print(
@@ -754,10 +1158,10 @@ jobs:
           )
           print("")
           print(
-              "Download the tag-review.html artifact"
+              "Download tag-review.html from the"
           )
           print(
-              "and review the suggested tags."
+              "workflow artifact."
           )
 
           PYTHON
@@ -765,6 +1169,10 @@ jobs:
 
           python tag_review.py
 
+
+      # ==========================================================
+      # UPLOAD HTML REVIEW TOOL
+      # ==========================================================
 
       - name: Upload review page
         uses: actions/upload-artifact@v4
