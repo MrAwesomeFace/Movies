@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>BW's Movie Collection — Tag Manager</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #eee;
+      margin: 0;
+      padding: 30px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    h1 {
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      color: #aaa;
+      margin-bottom: 30px;
+    }
+
+    button {
+      background: #333;
+      color: white;
+      border: 1px solid #555;
+      border-radius: 6px;
+      padding: 10px 16px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    button:hover {
+      background: #444;
+    }
+
+    .primary {
+      background: #2563eb;
+      border-color: #2563eb;
+    }
+
+    .primary:hover {
+      background: #1d4ed8;
+    }
+
+    .tag-section {
+      margin-top: 30px;
+      background: #1b1b1b;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .tag-section h2 {
+      margin-top: 0;
+    }
+
+    .movie {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid #333;
+    }
+
+    .movie:last-child {
+      border-bottom: none;
+    }
+
+    .movie input {
+      width: 18px;
+      height: 18px;
+    }
+
+    .movie-title {
+      font-weight: 600;
+    }
+
+    .movie-year {
+      color: #888;
+      margin-left: 5px;
+    }
+
+    .confidence {
+      color: #999;
+      font-size: 12px;
+      margin-left: auto;
+    }
+
+    .status {
+      margin-top: 20px;
+      padding: 15px;
+      background: #1b1b1b;
+      border-radius: 8px;
+      white-space: pre-wrap;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tag-name {
+      font-size: 24px;
+    }
+
+    .manual-area {
+      margin-top: 30px;
+      padding: 20px;
+      background: #1b1b1b;
+      border-radius: 10px;
+    }
+
+    input[type="text"] {
+      background: #222;
+      color: white;
+      border: 1px solid #555;
+      border-radius: 6px;
+      padding: 10px;
+      font-size: 15px;
+    }
+
+    .note {
+      color: #aaa;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>BW's Movie Collection — Tag Manager</h1>
+
+  <p class="subtitle">
+    Review suggested tags before changing the catalog.
+  </p>
+
+  <div class="controls">
+    <button onclick="analyzeCollection()">
+      Analyze Collection
+    </button>
+
+    <button onclick="selectAll()">
+      Select All Suggestions
+    </button>
+
+    <button onclick="clearAll()">
+      Clear All
+    </button>
+  </div>
+
+  <div id="status" class="status">
+    Ready. Click "Analyze Collection".
+  </div>
+
+  <div id="results"></div>
+
+  <div class="manual-area">
+
+    <h2>Add Another Tag</h2>
+
+    <p class="note">
+      This does not modify the catalog yet. It simply lets you define
+      another tag for future use.
+    </p>
+
+    <input
+      type="text"
+      id="new-tag"
+      placeholder="Example: action"
+    >
+
+    <button onclick="addTagType()">
+      Add Tag Type
+    </button>
+
+    <div id="tag-types"></div>
+
+  </div>
+
+</div>
+
+
+<script src="movies.js"></script>
+
+<script>
+
+  /*
+    =========================================================
+    TAG CONFIGURATION
+
+    These are the initial tag types.
+
+    Add future tags here if you want to expand the automatic
+    suggestions.
+    =========================================================
+  */
+
+  const tagRules = {
+
+    baseball: {
+
+      label: "⚾ Baseball",
+
+      rules: [
+        "baseball",
+        "major league",
+        "moneyball",
+        "league of their own",
+        "field of dreams",
+        "bull durham",
+        "sandlot",
+        "eight men out",
+        "61*",
+        "bang the drum slowly",
+        "hardball",
+        "rookie of the year",
+        "the natural",
+        "mr. baseball",
+        "pride of the yankees",
+        "major league",
+        "trouble with the curve",
+        "the scout",
+        "benchwarmer"
+      ]
+
+    },
+
+
+    christmas: {
+
+      label: "🎄 Christmas",
+
+      rules: [
+        "christmas",
+        "scrooged",
+        "elf",
+        "home alone",
+        "bad santa",
+        "fred claus",
+        "arthur christmas",
+        "the night before",
+        "deck the halls",
+        "the family stone",
+        "four christmas",
+        "surviving christmas",
+        "jingle all the way",
+        "love the coopers",
+        "white christmas",
+        "its a wonderful life",
+        "a christmas story",
+        "christmas with the kranks",
+        "the ref",
+        "polar express",
+        "grinch",
+        "frosty the snowman",
+        "rudolph",
+        "violent night",
+        "holdovers",
+        "best christmas pageant"
+      ]
+
+    },
+
+
+    animated: {
+
+      label: "🎨 Animated",
+
+      rules: [
+
+        "animation",
+        "animated",
+        "101 dalmatians",
+        "aladdin",
+        "beauty and the beast",
+        "cinderella",
+        "finding nemo",
+        "jungle book",
+        "lion king",
+        "mulan",
+        "princess and the frog",
+        "return to neverland",
+        "space jam",
+        "who framed roger rabbit",
+        "lego movie",
+        "lego movie 2",
+        "lego movie batman",
+        "batman: the animated series",
+        "clerks the animated series",
+        "sonic the hedgehog"
+
+      ]
+
+    }
+
+  };
+
+
+  /*
+    =========================================================
+    STORAGE FOR SUGGESTIONS
+    =========================================================
+  */
+
+  let suggestions = {};
+
+
+  /*
+    =========================================================
+    ANALYZE COLLECTION
+    =========================================================
+  */
+
+  function analyzeCollection() {
+
+    suggestions = {};
+
+    Object.keys(tagRules).forEach(tag => {
+
+      suggestions[tag] = [];
+
+    });
+
+
+    movies.forEach((movie, index) => {
+
+      const text = [
+
+        movie.title || "",
+        movie.tmdbTitle || "",
+        movie.genre || "",
+        movie.synopsis || "",
+        movie.cast || "",
+        movie.director || ""
+
+      ]
+        .join(" ")
+        .toLowerCase();
+
+
+      Object.keys(tagRules).forEach(tag => {
+
+        const ruleSet = tagRules[tag];
+
+        let matched = false;
+        let matchedRule = "";
+
+
+        /*
+          Genre is given extra weight for animated.
+        */
+
+        if (
+          tag === "animated" &&
+          (movie.genre || "")
+            .toLowerCase()
+            .includes("animation")
+        ) {
+
+          matched = true;
+          matchedRule = "TMDB genre: Animation";
+
+        }
+
+
+        if (!matched) {
+
+          for (const rule of ruleSet.rules) {
+
+            if (text.includes(rule.toLowerCase())) {
+
+              matched = true;
+              matchedRule = rule;
+              break;
+
+            }
+
+          }
+
+        }
+
+
+        if (matched) {
+
+          suggestions[tag].push({
+
+            index: index,
+            movie: movie,
+            reason: matchedRule
+
+          });
+
+        }
+
+      });
+
+    });
+
+
+    renderResults();
+
+  }
+
+
+  /*
+    =========================================================
+    RENDER RESULTS
+    =========================================================
+  */
+
+  function renderResults() {
+
+    const results =
+      document.getElementById("results");
+
+    results.innerHTML = "";
+
+
+    Object.keys(suggestions).forEach(tag => {
+
+      const section =
+        document.createElement("div");
+
+      section.className =
+        "tag-section";
+
+
+      const heading =
+        document.createElement("h2");
+
+      heading.innerHTML =
+        `<span class="tag-name">${tagRules[tag].label}</span>`;
+
+      section.appendChild(heading);
+
+
+      if (suggestions[tag].length === 0) {
+
+        const empty =
+          document.createElement("p");
+
+        empty.textContent =
+          "No suggestions.";
+
+        empty.className =
+          "note";
+
+        section.appendChild(empty);
+
+      }
+
+
+      suggestions[tag].forEach((item, suggestionIndex) => {
+
+        const row =
+          document.createElement("div");
+
+        row.className =
+          "movie";
+
+
+        const checkbox =
+          document.createElement("input");
+
+        checkbox.type =
+          "checkbox";
+
+        checkbox.className =
+          "tag-checkbox";
+
+        checkbox.dataset.tag =
+          tag;
+
+        checkbox.dataset.index =
+          item.index;
+
+
+        /*
+          Automatically select suggestions.
+
+          You can uncheck anything you don't want.
+        */
+
+        checkbox.checked = true;
+
+
+        const title =
+          document.createElement("span");
+
+        title.className =
+          "movie-title";
+
+        title.textContent =
+          item.movie.title;
+
+
+        const year =
+          document.createElement("span");
+
+        year.className =
+          "movie-year";
+
+        year.textContent =
+          item.movie.year
+            ? `(${item.movie.year})`
+            : "";
+
+
+        const reason =
+          document.createElement("span");
+
+        reason.className =
+          "confidence";
+
+        reason.textContent =
+          `matched: ${item.reason}`;
+
+
+        row.appendChild(checkbox);
+        row.appendChild(title);
+        row.appendChild(year);
+        row.appendChild(reason);
+
+        section.appendChild(row);
+
+      });
+
+
+      results.appendChild(section);
+
+    });
+
+
+    const approval =
+      document.createElement("div");
+
+    approval.className =
+      "tag-section";
+
+
+    approval.innerHTML = `
+
+      <h2>Approve Changes</h2>
+
+      <p class="note">
+        Review the three sections above. Uncheck anything that
+        should NOT receive the suggested tag.
+        Nothing is changed in movies.js by this page yet.
+      </p>
+
+      <button class="primary" onclick="generateUpdate()">
+        Generate Approved Changes
+      </button>
+
+    `;
+
+
+    results.appendChild(approval);
+
+  }
+
+
+  /*
+    =========================================================
+    GENERATE APPROVED CHANGES
+    =========================================================
+  */
+
+  function generateUpdate() {
+
+    const selected =
+      document.querySelectorAll(
+        ".tag-checkbox:checked"
+      );
+
+
+    const updates = {};
+
+
+    selected.forEach(checkbox => {
+
+      const tag =
+        checkbox.dataset.tag;
+
+      const index =
+        Number(checkbox.dataset.index);
+
+
+      if (!updates[index]) {
+
+        updates[index] = [];
+
+      }
+
+
+      updates[index].push(tag);
+
+    });
+
+
+    /*
+      For now we display exactly what will happen.
+
+      We are intentionally NOT writing to movies.js yet.
+    */
+
+    let output =
+      "APPROVED TAG CHANGES\n";
+    
+    output +=
+      "====================\n\n";
+
+
+    Object.keys(updates).forEach(index => {
+
+      const movie =
+        movies[index];
+
+      output +=
+        `${movie.title} (${movie.year || ""})\n`;
+
+      output +=
+        `  → ${updates[index].join(", ")}\n\n`;
+
+    });
+
+
+    if (
+      Object.keys(updates).length === 0
+    ) {
+
+      output +=
+        "No changes selected.";
+
+    }
+
+
+    document.getElementById("status")
+      .textContent = output;
+
+  }
+
+
+  /*
+    =========================================================
+    SELECT / CLEAR
+    =========================================================
+  */
+
+  function selectAll() {
+
+    document
+      .querySelectorAll(".tag-checkbox")
+      .forEach(box => {
+
+        box.checked = true;
+
+      });
+
+  }
+
+
+  function clearAll() {
+
+    document
+      .querySelectorAll(".tag-checkbox")
+      .forEach(box => {
+
+        box.checked = false;
+
+      });
+
+  }
+
+
+  /*
+    =========================================================
+    ADD FUTURE TAG TYPE
+    =========================================================
+  */
+
+  function addTagType() {
+
+    const input =
+      document.getElementById("new-tag");
+
+    const tag =
+      input.value
+        .trim()
+        .toLowerCase();
+
+
+    if (!tag) {
+
+      return;
+
+    }
+
+
+    if (tagRules[tag]) {
+
+      alert("That tag already exists.");
+
+      return;
+
+    }
+
+
+    tagRules[tag] = {
+
+      label: tag,
+
+      rules: [
+        tag
+      ]
+
+    };
+
+
+    input.value = "";
+
+
+    renderTagTypes();
+
+  }
+
+
+  function renderTagTypes() {
+
+    const container =
+      document.getElementById("tag-types");
+
+    container.innerHTML =
+      "<p class='note'>Available tag types:</p>";
+
+
+    Object.keys(tagRules).forEach(tag => {
+
+      const item =
+        document.createElement("div");
+
+      item.textContent =
+        `• ${tag}`;
+
+      container.appendChild(item);
+
+    });
+
+  }
+
+
+  renderTagTypes();
+
+</script>
+
+</body>
+</html>
