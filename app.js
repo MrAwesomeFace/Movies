@@ -42,9 +42,32 @@ const flipButton = document.getElementById("flip-button");
 // CURRENT STATE
 // =========================================================
 
-let currentFilter = "all";
 let currentSearch = "";
 let currentMovie = null;
+
+
+/*
+  Filters are now independent.
+
+  Type:
+    all / movie / tv / misc
+
+  Media:
+    all / physical / digital
+
+  Category:
+    baseball / christmas / none
+
+  Animated:
+    mixed / hide / only
+*/
+
+let activeFilters = {
+  type: "all",
+  media: "all",
+  category: null,
+  animated: "mixed"
+};
 
 
 // =========================================================
@@ -88,44 +111,25 @@ function renderMovies() {
   const filteredMovies = movies.filter(movie => {
 
 
-    // ------------------------------------------------------
-    // TYPE FILTERS
-    // ------------------------------------------------------
+    // ======================================================
+    // TYPE FILTER
+    // ======================================================
 
     if (
-      currentFilter === "movie" &&
-      movie.type !== "movie"
+      activeFilters.type !== "all" &&
+      movie.type !== activeFilters.type
     ) {
       return false;
     }
 
 
-    if (
-      currentFilter === "tv" &&
-      movie.type !== "tv"
-    ) {
-      return false;
-    }
-
+    // ======================================================
+    // PHYSICAL / DIGITAL FILTER
+    // ======================================================
 
     if (
-      currentFilter === "misc" &&
-      movie.type !== "misc"
+      activeFilters.media === "physical"
     ) {
-      return false;
-    }
-
-
-    // ------------------------------------------------------
-    // PHYSICAL / DIGITAL FILTERS
-    //
-    // These work independently of movie type.
-    //
-    // A movie with both physical AND digital copies
-    // appears in BOTH filters.
-    // ------------------------------------------------------
-
-    if (currentFilter === "physical") {
 
       if (
         !movie.physical ||
@@ -137,7 +141,9 @@ function renderMovies() {
     }
 
 
-    if (currentFilter === "digital") {
+    if (
+      activeFilters.media === "digital"
+    ) {
 
       if (
         !movie.digital ||
@@ -149,9 +155,59 @@ function renderMovies() {
     }
 
 
-    // ------------------------------------------------------
+    // ======================================================
+    // CATEGORY FILTER
+    // ======================================================
+
+    if (
+      activeFilters.category
+    ) {
+
+      const categories =
+        movie.categories || [];
+
+      if (
+        !categories.includes(
+          activeFilters.category
+        )
+      ) {
+        return false;
+      }
+
+    }
+
+
+    // ======================================================
+    // ANIMATED FILTER
+    //
+    // Mixed = everything
+    // Hide  = exclude animated
+    // Only  = animated only
+    // ======================================================
+
+    const isAnimated =
+      (movie.categories || []).includes("animated");
+
+
+    if (
+      activeFilters.animated === "hide" &&
+      isAnimated
+    ) {
+      return false;
+    }
+
+
+    if (
+      activeFilters.animated === "only" &&
+      !isAnimated
+    ) {
+      return false;
+    }
+
+
+    // ======================================================
     // SEARCH
-    // ------------------------------------------------------
+    // ======================================================
 
     if (currentSearch) {
 
@@ -162,6 +218,7 @@ function renderMovies() {
       const searchableText = [
 
         movie.title,
+        movie.tmdbTitle,
         movie.year,
         movie.genre,
         movie.director,
@@ -170,13 +227,19 @@ function renderMovies() {
         movie.type
 
       ]
-        .filter(value => value !== null && value !== undefined)
+        .filter(
+          value =>
+            value !== null &&
+            value !== undefined
+        )
         .join(" ")
         .toLowerCase();
 
 
       if (
-        !searchableText.includes(searchText)
+        !searchableText.includes(
+          searchText
+        )
       ) {
         return false;
       }
@@ -193,8 +256,15 @@ function renderMovies() {
   // SORT ALPHABETICALLY
   // ======================================================
 
-  filteredMovies.sort((a, b) =>
-    a.title.localeCompare(b.title)
+  filteredMovies.sort(
+    (a, b) =>
+      a.title.localeCompare(
+        b.title,
+        undefined,
+        {
+          sensitivity: "base"
+        }
+      )
   );
 
 
@@ -202,9 +272,16 @@ function renderMovies() {
   // UPDATE COUNT
   // ======================================================
 
+  const filtersAreActive =
+    activeFilters.type !== "all" ||
+    activeFilters.media !== "all" ||
+    activeFilters.category !== null ||
+    activeFilters.animated !== "mixed";
+
+
   if (
     currentSearch ||
-    currentFilter !== "all"
+    filtersAreActive
   ) {
 
     movieCount.textContent =
@@ -222,15 +299,21 @@ function renderMovies() {
   // NO RESULTS
   // ======================================================
 
-  if (filteredMovies.length === 0) {
+  if (
+    filteredMovies.length === 0
+  ) {
 
-    noResults.classList.remove("hidden");
+    noResults.classList.remove(
+      "hidden"
+    );
 
     return;
 
   } else {
 
-    noResults.classList.add("hidden");
+    noResults.classList.add(
+      "hidden"
+    );
 
   }
 
@@ -239,14 +322,21 @@ function renderMovies() {
   // CREATE CARDS
   // ======================================================
 
-  filteredMovies.forEach((movie, index) => {
+  filteredMovies.forEach(
+    (movie, index) => {
 
-    const card =
-      createMovieCard(movie, index);
+      const card =
+        createMovieCard(
+          movie,
+          index
+        );
 
-    movieGrid.appendChild(card);
+      movieGrid.appendChild(
+        card
+      );
 
-  });
+    }
+  );
 
 }
 
@@ -255,14 +345,23 @@ function renderMovies() {
 // CREATE MOVIE CARD
 // =========================================================
 
-function createMovieCard(movie, index) {
+function createMovieCard(
+  movie,
+  index
+) {
 
   const card =
-    document.createElement("article");
+    document.createElement(
+      "article"
+    );
 
-  card.className = "movie-card";
+  card.className =
+    "movie-card";
 
-  card.setAttribute("tabindex", "0");
+  card.setAttribute(
+    "tabindex",
+    "0"
+  );
 
 
   // ------------------------------------------------------
@@ -270,18 +369,24 @@ function createMovieCard(movie, index) {
   // ------------------------------------------------------
 
   const colors =
-    coverColors[index % coverColors.length];
+    coverColors[
+      index % coverColors.length
+    ];
 
 
   const cover =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
   cover.className =
     "movie-cover";
 
 
   const coverInner =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
   coverInner.className =
     "movie-cover-inner";
@@ -289,9 +394,6 @@ function createMovieCard(movie, index) {
 
   // ------------------------------------------------------
   // TMDB POSTER
-  //
-  // Use the actual TMDB poster when available.
-  // Otherwise fall back to the old gradient cover.
   // ------------------------------------------------------
 
   if (movie.poster) {
@@ -311,19 +413,23 @@ function createMovieCard(movie, index) {
   } else {
 
     coverInner.style.background =
-      `linear-gradient(145deg, ${colors[0]}, ${colors[1]})`;
+      `linear-gradient(
+        145deg,
+        ${colors[0]},
+        ${colors[1]}
+      )`;
 
   }
 
 
   // ------------------------------------------------------
   // COVER OVERLAY
-  //
-  // Poster itself is now kept clean.
   // ------------------------------------------------------
 
   const coverOverlay =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
   coverOverlay.style.position =
     "absolute";
@@ -331,73 +437,32 @@ function createMovieCard(movie, index) {
   coverOverlay.style.inset =
     "0";
 
-  coverOverlay.style.pointerEvents =
-    "none";
+  coverOverlay.style.display =
+    "flex";
+
+  coverOverlay.style.flexDirection =
+    "column";
+
+  coverOverlay.style.justifyContent =
+    "flex-end";
+
+  coverOverlay.style.padding =
+    "14px";
+
+  coverOverlay.style.background =
+    movie.poster
+      ? "linear-gradient(to top, rgba(0,0,0,.85), rgba(0,0,0,0) 65%)"
+      : "transparent";
 
 
   // ------------------------------------------------------
-  // ASSEMBLE COVER
+  // BADGES
   // ------------------------------------------------------
-
-  coverInner.appendChild(coverOverlay);
-
-  cover.appendChild(coverInner);
-
-  card.appendChild(cover);
-
-
-  // ======================================================
-  // TITLE UNDER POSTER
-  // ======================================================
-
-  const title =
-    document.createElement("div");
-
-  title.className =
-    "movie-card-title";
-
-  title.textContent =
-    movie.title;
-
-
-  // ------------------------------------------------------
-  // AUTOMATIC FONT SIZING
-  //
-  // Short titles remain large.
-  // Longer titles automatically shrink.
-  // ------------------------------------------------------
-
-  const titleLength =
-    movie.title ? movie.title.length : 0;
-
-  if (titleLength <= 18) {
-
-    title.style.fontSize = "16px";
-
-  } else if (titleLength <= 28) {
-
-    title.style.fontSize = "14px";
-
-  } else if (titleLength <= 40) {
-
-    title.style.fontSize = "12px";
-
-  } else {
-
-    title.style.fontSize = "11px";
-
-  }
-
-
-  card.appendChild(title);
-
-
-  // ======================================================
-  // BADGES UNDER TITLE
-  // ======================================================
 
   const badges =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
   badges.className =
     "movie-badges";
@@ -410,20 +475,26 @@ function createMovieCard(movie, index) {
     movie.physical.length
   ) {
 
-    movie.physical.forEach(format => {
+    movie.physical.forEach(
+      format => {
 
-      const badge =
-        document.createElement("span");
+        const badge =
+          document.createElement(
+            "span"
+          );
 
-      badge.className =
-        "movie-badge";
+        badge.className =
+          "movie-badge";
 
-      badge.textContent =
-        `💿 ${format}`;
+        badge.textContent =
+          `💿 ${format}`;
 
-      badges.appendChild(badge);
+        badges.appendChild(
+          badge
+        );
 
-    });
+      }
+    );
 
   }
 
@@ -435,35 +506,42 @@ function createMovieCard(movie, index) {
     movie.digital.length
   ) {
 
-    movie.digital.forEach(service => {
+    movie.digital.forEach(
+      service => {
 
-      const badge =
-        document.createElement("span");
+        const badge =
+          document.createElement(
+            "span"
+          );
 
-      badge.className =
-        "movie-badge";
+        badge.className =
+          "movie-badge";
 
-      badge.textContent =
-        `📱 ${service}`;
+        badge.textContent =
+          `📱 ${service}`;
 
-      badges.appendChild(badge);
+        badges.appendChild(
+          badge
+        );
 
-    });
+      }
+    );
 
   }
 
 
   // ------------------------------------------------------
   // TYPE BADGE
-  //
-  // Only show this for TV and Misc so normal movie cards
-  // stay clean.
   // ------------------------------------------------------
 
-  if (movie.type === "tv") {
+  if (
+    movie.type === "tv"
+  ) {
 
     const badge =
-      document.createElement("span");
+      document.createElement(
+        "span"
+      );
 
     badge.className =
       "movie-badge";
@@ -471,15 +549,21 @@ function createMovieCard(movie, index) {
     badge.textContent =
       "TV";
 
-    badges.appendChild(badge);
+    badges.appendChild(
+      badge
+    );
 
   }
 
 
-  if (movie.type === "misc") {
+  if (
+    movie.type === "misc"
+  ) {
 
     const badge =
-      document.createElement("span");
+      document.createElement(
+        "span"
+      );
 
     badge.className =
       "movie-badge";
@@ -487,12 +571,52 @@ function createMovieCard(movie, index) {
     badge.textContent =
       "MISC";
 
-    badges.appendChild(badge);
+    badges.appendChild(
+      badge
+    );
 
   }
 
 
-  card.appendChild(badges);
+  // ------------------------------------------------------
+  // ASSEMBLE COVER
+  // ------------------------------------------------------
+
+  coverOverlay.appendChild(
+    badges
+  );
+
+  coverInner.appendChild(
+    coverOverlay
+  );
+
+  cover.appendChild(
+    coverInner
+  );
+
+  card.appendChild(
+    cover
+  );
+
+
+  // ======================================================
+  // TITLE UNDER POSTER
+  // ======================================================
+
+  const title =
+    document.createElement(
+      "div"
+    );
+
+  title.className =
+    "movie-card-title";
+
+  title.textContent =
+    movie.title;
+
+  card.appendChild(
+    title
+  );
 
 
   // ======================================================
@@ -541,7 +665,9 @@ function createMovieCard(movie, index) {
 // OPEN MOVIE
 // =========================================================
 
-function openMovie(movie) {
+function openMovie(
+  movie
+) {
 
   currentMovie =
     movie;
@@ -631,10 +757,10 @@ function openMovie(movie) {
       "no-repeat";
 
 
-    // Dark overlay for title
-
     const overlay =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
     overlay.style.position =
       "absolute";
@@ -658,33 +784,10 @@ function openMovie(movie) {
       "linear-gradient(to top, rgba(0,0,0,.8), rgba(0,0,0,0) 60%)";
 
 
-    const bigTitle =
-      document.createElement("div");
-
-    bigTitle.textContent =
-      movie.title;
-
-    bigTitle.style.position =
-      "relative";
-
-    bigTitle.style.color =
-      "white";
-
-    bigTitle.style.fontSize =
-      "clamp(25px, 7vw, 48px)";
-
-    bigTitle.style.fontWeight =
-      "800";
-
-    bigTitle.style.lineHeight =
-      "0.95";
-
-    bigTitle.style.textShadow =
-      "0 3px 8px rgba(0,0,0,.8)";
-
-
     const bigYear =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
     bigYear.textContent =
       movie.year || "";
@@ -695,10 +798,6 @@ function openMovie(movie) {
     bigYear.style.color =
       "rgba(255,255,255,.8)";
 
-
-    overlay.appendChild(
-      bigTitle
-    );
 
     overlay.appendChild(
       bigYear
@@ -718,11 +817,17 @@ function openMovie(movie) {
       "";
 
     modalCover.style.background =
-      `linear-gradient(145deg, ${colors[0]}, ${colors[1]})`;
+      `linear-gradient(
+        145deg,
+        ${colors[0]},
+        ${colors[1]}
+      )`;
 
 
     const coverText =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
     coverText.style.position =
       "absolute";
@@ -746,33 +851,10 @@ function openMovie(movie) {
       "radial-gradient(circle at 20% 15%, rgba(255,255,255,.22), transparent 32%)";
 
 
-    const bigTitle =
-      document.createElement("div");
-
-    bigTitle.textContent =
-      movie.title;
-
-    bigTitle.style.position =
-      "relative";
-
-    bigTitle.style.color =
-      "white";
-
-    bigTitle.style.fontSize =
-      "clamp(25px, 7vw, 48px)";
-
-    bigTitle.style.fontWeight =
-      "800";
-
-    bigTitle.style.lineHeight =
-      "0.95";
-
-    bigTitle.style.textShadow =
-      "0 3px 8px rgba(0,0,0,.8)";
-
-
     const bigYear =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
     bigYear.textContent =
       movie.year || "";
@@ -783,10 +865,6 @@ function openMovie(movie) {
     bigYear.style.color =
       "rgba(255,255,255,.8)";
 
-
-    coverText.appendChild(
-      bigTitle
-    );
 
     coverText.appendChild(
       bigYear
@@ -817,42 +895,50 @@ function openMovie(movie) {
 
   // Physical
 
-  physical.forEach(format => {
+  physical.forEach(
+    format => {
 
-    const item =
-      document.createElement("div");
+      const item =
+        document.createElement(
+          "div"
+        );
 
-    item.className =
-      "format-item";
+      item.className =
+        "format-item";
 
-    item.textContent =
-      `💿 Physical — ${format}`;
+      item.textContent =
+        `💿 Physical — ${format}`;
 
-    modalFormats.appendChild(
-      item
-    );
+      modalFormats.appendChild(
+        item
+      );
 
-  });
+    }
+  );
 
 
   // Digital
 
-  digital.forEach(service => {
+  digital.forEach(
+    service => {
 
-    const item =
-      document.createElement("div");
+      const item =
+        document.createElement(
+          "div"
+        );
 
-    item.className =
-      "format-item";
+      item.className =
+        "format-item";
 
-    item.textContent =
-      `📱 Digital — ${service}`;
+      item.textContent =
+        `📱 Digital — ${service}`;
 
-    modalFormats.appendChild(
-      item
-    );
+      modalFormats.appendChild(
+        item
+      );
 
-  });
+    }
+  );
 
 
   // No format information
@@ -863,7 +949,9 @@ function openMovie(movie) {
   ) {
 
     const item =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
     item.className =
       "format-item";
@@ -939,7 +1027,9 @@ document.addEventListener(
 
     if (
       event.key === "Escape" &&
-      !modal.classList.contains("hidden")
+      !modal.classList.contains(
+        "hidden"
+      )
     ) {
 
       closeMovie();
@@ -989,12 +1079,6 @@ flipButton.addEventListener(
 flipContainer.addEventListener(
   "click",
   event => {
-
-    /*
-      Don't trigger a second flip when the
-      user clicks interactive content on the
-      back of the case.
-    */
 
     flipMovie();
 
@@ -1046,12 +1130,6 @@ flipContainer.addEventListener(
       touchStartY;
 
 
-    /*
-      Only treat it as a swipe if the
-      horizontal movement is greater
-      than the vertical movement.
-    */
-
     if (
       Math.abs(differenceX) > 50 &&
       Math.abs(differenceX) >
@@ -1073,43 +1151,225 @@ flipContainer.addEventListener(
 // FILTER BUTTONS
 // =========================================================
 
-filters.forEach(button => {
+filters.forEach(
+  button => {
 
-  button.addEventListener(
-    "click",
-    () => {
+    button.addEventListener(
+      "click",
+      () => {
 
-      // Remove active state
+        const group =
+          button.dataset.filterGroup;
 
-      filters.forEach(
-        b =>
-          b.classList.remove(
-            "active"
-          )
-      );
+        const value =
+          button.dataset.filterValue;
 
 
-      // Activate clicked button
+        // ==================================================
+        // TYPE
+        // ==================================================
 
-      button.classList.add(
-        "active"
-      );
+        if (
+          group === "type"
+        ) {
+
+          activeFilters.type =
+            value;
+
+          /*
+            Type is a single-choice group.
+            Selecting All clears the other type choice.
+          */
+
+          document
+            .querySelectorAll(
+              '[data-filter-group="type"]'
+            )
+            .forEach(
+              b =>
+                b.classList.toggle(
+                  "active",
+                  b.dataset.filterValue === value
+                )
+            );
+
+        }
 
 
-      // Set filter
+        // ==================================================
+        // MEDIA
+        // ==================================================
 
-      currentFilter =
-        button.dataset.filter;
+        if (
+          group === "media"
+        ) {
+
+          activeFilters.media =
+            value;
+
+          document
+            .querySelectorAll(
+              '[data-filter-group="media"]'
+            )
+            .forEach(
+              b =>
+                b.classList.toggle(
+                  "active",
+                  b.dataset.filterValue === value
+                )
+            );
+
+        }
 
 
-      // Re-render
+        // ==================================================
+        // CATEGORY
+        // ==================================================
 
-      renderMovies();
+        if (
+          group === "category"
+        ) {
 
-    }
-  );
+          if (
+            activeFilters.category === value
+          ) {
 
-});
+            /*
+              Clicking an active category
+              turns it off.
+            */
+
+            activeFilters.category =
+              null;
+
+            button.classList.remove(
+              "active"
+            );
+
+          } else {
+
+            /*
+              Only one category at a time.
+              Baseball OR Christmas.
+            */
+
+            activeFilters.category =
+              value;
+
+            document
+              .querySelectorAll(
+                '[data-filter-group="category"]'
+              )
+              .forEach(
+                b =>
+                  b.classList.toggle(
+                    "active",
+                    b.dataset.filterValue === value
+                  )
+              );
+
+          }
+
+        }
+
+
+        // ==================================================
+        // ANIMATED
+        // ==================================================
+
+        if (
+          group === "animated"
+        ) {
+
+          if (
+            activeFilters.animated === "mixed"
+          ) {
+
+            activeFilters.animated =
+              "hide";
+
+          } else if (
+            activeFilters.animated === "hide"
+          ) {
+
+            activeFilters.animated =
+              "only";
+
+          } else {
+
+            activeFilters.animated =
+              "mixed";
+
+          }
+
+          updateAnimatedButton();
+
+        }
+
+
+        renderMovies();
+
+      }
+    );
+
+  }
+);
+
+
+// =========================================================
+// UPDATE ANIMATED BUTTON
+// =========================================================
+
+function updateAnimatedButton() {
+
+  const animatedButton =
+    document.querySelector(
+      '[data-filter-group="animated"]'
+    );
+
+
+  if (
+    activeFilters.animated === "mixed"
+  ) {
+
+    animatedButton.textContent =
+      "Animated: Mixed";
+
+    animatedButton.classList.add(
+      "active"
+    );
+
+  }
+
+
+  if (
+    activeFilters.animated === "hide"
+  ) {
+
+    animatedButton.textContent =
+      "Animated: Hide";
+
+    animatedButton.classList.remove(
+      "active"
+    );
+
+  }
+
+
+  if (
+    activeFilters.animated === "only"
+  ) {
+
+    animatedButton.textContent =
+      "Animated: Only";
+
+    animatedButton.classList.add(
+      "active"
+    );
+
+  }
+
+}
 
 
 // =========================================================
@@ -1146,7 +1406,6 @@ searchInput.addEventListener(
     currentSearch =
       event.target.value.trim();
 
-
     renderMovies();
 
   }
@@ -1161,12 +1420,6 @@ searchInput.addEventListener(
 modal.addEventListener(
   "touchmove",
   event => {
-
-    /*
-      The modal itself can still scroll,
-      but this prevents accidental page
-      movement behind it.
-    */
 
     if (
       event.target === modal
