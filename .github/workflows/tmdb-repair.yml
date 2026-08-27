@@ -1,0 +1,839 @@
+name: Repair TMDB Movie Data
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair-tmdb:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # ==========================================================
+      # CHECK OUT REPOSITORY
+      # ==========================================================
+
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+
+      # ==========================================================
+      # SET UP PYTHON
+      # ==========================================================
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+
+      # ==========================================================
+      # INSTALL REQUESTS
+      # ==========================================================
+
+      - name: Install requests
+        run: |
+          pip install requests
+
+
+      # ==========================================================
+      # REPAIR MOVIES
+      # ==========================================================
+
+      - name: Repair TMDB data
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+
+        run: |
+
+          python <<'PYTHON'
+
+          import json
+          import os
+          import re
+          import requests
+          import sys
+
+
+          # ======================================================
+          # SETTINGS
+          # ======================================================
+
+          API_KEY = os.environ.get("TMDB_API_KEY")
+
+          if not API_KEY:
+              raise SystemExit(
+                  "TMDB_API_KEY secret is not configured."
+              )
+
+
+          API_BASE = "https://api.themoviedb.org/3"
+
+          POSTER_BASE = "https://image.tmdb.org/t/p/w500"
+
+
+          session = requests.Session()
+
+
+          # ======================================================
+          # VERIFIED TMDB IDs
+          #
+          # These IDs were manually verified.
+          # ======================================================
+
+          REPAIRS = {
+
+              "Don't Say a Word": 12103,
+
+              "Dirty Work": 14577,
+
+              "Dickie Roberts": 13778,
+
+              "Chitty Chitty Bang Bang": 11708,
+
+              "Bull Durham": 287,
+
+              "Eight Men Out": 13554,
+
+              "Field of Dreams": 2323,
+
+              "Ghost Town": 12797,
+
+              "Gone in 60 Seconds": 9679,
+
+              "Home Alone": 771,
+
+              "In Her Shoes": 11931,
+
+              "Johnny Dangerously": 16806,
+
+              "Kickboxer": 10222,
+
+              "Laws of Attraction": 11141,
+
+              "Major League": 9942,
+
+              "Major League 2": 11067,
+
+              "McLintock": 15263,
+
+              "Men in Black": 607,
+
+              "Men in Black 2": 608,
+
+              "Mr. Destiny": 2612,
+
+              "Loaded Weapon 1": 9644,
+
+              "Overboard": 10780,
+
+              "Point Break": 1089,
+
+              "Red Eye": 11460,
+
+              "Rudolph": 13382,
+
+              "School for Scoundrels": 9842,
+
+              "Stealth": 10048,
+
+              "Swimfan": 20616,
+
+              "Swingers": 10218,
+
+              "The Dukes of Hazzard": 6519,
+
+              "The Ex": 13171,
+
+              "The Fan": 9566,
+
+              "The Invention of Lying": 23082,
+
+              "The Lion King": 8587,
+
+              "The Natural": 11393,
+
+              "The Object of My Affection": 17127,
+
+              "The Program": 18133,
+
+              "The Recruit": 1647,
+
+              "The Scout": 35233,
+
+              "The Tick": 14651,
+
+              "Toys": 11597,
+
+              "Under Suspicion": 10562,
+
+              "Road House": 10135,
+
+              "Breach": 4169,
+
+              "Eye See You": 10375,
+
+              "Benchwarmer": 9957,
+
+              "Hush": 17941
+
+          }
+
+
+          # ======================================================
+          # TITLE NORMALIZATION
+          # ======================================================
+
+          def normalize_title(title):
+
+              if not title:
+                  return ""
+
+              title = str(title).lower()
+
+              title = title.replace("&", "and")
+
+              title = re.sub(
+                  r"[^a-z0-9]+",
+                  " ",
+                  title
+              )
+
+              return " ".join(
+                  title.split()
+              )
+
+
+          # ======================================================
+          # SPECIAL TITLE ALIASES
+          # ======================================================
+
+          ALIASES = {
+
+              "rudolph":
+                  "rudolph the red nosed reindeer",
+
+              "loaded weapon 1":
+                  "national lampoons loaded weapon 1",
+
+              "dickie roberts":
+                  "dickie roberts former child star",
+
+              "major league 2":
+                  "major league ii",
+
+              "men in black 2":
+                  "men in black ii",
+
+              "the ex":
+                  "the ex"
+
+          }
+
+
+          # ======================================================
+          # FIND MOVIE IN CATALOG
+          # ======================================================
+
+          def find_movie_index(
+              movies,
+              requested_title
+          ):
+
+              requested_normalized = normalize_title(
+                  requested_title
+              )
+
+
+              # --------------------------------------------------
+              # Exact normalized match
+              # --------------------------------------------------
+
+              for index, movie in enumerate(movies):
+
+                  catalog_title = movie.get(
+                      "title",
+                      ""
+                  )
+
+                  if normalize_title(
+                      catalog_title
+                  ) == requested_normalized:
+
+                      return index
+
+
+              # --------------------------------------------------
+              # Alias match
+              # --------------------------------------------------
+
+              alias = ALIASES.get(
+                  requested_normalized
+              )
+
+
+              if alias:
+
+                  for index, movie in enumerate(movies):
+
+                      catalog_title = movie.get(
+                          "title",
+                          ""
+                      )
+
+                      if normalize_title(
+                          catalog_title
+                      ) == alias:
+
+                          return index
+
+
+              # --------------------------------------------------
+              # "The" at beginning/end
+              # --------------------------------------------------
+
+              def remove_the(value):
+
+                  value = normalize_title(
+                      value
+                  )
+
+                  if value.startswith("the "):
+
+                      return value[4:]
+
+
+                  if value.endswith(" the"):
+
+                      return value[:-4]
+
+
+                  return value
+
+
+              requested_without_the = remove_the(
+                  requested_title
+              )
+
+
+              for index, movie in enumerate(movies):
+
+                  catalog_title = movie.get(
+                      "title",
+                      ""
+                  )
+
+                  if (
+                      remove_the(catalog_title)
+                      ==
+                      requested_without_the
+                  ):
+
+                      return index
+
+
+              return None
+
+
+          # ======================================================
+          # LOAD MOVIES.JS
+          # ======================================================
+
+          with open(
+              "movies.js",
+              "r",
+              encoding="utf-8"
+          ) as f:
+
+              source = f.read()
+
+
+          start = source.find("[")
+
+          end = source.rfind("]")
+
+
+          if start == -1 or end == -1:
+
+              raise SystemExit(
+                  "Could not locate movies array in movies.js."
+              )
+
+
+          try:
+
+              movies = json.loads(
+                  source[start:end + 1]
+              )
+
+          except json.JSONDecodeError as e:
+
+              raise SystemExit(
+                  f"Could not parse movies.js: {e}"
+              )
+
+
+          print(
+              f"Loaded {len(movies)} catalog entries."
+          )
+
+
+          # ======================================================
+          # PASS 1 — VALIDATE EVERY MOVIE
+          #
+          # Nothing is changed yet.
+          # ======================================================
+
+          print("")
+          print("========================================")
+          print("VALIDATING REPAIR LIST")
+          print("========================================")
+
+
+          matches = {}
+
+
+          for requested_title, tmdb_id in REPAIRS.items():
+
+              index = find_movie_index(
+                  movies,
+                  requested_title
+              )
+
+
+              if index is None:
+
+                  print(
+                      f"NOT FOUND: {requested_title}"
+                  )
+
+                  continue
+
+
+              movie = movies[index]
+
+
+              print(
+                  f"FOUND: {requested_title}"
+                  f" -> {movie.get('title', '')}"
+                  f" | Current TMDB: "
+                  f"{movie.get('tmdbId', 'none')}"
+                  f" | New TMDB: {tmdb_id}"
+              )
+
+
+              matches[
+                  requested_title
+              ] = index
+
+
+          # ======================================================
+          # ABORT IF ANY MOVIE IS MISSING
+          # ======================================================
+
+          if len(matches) != len(REPAIRS):
+
+              missing = [
+                  title
+                  for title in REPAIRS
+                  if title not in matches
+              ]
+
+
+              print("")
+              print("========================================")
+              print("REPAIR ABORTED")
+              print("========================================")
+              print("")
+              print(
+                  "These movies could not be found:"
+              )
+
+
+              for title in missing:
+
+                  print(
+                      f"  - {title}"
+                  )
+
+
+              print("")
+              print(
+                  "NO MOVIES WERE CHANGED."
+              )
+
+
+              sys.exit(1)
+
+
+          # ======================================================
+          # PASS 2 — FETCH ALL TMDB RECORDS
+          #
+          # Nothing is changed yet.
+          # ======================================================
+
+          print("")
+          print("========================================")
+          print("FETCHING TMDB DATA")
+          print("========================================")
+
+
+          fetched = {}
+
+
+          for requested_title, tmdb_id in REPAIRS.items():
+
+              print(
+                  f"Fetching {requested_title}"
+                  f" [TMDB {tmdb_id}]"
+              )
+
+
+              response = session.get(
+                  f"{API_BASE}/movie/{tmdb_id}",
+                  params={
+                      "api_key": API_KEY,
+                      "append_to_response": "credits"
+                  },
+                  timeout=30
+              )
+
+
+              if response.status_code != 200:
+
+                  raise SystemExit(
+                      f"TMDB request failed for "
+                      f"{requested_title} "
+                      f"(ID {tmdb_id}) "
+                      f"HTTP {response.status_code}."
+                  )
+
+
+              data = response.json()
+
+
+              if not data.get("id"):
+
+                  raise SystemExit(
+                      f"No TMDB movie returned for "
+                      f"{requested_title} "
+                      f"(ID {tmdb_id})."
+                  )
+
+
+              # Make sure the returned ID is actually
+              # the ID we requested.
+
+              if int(data["id"]) != int(tmdb_id):
+
+                  raise SystemExit(
+                      f"TMDB returned unexpected ID "
+                      f"for {requested_title}."
+                  )
+
+
+              fetched[
+                  requested_title
+              ] = data
+
+
+          # ======================================================
+          # PASS 3 — APPLY DATA
+          # ======================================================
+
+          print("")
+          print("========================================")
+          print("APPLYING TMDB DATA")
+          print("========================================")
+
+
+          changed = 0
+
+
+          for requested_title, tmdb_id in REPAIRS.items():
+
+              index = matches[
+                  requested_title
+              ]
+
+              movie = movies[index]
+
+              data = fetched[
+                  requested_title
+              ]
+
+
+              # --------------------------------------------------
+              # TMDB ID
+              # --------------------------------------------------
+
+              movie["tmdbId"] = data.get(
+                  "id"
+              )
+
+
+              # --------------------------------------------------
+              # TMDB TITLE
+              # --------------------------------------------------
+
+              if data.get("title"):
+
+                  movie["tmdbTitle"] = data[
+                      "title"
+                  ]
+
+
+              # --------------------------------------------------
+              # POSTER
+              # --------------------------------------------------
+
+              poster_path = data.get(
+                  "poster_path"
+              )
+
+
+              if poster_path:
+
+                  movie["poster"] = (
+                      POSTER_BASE
+                      + poster_path
+                  )
+
+
+              # --------------------------------------------------
+              # YEAR
+              # --------------------------------------------------
+
+              release_date = data.get(
+                  "release_date"
+              )
+
+
+              if release_date:
+
+                  movie["year"] = (
+                      str(release_date)[:4]
+                  )
+
+
+              # --------------------------------------------------
+              # RUNTIME
+              # --------------------------------------------------
+
+              runtime = data.get(
+                  "runtime"
+              )
+
+
+              if runtime:
+
+                  movie["runtime"] = (
+                      f"{runtime}m"
+                  )
+
+
+              # --------------------------------------------------
+              # GENRE
+              # --------------------------------------------------
+
+              genres = data.get(
+                  "genres",
+                  []
+              )
+
+
+              genre_names = [
+                  genre.get("name")
+                  for genre in genres
+                  if genre.get("name")
+              ]
+
+
+              if genre_names:
+
+                  movie["genre"] = (
+                      " / ".join(
+                          genre_names
+                      )
+                  )
+
+
+              # --------------------------------------------------
+              # DIRECTOR
+              # --------------------------------------------------
+
+              credits = data.get(
+                  "credits",
+                  {}
+              )
+
+
+              crew = credits.get(
+                  "crew",
+                  []
+              )
+
+
+              directors = [
+                  person.get("name")
+                  for person in crew
+                  if person.get("job") == "Director"
+                  and person.get("name")
+              ]
+
+
+              if directors:
+
+                  movie["director"] = (
+                      ", ".join(
+                          directors
+                      )
+                  )
+
+
+              # --------------------------------------------------
+              # CAST
+              # --------------------------------------------------
+
+              cast = credits.get(
+                  "cast",
+                  []
+              )
+
+
+              cast_names = [
+                  person.get("name")
+                  for person in cast
+                  if person.get("name")
+              ]
+
+
+              if cast_names:
+
+                  movie["cast"] = (
+                      ", ".join(
+                          cast_names[:6]
+                      )
+                  )
+
+
+              # --------------------------------------------------
+              # SYNOPSIS
+              # --------------------------------------------------
+
+              overview = data.get(
+                  "overview"
+              )
+
+
+              if overview:
+
+                  movie["synopsis"] = overview
+
+
+              changed += 1
+
+
+              print(
+                  f"UPDATED: "
+                  f"{movie.get('title', '')}"
+                  f" -> TMDB "
+                  f"{movie.get('tmdbId')}"
+                  f" -> "
+                  f"{movie.get('tmdbTitle', '')}"
+              )
+
+
+          # ======================================================
+          # WRITE MOVIES.JS
+          #
+          # Keep the existing JavaScript wrapper.
+          # ======================================================
+
+          formatted_json = json.dumps(
+              movies,
+              indent=2,
+              ensure_ascii=False
+          )
+
+
+          new_source = (
+              "const movies = "
+              + formatted_json
+              + ";\n"
+          )
+
+
+          with open(
+              "movies.js",
+              "w",
+              encoding="utf-8"
+          ) as f:
+
+              f.write(
+                  new_source
+              )
+
+
+          # ======================================================
+          # SUMMARY
+          # ======================================================
+
+          print("")
+          print("========================================")
+          print("TMDB REPAIR COMPLETE")
+          print("========================================")
+          print("")
+          print(
+              f"Movies updated: {changed}"
+          )
+          print("")
+          print(
+              "TMDB IDs, metadata, and posters "
+              "were refreshed."
+          )
+          print(
+              "Physical, digital, and category "
+              "information was preserved."
+          )
+          print("")
+
+          PYTHON
+
+
+      # ==========================================================
+      # SHOW CHANGES
+      # ==========================================================
+
+      - name: Show movies.js changes
+        run: |
+          git diff -- movies.js
+
+
+      # ==========================================================
+      # COMMIT UPDATED MOVIES.JS
+      # ==========================================================
+
+      - name: Commit updated movies.js
+        run: |
+
+          git config user.name \
+            "github-actions[bot]"
+
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add movies.js
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git commit \
+            -m "Repair verified TMDB movie data"
+
+          git push
