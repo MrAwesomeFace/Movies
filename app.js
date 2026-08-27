@@ -1,10 +1,14 @@
-```javascript
 /*
   =========================================================
   BW'S MOVIE COLLECTION
   App functionality
   =========================================================
 */
+
+
+// =========================================================
+// ELEMENTS
+// =========================================================
 
 const movieGrid = document.getElementById("movie-grid");
 const movieCount = document.getElementById("movie-count");
@@ -33,9 +37,21 @@ const modalFormats = document.getElementById("modal-formats");
 const flipContainer = document.getElementById("movie-flip-container");
 const flipButton = document.getElementById("flip-button");
 
+
+// =========================================================
+// CURRENT STATE
+// =========================================================
+
 let currentFilter = "all";
 let currentSearch = "";
 let currentMovie = null;
+
+
+// =========================================================
+// SIMPLE COVER COLORS
+//
+// Used as a fallback when TMDB does not have a poster.
+// =========================================================
 
 const coverColors = [
   ["#182848", "#4b6cb7"],
@@ -52,13 +68,29 @@ const coverColors = [
   ["#16222a", "#3a6073"]
 ];
 
+
+// =========================================================
+// INITIALIZE
+// =========================================================
+
 renderMovies();
+
+
+// =========================================================
+// RENDER MOVIES
+// =========================================================
 
 function renderMovies() {
 
   movieGrid.innerHTML = "";
 
+
   const filteredMovies = movies.filter(movie => {
+
+
+    // ------------------------------------------------------
+    // TYPE FILTERS
+    // ------------------------------------------------------
 
     if (
       currentFilter === "movie" &&
@@ -67,6 +99,7 @@ function renderMovies() {
       return false;
     }
 
+
     if (
       currentFilter === "tv" &&
       movie.type !== "tv"
@@ -74,12 +107,23 @@ function renderMovies() {
       return false;
     }
 
+
     if (
       currentFilter === "misc" &&
       movie.type !== "misc"
     ) {
       return false;
     }
+
+
+    // ------------------------------------------------------
+    // PHYSICAL / DIGITAL FILTERS
+    //
+    // These work independently of movie type.
+    //
+    // A movie with both physical AND digital copies
+    // appears in BOTH filters.
+    // ------------------------------------------------------
 
     if (currentFilter === "physical") {
 
@@ -92,6 +136,7 @@ function renderMovies() {
 
     }
 
+
     if (currentFilter === "digital") {
 
       if (
@@ -103,28 +148,32 @@ function renderMovies() {
 
     }
 
+
+    // ------------------------------------------------------
+    // SEARCH
+    // ------------------------------------------------------
+
     if (currentSearch) {
 
       const searchText =
         currentSearch.toLowerCase();
 
+
       const searchableText = [
+
         movie.title,
-        movie.tmdbTitle,
         movie.year,
         movie.genre,
         movie.director,
         movie.cast,
         movie.synopsis,
         movie.type
+
       ]
-        .filter(
-          value =>
-            value !== null &&
-            value !== undefined
-        )
+        .filter(value => value !== null && value !== undefined)
         .join(" ")
         .toLowerCase();
+
 
       if (
         !searchableText.includes(searchText)
@@ -134,20 +183,24 @@ function renderMovies() {
 
     }
 
+
     return true;
 
   });
 
-  filteredMovies.sort(
-    (a, b) =>
-      a.title.localeCompare(
-        b.title,
-        undefined,
-        {
-          sensitivity: "base"
-        }
-      )
+
+  // ======================================================
+  // SORT ALPHABETICALLY
+  // ======================================================
+
+  filteredMovies.sort((a, b) =>
+    a.title.localeCompare(b.title)
   );
+
+
+  // ======================================================
+  // UPDATE COUNT
+  // ======================================================
 
   if (
     currentSearch ||
@@ -164,6 +217,11 @@ function renderMovies() {
 
   }
 
+
+  // ======================================================
+  // NO RESULTS
+  // ======================================================
+
   if (filteredMovies.length === 0) {
 
     noResults.classList.remove("hidden");
@@ -176,35 +234,44 @@ function renderMovies() {
 
   }
 
-  filteredMovies.forEach(
-    (movie, index) => {
 
-      movieGrid.appendChild(
-        createMovieCard(movie, index)
-      );
+  // ======================================================
+  // CREATE CARDS
+  // ======================================================
 
-    }
-  );
+  filteredMovies.forEach((movie, index) => {
+
+    const card =
+      createMovieCard(movie, index);
+
+    movieGrid.appendChild(card);
+
+  });
 
 }
+
+
+// =========================================================
+// CREATE MOVIE CARD
+// =========================================================
 
 function createMovieCard(movie, index) {
 
   const card =
     document.createElement("article");
 
-  card.className =
-    "movie-card";
+  card.className = "movie-card";
 
-  card.setAttribute(
-    "tabindex",
-    "0"
-  );
+  card.setAttribute("tabindex", "0");
+
+
+  // ------------------------------------------------------
+  // COVER
+  // ------------------------------------------------------
 
   const colors =
-    coverColors[
-      index % coverColors.length
-    ];
+    coverColors[index % coverColors.length];
+
 
   const cover =
     document.createElement("div");
@@ -212,11 +279,20 @@ function createMovieCard(movie, index) {
   cover.className =
     "movie-cover";
 
+
   const coverInner =
     document.createElement("div");
 
   coverInner.className =
     "movie-cover-inner";
+
+
+  // ------------------------------------------------------
+  // TMDB POSTER
+  //
+  // Use the actual TMDB poster when available.
+  // Otherwise fall back to the old gradient cover.
+  // ------------------------------------------------------
 
   if (movie.poster) {
 
@@ -235,30 +311,44 @@ function createMovieCard(movie, index) {
   } else {
 
     coverInner.style.background =
-      `linear-gradient(
-        145deg,
-        ${colors[0]},
-        ${colors[1]}
-      )`;
-
-    const fallbackTitle =
-      document.createElement("div");
-
-    fallbackTitle.className =
-      "movie-fallback-title";
-
-    fallbackTitle.textContent =
-      movie.title;
-
-    coverInner.appendChild(
-      fallbackTitle
-    );
+      `linear-gradient(145deg, ${colors[0]}, ${colors[1]})`;
 
   }
 
-  cover.appendChild(
-    coverInner
-  );
+
+  // ------------------------------------------------------
+  // COVER OVERLAY
+  //
+  // Poster itself is now kept clean.
+  // ------------------------------------------------------
+
+  const coverOverlay =
+    document.createElement("div");
+
+  coverOverlay.style.position =
+    "absolute";
+
+  coverOverlay.style.inset =
+    "0";
+
+  coverOverlay.style.pointerEvents =
+    "none";
+
+
+  // ------------------------------------------------------
+  // ASSEMBLE COVER
+  // ------------------------------------------------------
+
+  coverInner.appendChild(coverOverlay);
+
+  cover.appendChild(coverInner);
+
+  card.appendChild(cover);
+
+
+  // ======================================================
+  // TITLE UNDER POSTER
+  // ======================================================
 
   const title =
     document.createElement("div");
@@ -269,63 +359,106 @@ function createMovieCard(movie, index) {
   title.textContent =
     movie.title;
 
+
+  // ------------------------------------------------------
+  // AUTOMATIC FONT SIZING
+  //
+  // Short titles remain large.
+  // Longer titles automatically shrink.
+  // ------------------------------------------------------
+
+  const titleLength =
+    movie.title ? movie.title.length : 0;
+
+  if (titleLength <= 18) {
+
+    title.style.fontSize = "16px";
+
+  } else if (titleLength <= 28) {
+
+    title.style.fontSize = "14px";
+
+  } else if (titleLength <= 40) {
+
+    title.style.fontSize = "12px";
+
+  } else {
+
+    title.style.fontSize = "11px";
+
+  }
+
+
+  card.appendChild(title);
+
+
+  // ======================================================
+  // BADGES UNDER TITLE
+  // ======================================================
+
   const badges =
     document.createElement("div");
 
   badges.className =
     "movie-badges";
 
+
+  // Physical badges
+
   if (
     movie.physical &&
     movie.physical.length
   ) {
 
-    movie.physical.forEach(
-      format => {
+    movie.physical.forEach(format => {
 
-        const badge =
-          document.createElement("span");
+      const badge =
+        document.createElement("span");
 
-        badge.className =
-          "movie-badge";
+      badge.className =
+        "movie-badge";
 
-        badge.textContent =
-          `💿 ${format}`;
+      badge.textContent =
+        `💿 ${format}`;
 
-        badges.appendChild(
-          badge
-        );
+      badges.appendChild(badge);
 
-      }
-    );
+    });
 
   }
+
+
+  // Digital badges
 
   if (
     movie.digital &&
     movie.digital.length
   ) {
 
-    movie.digital.forEach(
-      service => {
+    movie.digital.forEach(service => {
 
-        const badge =
-          document.createElement("span");
+      const badge =
+        document.createElement("span");
 
-        badge.className =
-          "movie-badge";
+      badge.className =
+        "movie-badge";
 
-        badge.textContent =
-          `📱 ${service}`;
+      badge.textContent =
+        `📱 ${service}`;
 
-        badges.appendChild(
-          badge
-        );
+      badges.appendChild(badge);
 
-      }
-    );
+    });
 
   }
+
+
+  // ------------------------------------------------------
+  // TYPE BADGE
+  //
+  // Only show this for TV and Misc so normal movie cards
+  // stay clean.
+  // ------------------------------------------------------
 
   if (movie.type === "tv") {
 
@@ -338,11 +471,10 @@ function createMovieCard(movie, index) {
     badge.textContent =
       "TV";
 
-    badges.appendChild(
-      badge
-    );
+    badges.appendChild(badge);
 
   }
+
 
   if (movie.type === "misc") {
 
@@ -355,34 +487,31 @@ function createMovieCard(movie, index) {
     badge.textContent =
       "MISC";
 
-    badges.appendChild(
-      badge
-    );
+    badges.appendChild(badge);
 
   }
 
-  card.appendChild(
-    cover
-  );
 
-  card.appendChild(
-    title
-  );
+  card.appendChild(badges);
 
-  if (
-    badges.children.length > 0
-  ) {
 
-    card.appendChild(
-      badges
-    );
-
-  }
+  // ======================================================
+  // OPEN MOVIE
+  // ======================================================
 
   card.addEventListener(
     "click",
-    () => openMovie(movie)
+    () => {
+
+      openMovie(movie);
+
+    }
   );
+
+
+  // ======================================================
+  // KEYBOARD ACCESSIBILITY
+  // ======================================================
 
   card.addEventListener(
     "keydown",
@@ -402,14 +531,25 @@ function createMovieCard(movie, index) {
     }
   );
 
+
   return card;
 
 }
+
+
+// =========================================================
+// OPEN MOVIE
+// =========================================================
 
 function openMovie(movie) {
 
   currentMovie =
     movie;
+
+
+  // ------------------------------------------------------
+  // RESET FLIP
+  // ------------------------------------------------------
 
   flipContainer.classList.remove(
     "flipped"
@@ -418,31 +558,47 @@ function openMovie(movie) {
   flipButton.textContent =
     "Flip case";
 
+
+  // ------------------------------------------------------
+  // BASIC INFORMATION
+  // ------------------------------------------------------
+
   modalTitle.textContent =
     movie.title;
 
+
   modalYear.textContent =
     movie.year || "";
+
 
   modalRuntime.textContent =
     movie.runtime ||
     "Runtime unknown";
 
+
   modalGenre.textContent =
     movie.genre ||
     "Genre unknown";
+
 
   modalSynopsis.textContent =
     movie.synopsis ||
     "No synopsis added yet.";
 
+
   modalCast.textContent =
     movie.cast ||
     "Cast information not added.";
 
+
   modalDirector.textContent =
     movie.director ||
     "Director information not added.";
+
+
+  // ======================================================
+  // LARGE COVER
+  // ======================================================
 
   const colorIndex =
     movies.indexOf(movie) %
@@ -451,14 +607,14 @@ function openMovie(movie) {
   const colors =
     coverColors[colorIndex];
 
+
   modalCover.innerHTML =
     "";
 
-  modalCover.style.background =
-    "";
 
-  modalCover.style.backgroundImage =
-    "";
+  // ------------------------------------------------------
+  // Use TMDB poster if available
+  // ------------------------------------------------------
 
   if (movie.poster) {
 
@@ -474,23 +630,78 @@ function openMovie(movie) {
     modalCover.style.backgroundRepeat =
       "no-repeat";
 
+
+    // Dark overlay for title
+
     const overlay =
       document.createElement("div");
 
-    overlay.className =
-      "modal-cover-overlay";
+    overlay.style.position =
+      "absolute";
+
+    overlay.style.inset =
+      "0";
+
+    overlay.style.display =
+      "flex";
+
+    overlay.style.flexDirection =
+      "column";
+
+    overlay.style.justifyContent =
+      "flex-end";
+
+    overlay.style.padding =
+      "20px";
+
+    overlay.style.background =
+      "linear-gradient(to top, rgba(0,0,0,.8), rgba(0,0,0,0) 60%)";
+
 
     const bigTitle =
       document.createElement("div");
 
-    bigTitle.className =
-      "modal-cover-title";
-
     bigTitle.textContent =
       movie.title;
 
+    bigTitle.style.position =
+      "relative";
+
+    bigTitle.style.color =
+      "white";
+
+    bigTitle.style.fontSize =
+      "clamp(25px, 7vw, 48px)";
+
+    bigTitle.style.fontWeight =
+      "800";
+
+    bigTitle.style.lineHeight =
+      "0.95";
+
+    bigTitle.style.textShadow =
+      "0 3px 8px rgba(0,0,0,.8)";
+
+
+    const bigYear =
+      document.createElement("div");
+
+    bigYear.textContent =
+      movie.year || "";
+
+    bigYear.style.marginTop =
+      "10px";
+
+    bigYear.style.color =
+      "rgba(255,255,255,.8)";
+
+
     overlay.appendChild(
       bigTitle
+    );
+
+    overlay.appendChild(
+      bigYear
     );
 
     modalCover.appendChild(
@@ -499,30 +710,86 @@ function openMovie(movie) {
 
   } else {
 
+    // ----------------------------------------------------
+    // FALLBACK COVER
+    // ----------------------------------------------------
+
+    modalCover.style.backgroundImage =
+      "";
+
     modalCover.style.background =
-      `linear-gradient(
-        145deg,
-        ${colors[0]},
-        ${colors[1]}
-      )`;
+      `linear-gradient(145deg, ${colors[0]}, ${colors[1]})`;
+
 
     const coverText =
       document.createElement("div");
 
-    coverText.className =
-      "modal-fallback-cover";
+    coverText.style.position =
+      "absolute";
+
+    coverText.style.inset =
+      "0";
+
+    coverText.style.display =
+      "flex";
+
+    coverText.style.flexDirection =
+      "column";
+
+    coverText.style.justifyContent =
+      "flex-end";
+
+    coverText.style.padding =
+      "20px";
+
+    coverText.style.background =
+      "radial-gradient(circle at 20% 15%, rgba(255,255,255,.22), transparent 32%)";
+
 
     const bigTitle =
       document.createElement("div");
 
-    bigTitle.className =
-      "modal-cover-title";
-
     bigTitle.textContent =
       movie.title;
 
+    bigTitle.style.position =
+      "relative";
+
+    bigTitle.style.color =
+      "white";
+
+    bigTitle.style.fontSize =
+      "clamp(25px, 7vw, 48px)";
+
+    bigTitle.style.fontWeight =
+      "800";
+
+    bigTitle.style.lineHeight =
+      "0.95";
+
+    bigTitle.style.textShadow =
+      "0 3px 8px rgba(0,0,0,.8)";
+
+
+    const bigYear =
+      document.createElement("div");
+
+    bigYear.textContent =
+      movie.year || "";
+
+    bigYear.style.marginTop =
+      "10px";
+
+    bigYear.style.color =
+      "rgba(255,255,255,.8)";
+
+
     coverText.appendChild(
       bigTitle
+    );
+
+    coverText.appendChild(
+      bigYear
     );
 
     modalCover.appendChild(
@@ -531,52 +798,64 @@ function openMovie(movie) {
 
   }
 
+
+  // ======================================================
+  // FORMATS
+  // ======================================================
+
   modalFormats.innerHTML =
     "";
+
 
   const physical =
     movie.physical || [];
 
+
   const digital =
     movie.digital || [];
 
-  physical.forEach(
-    format => {
 
-      const item =
-        document.createElement("div");
+  // Physical
 
-      item.className =
-        "format-item";
+  physical.forEach(format => {
 
-      item.textContent =
-        `💿 Physical — ${format}`;
+    const item =
+      document.createElement("div");
 
-      modalFormats.appendChild(
-        item
-      );
+    item.className =
+      "format-item";
 
-    }
-  );
+    item.textContent =
+      `💿 Physical — ${format}`;
 
-  digital.forEach(
-    service => {
+    modalFormats.appendChild(
+      item
+    );
 
-      const item =
-        document.createElement("div");
+  });
 
-      item.className =
-        "format-item";
 
-      item.textContent =
-        `📱 Digital — ${service}`;
+  // Digital
 
-      modalFormats.appendChild(
-        item
-      );
+  digital.forEach(service => {
 
-    }
-  );
+    const item =
+      document.createElement("div");
+
+    item.className =
+      "format-item";
+
+    item.textContent =
+      `📱 Digital — ${service}`;
+
+    modalFormats.appendChild(
+      item
+    );
+
+  });
+
+
+  // No format information
 
   if (
     physical.length === 0 &&
@@ -598,6 +877,11 @@ function openMovie(movie) {
 
   }
 
+
+  // ======================================================
+  // SHOW MODAL
+  // ======================================================
+
   modal.classList.remove(
     "hidden"
   );
@@ -606,6 +890,11 @@ function openMovie(movie) {
     "hidden";
 
 }
+
+
+// =========================================================
+// CLOSE MOVIE
+// =========================================================
 
 function closeMovie() {
 
@@ -621,10 +910,16 @@ function closeMovie() {
 
 }
 
+
 modalClose.addEventListener(
   "click",
   closeMovie
 );
+
+
+// =========================================================
+// CLICK OUTSIDE MOVIE
+// =========================================================
 
 document.querySelector(
   ".modal-backdrop"
@@ -632,6 +927,11 @@ document.querySelector(
   "click",
   closeMovie
 );
+
+
+// =========================================================
+// ESCAPE KEY
+// =========================================================
 
 document.addEventListener(
   "keydown",
@@ -649,11 +949,17 @@ document.addEventListener(
   }
 );
 
+
+// =========================================================
+// FLIP CASE
+// =========================================================
+
 function flipMovie() {
 
   flipContainer.classList.toggle(
     "flipped"
   );
+
 
   if (
     flipContainer.classList.contains(
@@ -673,37 +979,36 @@ function flipMovie() {
 
 }
 
+
 flipButton.addEventListener(
   "click",
-  event => {
-
-    event.stopPropagation();
-
-    flipMovie();
-
-  }
+  flipMovie
 );
+
 
 flipContainer.addEventListener(
   "click",
   event => {
 
-    if (
-      event.target === flipButton ||
-      flipButton.contains(event.target)
-    ) {
-
-      return;
-
-    }
+    /*
+      Don't trigger a second flip when the
+      user clicks interactive content on the
+      back of the case.
+    */
 
     flipMovie();
 
   }
 );
 
+
+// =========================================================
+// SWIPE TO FLIP
+// =========================================================
+
 let touchStartX = 0;
 let touchStartY = 0;
+
 
 flipContainer.addEventListener(
   "touchstart",
@@ -724,6 +1029,7 @@ flipContainer.addEventListener(
   }
 );
 
+
 flipContainer.addEventListener(
   "touchend",
   event => {
@@ -738,6 +1044,13 @@ flipContainer.addEventListener(
     const differenceY =
       touch.screenY -
       touchStartY;
+
+
+    /*
+      Only treat it as a swipe if the
+      horizontal movement is greater
+      than the vertical movement.
+    */
 
     if (
       Math.abs(differenceX) > 50 &&
@@ -755,34 +1068,53 @@ flipContainer.addEventListener(
   }
 );
 
-filters.forEach(
-  button => {
 
-    button.addEventListener(
-      "click",
-      () => {
+// =========================================================
+// FILTER BUTTONS
+// =========================================================
 
-        filters.forEach(
-          b =>
-            b.classList.remove(
-              "active"
-            )
-        );
+filters.forEach(button => {
 
-        button.classList.add(
-          "active"
-        );
+  button.addEventListener(
+    "click",
+    () => {
 
-        currentFilter =
-          button.dataset.filter;
+      // Remove active state
 
-        renderMovies();
+      filters.forEach(
+        b =>
+          b.classList.remove(
+            "active"
+          )
+      );
 
-      }
-    );
 
-  }
-);
+      // Activate clicked button
+
+      button.classList.add(
+        "active"
+      );
+
+
+      // Set filter
+
+      currentFilter =
+        button.dataset.filter;
+
+
+      // Re-render
+
+      renderMovies();
+
+    }
+  );
+
+});
+
+
+// =========================================================
+// SEARCH
+// =========================================================
 
 searchToggle.addEventListener(
   "click",
@@ -791,6 +1123,7 @@ searchToggle.addEventListener(
     searchArea.classList.toggle(
       "hidden"
     );
+
 
     if (
       !searchArea.classList.contains(
@@ -805,6 +1138,7 @@ searchToggle.addEventListener(
   }
 );
 
+
 searchInput.addEventListener(
   "input",
   event => {
@@ -812,14 +1146,27 @@ searchInput.addEventListener(
     currentSearch =
       event.target.value.trim();
 
+
     renderMovies();
 
   }
 );
 
+
+// =========================================================
+// PREVENT BACKGROUND SCROLL
+// WHILE MODAL IS OPEN
+// =========================================================
+
 modal.addEventListener(
   "touchmove",
   event => {
+
+    /*
+      The modal itself can still scroll,
+      but this prevents accidental page
+      movement behind it.
+    */
 
     if (
       event.target === modal
@@ -834,4 +1181,3 @@ modal.addEventListener(
     passive: false
   }
 );
-```
