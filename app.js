@@ -1,3 +1,4 @@
+```javascript
 /*
   =========================================================
   BW'S MOVIE COLLECTION
@@ -49,8 +50,6 @@ let currentMovie = null;
 
 // =========================================================
 // SIMPLE COVER COLORS
-//
-// Used as a fallback when TMDB does not have a poster.
 // =========================================================
 
 const coverColors = [
@@ -84,9 +83,7 @@ function renderMovies() {
 
   movieGrid.innerHTML = "";
 
-
   const filteredMovies = movies.filter(movie => {
-
 
     // ------------------------------------------------------
     // TYPE FILTERS
@@ -99,14 +96,12 @@ function renderMovies() {
       return false;
     }
 
-
     if (
       currentFilter === "tv" &&
       movie.type !== "tv"
     ) {
       return false;
     }
-
 
     if (
       currentFilter === "misc" &&
@@ -118,11 +113,6 @@ function renderMovies() {
 
     // ------------------------------------------------------
     // PHYSICAL / DIGITAL FILTERS
-    //
-    // These work independently of movie type.
-    //
-    // A movie with both physical AND digital copies
-    // appears in BOTH filters.
     // ------------------------------------------------------
 
     if (currentFilter === "physical") {
@@ -135,7 +125,6 @@ function renderMovies() {
       }
 
     }
-
 
     if (currentFilter === "digital") {
 
@@ -158,10 +147,10 @@ function renderMovies() {
       const searchText =
         currentSearch.toLowerCase();
 
-
       const searchableText = [
 
         movie.title,
+        movie.tmdbTitle,
         movie.year,
         movie.genre,
         movie.director,
@@ -178,17 +167,13 @@ function renderMovies() {
         .join(" ")
         .toLowerCase();
 
-
       if (
-        !searchableText.includes(
-          searchText
-        )
+        !searchableText.includes(searchText)
       ) {
         return false;
       }
 
     }
-
 
     return true;
 
@@ -201,7 +186,13 @@ function renderMovies() {
 
   filteredMovies.sort(
     (a, b) =>
-      a.title.localeCompare(b.title)
+      a.title.localeCompare(
+        b.title,
+        undefined,
+        {
+          sensitivity: "base"
+        }
+      )
   );
 
 
@@ -229,21 +220,15 @@ function renderMovies() {
   // NO RESULTS
   // ======================================================
 
-  if (
-    filteredMovies.length === 0
-  ) {
+  if (filteredMovies.length === 0) {
 
-    noResults.classList.remove(
-      "hidden"
-    );
+    noResults.classList.remove("hidden");
 
     return;
 
   } else {
 
-    noResults.classList.add(
-      "hidden"
-    );
+    noResults.classList.add("hidden");
 
   }
 
@@ -256,14 +241,9 @@ function renderMovies() {
     (movie, index) => {
 
       const card =
-        createMovieCard(
-          movie,
-          index
-        );
+        createMovieCard(movie, index);
 
-      movieGrid.appendChild(
-        card
-      );
+      movieGrid.appendChild(card);
 
     }
   );
@@ -275,10 +255,7 @@ function renderMovies() {
 // CREATE MOVIE CARD
 // =========================================================
 
-function createMovieCard(
-  movie,
-  index
-) {
+function createMovieCard(movie, index) {
 
   const card =
     document.createElement("article");
@@ -301,7 +278,6 @@ function createMovieCard(
       index % coverColors.length
     ];
 
-
   const cover =
     document.createElement("div");
 
@@ -317,7 +293,7 @@ function createMovieCard(
 
 
   // ------------------------------------------------------
-  // TMDB POSTER
+  // POSTER
   // ------------------------------------------------------
 
   if (movie.poster) {
@@ -347,9 +323,9 @@ function createMovieCard(
 
 
   // ------------------------------------------------------
-  // FALLBACK COVER TEXT
+  // FALLBACK TITLE
   //
-  // Only used when there is no poster.
+  // Only appears when no poster exists.
   // ------------------------------------------------------
 
   if (!movie.poster) {
@@ -464,8 +440,6 @@ function createMovieCard(
 
   // ------------------------------------------------------
   // TYPE BADGE
-  //
-  // Only show this for TV and Misc.
   // ------------------------------------------------------
 
   if (
@@ -577,9 +551,7 @@ function createMovieCard(
 // OPEN MOVIE
 // =========================================================
 
-function openMovie(
-  movie
-) {
+function openMovie(movie) {
 
   currentMovie =
     movie;
@@ -604,30 +576,24 @@ function openMovie(
   modalTitle.textContent =
     movie.title;
 
-
   modalYear.textContent =
     movie.year || "";
-
 
   modalRuntime.textContent =
     movie.runtime ||
     "Runtime unknown";
 
-
   modalGenre.textContent =
     movie.genre ||
     "Genre unknown";
-
 
   modalSynopsis.textContent =
     movie.synopsis ||
     "No synopsis added yet.";
 
-
   modalCast.textContent =
     movie.cast ||
     "Cast information not added.";
-
 
   modalDirector.textContent =
     movie.director ||
@@ -645,13 +611,18 @@ function openMovie(
   const colors =
     coverColors[colorIndex];
 
-
   modalCover.innerHTML =
+    "";
+
+  modalCover.style.background =
+    "";
+
+  modalCover.style.backgroundImage =
     "";
 
 
   // ------------------------------------------------------
-  // Use TMDB poster if available
+  // POSTER
   // ------------------------------------------------------
 
   if (movie.poster) {
@@ -669,83 +640,25 @@ function openMovie(
       "no-repeat";
 
 
-    // ----------------------------------------------------
-    // DARK OVERLAY FOR TITLE
-    // ----------------------------------------------------
-
     const overlay =
       document.createElement("div");
 
-    overlay.style.position =
-      "absolute";
-
-    overlay.style.inset =
-      "0";
-
-    overlay.style.display =
-      "flex";
-
-    overlay.style.flexDirection =
-      "column";
-
-    overlay.style.justifyContent =
-      "flex-end";
-
-    overlay.style.padding =
-      "20px";
-
-    overlay.style.background =
-      "linear-gradient(
-        to top,
-        rgba(0,0,0,.8),
-        rgba(0,0,0,0) 60%
-      )";
+    overlay.className =
+      "modal-cover-overlay";
 
 
     const bigTitle =
       document.createElement("div");
 
+    bigTitle.className =
+      "modal-cover-title";
+
     bigTitle.textContent =
       movie.title;
-
-    bigTitle.style.position =
-      "relative";
-
-    bigTitle.style.color =
-      "white";
-
-    bigTitle.style.fontSize =
-      "clamp(25px, 7vw, 48px)";
-
-    bigTitle.style.fontWeight =
-      "800";
-
-    bigTitle.style.lineHeight =
-      "0.95";
-
-    bigTitle.style.textShadow =
-      "0 3px 8px rgba(0,0,0,.8)";
-
-
-    const bigYear =
-      document.createElement("div");
-
-    bigYear.textContent =
-      movie.year || "";
-
-    bigYear.style.marginTop =
-      "10px";
-
-    bigYear.style.color =
-      "rgba(255,255,255,.8)";
 
 
     overlay.appendChild(
       bigTitle
-    );
-
-    overlay.appendChild(
-      bigYear
     );
 
     modalCover.appendChild(
@@ -758,9 +671,6 @@ function openMovie(
     // FALLBACK COVER
     // ----------------------------------------------------
 
-    modalCover.style.backgroundImage =
-      "";
-
     modalCover.style.background =
       `linear-gradient(
         145deg,
@@ -772,76 +682,22 @@ function openMovie(
     const coverText =
       document.createElement("div");
 
-    coverText.style.position =
-      "absolute";
-
-    coverText.style.inset =
-      "0";
-
-    coverText.style.display =
-      "flex";
-
-    coverText.style.flexDirection =
-      "column";
-
-    coverText.style.justifyContent =
-      "flex-end";
-
-    coverText.style.padding =
-      "20px";
-
-    coverText.style.background =
-      "radial-gradient(
-        circle at 20% 15%,
-        rgba(255,255,255,.22),
-        transparent 32%
-      )";
+    coverText.className =
+      "modal-fallback-cover";
 
 
     const bigTitle =
       document.createElement("div");
 
+    bigTitle.className =
+      "modal-cover-title";
+
     bigTitle.textContent =
       movie.title;
-
-    bigTitle.style.position =
-      "relative";
-
-    bigTitle.style.color =
-      "white";
-
-    bigTitle.style.fontSize =
-      "clamp(25px, 7vw, 48px)";
-
-    bigTitle.style.fontWeight =
-      "800";
-
-    bigTitle.style.lineHeight =
-      "0.95";
-
-    bigTitle.style.textShadow =
-      "0 3px 8px rgba(0,0,0,.8)";
-
-
-    const bigYear =
-      document.createElement("div");
-
-    bigYear.textContent =
-      movie.year || "";
-
-    bigYear.style.marginTop =
-      "10px";
-
-    bigYear.style.color =
-      "rgba(255,255,255,.8)";
 
 
     coverText.appendChild(
       bigTitle
-    );
-
-    coverText.appendChild(
-      bigYear
     );
 
     modalCover.appendChild(
@@ -858,18 +714,14 @@ function openMovie(
   modalFormats.innerHTML =
     "";
 
-
   const physical =
     movie.physical || [];
-
 
   const digital =
     movie.digital || [];
 
 
-  // ------------------------------------------------------
-  // PHYSICAL
-  // ------------------------------------------------------
+  // Physical
 
   physical.forEach(
     format => {
@@ -891,9 +743,7 @@ function openMovie(
   );
 
 
-  // ------------------------------------------------------
-  // DIGITAL
-  // ------------------------------------------------------
+  // Digital
 
   digital.forEach(
     service => {
@@ -915,9 +765,7 @@ function openMovie(
   );
 
 
-  // ------------------------------------------------------
-  // NO FORMAT INFORMATION
-  // ------------------------------------------------------
+  // No format information
 
   if (
     physical.length === 0 &&
@@ -1022,7 +870,6 @@ function flipMovie() {
     "flipped"
   );
 
-
   if (
     flipContainer.classList.contains(
       "flipped"
@@ -1044,7 +891,13 @@ function flipMovie() {
 
 flipButton.addEventListener(
   "click",
-  flipMovie
+  event => {
+
+    event.stopPropagation();
+
+    flipMovie();
+
+  }
 );
 
 
@@ -1053,10 +906,18 @@ flipContainer.addEventListener(
   event => {
 
     /*
-      Don't trigger a second flip when the
-      user clicks interactive content on the
-      back of the case.
+      The flip button handles its own click.
+      Clicking elsewhere on the case flips it.
     */
+
+    if (
+      event.target === flipButton ||
+      flipButton.contains(event.target)
+    ) {
+
+      return;
+
+    }
 
     flipMovie();
 
@@ -1108,12 +969,6 @@ flipContainer.addEventListener(
       touchStartY;
 
 
-    /*
-      Only treat it as a swipe if the
-      horizontal movement is greater
-      than the vertical movement.
-    */
-
     if (
       Math.abs(differenceX) > 50 &&
       Math.abs(differenceX) >
@@ -1142,8 +997,6 @@ filters.forEach(
       "click",
       () => {
 
-        // Remove active state
-
         filters.forEach(
           b =>
             b.classList.remove(
@@ -1151,21 +1004,12 @@ filters.forEach(
             )
         );
 
-
-        // Activate clicked button
-
         button.classList.add(
           "active"
         );
 
-
-        // Set filter
-
         currentFilter =
           button.dataset.filter;
-
-
-        // Re-render
 
         renderMovies();
 
@@ -1188,7 +1032,6 @@ searchToggle.addEventListener(
       "hidden"
     );
 
-
     if (
       !searchArea.classList.contains(
         "hidden"
@@ -1210,7 +1053,6 @@ searchInput.addEventListener(
     currentSearch =
       event.target.value.trim();
 
-
     renderMovies();
 
   }
@@ -1226,12 +1068,6 @@ modal.addEventListener(
   "touchmove",
   event => {
 
-    /*
-      The modal itself can still scroll,
-      but this prevents accidental page
-      movement behind it.
-    */
-
     if (
       event.target === modal
     ) {
@@ -1245,3 +1081,4 @@ modal.addEventListener(
     passive: false
   }
 );
+```
