@@ -55,7 +55,6 @@ jobs:
           import os
           import re
           import requests
-          import sys
           from collections import Counter
 
 
@@ -79,13 +78,20 @@ jobs:
 
           # ======================================================
           # VERIFIED MOVIE TMDB IDs
+          #
+          # Four problematic movies were intentionally removed
+          # from this repair pass for manual correction:
+          #
+          # Dickie Roberts
+          # Men in Black
+          # Loaded Weapon 1
+          # Rudolph
           # ======================================================
 
           REPAIRS = {
 
               "Don't Say a Word": 12103,
               "Dirty Work": 14577,
-              "Dickie Roberts": 13778,
               "Chitty Chitty Bang Bang": 11708,
               "Bull Durham": 287,
               "Eight Men Out": 13554,
@@ -100,20 +106,16 @@ jobs:
               "Major League": 9942,
               "Major League 2": 11067,
               "McLintock": 15263,
-              "Men in Black": 607,
               "Men in Black 2": 608,
               "Mr. Destiny": 2612,
-              "Loaded Weapon 1": 9644,
               "Overboard": 10780,
               "Point Break": 1089,
               "Red Eye": 11460,
-              "Rudolph": 13382,
               "School for Scoundrels": 9842,
               "Stealth": 10048,
               "Swimfan": 20616,
               "Swingers": 10218,
               "The Dukes of Hazzard": 6519,
-              "The Ex": 13171,
               "The Fan": 9566,
               "The Invention of Lying": 23082,
               "The Lion King": 8587,
@@ -130,11 +132,12 @@ jobs:
               "Eye See You": 10375,
               "Benchwarmer": 9957,
               "Hush": 17941
+
           }
 
 
           # ======================================================
-          # MOVIES THAT SHOULD BE ADDED IF MISSING
+          # MOVIES TO ADD IF MISSING
           # ======================================================
 
           NEW_MOVIES = {
@@ -158,7 +161,7 @@ jobs:
 
 
           # ======================================================
-          # TV SERIES THAT MUST HAVE EVERY SEASON
+          # TV SERIES THAT SHOULD HAVE EVERY SEASON
           # ======================================================
 
           TV_SERIES = {
@@ -216,7 +219,7 @@ jobs:
 
 
           # ======================================================
-          # NORMALIZE ROMAN NUMERALS
+          # ROMAN NUMERAL NORMALIZATION
           # ======================================================
 
           ROMAN_NUMERALS = {
@@ -249,7 +252,7 @@ jobs:
 
 
           # ======================================================
-          # REMOVE "THE"
+          # REMOVE "THE" FOR MATCHING
           # ======================================================
 
           def remove_the(title):
@@ -266,7 +269,7 @@ jobs:
 
 
           # ======================================================
-          # FIND MOVIE
+          # FIND EXISTING MOVIE
           # ======================================================
 
           def find_movie_index(
@@ -285,7 +288,7 @@ jobs:
 
 
               # --------------------------------------------------
-              # Exact title
+              # Exact normalized title
               # --------------------------------------------------
 
               for index, movie in enumerate(movies):
@@ -300,7 +303,7 @@ jobs:
 
 
               # --------------------------------------------------
-              # Title with "The" moved
+              # Ignore position of "The"
               # --------------------------------------------------
 
               for index, movie in enumerate(movies):
@@ -336,9 +339,7 @@ jobs:
 
 
               # --------------------------------------------------
-              # Partial title fallback
-              #
-              # Only accept if there is exactly one candidate.
+              # Unique partial title fallback
               # --------------------------------------------------
 
               candidates = []
@@ -369,14 +370,10 @@ jobs:
 
 
           # ======================================================
-          # FORMAT "THE" TITLES
-          #
-          # The catalog convention is:
+          # CONVERT TMDB TITLE TO CATALOG TITLE
           #
           # "The Fan" -> "Fan, The"
           # "The Natural" -> "Natural, The"
-          #
-          # Do not move "The" if it is not at the beginning.
           # ======================================================
 
           def catalog_title(tmdb_title):
@@ -476,18 +473,13 @@ jobs:
 
 
           # ======================================================
-          # APPLY MOVIE METADATA
+          # UPDATE MOVIE METADATA
           # ======================================================
 
           def update_movie(
               movie,
-              data,
-              preserve_title=False
+              data
           ):
-
-              # --------------------------------------------------
-              # TMDB ID
-              # --------------------------------------------------
 
               movie["tmdbId"] = data.get(
                   "id"
@@ -495,7 +487,7 @@ jobs:
 
 
               # --------------------------------------------------
-              # TMDB title
+              # TITLE
               # --------------------------------------------------
 
               tmdb_title = data.get(
@@ -507,16 +499,13 @@ jobs:
 
                   movie["tmdbTitle"] = tmdb_title
 
-
-                  if not preserve_title:
-
-                      movie["title"] = catalog_title(
-                          tmdb_title
-                      )
+                  movie["title"] = catalog_title(
+                      tmdb_title
+                  )
 
 
               # --------------------------------------------------
-              # Poster
+              # POSTER
               # --------------------------------------------------
 
               poster_path = data.get(
@@ -533,7 +522,7 @@ jobs:
 
 
               # --------------------------------------------------
-              # Year
+              # YEAR
               # --------------------------------------------------
 
               release_date = data.get(
@@ -549,7 +538,7 @@ jobs:
 
 
               # --------------------------------------------------
-              # Runtime
+              # RUNTIME
               # --------------------------------------------------
 
               runtime = data.get(
@@ -565,7 +554,7 @@ jobs:
 
 
               # --------------------------------------------------
-              # Genre
+              # GENRE
               # --------------------------------------------------
 
               genres = data.get(
@@ -591,7 +580,7 @@ jobs:
 
 
               # --------------------------------------------------
-              # Director
+              # DIRECTOR
               # --------------------------------------------------
 
               credits = data.get(
@@ -624,7 +613,7 @@ jobs:
 
 
               # --------------------------------------------------
-              # Cast
+              # CAST
               # --------------------------------------------------
 
               cast = credits.get(
@@ -650,7 +639,7 @@ jobs:
 
 
               # --------------------------------------------------
-              # Synopsis
+              # SYNOPSIS
               # --------------------------------------------------
 
               overview = data.get(
@@ -675,8 +664,6 @@ jobs:
 
           repaired = 0
 
-          missing_repairs = []
-
 
           for requested_title, tmdb_id in REPAIRS.items():
 
@@ -689,20 +676,11 @@ jobs:
 
               if index is None:
 
-                  # The Ex is handled below as a new movie.
-
-                  if requested_title == "The Ex":
-                      continue
-
-                  missing_repairs.append(
-                      requested_title
+                  raise SystemExit(
+                      f"Could not safely match "
+                      f"'{requested_title}'. "
+                      f"No changes were written."
                   )
-
-                  print(
-                      f"NOT FOUND: {requested_title}"
-                  )
-
-                  continue
 
 
               movie = movies[index]
@@ -724,33 +702,11 @@ jobs:
 
               update_movie(
                   movie,
-                  data,
-                  preserve_title=False
+                  data
               )
 
 
               repaired += 1
-
-
-          if missing_repairs:
-
-              print("")
-              print(
-                  "The following repair items "
-                  "could not be matched:"
-              )
-
-              for title in missing_repairs:
-
-                  print(
-                      f"  - {title}"
-                  )
-
-              raise SystemExit(
-                  "Repair aborted because "
-                  "one or more verified movies "
-                  "could not be safely matched."
-              )
 
 
           # ======================================================
@@ -776,6 +732,10 @@ jobs:
               existing_index = None
 
 
+              # --------------------------------------------------
+              # Find by TMDB ID
+              # --------------------------------------------------
+
               for index, movie in enumerate(movies):
 
                   try:
@@ -791,6 +751,23 @@ jobs:
                       pass
 
 
+              # --------------------------------------------------
+              # Find by title if ID isn't present
+              # --------------------------------------------------
+
+              if existing_index is None:
+
+                  existing_index = find_movie_index(
+                      movies,
+                      requested_title,
+                      tmdb_id
+                  )
+
+
+              # --------------------------------------------------
+              # Already present
+              # --------------------------------------------------
+
               if existing_index is not None:
 
                   movie = movies[
@@ -804,8 +781,7 @@ jobs:
                   )
 
 
-                  # For F1, make sure the physical formats
-                  # include both 4K and Blu-ray.
+                  # F1 should have 4K and Blu-ray.
 
                   if requested_title == "F1":
 
@@ -833,8 +809,13 @@ jobs:
                   continue
 
 
+              # --------------------------------------------------
+              # Add new movie
+              # --------------------------------------------------
+
               print(
-                  f"ADDING: {requested_title}"
+                  f"ADDING: "
+                  f"{requested_title}"
                   f" -> TMDB {tmdb_id}"
               )
 
@@ -881,21 +862,20 @@ jobs:
                       ""
                   ),
 
-                  "physical": config[
-                      "physical"
-                  ],
+                  "physical": list(
+                      config["physical"]
+                  ),
 
-                  "digital": config[
-                      "digital"
-                  ]
+                  "digital": list(
+                      config["digital"]
+                  )
 
               }
 
 
               update_movie(
                   new_movie,
-                  data,
-                  preserve_title=True
+                  data
               )
 
 
@@ -943,30 +923,26 @@ jobs:
               )
 
 
+          # ======================================================
+          # FIND EXISTING TV SEASONS
+          # ======================================================
+
           def existing_seasons(
-              show_id
+              show_id,
+              show_name
           ):
 
               seasons = {}
 
 
-              for movie in movies:
+              normalized_show = normalize_numbers(
+                  show_name
+              )
 
-                  try:
 
-                      if int(
-                          movie.get("tmdbId", -1)
-                      ) != int(show_id):
-
-                          continue
-
-                  except Exception:
-
-                      continue
-
+              for index, movie in enumerate(movies):
 
                   if movie.get("type") != "tv":
-
                       continue
 
 
@@ -975,6 +951,24 @@ jobs:
                       ""
                   )
 
+
+                  normalized_title = normalize_numbers(
+                      title
+                  )
+
+
+                  if (
+                      normalized_show not in normalized_title
+                      and
+                      normalize_numbers(
+                          show_name
+                      ) not in normalized_title
+                  ):
+
+                      continue
+
+
+                  # Look for season number.
 
                   match = re.search(
                       r"(?:season|complete)\s+"
@@ -1015,36 +1009,42 @@ jobs:
 
                   seasons[
                       number
-                  ] = movie
+                  ] = index
 
 
               return seasons
 
 
+          # ======================================================
+          # INFER PHYSICAL FORMAT
+          # ======================================================
+
           def infer_physical_format(
-              show_id
+              show_name
           ):
 
               formats = []
 
+              normalized_show = normalize_numbers(
+                  show_name
+              )
+
 
               for movie in movies:
 
-                  try:
-
-                      if int(
-                          movie.get("tmdbId", -1)
-                      ) != int(show_id):
-
-                          continue
-
-                  except Exception:
-
+                  if movie.get("type") != "tv":
                       continue
 
 
-                  if movie.get("type") != "tv":
+                  title = normalize_numbers(
+                      movie.get(
+                          "title",
+                          ""
+                      )
+                  )
 
+
+                  if normalized_show not in title:
                       continue
 
 
@@ -1054,11 +1054,9 @@ jobs:
                   ) or []
 
 
-                  if physical:
-
-                      formats.extend(
-                          physical
-                      )
+                  formats.extend(
+                      physical
+                  )
 
 
               if not formats:
@@ -1072,8 +1070,6 @@ jobs:
                   formats
               )
 
-
-              # Preserve the most common physical format.
 
               return [
                   counts.most_common(1)[0][0]
@@ -1175,12 +1171,13 @@ jobs:
 
 
               existing = existing_seasons(
-                  show_id
+                  show_id,
+                  show_name
               )
 
 
               physical_format = infer_physical_format(
-                  show_id
+                  show_name
               )
 
 
@@ -1202,7 +1199,7 @@ jobs:
 
 
               # --------------------------------------------------
-              # Get common series information
+              # Series genre
               # --------------------------------------------------
 
               genres = show_data.get(
@@ -1224,6 +1221,10 @@ jobs:
                   )
               )
 
+
+              # --------------------------------------------------
+              # Series cast
+              # --------------------------------------------------
 
               credits = show_data.get(
                   "credits",
@@ -1249,10 +1250,9 @@ jobs:
               )
 
 
-              # TV shows do not have one useful movie-style
-              # director, so leave director blank unless the
-              # existing catalog already has one.
-
+              # --------------------------------------------------
+              # Add missing seasons
+              # --------------------------------------------------
 
               for season_number in range(
                   1,
@@ -1428,6 +1428,11 @@ jobs:
               "TMDB metadata and posters were refreshed "
               "from verified IDs."
           )
+          print(
+              "Titles were updated from TMDB and "
+              "'The' was moved to the end for "
+              "catalog alphabetical ordering."
+          )
           print("")
 
           PYTHON
@@ -1440,7 +1445,6 @@ jobs:
       - name: Show movies.js changes
         run: |
           git diff --stat -- movies.js
-          git diff -- movies.js
 
 
       # ==========================================================
