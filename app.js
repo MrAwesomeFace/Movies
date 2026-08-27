@@ -170,13 +170,19 @@ function renderMovies() {
         movie.type
 
       ]
-        .filter(value => value !== null && value !== undefined)
+        .filter(
+          value =>
+            value !== null &&
+            value !== undefined
+        )
         .join(" ")
         .toLowerCase();
 
 
       if (
-        !searchableText.includes(searchText)
+        !searchableText.includes(
+          searchText
+        )
       ) {
         return false;
       }
@@ -193,8 +199,9 @@ function renderMovies() {
   // SORT ALPHABETICALLY
   // ======================================================
 
-  filteredMovies.sort((a, b) =>
-    a.title.localeCompare(b.title)
+  filteredMovies.sort(
+    (a, b) =>
+      a.title.localeCompare(b.title)
   );
 
 
@@ -222,15 +229,21 @@ function renderMovies() {
   // NO RESULTS
   // ======================================================
 
-  if (filteredMovies.length === 0) {
+  if (
+    filteredMovies.length === 0
+  ) {
 
-    noResults.classList.remove("hidden");
+    noResults.classList.remove(
+      "hidden"
+    );
 
     return;
 
   } else {
 
-    noResults.classList.add("hidden");
+    noResults.classList.add(
+      "hidden"
+    );
 
   }
 
@@ -239,14 +252,21 @@ function renderMovies() {
   // CREATE CARDS
   // ======================================================
 
-  filteredMovies.forEach((movie, index) => {
+  filteredMovies.forEach(
+    (movie, index) => {
 
-    const card =
-      createMovieCard(movie, index);
+      const card =
+        createMovieCard(
+          movie,
+          index
+        );
 
-    movieGrid.appendChild(card);
+      movieGrid.appendChild(
+        card
+      );
 
-  });
+    }
+  );
 
 }
 
@@ -255,14 +275,21 @@ function renderMovies() {
 // CREATE MOVIE CARD
 // =========================================================
 
-function createMovieCard(movie, index) {
+function createMovieCard(
+  movie,
+  index
+) {
 
   const card =
     document.createElement("article");
 
-  card.className = "movie-card";
+  card.className =
+    "movie-card";
 
-  card.setAttribute("tabindex", "0");
+  card.setAttribute(
+    "tabindex",
+    "0"
+  );
 
 
   // ------------------------------------------------------
@@ -270,13 +297,16 @@ function createMovieCard(movie, index) {
   // ------------------------------------------------------
 
   const colors =
-    coverColors[index % coverColors.length];
+    coverColors[
+      index % coverColors.length
+    ];
 
 
   const cover =
     document.createElement("div");
 
-  cover.className = "movie-cover";
+  cover.className =
+    "movie-cover";
 
 
   const coverInner =
@@ -288,9 +318,6 @@ function createMovieCard(movie, index) {
 
   // ------------------------------------------------------
   // TMDB POSTER
-  //
-  // Use the actual TMDB poster when available.
-  // Otherwise fall back to the old gradient cover.
   // ------------------------------------------------------
 
   if (movie.poster) {
@@ -310,70 +337,56 @@ function createMovieCard(movie, index) {
   } else {
 
     coverInner.style.background =
-      `linear-gradient(145deg, ${colors[0]}, ${colors[1]})`;
+      `linear-gradient(
+        145deg,
+        ${colors[0]},
+        ${colors[1]}
+      )`;
 
   }
 
 
   // ------------------------------------------------------
-  // COVER OVERLAY
+  // FALLBACK COVER TEXT
   //
-  // Gives the title/badges readable contrast over posters.
+  // Only used when there is no poster.
   // ------------------------------------------------------
 
-  const coverOverlay =
-    document.createElement("div");
+  if (!movie.poster) {
 
-  coverOverlay.style.position =
-    "absolute";
+    const fallbackTitle =
+      document.createElement("div");
 
-  coverOverlay.style.inset =
-    "0";
+    fallbackTitle.className =
+      "movie-fallback-title";
 
-  coverOverlay.style.display =
-    "flex";
+    fallbackTitle.textContent =
+      movie.title;
 
-  coverOverlay.style.flexDirection =
-    "column";
+    coverInner.appendChild(
+      fallbackTitle
+    );
 
-  coverOverlay.style.justifyContent =
-    "flex-end";
+  }
 
-  coverOverlay.style.padding =
-    "14px";
 
-  coverOverlay.style.background =
-    movie.poster
-      ? "linear-gradient(to top, rgba(0,0,0,.85), rgba(0,0,0,0) 65%)"
-      : "transparent";
+  cover.appendChild(
+    coverInner
+  );
 
 
   // ------------------------------------------------------
-  // TITLE
+  // TITLE UNDER POSTER
   // ------------------------------------------------------
 
   const title =
     document.createElement("div");
 
   title.className =
-    "movie-cover-title";
+    "movie-card-title";
 
   title.textContent =
     movie.title;
-
-
-  // ------------------------------------------------------
-  // YEAR
-  // ------------------------------------------------------
-
-  const year =
-    document.createElement("div");
-
-  year.className =
-    "movie-cover-year";
-
-  year.textContent =
-    movie.year || "";
 
 
   // ------------------------------------------------------
@@ -387,52 +400,64 @@ function createMovieCard(movie, index) {
     "movie-badges";
 
 
-  // Physical badges
+  // ------------------------------------------------------
+  // PHYSICAL BADGES
+  // ------------------------------------------------------
 
   if (
     movie.physical &&
     movie.physical.length
   ) {
 
-    movie.physical.forEach(format => {
+    movie.physical.forEach(
+      format => {
 
-      const badge =
-        document.createElement("span");
+        const badge =
+          document.createElement("span");
 
-      badge.className =
-        "movie-badge";
+        badge.className =
+          "movie-badge";
 
-      badge.textContent =
-        `💿 ${format}`;
+        badge.textContent =
+          `💿 ${format}`;
 
-      badges.appendChild(badge);
+        badges.appendChild(
+          badge
+        );
 
-    });
+      }
+    );
 
   }
 
 
-  // Digital badges
+  // ------------------------------------------------------
+  // DIGITAL BADGES
+  // ------------------------------------------------------
 
   if (
     movie.digital &&
     movie.digital.length
   ) {
 
-    movie.digital.forEach(service => {
+    movie.digital.forEach(
+      service => {
 
-      const badge =
-        document.createElement("span");
+        const badge =
+          document.createElement("span");
 
-      badge.className =
-        "movie-badge";
+        badge.className =
+          "movie-badge";
 
-      badge.textContent =
-        `📱 ${service}`;
+        badge.textContent =
+          `📱 ${service}`;
 
-      badges.appendChild(badge);
+        badges.appendChild(
+          badge
+        );
 
-    });
+      }
+    );
 
   }
 
@@ -440,11 +465,12 @@ function createMovieCard(movie, index) {
   // ------------------------------------------------------
   // TYPE BADGE
   //
-  // Only show this for TV and Misc so normal movie cards
-  // stay clean.
+  // Only show this for TV and Misc.
   // ------------------------------------------------------
 
-  if (movie.type === "tv") {
+  if (
+    movie.type === "tv"
+  ) {
 
     const badge =
       document.createElement("span");
@@ -455,12 +481,16 @@ function createMovieCard(movie, index) {
     badge.textContent =
       "TV";
 
-    badges.appendChild(badge);
+    badges.appendChild(
+      badge
+    );
 
   }
 
 
-  if (movie.type === "misc") {
+  if (
+    movie.type === "misc"
+  ) {
 
     const badge =
       document.createElement("span");
@@ -471,24 +501,34 @@ function createMovieCard(movie, index) {
     badge.textContent =
       "MISC";
 
-    badges.appendChild(badge);
+    badges.appendChild(
+      badge
+    );
 
   }
 
 
   // ------------------------------------------------------
-  // ASSEMBLE COVER
+  // ASSEMBLE CARD
   // ------------------------------------------------------
 
-  coverOverlay.appendChild(title);
-  coverOverlay.appendChild(year);
-  coverOverlay.appendChild(badges);
+  card.appendChild(
+    cover
+  );
 
-  coverInner.appendChild(coverOverlay);
+  card.appendChild(
+    title
+  );
 
-  cover.appendChild(coverInner);
+  if (
+    badges.children.length > 0
+  ) {
 
-  card.appendChild(cover);
+    card.appendChild(
+      badges
+    );
+
+  }
 
 
   // ======================================================
@@ -537,7 +577,9 @@ function createMovieCard(movie, index) {
 // OPEN MOVIE
 // =========================================================
 
-function openMovie(movie) {
+function openMovie(
+  movie
+) {
 
   currentMovie =
     movie;
@@ -627,7 +669,9 @@ function openMovie(movie) {
       "no-repeat";
 
 
-    // Dark overlay for title
+    // ----------------------------------------------------
+    // DARK OVERLAY FOR TITLE
+    // ----------------------------------------------------
 
     const overlay =
       document.createElement("div");
@@ -651,7 +695,11 @@ function openMovie(movie) {
       "20px";
 
     overlay.style.background =
-      "linear-gradient(to top, rgba(0,0,0,.8), rgba(0,0,0,0) 60%)";
+      "linear-gradient(
+        to top,
+        rgba(0,0,0,.8),
+        rgba(0,0,0,0) 60%
+      )";
 
 
     const bigTitle =
@@ -714,7 +762,11 @@ function openMovie(movie) {
       "";
 
     modalCover.style.background =
-      `linear-gradient(145deg, ${colors[0]}, ${colors[1]})`;
+      `linear-gradient(
+        145deg,
+        ${colors[0]},
+        ${colors[1]}
+      )`;
 
 
     const coverText =
@@ -739,7 +791,11 @@ function openMovie(movie) {
       "20px";
 
     coverText.style.background =
-      "radial-gradient(circle at 20% 15%, rgba(255,255,255,.22), transparent 32%)";
+      "radial-gradient(
+        circle at 20% 15%,
+        rgba(255,255,255,.22),
+        transparent 32%
+      )";
 
 
     const bigTitle =
@@ -811,47 +867,57 @@ function openMovie(movie) {
     movie.digital || [];
 
 
-  // Physical
+  // ------------------------------------------------------
+  // PHYSICAL
+  // ------------------------------------------------------
 
-  physical.forEach(format => {
+  physical.forEach(
+    format => {
 
-    const item =
-      document.createElement("div");
+      const item =
+        document.createElement("div");
 
-    item.className =
-      "format-item";
+      item.className =
+        "format-item";
 
-    item.textContent =
-      `💿 Physical — ${format}`;
+      item.textContent =
+        `💿 Physical — ${format}`;
 
-    modalFormats.appendChild(
-      item
-    );
+      modalFormats.appendChild(
+        item
+      );
 
-  });
-
-
-  // Digital
-
-  digital.forEach(service => {
-
-    const item =
-      document.createElement("div");
-
-    item.className =
-      "format-item";
-
-    item.textContent =
-      `📱 Digital — ${service}`;
-
-    modalFormats.appendChild(
-      item
-    );
-
-  });
+    }
+  );
 
 
-  // No format information
+  // ------------------------------------------------------
+  // DIGITAL
+  // ------------------------------------------------------
+
+  digital.forEach(
+    service => {
+
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "format-item";
+
+      item.textContent =
+        `📱 Digital — ${service}`;
+
+      modalFormats.appendChild(
+        item
+      );
+
+    }
+  );
+
+
+  // ------------------------------------------------------
+  // NO FORMAT INFORMATION
+  // ------------------------------------------------------
 
   if (
     physical.length === 0 &&
@@ -1069,43 +1135,45 @@ flipContainer.addEventListener(
 // FILTER BUTTONS
 // =========================================================
 
-filters.forEach(button => {
+filters.forEach(
+  button => {
 
-  button.addEventListener(
-    "click",
-    () => {
+    button.addEventListener(
+      "click",
+      () => {
 
-      // Remove active state
+        // Remove active state
 
-      filters.forEach(
-        b =>
-          b.classList.remove(
-            "active"
-          )
-      );
-
-
-      // Activate clicked button
-
-      button.classList.add(
-        "active"
-      );
+        filters.forEach(
+          b =>
+            b.classList.remove(
+              "active"
+            )
+        );
 
 
-      // Set filter
+        // Activate clicked button
 
-      currentFilter =
-        button.dataset.filter;
+        button.classList.add(
+          "active"
+        );
 
 
-      // Re-render
+        // Set filter
 
-      renderMovies();
+        currentFilter =
+          button.dataset.filter;
 
-    }
-  );
 
-});
+        // Re-render
+
+        renderMovies();
+
+      }
+    );
+
+  }
+);
 
 
 // =========================================================
