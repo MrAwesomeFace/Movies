@@ -158,16 +158,13 @@ button {
 
   margin-top: 14px;
 
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.filters::-webkit-scrollbar {
-  display: none;
+  overflow: hidden;
 }
 
 
-/* Each filter row */
+/* =========================================================
+   FILTER ROW
+   ========================================================= */
 
 .filter-row {
   display: flex;
@@ -184,7 +181,9 @@ button {
 }
 
 
-/* Individual filter */
+/* =========================================================
+   INDIVIDUAL FILTER
+   ========================================================= */
 
 .filter {
   flex-shrink: 0;
@@ -208,7 +207,19 @@ button {
 }
 
 
-/* Animated filter gets a little more room */
+/* =========================================================
+   RANDOM / SHOW ALL
+   ========================================================= */
+
+.random-button,
+.show-all-button {
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   ANIMATED FILTER
+   ========================================================= */
 
 .animated-filter {
   min-width: 130px;
@@ -319,19 +330,45 @@ main {
   overflow-wrap: anywhere;
 }
 
-.movie-card-year {
-  margin-top: 2px;
 
-  color: var(--muted);
+/* =========================================================
+   FORMAT INDICATORS UNDER TITLE
+   ========================================================= */
 
-  font-size: 11px;
+.movie-card-formats {
+  display: flex;
+  flex-wrap: wrap;
 
-  text-align: center;
+  justify-content: center;
+
+  gap: 4px;
+
+  margin-top: 5px;
+
+  min-height: 0;
+}
+
+.movie-card-format {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 3px 6px;
+
+  border-radius: 5px;
+
+  background: var(--surface-light);
+
+  color: #cccccc;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  line-height: 1.2;
 }
 
 
 /* =========================================================
-   FORMAT INDICATORS
+   FORMAT BADGES
    ========================================================= */
 
 .movie-badges {
