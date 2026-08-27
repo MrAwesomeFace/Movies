@@ -1,0 +1,2142 @@
+name: TMDB ID Review
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tmdb-review:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # ==========================================================
+      # CHECK OUT REPOSITORY
+      # ==========================================================
+
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+
+      # ==========================================================
+      # SET UP PYTHON
+      # ==========================================================
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+
+      # ==========================================================
+      # INSTALL REQUESTS
+      # ==========================================================
+
+      - name: Install requests
+        run: |
+          pip install requests
+
+
+      # ==========================================================
+      # RUN TMDB REVIEW
+      # ==========================================================
+
+      - name: Analyze TMDB IDs
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+
+        run: |
+
+          python <<'PYTHON'
+
+          import json
+          import html
+          import os
+          import re
+          import requests
+          import time
+          from difflib import SequenceMatcher
+
+
+          # ======================================================
+          # SETTINGS
+          # ======================================================
+
+          API_KEY = os.environ.get(
+              "TMDB_API_KEY"
+          )
+
+          if not API_KEY:
+
+              raise SystemExit(
+                  "TMDB_API_KEY secret is not configured."
+              )
+
+
+          API_BASE = (
+              "https://api.themoviedb.org/3"
+          )
+
+
+          IMAGE_BASE = (
+              "https://image.tmdb.org/t/p/w342"
+          )
+
+
+          session = requests.Session()
+
+
+          # ======================================================
+          # LOAD MOVIES.JS
+          # ======================================================
+
+          with open(
+              "movies.js",
+              "r",
+              encoding="utf-8"
+          ) as f:
+
+              source = f.read()
+
+
+          start = source.find("[")
+          end = source.rfind("]")
+
+
+          if start == -1 or end == -1:
+
+              raise SystemExit(
+                  "Could not locate movies array."
+              )
+
+
+          try:
+
+              movies = json.loads(
+                  source[start:end + 1]
+              )
+
+          except json.JSONDecodeError as e:
+
+              raise SystemExit(
+                  f"Could not parse movies.js: {e}"
+              )
+
+
+          print(
+              f"Catalog entries: {len(movies)}"
+          )
+
+
+          # ======================================================
+          # HELPERS
+          # ======================================================
+
+          def normalize(text):
+
+              if not text:
+
+                  return ""
+
+
+              text = str(text).lower()
+
+
+              # Remove punctuation
+
+              text = re.sub(
+                  r"[^a-z0-9]+",
+                  " ",
+                  text
+              )
+
+
+              # Normalize spaces
+
+              return " ".join(
+                  text.split()
+              )
+
+
+          def title_similarity(a, b):
+
+              a = normalize(a)
+              b = normalize(b)
+
+
+              if not a or not b:
+
+                  return 0
+
+
+              if a == b:
+
+                  return 1.0
+
+
+              return SequenceMatcher(
+                  None,
+                  a,
+                  b
+              ).ratio()
+
+
+          def year_from_date(date):
+
+              if not date:
+
+                  return None
+
+
+              try:
+
+                  return int(
+                      str(date)[:4]
+                  )
+
+              except:
+
+                  return None
+
+
+          # ======================================================
+          # GET CURRENT TMDB RECORD
+          # ======================================================
+
+          def get_tmdb_movie(tmdb_id):
+
+              if not tmdb_id:
+
+                  return None
+
+
+              url = (
+                  f"{API_BASE}/movie/"
+                  f"{tmdb_id}"
+              )
+
+
+              try:
+
+                  response = session.get(
+                      url,
+                      params={
+                          "api_key": API_KEY
+                      },
+                      timeout=20
+                  )
+
+
+                  if response.status_code != 200:
+
+                      return None
+
+
+                  return response.json()
+
+
+              except Exception:
+
+                  return None
+
+
+          # ======================================================
+          # SEARCH TMDB BY TITLE
+          # ======================================================
+
+          def search_tmdb(title, year):
+
+              if not title:
+
+                  return []
+
+
+              params = {
+
+                  "api_key":
+                      API_KEY,
+
+                  "query":
+                      title,
+
+                  "include_adult":
+                      "false"
+
+              }
+
+
+              if year:
+
+                  params["year"] = year
+
+
+              try:
+
+                  response = session.get(
+                      f"{API_BASE}/search/movie",
+                      params=params,
+                      timeout=20
+                  )
+
+
+                  if response.status_code != 200:
+
+                      return []
+
+
+                  data = response.json()
+
+
+                  return data.get(
+                      "results",
+                      []
+                  )
+
+
+              except Exception:
+
+                  return []
+
+
+          # ======================================================
+          # DETERMINE BEST SEARCH MATCH
+          # ======================================================
+
+          def choose_match(
+              title,
+              year,
+              results
+          ):
+
+              if not results:
+
+                  return None
+
+
+              scored = []
+
+
+              for result in results:
+
+                  result_title = result.get(
+                      "title",
+                      ""
+                  )
+
+
+                  result_year = year_from_date(
+                      result.get(
+                          "release_date"
+                      )
+                  )
+
+
+                  similarity = title_similarity(
+                      title,
+                      result_title
+                  )
+
+
+                  year_score = 0
+
+
+                  if year and result_year:
+
+                      if year == result_year:
+
+                          year_score = 1.0
+
+                      elif abs(
+                          year - result_year
+                      ) == 1:
+
+                          year_score = 0.5
+
+
+                  # Title is more important than year,
+                  # but year is a strong confirmation.
+
+                  score = (
+                      similarity * 0.75
+                      +
+                      year_score * 0.25
+                  )
+
+
+                  scored.append(
+                      (
+                          score,
+                          result
+                      )
+                  )
+
+
+              scored.sort(
+                  key=lambda x: x[0],
+                  reverse=True
+              )
+
+
+              return scored[0]
+
+
+          # ======================================================
+          # ANALYZE CATALOG
+          # ======================================================
+
+          review_items = []
+
+          verified = 0
+          review_needed = 0
+          no_match = 0
+
+
+          for index, movie in enumerate(movies):
+
+              title = str(
+                  movie.get(
+                      "title",
+                      ""
+                  )
+              )
+
+
+              year_value = movie.get(
+                  "year"
+              )
+
+
+              try:
+
+                  year = int(
+                      str(year_value)[:4]
+                  )
+
+              except:
+
+                  year = None
+
+
+              current_id = movie.get(
+                  "tmdbId"
+              )
+
+
+              # --------------------------------------------------
+              # Skip entries without TMDB IDs
+              # --------------------------------------------------
+
+              if not current_id:
+
+                  review_items.append({
+
+                      "index": index,
+
+                      "title": title,
+
+                      "year": year,
+
+                      "currentId": None,
+
+                      "currentTitle": "",
+
+                      "currentYear": None,
+
+                      "currentPoster": "",
+
+                      "proposedId": None,
+
+                      "proposedTitle": "",
+
+                      "proposedYear": None,
+
+                      "proposedPoster": "",
+
+                      "status":
+                          "no_current_id",
+
+                      "default":
+                          "keep"
+
+                  })
+
+                  continue
+
+
+              # --------------------------------------------------
+              # Get existing TMDB record
+              # --------------------------------------------------
+
+              current = get_tmdb_movie(
+                  current_id
+              )
+
+
+              current_title = ""
+              current_year = None
+              current_poster = ""
+
+
+              if current:
+
+                  current_title = current.get(
+                      "title",
+                      ""
+                  )
+
+                  current_year = year_from_date(
+                      current.get(
+                          "release_date"
+                      )
+                  )
+
+                  poster_path = current.get(
+                      "poster_path"
+                  )
+
+                  if poster_path:
+
+                      current_poster = (
+                          IMAGE_BASE
+                          + poster_path
+                      )
+
+
+              # --------------------------------------------------
+              # Search using catalog title/year
+              # --------------------------------------------------
+
+              results = search_tmdb(
+                  title,
+                  year
+              )
+
+
+              best = choose_match(
+                  title,
+                  year,
+                  results
+              )
+
+
+              proposed = None
+              score = 0
+
+
+              if best:
+
+                  score, proposed = best
+
+
+              # --------------------------------------------------
+              # Proposed information
+              # --------------------------------------------------
+
+              proposed_id = None
+              proposed_title = ""
+              proposed_year = None
+              proposed_poster = ""
+
+
+              if proposed:
+
+                  proposed_id = proposed.get(
+                      "id"
+                  )
+
+                  proposed_title = proposed.get(
+                      "title",
+                      ""
+                  )
+
+                  proposed_year = year_from_date(
+                      proposed.get(
+                          "release_date"
+                      )
+                  )
+
+                  poster_path = proposed.get(
+                      "poster_path"
+                  )
+
+                  if poster_path:
+
+                      proposed_poster = (
+                          IMAGE_BASE
+                          + poster_path
+                      )
+
+
+              # --------------------------------------------------
+              # Determine whether current ID is valid
+              # --------------------------------------------------
+
+              current_title_score = (
+                  title_similarity(
+                      title,
+                      current_title
+                  )
+              )
+
+
+              year_matches = (
+                  year is not None
+                  and current_year is not None
+                  and year == current_year
+              )
+
+
+              title_matches = (
+                  current_title_score >= 0.90
+              )
+
+
+              current_is_good = (
+                  current is not None
+                  and title_matches
+                  and year_matches
+              )
+
+
+              proposed_is_better = (
+
+                  proposed is not None
+
+                  and proposed_id != current_id
+
+                  and score >= 0.80
+
+                  and (
+                      not current_is_good
+                      or score > (
+                          current_title_score * 0.75
+                          +
+                          (
+                              1.0
+                              if year_matches
+                              else 0
+                          ) * 0.25
+                      )
+                  )
+
+              )
+
+
+              # --------------------------------------------------
+              # Determine status
+              # --------------------------------------------------
+
+              if current_is_good:
+
+                  status = "verified"
+
+                  default = "keep"
+
+                  verified += 1
+
+
+              elif proposed_is_better:
+
+                  status = "needs_review"
+
+                  default = "update"
+
+                  review_needed += 1
+
+
+              elif not proposed:
+
+                  status = "no_match"
+
+                  default = "keep"
+
+                  no_match += 1
+
+
+              else:
+
+                  status = "needs_review"
+
+                  default = "keep"
+
+                  review_needed += 1
+
+
+              review_items.append({
+
+                  "index":
+                      index,
+
+                  "title":
+                      title,
+
+                  "year":
+                      year,
+
+                  "currentId":
+                      current_id,
+
+                  "currentTitle":
+                      current_title,
+
+                  "currentYear":
+                      current_year,
+
+                  "currentPoster":
+                      current_poster,
+
+                  "proposedId":
+                      proposed_id,
+
+                  "proposedTitle":
+                      proposed_title,
+
+                  "proposedYear":
+                      proposed_year,
+
+                  "proposedPoster":
+                      proposed_poster,
+
+                  "score":
+                      round(
+                          score,
+                          3
+                      ),
+
+                  "status":
+                      status,
+
+                  "default":
+                      default
+
+              })
+
+
+              # TMDB rate-limit courtesy
+
+              time.sleep(
+                  0.05
+              )
+
+
+          # ======================================================
+          # SAVE REVIEW DATA
+          # ======================================================
+
+          with open(
+              "tmdb-id-review.json",
+              "w",
+              encoding="utf-8"
+          ) as f:
+
+              json.dump(
+                  review_items,
+                  f,
+                  indent=2,
+                  ensure_ascii=False
+              )
+
+
+          # ======================================================
+          # HTML ESCAPE
+          # ======================================================
+
+          def esc(value):
+
+              return html.escape(
+                  str(value or ""),
+                  quote=True
+              )
+
+
+          # ======================================================
+          # BUILD HTML
+          # ======================================================
+
+          cards = []
+
+
+          for item in review_items:
+
+              status = item[
+                  "status"
+              ]
+
+
+              current_img = ""
+
+
+              if item[
+                  "currentPoster"
+              ]:
+
+                  current_img = f"""
+
+                  <img
+                    src="{esc(
+                        item['currentPoster']
+                    )}"
+                    loading="lazy"
+                  >
+
+                  """
+
+              else:
+
+                  current_img = """
+
+                  <div class="missing">
+                    NO CURRENT POSTER
+                  </div>
+
+                  """
+
+
+              proposed_img = ""
+
+
+              if item[
+                  "proposedPoster"
+              ]:
+
+                  proposed_img = f"""
+
+                  <img
+                    src="{esc(
+                        item['proposedPoster']
+                    )}"
+                    loading="lazy"
+                  >
+
+                  """
+
+              else:
+
+                  proposed_img = """
+
+                  <div class="missing">
+                    NO PROPOSED POSTER
+                  </div>
+
+                  """
+
+
+              if status == "verified":
+
+                  status_label = (
+                      "✓ VERIFIED"
+                  )
+
+              elif status == "no_match":
+
+                  status_label = (
+                      "⚠ NO RELIABLE MATCH"
+                  )
+
+              elif status == "no_current_id":
+
+                  status_label = (
+                      "⚠ NO CURRENT TMDB ID"
+                  )
+
+              else:
+
+                  status_label = (
+                      "⚠ REVIEW"
+                  )
+
+
+              keep_checked = (
+                  "checked"
+                  if item["default"] == "keep"
+                  else ""
+              )
+
+
+              update_checked = (
+                  "checked"
+                  if item["default"] == "update"
+                  else ""
+              )
+
+
+              update_disabled = (
+
+                  "disabled"
+
+                  if not item[
+                      "proposedId"
+                  ]
+
+                  else ""
+
+              )
+
+
+              cards.append(f"""
+
+              <div
+                class="movie-card"
+                data-title="{esc(
+                    item['title'].lower()
+                )}"
+                data-status="{status}"
+              >
+
+                <div class="header">
+
+                  <div>
+
+                    <div class="title">
+
+                      {esc(
+                          item['title']
+                      )}
+
+                    </div>
+
+                    <div class="catalog-year">
+
+                      Catalog year:
+                      {esc(
+                          item['year']
+                      )}
+
+                    </div>
+
+                  </div>
+
+
+                  <div class="status {status}">
+
+                    {status_label}
+
+                  </div>
+
+                </div>
+
+
+                <div class="comparison">
+
+
+                  <div class="record">
+
+                    <div class="record-label">
+                      CURRENT
+                    </div>
+
+                    <div class="poster">
+                      {current_img}
+                    </div>
+
+                    <div class="record-info">
+
+                      <strong>
+                        {esc(
+                            item['currentTitle']
+                        )}
+                      </strong>
+
+                      <br>
+
+                      TMDB ID:
+                      {esc(
+                          item['currentId']
+                      )}
+
+                      <br>
+
+                      Year:
+                      {esc(
+                          item['currentYear']
+                      )}
+
+                    </div>
+
+                  </div>
+
+
+                  <div class="arrow">
+                    →
+                  </div>
+
+
+                  <div class="record">
+
+                    <div class="record-label">
+                      PROPOSED
+                    </div>
+
+                    <div class="poster">
+                      {proposed_img}
+                    </div>
+
+                    <div class="record-info">
+
+                      <strong>
+                        {esc(
+                            item['proposedTitle']
+                        )}
+                      </strong>
+
+                      <br>
+
+                      TMDB ID:
+                      {esc(
+                          item['proposedId']
+                      )}
+
+                      <br>
+
+                      Year:
+                      {esc(
+                          item['proposedYear']
+                      )}
+
+                    </div>
+
+                  </div>
+
+
+                </div>
+
+
+                <div class="decision">
+
+                  <label>
+
+                    <input
+                      type="radio"
+                      name="decision-{item['index']}"
+                      value="keep"
+                      data-index="{item['index']}"
+                      {keep_checked}
+                    >
+
+                    Keep Current
+
+                  </label>
+
+
+                  <label>
+
+                    <input
+                      type="radio"
+                      name="decision-{item['index']}"
+                      value="update"
+                      data-index="{item['index']}"
+                      {update_checked}
+                      {update_disabled}
+                    >
+
+                    Use Proposed
+
+                  </label>
+
+                </div>
+
+
+              </div>
+
+              """)
+
+
+          # ======================================================
+          # CREATE PAGE
+          # ======================================================
+
+          page = f"""<!DOCTYPE html>
+
+          <html>
+
+          <head>
+
+          <meta charset="UTF-8">
+
+          <meta
+            name="viewport"
+            content="width=device-width,
+            initial-scale=1"
+          >
+
+          <title>
+            TMDB ID Review
+          </title>
+
+
+          <style>
+
+          * {{
+            box-sizing:
+              border-box;
+          }}
+
+
+          body {{
+
+            margin: 0;
+
+            padding: 20px;
+
+            background: #111;
+
+            color: #eee;
+
+            font-family:
+              Arial,
+              Helvetica,
+              sans-serif;
+
+          }}
+
+
+          .container {{
+
+            max-width:
+              1600px;
+
+            margin:
+              auto;
+
+          }}
+
+
+          h1 {{
+
+            margin-bottom:
+              5px;
+
+          }}
+
+
+          .subtitle {{
+
+            color: #aaa;
+
+            margin-bottom:
+              20px;
+
+          }}
+
+
+          .instructions {{
+
+            background:
+              #202a36;
+
+            padding:
+              18px;
+
+            border-radius:
+              10px;
+
+            margin-bottom:
+              20px;
+
+            line-height:
+              1.5;
+
+          }}
+
+
+          .toolbar {{
+
+            position:
+              sticky;
+
+            top: 0;
+
+            z-index: 20;
+
+            background:
+              #111;
+
+            padding:
+              12px 0;
+
+            border-bottom:
+              1px solid #333;
+
+            margin-bottom:
+              20px;
+
+          }}
+
+
+          #search {{
+
+            width: 100%;
+
+            padding:
+              12px;
+
+            font-size:
+              16px;
+
+            border-radius:
+              8px;
+
+            border:
+              1px solid #444;
+
+            background:
+              #222;
+
+            color:
+              #fff;
+
+            margin-bottom:
+              10px;
+
+          }}
+
+
+          .buttons {{
+
+            display:
+              flex;
+
+            gap:
+              8px;
+
+            flex-wrap:
+              wrap;
+
+          }}
+
+
+          button {{
+
+            padding:
+              9px 14px;
+
+            border: 0;
+
+            border-radius:
+              7px;
+
+            cursor:
+              pointer;
+
+            background:
+              #333;
+
+            color:
+              white;
+
+          }}
+
+
+          button:hover {{
+
+            background:
+              #444;
+
+          }}
+
+
+          .download {{
+
+            font-weight:
+              bold;
+
+          }}
+
+
+          .stats {{
+
+            color:
+              #aaa;
+
+            margin-top:
+              10px;
+
+          }}
+
+
+          .grid {{
+
+            display:
+              grid;
+
+            grid-template-columns:
+              repeat(
+                auto-fill,
+                minmax(
+                  500px,
+                  1fr
+                )
+              );
+
+            gap:
+              16px;
+
+          }}
+
+
+          .movie-card {{
+
+            background:
+              #1b1b1b;
+
+            border:
+              1px solid #303030;
+
+            border-radius:
+              10px;
+
+            padding:
+              14px;
+
+          }}
+
+
+          .movie-card[data-status="needs_review"] {{
+
+            border:
+              2px solid #777;
+
+          }}
+
+
+          .header {{
+
+            display:
+              flex;
+
+            justify-content:
+              space-between;
+
+            gap:
+              10px;
+
+            margin-bottom:
+              12px;
+
+          }}
+
+
+          .title {{
+
+            font-size:
+              18px;
+
+            font-weight:
+              bold;
+
+          }}
+
+
+          .catalog-year {{
+
+            color:
+              #888;
+
+            font-size:
+              12px;
+
+            margin-top:
+              3px;
+
+          }}
+
+
+          .status {{
+
+            font-size:
+              11px;
+
+            white-space:
+              nowrap;
+
+            padding:
+              5px 8px;
+
+            border-radius:
+              5px;
+
+            background:
+              #292929;
+
+          }}
+
+
+          .status.needs_review {{
+
+            background:
+              #4a4020;
+
+          }}
+
+
+          .status.no_match {{
+
+            background:
+              #442828;
+
+          }}
+
+
+          .comparison {{
+
+            display:
+              grid;
+
+            grid-template-columns:
+              1fr
+              30px
+              1fr;
+
+            gap:
+              8px;
+
+            align-items:
+              center;
+
+          }}
+
+
+          .record {{
+
+            text-align:
+              center;
+
+          }}
+
+
+          .record-label {{
+
+            color:
+              #888;
+
+            font-size:
+              11px;
+
+            letter-spacing:
+              .05em;
+
+            margin-bottom:
+              5px;
+
+          }}
+
+
+          .poster {{
+
+            width:
+              100%;
+
+            aspect-ratio:
+              2 / 3;
+
+            background:
+              #252525;
+
+            border-radius:
+              5px;
+
+            overflow:
+              hidden;
+
+            display:
+              flex;
+
+            align-items:
+              center;
+
+            justify-content:
+              center;
+
+          }}
+
+
+          .poster img {{
+
+            width:
+              100%;
+
+            height:
+              100%;
+
+            object-fit:
+              cover;
+
+          }}
+
+
+          .missing {{
+
+            color:
+              #777;
+
+            font-size:
+              11px;
+
+            padding:
+              10px;
+
+          }}
+
+
+          .arrow {{
+
+            text-align:
+              center;
+
+            color:
+              #777;
+
+            font-size:
+              22px;
+
+          }}
+
+
+          .record-info {{
+
+            min-height:
+              65px;
+
+            padding-top:
+              8px;
+
+            color:
+              #999;
+
+            font-size:
+              12px;
+
+            line-height:
+              1.5;
+
+          }}
+
+
+          .record-info strong {{
+
+            color:
+              #eee;
+
+            font-size:
+              13px;
+
+          }}
+
+
+          .decision {{
+
+            display:
+              grid;
+
+            grid-template-columns:
+              1fr
+              1fr;
+
+            gap:
+              8px;
+
+            margin-top:
+              12px;
+
+          }}
+
+
+          .decision label {{
+
+            padding:
+              9px 5px;
+
+            text-align:
+              center;
+
+            background:
+              #252525;
+
+            border-radius:
+              6px;
+
+            cursor:
+              pointer;
+
+            font-size:
+              13px;
+
+          }}
+
+
+          .decision input {{
+
+            margin-right:
+              5px;
+
+          }}
+
+
+          @media (
+            max-width: 700px
+          ) {{
+
+            .grid {{
+
+              grid-template-columns:
+                1fr;
+
+            }}
+
+            .comparison {{
+
+              grid-template-columns:
+                1fr;
+
+            }}
+
+            .arrow {{
+
+              transform:
+                rotate(90deg);
+
+            }}
+
+          }}
+
+          </style>
+
+          </head>
+
+
+          <body>
+
+
+          <div class="container">
+
+
+            <h1>
+              TMDB ID Review
+            </h1>
+
+
+            <div class="subtitle">
+
+              Checking
+              {len(movies)}
+              catalog entries using
+              title + year
+
+            </div>
+
+
+            <div class="instructions">
+
+              <strong>
+                Nothing has been changed.
+              </strong>
+
+              This page is only a review.
+
+              <br><br>
+
+              <strong>
+                Keep Current
+              </strong>
+              keeps the existing TMDB ID
+              and all existing metadata.
+
+              <br>
+
+              <strong>
+                Use Proposed
+              </strong>
+              will eventually replace the
+              TMDB ID and refresh the TMDB
+              information from the new record.
+
+              <br><br>
+
+              Movies marked
+              <strong>REVIEW</strong>
+              deserve particular attention.
+
+              Verified movies can normally
+              be left alone.
+
+            </div>
+
+
+            <div class="toolbar">
+
+
+              <input
+                id="search"
+                type="search"
+                placeholder="Search movie titles..."
+                autocomplete="off"
+              >
+
+
+              <div class="buttons">
+
+
+                <button
+                  onclick="showStatus('all')"
+                >
+                  All
+                </button>
+
+
+                <button
+                  onclick="showStatus('needs_review')"
+                >
+                  Review Only
+                </button>
+
+
+                <button
+                  onclick="showStatus('verified')"
+                >
+                  Verified
+                </button>
+
+
+                <button
+                  onclick="setAll('keep')"
+                >
+                  Keep All
+                </button>
+
+
+                <button
+                  onclick="setReviewToUpdate()"
+                >
+                  Use Proposed for Reviews
+                </button>
+
+
+                <button
+                  class="download"
+                  onclick="downloadChanges()"
+                >
+                  Download Approved Changes
+                </button>
+
+
+              </div>
+
+
+              <div
+                class="stats"
+                id="stats"
+              >
+
+                Showing
+                {len(movies)}
+
+                entries
+
+              </div>
+
+
+            </div>
+
+
+            <div
+              class="grid"
+              id="grid"
+            >
+
+              {''.join(cards)}
+
+            </div>
+
+
+          </div>
+
+
+          <script>
+
+
+          const cards =
+            document.querySelectorAll(
+              ".movie-card"
+            );
+
+
+          const search =
+            document.getElementById(
+              "search"
+            );
+
+
+          const stats =
+            document.getElementById(
+              "stats"
+            );
+
+
+          function refreshStats() {{
+
+            let visible = 0;
+
+
+            cards.forEach(
+              function(card) {{
+
+                if (
+                  card.style.display !==
+                  "none"
+                ) {{
+
+                  visible++;
+
+                }}
+
+              }}
+            );
+
+
+            stats.textContent =
+              "Showing "
+              + visible
+              + " entries";
+
+          }}
+
+
+          search.addEventListener(
+            "input",
+            function() {{
+
+              const query =
+                search.value
+                  .trim()
+                  .toLowerCase();
+
+
+              cards.forEach(
+                function(card) {{
+
+                  const title =
+                    card.dataset.title;
+
+
+                  if (
+                    !query ||
+                    title.includes(query)
+                  ) {{
+
+                    card.style.display =
+                      "";
+
+                  }} else {{
+
+                    card.style.display =
+                      "none";
+
+                  }}
+
+                }}
+              );
+
+
+              refreshStats();
+
+            }}
+          );
+
+
+          function showStatus(
+            status
+          ) {{
+
+            cards.forEach(
+              function(card) {{
+
+                if (
+                  status === "all" ||
+                  card.dataset.status ===
+                  status
+                ) {{
+
+                  card.style.display =
+                    "";
+
+                }} else {{
+
+                  card.style.display =
+                    "none";
+
+                }}
+
+              }}
+            );
+
+
+            refreshStats();
+
+          }}
+
+
+          function setAll(
+            value
+          ) {{
+
+            cards.forEach(
+              function(card) {{
+
+                if (
+                  card.style.display ===
+                  "none"
+                ) {{
+
+                  return;
+
+                }}
+
+
+                const radio =
+                  card.querySelector(
+                    'input[value="' +
+                    value +
+                    '"]'
+                  );
+
+
+                if (
+                  radio &&
+                  !radio.disabled
+                ) {{
+
+                  radio.checked =
+                    true;
+
+                }}
+
+              }}
+            );
+
+          }}
+
+
+          function setReviewToUpdate() {{
+
+            cards.forEach(
+              function(card) {{
+
+                if (
+                  card.dataset.status !==
+                  "needs_review"
+                ) {{
+
+                  return;
+
+                }}
+
+
+                const radio =
+                  card.querySelector(
+                    'input[value="update"]'
+                  );
+
+
+                if (
+                  radio &&
+                  !radio.disabled
+                ) {{
+
+                  radio.checked =
+                    true;
+
+                }}
+
+              }}
+            );
+
+          }}
+
+
+          function downloadChanges() {{
+
+            const changes = [];
+
+
+            cards.forEach(
+              function(card) {{
+
+                const selected =
+                  card.querySelector(
+                    'input[type="radio"]:checked'
+                  );
+
+
+                if (!selected) {{
+
+                  return;
+
+                }}
+
+
+                if (
+                  selected.value !==
+                  "update"
+                ) {{
+
+                  return;
+
+                }}
+
+
+                const index =
+                  Number(
+                    selected.dataset.index
+                  );
+
+
+                changes.push({{
+
+                  index:
+                    index
+
+                }});
+
+              }}
+            );
+
+
+            const blob =
+              new Blob(
+                [
+                  JSON.stringify(
+                    changes,
+                    null,
+                    2
+                  )
+                ],
+                {{
+
+                  type:
+                    "application/json"
+
+                }}
+              );
+
+
+            const url =
+              URL.createObjectURL(
+                blob
+              );
+
+
+            const link =
+              document.createElement(
+                "a"
+              );
+
+
+            link.href =
+              url;
+
+
+            link.download =
+              "approved-tmdb-id-changes.json";
+
+
+            document.body.appendChild(
+              link
+            );
+
+
+            link.click();
+
+
+            document.body.removeChild(
+              link
+            );
+
+
+            URL.revokeObjectURL(
+              url
+            );
+
+
+            alert(
+              changes.length
+              +
+              " TMDB ID changes approved."
+            );
+
+          }}
+
+          </script>
+
+
+          </body>
+
+          </html>
+          """
+
+
+          # ======================================================
+          # WRITE HTML
+          # ======================================================
+
+          with open(
+              "tmdb-id-review.html",
+              "w",
+              encoding="utf-8"
+          ) as f:
+
+              f.write(page)
+
+
+          # ======================================================
+          # SUMMARY
+          # ======================================================
+
+          print("")
+          print("========================================")
+          print("TMDB ID REVIEW COMPLETE")
+          print("========================================")
+          print("")
+          print(
+              f"Catalog entries: {len(movies)}"
+          )
+          print(
+              f"Verified:        {verified}"
+          )
+          print(
+              f"Needs review:    {review_needed}"
+          )
+          print(
+              f"No match:        {no_match}"
+          )
+          print("")
+          print(
+              "NO CHANGES WERE MADE."
+          )
+          print("")
+          print(
+              "Review tmdb-id-review.html"
+          )
+          print(
+              "before approving any changes."
+          )
+
+          PYTHON
+
+
+      # ==========================================================
+      # UPLOAD REVIEW PAGE
+      # ==========================================================
+
+      - name: Upload TMDB review
+        uses: actions/upload-artifact@v4
+
+        with:
+          name: tmdb-id-review
+
+          path: |
+            tmdb-id-review.html
+            tmdb-id-review.json
+
+          retention-days: 7
