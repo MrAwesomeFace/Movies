@@ -885,23 +885,7 @@ const movies = [
     ],
     "digital": []
   },
-  {
-    "title": "Back to the Future - The Complete Trilogy",
-    "tmdbTitle": "",
-    "type": "misc",
-    "tmdbId": null,
-    "poster": "",
-    "year": "",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
-    "synopsis": "",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
+
   {
     "title": "Back to the Future Part II",
     "type": "movie",
@@ -2551,7 +2535,7 @@ const movies = [
   {
     "title": "Dickie Roberts: Former Child Star",
     "type": "movie",
-    "tmdbId": 11027,
+    "tmdbId": 13778,
     "poster": "https://image.tmdb.org/t/p/w500/k52pPgVOHPwjIyMdvNZZi3Z7zFR.jpg",
     "year": "1981",
     "runtime": "122m",
@@ -3953,7 +3937,7 @@ const movies = [
   {
     "title": "Greedy",
     "type": "movie",
-    "tmdbId": 11884,
+    "tmdbId": 12778,
     "poster": "https://image.tmdb.org/t/p/w500/A7oAHTjtYnIEQjJs62IONRufooq.jpg",
     "year": "1984",
     "runtime": "101m",
@@ -6166,23 +6150,7 @@ const movies = [
     ],
     "digital": []
   },
-  {
-    "title": "Men of Honor",
-    "tmdbTitle": "Men of Honor",
-    "type": "movie",
-    "tmdbId": 11978,
-    "poster": "https://image.tmdb.org/t/p/w500/wNUAnXV1mzOOfvnVBIYsalkk078.jpg",
-    "year": "2000",
-    "runtime": "129m",
-    "genre": "Drama",
-    "director": "George Tillman Jr.",
-    "cast": "Robert De Niro, Cuba Gooding Jr., Charlize Theron, Aunjanue Ellis-Taylor, Hal Holbrook, Michael Rapaport",
-    "synopsis": "Against formidable odds -- and an old-school diving instructor embittered by the U.S. Navy's new, less prejudicial policies -- Carl Brashear sets his sights on becoming the Navy's first African-American master diver in this uplifting true story. Their relationship starts out on the rocks, but fate ultimately conspires to bring the men together into a setting of mutual respect, triumph and honor.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
+
   {
     "title": "Men in Black II",
     "tmdbTitle": "Men in Black II",
@@ -6790,7 +6758,7 @@ const movies = [
     "title": "Now You See Me, Now You Don't",
     "tmdbTitle": "Now You See Me: Now You Don't",
     "type": "movie",
-    "tmdbId": 1087891,
+    "tmdbId": 425274,
     "poster": "https://image.tmdb.org/t/p/w500/SNEoUInCa5fAgwuEBMIMBGvkkh.jpg",
     "year": "2025",
     "runtime": "123m",
@@ -7103,7 +7071,7 @@ const movies = [
   {
     "title": "Picture Perfect",
     "type": "movie",
-    "tmdbId": 17414,
+    "tmdbId": 9413,
     "poster": "https://image.tmdb.org/t/p/w500/xR2cWC04kWNr7TBeXNOf4uOqn00.jpg",
     "year": "1996",
     "runtime": "88m",
@@ -7346,7 +7314,7 @@ const movies = [
   {
     "title": "Pride of the Yankees",
     "type": "movie",
-    "tmdbId": 31909,
+    "tmdbId": 19140,
     "poster": "https://image.tmdb.org/t/p/w500/rs3cOVZtrXD27XQQdut1FWFYrUG.jpg",
     "year": "1986",
     "runtime": "100m",
@@ -7397,7 +7365,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "Quantum of Solace",
+    "title": "007: Quantum of Solace",
     "tmdbTitle": "Quantum of Solace",
     "type": "movie",
     "tmdbId": 10764,
@@ -7451,7 +7419,7 @@ const movies = [
     "title": "Rambo: First Blood",
     "tmdbTitle": "First Blood",
     "type": "movie",
-    "tmdbId": 1366,
+    "tmdbId": 1368,
     "poster": "https://image.tmdb.org/t/p/w500/xSI0dbKLDETwhiVUy6hGE8KXUln.jpg",
     "year": "1976",
     "runtime": "120m",
@@ -7897,7 +7865,7 @@ const movies = [
   {
     "title": "Runaway Bride",
     "type": "movie",
-    "tmdbId": 639,
+    "tmdbId": 4806,
     "poster": "https://image.tmdb.org/t/p/w500/rFOiFUhTMtDetqCGClC9PIgnC1P.jpg",
     "year": "1989",
     "runtime": "96m",
@@ -9894,7 +9862,7 @@ const movies = [
     "title": "Gift, The",
     "tmdbTitle": "The Gift",
     "type": "movie",
-    "tmdbId": 1413,
+    "tmdbId": 2046,
     "poster": "https://image.tmdb.org/t/p/w500/vfutnJ9sgpAtNuPemksd26gd5dC.jpg",
     "year": "1993",
     "runtime": "101m",
@@ -10413,7 +10381,7 @@ const movies = [
     ]
   },
   {
-    "title": "Lost World: Jurassic Park, The",
+    "title": "Jurassic Park: The Lost World",
     "type": "movie",
     "tmdbId": 330,
     "poster": "https://image.tmdb.org/t/p/w500/7st3JW0xpMAkwB3dYfv3iqAwD8Y.jpg",
@@ -10549,16 +10517,7 @@ const movies = [
     ],
     "digital": []
   },
-  {
-    "title": "Meg 2: The Trench, The",
-    "year": 2023,
-    "category": "movie",
-    "physical": [
-      "Blu-ray"
-    ],
-    "digital": [],
-    "tmdb_id": 615656
-  },
+
   {
     "title": "Mummy, The",
     "type": "movie",
@@ -10862,7 +10821,7 @@ const movies = [
   {
     "title": "Ref, The",
     "type": "movie",
-    "tmdbId": 9634,
+    "tmdbId": 10872,
     "poster": "https://image.tmdb.org/t/p/w500/rFOjlEGk5pfc1ZQQPs5xHBOejle.jpg",
     "year": "1963",
     "runtime": "86m",
@@ -12410,7 +12369,7 @@ const movies = [
   {
     "title": "What Happens in Vegas",
     "type": "movie",
-    "tmdbId": 13460,
+    "tmdbId": 9029,
     "poster": "https://image.tmdb.org/t/p/w500/cKUmTyXgmhv8cMRCY9RYTKcAeTn.jpg",
     "year": "2008",
     "runtime": "108m",
@@ -12460,7 +12419,7 @@ const movies = [
   {
     "title": "When a Man Loves a Woman",
     "type": "movie",
-    "tmdbId": 2749,
+    "tmdbId": 10449,
     "poster": "https://image.tmdb.org/t/p/w500/1qGyTDp4K4J2RjGtT5hR81ilX9r.jpg",
     "year": "2001",
     "runtime": "120m",
@@ -12477,7 +12436,7 @@ const movies = [
     "title": "Where the Heart Is",
     "tmdbTitle": "Where the Heart Is",
     "type": "movie",
-    "tmdbId": 2133,
+    "tmdbId": 10564,
     "poster": "https://image.tmdb.org/t/p/w500/vJPoxqgpfFNbGi0HyoNsjFeLCio.jpg",
     "year": "2000",
     "runtime": "130m",
