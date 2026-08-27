@@ -201,7 +201,7 @@ main {
   grid-template-columns:
     repeat(2, minmax(0, 1fr));
 
-  gap: 18px 12px;
+  gap: 24px 12px;
 }
 
 
@@ -223,6 +223,11 @@ main {
   transform: scale(0.97);
 }
 
+
+/* =========================================================
+   MOVIE POSTER
+   ========================================================= */
+
 .movie-cover {
   position: relative;
 
@@ -243,12 +248,6 @@ main {
   position: absolute;
   inset: 0;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-
-  padding: 14px;
-
   overflow: hidden;
 }
 
@@ -261,35 +260,55 @@ main {
   background:
     radial-gradient(
       circle at 20% 15%,
-      rgba(255,255,255,0.22),
+      rgba(255,255,255,0.12),
       transparent 32%
     );
 
   pointer-events: none;
 }
 
+
+/* =========================================================
+   MOVIE TITLE
+   =========================================================
+
+   Titles now live BELOW the poster rather than over it.
+
+   clamp() keeps the title responsive:
+   - smaller on phones
+   - larger on tablets/desktops
+   - never excessively large
+
+   overflow-wrap allows unusually long titles to wrap
+   rather than breaking the grid.
+   */
+
 .movie-cover-title {
   position: relative;
 
-  color: white;
+  margin-top: 9px;
 
-  font-size: clamp(17px, 5vw, 28px);
-  font-weight: 800;
-  line-height: 0.95;
+  color: var(--text);
 
-  text-shadow:
-    0 2px 5px rgba(0,0,0,0.8);
+  font-size: clamp(13px, 3.4vw, 18px);
+  font-weight: 700;
+
+  line-height: 1.15;
+
+  text-align: center;
+
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
-.movie-cover-year {
-  position: relative;
 
-  margin-top: 8px;
+/* =========================================================
+   YEAR
+   =========================================================
 
-  color: rgba(255,255,255,0.8);
-
-  font-size: 11px;
-}
+   The year is intentionally not displayed on the movie card.
+   It is still available in the movie's detail view.
+   */
 
 
 /* =========================================================
@@ -300,9 +319,11 @@ main {
   display: flex;
   flex-wrap: wrap;
 
+  justify-content: center;
+
   gap: 5px;
 
-  margin-top: 8px;
+  margin-top: 7px;
 }
 
 .movie-badge {
@@ -617,12 +638,16 @@ main {
     grid-template-columns:
       repeat(4, minmax(0, 1fr));
 
-    gap: 20px;
+    gap: 26px 20px;
   }
 
   main {
     padding-left: 24px;
     padding-right: 24px;
+  }
+
+  .movie-cover-title {
+    font-size: clamp(14px, 2.2vw, 17px);
   }
 
 }
@@ -638,11 +663,15 @@ main {
     grid-template-columns:
       repeat(6, minmax(0, 1fr));
 
-    gap: 22px 16px;
+    gap: 28px 16px;
   }
 
   .movie-card:hover {
     transform: translateY(-4px);
+  }
+
+  .movie-cover-title {
+    font-size: 15px;
   }
 
 }
