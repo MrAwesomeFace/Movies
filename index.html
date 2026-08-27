@@ -1,53 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <meta
-    name="theme-color"
-    content="#111111"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111111">
 
   <title>BW's Movie Collection</title>
 
-  <link
-    rel="stylesheet"
-    href="style.css"
-  >
-
+  <link rel="stylesheet" href="style.css">
 </head>
-
 
 <body>
 
-
-  <!-- =====================================================
-       HEADER
-       ===================================================== -->
-
   <header class="site-header">
-
 
     <div class="header-top">
 
       <div>
-
-        <h1>
-          BW's Movie Collection
-        </h1>
-
-        <p id="movie-count">
-          Loading collection...
-        </p>
-
+        <h1>BW's Movie Collection</h1>
+        <p id="movie-count">Loading collection...</p>
       </div>
-
 
       <button
         id="search-toggle"
@@ -60,9 +32,7 @@
     </div>
 
 
-    <!-- ===================================================
-         SEARCH
-         =================================================== -->
+    <!-- SEARCH -->
 
     <div
       id="search-area"
@@ -72,239 +42,210 @@
       <input
         type="search"
         id="search-input"
-        placeholder="Search movies, actors, directors..."
+        placeholder="Search movies..."
         autocomplete="off"
       >
 
     </div>
 
 
-    <!-- ===================================================
-         FILTERS
-         =================================================== -->
+    <!-- FILTERS -->
 
     <nav
       class="filters"
       aria-label="Collection filters"
     >
 
+      <!-- ROW 1: TYPE + RANDOM -->
 
-      <!-- =================================================
-           ROW 1: GENRES
-           ================================================= -->
+      <div class="filter-row filter-row-main">
 
-      <div class="filter-row genre-row">
+        <div class="filter-group">
 
+          <button
+            class="filter active"
+            data-filter-group="type"
+            data-filter-value="all"
+          >
+            All
+          </button>
 
-        <button
-          class="filter"
-          data-filter-group="genre"
-          data-filter-value="action"
-        >
-          Action
-        </button>
+          <button
+            class="filter"
+            data-filter-group="type"
+            data-filter-value="movie"
+          >
+            Movies
+          </button>
 
+          <button
+            class="filter"
+            data-filter-group="type"
+            data-filter-value="tv"
+          >
+            TV
+          </button>
 
-        <button
-          class="filter"
-          data-filter-group="genre"
-          data-filter-value="comedy"
-        >
-          Comedy
-        </button>
+          <button
+            class="filter"
+            data-filter-group="type"
+            data-filter-value="misc"
+          >
+            Misc
+          </button>
 
+        </div>
 
-        <button
-          class="filter"
-          data-filter-group="genre"
-          data-filter-value="drama"
-        >
-          Drama
-        </button>
+        <div class="filter-group filter-group-actions">
 
+          <button
+            id="random-button"
+            class="filter action-filter"
+          >
+            Random 50
+          </button>
 
-        <button
-          class="filter"
-          data-filter-group="genre"
-          data-filter-value="horror"
-        >
-          Horror
-        </button>
+          <button
+            id="show-all-button"
+            class="filter action-filter"
+          >
+            Show All
+          </button>
 
-
-        <button
-          class="filter"
-          data-filter-group="genre"
-          data-filter-value="thriller"
-        >
-          Thriller
-        </button>
-
+        </div>
 
       </div>
 
 
-      <!-- =================================================
-           ROW 2: TYPE
-           ================================================= -->
+      <!-- ROW 2: GENRES + CATEGORIES -->
+
+      <div class="filter-row genre-category-row">
+
+        <div class="filter-group">
+
+          <button
+            class="filter genre-filter"
+            data-filter-group="genre"
+            data-filter-value="action"
+          >
+            Action
+          </button>
+
+          <button
+            class="filter genre-filter"
+            data-filter-group="genre"
+            data-filter-value="comedy"
+          >
+            Comedy
+          </button>
+
+          <button
+            class="filter genre-filter"
+            data-filter-group="genre"
+            data-filter-value="drama"
+          >
+            Drama
+          </button>
+
+          <button
+            class="filter genre-filter"
+            data-filter-group="genre"
+            data-filter-value="horror"
+          >
+            Horror
+          </button>
+
+          <button
+            class="filter genre-filter"
+            data-filter-group="genre"
+            data-filter-value="thriller"
+          >
+            Thriller
+          </button>
+
+        </div>
+
+
+        <div class="filter-divider">
+          |
+        </div>
+
+
+        <div class="filter-group">
+
+          <button
+            class="filter category-filter"
+            data-filter-group="category"
+            data-filter-value="baseball"
+          >
+            Baseball
+          </button>
+
+          <button
+            class="filter category-filter"
+            data-filter-group="category"
+            data-filter-value="christmas"
+          >
+            Christmas
+          </button>
+
+          <button
+            class="filter category-filter animated-filter"
+            data-filter-group="animated"
+            data-filter-value="mixed"
+          >
+            Animated: Mixed
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- ROW 3: MEDIA -->
 
       <div class="filter-row">
 
+        <div class="filter-group">
 
-        <button
-          class="filter active"
-          data-filter-group="type"
-          data-filter-value="all"
-        >
-          All
-        </button>
+          <button
+            class="filter active"
+            data-filter-group="media"
+            data-filter-value="all"
+          >
+            All
+          </button>
 
+          <button
+            class="filter"
+            data-filter-group="media"
+            data-filter-value="physical"
+          >
+            Physical
+          </button>
 
-        <button
-          class="filter"
-          data-filter-group="type"
-          data-filter-value="movie"
-        >
-          Movies
-        </button>
+          <button
+            class="filter"
+            data-filter-group="media"
+            data-filter-value="digital"
+          >
+            Digital
+          </button>
 
-
-        <button
-          class="filter"
-          data-filter-group="type"
-          data-filter-value="tv"
-        >
-          TV
-        </button>
-
-
-        <button
-          class="filter"
-          data-filter-group="type"
-          data-filter-value="misc"
-        >
-          Misc
-        </button>
-
+        </div>
 
       </div>
-
-
-      <!-- =================================================
-           ROW 3: MEDIA
-           ================================================= -->
-
-      <div class="filter-row">
-
-
-        <button
-          class="filter active"
-          data-filter-group="media"
-          data-filter-value="all"
-        >
-          All
-        </button>
-
-
-        <button
-          class="filter"
-          data-filter-group="media"
-          data-filter-value="physical"
-        >
-          Physical
-        </button>
-
-
-        <button
-          class="filter"
-          data-filter-group="media"
-          data-filter-value="digital"
-        >
-          Digital
-        </button>
-
-
-      </div>
-
-
-      <!-- =================================================
-           ROW 4: CATEGORIES
-           ================================================= -->
-
-      <div class="filter-row category-row">
-
-
-        <button
-          class="filter category-filter"
-          data-filter-group="category"
-          data-filter-value="baseball"
-        >
-          Baseball
-        </button>
-
-
-        <button
-          class="filter category-filter"
-          data-filter-group="category"
-          data-filter-value="christmas"
-        >
-          Christmas
-        </button>
-
-
-        <button
-          class="filter category-filter animated-filter"
-          data-filter-group="animated"
-          data-filter-value="mixed"
-        >
-          Animated: Mixed
-        </button>
-
-
-      </div>
-
-
-      <!-- =================================================
-           ROW 5: RANDOM
-           ================================================= -->
-
-      <div class="filter-row utility-row">
-
-
-        <button
-          id="random-50"
-          class="filter random-button"
-          type="button"
-        >
-          🎲 Random 50
-        </button>
-
-
-        <button
-          id="show-all"
-          class="filter show-all-button"
-          type="button"
-        >
-          Show All
-        </button>
-
-
-      </div>
-
 
     </nav>
 
   </header>
 
 
-  <!-- =====================================================
-       COLLECTION
-       ===================================================== -->
+  <!-- COLLECTION -->
 
   <main>
 
     <section class="collection-section">
-
 
       <div
         id="movie-grid"
@@ -318,34 +259,25 @@
         id="no-results"
         class="no-results hidden"
       >
-
-        <p>
-          No movies found.
-        </p>
-
+        <p>No movies found.</p>
       </div>
-
 
     </section>
 
   </main>
 
 
-  <!-- =====================================================
-       MOVIE DETAIL WINDOW
-       ===================================================== -->
+  <!-- MOVIE DETAIL WINDOW -->
 
   <div
     id="movie-modal"
     class="modal hidden"
   >
 
-
     <div class="modal-backdrop"></div>
 
 
     <div class="modal-content">
-
 
       <button
         id="modal-close"
@@ -358,143 +290,98 @@
 
       <div class="movie-viewer">
 
-
         <div
           class="movie-flip-container"
           id="movie-flip-container"
         >
 
-
           <div class="movie-flipper">
 
 
-            <!-- =========================================
-                 FRONT
-                 ========================================= -->
+            <!-- FRONT -->
 
             <div class="movie-face movie-front">
-
 
               <div
                 id="modal-cover"
                 class="large-cover"
               ></div>
 
-
             </div>
 
 
-            <!-- =========================================
-                 BACK
-                 ========================================= -->
+            <!-- BACK -->
 
             <div class="movie-face movie-back">
 
-
               <div class="back-content">
-
 
                 <h2 id="modal-title"></h2>
 
 
                 <div class="movie-meta">
 
-
                   <span id="modal-year"></span>
 
-
                   <span>•</span>
-
 
                   <span id="modal-runtime"></span>
 
-
                   <span>•</span>
-
 
                   <span id="modal-genre"></span>
 
-
                 </div>
 
 
                 <div class="movie-info-section">
 
-
-                  <h3>
-                    About
-                  </h3>
-
+                  <h3>About</h3>
 
                   <p id="modal-synopsis"></p>
 
-
                 </div>
 
 
                 <div class="movie-info-section">
 
-
-                  <h3>
-                    Starring
-                  </h3>
-
+                  <h3>Starring</h3>
 
                   <p id="modal-cast"></p>
 
-
                 </div>
 
 
                 <div class="movie-info-section">
 
-
-                  <h3>
-                    Directed by
-                  </h3>
-
+                  <h3>Directed by</h3>
 
                   <p id="modal-director"></p>
 
-
                 </div>
 
 
                 <div class="movie-info-section">
 
-
-                  <h3>
-                    Where to find it
-                  </h3>
-
+                  <h3>Where to find it</h3>
 
                   <div
                     id="modal-formats"
                     class="format-list"
                   ></div>
 
-
                 </div>
-
 
               </div>
 
-
             </div>
 
-
           </div>
-
 
         </div>
 
 
-        <!-- =============================================
-             VIEWER CONTROLS
-             ============================================= -->
-
         <div class="movie-viewer-controls">
-
 
           <button
             id="flip-button"
@@ -503,31 +390,21 @@
             Flip case
           </button>
 
-
           <p class="flip-hint">
             Tap the cover or swipe to flip
           </p>
 
-
         </div>
-
 
       </div>
 
-
     </div>
-
 
   </div>
 
 
-  <!-- =====================================================
-       MOVIE DATA + APP
-       ===================================================== -->
-
   <script src="movies.js"></script>
   <script src="app.js"></script>
-
 
 </body>
 </html>
