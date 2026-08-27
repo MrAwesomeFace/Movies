@@ -1,4 +1,4 @@
-```yaml
+yaml
 name: Digital Movie Review
 
 on:
@@ -576,4 +576,3 @@ jobs:
             digital_movie_matches.json
             digital_movie_summary.json
           retention-days: 30
-```
