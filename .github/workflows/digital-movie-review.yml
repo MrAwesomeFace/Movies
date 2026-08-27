@@ -1,7 +1,7 @@
 ```yaml
 name: Digital Movie Review
 
-on:
+'on':
   workflow_dispatch:
 
 permissions:
@@ -13,20 +13,25 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
       - name: Run digital movie review
         env:
-          TMDB_TOKEN: ${{ secrets.TMDB_READ_TOKEN }}
+          TMDB_TOKEN: ${{ secrets.TMDB_API_KEY }}
         run: |
           python .github/scripts/digital_movie_review.py
 
-      - name: Upload review files
+      - name: Upload review package
         uses: actions/upload-artifact@v4
         with:
           name: digital-movie-review
