@@ -1,0 +1,39 @@
+```yaml
+name: Digital Movie Review
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Run digital movie review
+        env:
+          TMDB_TOKEN: ${{ secrets.TMDB_READ_TOKEN }}
+        run: |
+          python .github/scripts/digital_movie_review.py
+
+      - name: Upload review files
+        uses: actions/upload-artifact@v4
+        with:
+          name: digital-movie-review
+          path: |
+            review.html
+            proposed_movies.js
+            proposed_changes.json
+            review_summary.json
+          retention-days: 30
+```
