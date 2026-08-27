@@ -1,7 +1,7 @@
 ```yaml
 name: Digital Movie Review
 
-'on':
+on:
   workflow_dispatch:
 
 permissions:
@@ -23,22 +23,18 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests
 
-      - name: Run digital movie review
-        env:
-          TMDB_TOKEN: ${{ secrets.TMDB_API_KEY }}
+      - name: Compare digital movies with catalog
         run: |
-          python .github/scripts/digital_movie_review.py
+          python .github/scripts/digital_movie_compare.py
 
-      - name: Upload review package
+      - name: Upload comparison results
         uses: actions/upload-artifact@v4
         with:
           name: digital-movie-review
           path: |
-            review.html
-            proposed_movies.js
-            proposed_changes.json
-            review_summary.json
+            digital_movie_review.html
+            digital_movie_matches.json
+            digital_movie_summary.json
           retention-days: 30
 ```
