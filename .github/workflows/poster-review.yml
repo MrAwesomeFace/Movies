@@ -1,0 +1,1181 @@
+name: Poster Review
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  poster-review:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install requests
+        run: |
+          pip install requests
+
+      - name: Create poster review
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+        run: |
+
+          python <<'PYTHON'
+
+          import json
+          import html
+          import os
+          import requests
+
+
+          # ======================================================
+          # SETTINGS
+          # ======================================================
+
+          TMDB_API_KEY = os.environ.get("TMDB_API_KEY")
+
+          if not TMDB_API_KEY:
+              raise SystemExit(
+                  "TMDB_API_KEY secret is not configured."
+              )
+
+
+          TMDB_IMAGE_BASE = (
+              "https://image.tmdb.org/t/p/w342"
+          )
+
+
+          TMDB_API_BASE = (
+              "https://api.themoviedb.org/3"
+          )
+
+
+          # ======================================================
+          # LOAD MOVIES.JS
+          # ======================================================
+
+          with open(
+              "movies.js",
+              "r",
+              encoding="utf-8"
+          ) as f:
+
+              source = f.read()
+
+
+          start = source.find("[")
+          end = source.rfind("]")
+
+
+          if start == -1 or end == -1:
+
+              raise SystemExit(
+                  "Could not locate movies array in movies.js"
+              )
+
+
+          try:
+
+              movies = json.loads(
+                  source[start:end + 1]
+              )
+
+          except json.JSONDecodeError as e:
+
+              raise SystemExit(
+                  f"Could not parse movies.js: {e}"
+              )
+
+
+          print(
+              f"Movies found: {len(movies)}"
+          )
+
+
+          # ======================================================
+          # GET POSTER FROM TMDB ID
+          # ======================================================
+
+          session = requests.Session()
+
+
+          def get_tmdb_poster(tmdb_id):
+
+              if not tmdb_id:
+
+                  return None
+
+
+              url = (
+                  f"{TMDB_API_BASE}/movie/"
+                  f"{tmdb_id}"
+              )
+
+
+              params = {
+                  "api_key": TMDB_API_KEY
+              }
+
+
+              try:
+
+                  response = session.get(
+                      url,
+                      params=params,
+                      timeout=20
+                  )
+
+
+                  if response.status_code != 200:
+
+                      print(
+                          f"TMDB {tmdb_id}: "
+                          f"HTTP {response.status_code}"
+                      )
+
+                      return None
+
+
+                  data = response.json()
+
+
+                  poster_path = data.get(
+                      "poster_path"
+                  )
+
+
+                  if not poster_path:
+
+                      return None
+
+
+                  return (
+                      TMDB_IMAGE_BASE
+                      + poster_path
+                  )
+
+
+              except Exception as e:
+
+                  print(
+                      f"TMDB {tmdb_id}: "
+                      f"{e}"
+                  )
+
+                  return None
+
+
+          # ======================================================
+          # BUILD REVIEW DATA
+          # ======================================================
+
+          review_items = []
+
+
+          for index, movie in enumerate(movies):
+
+              title = str(
+                  movie.get(
+                      "title",
+                      ""
+                  )
+              )
+
+
+              tmdb_id = movie.get(
+                  "tmdbId"
+              )
+
+
+              current_poster = movie.get(
+                  "poster",
+                  ""
+              )
+
+
+              tmdb_poster = get_tmdb_poster(
+                  tmdb_id
+              )
+
+
+              # --------------------------------------------------
+              # Determine default selection
+              #
+              # If there is no TMDB poster, keep current.
+              # Otherwise default to UPDATE so obvious bad
+              # posters can be corrected quickly.
+              # --------------------------------------------------
+
+              if tmdb_poster:
+
+                  default_action = "update"
+
+              else:
+
+                  default_action = "keep"
+
+
+              review_items.append({
+
+                  "index": index,
+
+                  "title": title,
+
+                  "tmdbId": tmdb_id,
+
+                  "currentPoster":
+                      current_poster,
+
+                  "tmdbPoster":
+                      tmdb_poster,
+
+                  "defaultAction":
+                      default_action
+
+              })
+
+
+              print(
+                  f"{index + 1:4} / "
+                  f"{len(movies)}  "
+                  f"{title}  "
+                  f"TMDB {tmdb_id}"
+              )
+
+
+          # ======================================================
+          # HTML HELPERS
+          # ======================================================
+
+          def esc(value):
+
+              return html.escape(
+                  str(value or ""),
+                  quote=True
+              )
+
+
+          # ======================================================
+          # BUILD MOVIE CARDS
+          # ======================================================
+
+          cards = []
+
+
+          for item in review_items:
+
+              current = item[
+                  "currentPoster"
+              ]
+
+              tmdb = item[
+                  "tmdbPoster"
+              ]
+
+
+              current_img = ""
+
+              if current:
+
+                  current_img = f"""
+                  <img
+                    src="{esc(current)}"
+                    loading="lazy"
+                    onerror="this.style.display='none'"
+                  >
+                  """
+
+              else:
+
+                  current_img = """
+                  <div class="missing">
+                    NO CURRENT POSTER
+                  </div>
+                  """
+
+
+              tmdb_img = ""
+
+              if tmdb:
+
+                  tmdb_img = f"""
+                  <img
+                    src="{esc(tmdb)}"
+                    loading="lazy"
+                  >
+                  """
+
+              else:
+
+                  tmdb_img = """
+                  <div class="missing">
+                    NO TMDB POSTER
+                  </div>
+                  """
+
+
+              checked_update = (
+                  "checked"
+                  if item["defaultAction"] == "update"
+                  else ""
+              )
+
+
+              checked_keep = (
+                  "checked"
+                  if item["defaultAction"] == "keep"
+                  else ""
+              )
+
+
+              cards.append(f"""
+
+              <div
+                class="movie-card"
+                data-title="{esc(item['title'].lower())}"
+              >
+
+                <div class="movie-title">
+                  {esc(item['title'])}
+                </div>
+
+                <div class="tmdb-id">
+                  TMDB {esc(item['tmdbId'])}
+                </div>
+
+
+                <div class="posters">
+
+                  <div class="poster-column">
+
+                    <div class="poster-label">
+                      CURRENT
+                    </div>
+
+                    <div class="poster">
+                      {current_img}
+                    </div>
+
+                  </div>
+
+
+                  <div class="arrow">
+                    →
+                  </div>
+
+
+                  <div class="poster-column">
+
+                    <div class="poster-label">
+                      TMDB
+                    </div>
+
+                    <div class="poster">
+                      {tmdb_img}
+                    </div>
+
+                  </div>
+
+                </div>
+
+
+                <div class="decision">
+
+                  <label>
+
+                    <input
+                      type="radio"
+                      name="decision-{item['index']}"
+                      value="keep"
+                      data-index="{item['index']}"
+                      {checked_keep}
+                    >
+
+                    Keep Current
+
+                  </label>
+
+
+                  <label>
+
+                    <input
+                      type="radio"
+                      name="decision-{item['index']}"
+                      value="update"
+                      data-index="{item['index']}"
+                      {checked_update}
+                      {"disabled" if not tmdb else ""}
+                    >
+
+                    Update to TMDB
+
+                  </label>
+
+                </div>
+
+              </div>
+
+              """)
+
+
+          # ======================================================
+          # HTML PAGE
+          # ======================================================
+
+          page = f"""<!DOCTYPE html>
+
+          <html lang="en">
+
+          <head>
+
+          <meta charset="UTF-8">
+
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1"
+          >
+
+          <title>Movie Poster Review</title>
+
+
+          <style>
+
+          * {{
+            box-sizing: border-box;
+          }}
+
+
+          body {{
+
+            margin: 0;
+
+            padding: 20px;
+
+            background: #111;
+
+            color: #eee;
+
+            font-family:
+              Arial,
+              Helvetica,
+              sans-serif;
+
+          }}
+
+
+          .container {{
+
+            max-width: 1500px;
+
+            margin: auto;
+
+          }}
+
+
+          h1 {{
+
+            margin-bottom: 5px;
+
+          }}
+
+
+          .subtitle {{
+
+            color: #aaa;
+
+            margin-bottom: 20px;
+
+          }}
+
+
+          .instructions {{
+
+            background: #202a36;
+
+            padding: 18px;
+
+            border-radius: 10px;
+
+            margin-bottom: 20px;
+
+            line-height: 1.5;
+
+          }}
+
+
+          .toolbar {{
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 20;
+
+            background: #111;
+
+            padding: 12px 0;
+
+            border-bottom:
+              1px solid #333;
+
+            margin-bottom: 20px;
+
+          }}
+
+
+          #search {{
+
+            width: 100%;
+
+            padding: 12px;
+
+            font-size: 16px;
+
+            border-radius: 8px;
+
+            border:
+              1px solid #444;
+
+            background: #222;
+
+            color: #fff;
+
+            margin-bottom: 10px;
+
+          }}
+
+
+          .buttons {{
+
+            display: flex;
+
+            gap: 8px;
+
+            flex-wrap: wrap;
+
+          }}
+
+
+          button {{
+
+            padding: 9px 14px;
+
+            border: 0;
+
+            border-radius: 7px;
+
+            cursor: pointer;
+
+            background: #333;
+
+            color: white;
+
+          }}
+
+
+          button:hover {{
+
+            background: #444;
+
+          }}
+
+
+          .download {{
+
+            background: #eee;
+
+            color: #111;
+
+            font-weight: bold;
+
+          }}
+
+
+          .stats {{
+
+            color: #aaa;
+
+            margin-top: 10px;
+
+          }}
+
+
+          .grid {{
+
+            display: grid;
+
+            grid-template-columns:
+              repeat(
+                auto-fill,
+                minmax(340px, 1fr)
+              );
+
+            gap: 16px;
+
+          }}
+
+
+          .movie-card {{
+
+            background: #1b1b1b;
+
+            border:
+              1px solid #303030;
+
+            border-radius: 10px;
+
+            padding: 14px;
+
+          }}
+
+
+          .movie-title {{
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            margin-bottom: 4px;
+
+          }}
+
+
+          .tmdb-id {{
+
+            color: #777;
+
+            font-size: 12px;
+
+            margin-bottom: 12px;
+
+          }}
+
+
+          .posters {{
+
+            display: grid;
+
+            grid-template-columns:
+              1fr
+              25px
+              1fr;
+
+            gap: 8px;
+
+            align-items: center;
+
+          }}
+
+
+          .poster-column {{
+
+            text-align: center;
+
+          }}
+
+
+          .poster-label {{
+
+            color: #888;
+
+            font-size: 11px;
+
+            margin-bottom: 5px;
+
+            letter-spacing:
+              .05em;
+
+          }}
+
+
+          .poster {{
+
+            width: 100%;
+
+            aspect-ratio:
+              2 / 3;
+
+            background: #252525;
+
+            border-radius: 5px;
+
+            overflow: hidden;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+          }}
+
+
+          .poster img {{
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+
+          }}
+
+
+          .missing {{
+
+            color: #777;
+
+            font-size: 11px;
+
+            padding: 10px;
+
+          }}
+
+
+          .arrow {{
+
+            text-align: center;
+
+            color: #777;
+
+            font-size: 22px;
+
+          }}
+
+
+          .decision {{
+
+            display: grid;
+
+            grid-template-columns:
+              1fr
+              1fr;
+
+            gap: 8px;
+
+            margin-top: 12px;
+
+          }}
+
+
+          .decision label {{
+
+            padding: 9px 5px;
+
+            text-align: center;
+
+            background: #252525;
+
+            border-radius: 6px;
+
+            cursor: pointer;
+
+            font-size: 13px;
+
+          }}
+
+
+          .decision input {{
+
+            margin-right: 5px;
+
+          }}
+
+
+          @media (max-width: 600px) {{
+
+            .grid {{
+
+              grid-template-columns:
+                1fr;
+
+            }}
+
+          }}
+
+          </style>
+
+          </head>
+
+
+          <body>
+
+
+          <div class="container">
+
+
+            <h1>
+              Movie Poster Review
+            </h1>
+
+
+            <div class="subtitle">
+
+              {len(movies)}
+              catalog entries checked against
+              their TMDB IDs
+
+            </div>
+
+
+            <div class="instructions">
+
+              <strong>
+                Review the posters before making
+                any changes.
+              </strong>
+
+              <br><br>
+
+              <strong>
+                Keep Current
+              </strong>
+              leaves your existing poster alone.
+
+              <br>
+
+              <strong>
+                Update to TMDB
+              </strong>
+              replaces it with the poster
+              associated with that movie's
+              TMDB ID.
+
+              <br><br>
+
+              The review itself does not modify
+              <code>movies.js</code>.
+
+            </div>
+
+
+            <div class="toolbar">
+
+              <input
+                id="search"
+                type="search"
+                placeholder="Search movies..."
+                autocomplete="off"
+              >
+
+
+              <div class="buttons">
+
+                <button
+                  onclick="setAll('keep')"
+                >
+                  Keep All Current
+                </button>
+
+
+                <button
+                  onclick="setAll('update')"
+                >
+                  Update All to TMDB
+                </button>
+
+
+                <button
+                  class="download"
+                  onclick="downloadApproved()"
+                >
+                  Download Approved Poster Changes
+                </button>
+
+              </div>
+
+
+              <div
+                class="stats"
+                id="stats"
+              >
+                Showing {len(movies)}
+                movies
+              </div>
+
+            </div>
+
+
+            <div
+              class="grid"
+              id="grid"
+            >
+
+              {''.join(cards)}
+
+            </div>
+
+
+          </div>
+
+
+          <script>
+
+
+          const cards =
+            document.querySelectorAll(
+              ".movie-card"
+            );
+
+
+          const search =
+            document.getElementById(
+              "search"
+            );
+
+
+          const stats =
+            document.getElementById(
+              "stats"
+            );
+
+
+          // ====================================================
+          // SEARCH
+          // ====================================================
+
+          search.addEventListener(
+            "input",
+            function() {{
+
+              const query =
+                search.value
+                  .trim()
+                  .toLowerCase();
+
+
+              let visible = 0;
+
+
+              cards.forEach(
+                function(card) {{
+
+                  const title =
+                    card.dataset.title;
+
+
+                  if (
+                    !query ||
+                    title.includes(query)
+                  ) {{
+
+                    card.style.display =
+                      "";
+
+                    visible++;
+
+                  }} else {{
+
+                    card.style.display =
+                      "none";
+
+                  }}
+
+                }}
+              );
+
+
+              stats.textContent =
+                "Showing "
+                + visible
+                + " movies";
+
+            }}
+          );
+
+
+          // ====================================================
+          // CHECK ALL
+          // ====================================================
+
+          function setAll(
+            value
+          ) {{
+
+            cards.forEach(
+              function(card) {{
+
+                const radio =
+                  card.querySelector(
+                    'input[value="' +
+                    value +
+                    '"]'
+                  );
+
+
+                if (
+                  radio &&
+                  !radio.disabled
+                ) {{
+
+                  radio.checked =
+                    true;
+
+                }}
+
+              }}
+            );
+
+          }}
+
+
+          // ====================================================
+          // EXPORT
+          // ====================================================
+
+          function downloadApproved() {{
+
+            const results = [];
+
+
+            cards.forEach(
+              function(card) {{
+
+                const selected =
+                  card.querySelector(
+                    'input[type="radio"]:checked'
+                  );
+
+
+                if (!selected) {{
+                  return;
+                }}
+
+
+                if (
+                  selected.value !==
+                  "update"
+                ) {{
+
+                  return;
+
+                }}
+
+
+                results.push({{
+
+                  index:
+                    Number(
+                      selected.dataset.index
+                    )
+
+                }});
+
+              }}
+            );
+
+
+            const blob =
+              new Blob(
+                [
+                  JSON.stringify(
+                    results,
+                    null,
+                    2
+                  )
+                ],
+                {{
+                  type:
+                    "application/json"
+                }}
+              );
+
+
+            const url =
+              URL.createObjectURL(
+                blob
+              );
+
+
+            const link =
+              document.createElement(
+                "a"
+              );
+
+
+            link.href =
+              url;
+
+
+            link.download =
+              "approved-poster-changes.json";
+
+
+            document.body.appendChild(
+              link
+            );
+
+
+            link.click();
+
+
+            document.body.removeChild(
+              link
+            );
+
+
+            URL.revokeObjectURL(
+              url
+            );
+
+
+            alert(
+              results.length
+              + " poster changes approved."
+            );
+
+          }}
+
+          </script>
+
+
+          </body>
+
+          </html>
+          """
+
+
+          # ======================================================
+          # WRITE REVIEW PAGE
+          # ======================================================
+
+          with open(
+              "poster-review.html",
+              "w",
+              encoding="utf-8"
+          ) as f:
+
+              f.write(page)
+
+
+          print("")
+          print("========================================")
+          print("POSTER REVIEW COMPLETE")
+          print("========================================")
+          print("")
+          print(
+              f"Catalog entries: {len(movies)}"
+          )
+          print("")
+          print(
+              "No changes were made to movies.js."
+          )
+          print("")
+
+          PYTHON
+
+
+      - name: Upload poster review
+        uses: actions/upload-artifact@v4
+        with:
+          name: poster-review
+          path: poster-review.html
+          retention-days: 7
