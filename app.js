@@ -1,10 +1,8 @@
-```javascript
 /*
   =========================================================
   BW'S MOVIE COLLECTION
   App functionality
   =========================================================
-*/
 
 
 // =========================================================
@@ -98,10 +96,7 @@ function renderMovies() {
 
   let filteredMovies = movies.filter(movie => {
 
-
-    // ======================================================
     // TYPE FILTER
-    // ======================================================
 
     if (
       activeFilters.type !== "all" &&
@@ -111,9 +106,7 @@ function renderMovies() {
     }
 
 
-    // ======================================================
     // PHYSICAL / DIGITAL FILTER
-    // ======================================================
 
     if (
       activeFilters.media === "physical" &&
@@ -130,16 +123,7 @@ function renderMovies() {
     }
 
 
-    // ======================================================
     // GENRE FILTER
-    //
-    // The movie genre can contain multiple genres such as:
-    //
-    // "Adventure / Action / Thriller"
-    //
-    // We check whether the selected genre appears anywhere
-    // in the genre string.
-    // ======================================================
 
     if (activeFilters.genre) {
 
@@ -157,9 +141,7 @@ function renderMovies() {
     }
 
 
-    // ======================================================
     // CATEGORY FILTER
-    // ======================================================
 
     if (activeFilters.category) {
 
@@ -177,17 +159,10 @@ function renderMovies() {
     }
 
 
-    // ======================================================
     // ANIMATED FILTER
-    //
-    // Mixed = everything
-    // Hide  = exclude animated
-    // Only  = animated only
-    // ======================================================
 
     const isAnimated =
       (movie.categories || []).includes("animated");
-
 
     if (
       activeFilters.animated === "hide" &&
@@ -195,7 +170,6 @@ function renderMovies() {
     ) {
       return false;
     }
-
 
     if (
       activeFilters.animated === "only" &&
@@ -205,18 +179,14 @@ function renderMovies() {
     }
 
 
-    // ======================================================
     // SEARCH
-    // ======================================================
 
     if (currentSearch) {
 
       const searchText =
         currentSearch.toLowerCase();
 
-
       const searchableText = [
-
         movie.title,
         movie.tmdbTitle,
         movie.year,
@@ -225,7 +195,6 @@ function renderMovies() {
         movie.cast,
         movie.synopsis,
         movie.type
-
       ]
         .filter(
           value =>
@@ -234,7 +203,6 @@ function renderMovies() {
         )
         .join(" ")
         .toLowerCase();
-
 
       if (
         !searchableText.includes(
@@ -258,12 +226,6 @@ function renderMovies() {
 
   if (randomMode) {
 
-    /*
-      If randomMovies has already been generated, use that
-      exact group rather than reshuffling every time renderMovies
-      runs.
-    */
-
     filteredMovies =
       randomMovies.filter(
         movie => filteredMovies.includes(movie)
@@ -274,9 +236,6 @@ function renderMovies() {
 
   // =========================================================
   // SORT ALPHABETICALLY
-  //
-  // Normal collection = alphabetical.
-  // Random mode = preserve random order.
   // =========================================================
 
   if (!randomMode) {
@@ -397,15 +356,12 @@ function createMovieCard(
   );
 
 
-  // ======================================================
   // COVER
-  // ======================================================
 
   const colors =
     coverColors[
       index % coverColors.length
     ];
-
 
   const cover =
     document.createElement(
@@ -414,7 +370,6 @@ function createMovieCard(
 
   cover.className =
     "movie-cover";
-
 
   const coverInner =
     document.createElement(
@@ -425,9 +380,7 @@ function createMovieCard(
     "movie-cover-inner";
 
 
-  // ======================================================
   // TMDB POSTER
-  // ======================================================
 
   if (movie.poster) {
 
@@ -464,9 +417,7 @@ function createMovieCard(
   );
 
 
-  // ======================================================
-  // TITLE UNDER POSTER
-  // ======================================================
+  // TITLE
 
   const title =
     document.createElement(
@@ -484,12 +435,7 @@ function createMovieCard(
   );
 
 
-  // ======================================================
   // FORMAT INDICATORS
-  //
-  // These now appear BELOW the title instead of over the
-  // poster.
-  // ======================================================
 
   const badges =
     document.createElement(
@@ -610,9 +556,6 @@ function createMovieCard(
   }
 
 
-  // Only add the badge container if there is something
-  // to display.
-
   if (
     badges.children.length > 0
   ) {
@@ -624,9 +567,7 @@ function createMovieCard(
   }
 
 
-  // ======================================================
   // OPEN MOVIE
-  // ======================================================
 
   card.addEventListener(
     "click",
@@ -638,9 +579,7 @@ function createMovieCard(
   );
 
 
-  // ======================================================
   // KEYBOARD ACCESSIBILITY
-  // ======================================================
 
   card.addEventListener(
     "keydown",
@@ -678,9 +617,7 @@ function openMovie(
     movie;
 
 
-  // ======================================================
   // RESET FLIP
-  // ======================================================
 
   flipContainer.classList.remove(
     "flipped"
@@ -690,9 +627,7 @@ function openMovie(
     "Flip case";
 
 
-  // ======================================================
   // BASIC INFORMATION
-  // ======================================================
 
   modalTitle.textContent =
     movie.title;
@@ -721,9 +656,7 @@ function openMovie(
     "Director information not added.";
 
 
-  // ======================================================
   // LARGE COVER
-  // ======================================================
 
   const colorIndex =
     movies.indexOf(movie) %
@@ -732,14 +665,11 @@ function openMovie(
   const colors =
     coverColors[colorIndex];
 
-
   modalCover.innerHTML =
     "";
 
 
-  // ------------------------------------------------------
   // TMDB POSTER
-  // ------------------------------------------------------
 
   if (movie.poster) {
 
@@ -789,9 +719,7 @@ function openMovie(
 
   } else {
 
-    // ----------------------------------------------------
     // FALLBACK COVER
-    // ----------------------------------------------------
 
     modalCover.style.backgroundImage =
       "";
@@ -838,13 +766,10 @@ function openMovie(
   }
 
 
-  // ======================================================
   // FORMATS
-  // ======================================================
 
   modalFormats.innerHTML =
     "";
-
 
   const physical =
     movie.physical || [];
@@ -926,9 +851,7 @@ function openMovie(
   }
 
 
-  // ======================================================
   // SHOW MODAL
-  // ======================================================
 
   modal.classList.remove(
     "hidden"
@@ -1040,11 +963,6 @@ flipContainer.addEventListener(
   "click",
   event => {
 
-    /*
-      Don't flip twice when the actual Flip Case button
-      is clicked.
-    */
-
     if (
       event.target === flipButton
     ) {
@@ -1136,9 +1054,7 @@ filters.forEach(
           button.dataset.filterValue;
 
 
-        // ==================================================
         // TYPE
-        // ==================================================
 
         if (
           group === "type"
@@ -1162,9 +1078,7 @@ filters.forEach(
         }
 
 
-        // ==================================================
         // MEDIA
-        // ==================================================
 
         if (
           group === "media"
@@ -1188,9 +1102,7 @@ filters.forEach(
         }
 
 
-        // ==================================================
         // GENRE
-        // ==================================================
 
         if (
           group === "genre"
@@ -1229,9 +1141,7 @@ filters.forEach(
         }
 
 
-        // ==================================================
         // CATEGORY
-        // ==================================================
 
         if (
           group === "category"
@@ -1270,9 +1180,7 @@ filters.forEach(
         }
 
 
-        // ==================================================
         // ANIMATED
-        // ==================================================
 
         if (
           group === "animated"
@@ -1304,11 +1212,7 @@ filters.forEach(
         }
 
 
-        /*
-          Changing filters invalidates the old random list.
-          If Random 50 is currently active, generate a new
-          random group using the newly selected filters.
-        */
+        // Changing filters invalidates the old random list.
 
         if (randomMode) {
 
@@ -1389,8 +1293,6 @@ function updateAnimatedButton() {
 
 // =========================================================
 // GET CURRENT FILTERED MOVIES
-//
-// Used when generating the random 50.
 // =========================================================
 
 function getFilteredMovies() {
@@ -1491,9 +1393,7 @@ function getFilteredMovies() {
       const searchText =
         currentSearch.toLowerCase();
 
-
       const searchableText = [
-
         movie.title,
         movie.tmdbTitle,
         movie.year,
@@ -1502,7 +1402,6 @@ function getFilteredMovies() {
         movie.cast,
         movie.synopsis,
         movie.type
-
       ]
         .filter(
           value =>
@@ -1541,14 +1440,11 @@ function generateRandomMovies() {
     getFilteredMovies();
 
 
-  /*
-    Fisher-Yates shuffle.
-    This gives us a genuinely randomized selection.
-  */
-
   const shuffled =
     [...availableMovies];
 
+
+  // Fisher-Yates shuffle
 
   for (
     let i = shuffled.length - 1;
@@ -1560,6 +1456,7 @@ function generateRandomMovies() {
       Math.floor(
         Math.random() * (i + 1)
       );
+
 
     [
       shuffled[i],
@@ -1632,6 +1529,11 @@ if (showAllButton) {
 
       renderMovies();
 
+
+      showAllButton.classList.remove(
+        "active"
+      );
+
     }
   );
 
@@ -1642,53 +1544,56 @@ if (showAllButton) {
 // SEARCH
 // =========================================================
 
-searchToggle.addEventListener(
-  "click",
-  () => {
+if (searchToggle) {
 
-    searchArea.classList.toggle(
-      "hidden"
-    );
+  searchToggle.addEventListener(
+    "click",
+    () => {
 
-
-    if (
-      !searchArea.classList.contains(
+      searchArea.classList.toggle(
         "hidden"
-      )
-    ) {
-
-      searchInput.focus();
-
-    }
-
-  }
-);
+      );
 
 
-searchInput.addEventListener(
-  "input",
-  event => {
+      if (
+        !searchArea.classList.contains(
+          "hidden"
+        )
+      ) {
 
-    currentSearch =
-      event.target.value.trim();
+        searchInput.focus();
 
-
-    /*
-      If Random 50 is active, changing the search should
-      generate a new random group from the search results.
-    */
-
-    if (randomMode) {
-
-      generateRandomMovies();
+      }
 
     }
+  );
+
+}
 
 
-    renderMovies();
+if (searchInput) {
 
-  }
-);
+  searchInput.addEventListener(
+    "input",
+    event => {
+
+      currentSearch =
+        event.target.value.trim();
+
+
+      if (randomMode) {
+
+        generateRandomMovies();
+
+      }
+
+
+      renderMovies();
+
+    }
+  );
+
+}
 
 
 // =========================================================
@@ -1696,21 +1601,24 @@ searchInput.addEventListener(
 // WHILE MODAL IS OPEN
 // =========================================================
 
-modal.addEventListener(
-  "touchmove",
-  event => {
+if (modal) {
 
-    if (
-      event.target === modal
-    ) {
+  modal.addEventListener(
+    "touchmove",
+    event => {
 
-      event.preventDefault();
+      if (
+        event.target === modal
+      ) {
 
+        event.preventDefault();
+
+      }
+
+    },
+    {
+      passive: false
     }
+  );
 
-  },
-  {
-    passive: false
-  }
-);
-```
+}
