@@ -13,69 +13,210 @@
 <body>
 
   <header class="site-header">
+
     <div class="header-top">
+
       <div>
         <h1>BW's Movie Collection</h1>
         <p id="movie-count">Loading collection...</p>
       </div>
 
-      <button id="search-toggle" class="icon-button" aria-label="Search">
+      <button
+        id="search-toggle"
+        class="icon-button"
+        aria-label="Search"
+      >
         🔍
       </button>
+
     </div>
 
-    <div id="search-area" class="search-area hidden">
+
+    <!-- SEARCH -->
+
+    <div
+      id="search-area"
+      class="search-area hidden"
+    >
+
       <input
         type="search"
         id="search-input"
         placeholder="Search movies..."
         autocomplete="off"
       >
+
     </div>
 
-<nav class="filters" aria-label="Collection filters">
-  <button class="filter active" data-filter="all">All</button>
-  <button class="filter" data-filter="movie">Movies</button>
-  <button class="filter" data-filter="tv">TV</button>
-  <button class="filter" data-filter="misc">Misc</button>
-  <button class="filter" data-filter="physical">Physical</button>
-  <button class="filter" data-filter="digital">Digital</button>
-</nav>
+
+    <!-- FILTERS -->
+
+    <nav
+      class="filters"
+      aria-label="Collection filters"
+    >
+
+      <!-- ROW 1: TYPE -->
+
+      <div class="filter-row">
+
+        <button
+          class="filter active"
+          data-filter-group="type"
+          data-filter-value="all"
+        >
+          All
+        </button>
+
+        <button
+          class="filter"
+          data-filter-group="type"
+          data-filter-value="movie"
+        >
+          Movies
+        </button>
+
+        <button
+          class="filter"
+          data-filter-group="type"
+          data-filter-value="tv"
+        >
+          TV
+        </button>
+
+        <button
+          class="filter"
+          data-filter-group="type"
+          data-filter-value="misc"
+        >
+          Misc
+        </button>
+
+      </div>
+
+
+      <!-- ROW 2: MEDIA -->
+
+      <div class="filter-row">
+
+        <button
+          class="filter active"
+          data-filter-group="media"
+          data-filter-value="all"
+        >
+          All
+        </button>
+
+        <button
+          class="filter"
+          data-filter-group="media"
+          data-filter-value="physical"
+        >
+          Physical
+        </button>
+
+        <button
+          class="filter"
+          data-filter-group="media"
+          data-filter-value="digital"
+        >
+          Digital
+        </button>
+
+      </div>
+
+
+      <!-- ROW 3: CATEGORIES -->
+
+      <div class="filter-row category-row">
+
+        <button
+          class="filter category-filter"
+          data-filter-group="category"
+          data-filter-value="baseball"
+        >
+          Baseball
+        </button>
+
+        <button
+          class="filter category-filter"
+          data-filter-group="category"
+          data-filter-value="christmas"
+        >
+          Christmas
+        </button>
+
+        <button
+          class="filter category-filter animated-filter"
+          data-filter-group="animated"
+          data-filter-value="mixed"
+        >
+          Animated: Mixed
+        </button>
+
+      </div>
+
+    </nav>
+
   </header>
 
+
+  <!-- COLLECTION -->
 
   <main>
 
     <section class="collection-section">
-      <div id="movie-grid" class="movie-grid">
+
+      <div
+        id="movie-grid"
+        class="movie-grid"
+      >
         <!-- Movie cards are inserted here by app.js -->
       </div>
 
-      <div id="no-results" class="no-results hidden">
+
+      <div
+        id="no-results"
+        class="no-results hidden"
+      >
         <p>No movies found.</p>
       </div>
+
     </section>
 
   </main>
 
 
-  <!-- Movie detail window -->
+  <!-- MOVIE DETAIL WINDOW -->
 
-  <div id="movie-modal" class="modal hidden">
+  <div
+    id="movie-modal"
+    class="modal hidden"
+  >
 
     <div class="modal-backdrop"></div>
 
+
     <div class="modal-content">
 
-      <button id="modal-close" class="modal-close" aria-label="Close">
+      <button
+        id="modal-close"
+        class="modal-close"
+        aria-label="Close"
+      >
         ×
       </button>
 
+
       <div class="movie-viewer">
 
-        <div class="movie-flip-container" id="movie-flip-container">
+        <div
+          class="movie-flip-container"
+          id="movie-flip-container"
+        >
 
           <div class="movie-flipper">
+
 
             <!-- FRONT -->
 
@@ -97,34 +238,58 @@
 
                 <h2 id="modal-title"></h2>
 
-<div class="movie-meta">
-  <span id="modal-year"></span>
-  <span>•</span>
-  <span id="modal-runtime"></span>
-  <span>•</span>
-  <span id="modal-genre"></span>
-</div>
+
+                <div class="movie-meta">
+
+                  <span id="modal-year"></span>
+
+                  <span>•</span>
+
+                  <span id="modal-runtime"></span>
+
+                  <span>•</span>
+
+                  <span id="modal-genre"></span>
+
+                </div>
+
 
                 <div class="movie-info-section">
+
                   <h3>About</h3>
+
                   <p id="modal-synopsis"></p>
+
                 </div>
 
+
                 <div class="movie-info-section">
+
                   <h3>Starring</h3>
+
                   <p id="modal-cast"></p>
+
                 </div>
 
+
                 <div class="movie-info-section">
+
                   <h3>Directed by</h3>
+
                   <p id="modal-director"></p>
+
                 </div>
 
+
                 <div class="movie-info-section">
+
                   <h3>Where to find it</h3>
 
-                  <div id="modal-formats" class="format-list">
-                  </div>
+                  <div
+                    id="modal-formats"
+                    class="format-list"
+                  ></div>
+
                 </div>
 
               </div>
@@ -138,7 +303,10 @@
 
         <div class="movie-viewer-controls">
 
-          <button id="flip-button" class="primary-button">
+          <button
+            id="flip-button"
+            class="primary-button"
+          >
             Flip case
           </button>
 
@@ -157,8 +325,7 @@
 
   <!--
     The movie collection itself lives in movies.js.
-    That means adding movies later won't require
-    changing this HTML file.
+    Adding movies later won't require changing this HTML.
   -->
 
   <script src="movies.js"></script>
