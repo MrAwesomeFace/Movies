@@ -37,6 +37,9 @@ const modalFormats = document.getElementById("modal-formats");
 const flipContainer = document.getElementById("movie-flip-container");
 const flipButton = document.getElementById("flip-button");
 
+const randomButton = document.getElementById("random-50");
+const showAllButton = document.getElementById("show-all");
+
 
 // =========================================================
 // CURRENT STATE
@@ -45,15 +48,20 @@ const flipButton = document.getElementById("flip-button");
 let currentSearch = "";
 let currentMovie = null;
 
+let randomMode = false;
+
 
 /*
-  Filters are now independent.
+  Filters are independent.
 
   Type:
     all / movie / tv / misc
 
   Media:
     all / physical / digital
+
+  Genre:
+    action / comedy / drama / horror / thriller
 
   Category:
     baseball / christmas / none
@@ -65,6 +73,7 @@ let currentMovie = null;
 let activeFilters = {
   type: "all",
   media: "all",
+  genre: null,
   category: null,
   animated: "mixed"
 };
@@ -72,8 +81,6 @@ let activeFilters = {
 
 // =========================================================
 // SIMPLE COVER COLORS
-//
-// Used as a fallback when TMDB does not have a poster.
 // =========================================================
 
 const coverColors = [
@@ -148,6 +155,39 @@ function renderMovies() {
       if (
         !movie.digital ||
         movie.digital.length === 0
+      ) {
+        return false;
+      }
+
+    }
+
+
+    // ======================================================
+    // GENRE FILTER
+    //
+    // Matches individual genres inside strings such as:
+    // "Adventure / Action / Thriller"
+    // ======================================================
+
+    if (
+      activeFilters.genre
+    ) {
+
+      const genreText =
+        (movie.genre || "").toLowerCase();
+
+      const movieGenres =
+        genreText
+          .split("/")
+          .map(
+            genre =>
+              genre.trim()
+          );
+
+      if (
+        !movieGenres.includes(
+          activeFilters.genre
+        )
       ) {
         return false;
       }
@@ -252,9 +292,9 @@ function renderMovies() {
   });
 
 
-  // ======================================================
+  // =========================================================
   // SORT ALPHABETICALLY
-  // ======================================================
+  // =========================================================
 
   filteredMovies.sort(
     (a, b) =>
@@ -268,18 +308,71 @@ function renderMovies() {
   );
 
 
-  // ======================================================
+  // =========================================================
+  // RANDOM 50
+  //
+  // Apply all normal filters first, then randomly select
+  // up to 50 from the resulting collection.
+  // =========================================================
+
+  if (randomMode) {
+
+    for (
+      let i = filteredMovies.length - 1;
+      i > 0;
+      i--
+    ) {
+
+      const j =
+        Math.floor(
+          Math.random() * (i + 1)
+        );
+
+      [
+        filteredMovies[i],
+        filteredMovies[j]
+      ] =
+      [
+        filteredMovies[j],
+        filteredMovies[i]
+      ];
+
+    }
+
+
+    if (
+      filteredMovies.length > 50
+    ) {
+
+      filteredMovies.splice(
+        50
+      );
+
+    }
+
+  }
+
+
+  // =========================================================
   // UPDATE COUNT
-  // ======================================================
+  // =========================================================
 
   const filtersAreActive =
     activeFilters.type !== "all" ||
     activeFilters.media !== "all" ||
+    activeFilters.genre !== null ||
     activeFilters.category !== null ||
     activeFilters.animated !== "mixed";
 
 
   if (
+    randomMode
+  ) {
+
+    movieCount.textContent =
+      `${filteredMovies.length} random titles`;
+
+  } else if (
     currentSearch ||
     filtersAreActive
   ) {
@@ -295,9 +388,9 @@ function renderMovies() {
   }
 
 
-  // ======================================================
+  // =========================================================
   // NO RESULTS
-  // ======================================================
+  // =========================================================
 
   if (
     filteredMovies.length === 0
@@ -318,9 +411,9 @@ function renderMovies() {
   }
 
 
-  // ======================================================
+  // =========================================================
   // CREATE CARDS
-  // ======================================================
+  // =========================================================
 
   filteredMovies.forEach(
     (movie, index) => {
@@ -364,9 +457,9 @@ function createMovieCard(
   );
 
 
-  // ------------------------------------------------------
+  // ======================================================
   // COVER
-  // ------------------------------------------------------
+  // ======================================================
 
   const colors =
     coverColors[
@@ -392,9 +485,9 @@ function createMovieCard(
     "movie-cover-inner";
 
 
-  // ------------------------------------------------------
+  // ======================================================
   // TMDB POSTER
-  // ------------------------------------------------------
+  // ======================================================
 
   if (movie.poster) {
 
@@ -422,9 +515,9 @@ function createMovieCard(
   }
 
 
-  // ------------------------------------------------------
+  // ======================================================
   // COVER OVERLAY
-  // ------------------------------------------------------
+  // ======================================================
 
   const coverOverlay =
     document.createElement(
@@ -455,84 +548,21 @@ function createMovieCard(
       : "transparent";
 
 
-  // ------------------------------------------------------
-  // BADGES
-  // ------------------------------------------------------
+  // ======================================================
+  // TYPE BADGES ONLY
+  //
+  // Physical/digital formats are now displayed beneath
+  // the poster instead of over it.
+  // ======================================================
 
-  const badges =
+  const typeBadges =
     document.createElement(
       "div"
     );
 
-  badges.className =
+  typeBadges.className =
     "movie-badges";
 
-
-  // Physical badges
-
-  if (
-    movie.physical &&
-    movie.physical.length
-  ) {
-
-    movie.physical.forEach(
-      format => {
-
-        const badge =
-          document.createElement(
-            "span"
-          );
-
-        badge.className =
-          "movie-badge";
-
-        badge.textContent =
-          `💿 ${format}`;
-
-        badges.appendChild(
-          badge
-        );
-
-      }
-    );
-
-  }
-
-
-  // Digital badges
-
-  if (
-    movie.digital &&
-    movie.digital.length
-  ) {
-
-    movie.digital.forEach(
-      service => {
-
-        const badge =
-          document.createElement(
-            "span"
-          );
-
-        badge.className =
-          "movie-badge";
-
-        badge.textContent =
-          `📱 ${service}`;
-
-        badges.appendChild(
-          badge
-        );
-
-      }
-    );
-
-  }
-
-
-  // ------------------------------------------------------
-  // TYPE BADGE
-  // ------------------------------------------------------
 
   if (
     movie.type === "tv"
@@ -549,7 +579,7 @@ function createMovieCard(
     badge.textContent =
       "TV";
 
-    badges.appendChild(
+    typeBadges.appendChild(
       badge
     );
 
@@ -571,20 +601,23 @@ function createMovieCard(
     badge.textContent =
       "MISC";
 
-    badges.appendChild(
+    typeBadges.appendChild(
       badge
     );
 
   }
 
 
-  // ------------------------------------------------------
-  // ASSEMBLE COVER
-  // ------------------------------------------------------
+  if (
+    typeBadges.children.length > 0
+  ) {
 
-  coverOverlay.appendChild(
-    badges
-  );
+    coverOverlay.appendChild(
+      typeBadges
+    );
+
+  }
+
 
   coverInner.appendChild(
     coverOverlay
@@ -617,6 +650,81 @@ function createMovieCard(
   card.appendChild(
     title
   );
+
+
+  // ======================================================
+  // FORMATS UNDER TITLE
+  // ======================================================
+
+  const formats =
+    document.createElement(
+      "div"
+    );
+
+  formats.className =
+    "movie-card-formats";
+
+
+  const physical =
+    movie.physical || [];
+
+  const digital =
+    movie.digital || [];
+
+
+  physical.forEach(
+    format => {
+
+      const formatItem =
+        document.createElement(
+          "span"
+        );
+
+      formatItem.className =
+        "movie-card-format";
+
+      formatItem.textContent =
+        `💿 ${format}`;
+
+      formats.appendChild(
+        formatItem
+      );
+
+    }
+  );
+
+
+  digital.forEach(
+    service => {
+
+      const formatItem =
+        document.createElement(
+          "span"
+        );
+
+      formatItem.className =
+        "movie-card-format";
+
+      formatItem.textContent =
+        `📱 ${service}`;
+
+      formats.appendChild(
+        formatItem
+      );
+
+    }
+  );
+
+
+  if (
+    formats.children.length > 0
+  ) {
+
+    card.appendChild(
+      formats
+    );
+
+  }
 
 
   // ======================================================
@@ -673,9 +781,9 @@ function openMovie(
     movie;
 
 
-  // ------------------------------------------------------
+  // ======================================================
   // RESET FLIP
-  // ------------------------------------------------------
+  // ======================================================
 
   flipContainer.classList.remove(
     "flipped"
@@ -685,9 +793,9 @@ function openMovie(
     "Flip case";
 
 
-  // ------------------------------------------------------
+  // ======================================================
   // BASIC INFORMATION
-  // ------------------------------------------------------
+  // ======================================================
 
   modalTitle.textContent =
     movie.title;
@@ -738,9 +846,9 @@ function openMovie(
     "";
 
 
-  // ------------------------------------------------------
-  // Use TMDB poster if available
-  // ------------------------------------------------------
+  // ======================================================
+  // USE TMDB POSTER
+  // ======================================================
 
   if (movie.poster) {
 
@@ -784,34 +892,15 @@ function openMovie(
       "linear-gradient(to top, rgba(0,0,0,.8), rgba(0,0,0,0) 60%)";
 
 
-    const bigYear =
-      document.createElement(
-        "div"
-      );
-
-    bigYear.textContent =
-      movie.year || "";
-
-    bigYear.style.marginTop =
-      "10px";
-
-    bigYear.style.color =
-      "rgba(255,255,255,.8)";
-
-
-    overlay.appendChild(
-      bigYear
-    );
-
     modalCover.appendChild(
       overlay
     );
 
   } else {
 
-    // ----------------------------------------------------
+    // ====================================================
     // FALLBACK COVER
-    // ----------------------------------------------------
+    // ====================================================
 
     modalCover.style.backgroundImage =
       "";
@@ -851,25 +940,6 @@ function openMovie(
       "radial-gradient(circle at 20% 15%, rgba(255,255,255,.22), transparent 32%)";
 
 
-    const bigYear =
-      document.createElement(
-        "div"
-      );
-
-    bigYear.textContent =
-      movie.year || "";
-
-    bigYear.style.marginTop =
-      "10px";
-
-    bigYear.style.color =
-      "rgba(255,255,255,.8)";
-
-
-    coverText.appendChild(
-      bigYear
-    );
-
     modalCover.appendChild(
       coverText
     );
@@ -893,8 +963,6 @@ function openMovie(
     movie.digital || [];
 
 
-  // Physical
-
   physical.forEach(
     format => {
 
@@ -917,8 +985,6 @@ function openMovie(
   );
 
 
-  // Digital
-
   digital.forEach(
     service => {
 
@@ -940,8 +1006,6 @@ function openMovie(
     }
   );
 
-
-  // No format information
 
   if (
     physical.length === 0 &&
@@ -1072,13 +1136,25 @@ function flipMovie() {
 
 flipButton.addEventListener(
   "click",
-  flipMovie
+  event => {
+
+    event.stopPropagation();
+
+    flipMovie();
+
+  }
 );
 
 
 flipContainer.addEventListener(
   "click",
   event => {
+
+    if (
+      event.target === flipButton
+    ) {
+      return;
+    }
 
     flipMovie();
 
@@ -1176,11 +1252,6 @@ filters.forEach(
           activeFilters.type =
             value;
 
-          /*
-            Type is a single-choice group.
-            Selecting All clears the other type choice.
-          */
-
           document
             .querySelectorAll(
               '[data-filter-group="type"]'
@@ -1223,6 +1294,47 @@ filters.forEach(
 
 
         // ==================================================
+        // GENRE
+        // ==================================================
+
+        if (
+          group === "genre"
+        ) {
+
+          if (
+            activeFilters.genre === value
+          ) {
+
+            activeFilters.genre =
+              null;
+
+            button.classList.remove(
+              "active"
+            );
+
+          } else {
+
+            activeFilters.genre =
+              value;
+
+            document
+              .querySelectorAll(
+                '[data-filter-group="genre"]'
+              )
+              .forEach(
+                b =>
+                  b.classList.toggle(
+                    "active",
+                    b.dataset.filterValue === value
+                  )
+              );
+
+          }
+
+        }
+
+
+        // ==================================================
         // CATEGORY
         // ==================================================
 
@@ -1234,11 +1346,6 @@ filters.forEach(
             activeFilters.category === value
           ) {
 
-            /*
-              Clicking an active category
-              turns it off.
-            */
-
             activeFilters.category =
               null;
 
@@ -1247,11 +1354,6 @@ filters.forEach(
             );
 
           } else {
-
-            /*
-              Only one category at a time.
-              Baseball OR Christmas.
-            */
 
             activeFilters.category =
               value;
@@ -1307,6 +1409,15 @@ filters.forEach(
         }
 
 
+        // ==================================================
+        // ANY NORMAL FILTER CANCELS RANDOM MODE
+        // ==================================================
+
+        randomMode =
+          false;
+
+        updateRandomButtons();
+
         renderMovies();
 
       }
@@ -1326,6 +1437,11 @@ function updateAnimatedButton() {
     document.querySelector(
       '[data-filter-group="animated"]'
     );
+
+
+  if (!animatedButton) {
+    return;
+  }
 
 
   if (
@@ -1373,6 +1489,84 @@ function updateAnimatedButton() {
 
 
 // =========================================================
+// RANDOM 50
+// =========================================================
+
+if (randomButton) {
+
+  randomButton.addEventListener(
+    "click",
+    () => {
+
+      randomMode =
+        true;
+
+      renderMovies();
+
+      updateRandomButtons();
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+  );
+
+}
+
+
+// =========================================================
+// SHOW ALL
+// =========================================================
+
+if (showAllButton) {
+
+  showAllButton.addEventListener(
+    "click",
+    () => {
+
+      randomMode =
+        false;
+
+      renderMovies();
+
+      updateRandomButtons();
+
+    }
+  );
+
+}
+
+
+// =========================================================
+// RANDOM BUTTON STATE
+// =========================================================
+
+function updateRandomButtons() {
+
+  if (randomButton) {
+
+    randomButton.classList.toggle(
+      "active",
+      randomMode
+    );
+
+  }
+
+  if (showAllButton) {
+
+    showAllButton.classList.toggle(
+      "active",
+      !randomMode
+    );
+
+  }
+
+}
+
+
+// =========================================================
 // SEARCH
 // =========================================================
 
@@ -1405,6 +1599,11 @@ searchInput.addEventListener(
 
     currentSearch =
       event.target.value.trim();
+
+    randomMode =
+      false;
+
+    updateRandomButtons();
 
     renderMovies();
 
