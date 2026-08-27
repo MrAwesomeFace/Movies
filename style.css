@@ -28,8 +28,10 @@ html {
 
 body {
   margin: 0;
+
   background: var(--background);
   color: var(--text);
+
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -48,11 +50,13 @@ body {
 .site-header {
   position: sticky;
   top: 0;
+
   z-index: 10;
 
   padding: 18px 18px 14px;
 
   background: rgba(16, 16, 16, 0.96);
+
   border-bottom: 1px solid var(--border);
 
   backdrop-filter: blur(12px);
@@ -61,6 +65,7 @@ body {
 
 .header-top {
   display: flex;
+
   align-items: center;
   justify-content: space-between;
 
@@ -74,6 +79,7 @@ h1 {
 
   font-size: 24px;
   font-weight: 700;
+
   letter-spacing: -0.5px;
 }
 
@@ -81,6 +87,7 @@ h1 {
   margin: 4px 0 0;
 
   color: #b8b8b8;
+
   font-size: 13px;
 }
 
@@ -130,6 +137,8 @@ button {
   width: 42px;
   height: 42px;
 
+  flex-shrink: 0;
+
   border: 1px solid var(--border);
   border-radius: 50%;
 
@@ -152,13 +161,14 @@ button {
 
 .filters {
   display: flex;
+
   flex-direction: column;
 
   gap: 7px;
 
   margin-top: 14px;
 
-  overflow: hidden;
+  width: 100%;
 }
 
 
@@ -169,7 +179,11 @@ button {
 .filter-row {
   display: flex;
 
+  align-items: center;
+
   gap: 8px;
+
+  width: 100%;
 
   overflow-x: auto;
 
@@ -182,13 +196,68 @@ button {
 
 
 /* =========================================================
+   FILTER GROUP
+   ========================================================= */
+
+.filter-group {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  flex-shrink: 0;
+}
+
+
+/* =========================================================
+   FIRST ROW
+   ========================================================= */
+
+.filter-row-main {
+  justify-content: space-between;
+
+  overflow: visible;
+}
+
+.filter-group-actions {
+  margin-left: auto;
+}
+
+
+/* =========================================================
+   SECOND ROW
+   ========================================================= */
+
+.genre-category-row {
+  overflow-x: auto;
+}
+
+
+/* Divider between genre and category filters */
+
+.filter-divider {
+  flex-shrink: 0;
+
+  color: #666666;
+
+  font-size: 20px;
+  font-weight: 300;
+
+  line-height: 1;
+
+  margin: 0 2px;
+}
+
+
+/* =========================================================
    INDIVIDUAL FILTER
    ========================================================= */
 
 .filter {
   flex-shrink: 0;
 
-  padding: 8px 15px;
+  padding: 8px 14px;
 
   border: 1px solid var(--border);
   border-radius: 999px;
@@ -199,6 +268,12 @@ button {
   cursor: pointer;
 
   font-size: 14px;
+
+  white-space: nowrap;
+}
+
+.filter:hover {
+  border-color: #555555;
 }
 
 .filter.active {
@@ -208,21 +283,15 @@ button {
 
 
 /* =========================================================
-   RANDOM / SHOW ALL
-   ========================================================= */
-
-.random-button,
-.show-all-button {
-  font-weight: 600;
-}
-
-
-/* =========================================================
-   ANIMATED FILTER
+   SPECIAL FILTERS
    ========================================================= */
 
 .animated-filter {
   min-width: 130px;
+}
+
+.action-filter {
+  background: #202020;
 }
 
 
@@ -271,6 +340,7 @@ main {
   position: relative;
 
   width: 100%;
+
   aspect-ratio: 2 / 3;
 
   overflow: hidden;
@@ -288,7 +358,9 @@ main {
   inset: 0;
 
   display: flex;
+
   flex-direction: column;
+
   justify-content: flex-end;
 
   overflow: hidden;
@@ -320,7 +392,9 @@ main {
 
   color: #f2f2f2;
 
-  font-size: clamp(12px, 2.8vw, 16px);
+  font-size:
+    clamp(12px, 2.8vw, 16px);
+
   font-weight: 600;
 
   line-height: 1.15;
@@ -332,47 +406,12 @@ main {
 
 
 /* =========================================================
-   FORMAT INDICATORS UNDER TITLE
-   ========================================================= */
-
-.movie-card-formats {
-  display: flex;
-  flex-wrap: wrap;
-
-  justify-content: center;
-
-  gap: 4px;
-
-  margin-top: 5px;
-
-  min-height: 0;
-}
-
-.movie-card-format {
-  display: inline-flex;
-  align-items: center;
-
-  padding: 3px 6px;
-
-  border-radius: 5px;
-
-  background: var(--surface-light);
-
-  color: #cccccc;
-
-  font-size: 10px;
-  font-weight: 600;
-
-  line-height: 1.2;
-}
-
-
-/* =========================================================
-   FORMAT BADGES
+   FORMAT INDICATORS
    ========================================================= */
 
 .movie-badges {
   display: flex;
+
   flex-wrap: wrap;
 
   gap: 5px;
@@ -384,6 +423,7 @@ main {
 
 .movie-badge {
   display: inline-flex;
+
   align-items: center;
 
   padding: 3px 6px;
@@ -395,6 +435,7 @@ main {
   color: white;
 
   font-size: 10px;
+
   font-weight: 600;
 }
 
@@ -427,6 +468,7 @@ main {
   z-index: 50;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -449,9 +491,11 @@ main {
 
 .modal-content {
   position: relative;
+
   z-index: 1;
 
   width: min(900px, 100%);
+
   max-height: 94vh;
 
   overflow-y: auto;
@@ -469,6 +513,7 @@ main {
 
 .modal-close {
   position: absolute;
+
   top: 10px;
   right: 12px;
 
@@ -481,6 +526,7 @@ main {
   border-radius: 50%;
 
   background: rgba(0,0,0,0.6);
+
   color: white;
 
   font-size: 28px;
@@ -496,6 +542,7 @@ main {
 
 .movie-viewer {
   display: flex;
+
   flex-direction: column;
 
   align-items: center;
@@ -526,7 +573,8 @@ main {
     transform 0.65s cubic-bezier(0.4, 0.2, 0.2, 1);
 }
 
-.movie-flip-container.flipped .movie-flipper {
+.movie-flip-container.flipped
+.movie-flipper {
   transform: rotateY(180deg);
 }
 
@@ -537,6 +585,7 @@ main {
 
 .movie-face {
   position: absolute;
+
   inset: 0;
 
   overflow: hidden;
@@ -552,7 +601,9 @@ main {
 
 .movie-front {
   display: flex;
+
   flex-direction: column;
+
   justify-content: flex-end;
 
   padding: 18px;
@@ -560,6 +611,7 @@ main {
 
 .large-cover {
   position: absolute;
+
   inset: 0;
 
   border-radius: 9px;
@@ -592,11 +644,13 @@ main {
   margin: 0 0 7px;
 
   font-size: 28px;
+
   line-height: 1;
 }
 
 .movie-meta {
   display: flex;
+
   gap: 7px;
 
   margin-bottom: 20px;
@@ -614,7 +668,9 @@ main {
   margin: 0 0 5px;
 
   font-size: 12px;
+
   text-transform: uppercase;
+
   letter-spacing: 0.08em;
 }
 
@@ -622,6 +678,7 @@ main {
   margin: 0;
 
   font-size: 14px;
+
   line-height: 1.45;
 }
 
@@ -632,6 +689,7 @@ main {
 
 .format-list {
   display: flex;
+
   flex-direction: column;
 
   gap: 6px;
@@ -639,6 +697,7 @@ main {
 
 .format-item {
   display: flex;
+
   align-items: center;
 
   gap: 8px;
@@ -668,6 +727,7 @@ main {
   border-radius: 999px;
 
   background: white;
+
   color: #111;
 
   font-weight: 600;
