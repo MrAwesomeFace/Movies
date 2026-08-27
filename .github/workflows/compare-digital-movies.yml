@@ -1,0 +1,49 @@
+```yaml
+name: Compare Digital Movies
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  compare-digital-movies:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Run digital movie comparison
+        run: |
+          python scripts/compare_digital_movies.py
+
+      - name: Upload comparison reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: digital-movie-comparison
+          path: |
+            digital_movie_comparison.csv
+            digital_movie_review.csv
+
+      - name: Commit comparison reports
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add digital_movie_comparison.csv
+          git add digital_movie_review.csv
+
+          if git diff --cached --quiet; then
+            echo "No report changes to commit."
+          else
+            git commit -m "Update digital movie comparison report"
+            git push
+          fi
+```
