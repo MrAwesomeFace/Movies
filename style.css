@@ -30,7 +30,6 @@ body {
   margin: 0;
   background: var(--background);
   color: var(--text);
-
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -53,11 +52,8 @@ body {
 
   padding: 18px 18px 14px;
 
-  background: rgba(16, 16, 16, 0.97);
-
+  background: rgba(16, 16, 16, 0.96);
   border-bottom: 1px solid var(--border);
-
-  color: var(--text);
 
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -74,19 +70,17 @@ body {
 h1 {
   margin: 0;
 
-  color: #ffffff;
+  color: #f5f5f5;
 
   font-size: 24px;
   font-weight: 700;
-
   letter-spacing: -0.5px;
 }
 
 #movie-count {
   margin: 4px 0 0;
 
-  color: #bbbbbb;
-
+  color: #b8b8b8;
   font-size: 13px;
 }
 
@@ -114,13 +108,9 @@ h1 {
   outline: none;
 
   background: var(--surface);
-  color: #ffffff;
+  color: var(--text);
 
   font-size: 16px;
-}
-
-#search-input::placeholder {
-  color: #888888;
 }
 
 #search-input:focus {
@@ -144,7 +134,7 @@ button {
   border-radius: 50%;
 
   background: var(--surface);
-  color: #ffffff;
+  color: var(--text);
 
   font-size: 18px;
 
@@ -157,19 +147,29 @@ button {
 
 
 /* =========================================================
-   FILTER AREA
-   ========================================================= */
-
-.filter-area {
-  margin-top: 14px;
-}
-
-
-/* =========================================================
-   FILTER ROWS
+   FILTER BAR
    ========================================================= */
 
 .filters {
+  display: flex;
+  flex-direction: column;
+
+  gap: 7px;
+
+  margin-top: 14px;
+
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.filters::-webkit-scrollbar {
+  display: none;
+}
+
+
+/* Each filter row */
+
+.filter-row {
   display: flex;
 
   gap: 8px;
@@ -179,37 +179,12 @@ button {
   scrollbar-width: none;
 }
 
-.filters::-webkit-scrollbar {
+.filter-row::-webkit-scrollbar {
   display: none;
 }
 
 
-/*
-  The first filter row is the primary collection filter:
-  All / Physical / Digital / Movie / TV / Misc
-*/
-
-.primary-filters {
-  margin-top: 0;
-}
-
-
-/*
-  The second row is for collection categories:
-  Baseball / Christmas / Animated
-
-  It is intentionally separated from the
-  physical/digital/type filters.
-*/
-
-.category-filters {
-  margin-top: 8px;
-}
-
-
-/* =========================================================
-   FILTER BUTTONS
-   ========================================================= */
+/* Individual filter */
 
 .filter {
   flex-shrink: 0;
@@ -220,35 +195,23 @@ button {
   border-radius: 999px;
 
   background: var(--surface);
-
-  color: #eeeeee;
+  color: #dddddd;
 
   cursor: pointer;
 
   font-size: 14px;
 }
 
-.filter:hover {
-  background: var(--surface-light);
-}
-
 .filter.active {
   background: var(--accent);
   color: #111111;
-
-  border-color: var(--accent);
 }
 
 
-/*
-  Category filters use the same visual language,
-  but are slightly more compact.
-*/
+/* Animated filter gets a little more room */
 
-.category-filters .filter {
-  padding: 7px 13px;
-
-  font-size: 13px;
+.animated-filter {
+  min-width: 130px;
 }
 
 
@@ -271,7 +234,7 @@ main {
   grid-template-columns:
     repeat(2, minmax(0, 1fr));
 
-  gap: 22px 12px;
+  gap: 18px 12px;
 }
 
 
@@ -293,16 +256,10 @@ main {
   transform: scale(0.97);
 }
 
-
-/* =========================================================
-   POSTER
-   ========================================================= */
-
 .movie-cover {
   position: relative;
 
   width: 100%;
-
   aspect-ratio: 2 / 3;
 
   overflow: hidden;
@@ -317,33 +274,25 @@ main {
 
 .movie-cover-inner {
   position: absolute;
-
   inset: 0;
 
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
   overflow: hidden;
-
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
 }
-
-
-/*
-  Very subtle poster shading.
-  This no longer contains the movie title.
-*/
 
 .movie-cover-inner::before {
   content: "";
 
   position: absolute;
-
   inset: 0;
 
   background:
     radial-gradient(
       circle at 20% 15%,
-      rgba(255, 255, 255, 0.10),
+      rgba(255,255,255,0.22),
       transparent 32%
     );
 
@@ -352,72 +301,61 @@ main {
 
 
 /* =========================================================
-   MOVIE TITLE UNDER POSTER
+   TITLE UNDER POSTER
    ========================================================= */
 
-.movie-card .movie-cover-title {
-  position: static;
+.movie-card-title {
+  margin-top: 7px;
 
-  display: -webkit-box;
+  color: #f2f2f2;
 
-  margin-top: 9px;
-
-  overflow: hidden;
-
-  color: #ffffff;
-
-  font-size: clamp(12px, 3.5vw, 17px);
-
-  font-weight: 700;
+  font-size: clamp(12px, 2.8vw, 16px);
+  font-weight: 600;
 
   line-height: 1.15;
 
   text-align: center;
 
-  text-shadow: none;
-
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  overflow-wrap: anywhere;
 }
 
+.movie-card-year {
+  margin-top: 2px;
 
-/*
-  Year is intentionally hidden on the collection cards.
-*/
+  color: var(--muted);
 
-.movie-card .movie-cover-year {
-  display: none;
+  font-size: 11px;
+
+  text-align: center;
 }
 
 
 /* =========================================================
-   FORMAT / TYPE BADGES
+   FORMAT INDICATORS
    ========================================================= */
 
 .movie-badges {
   display: flex;
-
   flex-wrap: wrap;
-
-  justify-content: center;
 
   gap: 5px;
 
   margin-top: 7px;
+
+  justify-content: center;
 }
 
 .movie-badge {
   display: inline-flex;
-
   align-items: center;
 
   padding: 3px 6px;
 
   border-radius: 5px;
 
-  background: rgba(0, 0, 0, 0.65);
+  background: rgba(0,0,0,0.65);
 
-  color: #ffffff;
+  color: white;
 
   font-size: 10px;
   font-weight: 600;
@@ -447,13 +385,11 @@ main {
 
 .modal {
   position: fixed;
-
   inset: 0;
 
   z-index: 50;
 
   display: flex;
-
   align-items: center;
   justify-content: center;
 
@@ -466,10 +402,9 @@ main {
 
 .modal-backdrop {
   position: absolute;
-
   inset: 0;
 
-  background: rgba(0, 0, 0, 0.82);
+  background: rgba(0,0,0,0.82);
 
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
@@ -477,11 +412,9 @@ main {
 
 .modal-content {
   position: relative;
-
   z-index: 1;
 
   width: min(900px, 100%);
-
   max-height: 94vh;
 
   overflow-y: auto;
@@ -489,18 +422,16 @@ main {
   padding: 20px;
 
   border: 1px solid var(--border);
-
   border-radius: 18px;
 
   background: var(--surface);
 
   box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.7);
+    0 20px 60px rgba(0,0,0,0.7);
 }
 
 .modal-close {
   position: absolute;
-
   top: 10px;
   right: 12px;
 
@@ -510,15 +441,12 @@ main {
   height: 40px;
 
   border: 0;
-
   border-radius: 50%;
 
-  background: rgba(0, 0, 0, 0.6);
-
-  color: #ffffff;
+  background: rgba(0,0,0,0.6);
+  color: white;
 
   font-size: 28px;
-
   line-height: 1;
 
   cursor: pointer;
@@ -531,7 +459,6 @@ main {
 
 .movie-viewer {
   display: flex;
-
   flex-direction: column;
 
   align-items: center;
@@ -573,7 +500,6 @@ main {
 
 .movie-face {
   position: absolute;
-
   inset: 0;
 
   overflow: hidden;
@@ -581,18 +507,15 @@ main {
   border-radius: 9px;
 
   backface-visibility: hidden;
-
   -webkit-backface-visibility: hidden;
 
   box-shadow:
-    0 12px 35px rgba(0, 0, 0, 0.65);
+    0 12px 35px rgba(0,0,0,0.65);
 }
 
 .movie-front {
   display: flex;
-
   flex-direction: column;
-
   justify-content: flex-end;
 
   padding: 18px;
@@ -600,7 +523,6 @@ main {
 
 .large-cover {
   position: absolute;
-
   inset: 0;
 
   border-radius: 9px;
@@ -633,13 +555,11 @@ main {
   margin: 0 0 7px;
 
   font-size: 28px;
-
   line-height: 1;
 }
 
 .movie-meta {
   display: flex;
-
   gap: 7px;
 
   margin-bottom: 20px;
@@ -657,9 +577,7 @@ main {
   margin: 0 0 5px;
 
   font-size: 12px;
-
   text-transform: uppercase;
-
   letter-spacing: 0.08em;
 }
 
@@ -667,7 +585,6 @@ main {
   margin: 0;
 
   font-size: 14px;
-
   line-height: 1.45;
 }
 
@@ -678,7 +595,6 @@ main {
 
 .format-list {
   display: flex;
-
   flex-direction: column;
 
   gap: 6px;
@@ -686,7 +602,6 @@ main {
 
 .format-item {
   display: flex;
-
   align-items: center;
 
   gap: 8px;
@@ -695,7 +610,7 @@ main {
 
   border-radius: 7px;
 
-  background: rgba(0, 0, 0, 0.08);
+  background: rgba(0,0,0,0.08);
 
   font-size: 13px;
 }
@@ -713,12 +628,10 @@ main {
   padding: 11px 18px;
 
   border: 0;
-
   border-radius: 999px;
 
-  background: #ffffff;
-
-  color: #111111;
+  background: white;
+  color: #111;
 
   font-weight: 600;
 
@@ -744,16 +657,12 @@ main {
     grid-template-columns:
       repeat(4, minmax(0, 1fr));
 
-    gap: 24px 20px;
+    gap: 20px;
   }
 
   main {
     padding-left: 24px;
     padding-right: 24px;
-  }
-
-  .movie-card .movie-cover-title {
-    font-size: 15px;
   }
 
 }
@@ -769,15 +678,11 @@ main {
     grid-template-columns:
       repeat(6, minmax(0, 1fr));
 
-    gap: 26px 16px;
+    gap: 22px 16px;
   }
 
   .movie-card:hover {
     transform: translateY(-4px);
-  }
-
-  .movie-card .movie-cover-title {
-    font-size: 15px;
   }
 
 }
