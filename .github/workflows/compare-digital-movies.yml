@@ -1,0 +1,532 @@
+name: Compare Digital Movies to Catalog
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Compare catalog and digital movies
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+
+          const MOVIES_FILE = 'movies.js';
+          const DIGITAL_FILE = 'digital_movies_tmdb_enriched.json';
+          const REVIEW_FILE = 'digital_movie_merge_review.csv';
+          const MERGE_FILE = 'digital_movie_merge.json';
+
+          console.log('========================================');
+          console.log('DIGITAL MOVIE CATALOG COMPARISON');
+          console.log('========================================');
+          console.log('');
+
+          if (!fs.existsSync(MOVIES_FILE)) {
+            throw new Error('Could not find movies.js');
+          }
+
+          if (!fs.existsSync(DIGITAL_FILE)) {
+            throw new Error(
+              'Could not find digital_movies_tmdb_enriched.json'
+            );
+          }
+
+          // ----------------------------------------------------------
+          // Load movies.js
+          // ----------------------------------------------------------
+
+          const moviesText = fs.readFileSync(
+            MOVIES_FILE,
+            'utf8'
+          );
+
+          const arrayStart = moviesText.indexOf('[');
+          const arrayEnd = moviesText.lastIndexOf(']');
+
+          if (arrayStart === -1 || arrayEnd === -1) {
+            throw new Error(
+              'Could not locate the movie array in movies.js'
+            );
+          }
+
+          const movies = JSON.parse(
+            moviesText.substring(
+              arrayStart,
+              arrayEnd + 1
+            )
+          );
+
+          // ----------------------------------------------------------
+          // Load enriched digital file
+          // ----------------------------------------------------------
+
+          const digital = JSON.parse(
+            fs.readFileSync(
+              DIGITAL_FILE,
+              'utf8'
+            )
+          );
+
+          console.log(
+            'Catalog records:',
+            movies.length
+          );
+
+          console.log(
+            'Digital records:',
+            digital.length
+          );
+
+          console.log('');
+
+          // ----------------------------------------------------------
+          // Build TMDB ID lookup
+          // ----------------------------------------------------------
+
+          const catalogByTmdb = new Map();
+          const duplicateIds = new Set();
+
+          for (const movie of movies) {
+
+            const id = String(
+              movie.tmdbId ??
+              movie.tmdbID ??
+              movie.tmdb_id ??
+              ''
+            ).trim();
+
+            if (!id) {
+              continue;
+            }
+
+            if (catalogByTmdb.has(id)) {
+              duplicateIds.add(id);
+            } else {
+              catalogByTmdb.set(id, movie);
+            }
+          }
+
+          console.log(
+            'Catalog TMDB IDs:',
+            catalogByTmdb.size
+          );
+
+          console.log(
+            'Duplicate catalog TMDB IDs:',
+            duplicateIds.size
+          );
+
+          console.log('');
+
+          // ----------------------------------------------------------
+          // Helpers
+          // ----------------------------------------------------------
+
+          function csvEscape(value) {
+
+            if (value === null || value === undefined) {
+              return '';
+            }
+
+            value = String(value);
+
+            if (
+              value.includes(',') ||
+              value.includes('"') ||
+              value.includes('\n')
+            ) {
+              return '"' +
+                value.replace(/"/g, '""') +
+                '"';
+            }
+
+            return value;
+          }
+
+          function getDigitalSources(record) {
+
+            if (!record.digital) {
+              return [];
+            }
+
+            return String(record.digital)
+              .split('|')
+              .map(x => x.trim())
+              .filter(Boolean);
+          }
+
+          function getExistingDigital(movie) {
+
+            const value =
+              movie.digital ??
+              movie.digitalSources ??
+              movie.digital_source ??
+              [];
+
+            if (Array.isArray(value)) {
+              return value;
+            }
+
+            if (!value) {
+              return [];
+            }
+
+            return String(value)
+              .split('|')
+              .map(x => x.trim())
+              .filter(Boolean);
+          }
+
+          function unique(values) {
+
+            return [...new Set(
+              values.filter(Boolean)
+            )];
+          }
+
+          function titleOf(movie) {
+
+            return String(
+              movie.title ??
+              movie.tmdbTitle ??
+              ''
+            ).trim();
+          }
+
+          // ----------------------------------------------------------
+          // Compare records
+          // ----------------------------------------------------------
+
+          const results = [];
+
+          let matched = 0;
+          let newMovies = 0;
+          let reviews = 0;
+          let duplicates = 0;
+          let errors = 0;
+
+          for (const record of digital) {
+
+            const title = String(
+              record.title ?? ''
+            ).trim();
+
+            const tmdbId = String(
+              record.tmdbId ??
+              ''
+            ).trim();
+
+            const digitalSources =
+              getDigitalSources(record);
+
+            const result = {
+              action: '',
+              title: title,
+              digital_sources: digitalSources,
+              tmdbId: tmdbId,
+              tmdbTitle: String(
+                record.tmdbTitle ?? ''
+              ),
+              tmdbYear: String(
+                record.tmdbYear ?? ''
+              ),
+              catalogTitle: '',
+              catalogYear: '',
+              catalogDigital: [],
+              reason: '',
+              proposedMovie: null
+            };
+
+            // --------------------------------------------------------
+            // No TMDB ID
+            // --------------------------------------------------------
+
+            if (!tmdbId) {
+
+              result.action = 'REVIEW';
+
+              result.reason =
+                'No TMDB ID available.';
+
+              reviews++;
+
+              results.push(result);
+
+              continue;
+            }
+
+            // --------------------------------------------------------
+            // Duplicate TMDB ID in catalog
+            // --------------------------------------------------------
+
+            if (duplicateIds.has(tmdbId)) {
+
+              result.action = 'REVIEW';
+
+              result.reason =
+                'TMDB ID appears more than once in movies.js.';
+
+              duplicates++;
+              reviews++;
+
+              results.push(result);
+
+              continue;
+            }
+
+            // --------------------------------------------------------
+            // Existing catalog match
+            // --------------------------------------------------------
+
+            const existing =
+              catalogByTmdb.get(tmdbId);
+
+            if (existing) {
+
+              result.action = 'MATCH';
+
+              result.catalogTitle =
+                titleOf(existing);
+
+              result.catalogYear = String(
+                existing.year ??
+                existing.tmdbYear ??
+                ''
+              );
+
+              result.catalogDigital =
+                getExistingDigital(existing);
+
+              result.reason =
+                'TMDB ID matches existing catalog record.';
+
+              matched++;
+
+              results.push(result);
+
+              continue;
+            }
+
+            // --------------------------------------------------------
+            // New movie
+            // --------------------------------------------------------
+
+            if (record.tmdbTitle) {
+
+              result.action = 'NEW';
+
+              result.reason =
+                'TMDB ID does not exist in movies.js.';
+
+              result.proposedMovie = {
+                title: String(
+                  record.tmdbTitle
+                ),
+
+                tmdbTitle: String(
+                  record.tmdbTitle
+                ),
+
+                tmdbId: Number(
+                  record.tmdbId
+                ),
+
+                year: record.tmdbYear
+                  ? Number(record.tmdbYear)
+                  : '',
+
+                digital: digitalSources,
+
+                physical: [],
+
+                posterPath: String(
+                  record.tmdbPosterPath ?? ''
+                ),
+
+                backdropPath: String(
+                  record.tmdbBackdropPath ?? ''
+                )
+              };
+
+              newMovies++;
+
+              results.push(result);
+
+              continue;
+            }
+
+            // --------------------------------------------------------
+            // Anything unexpected
+            // --------------------------------------------------------
+
+            result.action = 'REVIEW';
+
+            result.reason =
+              'Could not determine how to handle this record.';
+
+            reviews++;
+
+            results.push(result);
+          }
+
+          // ----------------------------------------------------------
+          // Create review CSV
+          // ----------------------------------------------------------
+
+          const csvHeader = [
+            'action',
+            'title',
+            'digital_sources',
+            'tmdbId',
+            'tmdbTitle',
+            'tmdbYear',
+            'catalogTitle',
+            'catalogYear',
+            'catalogDigital',
+            'reason'
+          ];
+
+          const csvLines = [
+            csvHeader.join(',')
+          ];
+
+          for (const result of results) {
+
+            csvLines.push([
+              csvEscape(result.action),
+              csvEscape(result.title),
+              csvEscape(
+                result.digital_sources.join(' | ')
+              ),
+              csvEscape(result.tmdbId),
+              csvEscape(result.tmdbTitle),
+              csvEscape(result.tmdbYear),
+              csvEscape(result.catalogTitle),
+              csvEscape(result.catalogYear),
+              csvEscape(
+                result.catalogDigital.join(' | ')
+              ),
+              csvEscape(result.reason)
+            ].join(','));
+          }
+
+          fs.writeFileSync(
+            REVIEW_FILE,
+            csvLines.join('\n') + '\n',
+            'utf8'
+          );
+
+          // ----------------------------------------------------------
+          // Create structured merge file
+          // ----------------------------------------------------------
+
+          const mergeData = {
+            generated: new Date().toISOString(),
+
+            summary: {
+              catalogRecords: movies.length,
+              digitalRecords: digital.length,
+              matched: matched,
+              newMovies: newMovies,
+              reviews: reviews,
+              duplicateTmdbIds: duplicates,
+              errors: errors
+            },
+
+            matches: results.filter(
+              x => x.action === 'MATCH'
+            ),
+
+            newMovies: results.filter(
+              x => x.action === 'NEW'
+            ),
+
+            reviews: results.filter(
+              x => x.action === 'REVIEW'
+            )
+          };
+
+          fs.writeFileSync(
+            MERGE_FILE,
+            JSON.stringify(
+              mergeData,
+              null,
+              2
+            ),
+            'utf8'
+          );
+
+          // ----------------------------------------------------------
+          // Final report
+          // ----------------------------------------------------------
+
+          console.log('');
+          console.log('========================================');
+          console.log('COMPARISON COMPLETE');
+          console.log('========================================');
+          console.log(
+            'Catalog records:',
+            movies.length
+          );
+          console.log(
+            'Digital records:',
+            digital.length
+          );
+          console.log(
+            'MATCH:',
+            matched
+          );
+          console.log(
+            'NEW:',
+            newMovies
+          );
+          console.log(
+            'REVIEW:',
+            reviews
+          );
+          console.log(
+            'DUPLICATE TMDB IDs:',
+            duplicates
+          );
+          console.log(
+            'ERROR:',
+            errors
+          );
+          console.log('');
+          console.log(
+            'Created:',
+            REVIEW_FILE
+          );
+          console.log(
+            'Created:',
+            MERGE_FILE
+          );
+          console.log('');
+          console.log(
+            'movies.js was NOT modified.'
+          );
+          NODE
+
+      - name: Upload comparison files
+        uses: actions/upload-artifact@v4
+        with:
+          name: digital-movie-merge-review
+          path: |
+            digital_movie_merge_review.csv
+            digital_movie_merge.json
+
+      - name: Commit comparison files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add digital_movie_merge_review.csv digital_movie_merge.json
+          git commit -m "Compare digital movies with catalog" || true
+          git push
