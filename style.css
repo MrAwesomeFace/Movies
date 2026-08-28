@@ -236,7 +236,9 @@ button {
 }
 
 
-/* Divider between genre and category filters */
+/* =========================================================
+   FILTER DIVIDER
+   ========================================================= */
 
 .filter-divider {
   flex-shrink: 0;
@@ -330,12 +332,7 @@ main {
   cursor: pointer;
 
   transition:
-    transform 0.18s ease,
     opacity 0.18s ease;
-}
-
-.movie-card:active {
-  transform: scale(0.97);
 }
 
 
@@ -369,7 +366,7 @@ main {
 
 
 /* =========================================================
-   MOVIE COVER
+   MOVIE COVER / SHELF AREA
    ========================================================= */
 
 .movie-cover {
@@ -379,27 +376,27 @@ main {
 
   aspect-ratio: 2 / 3;
 
-  /*
-    The shelf needs to extend below the poster,
-    so the cover itself cannot clip it.
-  */
   overflow: visible;
 
   border-radius: 7px;
 
   background: #292929;
 
-  box-shadow:
-    0 6px 18px rgba(0, 0, 0, 0.45);
+  /*
+    Base shadow belongs to the poster area,
+    not the shelf.
+  */
+  box-shadow: none;
 }
 
 
 /* =========================================================
-   POSTER IMAGE CONTAINER
+   POSTER IMAGE
    ========================================================= */
 
 .movie-cover-inner {
   position: absolute;
+
   inset: 0;
 
   display: flex;
@@ -411,6 +408,15 @@ main {
   overflow: hidden;
 
   border-radius: 7px;
+
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.45);
+
+  transition:
+    transform 0.20s ease,
+    box-shadow 0.20s ease;
+
+  z-index: 3;
 }
 
 
@@ -445,21 +451,19 @@ main {
 
   pointer-events: none;
 
-  z-index: 2;
+  z-index: 1;
 }
 
 
 /* =========================================================
-   HOVER — LIFT MOVIE FROM SHELF
+   HOVER — POSTER LIFTS FROM STATIONARY SHELF
    ========================================================= */
 
 @media (hover: hover) {
 
-  .movie-card:hover {
-    transform: translateY(-4px);
-  }
+  .movie-card:hover .movie-cover-inner {
+    transform: translateY(-5px);
 
-  .movie-card:hover .movie-cover {
     box-shadow:
       0 10px 18px rgba(0, 0, 0, 0.42),
       0 20px 30px rgba(0, 0, 0, 0.30);
