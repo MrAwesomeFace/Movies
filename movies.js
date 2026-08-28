@@ -15230,7 +15230,7 @@ const movies = [
       "Movies Anywhere"
     ],
     "categories": [
-      "christmas"
+    
     ]
   },
   {
@@ -16125,7 +16125,7 @@ const movies = [
       "Movies Anywhere"
     ],
     "categories": [
-      "christmas"
+      
     ]
   },
   {
@@ -16250,7 +16250,7 @@ const movies = [
       "Prime"
     ],
     "categories": [
-      "christmas"
+      
     ]
   },
   {
@@ -16623,7 +16623,7 @@ const movies = [
       "Fandango"
     ],
     "categories": [
-      "christmas"
+    
     ]
   },
   {
@@ -16730,7 +16730,7 @@ const movies = [
       "Movies Anywhere"
     ],
     "categories": [
-      "christmas"
+  
     ]
   },
   {
