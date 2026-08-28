@@ -27,7 +27,7 @@ jobs:
           import urllib.request
           from difflib import SequenceMatcher
 
-          INPUT = "digital_movies_normalized_for_tmdb.csv"
+          INPUT = "digital_movies_import_queue.csv"
           OUTPUT = "digital_movies_tmdb_enriched.json"
 
           TOKEN = os.environ["TMDB_TOKEN"]
