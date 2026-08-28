@@ -49,7 +49,9 @@
       "Blu-ray",
       "DVD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "007: Spectre",
@@ -66,7 +68,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "101 Dalmatians",
@@ -275,7 +279,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "christmas"
     ]
@@ -365,7 +372,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "baseball"
     ]
@@ -401,7 +411,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "A Very Harold & Kumar Christmas",
@@ -419,7 +432,10 @@
       "Blu-ray",
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "christmas"
     ]
@@ -439,7 +455,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Ace Ventura: Pet Detective",
@@ -488,7 +507,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Aladdin",
@@ -504,7 +526,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "All About Steve",
@@ -777,7 +802,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Armageddon",
@@ -1000,7 +1028,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Ballistic: Ecks vs. Sever",
@@ -1106,7 +1137,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Batman Forever",
@@ -1140,7 +1174,11 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere | Prime"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere",
+      "Prime"
+    ]
   },
   {
     "title": "Batman: The Animated Series",
@@ -1176,7 +1214,9 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Be Cool",
@@ -1211,7 +1251,10 @@
       "Blu-ray",
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Bedazzled",
@@ -1245,7 +1288,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Benchwarmers, The",
@@ -1299,7 +1345,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Blade",
@@ -1435,7 +1484,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "animated"
     ]
@@ -1612,7 +1664,10 @@
       "Blu-ray",
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Can't Hardly Wait",
@@ -1791,7 +1846,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "christmas"
     ]
@@ -1810,7 +1868,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Cinderella",
@@ -2109,7 +2169,9 @@
       "Blu-ray",
       "4K UHD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Creed II",
@@ -2127,7 +2189,9 @@
       "Blu-ray",
       "4K UHD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Creed III",
@@ -2145,7 +2209,9 @@
       "Blu-ray",
       "4K UHD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "D1: The Mighty Ducks",
@@ -2277,7 +2343,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Dead Man on Campus",
@@ -2311,7 +2380,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Death Race",
@@ -2397,7 +2469,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Den of Thieves",
@@ -2512,7 +2587,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Dexter - Season 1",
@@ -2609,7 +2687,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Die Hard with a Vengeance",
@@ -2674,7 +2755,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Divergent Saga: Divergent",
@@ -2690,7 +2773,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Divergent Saga: Insurgent",
@@ -2706,7 +2792,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "DodgeBall: A True Underdog Story",
@@ -2824,7 +2912,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Driven",
@@ -2905,7 +2996,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Dumbo",
@@ -2979,7 +3073,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "christmas"
     ]
@@ -3016,7 +3113,9 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Enemy of the State",
@@ -3270,7 +3369,10 @@
       "Blu-ray + DVD",
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Fast & Furious: Fast 1",
@@ -3302,7 +3404,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Fast & Furious: Fast 4",
@@ -3338,7 +3443,10 @@
       "Blu-ray",
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Fast & Furious: Fast 6",
@@ -3356,7 +3464,10 @@
       "Blu-ray",
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Fast & Furious: Fast 7",
@@ -3374,7 +3485,10 @@
       "Blu-ray + DVD",
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Fast & Furious: Fast 8",
@@ -3392,7 +3506,10 @@
       "Blu-ray + DVD",
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Ferdinand",
@@ -3445,7 +3562,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "baseball"
     ],
@@ -3482,7 +3602,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Final Destination 2",
@@ -3498,7 +3621,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Finding Nemo",
@@ -3712,7 +3838,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "animated"
     ]
@@ -3748,7 +3877,9 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "G.I. Joe: The Rise of Cobra",
@@ -3848,7 +3979,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Prime"
+    "digital": [
+      "Fandango",
+      "Prime"
+    ]
   },
   {
     "title": "Ghostbusters II",
@@ -3881,7 +4015,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Go",
@@ -3981,7 +4117,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Grudge Match",
@@ -3998,7 +4137,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Guardians of the Galaxy",
@@ -4031,7 +4173,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Hannibal",
@@ -4099,7 +4244,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Harry Potter and the Deathly Hallows: Part 1",
@@ -4115,7 +4263,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Harry Potter and the Deathly Hallows: Part 2",
@@ -4131,7 +4282,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Harry Potter and the Goblet of Fire",
@@ -4147,7 +4301,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Harry Potter and the Half-Blood Prince",
@@ -4163,7 +4320,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Harry Potter and the Order of the Phoenix",
@@ -4179,7 +4339,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Harry Potter and the Prisoner of Azkaban",
@@ -4195,7 +4358,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Harry Potter and the Sorcerer's Stone",
@@ -4426,7 +4592,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Horton Hears a Who!",
@@ -4531,7 +4700,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "christmas"
     ]
@@ -4667,7 +4839,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "animated"
     ]
@@ -4744,7 +4919,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "In Her Shoes",
@@ -4778,7 +4956,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Indiana Jones and the Kingdom of the Crystal Skull",
@@ -4879,7 +5060,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "animated"
     ]
@@ -4933,7 +5117,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "It's a Wonderful Life",
@@ -4969,7 +5156,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Jersey Girl",
@@ -5002,7 +5192,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "christmas"
     ]
@@ -5022,7 +5215,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "John Wick: Chapter 2",
@@ -5039,7 +5235,11 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere | Prime"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere",
+      "Prime"
+    ]
   },
   {
     "title": "John Wick: Chapter 3 - Parabellum",
@@ -5056,7 +5256,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "John Wick: Chapter 4",
@@ -5072,7 +5274,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Johnny Dangerously",
@@ -5121,7 +5325,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Jumanji: Welcome to the Jungle",
@@ -5137,7 +5344,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Juno",
@@ -5172,7 +5382,10 @@
       "Blu-ray",
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Jurassic Park III",
@@ -5188,7 +5401,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Jurassic World",
@@ -5206,7 +5422,10 @@
       "Blu-ray + DVD",
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Jurassic World Dominion",
@@ -5222,7 +5441,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Jurassic World: Fallen Kingdom",
@@ -5240,7 +5462,10 @@
       "Blu-ray + DVD",
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Just Go with It",
@@ -5274,7 +5499,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Justified - Complete First Season",
@@ -5325,7 +5553,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Kick-Ass 2",
@@ -5342,7 +5573,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Kickboxer",
@@ -5426,7 +5660,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Kiss Kiss Bang Bang",
@@ -5474,7 +5711,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Knocked Up",
@@ -5545,7 +5785,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Last Stand, The",
@@ -5628,7 +5870,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Lethal Weapon",
@@ -5795,7 +6040,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "christmas"
     ]
@@ -5830,7 +6078,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "christmas"
     ]
@@ -5886,7 +6137,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Major League",
@@ -5902,7 +6156,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango",
+    "digital": [
+      "Fandango"
+    ],
     "categories": [
       "baseball"
     ],
@@ -5961,7 +6217,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Man of Steel",
@@ -5978,7 +6237,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Man on the Moon",
@@ -6012,7 +6274,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Matilda",
@@ -6147,7 +6412,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Men in Black II",
@@ -6256,7 +6524,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Minority Report",
@@ -6273,7 +6544,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Miss Congeniality",
@@ -6323,7 +6596,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Mission: Impossible 2",
@@ -6374,7 +6649,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "baseball"
     ]
@@ -6394,7 +6672,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango",
+    "digital": [
+      "Fandango"
+    ],
     "categories": [
       "animated"
     ]
@@ -6414,7 +6694,10 @@
       "4K UHD",
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Mr. & Mrs. Smith",
@@ -6481,7 +6764,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Mulan",
@@ -6568,7 +6854,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "christmas"
     ]
@@ -6733,7 +7022,10 @@
     "physical": [
       "Blu-ray + DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Now You See Me 2",
@@ -6750,7 +7042,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Now You See Me, Now You Don't",
@@ -6767,7 +7062,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "O",
@@ -6800,7 +7098,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Ocean's Eleven",
@@ -6817,7 +7118,11 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere | Prime"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere",
+      "Prime"
+    ]
   },
   {
     "title": "Ocean's Thirteen",
@@ -6834,7 +7139,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Ocean's Twelve",
@@ -6851,7 +7159,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Office Christmas Party",
@@ -6868,7 +7179,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango",
+    "digital": [
+      "Fandango"
+    ],
     "categories": [
       "christmas"
     ]
@@ -6980,7 +7293,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Parks and Recreation - The Complete Series",
@@ -7165,7 +7481,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Pitch Perfect 2",
@@ -7182,7 +7501,10 @@
     "physical": [
       "Blu-ray + DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Pitch Perfect 3",
@@ -7199,7 +7521,10 @@
     "physical": [
       "Blu-ray + DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Pixie Hollow Games",
@@ -7236,7 +7561,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Pocahontas",
@@ -7394,7 +7721,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Rambo III",
@@ -7429,7 +7759,11 @@
       "DVD",
       "4K UHD"
     ],
-    "digital": "Fandango | Movies Anywhere | Prime"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere",
+      "Prime"
+    ]
   },
   {
     "title": "Rambo: First Blood Part II",
@@ -7599,7 +7933,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango",
+    "digital": [
+      "Fandango"
+    ],
     "categories": [
       "animated"
     ]
@@ -7619,7 +7955,10 @@
     "physical": [
       "Blu-ray + DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Rio Bravo",
@@ -7651,7 +7990,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Road House",
@@ -7738,7 +8080,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Rock Star",
@@ -7772,7 +8117,9 @@
       "DVD",
       "4K UHD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Role Models",
@@ -7823,7 +8170,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Prime"
+    "digital": [
+      "Prime"
+    ]
   },
   {
     "title": "Rudolph the Red-Nosed Reindeer",
@@ -7858,7 +8207,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Runaway Bride",
@@ -8261,7 +8613,11 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere | Prime"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere",
+      "Prime"
+    ]
   },
   {
     "title": "Sherlock Holmes",
@@ -8293,7 +8649,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Shoot 'Em Up",
@@ -8450,7 +8809,10 @@
     "physical": [
       "Blu-ray + DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "animated"
     ]
@@ -8594,7 +8956,9 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Sonic the Hedgehog 2",
@@ -8610,7 +8974,9 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Sonic the Hedgehog 3",
@@ -8626,7 +8992,9 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Space Jam",
@@ -8658,7 +9026,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Spider-Man",
@@ -8725,7 +9096,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Star Trek",
@@ -8759,7 +9133,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Stealth",
@@ -8843,7 +9219,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Surviving Christmas",
@@ -8878,7 +9257,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Sweet Home Alabama",
@@ -8996,7 +9377,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Tarzan",
@@ -9129,7 +9513,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "A-Team, The",
@@ -9146,7 +9533,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Accountant, The",
@@ -9164,7 +9554,10 @@
       "Blu-ray",
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Accountant 2, The",
@@ -9180,7 +9573,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Amazing Spider-Man, The",
@@ -9197,7 +9592,10 @@
     "physical": [
       "Blu-ray + DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Amazing Spider-Man 2, The",
@@ -9267,7 +9665,10 @@
       "4K UHD",
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Beekeeper, The",
@@ -9283,7 +9684,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Best Christmas Pageant Ever, The",
@@ -9299,7 +9702,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "christmas"
     ]
@@ -9336,7 +9742,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Bourne Identity, The",
@@ -9353,7 +9762,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Bourne Legacy, The",
@@ -9370,7 +9782,10 @@
     "physical": [
       "Blu-ray + DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Bourne Supremacy, The",
@@ -9387,7 +9802,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Bourne Ultimatum, The",
@@ -9404,7 +9822,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Break-Up, The",
@@ -9571,7 +9992,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Dark Knight Rises, The",
@@ -9588,7 +10012,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Day After Tomorrow, The",
@@ -9675,7 +10102,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Expendables 2, The",
@@ -9692,7 +10122,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Family Man, The",
@@ -9798,7 +10231,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Fox and the Hound, The",
@@ -9888,7 +10324,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Goonies, The",
@@ -9922,7 +10361,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Grinch, The",
@@ -9939,7 +10381,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "animated",
       "christmas"
@@ -9977,7 +10422,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Heat, The",
@@ -9994,7 +10442,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Holdovers, The",
@@ -10010,7 +10461,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "christmas"
     ]
@@ -10030,7 +10484,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "christmas"
     ]
@@ -10070,7 +10527,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Hunger Games: Catching Fire, The",
@@ -10087,7 +10547,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Hunger Games: Mockingjay - Part 1, The",
@@ -10104,7 +10566,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Hunger Games: Mockingjay - Part 2, The",
@@ -10121,7 +10585,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Illusionist, The",
@@ -10154,7 +10621,11 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere | Prime"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere",
+      "Prime"
+    ]
   },
   {
     "title": "Incredible Hulk, The",
@@ -10261,7 +10732,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "animated"
     ]
@@ -10280,7 +10754,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "animated"
     ]
@@ -10299,7 +10776,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "animated"
     ]
@@ -10373,7 +10853,10 @@
     "physical": [
       "Blu-ray + DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "animated"
     ]
@@ -10392,7 +10875,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Many Adventures of Winnie the Pooh, The",
@@ -10446,7 +10932,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Matrix Reloaded, The",
@@ -10497,7 +10986,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Meg, The",
@@ -10513,7 +11005,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Mummy, The",
@@ -10530,7 +11025,10 @@
       "Blu-ray",
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Mummy Returns, The",
@@ -10547,7 +11045,10 @@
       "Blu-ray",
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Mummy: Tomb of the Dragon Emperor, The",
@@ -10564,7 +11065,10 @@
       "Blu-ray",
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Natural, The",
@@ -10580,7 +11084,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "baseball"
     ],
@@ -10617,7 +11124,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "christmas"
     ]
@@ -10704,7 +11214,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "animated",
       "christmas"
@@ -11210,7 +11723,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Twilight Saga: Breaking Dawn - Part 2, The",
@@ -11227,7 +11742,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Twilight Saga: Eclipse, The",
@@ -11411,7 +11929,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Three to Tango",
@@ -11491,7 +12012,9 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Total Recall",
@@ -11508,7 +12031,10 @@
       "DVD",
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Toy Story",
@@ -11655,7 +12181,9 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Transformers: Dark of the Moon",
@@ -11706,7 +12234,9 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Transporter",
@@ -11794,7 +12324,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "animated"
     ]
@@ -11831,7 +12364,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "baseball"
     ]
@@ -11867,7 +12403,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Twilight",
@@ -12002,7 +12541,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Underworld: Evolution",
@@ -12073,7 +12615,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Vacation",
@@ -12172,7 +12717,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "christmas"
     ]
@@ -12259,7 +12807,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Watchmen",
@@ -12293,7 +12844,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Wayne's World 2",
@@ -12310,7 +12863,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "We're the Millers",
@@ -12327,7 +12882,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Wedding Crashers",
@@ -12528,7 +13086,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Wicked: For Good",
@@ -12544,7 +13105,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Willy Wonka & the Chocolate Factory",
@@ -12561,7 +13125,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Wonder Woman",
@@ -12578,7 +13145,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Wonka",
@@ -12594,7 +13164,10 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Wrath of Man",
@@ -12610,7 +13183,9 @@
     "physical": [
       "DVD"
     ],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Wreck-It Ralph",
@@ -12732,7 +13307,10 @@
     "physical": [
       "Blu-ray"
     ],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "X-Men: First Class",
@@ -13580,7 +14158,10 @@
     "cast": "",
     "synopsis": "Harry Potter has lived under the stairs at his aunt and uncle's house his whole life. But on his 11th birthday, he learns he's a powerful wizard—with a place waiting for him at the Hogwarts School of Witchcraft and Wizardry. As he learns to harness his newfound powers with the help of the school's kindly headmaster, Harry uncovers the truth about his parents' deaths—and about the villain who's to blame.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "2001: A Space Odyssey",
@@ -13595,7 +14176,10 @@
     "cast": "",
     "synopsis": "Humanity finds a mysterious object buried beneath the lunar surface and sets off to find its origins with the help of HAL 9000, the world's most advanced super computer.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "300: Rise of an Empire",
@@ -13610,7 +14194,10 @@
     "cast": "",
     "synopsis": "Greek general Themistocles attempts to unite all of Greece by leading the charge that will change the course of the war. Themistocles faces the massive invading Persian forces led by mortal-turned-god, Xerxes and Artemesia, the vengeful commander of the Persian navy.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "A Bad Moms Christmas",
@@ -13625,7 +14212,10 @@
     "cast": "",
     "synopsis": "Amy, Kiki and Carla – three under-appreciated and over-burdened women – rebel against the challenges and expectations of the Super Bowl for mothers: Christmas. And if creating a more perfect holiday for their families wasn’t hard enough, they have to do all of that while hosting and entertaining their own mothers.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "christmas"
     ]
@@ -13643,7 +14233,10 @@
     "cast": "",
     "synopsis": "In a near-future Britain, young Alexander DeLarge and his pals get their kicks beating and raping anyone they please. When not destroying the lives of others, Alex swoons to the music of Beethoven. The state, eager to crack down on juvenile crime, gives an incarcerated Alex the option to undergo an invasive procedure that'll rob him of all personal agency. In a time when conscience is a commodity, can Alex change his tune?",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "A Knight's Tale",
@@ -13658,7 +14251,10 @@
     "cast": "",
     "synopsis": "William Thatcher, a knight's peasant apprentice, gets a chance at glory when the knight dies suddenly mid-tournament. Posing as a knight himself, William won't stop until he's crowned tournament champion—assuming matters of the heart don't get in the way.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "A Merry Friggin' Christmas",
@@ -13673,7 +14269,9 @@
     "cast": "",
     "synopsis": "Boyd Mitchler and his family must spend Christmas with his estranged family of misfits. Upon realizing that he left all his son's gifts at home, he hits the road with his dad in an attempt to make the 8-hour round trip before sunrise.",
     "physical": [],
-    "digital": "Prime",
+    "digital": [
+      "Prime"
+    ],
     "categories": [
       "christmas"
     ]
@@ -13691,7 +14289,9 @@
     "cast": "",
     "synopsis": "Hard-working bakery owner Kate Holiday, has more cookie orders than she has time to fill this holiday season, and when her boyfriend suddenly breaks up with her, any shred of Christmas joy she was hanging onto, immediately disappears. After Kate hangs the last ornament on the tree and goes to bed, she awakens the next morning to a little bit of Christmas magic. She gets the surprise of her life when Chip, a handsome soldier who may or may not be the Nutcracker Prince from Tchaikovsky’s “The Nutcracker,” appears in her living room.",
     "physical": [],
-    "digital": "Prime",
+    "digital": [
+      "Prime"
+    ],
     "categories": [
       "christmas"
     ]
@@ -13709,7 +14309,9 @@
     "cast": "",
     "synopsis": "Siblings Wednesday and Pugsley Addams will stop at nothing to get rid of Pubert, the new baby boy adored by parents Gomez and Morticia. Things go from bad to worse when the new \"black widow\" nanny, Debbie Jellinsky, launches her plan to add Fester to her collection of dead husbands.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Aladdin and the King of Thieves",
@@ -13724,7 +14326,10 @@
     "cast": "",
     "synopsis": "Legendary secrets are revealed as Aladdin and his friends—Jasmine, Abu, Carpet and, of course, the always entertaining Genie—face all sorts of terrifying threats and make some exciting last-minute escapes pursuing the King Of Thieves and his villainous crew.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "The Return of Jafar",
@@ -13739,7 +14344,10 @@
     "cast": "",
     "synopsis": "The evil Jafar escapes from the magic lamp as an all-powerful genie, ready to plot his revenge against Aladdin. From battling elusive villains atop winged horses, to dodging flames inside an exploding lava pit, it's up to Aladdin - with Princess Jasmine and the outrageously funny Genie by his side - to save the kingdom once and for all.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Anna",
@@ -13754,7 +14362,10 @@
     "cast": "",
     "synopsis": "Beneath Anna Poliatova's striking beauty lies a secret that will unleash her indelible strength and skill to become one of the world's most feared government assassins.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Annie",
@@ -13769,7 +14380,10 @@
     "cast": "",
     "synopsis": "Annie is a young, happy foster kid who's also tough enough to make her way on the streets of New York in 2014. Originally left by her parents as a baby with the promise that they'd be back for her someday, it's been a hard knock life ever since with her mean foster mom Miss Hannigan. But everything's about to change when the hard-nosed tycoon and New York mayoral candidate Will Stacks—advised by his brilliant VP and his shrewd and scheming campaign advisor—makes a thinly-veiled campaign move and takes her in. Stacks believes he's her guardian angel, but Annie's self-assured nature and bright, sun-will-come-out-tomorrow outlook on life just might mean it's the other way around.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Anyone but You",
@@ -13784,7 +14398,10 @@
     "cast": "",
     "synopsis": "After an amazing first date, Bea and Ben’s fiery attraction turns ice cold — until they find themselves unexpectedly reunited at a destination wedding in Australia. So they do what any two mature adults would do: pretend to be a couple.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Away from Her",
@@ -13799,7 +14416,9 @@
     "cast": "",
     "synopsis": "Fiona and Grant have been married for nearly 50 years. They have to face the fact that Fiona’s absent-mindedness is a symptom of Alzheimer’s disease. She must go to a specialized nursing home, where she slowly forgets Grant and turns her affection to Aubrey, another patient in the home.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Bad Boys: Ride or Die",
@@ -13814,7 +14433,10 @@
     "cast": "",
     "synopsis": "After their late former Captain is framed, Lowrey and Burnett try to clear his name, only to end up on the run themselves.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Bad Santa 2",
@@ -13829,7 +14451,9 @@
     "cast": "",
     "synopsis": "Fueled by cheap whiskey, greed and hatred, Willie Soke teams up with his angry little sidekick, Marcus, to knock off a Chicago charity on Christmas Eve. Along for the ride is chubby and cheery Thurman Merman, a 250-pound ray of sunshine who brings out Willie's sliver of humanity. Issues arise when the pair are joined by Willie's horror story of a mother, who raises the bar for the gang's ambitions, while somehow lowering the standards of criminal behavior.",
     "physical": [],
-    "digital": "Prime",
+    "digital": [
+      "Prime"
+    ],
     "categories": [
       "christmas"
     ]
@@ -13847,7 +14471,10 @@
     "cast": "",
     "synopsis": "Lake Tahoe, 1969. Seven strangers, each one with a secret to bury, meet at El Royale, a decadent motel with a dark past. In the course of a fateful night, everyone will have one last shot at redemption.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Barbie",
@@ -13862,7 +14489,10 @@
     "cast": "",
     "synopsis": "Barbie and Ken are having the time of their lives in the colorful and seemingly perfect world of Barbie Land. However, when they get a chance to go to the real world, they soon discover the joys and perils of living among humans.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Barry Lyndon",
@@ -13877,7 +14507,10 @@
     "cast": "",
     "synopsis": "An Irish rogue uses his cunning and wit to work his way up the social classes of 18th century England, transforming himself from the humble Redmond Barry into the noble Barry Lyndon.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Basic Instinct",
@@ -13892,7 +14525,9 @@
     "cast": "",
     "synopsis": "Catherine, a novelist with an insatiable sexual appetite, becomes a prime suspect when her boyfriend is brutally murdered -- a crime she had described in her latest story.",
     "physical": [],
-    "digital": "Prime"
+    "digital": [
+      "Prime"
+    ]
   },
   {
     "title": "Batman & Mr. Freeze: SubZero",
@@ -13907,7 +14542,10 @@
     "cast": "",
     "synopsis": "When Mr. Freeze kidnaps Barbara Gordon, as an involuntary organ donor to save his dying wife, Batman and Robin must find her before the operation can begin.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Batman: Mask of the Phantasm",
@@ -13922,7 +14560,10 @@
     "cast": "",
     "synopsis": "Andrea Beaumont leaves her father to return to Gotham, rekindling an old romance with Bruce Wayne. At the same time, a mysterious figure begins to hunt down Gotham's criminals, wrongly implicating Batman in the murders. Now on the run from the law, Batman must find and stop the culprit, while also navigating his relationship with Andrea.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Behind Enemy Lines",
@@ -13937,7 +14578,10 @@
     "cast": "",
     "synopsis": "While flying a routine reconnaissance mission over Bosnia, fighter pilot Lt. Chris Burnett photographs something he wasn't supposed to see and gets shot down behind enemy lines, where he must outrun an army led by a ruthless Serbian general. With time running out and a deadly tracker on his trail, Burnett's commanding officer, Admiral Reigart, decides to risk his career and launch a renegade rescue mission to save his life.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Being John Malkovich",
@@ -13952,7 +14596,10 @@
     "cast": "",
     "synopsis": "One day at work, unsuccessful puppeteer Craig finds a portal into the head of actor John Malkovich. The portal soon becomes a passion for anybody who enters its mad and controlling world of overtaking another human body.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Big Hero 6",
@@ -13967,7 +14614,10 @@
     "cast": "",
     "synopsis": "A special bond develops between plus-sized inflatable robot Baymax, and prodigy Hiro Hamada, who team up with a group of friends to form a band of high-tech heroes.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Big Trouble in Little China",
@@ -13982,7 +14632,10 @@
     "cast": "",
     "synopsis": "Truck driver Jack Burton gets embroiled in a supernatural battle when his best friend Wang Chi's green-eyed fiancée is kidnapped by henchmen of the sorcerer Lo Pan, who must marry a girl with green eyes in order to return to the human realm.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Bill & Ted Face the Music",
@@ -13997,7 +14650,9 @@
     "cast": "",
     "synopsis": "Yet to fulfill their rock and roll destiny, the stakes are higher than ever for the now middle-aged Bill and Ted who set out on a new adventure when a visitor from the future warns them that only their song can save life as we know it.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Bill & Ted's Bogus Journey",
@@ -14012,7 +14667,9 @@
     "cast": "",
     "synopsis": "Amiable slackers Bill and Ted are once again roped into a fantastical adventure when De Nomolos, a villain from the future, sends evil robot duplicates of the two lads to terminate and replace them. The robot doubles actually succeed in killing Bill and Ted, but the two are determined to escape the afterlife, challenging the Grim Reaper to a series of games in order to return to the land of the living.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Bill & Ted's Excellent Adventure",
@@ -14027,7 +14684,9 @@
     "cast": "",
     "synopsis": "Two rock-'n-rolling teens, on the verge of failing their class, set out on a quest to make the ultimate school history report after being presented with a time machine.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Blade Runner 2049",
@@ -14042,7 +14701,10 @@
     "cast": "",
     "synopsis": "Thirty years after the events of the first film, a new blade runner, LAPD Officer K, unearths a long-buried secret that has the potential to plunge what's left of society into chaos. K's discovery leads him on a quest to find Rick Deckard, a former LAPD blade runner who has been missing for 30 years.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Boogie Nights",
@@ -14057,7 +14719,10 @@
     "cast": "",
     "synopsis": "In 1977, an idealistic porn producer and his promising protege try to catch up with the end of an era before their never-ending party collides with cold, hard reality.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Catch Me If You Can",
@@ -14072,7 +14737,9 @@
     "cast": "",
     "synopsis": "A true story about Frank Abagnale Jr. who, before his 19th birthday, successfully conned millions of dollars worth of checks as a Pan Am pilot, doctor, and legal prosecutor. An FBI agent makes it his mission to put him behind bars. But Frank not only eludes capture, he revels in the pursuit.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Chicago",
@@ -14087,7 +14754,9 @@
     "cast": "",
     "synopsis": "Murderesses Velma Kelly and Roxie Hart find themselves on death row together and fight for the fame that will keep them from the gallows in 1920s Chicago.",
     "physical": [],
-    "digital": "Prime"
+    "digital": [
+      "Prime"
+    ]
   },
   {
     "title": "Christmas in Connecticut",
@@ -14102,7 +14771,10 @@
     "cast": "",
     "synopsis": "While recovering in a hospital, war hero Jefferson Jones grows familiar with the \"Diary of a Housewife\" column written by Elizabeth Lane. Jeff's nurse arranges with Elizabeth's publisher, Alexander Yardley, for Jeff to spend the holiday at Elizabeth's bucolic Connecticut farm with her husband and child. But the column is a sham, so Elizabeth and her editor, Dudley Beecham, in fear of losing their jobs, hasten to set up the single, childless and entirely  nondomestic Elizabeth on a country farm.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "christmas"
     ]
@@ -14120,7 +14792,9 @@
     "cast": "",
     "synopsis": "After narrowly surviving a massive heart attack, Randal enlists his old friend Dante to help him make a movie immortalizing their youthful days at the little convenience store that started it all.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Clue",
@@ -14135,7 +14809,9 @@
     "cast": "",
     "synopsis": "Clue finds six colorful dinner guests gathered at the mansion of their host, Mr. Boddy -- who turns up dead after his secret is exposed: He was blackmailing all of them. With the killer among them, the guests and Boddy's chatty butler must suss out the culprit before the body count rises.",
     "physical": [],
-    "digital": "Prime"
+    "digital": [
+      "Prime"
+    ]
   },
   {
     "title": "Cold Pursuit",
@@ -14150,7 +14826,10 @@
     "cast": "",
     "synopsis": "The quiet family life of Nels Coxman, a snowplow driver, is upended after his son's murder. Nels begins a vengeful hunt for Viking, the drug lord he holds responsible for the killing, eliminating Viking's associates one by one. As Nels draws closer to Viking, his actions bring even more unexpected and violent consequences, as he proves that revenge is all in the execution.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Conan the Barbarian",
@@ -14165,7 +14844,10 @@
     "cast": "",
     "synopsis": "A horde of rampaging warriors massacre the parents of young Conan and enslave the young child for years on The Wheel of Pain. As the sole survivor of the childhood massacre, Conan is released from slavery and taught the ancient arts of fighting. Transforming himself into a killing machine, Conan travels into the wilderness to seek vengeance on Thulsa Doom, the man responsible for killing his family. In the wilderness, Conan takes up with the thieves Valeria and Subotai. The group comes upon King Osric, who wants the trio of warriors to help rescue his daughter who has joined Doom in the hills.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Cowboys & Aliens",
@@ -14180,7 +14862,10 @@
     "cast": "",
     "synopsis": "A stranger stumbles into the desert town of Absolution with no memory of his past and a futuristic shackle around his wrist. With the help of mysterious beauty Ella and the iron-fisted Colonel Dolarhyde, he finds himself leading an unlikely posse of cowboys, outlaws, and Apache warriors against a common enemy from beyond this world in an epic showdown for survival.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Crazy, Stupid, Love.",
@@ -14195,7 +14880,10 @@
     "cast": "",
     "synopsis": "Cal Weaver is living the American dream. He has a good job, a beautiful house, great children and a beautiful wife, named Emily. Cal's seemingly perfect life unravels, however, when he learns that Emily has been unfaithful and wants a divorce. Over 40 and suddenly single, Cal is adrift in the fickle world of dating. Enter, Jacob Palmer, a self-styled player who takes Cal under his wing and teaches him how to be a hit with the ladies.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Daylight",
@@ -14210,7 +14898,10 @@
     "cast": "",
     "synopsis": "A group of armed robbers fleeing the police head for the New Jersey Tunnel and run right into trucks transporting toxic waste. The spectacular explosion that follows results in both ends of the tunnel collapsing and the handful of people who survived the explosion are now in peril. Kit Latura is the only man with the skill and knowledge to lead the band of survivors out of the tunnel before the structure collapses.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Dear Santa",
@@ -14225,7 +14916,9 @@
     "cast": "",
     "synopsis": "Likeable 6th grader Liam writes to Santa asking him to prove that he's real. But Liam is dyslexic and accidentally sends his letter to Satan instead, who shows up at Liam's house, excited to have his first fanboy letter and wanting a little of Liam's soul.",
     "physical": [],
-    "digital": "Fandango",
+    "digital": [
+      "Fandango"
+    ],
     "categories": [
       "christmas"
     ]
@@ -14243,7 +14936,10 @@
     "cast": "",
     "synopsis": "Madeline is married to Ernest, who was once her arch-rival Helen's fiancé. After recovering from a mental breakdown, Helen vows to kill Madeline and steal back Ernest. Unfortunately for everyone, the introduction of a magic potion causes things to be a great deal more complicated than a mere murder plot.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Death Race 2",
@@ -14258,7 +14954,10 @@
     "cast": "",
     "synopsis": "In the world's most dangerous prison, a new game is born: Death Race. The rules of this adrenaline-fueled blood sport are simple, drive or die. When repentant convict Carl Lucas discovers there's a price on his head, his only hope is to survive a twisted race against an army of hardened criminals and tricked-out cars.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Dogma",
@@ -14273,7 +14972,10 @@
     "cast": "",
     "synopsis": "An abortion clinic worker with a special heritage is called upon to save the existence of humanity from being negated by two renegade angels trying to exploit a loophole and re-enter Heaven.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Dungeons & Dragons: Honor Among Thieves",
@@ -14288,7 +14990,9 @@
     "cast": "",
     "synopsis": "A charming thief and a band of unlikely adventurers undertake an epic heist to retrieve a lost relic, but things go dangerously awry when they run afoul of the wrong people.",
     "physical": [],
-    "digital": "Prime"
+    "digital": [
+      "Prime"
+    ]
   },
   {
     "title": "Easy A",
@@ -14303,7 +15007,10 @@
     "cast": "",
     "synopsis": "Olive, an average high school student, sees her below-the-radar existence turn around overnight once she decides to use the school's gossip grapevine to advance her social standing. Now her classmates are turning against her and the school board is becoming concerned, including her favorite teacher and the distracted guidance counselor. With the support of her hilariously idiosyncratic parents and a little help from a long-time crush, Olive attempts to take on her notorious new identity and crush the rumor mill once and for all.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Eraser",
@@ -14318,7 +15025,10 @@
     "cast": "",
     "synopsis": "John \"The Eraser\" Kruger is the top gun in the US Marshall Witness Protection Program; he protects witnesses by erasing their pasts. His latest assignment is whistle-blower Dr. Lee Cullen, who has evidence that her employer, a major arms corporation, is entangled in a conspiracy involving a high-tech railgun, but there is danger lurking closer to home for Kruger, from within his own department.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Escape Plan",
@@ -14333,7 +15043,10 @@
     "cast": "",
     "synopsis": "Ray Breslin is the world's foremost authority on structural security. After analyzing every high security prison and learning a vast array of survival skills so he can design escape-proof prisons, his skills are put to the test. He's framed and incarcerated in a master prison he designed himself. He needs to escape and find the person who put him behind bars.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Eyes Wide Shut",
@@ -14348,7 +15061,10 @@
     "cast": "",
     "synopsis": "After Dr. Bill Harford's wife, Alice, admits to having sexual fantasies about a man she met, Bill becomes obsessed with having a sexual encounter. He discovers an underground sexual group and attends one of their meetings -- and quickly discovers that he is in over his head.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Family Plot",
@@ -14363,7 +15079,10 @@
     "cast": "",
     "synopsis": "Spiritualist Blanche Tyler and her cab-driving boyfriend encounter a pair of serial kidnappers while trailing a missing heir in California.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Fantastic Beasts and Where to Find Them",
@@ -14378,7 +15097,10 @@
     "cast": "",
     "synopsis": "In 1926, Newt Scamander arrives at the Magical Congress of the United States of America with a magically expanded briefcase, which houses a number of dangerous creatures and their habitats. When the creatures escape from the briefcase, it sends the American wizarding authorities after Newt, and threatens to strain even further the state of magical and non-magical relations.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Fantastic Beasts: The Crimes of Grindelwald",
@@ -14393,7 +15115,10 @@
     "cast": "",
     "synopsis": "Gellert Grindelwald has escaped imprisonment and has begun gathering followers to his cause—elevating wizards above all non-magical beings. The only one capable of putting a stop to him is the wizard he once called his closest friend, Albus Dumbledore. However, Dumbledore will need to seek help from the wizard who had thwarted Grindelwald once before, his former student Newt Scamander, who agrees to help, unaware of the dangers that lie ahead. Lines are drawn as love and loyalty are tested, even among the truest friends and family, in an increasingly divided wizarding world.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Fast & Furious Presents: Hobbs & Shaw",
@@ -14408,7 +15133,10 @@
     "cast": "",
     "synopsis": "Ever since US Diplomatic Security Service Agent Hobbs and lawless outcast Shaw first faced off, they just have traded smack talk and body blows. But when cyber-genetically enhanced anarchist Brixton's ruthless actions threaten the future of humanity, they join forces to defeat him.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Father Goose",
@@ -14423,7 +15151,9 @@
     "cast": "",
     "synopsis": "During World War II, South Sea beachcomber Walter Eckland is persuaded to spy on planes passing over his island. He gets more than he bargained for as schoolteacher Catherine Frenau arrives on the run from the Japanese with her pupils in tow!",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Final Destination 3",
@@ -14438,7 +15168,10 @@
     "cast": "",
     "synopsis": "High school senior Wendy's premonition of a deadly rollercoaster ride saves her life and a lucky few, but not from death itself — which seeks out those who escaped their fate.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Final Destination 5",
@@ -14453,7 +15186,10 @@
     "cast": "",
     "synopsis": "Death is just as omnipresent as ever, and is unleashed after one man’s premonition saves a group of coworkers from a terrifying suspension bridge collapse. But this group of unsuspecting souls was never supposed to survive, and, in a terrifying race against time, the ill-fated group frantically tries to discover a way to escape Death’s sinister agenda.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "For Love of the Game",
@@ -14468,7 +15204,10 @@
     "cast": "",
     "synopsis": "A baseball legend almost finished with his distinguished career at the age of forty has one last chance to prove who he is, what he is capable of, and win the heart of the woman he has loved for the past four years.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "baseball"
     ]
@@ -14486,7 +15225,10 @@
     "cast": "",
     "synopsis": "Dylan is done with relationships. Jamie decides to stop buying into the Hollywood clichés of true love. When the two become friends they decide to try something new and take advantage of their mutual attraction - but without any emotional attachment.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "christmas"
     ]
@@ -14504,7 +15246,10 @@
     "cast": "",
     "synopsis": "A pragmatic U.S. Marine observes the dehumanizing effects the U.S.-Vietnam War has on his fellow recruits from their brutal boot camp training to the bloody street fighting in Hue.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Ghost",
@@ -14519,7 +15264,9 @@
     "cast": "",
     "synopsis": "After a young man is murdered, his spirit stays behind to warn his lover of impending danger, with the help of a reluctant psychic.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Ghostbusters: Afterlife",
@@ -14534,7 +15281,10 @@
     "cast": "",
     "synopsis": "When single mom Callie and her two kids Trevor and Phoebe arrive in a small Oklahoma town, they begin to discover their connection to the original Ghostbusters and the secret legacy their grandfather left behind.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Gladiator II",
@@ -14549,7 +15299,9 @@
     "cast": "",
     "synopsis": "Years after witnessing the death of the revered hero Maximus at the hands of his uncle, Lucius is forced to enter the Colosseum after his home is conquered by the tyrannical Emperors who now lead Rome with an iron fist. With rage in his heart and the future of the Empire at stake, Lucius must look to his past to find strength and honor to return the glory of Rome to its people.",
     "physical": [],
-    "digital": "Prime"
+    "digital": [
+      "Prime"
+    ]
   },
   {
     "title": "Groundhog Day",
@@ -14564,7 +15316,10 @@
     "cast": "",
     "synopsis": "A cynical TV weatherman, along with his idealistic producer and his sardonic cameraman, is sent to report on Groundhog Day in the small town of Punxsutawney, where he finds himself repeating the same day over and over.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Haul Out the Holly",
@@ -14579,7 +15334,9 @@
     "cast": "",
     "synopsis": "Emily arrives home, hoping to visit her parents, only to discover that they are leaving on a trip of their own. As she stays at their house for the holidays, their HOA is determined to get Emily to participate in the neighborhood’s many Christmas festivities.",
     "physical": [],
-    "digital": "Prime",
+    "digital": [
+      "Prime"
+    ],
     "categories": [
       "christmas"
     ]
@@ -14597,7 +15354,9 @@
     "cast": "",
     "synopsis": "As the holidays approach, Emily and Jared are looking forward to celebrating the holidays together again, this time as a couple. Emily, now embracing Evergreen Lane’s uniquely festive spirit, is ready to work with Jared, Ned, Mary Louise and Pamela to make this year’s Christmas celebrations the best yet – even if being the HOA president’s girlfriend doesn’t stop those dreaded decorating citations. When a house on the block goes up for sale, it causes quite a stir with residents.",
     "physical": [],
-    "digital": "Prime",
+    "digital": [
+      "Prime"
+    ],
     "categories": [
       "christmas"
     ]
@@ -14615,7 +15374,10 @@
     "cast": "",
     "synopsis": "An uproarious version of history that proves nothing is sacred – not even the Roman Empire, the French Revolution and the Spanish Inquisition.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Home for the Holidays",
@@ -14630,7 +15392,9 @@
     "cast": "",
     "synopsis": "After losing her job, making out with her soon-to-be former boss, and finding out that her daughter plans to spend Thanksgiving with her boyfriend, Claudia Larson faces spending the holiday with her unhinged family.",
     "physical": [],
-    "digital": "Fandango",
+    "digital": [
+      "Fandango"
+    ],
     "categories": [
       "christmas"
     ]
@@ -14648,7 +15412,10 @@
     "cast": "",
     "synopsis": "The boy who wasn't supposed to grow up—Peter Pan—does just that, becoming a soulless corporate lawyer whose workaholism could cost him his wife and kids. During his trip to see Granny Wendy in London, the vengeful Capt. Hook kidnaps Peter's kids and forces Peter to return to Neverland.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Houseboat",
@@ -14663,7 +15430,9 @@
     "cast": "",
     "synopsis": "An Italian socialite on the run signs on as housekeeper for a widower with three children.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "How to Train Your Dragon",
@@ -14678,7 +15447,10 @@
     "cast": "",
     "synopsis": "On the rugged isle of Berk, where Vikings and dragons have been bitter enemies for generations, Hiccup stands apart, defying centuries of tradition when he befriends Toothless, a feared Night Fury dragon. Their unlikely bond reveals the true nature of dragons, challenging the very foundations of Viking society.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "How to Train Your Dragon 2",
@@ -14693,7 +15465,10 @@
     "cast": "",
     "synopsis": "Five years after uniting the dragons and Vikings of Berk, Hiccup and Toothless soar beyond their homeland, charting the vast unknown. During one of their adventures, the pair discover a secret cave that houses hundreds of wild dragons -- and a mysterious dragon rider with a startling connection to Hiccup. And as the ruthless dragon conqueror Drago Bludvist rises to seize control of both dragons and people alike, Hiccup must step into his role as a true leader and, alongside his friends and Toothless, protect Berk from a devastating war.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Idiocracy",
@@ -14708,7 +15483,10 @@
     "cast": "",
     "synopsis": "To test its top-secret Human Hibernation Project, the Pentagon picks the most average European-Americans it can find - an Army private and a prostitute - and sends them to the year 2505 after a series of freak events. But when they arrive, they find a civilization so dumbed-down that they're the smartest people around.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "In the Grey",
@@ -14723,7 +15501,10 @@
     "cast": "",
     "synopsis": "A covert team of elite operatives are living in the shadows. When a ruthless despot steals a billion-dollar fortune, they're sent to take it back—an impossible heist that erupts into a deadly game of strategy, deception and survival.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Indian Summer",
@@ -14738,7 +15519,10 @@
     "cast": "",
     "synopsis": "An adaptation of F. Scott Fitzgerald's \"Bernice Bobs Her Hair\" which is set in a small Czech town where life for two teenage cousins revolves around evening alfresco dances. The tale involves a rivalry for male attention between Klara and Maria, both spending summer at their grandma's house.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Indiscreet",
@@ -14753,7 +15537,9 @@
     "cast": "",
     "synopsis": "Anna Kalman is an accomplished actress who has given up hope of finding the man of her dreams. While talking about this subject with her sister, in walks Philip Adams and she realizes that this is the charming, smart, and handsome man she has been waiting for.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Is This Thing On?",
@@ -14768,7 +15554,10 @@
     "cast": "",
     "synopsis": "As their marriage quietly unravels, Alex faces middle age and an impending divorce, seeking new purpose in the New York comedy scene while Tess confronts the sacrifices she made for their family—forcing them to navigate co-parenting, identity, and whether love can take a new form.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "It Happens Every Spring",
@@ -14783,7 +15572,10 @@
     "cast": "",
     "synopsis": "A scientist discovers a formula that makes a baseball which is repelled by wood. He promptly sets out to exploit his discovery.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "baseball"
     ]
@@ -14801,7 +15593,10 @@
     "cast": "",
     "synopsis": "The most dangerous former operative of the CIA is drawn out of hiding to uncover hidden truths about his past.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Just One of the Guys",
@@ -14816,7 +15611,10 @@
     "cast": "",
     "synopsis": "When Terry Griffith loses her high school's writing competition, she's convinced that it's because she's a girl. So Terry decides to change high schools and pose as a boy to prove her point. Her brother, Buddy, helps her pass as a guy so well that she is soon making friends with the boys at school, including the attractive Rick, who becomes her new best friend. But her gender-swapping makes things difficult when she falls in love with him.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Kill Bill: The Whole Bloody Affair",
@@ -14831,7 +15629,9 @@
     "cast": "",
     "synopsis": "A former assassin, known simply as The Bride, wakes from a coma four years after her jealous ex-lover Bill attempts to murder her on her wedding day. Fueled by an insatiable desire for revenge, she vows to get even with every person who contributed to the loss of her unborn child, her entire wedding party, and four years of her life.  After devising a hit list, The Bride sets off on her quest, enduring unspeakable injury and unscrupulous enemies.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Natural Born Killers",
@@ -14846,7 +15646,10 @@
     "cast": "",
     "synopsis": "Two victims of traumatized childhoods become lovers and serial murderers irresponsibly glorified by the mass media.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Knives Out",
@@ -14861,7 +15664,10 @@
     "cast": "",
     "synopsis": "When renowned crime novelist Harlan Thrombey is found dead at his estate just after his 85th birthday, the inquisitive and debonair Detective Benoit Blanc is mysteriously enlisted to investigate. From Harlan's dysfunctional family to his devoted staff, Blanc sifts through a web of red herrings and self-serving lies to uncover the truth behind Harlan's untimely death.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Kuffs",
@@ -14876,7 +15682,10 @@
     "cast": "",
     "synopsis": "George Kuffs didn't finish high-school, just lost his job, and his college-age girlfriend is pregnant. To top it off, George's brother Brad is killed and George inherits Brad's \"patrol special\" privatized police district and all the problems that come with it.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Kung Fu Panda",
@@ -14891,7 +15700,10 @@
     "cast": "",
     "synopsis": "Chosen by prophecy but doubted by all, Po is an unlikely choice for the mystical title of the Dragon Warrior—a clumsy panda thrust into the world of kung fu as a deadly enemy threatens the Valley of Peace. Under reluctant guidance by Master Shifu and the Furious Five, Po must embrace who he is to unlock the power that no scroll can teach.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "La La Land",
@@ -14906,7 +15718,10 @@
     "cast": "",
     "synopsis": "Mia, an aspiring actress, serves lattes to movie stars in between auditions and Sebastian, a jazz musician, scrapes by playing cocktail party gigs in dingy bars, but as success mounts they are faced with decisions that begin to fray the fragile fabric of their love affair, and the dreams they worked so hard to maintain in each other threaten to rip them apart.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Lean On Me",
@@ -14921,7 +15736,10 @@
     "cast": "",
     "synopsis": "When principal Joe Clark takes over decaying Eastside High School, he's faced with students wearing gang colors and graffiti-covered walls. Determined to do anything he must to turn the school around, he expels suspected drug dealers, padlocks doors and demands effort and results from students, staff and parents. Autocratic to a fault, this real-life educator put it all on the line.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Little Big League",
@@ -14936,7 +15754,10 @@
     "cast": "",
     "synopsis": "When the owner of the Minnesota Twins passes away, he bequeaths the team to his preteen grandson. The newly minted head honcho quickly appoints himself manager, causing unrest in an organization that struggles to take orders from a 12-year-old.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Little Shop of Horrors",
@@ -14951,7 +15772,10 @@
     "cast": "",
     "synopsis": "Seymour Krelborn is a nerdy orphan working at Mushnik's; a flower shop in urban Skid Row. He harbors a crush on fellow co-worker, Audrey Fulquard, and is berated by Mr. Mushnik daily. One day, Seymour finds a very mysterious unidentified plant which he calls Audrey II. The plant seems to have a craving for blood and soon begins to sing for it’s supper.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Little Women",
@@ -14966,7 +15790,10 @@
     "cast": "",
     "synopsis": "Four sisters come of age in America in the aftermath of the Civil War.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Lolita",
@@ -14981,7 +15808,10 @@
     "cast": "",
     "synopsis": "Humbert Humbert is a middle-aged British novelist who is both appalled by and attracted to the vulgarity of American culture. When he comes to stay at the boarding house run by Charlotte Haze, he soon becomes obsessed with Lolita, the woman's teenaged daughter.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "London Has Fallen",
@@ -14996,7 +15826,10 @@
     "cast": "",
     "synopsis": "In London for the Prime Minister's funeral, Mike Banning discovers a plot to assassinate all the attending world leaders.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "MacGruber",
@@ -15011,7 +15844,10 @@
     "cast": "",
     "synopsis": "Ex-special operative MacGruber is called back into action to take down his archenemy, Dieter Von Cunth, who's in possession of a nuclear warhead and bent on destroying Washington, DC.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Mad Max: Fury Road",
@@ -15026,7 +15862,10 @@
     "cast": "",
     "synopsis": "An apocalyptic story set in the furthest reaches of our planet, in a stark desert landscape where humanity is broken, and most everyone is crazed fighting for the necessities of life. Within this world exist two rebels on the run who just might be able to restore order.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Magnolia",
@@ -15041,7 +15880,11 @@
     "cast": "",
     "synopsis": "On one random day in the San Fernando Valley, a dying father, a young wife, a male caretaker, a famous lost son, a police officer in love, a boy genius, an ex-boy genius, a game show host and an estranged daughter will each become part of a dazzling multiplicity of plots, but one story.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere | Prime"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere",
+      "Prime"
+    ]
   },
   {
     "title": "Mary Poppins",
@@ -15056,7 +15899,10 @@
     "cast": "",
     "synopsis": "In turn of the century London, a magical nanny employs music and adventure to help two neglected children become closer to their father.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Maze Runner: The Death Cure",
@@ -15071,7 +15917,10 @@
     "cast": "",
     "synopsis": "Thomas leads his group of escaped Gladers on their final and most dangerous mission yet. To save their friends, they must break into the legendary Last City, a WCKD-controlled labyrinth that may turn out to be the deadliest maze of all. Anyone who makes it out alive will get answers to the questions the Gladers have been asking since they first arrived in the maze.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Maze Runner: The Scorch Trials",
@@ -15086,7 +15935,10 @@
     "cast": "",
     "synopsis": "Thomas and his fellow Gladers face their greatest challenge yet: searching for clues about the mysterious and powerful organization known as WCKD. Their journey takes them to the Scorch, a desolate landscape filled with unimaginable obstacles. Teaming up with resistance fighters, the Gladers take on WCKD’s vastly superior forces and uncover its shocking plans for them all.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Mechanic: Resurrection",
@@ -15101,7 +15953,9 @@
     "cast": "",
     "synopsis": "Arthur Bishop thought he had put his murderous past behind him when his most formidable foe kidnaps the love of his life. Now he is forced to travel the globe to complete three impossible assassinations, and do what he does best, make them look like accidents.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Mickey's Magical Christmas: Snowed in at the House of Mouse",
@@ -15116,7 +15970,10 @@
     "cast": "",
     "synopsis": "When a huge snowstorm leaves everyone stranded, Mickey and all of his guests at the House of Mouse, including Pooh, Belle, Snow White, Cinderella, Ariel and many more of his old and new friends, break out the cookies and hot chocolate to help Donald mend his tattered Christmas spirit.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "christmas"
     ]
@@ -15134,7 +15991,10 @@
     "cast": "",
     "synopsis": "A bounty hunter pursues a former Mafia accountant who is also being chased by a rival bounty hunter, the F.B.I., and his old mob boss after jumping bail.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Miracle on 34th Street",
@@ -15149,7 +16009,10 @@
     "cast": "",
     "synopsis": "Six-year-old Susan Walker has doubts about childhood's most enduring miracle—Santa Claus. Her mother told her the secret about Santa a long time ago, but, after meeting a special department store Santa who's convinced he's the real thing, Susan is given the most precious gift of all—something to believe in.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "christmas"
     ]
@@ -15167,7 +16030,10 @@
     "cast": "",
     "synopsis": "Genius Belgian detective Hercule Poirot investigates the murder of an American tycoon aboard the Orient Express train.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Nerve",
@@ -15182,7 +16048,10 @@
     "cast": "",
     "synopsis": "Industrious high school senior Vee Delmonico has had it with living life on the sidelines. When pressured by friends to join the popular online game Nerve, Vee decides to sign up for just one dare in what seems like harmless fun. But as she finds herself caught up in the thrill of the adrenaline-fueled competition partnered with a mysterious stranger, the game begins to take a sinister turn with increasingly dangerous acts, leading her into a high stakes finale that will determine her entire future.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "The Social Network",
@@ -15197,7 +16066,10 @@
     "cast": "",
     "synopsis": "In 2003, Harvard undergrad and computer programmer Mark Zuckerberg begins work on a new concept that eventually turns into the global social network known as Facebook. Six years later, Mark is one of the youngest billionaires ever, but his unprecedented success leads to both personal and legal complications when he ends up on the receiving end of two lawsuits, one involving his former friend.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Never Been Kissed",
@@ -15212,7 +16084,10 @@
     "cast": "",
     "synopsis": "Josie Geller, a baby-faced junior copywriter at the Chicago Sun-Times, must pose as a student at her former high school to research contemporary teenage culture. With the help of her brother, Rob, Josie infiltrates the inner circle of the most popular clique on campus. But she hits a major snag in her investigation -- not to mention her own failed love life -- when she falls for her dreamy English teacher, Sam Coulson.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "No Hard Feelings",
@@ -15227,7 +16102,10 @@
     "cast": "",
     "synopsis": "On the brink of losing her childhood home, Maddie discovers an intriguing job listing: wealthy helicopter parents looking for someone to “date” their introverted 19-year-old son, Percy, before he leaves for college. To her surprise, Maddie soon discovers the awkward Percy is no sure thing.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Operation Fortune: Ruse de Guerre",
@@ -15242,7 +16120,10 @@
     "cast": "",
     "synopsis": "Special agent Orson Fortune and his team of operatives recruit one of Hollywood's biggest movie stars to help them on an undercover mission when the sale of a deadly new weapons technology threatens to disrupt the world order.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "christmas"
     ]
@@ -15260,7 +16141,9 @@
     "cast": "",
     "synopsis": "A World War II submarine commander finds himself stuck with a damaged sub, a con-man executive officer, and a group of army nurses.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Out of Sight",
@@ -15275,7 +16158,10 @@
     "cast": "",
     "synopsis": "Meet Jack Foley, a smooth criminal who bends the law and is determined to make one last heist. Karen Sisco is a federal marshal who chooses all the right moves … and all the wrong guys. Now they're willing to risk it all to find out if there's more between them than just the law.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Paranormal Activity",
@@ -15290,7 +16176,9 @@
     "cast": "",
     "synopsis": "After a young, middle-class couple moves into what seems like a typical suburban house, they become increasingly disturbed by a presence that may or may not be demonic, but is certainly the most active in the middle of the night.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Passenger 57",
@@ -15305,7 +16193,10 @@
     "cast": "",
     "synopsis": "Airline security specialist John Cutter, finally returning to the job after his wife's death, finds himself stuck on a flight being hijacked by notorious terrorist Charles Rane. Unfortunately for the terrorists, they're also stuck with him.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Plane",
@@ -15320,7 +16211,10 @@
     "cast": "",
     "synopsis": "After a heroic job of successfully landing his storm-damaged aircraft in a war zone, a fearless pilot finds himself between the agendas of multiple militias planning to take the plane and its passengers hostage.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Psycho",
@@ -15335,7 +16229,9 @@
     "cast": "",
     "synopsis": "When larcenous real estate clerk Marion Crane goes on the lam with a wad of cash and hopes of starting a new life, she ends up at the notorious Bates Motel, where manager Norman Bates cares for his housebound mother.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Puffs",
@@ -15350,7 +16246,9 @@
     "cast": "",
     "synopsis": "Ella and Edik, siblings of a traditional Bukhari family, arrive early on holiday to their childhood home. There they find their homophobic father - dead and dressed in women's clothes.",
     "physical": [],
-    "digital": "Prime",
+    "digital": [
+      "Prime"
+    ],
     "categories": [
       "christmas"
     ]
@@ -15368,7 +16266,9 @@
     "cast": "",
     "synopsis": "When Rango, a lost family pet, accidentally winds up in the gritty, gun-slinging Western town of Dirt, the theater-loving lizard suddenly finds himself the newly appointed sheriff. Welcomed as the last hope the town has been waiting for, Rango is forced to play his new role to the hilt and uncover the truth behind a looming water crisis—before his act catches up with him.",
     "physical": [],
-    "digital": "Prime"
+    "digital": [
+      "Prime"
+    ]
   },
   {
     "title": "Ready Player One",
@@ -15383,7 +16283,10 @@
     "cast": "",
     "synopsis": "When the creator of a popular video game system dies, a virtual contest is created to compete for his fortune.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Rocky",
@@ -15398,7 +16301,9 @@
     "cast": "",
     "synopsis": "Rocky Balboa is a Philadelphia club fighter who seems to be going nowhere. But when a stroke of fate puts him in the ring with a world heavyweight champion, Rocky knows that it's his one shot at the big time — a once-in-a-lifetime opportunity to go the distance and come out a winner!",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Rocky II",
@@ -15413,7 +16318,9 @@
     "cast": "",
     "synopsis": "After Rocky goes the distance with champ Apollo Creed, both try to put the fight behind them and move on. Rocky settles down with Adrian but can't put his life together outside the ring, while Creed seeks a rematch to restore his reputation. Soon enough, the \"Master of Disaster\" and the \"Italian Stallion\" are set on a collision course for a climactic battle that is brutal and unforgettable.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Rocky III",
@@ -15428,7 +16335,9 @@
     "cast": "",
     "synopsis": "Following Rocky Balboa's intense battle with his most powerful adversary yet – the ferocious Clubber Lang – Rocky joins forces with former rival Apollo Creed in an effort to get back his fighting spirit.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Rocky IV",
@@ -15443,7 +16352,9 @@
     "cast": "",
     "synopsis": "Rocky Balboa holds the world heavyweight championship, but a new challenger has stepped forward: Drago, a six-foot-four, 261-pound fighter who has the backing of the Soviet Union. This time, Rocky's training regimen takes him to Siberia, where he prepares for a globally televised match in the heart of Moscow. But nothing can truly prepare him for what he's about to face – a fight to the finish, in which he must defend not only himself, but also the honor of his country!",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Rocky V",
@@ -15458,7 +16369,9 @@
     "cast": "",
     "synopsis": "A lifetime of taking shots has ended Rocky’s career, and a crooked accountant has left him broke. Inspired by the memory of his trainer, however, Rocky finds glory in training and takes on an up-and-coming boxer.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Death Race 2050",
@@ -15473,7 +16386,10 @@
     "cast": "",
     "synopsis": "The year 2050 the planet has become overpopulated, to help control population the government develops a race. The Death Race. Annually competitors race across the country scoring points for killing people with their vehicles.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Schindler's List",
@@ -15488,7 +16404,10 @@
     "cast": "",
     "synopsis": "The true story of how businessman Oskar Schindler saved over a thousand Jewish lives from the Nazis while they worked as slaves in his factory during World War II.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Shelter",
@@ -15503,7 +16422,10 @@
     "cast": "",
     "synopsis": "A man living in self-imposed exile on a remote island rescues a young girl from a violent storm, setting off a chain of events that forces him out of seclusion to protect her from enemies tied to his past.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Sneakers",
@@ -15518,7 +16440,10 @@
     "cast": "",
     "synopsis": "When shadowy U.S. intelligence agents blackmail a reformed computer hacker and his eccentric team of security experts into stealing a code-breaking 'black box' from a Soviet-funded genius, they uncover a bigger conspiracy. Now, he and his 'sneakers' must save themselves and the world economy by retrieving the box from their blackmailers.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "So I Married an Axe Murderer",
@@ -15533,7 +16458,10 @@
     "cast": "",
     "synopsis": "Just after a bad breakup, Charlie MacKenzie falls for lovely butcher Harriet Michaels and introduces her to his parents. But, as voracious consumers of sensational tabloids, his parents soon come to suspect that Harriet is actually a notorious serial killer -- \"Mrs. X\" -- wanted in connection with a string of bizarre honeymoon killings. Thinking his parents foolish, Charlie proposes to Harriet. But while on his honeymoon with her, he begins to fear they were right.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Son in Law",
@@ -15548,7 +16476,10 @@
     "cast": "",
     "synopsis": "Country girl Rebecca has spent most of her life on a farm in South Dakota, and, when she goes away to college in Los Angeles, Rebecca immediately feels out of place in the daunting urban setting. She is befriended by a savvy party animal named Crawl, who convinces the ambivalent Rebecca to stay in the city. When Thanksgiving break rolls around, Rebecca, no longer an innocent farm girl, invites Crawl back to South Dakota, where he pretends to be her fiancé.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Soul Survivors",
@@ -15563,7 +16494,9 @@
     "cast": "",
     "synopsis": "A college freshman involved in a fatal car crash discovers she may not have survived after all when she becomes caught between the worlds of the living and the dead.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Spider-Man: Homecoming",
@@ -15578,7 +16511,10 @@
     "cast": "",
     "synopsis": "Following the events of Captain America: Civil War, Peter Parker, with the help of his mentor Tony Stark, tries to balance his life as an ordinary high school student in Queens, New York City, with fighting crime as his superhero alter ego Spider-Man as a new threat, the Vulture, emerges.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Spider-Man: Into the Spider-Verse",
@@ -15593,7 +16529,10 @@
     "cast": "",
     "synopsis": "Struggling to find his place in the world while juggling school and family, Brooklyn teenager Miles Morales is unexpectedly bitten by a radioactive spider and develops unfathomable powers just like the one and only Spider-Man. While wrestling with the implications of his new abilities, Miles discovers a super collider created by the madman Wilson \"Kingpin\" Fisk, causing others from across the Spider-Verse to be inadvertently transported to his dimension.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Spider-Man: No Way Home",
@@ -15608,7 +16547,10 @@
     "cast": "",
     "synopsis": "Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes of being a super-hero. When he asks for help from Doctor Strange the stakes become even more dangerous, forcing him to discover what it truly means to be Spider-Man.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Spy Game",
@@ -15623,7 +16565,10 @@
     "cast": "",
     "synopsis": "On the day of his retirement, a veteran CIA agent learns that his former protégé has been arrested in China, is sentenced to die the next morning in Beijing, and that the CIA is considering letting that happen to avoid an international scandal.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Street Fighter",
@@ -15638,7 +16583,10 @@
     "cast": "",
     "synopsis": "Colonel Guile and various other martial arts heroes fight against the tyranny of dictator M. Bison and his cohorts.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Sudden Death",
@@ -15653,7 +16601,10 @@
     "cast": "",
     "synopsis": "When a man's daughter is suddenly taken during a championship hockey game – with the captors demanding a billion dollars by game's end – he frantically sets a plan in motion to rescue her and abort an impending explosion before the final buzzer.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Sunset Boulevard",
@@ -15668,7 +16619,9 @@
     "cast": "",
     "synopsis": "A hack screenwriter writes a screenplay for a former silent film star who has faded into Hollywood obscurity.",
     "physical": [],
-    "digital": "Fandango",
+    "digital": [
+      "Fandango"
+    ],
     "categories": [
       "christmas"
     ]
@@ -15686,7 +16639,9 @@
     "cast": "",
     "synopsis": "Louise is not very popular at her highschool. Then she learns that she's descended from the witches of Salem and has inherited their powers. At first she uses them to get back at the girls and teachers who teased her and to win the heart of the handsome footballer's captain. But soon she has doubts if it's right to 'cheat' her way to popularity.",
     "physical": [],
-    "digital": "Prime"
+    "digital": [
+      "Prime"
+    ]
   },
   {
     "title": "That Touch of Mink",
@@ -15701,7 +16656,9 @@
     "cast": "",
     "synopsis": "Cathy Timberlake is en route to a job interview when a car transporting businessman Philip Shayne covers her in mud. He sends his assistant, Roger, to apologize, but upon meeting Cathy, Roger knows that she would be a suitable match for his boss. Despite their mutual attraction, Cathy and Philip want different things. Philip wants a fling, while Cathy wants a marriage. As they travel to exotic locales, their differing motivations are put to the test.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "The Addams Family",
@@ -15716,7 +16673,9 @@
     "cast": "",
     "synopsis": "The Addams family's lives begin to unravel when they face-off against a treacherous, greedy crafty reality-TV host while also preparing for their extended family to arrive for a major celebration.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "The American President",
@@ -15731,7 +16690,10 @@
     "cast": "",
     "synopsis": "Widowed U.S. president Andrew Shepherd, one of the world's most powerful men, can have anything he wants -- and what he covets most is Sydney Ellen Wade, a Washington lobbyist. But Shepherd's attempts at courting her spark wild rumors and decimate his approval ratings.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "The Conversation",
@@ -15746,7 +16708,9 @@
     "cast": "",
     "synopsis": "A paranoid, secretive surveillance expert has a crisis of conscience when he suspects that the couple he is spying on will be murdered.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "The Expendables 3",
@@ -15761,7 +16725,10 @@
     "cast": "",
     "synopsis": "Barney, Christmas and the rest of the team comes face-to-face with Conrad Stonebanks, who years ago co-founded The Expendables with Barney. Stonebanks subsequently became a ruthless arms trader and someone who Barney was forced to kill… or so he thought. Stonebanks, who eluded death once before, now is making it his mission to end The Expendables -- but Barney has other plans. Barney decides that he has to fight old blood with new blood, and brings in a new era of Expendables team members, recruiting individuals who are younger, faster and more tech-savvy. The latest mission becomes a clash of classic old-school style versus high-tech expertise in the Expendables’ most personal battle yet.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "christmas"
     ]
@@ -15779,7 +16746,10 @@
     "cast": "",
     "synopsis": "Fresh off an almost career-ending accident, stuntman Colt Seavers has to track down a missing movie star, solve a conspiracy and try to win back the love of his life while still doing his day job.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "The Final Destination",
@@ -15794,7 +16764,9 @@
     "cast": "",
     "synopsis": "A horrifying premonition saves a young man and his friends from death during a racetrack accident but terrible fates await them nonetheless.",
     "physical": [],
-    "digital": "Movies Anywhere"
+    "digital": [
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "The Fugitive",
@@ -15809,7 +16781,10 @@
     "cast": "",
     "synopsis": "Wrongfully convicted of murdering his wife and sentenced to death, Richard Kimble escapes from the law in an attempt to find the real killer and clear his name.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "The Grass Is Greener",
@@ -15824,7 +16799,9 @@
     "cast": "",
     "synopsis": "Victor and Hillary are down on their luck to the point that they allow tourists to take guided tours of their castle. But Charles Delacro, a millionaire oil tycoon, visits, and takes a liking to more than the house. Soon, Hattie Durant gets involved and they have a good old fashioned love triangle.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "The Great Outdoors",
@@ -15839,7 +16816,10 @@
     "cast": "",
     "synopsis": "It's vacation time for outdoorsy Chicago man Chet Ripley, along with his wife, Connie, and their two kids, Buck and Ben. But a serene weekend of fishing at a Wisconsin lakeside cabin gets crashed by Connie's obnoxious brother-in-law, Roman Craig, his wife, Kate, and the couple's two daughters. As the excursion wears on, the Ripleys find themselves at odds with the stuffy Craig family.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "The Hangover Part III",
@@ -15854,7 +16834,10 @@
     "cast": "",
     "synopsis": "This time, there's no wedding. No bachelor party. What could go wrong, right? But when the Wolfpack hits the road, all bets are off.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "The Housemaid",
@@ -15869,7 +16852,10 @@
     "cast": "",
     "synopsis": "Trying to escape her past, Millie Calloway accepts a job as a live-in housemaid for the wealthy Nina and Andrew Winchester. But what begins as a dream job quickly unravels into something far more dangerous—a sexy, seductive game of secrets, scandal, and power.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "The Hunger Games: The Ballad of Songbirds & Snakes",
@@ -15884,7 +16870,10 @@
     "cast": "",
     "synopsis": "64 years before he becomes the tyrannical president of Panem, Coriolanus Snow sees a chance for a change in fortunes when he mentors Lucy Gray Baird, the female tribute from District 12.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "The Italian Job",
@@ -15899,7 +16888,9 @@
     "cast": "",
     "synopsis": "Charlie Croker pulled off the crime of a lifetime. The one thing that he didn't plan on was being double-crossed. Along with a drop-dead gorgeous safecracker, Croker and his team take off to re-steal the loot and end up in a pulse-pounding, pedal-to-the-metal chase that careens up, down, above and below the streets of Los Angeles.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "The Land Before Time XII: The Great Day of the Flyers",
@@ -15914,7 +16905,10 @@
     "cast": "",
     "synopsis": "As the Great Day of the Flyers nears, the Great Valley's flying youngsters are eager to participate in the annual exhibition to show off their skills. Everyone, that is, except free-spirited pterodactyl Petrie, whose individualism causes problems when it comes to staying in formation. Enter his dinosaur pals Littlefoot, Cera, Spike and Ducky, who encourage Petrie to embrace his uniqueness.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "The Lego Ninjago Movie",
@@ -15929,7 +16923,10 @@
     "cast": "",
     "synopsis": "Six young ninjas are tasked with defending their island home of Ninjago. By night, they’re gifted warriors using their skill and awesome fleet of vehicles to fight villains and monsters. By day, they’re ordinary teens struggling against their greatest enemy....high school.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "The Man Who Invented Christmas",
@@ -15944,7 +16941,10 @@
     "cast": "",
     "synopsis": "In 1843, despite the fact that Dickens is a successful writer, the failure of his latest book puts his career at a crossroads, until the moment when, struggling with inspiration and confronting reality with his childhood memories, a new character is born in the depths of his troubled mind; an old, lonely, embittered man, so vivid, so human, that a whole world grows around him, a story so inspiring that changed the meaning of Christmas forever.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere",
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "categories": [
       "christmas"
     ]
@@ -15962,7 +16962,10 @@
     "cast": "",
     "synopsis": "It has been twenty years since Don Diego de la Vega fought Spanish oppression in Alta California as the legendary romantic hero, Zorro. Having escaped from prison he transforms troubled bandit Alejandro into his successor, in order to foil the plans of the tyrannical Don Rafael Montero who robbed him of his freedom, his wife and his precious daughter.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "The Maze Runner",
@@ -15977,7 +16980,10 @@
     "cast": "",
     "synopsis": "A teenager with no memory of his past finds himself among a group of boys living in a walled enclosure surrounded by a massive, ever-changing maze. As he struggles to adapt to their rules and society, he begins to uncover clues that may lead to escape and the truth behind their confinement.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "The Ministry of Ungentlemanly Warfare",
@@ -15992,7 +16998,10 @@
     "cast": "",
     "synopsis": "During World War II, the British Army assigns a group of competent soldiers to carry out a mission against the Nazi forces behind enemy lines... A true story about a secret British WWII organization — the Special Operations Executive. Founded by Winston Churchill, their irregular warfare against the Germans helped to change the course of the war, and gave birth to modern black operations.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "The Naked Gun",
@@ -16007,7 +17016,9 @@
     "cast": "",
     "synopsis": "Only one man has the particular set of skills... to lead Police Squad and save the world: Lt. Frank Drebin Jr. Following in his father's footsteps, he must solve a murder case to prevent Police Squad from closure.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "The Nice Guys",
@@ -16022,7 +17033,10 @@
     "cast": "",
     "synopsis": "A private eye investigates the apparent suicide of a fading porn star in 1970s Los Angeles and uncovers a conspiracy.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "The Producers",
@@ -16037,7 +17051,10 @@
     "cast": "",
     "synopsis": "A conniving Broadway producer and his meek accountant plan to profit from charming wealthy old biddies to invest in an overbudget production, and then put on a sure-fire disaster, so nobody will ask for their money back — and what's more disastrous than a tasteless musical celebrating Adolf Hitler.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "The Score",
@@ -16052,7 +17069,9 @@
     "cast": "",
     "synopsis": "An aging thief hopes to retire and live off his ill-gotten wealth when a young kid convinces him into doing one last heist.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "The Shining",
@@ -16067,7 +17086,10 @@
     "cast": "",
     "synopsis": "Jack Torrance accepts a caretaker job at the Overlook Hotel, where he, along with his wife Wendy and their son Danny, must live isolated from the rest of the world for the winter. But they aren't prepared for the madness that lurks within.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "The Siege",
@@ -16082,7 +17104,10 @@
     "cast": "",
     "synopsis": "The secret US abduction of a suspected terrorist from his Middle East homeland leads to a wave of terrorist attacks in New York.  An FBI senior agent and his team attempt to locate and decommission the enemy cells, but must also deal with an Army General gone rogue and a female CIA agent of uncertain loyalties.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "The Sound of Music",
@@ -16097,7 +17122,10 @@
     "cast": "",
     "synopsis": "In the years before World War II, a tomboyish postulant at an Austrian abbey is hired as a governess in the home of a widowed naval captain with seven children and brings a new love of life and music into the home.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "The Super Mario Bros. Movie",
@@ -16112,7 +17140,10 @@
     "cast": "",
     "synopsis": "While working underground to fix a water main, Brooklyn plumbers—and brothers—Mario and Luigi are transported down a mysterious pipe and wander into a magical new world. But when the brothers are separated, Mario embarks on an epic quest to find Luigi.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "The Unbearable Weight of Massive Talent",
@@ -16127,7 +17158,10 @@
     "cast": "",
     "synopsis": "Creatively unfulfilled and facing financial ruin, Nick Cage must accept a $1 million offer to attend the birthday of a dangerous superfan. Things take a wildly unexpected turn when Cage is recruited by a CIA operative and forced to live up to his own legend, channeling his most iconic and beloved on-screen characters in order to save himself and his loved ones.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "The War of the Roses",
@@ -16142,7 +17176,10 @@
     "cast": "",
     "synopsis": "Barbara and Oliver Rose live happily as a married couple. When Barbara starts to wonder what life would be like without Oliver and likes what she sees, the two begin a campaign to force each other to leave their house, with their divorce lawyer D'Amato caught in the middle.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "To Catch a Thief",
@@ -16157,7 +17194,9 @@
     "cast": "",
     "synopsis": "When a string of jewel robberies hits the French Riviera, suspicion falls on retired thief John “The Cat” Robie. To clear his name, he sets out to trap the copycat himself—entangling a wealthy widow and her beguiling daughter in a seductive game of pursuit, deception, and desire.",
     "physical": [],
-    "digital": "Fandango"
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Twister",
@@ -16172,7 +17211,10 @@
     "cast": "",
     "synopsis": "An unprecedented series of violent tornadoes is sweeping across Oklahoma. Tornado chasers, headed by Dr. Jo Harding, attempt to release a groundbreaking device that will allow them to track them and create a more advanced warning system. They are joined by Jo's soon to be ex-husband Bill, a former tornado chaser himself, and his girlfriend Melissa.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Twisters",
@@ -16187,7 +17229,10 @@
     "cast": "",
     "synopsis": "As storm season intensifies, the paths of former storm chaser Kate Carter and reckless social-media superstar Tyler Owens collide when terrifying phenomena never seen before are unleashed. The pair and their competing teams find themselves squarely in the paths of multiple storm systems converging over central Oklahoma in the fight of their lives.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Valentine's Day",
@@ -16202,7 +17247,10 @@
     "cast": "",
     "synopsis": "Intertwining couples and singles in Los Angeles break-up and make-up based on the pressures and expectations of Valentine's Day.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Venom",
@@ -16217,7 +17265,10 @@
     "cast": "",
     "synopsis": "Investigative journalist Eddie Brock attempts a comeback following a scandal, but accidentally becomes the host of Venom, a violent, super powerful alien symbiote. Soon, he must rely on his newfound powers to protect the world from a shadowy organization looking for a symbiote of their own.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Venom: Let There Be Carnage",
@@ -16232,7 +17283,10 @@
     "cast": "",
     "synopsis": "After finding a host body in investigative reporter Eddie Brock, the alien symbiote must face a new enemy, Carnage, the alter ego of serial killer Cletus Kasady.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "Vertigo",
@@ -16247,7 +17301,10 @@
     "cast": "",
     "synopsis": "A retired San Francisco detective suffering from acrophobia investigates the strange activities of an old friend's wife, all the while becoming dangerously obsessed with her.",
     "physical": [],
-    "digital": "Fandango | Movies Anywhere"
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "What Happens Later",
@@ -16262,6 +17319,8 @@
     "cast": "",
     "synopsis": "Two ex-lovers get snowed in at a regional airport overnight. Indefinitely delayed, Willa, a magical thinker, and Bill, a catastrophic one, find themselves just as attracted to and annoyed by one another as they did decades earlier. But as they unpack the riddle of their mutual past and compare their lives to the dreams they once shared, they begin to wonder if their reunion is mere coincidence, or something more enchanted.",
     "physical": [],
-    "digital": "Prime"
+    "digital": [
+      "Prime"
+    ]
   }
 ]
