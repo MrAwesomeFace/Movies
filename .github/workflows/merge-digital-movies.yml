@@ -233,17 +233,6 @@ jobs:
             return String(value).trim();
           }
 
-          function firstNameFromList(value) {
-            if (!value) {
-              return '';
-            }
-
-            return String(value)
-              .split(',')
-              .map(x => x.trim())
-              .filter(Boolean)[0] || '';
-          }
-
           function getCategories(row, title, overview, genre) {
             const categories = [];
 
@@ -311,6 +300,14 @@ jobs:
             return categories;
           }
 
+          /*
+           * IMPORTANT:
+           * New digital-only movies are built using the same
+           * field structure as movies.js.
+           *
+           * Existing movies are NEVER rebuilt or overwritten.
+           * They remain the source of truth.
+           */
           function makeNewMovie(row) {
             const tmdbId = normalizeId(
               row.tmdbId || row.source_tmdbId
@@ -328,29 +325,11 @@ jobs:
             const posterPath =
               cleanText(row.tmdbPosterPath);
 
-            const backdropPath =
-              cleanText(row.tmdbBackdropPath);
-
             const overview =
               cleanText(row.tmdbOverview);
 
-            const originalTitle =
-              cleanText(row.tmdbOriginalTitle);
-
-            const releaseDate =
-              cleanText(row.tmdbReleaseDate);
-
-            const runtime =
-              cleanText(row.tmdbRuntime);
-
             const genre =
               cleanText(row.tmdbGenre);
-
-            const director =
-              cleanText(row.tmdbDirector);
-
-            const cast =
-              cleanText(row.tmdbCast);
 
             const movie = {
               title: title,
@@ -361,10 +340,10 @@ jobs:
                 ? `https://image.tmdb.org/t/p/w500${posterPath}`
                 : '',
               year: year,
-              runtime: runtime,
+              runtime: cleanText(row.tmdbRuntime),
               genre: genre,
-              director: director,
-              cast: cast,
+              director: cleanText(row.tmdbDirector),
+              cast: cleanText(row.tmdbCast),
               synopsis: overview,
               physical: [],
               digital: cleanText(row.digital)
@@ -434,10 +413,17 @@ jobs:
             `Digital rows: ${digitalRows.length}`
           );
 
+          /*
+           * Clone the existing catalog.
+           * Nothing from the original catalog is discarded.
+           */
           const merged = movies.map(movie => ({
             ...movie
           }));
 
+          /*
+           * Build TMDB ID lookup from the ORIGINAL catalog.
+           */
           const byTmdbId = new Map();
 
           for (
@@ -465,6 +451,7 @@ jobs:
           let digitalAdded = 0;
 
           for (const row of digitalRows) {
+
             const sourceId = normalizeId(
               row.tmdbId ||
               row.source_tmdbId
@@ -497,7 +484,14 @@ jobs:
               continue;
             }
 
+            /*
+             * EXISTING MOVIE:
+             *
+             * The original movie remains completely intact.
+             * We only add the digital information.
+             */
             if (byTmdbId.has(sourceId)) {
+
               const index =
                 byTmdbId.get(sourceId);
 
@@ -525,6 +519,12 @@ jobs:
               continue;
             }
 
+            /*
+             * NEW DIGITAL MOVIE:
+             *
+             * Only created when no existing movie has
+             * the same TMDB ID.
+             */
             const newMovie =
               makeNewMovie(row);
 
@@ -538,6 +538,13 @@ jobs:
             added++;
           }
 
+          /*
+           * FINAL OUTPUT IS PURE JSON.
+           *
+           * It does NOT contain:
+           * const movies =
+           * or any other JavaScript wrapper.
+           */
           fs.writeFileSync(
             OUTPUT_FILE,
             JSON.stringify(
@@ -615,6 +622,7 @@ jobs:
           );
 
           console.log('');
+
           console.log(
             `Created: ${OUTPUT_FILE}`
           );
@@ -626,6 +634,10 @@ jobs:
           console.log(
             '======================================'
           );
+
+          /*
+           * SANITY CHECKS
+           */
 
           if (merged.length < movies.length) {
             throw new Error(
@@ -664,10 +676,14 @@ jobs:
             );
           }
 
+          /*
+           * Validate every NEW record.
+           */
           const newMovies =
             merged.slice(movies.length);
 
           for (const movie of newMovies) {
+
             if (!movie.tmdbId) {
               throw new Error(
                 `SANITY CHECK FAILED: new movie "${movie.title}" has no TMDB ID.`
@@ -686,13 +702,23 @@ jobs:
               );
             }
 
-            if (!Object.prototype.hasOwnProperty.call(movie, 'physical')) {
+            if (
+              !Object.prototype.hasOwnProperty.call(
+                movie,
+                'physical'
+              )
+            ) {
               throw new Error(
                 `SANITY CHECK FAILED: new movie "${movie.title}" has no physical field.`
               );
             }
 
-            if (!Object.prototype.hasOwnProperty.call(movie, 'digital')) {
+            if (
+              !Object.prototype.hasOwnProperty.call(
+                movie,
+                'digital'
+              )
+            ) {
               throw new Error(
                 `SANITY CHECK FAILED: new movie "${movie.title}" has no digital field.`
               );
@@ -706,6 +732,7 @@ jobs:
           console.log(
             'Sanity checks passed.'
           );
+
           NODE
 
       - name: Commit merged files
