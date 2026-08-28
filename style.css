@@ -1,785 +1,884 @@
 /* =========================================================
-   BW'S MOVIE COLLECTION
-   Main visual design
-   ========================================================= */
+BW'S MOVIE COLLECTION
+Main visual design
+========================================================= */
 
 :root {
-  --background: #101010;
-  --surface: #1b1b1b;
-  --surface-light: #252525;
-  --text: #f5f5f5;
-  --muted: #999999;
-  --border: #333333;
-  --accent: #ffffff;
+--background: #101010;
+--surface: #1b1b1b;
+--surface-light: #252525;
+--text: #f5f5f5;
+--muted: #999999;
+--border: #333333;
+--accent: #ffffff;
 }
 
-
 /* =========================================================
-   BASIC RESET
-   ========================================================= */
+BASIC RESET
+========================================================= */
 
 * {
   box-sizing: border-box;
-}
+  }
 
 html {
-  background: var(--background);
+background: var(--background);
 }
 
 body {
-  margin: 0;
+margin: 0;
 
-  background: var(--background);
-  color: var(--text);
+background:
+linear-gradient(
+180deg,
+#101010 0%,
+#121212 55%,
+#0e0e0e 100%
+);
 
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif;
+color: var(--text);
+
+font-family:
+-apple-system,
+BlinkMacSystemFont,
+"Segoe UI",
+Roboto,
+Helvetica,
+Arial,
+sans-serif;
 }
 
-
 /* =========================================================
-   HEADER
-   ========================================================= */
+HEADER
+========================================================= */
 
 .site-header {
-  position: sticky;
-  top: 0;
+position: sticky;
+top: 0;
 
-  z-index: 10;
+z-index: 10;
 
-  padding: 18px 18px 14px;
+padding: 18px 18px 14px;
 
-  background: rgba(16, 16, 16, 0.96);
+background: rgba(16, 16, 16, 0.96);
 
-  border-bottom: 1px solid var(--border);
+border-bottom: 1px solid var(--border);
 
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+backdrop-filter: blur(12px);
+-webkit-backdrop-filter: blur(12px);
 }
 
 .header-top {
-  display: flex;
+display: flex;
 
-  align-items: center;
-  justify-content: space-between;
+align-items: center;
+justify-content: space-between;
 
-  gap: 15px;
+gap: 15px;
 }
 
 h1 {
-  margin: 0;
+margin: 0;
 
-  color: #f5f5f5;
+color: #f5f5f5;
 
-  font-size: 24px;
-  font-weight: 700;
+font-size: 24px;
+font-weight: 700;
 
-  letter-spacing: -0.5px;
+letter-spacing: -0.5px;
 }
 
 #movie-count {
-  margin: 4px 0 0;
+margin: 4px 0 0;
 
-  color: #b8b8b8;
+color: #b8b8b8;
 
-  font-size: 13px;
+font-size: 13px;
 }
 
-
 /* =========================================================
-   SEARCH
-   ========================================================= */
+SEARCH
+========================================================= */
 
 .search-area {
-  margin-top: 12px;
+margin-top: 12px;
 }
 
 .search-area.hidden {
-  display: none;
+display: none;
 }
 
 #search-input {
-  width: 100%;
+width: 100%;
 
-  padding: 12px 14px;
+padding: 12px 14px;
 
-  border: 1px solid var(--border);
-  border-radius: 12px;
+border: 1px solid var(--border);
+border-radius: 12px;
 
-  outline: none;
+outline: none;
 
-  background: var(--surface);
-  color: var(--text);
+background: var(--surface);
+color: var(--text);
 
-  font-size: 16px;
+font-size: 16px;
 }
 
 #search-input:focus {
-  border-color: #666666;
+border-color: #666666;
 }
 
-
 /* =========================================================
-   BUTTONS
-   ========================================================= */
+BUTTONS
+========================================================= */
 
 button {
-  font-family: inherit;
+font-family: inherit;
 }
 
 .icon-button {
-  width: 42px;
-  height: 42px;
+width: 42px;
+height: 42px;
 
-  flex-shrink: 0;
+flex-shrink: 0;
 
-  border: 1px solid var(--border);
-  border-radius: 50%;
+border: 1px solid var(--border);
+border-radius: 50%;
 
-  background: var(--surface);
-  color: var(--text);
+background: var(--surface);
+color: var(--text);
 
-  font-size: 18px;
+font-size: 18px;
 
-  cursor: pointer;
+cursor: pointer;
 }
 
 .icon-button:active {
-  transform: scale(0.95);
+transform: scale(0.95);
 }
 
-
 /* =========================================================
-   FILTER BAR
-   ========================================================= */
+FILTER BAR
+========================================================= */
 
 .filters {
-  display: flex;
+display: flex;
 
-  flex-direction: column;
+flex-direction: column;
 
-  gap: 7px;
+gap: 7px;
 
-  margin-top: 14px;
+margin-top: 14px;
 
-  width: 100%;
+width: 100%;
 }
 
-
 /* =========================================================
-   FILTER ROW
-   ========================================================= */
+FILTER ROW
+========================================================= */
 
 .filter-row {
-  display: flex;
+display: flex;
 
-  align-items: center;
+align-items: center;
 
-  gap: 8px;
+gap: 8px;
 
-  width: 100%;
+width: 100%;
 
-  overflow-x: auto;
+overflow-x: auto;
 
-  scrollbar-width: none;
+scrollbar-width: none;
 }
 
 .filter-row::-webkit-scrollbar {
-  display: none;
+display: none;
 }
 
-
 /* =========================================================
-   FILTER GROUP
-   ========================================================= */
+FILTER GROUP
+========================================================= */
 
 .filter-group {
-  display: flex;
+display: flex;
 
-  align-items: center;
+align-items: center;
 
-  gap: 8px;
+gap: 8px;
 
-  flex-shrink: 0;
+flex-shrink: 0;
 }
 
-
 /* =========================================================
-   FIRST ROW
-   ========================================================= */
+FIRST ROW
+========================================================= */
 
 .filter-row-main {
-  justify-content: space-between;
+justify-content: space-between;
 
-  overflow: visible;
+overflow: visible;
 }
 
 .filter-group-actions {
-  margin-left: auto;
+margin-left: auto;
 }
-
 
 /* =========================================================
-   SECOND ROW
-   ========================================================= */
+SECOND ROW
+========================================================= */
 
 .genre-category-row {
-  overflow-x: auto;
+overflow-x: auto;
 }
-
 
 /* Divider between genre and category filters */
 
 .filter-divider {
-  flex-shrink: 0;
+flex-shrink: 0;
 
-  color: #666666;
+color: #666666;
 
-  font-size: 20px;
-  font-weight: 300;
+font-size: 20px;
+font-weight: 300;
 
-  line-height: 1;
+line-height: 1;
 
-  margin: 0 2px;
+margin: 0 2px;
 }
 
-
 /* =========================================================
-   INDIVIDUAL FILTER
-   ========================================================= */
+INDIVIDUAL FILTER
+========================================================= */
 
 .filter {
-  flex-shrink: 0;
+flex-shrink: 0;
 
-  padding: 8px 14px;
+padding: 8px 14px;
 
-  border: 1px solid var(--border);
-  border-radius: 999px;
+border: 1px solid var(--border);
+border-radius: 999px;
 
-  background: var(--surface);
-  color: #dddddd;
+background: var(--surface);
+color: #dddddd;
 
-  cursor: pointer;
+cursor: pointer;
 
-  font-size: 14px;
+font-size: 14px;
 
-  white-space: nowrap;
+white-space: nowrap;
 }
 
 .filter:hover {
-  border-color: #555555;
+border-color: #555555;
 }
 
 .filter.active {
-  background: var(--accent);
-  color: #111111;
+background: var(--accent);
+color: #111111;
 }
 
-
 /* =========================================================
-   SPECIAL FILTERS
-   ========================================================= */
+SPECIAL FILTERS
+========================================================= */
 
 .animated-filter {
-  min-width: 130px;
+min-width: 130px;
 }
 
 .action-filter {
-  background: #202020;
+background: #202020;
 }
 
-
 /* =========================================================
-   MAIN COLLECTION
-   ========================================================= */
+MAIN COLLECTION
+========================================================= */
 
 main {
-  width: 100%;
-  max-width: 1200px;
+width: 100%;
+max-width: 1200px;
 
-  margin: 0 auto;
+margin: 0 auto;
 
-  padding: 22px 16px 50px;
+padding: 22px 16px 50px;
 }
-
-.movie-grid {
-  display: grid;
-
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
-
-  gap: 18px 12px;
-}
-
 
 /* =========================================================
-   MOVIE CARDS
-   ========================================================= */
+SHELF WALL
+========================================================= */
+
+.movie-grid {
+position: relative;
+
+display: grid;
+
+grid-template-columns:
+repeat(2, minmax(0, 1fr));
+
+gap: 18px 12px;
+
+padding: 8px 4px 22px;
+
+/*
+Subtle dark vertical variation gives the collection
+a little more depth without looking like a texture.
+*/
+
+background:
+linear-gradient(
+90deg,
+rgba(255,255,255,0.012),
+transparent 18%,
+transparent 82%,
+rgba(255,255,255,0.012)
+);
+}
+
+/* =========================================================
+SHELF EFFECT
+========================================================= */
+
+/*
+The grid itself gets a subtle "shelf" running underneath
+each row. It stays intentionally understated.
+*/
+
+.movie-grid::after {
+content: "";
+
+position: absolute;
+
+left: 0;
+right: 0;
+bottom: 0;
+
+height: 7px;
+
+background:
+linear-gradient(
+to bottom,
+#292929,
+#171717
+);
+
+border-radius: 2px;
+
+box-shadow:
+0 4px 8px rgba(0,0,0,0.55),
+inset 0 1px 0 rgba(255,255,255,0.06);
+
+pointer-events: none;
+}
+
+/* =========================================================
+MOVIE CARDS
+========================================================= */
 
 .movie-card {
-  min-width: 0;
+position: relative;
 
-  cursor: pointer;
+min-width: 0;
 
-  transition:
-    transform 0.18s ease,
-    opacity 0.18s ease;
+cursor: pointer;
+
+transition:
+transform 0.18s ease,
+opacity 0.18s ease;
 }
 
 .movie-card:active {
-  transform: scale(0.97);
+transform: scale(0.97);
 }
 
+/*
+Small "case" effect.
+
+The poster remains essentially flat, but the edge,
+highlight and shadow make it feel like an actual
+physical DVD/Blu-ray case.
+*/
+
 .movie-cover {
-  position: relative;
+position: relative;
 
-  width: 100%;
+width: 100%;
 
-  aspect-ratio: 2 / 3;
+aspect-ratio: 2 / 3;
 
-  overflow: hidden;
+overflow: hidden;
 
-  border-radius: 7px;
+border-radius: 6px;
 
-  background: #292929;
+background: #292929;
 
-  box-shadow:
-    0 6px 18px rgba(0, 0, 0, 0.45);
+box-shadow:
+2px 4px 7px rgba(0,0,0,0.55),
+0 9px 18px rgba(0,0,0,0.28);
+
+transform: translateZ(0);
+}
+
+/*
+Very subtle plastic/case edge.
+*/
+
+.movie-cover::after {
+content: "";
+
+position: absolute;
+
+inset: 0;
+
+pointer-events: none;
+
+border-radius: 6px;
+
+box-shadow:
+inset 1px 0 0 rgba(255,255,255,0.13),
+inset -2px 0 0 rgba(0,0,0,0.22),
+inset 0 0 7px rgba(0,0,0,0.16);
 }
 
 .movie-cover-inner {
-  position: absolute;
-  inset: 0;
+position: absolute;
 
-  display: flex;
+inset: 0;
 
-  flex-direction: column;
+display: flex;
 
-  justify-content: flex-end;
+flex-direction: column;
 
-  overflow: hidden;
+justify-content: flex-end;
+
+overflow: hidden;
 }
+
+/*
+Existing subtle highlight preserved.
+*/
 
 .movie-cover-inner::before {
-  content: "";
+content: "";
 
-  position: absolute;
-  inset: 0;
+position: absolute;
 
-  background:
-    radial-gradient(
-      circle at 20% 15%,
-      rgba(255,255,255,0.22),
-      transparent 32%
-    );
+inset: 0;
 
-  pointer-events: none;
+background:
+radial-gradient(
+circle at 20% 15%,
+rgba(255,255,255,0.22),
+transparent 32%
+);
+
+pointer-events: none;
 }
 
-
 /* =========================================================
-   TITLE UNDER POSTER
-   ========================================================= */
+TITLE UNDER POSTER
+========================================================= */
 
 .movie-card-title {
-  margin-top: 7px;
+margin-top: 7px;
 
-  color: #f2f2f2;
+color: #f2f2f2;
 
-  font-size:
-    clamp(12px, 2.8vw, 16px);
+font-size:
+clamp(12px, 2.8vw, 16px);
 
-  font-weight: 600;
+font-weight: 600;
 
-  line-height: 1.15;
+line-height: 1.15;
 
-  text-align: center;
+text-align: center;
 
-  overflow-wrap: anywhere;
+overflow-wrap: anywhere;
 }
 
-
 /* =========================================================
-   FORMAT INDICATORS
-   ========================================================= */
+FORMAT INDICATORS
+========================================================= */
 
 .movie-badges {
-  display: flex;
+display: flex;
 
-  flex-wrap: wrap;
+flex-wrap: wrap;
 
-  gap: 5px;
+gap: 5px;
 
-  margin-top: 7px;
+margin-top: 7px;
 
-  justify-content: center;
+justify-content: center;
 }
 
 .movie-badge {
-  display: inline-flex;
+display: inline-flex;
 
-  align-items: center;
+align-items: center;
 
-  padding: 3px 6px;
+padding: 3px 6px;
 
-  border-radius: 5px;
+border-radius: 5px;
 
-  background: rgba(0,0,0,0.65);
+background: rgba(0,0,0,0.65);
 
-  color: white;
+color: white;
 
-  font-size: 10px;
+font-size: 10px;
 
-  font-weight: 600;
+font-weight: 600;
 }
 
-
 /* =========================================================
-   NO RESULTS
-   ========================================================= */
+NO RESULTS
+========================================================= */
 
 .no-results {
-  padding: 60px 20px;
+padding: 60px 20px;
 
-  text-align: center;
+text-align: center;
 
-  color: var(--muted);
+color: var(--muted);
 }
 
 .no-results.hidden {
-  display: none;
+display: none;
 }
 
-
 /* =========================================================
-   MODAL
-   ========================================================= */
+MODAL
+========================================================= */
 
 .modal {
-  position: fixed;
-  inset: 0;
+position: fixed;
+inset: 0;
 
-  z-index: 50;
+z-index: 50;
 
-  display: flex;
+display: flex;
 
-  align-items: center;
-  justify-content: center;
+align-items: center;
+justify-content: center;
 
-  padding: 15px;
+padding: 15px;
 }
 
 .modal.hidden {
-  display: none;
+display: none;
 }
 
 .modal-backdrop {
-  position: absolute;
-  inset: 0;
+position: absolute;
+inset: 0;
 
-  background: rgba(0,0,0,0.82);
+background: rgba(0,0,0,0.82);
 
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+backdrop-filter: blur(5px);
+-webkit-backdrop-filter: blur(5px);
 }
 
 .modal-content {
-  position: relative;
+position: relative;
 
-  z-index: 1;
+z-index: 1;
 
-  width: min(900px, 100%);
+width: min(900px, 100%);
 
-  max-height: 94vh;
+max-height: 94vh;
 
-  overflow-y: auto;
+overflow-y: auto;
 
-  padding: 20px;
+padding: 20px;
 
-  border: 1px solid var(--border);
-  border-radius: 18px;
+border: 1px solid var(--border);
+border-radius: 18px;
 
-  background: var(--surface);
+background: var(--surface);
 
-  box-shadow:
-    0 20px 60px rgba(0,0,0,0.7);
+box-shadow:
+0 20px 60px rgba(0,0,0,0.7);
 }
 
 .modal-close {
-  position: absolute;
+position: absolute;
 
-  top: 10px;
-  right: 12px;
+top: 10px;
+right: 12px;
 
-  z-index: 5;
+z-index: 5;
 
-  width: 40px;
-  height: 40px;
+width: 40px;
+height: 40px;
 
-  border: 0;
-  border-radius: 50%;
+border: 0;
+border-radius: 50%;
 
-  background: rgba(0,0,0,0.6);
+background: rgba(0,0,0,0.6);
 
-  color: white;
+color: white;
 
-  font-size: 28px;
-  line-height: 1;
+font-size: 28px;
+line-height: 1;
 
-  cursor: pointer;
+cursor: pointer;
 }
 
-
 /* =========================================================
-   MOVIE VIEWER
-   ========================================================= */
+MOVIE VIEWER
+========================================================= */
 
 .movie-viewer {
-  display: flex;
+display: flex;
 
-  flex-direction: column;
+flex-direction: column;
 
-  align-items: center;
+align-items: center;
 
-  gap: 18px;
+gap: 18px;
 
-  padding-top: 10px;
+padding-top: 10px;
 }
 
 .movie-flip-container {
-  width: min(75vw, 360px);
+width: min(75vw, 360px);
 
-  perspective: 1400px;
+perspective: 1400px;
 
-  cursor: pointer;
+cursor: pointer;
 }
 
 .movie-flipper {
-  position: relative;
+position: relative;
 
-  width: 100%;
+width: 100%;
 
-  aspect-ratio: 2 / 3;
+aspect-ratio: 2 / 3;
 
-  transform-style: preserve-3d;
+transform-style: preserve-3d;
 
-  transition:
-    transform 0.65s cubic-bezier(0.4, 0.2, 0.2, 1);
+transition:
+transform 0.65s cubic-bezier(0.4, 0.2, 0.2, 1);
 }
 
 .movie-flip-container.flipped
 .movie-flipper {
-  transform: rotateY(180deg);
+transform: rotateY(180deg);
 }
 
-
 /* =========================================================
-   FRONT + BACK OF CASE
-   ========================================================= */
+FRONT + BACK OF CASE
+========================================================= */
 
 .movie-face {
-  position: absolute;
+position: absolute;
 
-  inset: 0;
+inset: 0;
 
-  overflow: hidden;
+overflow: hidden;
 
-  border-radius: 9px;
+border-radius: 9px;
 
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+backface-visibility: hidden;
+-webkit-backface-visibility: hidden;
 
-  box-shadow:
-    0 12px 35px rgba(0,0,0,0.65);
+box-shadow:
+0 12px 35px rgba(0,0,0,0.65);
 }
 
 .movie-front {
-  display: flex;
+display: flex;
 
-  flex-direction: column;
+flex-direction: column;
 
-  justify-content: flex-end;
+justify-content: flex-end;
 
-  padding: 18px;
+padding: 18px;
 }
 
 .large-cover {
-  position: absolute;
+position: absolute;
 
-  inset: 0;
+inset: 0;
 
-  border-radius: 9px;
+border-radius: 9px;
 
-  overflow: hidden;
+overflow: hidden;
 }
 
 .movie-back {
-  transform: rotateY(180deg);
+transform: rotateY(180deg);
 
-  background:
-    linear-gradient(
-      135deg,
-      #eee9dd,
-      #d8d0c0
-    );
+background:
+linear-gradient(
+135deg,
+#eee9dd,
+#d8d0c0
+);
 
-  color: #181818;
+color: #181818;
 }
 
 .back-content {
-  height: 100%;
+height: 100%;
 
-  overflow-y: auto;
+overflow-y: auto;
 
-  padding: 24px;
+padding: 24px;
 }
 
 .back-content h2 {
-  margin: 0 0 7px;
+margin: 0 0 7px;
 
-  font-size: 28px;
+font-size: 28px;
 
-  line-height: 1;
+line-height: 1;
 }
 
 .movie-meta {
-  display: flex;
+display: flex;
 
-  gap: 7px;
+gap: 7px;
 
-  margin-bottom: 20px;
+margin-bottom: 20px;
 
-  color: #555;
+color: #555;
 
-  font-size: 13px;
+font-size: 13px;
 }
 
 .movie-info-section {
-  margin-top: 18px;
+margin-top: 18px;
 }
 
 .movie-info-section h3 {
-  margin: 0 0 5px;
+margin: 0 0 5px;
 
-  font-size: 12px;
+font-size: 12px;
 
-  text-transform: uppercase;
+text-transform: uppercase;
 
-  letter-spacing: 0.08em;
+letter-spacing: 0.08em;
 }
 
 .movie-info-section p {
-  margin: 0;
+margin: 0;
 
-  font-size: 14px;
+font-size: 14px;
 
-  line-height: 1.45;
+line-height: 1.45;
 }
 
-
 /* =========================================================
-   FORMAT LIST ON BACK
-   ========================================================= */
+FORMAT LIST ON BACK
+========================================================= */
 
 .format-list {
-  display: flex;
+display: flex;
 
-  flex-direction: column;
+flex-direction: column;
 
-  gap: 6px;
+gap: 6px;
 }
 
 .format-item {
-  display: flex;
+display: flex;
 
-  align-items: center;
+align-items: center;
 
-  gap: 8px;
+gap: 8px;
 
-  padding: 7px 9px;
+padding: 7px 9px;
 
-  border-radius: 7px;
+border-radius: 7px;
 
-  background: rgba(0,0,0,0.08);
+background: rgba(0,0,0,0.08);
 
-  font-size: 13px;
+font-size: 13px;
 }
 
-
 /* =========================================================
-   VIEWER CONTROLS
-   ========================================================= */
+VIEWER CONTROLS
+========================================================= */
 
 .movie-viewer-controls {
-  text-align: center;
+text-align: center;
 }
 
 .primary-button {
-  padding: 11px 18px;
+padding: 11px 18px;
 
-  border: 0;
-  border-radius: 999px;
+border: 0;
+border-radius: 999px;
 
-  background: white;
+background: white;
 
-  color: #111;
+color: #111;
 
-  font-weight: 600;
+font-weight: 600;
 
-  cursor: pointer;
+cursor: pointer;
 }
 
 .flip-hint {
-  margin: 8px 0 0;
+margin: 8px 0 0;
 
-  color: var(--muted);
+color: var(--muted);
 
-  font-size: 12px;
+font-size: 12px;
 }
 
-
 /* =========================================================
-   TABLET / IPAD
-   ========================================================= */
+TABLET / IPAD
+========================================================= */
 
 @media (min-width: 600px) {
 
-  .movie-grid {
-    grid-template-columns:
-      repeat(4, minmax(0, 1fr));
+.movie-grid {
+grid-template-columns:
+repeat(4, minmax(0, 1fr));
 
-    gap: 20px;
-  }
+```
+gap: 20px;
 
-  main {
-    padding-left: 24px;
-    padding-right: 24px;
-  }
+padding-left: 6px;
+padding-right: 6px;
+```
 
 }
 
+main {
+padding-left: 24px;
+padding-right: 24px;
+}
+
+}
 
 /* =========================================================
-   DESKTOP
-   ========================================================= */
+DESKTOP
+========================================================= */
 
 @media (min-width: 1000px) {
 
-  .movie-grid {
-    grid-template-columns:
-      repeat(6, minmax(0, 1fr));
+.movie-grid {
+grid-template-columns:
+repeat(6, minmax(0, 1fr));
 
-    gap: 22px 16px;
-  }
+```
+gap: 22px 16px;
 
-  .movie-card:hover {
-    transform: translateY(-4px);
-  }
+padding-left: 8px;
+padding-right: 8px;
+```
+
+}
+
+.movie-card:hover {
+transform: translateY(-4px);
+}
+
+.movie-card:hover .movie-cover {
+box-shadow:
+3px 7px 12px rgba(0,0,0,0.58),
+0 12px 22px rgba(0,0,0,0.32);
+}
 
 }
