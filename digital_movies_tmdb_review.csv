@@ -1,1 +1,1 @@
-digital_title,digital_year,digital,tmdb_id,tmdb_title,tmdb_year,confidence,title_score,year_difference,review_reason
+title,digital,source_year,tmdbId,tmdbTitle,year,confidence,match_type,review
