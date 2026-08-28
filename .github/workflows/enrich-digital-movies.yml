@@ -744,3 +744,4 @@ steps:
       git commit -m "Enrich digital movies with TMDB metadata" || echo "Nothing new to commit"
 
       git push
+```
