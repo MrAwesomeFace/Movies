@@ -1,9 +1,9 @@
-# /*
-
-BW'S MOVIE COLLECTION
-App functionality
-=================
-
+```javascript
+/*
+  =========================================================
+  BW'S MOVIE COLLECTION
+  App functionality
+  =========================================================
 */
 
 // =========================================================
@@ -40,6 +40,7 @@ const flipButton = document.getElementById("flip-button");
 const randomButton = document.getElementById("random-button");
 const showAllButton = document.getElementById("show-all-button");
 
+
 // =========================================================
 // CURRENT STATE
 // =========================================================
@@ -51,31 +52,33 @@ let randomMode = false;
 let randomMovies = [];
 
 let activeFilters = {
-type: "all",
-media: "all",
-genre: null,
-category: null,
-animated: "mixed"
+  type: "all",
+  media: "all",
+  genre: null,
+  category: null,
+  animated: "mixed"
 };
+
 
 // =========================================================
 // SIMPLE COVER COLORS
 // =========================================================
 
 const coverColors = [
-["#182848", "#4b6cb7"],
-["#3a1c71", "#d76d77"],
-["#232526", "#414345"],
-["#42275a", "#734b6d"],
-["#134e5e", "#71b280"],
-["#642b73", "#c6426e"],
-["#0f2027", "#2c5364"],
-["#200122", "#6f0000"],
-["#141e30", "#243b55"],
-["#283c86", "#45a247"],
-["#4b1248", "#f0c27b"],
-["#16222a", "#3a6073"]
+  ["#182848", "#4b6cb7"],
+  ["#3a1c71", "#d76d77"],
+  ["#232526", "#414345"],
+  ["#42275a", "#734b6d"],
+  ["#134e5e", "#71b280"],
+  ["#642b73", "#c6426e"],
+  ["#0f2027", "#2c5364"],
+  ["#200122", "#6f0000"],
+  ["#141e30", "#243b55"],
+  ["#283c86", "#45a247"],
+  ["#4b1248", "#f0c27b"],
+  ["#16222a", "#3a6073"]
 ];
+
 
 // =========================================================
 // INITIALIZE
@@ -83,818 +86,783 @@ const coverColors = [
 
 renderMovies();
 
+
 // =========================================================
 // RENDER MOVIES
 // =========================================================
 
 function renderMovies() {
 
-movieGrid.innerHTML = "";
+  movieGrid.innerHTML = "";
 
-let filteredMovies = movies.filter(movie => {
+  let filteredMovies = movies.filter(movie => {
 
-```
-// TYPE FILTER
+    // TYPE FILTER
 
-if (
-  activeFilters.type !== "all" &&
-  movie.type !== activeFilters.type
-) {
-  return false;
-}
-
-
-// PHYSICAL / DIGITAL FILTER
-
-if (
-  activeFilters.media === "physical" &&
-  (!movie.physical || movie.physical.length === 0)
-) {
-  return false;
-}
-
-if (
-  activeFilters.media === "digital" &&
-  (!movie.digital || movie.digital.length === 0)
-) {
-  return false;
-}
+    if (
+      activeFilters.type !== "all" &&
+      movie.type !== activeFilters.type
+    ) {
+      return false;
+    }
 
 
-// GENRE FILTER
+    // PHYSICAL / DIGITAL FILTER
 
-if (activeFilters.genre) {
+    if (
+      activeFilters.media === "physical" &&
+      (!movie.physical || movie.physical.length === 0)
+    ) {
+      return false;
+    }
 
-  const movieGenre =
-    (movie.genre || "").toLowerCase();
-
-  if (
-    !movieGenre.includes(
-      activeFilters.genre.toLowerCase()
-    )
-  ) {
-    return false;
-  }
-
-}
-
-
-// CATEGORY FILTER
-
-if (activeFilters.category) {
-
-  const categories =
-    movie.categories || [];
-
-  if (
-    !categories.includes(
-      activeFilters.category
-    )
-  ) {
-    return false;
-  }
-
-}
+    if (
+      activeFilters.media === "digital" &&
+      (!movie.digital || movie.digital.length === 0)
+    ) {
+      return false;
+    }
 
 
-// ANIMATED FILTER
+    // GENRE FILTER
 
-const isAnimated =
-  (movie.categories || []).includes("animated");
+    if (activeFilters.genre) {
 
-if (
-  activeFilters.animated === "hide" &&
-  isAnimated
-) {
-  return false;
-}
+      const movieGenre =
+        (movie.genre || "").toLowerCase();
 
-if (
-  activeFilters.animated === "only" &&
-  !isAnimated
-) {
-  return false;
-}
-
-
-// SEARCH
-
-if (currentSearch) {
-
-  const searchText =
-    currentSearch.toLowerCase();
-
-  const searchableText = [
-    movie.title,
-    movie.tmdbTitle,
-    movie.year,
-    movie.genre,
-    movie.director,
-    movie.cast,
-    movie.synopsis,
-    movie.type
-  ]
-    .filter(
-      value =>
-        value !== null &&
-        value !== undefined
-    )
-    .join(" ")
-    .toLowerCase();
-
-  if (
-    !searchableText.includes(
-      searchText
-    )
-  ) {
-    return false;
-  }
-
-}
-
-
-return true;
-```
-
-});
-
-// =========================================================
-// RANDOM 50
-// =========================================================
-
-if (randomMode) {
-
-```
-filteredMovies =
-  randomMovies.filter(
-    movie => filteredMovies.includes(movie)
-  );
-```
-
-}
-
-// =========================================================
-// SORT ALPHABETICALLY
-// =========================================================
-
-if (!randomMode) {
-
-```
-filteredMovies.sort(
-  (a, b) =>
-    a.title.localeCompare(
-      b.title,
-      undefined,
-      {
-        sensitivity: "base"
+      if (
+        !movieGenre.includes(
+          activeFilters.genre.toLowerCase()
+        )
+      ) {
+        return false;
       }
-    )
-);
-```
 
-}
+    }
 
-// =========================================================
-// UPDATE COUNT
-// =========================================================
 
-const filtersAreActive =
-activeFilters.type !== "all" ||
-activeFilters.media !== "all" ||
-activeFilters.genre !== null ||
-activeFilters.category !== null ||
-activeFilters.animated !== "mixed";
+    // CATEGORY FILTER
 
-if (randomMode) {
+    if (activeFilters.category) {
 
-```
-movieCount.textContent =
-  filteredMovies.length + " random titles";
-```
+      const categories =
+        movie.categories || [];
 
-} else if (
-currentSearch ||
-filtersAreActive
-) {
+      if (
+        !categories.includes(
+          activeFilters.category
+        )
+      ) {
+        return false;
+      }
 
-```
-movieCount.textContent =
-  filteredMovies.length +
-  " of " +
-  movies.length +
-  " titles";
-```
+    }
 
-} else {
 
-```
-movieCount.textContent =
-  movies.length +
-  " titles";
-```
+    // ANIMATED FILTER
 
-}
+    const isAnimated =
+      (movie.categories || []).includes("animated");
 
-// =========================================================
-// NO RESULTS
-// =========================================================
+    if (
+      activeFilters.animated === "hide" &&
+      isAnimated
+    ) {
+      return false;
+    }
 
-if (
-filteredMovies.length === 0
-) {
+    if (
+      activeFilters.animated === "only" &&
+      !isAnimated
+    ) {
+      return false;
+    }
 
-```
-noResults.classList.remove(
-  "hidden"
-);
 
-return;
-```
+    // SEARCH
 
-} else {
+    if (currentSearch) {
 
-```
-noResults.classList.add(
-  "hidden"
-);
-```
+      const searchText =
+        currentSearch.toLowerCase();
 
-}
+      const searchableText = [
+        movie.title,
+        movie.tmdbTitle,
+        movie.year,
+        movie.genre,
+        movie.director,
+        movie.cast,
+        movie.synopsis,
+        movie.type
+      ]
+        .filter(
+          value =>
+            value !== null &&
+            value !== undefined
+        )
+        .join(" ")
+        .toLowerCase();
 
-// =========================================================
-// CREATE CARDS
-// =========================================================
+      if (
+        !searchableText.includes(
+          searchText
+        )
+      ) {
+        return false;
+      }
 
-filteredMovies.forEach(
-(movie, index) => {
+    }
 
-```
-  const card =
-    createMovieCard(
-      movie,
-      index
+
+    return true;
+
+  });
+
+
+  // =========================================================
+  // RANDOM 50
+  // =========================================================
+
+  if (randomMode) {
+
+    filteredMovies =
+      randomMovies.filter(
+        movie => filteredMovies.includes(movie)
+      );
+
+  }
+
+
+  // =========================================================
+  // SORT ALPHABETICALLY
+  // =========================================================
+
+  if (!randomMode) {
+
+    filteredMovies.sort(
+      (a, b) =>
+        a.title.localeCompare(
+          b.title,
+          undefined,
+          {
+            sensitivity: "base"
+          }
+        )
     );
 
-  movieGrid.appendChild(
-    card
+  }
+
+
+  // =========================================================
+  // UPDATE COUNT
+  // =========================================================
+
+  const filtersAreActive =
+    activeFilters.type !== "all" ||
+    activeFilters.media !== "all" ||
+    activeFilters.genre !== null ||
+    activeFilters.category !== null ||
+    activeFilters.animated !== "mixed";
+
+
+  if (randomMode) {
+
+    movieCount.textContent =
+      `${filteredMovies.length} random titles`;
+
+  } else if (
+    currentSearch ||
+    filtersAreActive
+  ) {
+
+    movieCount.textContent =
+      `${filteredMovies.length} of ${movies.length} titles`;
+
+  } else {
+
+    movieCount.textContent =
+      `${movies.length} titles`;
+
+  }
+
+
+  // =========================================================
+  // NO RESULTS
+  // =========================================================
+
+  if (
+    filteredMovies.length === 0
+  ) {
+
+    noResults.classList.remove(
+      "hidden"
+    );
+
+    return;
+
+  } else {
+
+    noResults.classList.add(
+      "hidden"
+    );
+
+  }
+
+
+  // =========================================================
+  // CREATE CARDS
+  // =========================================================
+
+  filteredMovies.forEach(
+    (movie, index) => {
+
+      const card =
+        createMovieCard(
+          movie,
+          index
+        );
+
+      movieGrid.appendChild(
+        card
+      );
+
+    }
   );
 
 }
-```
 
-);
-
-}
 
 // =========================================================
 // CREATE MOVIE CARD
 // =========================================================
 
 function createMovieCard(
-movie,
-index
+  movie,
+  index
 ) {
 
-const card =
-document.createElement(
-"article"
-);
-
-card.className =
-"movie-card";
-
-card.setAttribute(
-"tabindex",
-"0"
-);
-
-// =========================================================
-// COVER
-// =========================================================
-
-const colors =
-coverColors[
-index % coverColors.length
-];
-
-const cover =
-document.createElement(
-"div"
-);
-
-cover.className =
-"movie-cover";
-
-const coverInner =
-document.createElement(
-"div"
-);
-
-coverInner.className =
-"movie-cover-inner";
-
-// TMDB POSTER
-
-if (movie.poster) {
-
-```
-coverInner.style.backgroundImage =
-  "url(\"" + movie.poster + "\")";
-
-coverInner.style.backgroundSize =
-  "cover";
-
-coverInner.style.backgroundPosition =
-  "center";
-
-coverInner.style.backgroundRepeat =
-  "no-repeat";
-```
-
-} else {
-
-```
-coverInner.style.background =
-  "linear-gradient(145deg, " +
-  colors[0] +
-  ", " +
-  colors[1] +
-  ")";
-```
-
-}
-
-// =========================================================
-// TITLE
-// =========================================================
-
-const title =
-document.createElement(
-"div"
-);
-
-title.className =
-"movie-card-title";
-
-title.textContent =
-movie.title;
-
-card.appendChild(
-title
-);
-
-// =========================================================
-// FORMAT INDICATORS
-// =========================================================
-
-const badges =
-document.createElement(
-"div"
-);
-
-badges.className =
-"movie-badges";
-
-// Physical badges
-
-if (
-movie.physical &&
-movie.physical.length
-) {
-
-```
-movie.physical.forEach(
-  format => {
-
-    const badge =
-      document.createElement(
-        "span"
-      );
-
-    badge.className =
-      "movie-badge";
-
-    badge.textContent =
-      "💿 " + format;
-
-    badges.appendChild(
-      badge
+  const card =
+    document.createElement(
+      "article"
     );
 
-  }
-);
-```
+  card.className =
+    "movie-card";
 
-}
+  card.setAttribute(
+    "tabindex",
+    "0"
+  );
 
-// Digital badges
 
-if (
-movie.digital &&
-movie.digital.length
-) {
+  // COVER
 
-```
-movie.digital.forEach(
-  service => {
+  const colors =
+    coverColors[
+      index % coverColors.length
+    ];
 
-    const badge =
-      document.createElement(
-        "span"
-      );
-
-    badge.className =
-      "movie-badge";
-
-    badge.textContent =
-      "📱 " + service;
-
-    badges.appendChild(
-      badge
+  const cover =
+    document.createElement(
+      "div"
     );
 
+  cover.className =
+    "movie-cover";
+
+  const coverInner =
+    document.createElement(
+      "div"
+    );
+
+  coverInner.className =
+    "movie-cover-inner";
+
+
+  // TMDB POSTER
+
+  if (movie.poster) {
+
+    coverInner.style.backgroundImage =
+      `url("${movie.poster}")`;
+
+    coverInner.style.backgroundSize =
+      "cover";
+
+    coverInner.style.backgroundPosition =
+      "center";
+
+    coverInner.style.backgroundRepeat =
+      "no-repeat";
+
+  } else {
+
+    coverInner.style.background =
+      `linear-gradient(
+        145deg,
+        ${colors[0]},
+        ${colors[1]}
+      )`;
+
   }
-);
-```
 
-}
 
-// TV badge
-
-if (
-movie.type === "tv"
-) {
-
-```
-const badge =
-  document.createElement(
-    "span"
+  cover.appendChild(
+    coverInner
   );
 
-badge.className =
-  "movie-badge";
-
-badge.textContent =
-  "TV";
-
-badges.appendChild(
-  badge
-);
-```
-
-}
-
-// Misc badge
-
-if (
-movie.type === "misc"
-) {
-
-```
-const badge =
-  document.createElement(
-    "span"
+  card.appendChild(
+    cover
   );
 
-badge.className =
-  "movie-badge";
 
-badge.textContent =
-  "MISC";
+  // TITLE
 
-badges.appendChild(
-  badge
-);
-```
+  const title =
+    document.createElement(
+      "div"
+    );
 
-}
+  title.className =
+    "movie-card-title";
 
-if (
-badges.children.length > 0
-) {
+  title.textContent =
+    movie.title;
 
-```
-card.appendChild(
-  badges
-);
-```
+  card.appendChild(
+    title
+  );
 
-}
 
-// =========================================================
-// POSTER
-// =========================================================
+  // FORMAT INDICATORS
 
-cover.appendChild(
-coverInner
-);
+  const badges =
+    document.createElement(
+      "div"
+    );
 
-card.appendChild(
-cover
-);
+  badges.className =
+    "movie-badges";
 
-// =========================================================
-// OPEN MOVIE
-// =========================================================
 
-card.addEventListener(
-"click",
-() => {
+  // Physical badges
 
-```
-  openMovie(movie);
-
-}
-```
-
-);
-
-// KEYBOARD ACCESSIBILITY
-
-card.addEventListener(
-"keydown",
-event => {
-
-```
   if (
-    event.key === "Enter" ||
-    event.key === " "
+    movie.physical &&
+    movie.physical.length
   ) {
 
-    event.preventDefault();
+    movie.physical.forEach(
+      format => {
 
-    openMovie(movie);
+        const badge =
+          document.createElement(
+            "span"
+          );
+
+        badge.className =
+          "movie-badge";
+
+        badge.textContent =
+          `💿 ${format}`;
+
+        badges.appendChild(
+          badge
+        );
+
+      }
+    );
 
   }
 
+
+  // Digital badges
+
+  if (
+    movie.digital &&
+    movie.digital.length
+  ) {
+
+    movie.digital.forEach(
+      service => {
+
+        const badge =
+          document.createElement(
+            "span"
+          );
+
+        badge.className =
+          "movie-badge";
+
+        badge.textContent =
+          `📱 ${service}`;
+
+        badges.appendChild(
+          badge
+        );
+
+      }
+    );
+
+  }
+
+
+  // TV badge
+
+  if (
+    movie.type === "tv"
+  ) {
+
+    const badge =
+      document.createElement(
+        "span"
+      );
+
+    badge.className =
+      "movie-badge";
+
+    badge.textContent =
+      "TV";
+
+    badges.appendChild(
+      badge
+    );
+
+  }
+
+
+  // Misc badge
+
+  if (
+    movie.type === "misc"
+  ) {
+
+    const badge =
+      document.createElement(
+        "span"
+      );
+
+    badge.className =
+      "movie-badge";
+
+    badge.textContent =
+      "MISC";
+
+    badges.appendChild(
+      badge
+    );
+
+  }
+
+
+  if (
+    badges.children.length > 0
+  ) {
+
+    card.appendChild(
+      badges
+    );
+
+  }
+
+
+  // OPEN MOVIE
+
+  card.addEventListener(
+    "click",
+    () => {
+
+      openMovie(movie);
+
+    }
+  );
+
+
+  // KEYBOARD ACCESSIBILITY
+
+  card.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key === "Enter" ||
+        event.key === " "
+      ) {
+
+        event.preventDefault();
+
+        openMovie(movie);
+
+      }
+
+    }
+  );
+
+
+  return card;
+
 }
-```
 
-);
-
-return card;
-
-}
 
 // =========================================================
 // OPEN MOVIE
 // =========================================================
 
 function openMovie(
-movie
+  movie
 ) {
 
-currentMovie =
-movie;
-
-// RESET FLIP
-
-flipContainer.classList.remove(
-"flipped"
-);
-
-flipButton.textContent =
-"Flip case";
-
-// BASIC INFORMATION
-
-modalTitle.textContent =
-movie.title;
-
-modalYear.textContent =
-movie.year || "";
-
-modalRuntime.textContent =
-movie.runtime ||
-"Runtime unknown";
-
-modalGenre.textContent =
-movie.genre ||
-"Genre unknown";
-
-modalSynopsis.textContent =
-movie.synopsis ||
-"No synopsis added yet.";
-
-modalCast.textContent =
-movie.cast ||
-"Cast information not added.";
-
-modalDirector.textContent =
-movie.director ||
-"Director information not added.";
-
-// LARGE COVER
-
-const colorIndex =
-movies.indexOf(movie) %
-coverColors.length;
-
-const colors =
-coverColors[colorIndex];
-
-modalCover.innerHTML =
-"";
-
-// TMDB POSTER
-
-if (movie.poster) {
-
-```
-modalCover.style.backgroundImage =
-  "url(\"" + movie.poster + "\")";
-
-modalCover.style.backgroundSize =
-  "cover";
-
-modalCover.style.backgroundPosition =
-  "center";
-
-modalCover.style.backgroundRepeat =
-  "no-repeat";
+  currentMovie =
+    movie;
 
 
-const overlay =
-  document.createElement(
-    "div"
+  // RESET FLIP
+
+  flipContainer.classList.remove(
+    "flipped"
   );
 
-overlay.style.position =
-  "absolute";
-
-overlay.style.inset =
-  "0";
-
-overlay.style.display =
-  "flex";
-
-overlay.style.flexDirection =
-  "column";
-
-overlay.style.justifyContent =
-  "flex-end";
-
-overlay.style.padding =
-  "20px";
-
-overlay.style.background =
-  "linear-gradient(to top, rgba(0,0,0,.8), rgba(0,0,0,0) 60%)";
+  flipButton.textContent =
+    "Flip case";
 
 
-modalCover.appendChild(
-  overlay
-);
-```
+  // BASIC INFORMATION
 
-} else {
+  modalTitle.textContent =
+    movie.title;
 
-```
-// FALLBACK COVER
+  modalYear.textContent =
+    movie.year || "";
 
-modalCover.style.backgroundImage =
-  "";
+  modalRuntime.textContent =
+    movie.runtime ||
+    "Runtime unknown";
 
-modalCover.style.background =
-  "linear-gradient(145deg, " +
-  colors[0] +
-  ", " +
-  colors[1] +
-  ")";
+  modalGenre.textContent =
+    movie.genre ||
+    "Genre unknown";
 
+  modalSynopsis.textContent =
+    movie.synopsis ||
+    "No synopsis added yet.";
 
-const coverText =
-  document.createElement(
-    "div"
-  );
+  modalCast.textContent =
+    movie.cast ||
+    "Cast information not added.";
 
-coverText.style.position =
-  "absolute";
-
-coverText.style.inset =
-  "0";
-
-coverText.style.display =
-  "flex";
-
-coverText.style.flexDirection =
-  "column";
-
-coverText.style.justifyContent =
-  "flex-end";
-
-coverText.style.padding =
-  "20px";
-
-coverText.style.background =
-  "radial-gradient(circle at 20% 15%, rgba(255,255,255,.22), transparent 32%)";
+  modalDirector.textContent =
+    movie.director ||
+    "Director information not added.";
 
 
-modalCover.appendChild(
-  coverText
-);
-```
+  // LARGE COVER
 
-}
+  const colorIndex =
+    movies.indexOf(movie) %
+    coverColors.length;
 
-// FORMATS
+  const colors =
+    coverColors[colorIndex];
 
-modalFormats.innerHTML =
-"";
+  modalCover.innerHTML =
+    "";
 
-const physical =
-movie.physical || [];
 
-const digital =
-movie.digital || [];
+  // TMDB POSTER
 
-// Physical
+  if (movie.poster) {
 
-physical.forEach(
-format => {
+    modalCover.style.backgroundImage =
+      `url("${movie.poster}")`;
 
-```
-  const item =
-    document.createElement(
-      "div"
+    modalCover.style.backgroundSize =
+      "cover";
+
+    modalCover.style.backgroundPosition =
+      "center";
+
+    modalCover.style.backgroundRepeat =
+      "no-repeat";
+
+
+    const overlay =
+      document.createElement(
+        "div"
+      );
+
+    overlay.style.position =
+      "absolute";
+
+    overlay.style.inset =
+      "0";
+
+    overlay.style.display =
+      "flex";
+
+    overlay.style.flexDirection =
+      "column";
+
+    overlay.style.justifyContent =
+      "flex-end";
+
+    overlay.style.padding =
+      "20px";
+
+    overlay.style.background =
+      "linear-gradient(to top, rgba(0,0,0,.8), rgba(0,0,0,0) 60%)";
+
+
+    modalCover.appendChild(
+      overlay
     );
 
-  item.className =
-    "format-item";
+  } else {
 
-  item.textContent =
-    "💿 Physical — " + format;
+    // FALLBACK COVER
 
-  modalFormats.appendChild(
-    item
-  );
+    modalCover.style.backgroundImage =
+      "";
 
-}
-```
+    modalCover.style.background =
+      `linear-gradient(
+        145deg,
+        ${colors[0]},
+        ${colors[1]}
+      )`;
 
-);
 
-// Digital
+    const coverText =
+      document.createElement(
+        "div"
+      );
 
-digital.forEach(
-service => {
+    coverText.style.position =
+      "absolute";
 
-```
-  const item =
-    document.createElement(
-      "div"
+    coverText.style.inset =
+      "0";
+
+    coverText.style.display =
+      "flex";
+
+    coverText.style.flexDirection =
+      "column";
+
+    coverText.style.justifyContent =
+      "flex-end";
+
+    coverText.style.padding =
+      "20px";
+
+    coverText.style.background =
+      "radial-gradient(circle at 20% 15%, rgba(255,255,255,.22), transparent 32%)";
+
+
+    modalCover.appendChild(
+      coverText
     );
 
-  item.className =
-    "format-item";
+  }
 
-  item.textContent =
-    "📱 Digital — " + service;
 
-  modalFormats.appendChild(
-    item
+  // FORMATS
+
+  modalFormats.innerHTML =
+    "";
+
+  const physical =
+    movie.physical || [];
+
+  const digital =
+    movie.digital || [];
+
+
+  // Physical
+
+  physical.forEach(
+    format => {
+
+      const item =
+        document.createElement(
+          "div"
+        );
+
+      item.className =
+        "format-item";
+
+      item.textContent =
+        `💿 Physical — ${format}`;
+
+      modalFormats.appendChild(
+        item
+      );
+
+    }
   );
 
-}
-```
 
-);
+  // Digital
 
-// No format information
+  digital.forEach(
+    service => {
 
-if (
-physical.length === 0 &&
-digital.length === 0
-) {
+      const item =
+        document.createElement(
+          "div"
+        );
 
-```
-const item =
-  document.createElement(
-    "div"
+      item.className =
+        "format-item";
+
+      item.textContent =
+        `📱 Digital — ${service}`;
+
+      modalFormats.appendChild(
+        item
+      );
+
+    }
   );
 
-item.className =
-  "format-item";
 
-item.textContent =
-  "No format information added yet.";
+  // No format information
 
-modalFormats.appendChild(
-  item
-);
-```
+  if (
+    physical.length === 0 &&
+    digital.length === 0
+  ) {
+
+    const item =
+      document.createElement(
+        "div"
+      );
+
+    item.className =
+      "format-item";
+
+    item.textContent =
+      "No format information added yet.";
+
+    modalFormats.appendChild(
+      item
+    );
+
+  }
+
+
+  // SHOW MODAL
+
+  modal.classList.remove(
+    "hidden"
+  );
+
+  document.body.style.overflow =
+    "hidden";
 
 }
 
-// SHOW MODAL
-
-modal.classList.remove(
-"hidden"
-);
-
-document.body.style.overflow =
-"hidden";
-
-}
 
 // =========================================================
 // CLOSE MOVIE
@@ -902,57 +870,59 @@ document.body.style.overflow =
 
 function closeMovie() {
 
-modal.classList.add(
-"hidden"
-);
+  modal.classList.add(
+    "hidden"
+  );
 
-document.body.style.overflow =
-"";
+  document.body.style.overflow =
+    "";
 
-currentMovie =
-null;
+  currentMovie =
+    null;
 
 }
 
+
 modalClose.addEventListener(
-"click",
-closeMovie
+  "click",
+  closeMovie
 );
+
 
 // =========================================================
 // CLICK OUTSIDE MOVIE
 // =========================================================
 
 document.querySelector(
-".modal-backdrop"
+  ".modal-backdrop"
 ).addEventListener(
-"click",
-closeMovie
+  "click",
+  closeMovie
 );
+
 
 // =========================================================
 // ESCAPE KEY
 // =========================================================
 
 document.addEventListener(
-"keydown",
-event => {
+  "keydown",
+  event => {
 
-```
-if (
-  event.key === "Escape" &&
-  !modal.classList.contains(
-    "hidden"
-  )
-) {
+    if (
+      event.key === "Escape" &&
+      !modal.classList.contains(
+        "hidden"
+      )
+    ) {
 
-  closeMovie();
+      closeMovie();
 
-}
-```
+    }
 
-}
+  }
 );
+
 
 // =========================================================
 // FLIP CASE
@@ -960,53 +930,51 @@ if (
 
 function flipMovie() {
 
-flipContainer.classList.toggle(
-"flipped"
-);
+  flipContainer.classList.toggle(
+    "flipped"
+  );
 
-if (
-flipContainer.classList.contains(
-"flipped"
-)
-) {
 
-```
-flipButton.textContent =
-  "Flip back";
-```
+  if (
+    flipContainer.classList.contains(
+      "flipped"
+    )
+  ) {
 
-} else {
+    flipButton.textContent =
+      "Flip back";
 
-```
-flipButton.textContent =
-  "Flip case";
-```
+  } else {
 
-}
+    flipButton.textContent =
+      "Flip case";
+
+  }
 
 }
+
 
 flipButton.addEventListener(
-"click",
-flipMovie
+  "click",
+  flipMovie
 );
+
 
 flipContainer.addEventListener(
-"click",
-event => {
+  "click",
+  event => {
 
-```
-if (
-  event.target === flipButton
-) {
-  return;
-}
+    if (
+      event.target === flipButton
+    ) {
+      return;
+    }
 
-flipMovie();
-```
+    flipMovie();
 
-}
+  }
 );
+
 
 // =========================================================
 // SWIPE TO FLIP
@@ -1015,255 +983,253 @@ flipMovie();
 let touchStartX = 0;
 let touchStartY = 0;
 
-flipContainer.addEventListener(
-"touchstart",
-event => {
-
-```
-const touch =
-  event.changedTouches[0];
-
-touchStartX =
-  touch.screenX;
-
-touchStartY =
-  touch.screenY;
-```
-
-},
-{
-passive: true
-}
-);
 
 flipContainer.addEventListener(
-"touchend",
-event => {
+  "touchstart",
+  event => {
 
-```
-const touch =
-  event.changedTouches[0];
+    const touch =
+      event.changedTouches[0];
 
-const differenceX =
-  touch.screenX -
-  touchStartX;
+    touchStartX =
+      touch.screenX;
 
-const differenceY =
-  touch.screenY -
-  touchStartY;
+    touchStartY =
+      touch.screenY;
 
-
-if (
-  Math.abs(differenceX) > 50 &&
-  Math.abs(differenceX) >
-    Math.abs(differenceY)
-) {
-
-  flipMovie();
-
-}
-```
-
-},
-{
-passive: true
-}
+  },
+  {
+    passive: true
+  }
 );
+
+
+flipContainer.addEventListener(
+  "touchend",
+  event => {
+
+    const touch =
+      event.changedTouches[0];
+
+    const differenceX =
+      touch.screenX -
+      touchStartX;
+
+    const differenceY =
+      touch.screenY -
+      touchStartY;
+
+
+    if (
+      Math.abs(differenceX) > 50 &&
+      Math.abs(differenceX) >
+        Math.abs(differenceY)
+    ) {
+
+      flipMovie();
+
+    }
+
+  },
+  {
+    passive: true
+  }
+);
+
 
 // =========================================================
 // FILTER BUTTONS
 // =========================================================
 
 filters.forEach(
-button => {
+  button => {
 
-```
-button.addEventListener(
-  "click",
-  () => {
+    button.addEventListener(
+      "click",
+      () => {
 
-    const group =
-      button.dataset.filterGroup;
+        const group =
+          button.dataset.filterGroup;
 
-    const value =
-      button.dataset.filterValue;
+        const value =
+          button.dataset.filterValue;
 
 
-    // TYPE
+        // TYPE
 
-    if (
-      group === "type"
-    ) {
+        if (
+          group === "type"
+        ) {
 
-      activeFilters.type =
-        value;
+          activeFilters.type =
+            value;
 
-      document
-        .querySelectorAll(
-          '[data-filter-group="type"]'
-        )
-        .forEach(
-          b =>
-            b.classList.toggle(
-              "active",
-              b.dataset.filterValue === value
+          document
+            .querySelectorAll(
+              '[data-filter-group="type"]'
             )
-        );
+            .forEach(
+              b =>
+                b.classList.toggle(
+                  "active",
+                  b.dataset.filterValue === value
+                )
+            );
 
-    }
+        }
 
 
-    // MEDIA
+        // MEDIA
 
-    if (
-      group === "media"
-    ) {
+        if (
+          group === "media"
+        ) {
 
-      activeFilters.media =
-        value;
+          activeFilters.media =
+            value;
 
-      document
-        .querySelectorAll(
-          '[data-filter-group="media"]'
-        )
-        .forEach(
-          b =>
-            b.classList.toggle(
-              "active",
-              b.dataset.filterValue === value
+          document
+            .querySelectorAll(
+              '[data-filter-group="media"]'
             )
-        );
+            .forEach(
+              b =>
+                b.classList.toggle(
+                  "active",
+                  b.dataset.filterValue === value
+                )
+            );
 
-    }
+        }
 
 
-    // GENRE
+        // GENRE
 
-    if (
-      group === "genre"
-    ) {
+        if (
+          group === "genre"
+        ) {
 
-      if (
-        activeFilters.genre === value
-      ) {
+          if (
+            activeFilters.genre === value
+          ) {
 
-        activeFilters.genre =
-          null;
+            activeFilters.genre =
+              null;
 
-        button.classList.remove(
-          "active"
-        );
+            button.classList.remove(
+              "active"
+            );
 
-      } else {
+          } else {
 
-        activeFilters.genre =
-          value;
+            activeFilters.genre =
+              value;
 
-        document
-          .querySelectorAll(
-            '[data-filter-group="genre"]'
-          )
-          .forEach(
-            b =>
-              b.classList.toggle(
-                "active",
-                b.dataset.filterValue === value
+            document
+              .querySelectorAll(
+                '[data-filter-group="genre"]'
               )
-          );
+              .forEach(
+                b =>
+                  b.classList.toggle(
+                    "active",
+                    b.dataset.filterValue === value
+                  )
+              );
 
-      }
+          }
 
-    }
+        }
 
 
-    // CATEGORY
+        // CATEGORY
 
-    if (
-      group === "category"
-    ) {
+        if (
+          group === "category"
+        ) {
 
-      if (
-        activeFilters.category === value
-      ) {
+          if (
+            activeFilters.category === value
+          ) {
 
-        activeFilters.category =
-          null;
+            activeFilters.category =
+              null;
 
-        button.classList.remove(
-          "active"
-        );
+            button.classList.remove(
+              "active"
+            );
 
-      } else {
+          } else {
 
-        activeFilters.category =
-          value;
+            activeFilters.category =
+              value;
 
-        document
-          .querySelectorAll(
-            '[data-filter-group="category"]'
-          )
-          .forEach(
-            b =>
-              b.classList.toggle(
-                "active",
-                b.dataset.filterValue === value
+            document
+              .querySelectorAll(
+                '[data-filter-group="category"]'
               )
-          );
+              .forEach(
+                b =>
+                  b.classList.toggle(
+                    "active",
+                    b.dataset.filterValue === value
+                  )
+              );
+
+          }
+
+        }
+
+
+        // ANIMATED
+
+        if (
+          group === "animated"
+        ) {
+
+          if (
+            activeFilters.animated === "mixed"
+          ) {
+
+            activeFilters.animated =
+              "hide";
+
+          } else if (
+            activeFilters.animated === "hide"
+          ) {
+
+            activeFilters.animated =
+              "only";
+
+          } else {
+
+            activeFilters.animated =
+              "mixed";
+
+          }
+
+          updateAnimatedButton();
+
+        }
+
+
+        // Changing filters invalidates the old random list.
+
+        if (randomMode) {
+
+          generateRandomMovies();
+
+        }
+
+
+        renderMovies();
 
       }
-
-    }
-
-
-    // ANIMATED
-
-    if (
-      group === "animated"
-    ) {
-
-      if (
-        activeFilters.animated === "mixed"
-      ) {
-
-        activeFilters.animated =
-          "hide";
-
-      } else if (
-        activeFilters.animated === "hide"
-      ) {
-
-        activeFilters.animated =
-          "only";
-
-      } else {
-
-        activeFilters.animated =
-          "mixed";
-
-      }
-
-      updateAnimatedButton();
-
-    }
-
-
-    // Changing filters invalidates the old random list.
-
-    if (randomMode) {
-
-      generateRandomMovies();
-
-    }
-
-
-    renderMovies();
+    );
 
   }
 );
-```
 
-}
-);
 
 // =========================================================
 // UPDATE ANIMATED BUTTON
@@ -1271,61 +1237,60 @@ button.addEventListener(
 
 function updateAnimatedButton() {
 
-const animatedButton =
-document.querySelector(
-'[data-filter-group="animated"]'
-);
+  const animatedButton =
+    document.querySelector(
+      '[data-filter-group="animated"]'
+    );
 
-if (!animatedButton) {
-return;
-}
 
-if (
-activeFilters.animated === "mixed"
-) {
+  if (!animatedButton) {
+    return;
+  }
 
-```
-animatedButton.textContent =
-  "Animated: Mixed";
 
-animatedButton.classList.add(
-  "active"
-);
-```
+  if (
+    activeFilters.animated === "mixed"
+  ) {
 
-}
+    animatedButton.textContent =
+      "Animated: Mixed";
 
-if (
-activeFilters.animated === "hide"
-) {
+    animatedButton.classList.add(
+      "active"
+    );
 
-```
-animatedButton.textContent =
-  "Animated: Hide";
+  }
 
-animatedButton.classList.remove(
-  "active"
-);
-```
 
-}
+  if (
+    activeFilters.animated === "hide"
+  ) {
 
-if (
-activeFilters.animated === "only"
-) {
+    animatedButton.textContent =
+      "Animated: Hide";
 
-```
-animatedButton.textContent =
-  "Animated: Only";
+    animatedButton.classList.remove(
+      "active"
+    );
 
-animatedButton.classList.add(
-  "active"
-);
-```
+  }
 
-}
+
+  if (
+    activeFilters.animated === "only"
+  ) {
+
+    animatedButton.textContent =
+      "Animated: Only";
+
+    animatedButton.classList.add(
+      "active"
+    );
+
+  }
 
 }
+
 
 // =========================================================
 // GET CURRENT FILTERED MOVIES
@@ -1333,139 +1298,138 @@ animatedButton.classList.add(
 
 function getFilteredMovies() {
 
-return movies.filter(movie => {
+  return movies.filter(movie => {
 
-```
-// Type
+    // Type
 
-if (
-  activeFilters.type !== "all" &&
-  movie.type !== activeFilters.type
-) {
-  return false;
-}
-
-
-// Media
-
-if (
-  activeFilters.media === "physical" &&
-  (!movie.physical || movie.physical.length === 0)
-) {
-  return false;
-}
-
-if (
-  activeFilters.media === "digital" &&
-  (!movie.digital || movie.digital.length === 0)
-) {
-  return false;
-}
+    if (
+      activeFilters.type !== "all" &&
+      movie.type !== activeFilters.type
+    ) {
+      return false;
+    }
 
 
-// Genre
+    // Media
 
-if (activeFilters.genre) {
+    if (
+      activeFilters.media === "physical" &&
+      (!movie.physical || movie.physical.length === 0)
+    ) {
+      return false;
+    }
 
-  const movieGenre =
-    (movie.genre || "").toLowerCase();
-
-  if (
-    !movieGenre.includes(
-      activeFilters.genre.toLowerCase()
-    )
-  ) {
-    return false;
-  }
-
-}
-
-
-// Category
-
-if (activeFilters.category) {
-
-  const categories =
-    movie.categories || [];
-
-  if (
-    !categories.includes(
-      activeFilters.category
-    )
-  ) {
-    return false;
-  }
-
-}
+    if (
+      activeFilters.media === "digital" &&
+      (!movie.digital || movie.digital.length === 0)
+    ) {
+      return false;
+    }
 
 
-// Animated
+    // Genre
 
-const isAnimated =
-  (movie.categories || []).includes(
-    "animated"
-  );
+    if (activeFilters.genre) {
 
+      const movieGenre =
+        (movie.genre || "").toLowerCase();
 
-if (
-  activeFilters.animated === "hide" &&
-  isAnimated
-) {
-  return false;
-}
+      if (
+        !movieGenre.includes(
+          activeFilters.genre.toLowerCase()
+        )
+      ) {
+        return false;
+      }
 
-
-if (
-  activeFilters.animated === "only" &&
-  !isAnimated
-) {
-  return false;
-}
+    }
 
 
-// Search
+    // Category
 
-if (currentSearch) {
+    if (activeFilters.category) {
 
-  const searchText =
-    currentSearch.toLowerCase();
+      const categories =
+        movie.categories || [];
 
-  const searchableText = [
-    movie.title,
-    movie.tmdbTitle,
-    movie.year,
-    movie.genre,
-    movie.director,
-    movie.cast,
-    movie.synopsis,
-    movie.type
-  ]
-    .filter(
-      value =>
-        value !== null &&
-        value !== undefined
-    )
-    .join(" ")
-    .toLowerCase();
+      if (
+        !categories.includes(
+          activeFilters.category
+        )
+      ) {
+        return false;
+      }
+
+    }
 
 
-  if (
-    !searchableText.includes(
-      searchText
-    )
-  ) {
-    return false;
-  }
+    // Animated
 
-}
+    const isAnimated =
+      (movie.categories || []).includes(
+        "animated"
+      );
 
 
-return true;
-```
+    if (
+      activeFilters.animated === "hide" &&
+      isAnimated
+    ) {
+      return false;
+    }
 
-});
+
+    if (
+      activeFilters.animated === "only" &&
+      !isAnimated
+    ) {
+      return false;
+    }
+
+
+    // Search
+
+    if (currentSearch) {
+
+      const searchText =
+        currentSearch.toLowerCase();
+
+      const searchableText = [
+        movie.title,
+        movie.tmdbTitle,
+        movie.year,
+        movie.genre,
+        movie.director,
+        movie.cast,
+        movie.synopsis,
+        movie.type
+      ]
+        .filter(
+          value =>
+            value !== null &&
+            value !== undefined
+        )
+        .join(" ")
+        .toLowerCase();
+
+
+      if (
+        !searchableText.includes(
+          searchText
+        )
+      ) {
+        return false;
+      }
+
+    }
+
+
+    return true;
+
+  });
 
 }
+
 
 // =========================================================
 // GENERATE RANDOM 50
@@ -1473,46 +1437,48 @@ return true;
 
 function generateRandomMovies() {
 
-const availableMovies =
-getFilteredMovies();
-
-const shuffled =
-[...availableMovies];
-
-// Fisher-Yates shuffle
-
-for (
-let i = shuffled.length - 1;
-i > 0;
-i--
-) {
-
-```
-const j =
-  Math.floor(
-    Math.random() * (i + 1)
-  );
+  const availableMovies =
+    getFilteredMovies();
 
 
-[
-  shuffled[i],
-  shuffled[j]
-] =
-[
-  shuffled[j],
-  shuffled[i]
-];
-```
+  const shuffled =
+    [...availableMovies];
+
+
+  // Fisher-Yates shuffle
+
+  for (
+    let i = shuffled.length - 1;
+    i > 0;
+    i--
+  ) {
+
+    const j =
+      Math.floor(
+        Math.random() * (i + 1)
+      );
+
+
+    [
+      shuffled[i],
+      shuffled[j]
+    ] =
+    [
+      shuffled[j],
+      shuffled[i]
+    ];
+
+  }
+
+
+  randomMovies =
+    shuffled.slice(
+      0,
+      50
+    );
 
 }
 
-randomMovies =
-shuffled.slice(
-0,
-50
-);
-
-}
 
 // =========================================================
 // RANDOM 50 BUTTON
@@ -1520,33 +1486,31 @@ shuffled.slice(
 
 if (randomButton) {
 
-randomButton.addEventListener(
-"click",
-() => {
+  randomButton.addEventListener(
+    "click",
+    () => {
 
-```
-  randomMode =
-    true;
+      randomMode =
+        true;
 
-  generateRandomMovies();
+      generateRandomMovies();
 
-  renderMovies();
+      renderMovies();
 
 
-  if (showAllButton) {
+      if (showAllButton) {
 
-    showAllButton.classList.add(
-      "active"
-    );
+        showAllButton.classList.add(
+          "active"
+        );
 
-  }
+      }
 
-}
-```
-
-);
+    }
+  );
 
 }
+
 
 // =========================================================
 // SHOW ALL BUTTON
@@ -1554,30 +1518,28 @@ randomButton.addEventListener(
 
 if (showAllButton) {
 
-showAllButton.addEventListener(
-"click",
-() => {
+  showAllButton.addEventListener(
+    "click",
+    () => {
 
-```
-  randomMode =
-    false;
+      randomMode =
+        false;
 
-  randomMovies =
-    [];
+      randomMovies =
+        [];
 
-  renderMovies();
+      renderMovies();
 
 
-  showAllButton.classList.remove(
-    "active"
+      showAllButton.classList.remove(
+        "active"
+      );
+
+    }
   );
 
 }
-```
 
-);
-
-}
 
 // =========================================================
 // SEARCH
@@ -1585,59 +1547,55 @@ showAllButton.addEventListener(
 
 if (searchToggle) {
 
-searchToggle.addEventListener(
-"click",
-() => {
+  searchToggle.addEventListener(
+    "click",
+    () => {
 
-```
-  searchArea.classList.toggle(
-    "hidden"
+      searchArea.classList.toggle(
+        "hidden"
+      );
+
+
+      if (
+        !searchArea.classList.contains(
+          "hidden"
+        )
+      ) {
+
+        searchInput.focus();
+
+      }
+
+    }
   );
 
-
-  if (
-    !searchArea.classList.contains(
-      "hidden"
-    )
-  ) {
-
-    searchInput.focus();
-
-  }
-
 }
-```
 
-);
-
-}
 
 if (searchInput) {
 
-searchInput.addEventListener(
-"input",
-event => {
+  searchInput.addEventListener(
+    "input",
+    event => {
 
-```
-  currentSearch =
-    event.target.value.trim();
-
-
-  if (randomMode) {
-
-    generateRandomMovies();
-
-  }
+      currentSearch =
+        event.target.value.trim();
 
 
-  renderMovies();
+      if (randomMode) {
 
-}
-```
+        generateRandomMovies();
 
-);
+      }
+
+
+      renderMovies();
+
+    }
+  );
 
 }
+
 
 // =========================================================
 // PREVENT BACKGROUND SCROLL
@@ -1646,25 +1604,23 @@ event => {
 
 if (modal) {
 
-modal.addEventListener(
-"touchmove",
-event => {
+  modal.addEventListener(
+    "touchmove",
+    event => {
 
-```
-  if (
-    event.target === modal
-  ) {
+      if (
+        event.target === modal
+      ) {
 
-    event.preventDefault();
+        event.preventDefault();
 
-  }
+      }
 
-},
-{
-  passive: false
-}
-```
-
-);
+    },
+    {
+      passive: false
+    }
+  );
 
 }
+```
