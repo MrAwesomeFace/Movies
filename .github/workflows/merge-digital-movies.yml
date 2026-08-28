@@ -225,52 +225,160 @@ jobs:
             movie.digital = existing.join(' | ');
           }
 
+          function cleanText(value) {
+            if (value === undefined || value === null) {
+              return '';
+            }
+
+            return String(value).trim();
+          }
+
+          function firstNameFromList(value) {
+            if (!value) {
+              return '';
+            }
+
+            return String(value)
+              .split(',')
+              .map(x => x.trim())
+              .filter(Boolean)[0] || '';
+          }
+
+          function getCategories(row, title, overview, genre) {
+            const categories = [];
+
+            const text = [
+              title,
+              overview,
+              genre,
+              row.tmdbOriginalTitle || '',
+              row.title || ''
+            ]
+              .join(' ')
+              .toLowerCase();
+
+            const christmasTerms = [
+              'christmas',
+              'xmas',
+              'santa',
+              'north pole',
+              'holiday',
+              'holly',
+              'grinch',
+              'mistletoe',
+              'noel',
+              'nativity',
+              'christmas eve',
+              'christmas day'
+            ];
+
+            const baseballTerms = [
+              'baseball',
+              'major league baseball',
+              'mlb',
+              'little league',
+              'pitcher',
+              'pitching',
+              'home run',
+              'batting',
+              'ballplayer',
+              'baseball team'
+            ];
+
+            const animatedTerms = [
+              'animation',
+              'animated'
+            ];
+
+            if (
+              christmasTerms.some(term => text.includes(term))
+            ) {
+              categories.push('christmas');
+            }
+
+            if (
+              baseballTerms.some(term => text.includes(term))
+            ) {
+              categories.push('baseball');
+            }
+
+            if (
+              animatedTerms.some(term => text.includes(term))
+            ) {
+              categories.push('animated');
+            }
+
+            return categories;
+          }
+
           function makeNewMovie(row) {
             const tmdbId = normalizeId(
               row.tmdbId || row.source_tmdbId
             );
 
             const title =
-              row.tmdbTitle ||
-              row.title ||
-              '';
+              cleanText(row.tmdbTitle) ||
+              cleanText(row.title);
 
             const year =
-              row.tmdbYear ||
-              row.year ||
-              row.source_year ||
-              '';
+              cleanText(row.tmdbYear) ||
+              cleanText(row.year) ||
+              cleanText(row.source_year);
+
+            const posterPath =
+              cleanText(row.tmdbPosterPath);
+
+            const backdropPath =
+              cleanText(row.tmdbBackdropPath);
+
+            const overview =
+              cleanText(row.tmdbOverview);
+
+            const originalTitle =
+              cleanText(row.tmdbOriginalTitle);
+
+            const releaseDate =
+              cleanText(row.tmdbReleaseDate);
+
+            const runtime =
+              cleanText(row.tmdbRuntime);
+
+            const genre =
+              cleanText(row.tmdbGenre);
+
+            const director =
+              cleanText(row.tmdbDirector);
+
+            const cast =
+              cleanText(row.tmdbCast);
 
             const movie = {
               title: title,
-              year: year ? Number(year) : '',
-              tmdbId: tmdbId,
-              digital: row.digital || ''
+              tmdbTitle: title,
+              type: 'movie',
+              tmdbId: tmdbId ? Number(tmdbId) : '',
+              poster: posterPath
+                ? `https://image.tmdb.org/t/p/w500${posterPath}`
+                : '',
+              year: year,
+              runtime: runtime,
+              genre: genre,
+              director: director,
+              cast: cast,
+              synopsis: overview,
+              physical: [],
+              digital: cleanText(row.digital)
             };
 
-            if (row.tmdbOriginalTitle) {
-              movie.originalTitle =
-                row.tmdbOriginalTitle;
-            }
+            const categories = getCategories(
+              row,
+              title,
+              overview,
+              genre
+            );
 
-            if (row.tmdbReleaseDate) {
-              movie.releaseDate =
-                row.tmdbReleaseDate;
-            }
-
-            if (row.tmdbOverview) {
-              movie.overview =
-                row.tmdbOverview;
-            }
-
-            if (row.tmdbPosterPath) {
-              movie.posterPath =
-                row.tmdbPosterPath;
-            }
-
-            if (row.tmdbBackdropPath) {
-              movie.backdropPath =
-                row.tmdbBackdropPath;
+            if (categories.length > 0) {
+              movie.categories = categories;
             }
 
             return movie;
@@ -288,27 +396,33 @@ jobs:
             );
           }
 
-          const moviesText =
-            fs.readFileSync(
-              MOVIES_FILE,
-              'utf8'
-            );
+          const moviesText = fs.readFileSync(
+            MOVIES_FILE,
+            'utf8'
+          );
 
-          const digitalText =
-            fs.readFileSync(
-              DIGITAL_FILE,
-              'utf8'
-            );
+          const digitalText = fs.readFileSync(
+            DIGITAL_FILE,
+            'utf8'
+          );
 
-          const movies =
-            extractMoviesJS(moviesText);
+          const movies = extractMoviesJS(
+            moviesText
+          );
 
-          const digitalRows =
-            parseCSV(digitalText);
+          const digitalRows = parseCSV(
+            digitalText
+          );
 
           if (!Array.isArray(movies)) {
             throw new Error(
               'movies.js did not contain an array.'
+            );
+          }
+
+          if (digitalRows.length === 0) {
+            throw new Error(
+              'Digital CSV contains no data rows.'
             );
           }
 
@@ -320,10 +434,9 @@ jobs:
             `Digital rows: ${digitalRows.length}`
           );
 
-          const merged =
-            movies.map(movie => ({
-              ...movie
-            }));
+          const merged = movies.map(movie => ({
+            ...movie
+          }));
 
           const byTmdbId = new Map();
 
@@ -332,8 +445,9 @@ jobs:
             i < merged.length;
             i++
           ) {
-            const id =
-              findTmdbId(merged[i]);
+            const id = findTmdbId(
+              merged[i]
+            );
 
             if (
               id &&
@@ -348,29 +462,34 @@ jobs:
           let matched = 0;
           let added = 0;
           let reviewed = 0;
+          let digitalAdded = 0;
 
           for (const row of digitalRows) {
-            const sourceId =
-              normalizeId(
-                row.tmdbId ||
-                row.source_tmdbId
-              );
+            const sourceId = normalizeId(
+              row.tmdbId ||
+              row.source_tmdbId
+            );
+
+            const sourceTitle =
+              cleanText(row.title);
+
+            const digitalSource =
+              cleanText(row.digital);
 
             if (!sourceId) {
               reviewed++;
 
               reviewRows.push({
                 status: 'REVIEW',
-                title: row.title || '',
-                digital: row.digital || '',
+                title: sourceTitle,
+                digital: digitalSource,
                 tmdbId: '',
                 tmdbTitle:
-                  row.tmdbTitle || '',
+                  cleanText(row.tmdbTitle),
                 year:
-                  row.tmdbYear ||
-                  row.year ||
-                  row.source_year ||
-                  '',
+                  cleanText(row.tmdbYear) ||
+                  cleanText(row.year) ||
+                  cleanText(row.source_year),
                 reason:
                   'No TMDB ID available'
               });
@@ -382,10 +501,24 @@ jobs:
               const index =
                 byTmdbId.get(sourceId);
 
+              const before =
+                JSON.stringify(
+                  merged[index].digital
+                );
+
               addDigitalToMovie(
                 merged[index],
-                row.digital || ''
+                digitalSource
               );
+
+              const after =
+                JSON.stringify(
+                  merged[index].digital
+                );
+
+              if (before !== after) {
+                digitalAdded++;
+              }
 
               matched++;
 
@@ -454,27 +587,31 @@ jobs:
           );
 
           console.log(
-            `Original movies:      ${movies.length}`
+            `Original movies:          ${movies.length}`
           );
 
           console.log(
-            `Digital rows:         ${digitalRows.length}`
+            `Digital rows:             ${digitalRows.length}`
           );
 
           console.log(
-            `Matched by TMDB ID:   ${matched}`
+            `Matched by TMDB ID:       ${matched}`
           );
 
           console.log(
-            `New movies added:     ${added}`
+            `Digital values changed:   ${digitalAdded}`
           );
 
           console.log(
-            `Manual review:        ${reviewed}`
+            `New movies added:         ${added}`
           );
 
           console.log(
-            `Final records:        ${merged.length}`
+            `Manual review:            ${reviewed}`
+          );
+
+          console.log(
+            `Final records:            ${merged.length}`
           );
 
           console.log('');
@@ -498,7 +635,7 @@ jobs:
 
           if (
             !fs.existsSync(OUTPUT_FILE) ||
-            fs.statSync(OUTPUT_FILE).size < 10
+            fs.statSync(OUTPUT_FILE).size < 100
           ) {
             throw new Error(
               'SANITY CHECK FAILED: merged JSON is empty.'
@@ -521,6 +658,54 @@ jobs:
             `Records containing digital information: ${digitalCount}`
           );
 
+          if (digitalCount === 0) {
+            throw new Error(
+              'SANITY CHECK FAILED: no records contain digital information.'
+            );
+          }
+
+          const newMovies =
+            merged.slice(movies.length);
+
+          for (const movie of newMovies) {
+            if (!movie.tmdbId) {
+              throw new Error(
+                `SANITY CHECK FAILED: new movie "${movie.title}" has no TMDB ID.`
+              );
+            }
+
+            if (!movie.tmdbTitle) {
+              throw new Error(
+                `SANITY CHECK FAILED: new movie "${movie.title}" has no tmdbTitle.`
+              );
+            }
+
+            if (!movie.type) {
+              throw new Error(
+                `SANITY CHECK FAILED: new movie "${movie.title}" has no type.`
+              );
+            }
+
+            if (!Object.prototype.hasOwnProperty.call(movie, 'physical')) {
+              throw new Error(
+                `SANITY CHECK FAILED: new movie "${movie.title}" has no physical field.`
+              );
+            }
+
+            if (!Object.prototype.hasOwnProperty.call(movie, 'digital')) {
+              throw new Error(
+                `SANITY CHECK FAILED: new movie "${movie.title}" has no digital field.`
+              );
+            }
+          }
+
+          console.log(
+            `Validated new movie records: ${newMovies.length}`
+          );
+
+          console.log(
+            'Sanity checks passed.'
+          );
           NODE
 
       - name: Commit merged files
