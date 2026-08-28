@@ -1,0 +1,432 @@
+name: Prepare Movie Merge Preview
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  prepare-merge:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build merge preview
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+        run: |
+          set -e
+
+          node <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+
+          const MOVIES_FILE = 'movies.js';
+          const ENRICHED_FILE = 'digital_movies_tmdb_enriched.json';
+          const PREVIEW_FILE = 'movies_merge_preview.js';
+          const REVIEW_FILE = 'movies_merge_review.csv';
+
+          function fail(message) {
+            console.error(message);
+            process.exit(1);
+          }
+
+          if (!fs.existsSync(MOVIES_FILE)) {
+            fail(`Missing ${MOVIES_FILE}`);
+          }
+
+          if (!fs.existsSync(ENRICHED_FILE)) {
+            fail(`Missing ${ENRICHED_FILE}`);
+          }
+
+          const moviesSource = fs.readFileSync(MOVIES_FILE, 'utf8');
+
+          let movies;
+
+          try {
+            movies = vm.runInNewContext(
+              moviesSource + '\nmovies;',
+              Object.create(null),
+              { timeout: 5000 }
+            );
+          } catch (err) {
+            fail(`Could not read movies.js: ${err.message}`);
+          }
+
+          if (!Array.isArray(movies)) {
+            fail('movies.js did not contain an array named "movies".');
+          }
+
+          const digital = JSON.parse(
+            fs.readFileSync(ENRICHED_FILE, 'utf8')
+          );
+
+          if (!Array.isArray(digital)) {
+            fail(`${ENRICHED_FILE} did not contain an array.`);
+          }
+
+          console.log(`Existing catalog records: ${movies.length}`);
+          console.log(`Digital records: ${digital.length}`);
+
+          /*
+           * Make a copy so movies.js itself is never modified.
+           */
+          const merged = movies.map(movie => ({
+            ...movie,
+            physical: Array.isArray(movie.physical)
+              ? [...movie.physical]
+              : [],
+            digital: Array.isArray(movie.digital)
+              ? [...movie.digital]
+              : []
+          }));
+
+          const byTmdbId = new Map();
+
+          for (let i = 0; i < merged.length; i++) {
+            const id = String(merged[i].tmdbId ?? '').trim();
+
+            if (!id) continue;
+
+            if (!byTmdbId.has(id)) {
+              byTmdbId.set(id, i);
+            }
+          }
+
+          const reviewRows = [];
+          const addedIds = new Set();
+          const updatedIds = new Set();
+
+          function csvEscape(value) {
+            const text = String(value ?? '');
+            return '"' + text.replace(/"/g, '""') + '"';
+          }
+
+          function addReview(
+            action,
+            title,
+            digitalProvider,
+            tmdbId,
+            tmdbTitle,
+            year,
+            reason
+          ) {
+            reviewRows.push([
+              action,
+              title,
+              digitalProvider,
+              tmdbId,
+              tmdbTitle,
+              year,
+              reason
+            ]);
+          }
+
+          function splitProviders(value) {
+            if (!value) return [];
+
+            return String(value)
+              .split('|')
+              .map(x => x.trim())
+              .filter(Boolean);
+          }
+
+          /*
+           * These are the situations where we do NOT want to
+           * automatically create a new catalog record.
+           */
+          function shouldHoldForReview(item) {
+            const title = String(item.title ?? '').trim();
+            const tmdbId = String(item.tmdbId ?? '').trim();
+            const matchType = String(item.match_type ?? '').trim().toUpperCase();
+            const confidence = String(item.confidence ?? '').trim().toUpperCase();
+            const review = String(item.review ?? '').trim();
+
+            if (!tmdbId) {
+              return 'No TMDB ID available.';
+            }
+
+            if (matchType === 'ERROR') {
+              return review || 'TMDB lookup error.';
+            }
+
+            if (confidence === 'REVIEW') {
+              return review || 'Match requires manual review.';
+            }
+
+            /*
+             * The enriched file can contain a TMDB result that is
+             * clearly a bad title match. These are safer to review
+             * than to automatically add.
+             */
+            const suspicious = [
+              ['Fast & Furious', '384018', 'Fast & Furious Presents: Hobbs & Shaw'],
+              ['Killers', '241', 'Natural Born Killers'],
+              ['Network', '37799', 'The Social Network']
+            ];
+
+            for (const [sourceTitle, sourceId, resultTitle] of suspicious) {
+              if (
+                title.toLowerCase() === sourceTitle.toLowerCase() &&
+                tmdbId === sourceId
+              ) {
+                return `Suspicious TMDB match: "${resultTitle}".`;
+              }
+            }
+
+            /*
+             * If TMDB returned a different title and the source wasn't
+             * already marked as an existing match, hold it for review.
+             */
+            const tmdbTitle = String(item.tmdbTitle ?? '').trim();
+
+            if (
+              matchType !== 'EXISTING_TMDB_ID' &&
+              tmdbTitle &&
+              title &&
+              title.toLowerCase() !== tmdbTitle.toLowerCase()
+            ) {
+              const normalizedSource = title
+                .toLowerCase()
+                .replace(/[^a-z0-9]/g, '');
+
+              const normalizedTmdb = tmdbTitle
+                .toLowerCase()
+                .replace(/[^a-z0-9]/g, '');
+
+              if (
+                normalizedSource &&
+                normalizedTmdb &&
+                !normalizedTmdb.includes(normalizedSource) &&
+                !normalizedSource.includes(normalizedTmdb)
+              ) {
+                return `Source title "${title}" differs from TMDB title "${tmdbTitle}".`;
+              }
+            }
+
+            return null;
+          }
+
+          for (const item of digital) {
+            const title = String(item.title ?? '').trim();
+            const providers = splitProviders(item.digital);
+            const tmdbId = String(item.tmdbId ?? '').trim();
+            const tmdbTitle = String(item.tmdbTitle ?? '').trim();
+            const year = String(
+              item.tmdbYear ??
+              item.source_year ??
+              ''
+            ).trim();
+
+            if (!title) {
+              addReview(
+                'REVIEW',
+                '',
+                item.digital ?? '',
+                tmdbId,
+                tmdbTitle,
+                year,
+                'Digital record has no title.'
+              );
+              continue;
+            }
+
+            /*
+             * First priority: TMDB ID already exists in movies.js.
+             */
+            if (tmdbId && byTmdbId.has(tmdbId)) {
+              const index = byTmdbId.get(tmdbId);
+              const movie = merged[index];
+
+              const before = JSON.stringify(movie.digital);
+
+              for (const provider of providers) {
+                if (!movie.digital.includes(provider)) {
+                  movie.digital.push(provider);
+                }
+              }
+
+              if (JSON.stringify(movie.digital) !== before) {
+                updatedIds.add(tmdbId);
+
+                addReview(
+                  'UPDATE',
+                  title,
+                  providers.join(' | '),
+                  tmdbId,
+                  tmdbTitle,
+                  year,
+                  `Digital provider added to existing catalog record "${movie.title}".`
+                );
+              } else {
+                addReview(
+                  'ALREADY_PRESENT',
+                  title,
+                  providers.join(' | '),
+                  tmdbId,
+                  tmdbTitle,
+                  year,
+                  `Digital provider already exists on "${movie.title}".`
+                );
+              }
+
+              continue;
+            }
+
+            /*
+             * If it doesn't match an existing TMDB ID, check whether
+             * the enriched record is safe enough to create.
+             */
+            const holdReason = shouldHoldForReview(item);
+
+            if (holdReason) {
+              addReview(
+                'REVIEW',
+                title,
+                providers.join(' | '),
+                tmdbId,
+                tmdbTitle,
+                year,
+                holdReason
+              );
+              continue;
+            }
+
+            /*
+             * Prevent the same TMDB movie from being added twice.
+             * This handles cases such as Magnolia appearing once for
+             * Fandango and once for Prime.
+             */
+            if (addedIds.has(tmdbId)) {
+              const existingIndex = byTmdbId.get(tmdbId);
+              const movie = merged[existingIndex];
+
+              for (const provider of providers) {
+                if (!movie.digital.includes(provider)) {
+                  movie.digital.push(provider);
+                }
+              }
+
+              updatedIds.add(tmdbId);
+
+              addReview(
+                'COMBINED',
+                title,
+                providers.join(' | '),
+                tmdbId,
+                tmdbTitle,
+                year,
+                'Combined with another digital entry having the same TMDB ID.'
+              );
+
+              continue;
+            }
+
+            /*
+             * Create a NEW catalog record.
+             *
+             * We intentionally use only metadata that is already present
+             * in the enriched JSON. The real movies.js remains untouched.
+             */
+            const newMovie = {
+              title: tmdbTitle || title,
+              tmdbTitle: tmdbTitle || title,
+              type: 'movie',
+              tmdbId: Number(tmdbId),
+              poster: item.tmdbPosterPath
+                ? `https://image.tmdb.org/t/p/w500${item.tmdbPosterPath}`
+                : '',
+              year: year,
+              runtime: '',
+              genre: '',
+              director: '',
+              cast: '',
+              synopsis: item.tmdbOverview || '',
+              physical: [],
+              digital: providers
+            };
+
+            if (item.tmdbBackdropPath) {
+              newMovie.backdrop = `https://image.tmdb.org/t/p/w1280${item.tmdbBackdropPath}`;
+            }
+
+            merged.push(newMovie);
+
+            const newIndex = merged.length - 1;
+            byTmdbId.set(tmdbId, newIndex);
+            addedIds.add(tmdbId);
+
+            addReview(
+              'NEW',
+              title,
+              providers.join(' | '),
+              tmdbId,
+              tmdbTitle,
+              year,
+              'New movie will be added to the preview.'
+            );
+          }
+
+          /*
+           * Write the preview as a valid movies.js-style file.
+           */
+          const preview =
+            'const movies = ' +
+            JSON.stringify(merged, null, 2) +
+            ';\n\n' +
+            'if (typeof module !== "undefined") module.exports = movies;\n';
+
+          fs.writeFileSync(PREVIEW_FILE, preview, 'utf8');
+
+          /*
+           * Write the review CSV.
+           */
+          const header = [
+            'action',
+            'digital_title',
+            'digital_provider',
+            'tmdbId',
+            'tmdbTitle',
+            'year',
+            'reason'
+          ];
+
+          const csv = [
+            header.map(csvEscape).join(','),
+            ...reviewRows.map(row => row.map(csvEscape).join(','))
+          ].join('\n');
+
+          fs.writeFileSync(REVIEW_FILE, csv + '\n', 'utf8');
+
+          console.log('');
+          console.log('========================================');
+          console.log('MERGE PREVIEW COMPLETE');
+          console.log('========================================');
+          console.log(`Original catalog: ${movies.length}`);
+          console.log(`Preview catalog:  ${merged.length}`);
+          console.log(`New records:      ${addedIds.size}`);
+          console.log(`Updated records:  ${updatedIds.size}`);
+          console.log(
+            `Review rows:      ${reviewRows.filter(x => x[0] === 'REVIEW').length}`
+          );
+          console.log('');
+          console.log(`Created: ${PREVIEW_FILE}`);
+          console.log(`Created: ${REVIEW_FILE}`);
+          console.log('');
+          console.log('IMPORTANT: movies.js was NOT modified.');
+          NODE
+
+      - name: Commit merge preview files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add movies_merge_preview.js
+          git add movies_merge_review.csv
+
+          git diff --cached --quiet || git commit -m "Create movie merge preview"
+
+          git push
