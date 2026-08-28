@@ -1,4 +1,20 @@
-name: Merge digital movies
+name: Merge Digital Movies
+
+on:
+workflow_dispatch:
+
+permissions:
+contents: write
+
+jobs:
+merge-digital-movies:
+runs-on: ubuntu-latest
+
+steps:
+  - name: Checkout repository
+    uses: actions/checkout@v4
+
+  - name: Merge digital movies
     run: |
       node <<'NODE'
       const fs = require('fs');
@@ -28,7 +44,9 @@ name: Merge digital movies
             row.push(cell);
             cell = '';
           } else if ((c === '\n' || c === '\r') && !quoted) {
-            if (c === '\r' && text[i + 1] === '\n') i++;
+            if (c === '\r' && text[i + 1] === '\n') {
+              i++;
+            }
 
             row.push(cell);
             cell = '';
@@ -51,7 +69,9 @@ name: Merge digital movies
           }
         }
 
-        if (rows.length === 0) return [];
+        if (rows.length === 0) {
+          return [];
+        }
 
         const headers = rows[0].map(h => h.trim());
 
@@ -81,7 +101,9 @@ name: Merge digital movies
       }
 
       function normalizeId(value) {
-        if (value === undefined || value === null) return '';
+        if (value === undefined || value === null) {
+          return '';
+        }
 
         return String(value)
           .trim()
@@ -98,7 +120,10 @@ name: Merge digital movies
 
         for (const value of possibleIds) {
           const id = normalizeId(value);
-          if (id) return id;
+
+          if (id) {
+            return id;
+          }
         }
 
         return '';
@@ -107,75 +132,81 @@ name: Merge digital movies
       function extractMoviesJS(text) {
         let cleaned = text.trim();
 
-        cleaned = cleaned.replace(
-          /^export\s+default\s+/m,
-          ''
+        const match = cleaned.match(
+          /^(?:const|let|var)\s+\w+\s*=\s*(\[[\s\S]*\])\s*;?\s*$/
         );
 
-        cleaned = cleaned.replace(
-          /^const\s+\w+\s*=\s*/m,
-          ''
-        );
+        if (match) {
+          cleaned = match[1];
+        } else {
+          cleaned = cleaned.replace(
+            /^export\s+default\s+/m,
+            ''
+          );
 
-        cleaned = cleaned.replace(
-          /^let\s+\w+\s*=\s*/m,
-          ''
-        );
+          cleaned = cleaned.replace(
+            /^const\s+\w+\s*=\s*/,
+            ''
+          );
 
-        cleaned = cleaned.replace(
-          /^var\s+\w+\s*=\s*/m,
-          ''
-        );
+          cleaned = cleaned.replace(
+            /^let\s+\w+\s*=\s*/,
+            ''
+          );
 
-        cleaned = cleaned.replace(/;\s*$/, '');
+          cleaned = cleaned.replace(
+            /^var\s+\w+\s*=\s*/,
+            ''
+          );
+
+          cleaned = cleaned.replace(/;\s*$/, '');
+        }
 
         try {
-          return JSON.parse(cleaned);
+          const parsed = JSON.parse(cleaned);
+
+          if (!Array.isArray(parsed)) {
+            throw new Error(
+              'movies.js parsed successfully but did not contain an array.'
+            );
+          }
+
+          return parsed;
         } catch (error) {
-          const start = cleaned.indexOf('[');
-          const end = cleaned.lastIndexOf(']');
-
-          if (start === -1 || end === -1) {
-            throw new Error(
-              'Could not find the movie array in movies.js.'
-            );
-          }
-
-          try {
-            return JSON.parse(
-              cleaned.substring(start, end + 1)
-            );
-          } catch (error2) {
-            throw new Error(
-              'movies.js could not be parsed as JSON.'
-            );
-          }
+          throw new Error(
+            'movies.js could not be parsed. Expected format: const movies = [ ... ];'
+          );
         }
       }
 
       function addDigitalToMovie(movie, digitalSource) {
-        if (!digitalSource) return;
+        if (!digitalSource) {
+          return;
+        }
+
+        if (
+          movie.digital === undefined ||
+          movie.digital === null ||
+          String(movie.digital).trim() === ''
+        ) {
+          movie.digital = digitalSource;
+          return;
+        }
 
         let existing = [];
 
-        if (
-          movie.digital !== undefined &&
-          movie.digital !== null &&
-          String(movie.digital).trim() !== ''
-        ) {
-          if (Array.isArray(movie.digital)) {
-            existing = movie.digital.flatMap(value =>
-              String(value)
-                .split('|')
-                .map(item => item.trim())
-                .filter(Boolean)
-            );
-          } else {
-            existing = String(movie.digital)
+        if (Array.isArray(movie.digital)) {
+          existing = movie.digital.flatMap(value =>
+            String(value)
               .split('|')
               .map(item => item.trim())
-              .filter(Boolean);
-          }
+              .filter(Boolean)
+          );
+        } else {
+          existing = String(movie.digital)
+            .split('|')
+            .map(item => item.trim())
+            .filter(Boolean);
         }
 
         const additions = String(digitalSource)
@@ -193,7 +224,10 @@ name: Merge digital movies
       }
 
       function cleanText(value) {
-        if (value === undefined || value === null) return '';
+        if (value === undefined || value === null) {
+          return '';
+        }
+
         return String(value).trim();
       }
 
@@ -349,12 +383,6 @@ name: Merge digital movies
       const movies = extractMoviesJS(moviesText);
       const digitalRows = parseCSV(digitalText);
 
-      if (!Array.isArray(movies)) {
-        throw new Error(
-          'movies.js did not contain an array.'
-        );
-      }
-
       if (digitalRows.length === 0) {
         throw new Error(
           'Digital CSV contains no data rows.'
@@ -387,11 +415,15 @@ name: Merge digital movies
 
       for (const row of digitalRows) {
         const sourceId = normalizeId(
-          row.tmdbId || row.source_tmdbId
+          row.tmdbId ||
+          row.source_tmdbId
         );
 
-        const sourceTitle = cleanText(row.title);
-        const digitalSource = cleanText(row.digital);
+        const sourceTitle =
+          cleanText(row.title);
+
+        const digitalSource =
+          cleanText(row.digital);
 
         if (!sourceId) {
           reviewed++;
@@ -401,22 +433,27 @@ name: Merge digital movies
             title: sourceTitle,
             digital: digitalSource,
             tmdbId: '',
-            tmdbTitle: cleanText(row.tmdbTitle),
+            tmdbTitle:
+              cleanText(row.tmdbTitle),
             year:
               cleanText(row.tmdbYear) ||
               cleanText(row.year) ||
               cleanText(row.source_year),
-            reason: 'No TMDB ID available'
+            reason:
+              'No TMDB ID available'
           });
 
           continue;
         }
 
         if (byTmdbId.has(sourceId)) {
-          const index = byTmdbId.get(sourceId);
+          const index =
+            byTmdbId.get(sourceId);
 
           const before =
-            JSON.stringify(merged[index].digital);
+            JSON.stringify(
+              merged[index].digital
+            );
 
           addDigitalToMovie(
             merged[index],
@@ -424,17 +461,21 @@ name: Merge digital movies
           );
 
           const after =
-            JSON.stringify(merged[index].digital);
+            JSON.stringify(
+              merged[index].digital
+            );
 
           if (before !== after) {
             digitalAdded++;
           }
 
           matched++;
+
           continue;
         }
 
-        const newMovie = makeNewMovie(row);
+        const newMovie =
+          makeNewMovie(row);
 
         merged.push(newMovie);
 
@@ -446,50 +487,13 @@ name: Merge digital movies
         added++;
       }
 
-      if (merged.length < movies.length) {
-        throw new Error(
-          'SANITY CHECK FAILED: merged catalog is smaller than the original catalog.'
-        );
-      }
-
-      let digitalCount = 0;
-
-      for (const movie of merged) {
-        if (
-          movie.digital !== undefined &&
-          movie.digital !== null &&
-          String(movie.digital).trim() !== ''
-        ) {
-          digitalCount++;
-        }
-      }
-
-      if (digitalCount === 0) {
-        throw new Error(
-          'SANITY CHECK FAILED: no records contain digital information.'
-        );
-      }
-
-      /*
-       * IMPORTANT:
-       * Create the output as a JSON array only.
-       * movies.js already supplies:
-       *
-       * const movies = [
-       *
-       * so the JSON file must contain only the array.
-       */
-
-      const outputText =
+      fs.writeFileSync(
+        OUTPUT_FILE,
         JSON.stringify(
           merged,
           null,
           2
-        );
-
-      fs.writeFileSync(
-        OUTPUT_FILE,
-        outputText + '\n',
+        ) + '\n',
         'utf8'
       );
 
@@ -520,12 +524,84 @@ name: Merge digital movies
         'utf8'
       );
 
+      console.log('');
+      console.log('======================================');
+      console.log('DIGITAL MOVIE MERGE COMPLETE');
+      console.log('======================================');
+
+      console.log(
+        `Original movies:          ${movies.length}`
+      );
+
+      console.log(
+        `Digital rows:             ${digitalRows.length}`
+      );
+
+      console.log(
+        `Matched by TMDB ID:       ${matched}`
+      );
+
+      console.log(
+        `Digital values changed:   ${digitalAdded}`
+      );
+
+      console.log(
+        `New movies added:         ${added}`
+      );
+
+      console.log(
+        `Manual review:            ${reviewed}`
+      );
+
+      console.log(
+        `Final records:            ${merged.length}`
+      );
+
+      console.log('');
+      console.log(
+        `Created: ${OUTPUT_FILE}`
+      );
+
+      console.log(
+        `Created: ${REVIEW_FILE}`
+      );
+
+      console.log('======================================');
+
+      if (merged.length < movies.length) {
+        throw new Error(
+          'SANITY CHECK FAILED: merged catalog is smaller than the original catalog.'
+        );
+      }
+
       if (
         !fs.existsSync(OUTPUT_FILE) ||
         fs.statSync(OUTPUT_FILE).size < 100
       ) {
         throw new Error(
           'SANITY CHECK FAILED: merged JSON is empty.'
+        );
+      }
+
+      let digitalCount = 0;
+
+      for (const movie of merged) {
+        if (
+          movie.digital !== undefined &&
+          movie.digital !== null &&
+          String(movie.digital).trim() !== ''
+        ) {
+          digitalCount++;
+        }
+      }
+
+      console.log(
+        `Records containing digital information: ${digitalCount}`
+      );
+
+      if (digitalCount === 0) {
+        throw new Error(
+          'SANITY CHECK FAILED: no records contain digital information.'
         );
       }
 
@@ -574,68 +650,11 @@ name: Merge digital movies
         }
       }
 
-      console.log('');
       console.log(
-        '======================================'
-      );
-      console.log(
-        'DIGITAL MOVIE MERGE COMPLETE'
-      );
-      console.log(
-        '======================================'
+        `Validated new movie records: ${newMovies.length}`
       );
 
-      console.log(
-        `Original movies:          ${movies.length}`
-      );
-
-      console.log(
-        `Digital rows:             ${digitalRows.length}`
-      );
-
-      console.log(
-        `Matched by TMDB ID:       ${matched}`
-      );
-
-      console.log(
-        `Digital values changed:   ${digitalAdded}`
-      );
-
-      console.log(
-        `New movies added:         ${added}`
-      );
-
-      console.log(
-        `Manual review:            ${reviewed}`
-      );
-
-      console.log(
-        `Final records:            ${merged.length}`
-      );
-
-      console.log(
-        `Records with digital:     ${digitalCount}`
-      );
-
-      console.log(
-        `Created: ${OUTPUT_FILE}`
-      );
-
-      console.log(
-        `Created: ${REVIEW_FILE}`
-      );
-
-      console.log(
-        `Validated new movies:     ${newMovies.length}`
-      );
-
-      console.log(
-        'Sanity checks passed.'
-      );
-
-      console.log(
-        '======================================'
-      );
+      console.log('Sanity checks passed.');
       NODE
 
   - name: Commit merged files
