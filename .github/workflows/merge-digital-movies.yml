@@ -1,21 +1,4 @@
-name: Merge Digital Movies
-
-on:
-workflow_dispatch:
-
-permissions:
-contents: write
-
-jobs:
-merge-digital-movies:
-runs-on: ubuntu-latest
-
-```
-steps:
-  - name: Checkout repository
-    uses: actions/checkout@v4
-
-  - name: Merge digital movies
+name: Merge digital movies
     run: |
       node <<'NODE'
       const fs = require('fs');
@@ -45,9 +28,7 @@ steps:
             row.push(cell);
             cell = '';
           } else if ((c === '\n' || c === '\r') && !quoted) {
-            if (c === '\r' && text[i + 1] === '\n') {
-              i++;
-            }
+            if (c === '\r' && text[i + 1] === '\n') i++;
 
             row.push(cell);
             cell = '';
@@ -70,9 +51,7 @@ steps:
           }
         }
 
-        if (rows.length === 0) {
-          return [];
-        }
+        if (rows.length === 0) return [];
 
         const headers = rows[0].map(h => h.trim());
 
@@ -102,9 +81,7 @@ steps:
       }
 
       function normalizeId(value) {
-        if (value === undefined || value === null) {
-          return '';
-        }
+        if (value === undefined || value === null) return '';
 
         return String(value)
           .trim()
@@ -121,10 +98,7 @@ steps:
 
         for (const value of possibleIds) {
           const id = normalizeId(value);
-
-          if (id) {
-            return id;
-          }
+          if (id) return id;
         }
 
         return '';
@@ -167,13 +141,10 @@ steps:
             );
           }
 
-          const arrayText = cleaned.substring(
-            start,
-            end + 1
-          );
-
           try {
-            return JSON.parse(arrayText);
+            return JSON.parse(
+              cleaned.substring(start, end + 1)
+            );
           } catch (error2) {
             throw new Error(
               'movies.js could not be parsed as JSON.'
@@ -183,9 +154,7 @@ steps:
       }
 
       function addDigitalToMovie(movie, digitalSource) {
-        if (!digitalSource) {
-          return;
-        }
+        if (!digitalSource) return;
 
         let existing = [];
 
@@ -224,10 +193,7 @@ steps:
       }
 
       function cleanText(value) {
-        if (value === undefined || value === null) {
-          return '';
-        }
-
+        if (value === undefined || value === null) return '';
         return String(value).trim();
       }
 
@@ -380,13 +346,8 @@ steps:
         'utf8'
       );
 
-      const movies = extractMoviesJS(
-        moviesText
-      );
-
-      const digitalRows = parseCSV(
-        digitalText
-      );
+      const movies = extractMoviesJS(moviesText);
+      const digitalRows = parseCSV(digitalText);
 
       if (!Array.isArray(movies)) {
         throw new Error(
@@ -400,13 +361,8 @@ steps:
         );
       }
 
-      console.log(
-        `Existing movies: ${movies.length}`
-      );
-
-      console.log(
-        `Digital rows: ${digitalRows.length}`
-      );
+      console.log(`Existing movies: ${movies.length}`);
+      console.log(`Digital rows: ${digitalRows.length}`);
 
       const merged = movies.map(movie => ({
         ...movie
@@ -414,19 +370,10 @@ steps:
 
       const byTmdbId = new Map();
 
-      for (
-        let i = 0;
-        i < merged.length;
-        i++
-      ) {
-        const id = findTmdbId(
-          merged[i]
-        );
+      for (let i = 0; i < merged.length; i++) {
+        const id = findTmdbId(merged[i]);
 
-        if (
-          id &&
-          !byTmdbId.has(id)
-        ) {
+        if (id && !byTmdbId.has(id)) {
           byTmdbId.set(id, i);
         }
       }
@@ -440,15 +387,11 @@ steps:
 
       for (const row of digitalRows) {
         const sourceId = normalizeId(
-          row.tmdbId ||
-          row.source_tmdbId
+          row.tmdbId || row.source_tmdbId
         );
 
-        const sourceTitle =
-          cleanText(row.title);
-
-        const digitalSource =
-          cleanText(row.digital);
+        const sourceTitle = cleanText(row.title);
+        const digitalSource = cleanText(row.digital);
 
         if (!sourceId) {
           reviewed++;
@@ -458,27 +401,22 @@ steps:
             title: sourceTitle,
             digital: digitalSource,
             tmdbId: '',
-            tmdbTitle:
-              cleanText(row.tmdbTitle),
+            tmdbTitle: cleanText(row.tmdbTitle),
             year:
               cleanText(row.tmdbYear) ||
               cleanText(row.year) ||
               cleanText(row.source_year),
-            reason:
-              'No TMDB ID available'
+            reason: 'No TMDB ID available'
           });
 
           continue;
         }
 
         if (byTmdbId.has(sourceId)) {
-          const index =
-            byTmdbId.get(sourceId);
+          const index = byTmdbId.get(sourceId);
 
           const before =
-            JSON.stringify(
-              merged[index].digital
-            );
+            JSON.stringify(merged[index].digital);
 
           addDigitalToMovie(
             merged[index],
@@ -486,21 +424,17 @@ steps:
           );
 
           const after =
-            JSON.stringify(
-              merged[index].digital
-            );
+            JSON.stringify(merged[index].digital);
 
           if (before !== after) {
             digitalAdded++;
           }
 
           matched++;
-
           continue;
         }
 
-        const newMovie =
-          makeNewMovie(row);
+        const newMovie = makeNewMovie(row);
 
         merged.push(newMovie);
 
@@ -535,6 +469,16 @@ steps:
           'SANITY CHECK FAILED: no records contain digital information.'
         );
       }
+
+      /*
+       * IMPORTANT:
+       * Create the output as a JSON array only.
+       * movies.js already supplies:
+       *
+       * const movies = [
+       *
+       * so the JSON file must contain only the array.
+       */
 
       const outputText =
         JSON.stringify(
@@ -708,4 +652,3 @@ steps:
 
       git commit -m "Create merged digital movie catalog"
       git push
-```
