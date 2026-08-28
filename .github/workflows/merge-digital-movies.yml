@@ -41,50 +41,113 @@ jobs:
               title = re.sub(r"[^a-z0-9]", "", title)
               return title
 
-          def extract_movies_js():
-              text = movies_path.read_text(encoding="utf-8")
+          # ------------------------------------------------------------
+          # READ movies.js
+          # ------------------------------------------------------------
 
-              start = text.find("[")
-              end = text.rfind("]")
+          print("Loading movies.js...")
 
-              if start == -1 or end == -1:
-                  raise RuntimeError("Could not find movie array in movies.js")
+          text = movies_path.read_text(encoding="utf-8")
 
-              array_text = text[start:end + 1]
+          start = text.find("[")
+          end = text.rfind("]")
 
-              try:
-                  return json.loads(array_text)
-              except Exception as e:
-                  raise RuntimeError(
-                      "Could not parse the movie array from movies.js: " + str(e)
-                  )
+          if start == -1 or end == -1:
+              raise RuntimeError("Could not find movie array in movies.js")
 
-          print("Loading existing movies.js...")
-          movies = extract_movies_js()
+          array_text = text[start:end + 1]
+
+          try:
+              movies = json.loads(array_text)
+          except Exception as e:
+              raise RuntimeError(
+                  "Could not parse movies.js movie array: " + str(e)
+              )
 
           print(f"Existing catalog records: {len(movies)}")
 
+          # ------------------------------------------------------------
+          # READ DIGITAL IMPORT QUEUE
+          #
+          # IMPORTANT:
+          # This file is TAB DELIMITED even though it has a .csv
+          # extension.
+          # ------------------------------------------------------------
+
           print("Loading digital import queue...")
-          with digital_path.open("r", encoding="utf-8-sig", newline="") as f:
-              digital_rows = list(csv.DictReader(f))
+
+          with digital_path.open(
+              "r",
+              encoding="utf-8-sig",
+              newline=""
+          ) as f:
+              digital_rows = list(
+                  csv.DictReader(
+                      f,
+                      delimiter="\t"
+                  )
+              )
 
           print(f"Digital import records: {len(digital_rows)}")
 
+          if not digital_rows:
+              raise RuntimeError(
+                  "Digital import queue contained no records."
+              )
+
+          # Verify that the important columns were actually detected.
+          required_columns = [
+              "title",
+              "digital",
+              "tmdbId",
+              "year"
+          ]
+
+          missing_columns = [
+              c for c in required_columns
+              if c not in digital_rows[0]
+          ]
+
+          if missing_columns:
+              raise RuntimeError(
+                  "Digital import queue is missing columns: "
+                  + ", ".join(missing_columns)
+              )
+
+          print(
+              "Detected columns:",
+              ", ".join(digital_rows[0].keys())
+          )
+
+          # ------------------------------------------------------------
+          # READ ENRICHED TMDB DATA
+          # ------------------------------------------------------------
+
           print("Loading enriched TMDB data...")
-          with enriched_path.open("r", encoding="utf-8") as f:
-              enriched = json.load(f)
+
+          if enriched_path.exists():
+              with enriched_path.open(
+                  "r",
+                  encoding="utf-8"
+              ) as f:
+                  enriched = json.load(f)
+          else:
+              enriched = []
 
           print(f"Enriched records: {len(enriched)}")
 
           # ------------------------------------------------------------
-          # Build lookup tables for the existing catalog.
-          # TMDB ID is the primary source of truth.
+          # BUILD EXISTING MOVIE LOOKUPS
+          #
+          # TMDB ID is the PRIMARY matching key.
+          # Existing movies.js metadata is NEVER replaced.
           # ------------------------------------------------------------
 
-          id_lookup = {}
-          title_year_lookup = {}
+          existing_by_tmdb = {}
+          existing_by_title_year = {}
 
           for movie in movies:
+
               tmdb_id = clean(
                   movie.get("tmdbId")
                   or movie.get("tmdb_id")
@@ -95,37 +158,54 @@ jobs:
               year = clean(movie.get("year"))
 
               if tmdb_id:
-                  id_lookup[tmdb_id] = movie
+                  existing_by_tmdb[tmdb_id] = movie
 
-              if title:
-                  title_year_lookup[
-                      (normalize_title(title), year)
+              if title and year:
+                  existing_by_title_year[
+                      (
+                          normalize_title(title),
+                          year
+                      )
                   ] = movie
 
+          print(
+              f"Existing TMDB IDs indexed: "
+              f"{len(existing_by_tmdb)}"
+          )
+
           # ------------------------------------------------------------
-          # Enriched data lookup by source title + source TMDB ID.
+          # BUILD ENRICHED LOOKUPS
           # ------------------------------------------------------------
 
-          enriched_lookup = {}
+          enriched_by_id = {}
 
           for item in enriched:
-              key = (
-                  normalize_title(item.get("title")),
-                  clean(item.get("source_tmdbId"))
+              source_id = clean(
+                  item.get("source_tmdbId")
+                  or item.get("tmdbId")
               )
-              enriched_lookup[key] = item
+
+              if source_id:
+                  enriched_by_id[source_id] = item
 
           # ------------------------------------------------------------
-          # Start with a deep copy of movies.js.
-          # Existing metadata will remain untouched.
+          # COPY THE EXISTING CATALOG
+          #
+          # We work on a copy.
+          # movies.js itself is NOT modified.
           # ------------------------------------------------------------
 
-          merged = json.loads(json.dumps(movies))
+          merged = json.loads(
+              json.dumps(
+                  movies,
+                  ensure_ascii=False
+              )
+          )
 
-          # Map IDs to the corresponding record in the copied catalog.
-          merged_id_lookup = {}
+          merged_by_tmdb = {}
 
           for movie in merged:
+
               tmdb_id = clean(
                   movie.get("tmdbId")
                   or movie.get("tmdb_id")
@@ -133,190 +213,283 @@ jobs:
               )
 
               if tmdb_id:
-                  merged_id_lookup[tmdb_id] = movie
+                  merged_by_tmdb[tmdb_id] = movie
+
+          # ------------------------------------------------------------
+          # DIGITAL FIELD HANDLING
+          # ------------------------------------------------------------
+
+          def add_digital(movie, source):
+
+              source = clean(source)
+
+              if not source:
+                  return
+
+              # This catalog uses "digital" as a list.
+              if "digital" not in movie or movie["digital"] is None:
+                  movie["digital"] = []
+
+              current = movie["digital"]
+
+              if isinstance(current, list):
+
+                  if source not in current:
+                      current.append(source)
+
+              else:
+
+                  current_text = clean(current)
+
+                  if not current_text:
+                      movie["digital"] = [source]
+
+                  else:
+                      values = [
+                          x.strip()
+                          for x in current_text.split("|")
+                          if x.strip()
+                      ]
+
+                      if source not in values:
+                          values.append(source)
+
+                      movie["digital"] = values
+
+          # ------------------------------------------------------------
+          # PROCESS DIGITAL RECORDS
+          # ------------------------------------------------------------
 
           review_rows = []
 
-          attached = 0
-          new_movies = 0
+          matched_count = 0
+          new_count = 0
           review_count = 0
 
-          # ------------------------------------------------------------
-          # Helper: find the digital media field.
-          # ------------------------------------------------------------
-
-          def get_digital_field(movie):
-              for field in ("digital", "digitalVersions", "digital_versions"):
-                  if field in movie:
-                      return field
-              return "digital"
-
-          def add_digital(movie, digital_source):
-              field = get_digital_field(movie)
-
-              if not digital_source:
-                  return
-
-              current = movie.get(field)
-
-              if current is None or current == "":
-                  movie[field] = digital_source
-                  return
-
-              if isinstance(current, list):
-                  values = [clean(x) for x in current]
-                  if digital_source not in values:
-                      values.append(digital_source)
-                  movie[field] = values
-                  return
-
-              current = clean(current)
-
-              existing_values = [
-                  x.strip() for x in current.split("|") if x.strip()
-              ]
-
-              if digital_source not in existing_values:
-                  existing_values.append(digital_source)
-
-              movie[field] = " | ".join(existing_values)
-
-          # ------------------------------------------------------------
-          # Process every digital record.
-          # ------------------------------------------------------------
-
           for row in digital_rows:
+
               title = clean(row.get("title"))
               digital_source = clean(row.get("digital"))
-              source_tmdb_id = clean(row.get("tmdbId"))
-              source_year = clean(row.get("year"))
+              tmdb_id = clean(row.get("tmdbId"))
+              year = clean(row.get("year"))
 
-              enriched_item = enriched_lookup.get(
-                  (normalize_title(title), source_tmdb_id)
-              )
+              # --------------------------------------------------------
+              # MATCH BY TMDB ID
+              # --------------------------------------------------------
 
-              tmdb_id = source_tmdb_id
+              if tmdb_id and tmdb_id in merged_by_tmdb:
 
-              if enriched_item:
-                  tmdb_id = clean(
-                      enriched_item.get("tmdbId")
-                      or enriched_item.get("source_tmdbId")
+                  movie = merged_by_tmdb[tmdb_id]
+
+                  add_digital(
+                      movie,
+                      digital_source
                   )
 
-              # --------------------------------------------------------
-              # PRIMARY MATCH: TMDB ID
-              # --------------------------------------------------------
-
-              if tmdb_id and tmdb_id in merged_id_lookup:
-                  movie = merged_id_lookup[tmdb_id]
-
-                  add_digital(movie, digital_source)
-
-                  attached += 1
+                  matched_count += 1
 
                   review_rows.append({
                       "result": "MATCH",
                       "digital_title": title,
                       "digital": digital_source,
                       "tmdbId": tmdb_id,
-                      "existing_title": clean(movie.get("title")),
-                      "existing_year": clean(movie.get("year")),
-                      "notes": "Matched by TMDB ID; existing catalog metadata preserved."
+                      "existing_title": clean(
+                          movie.get("title")
+                      ),
+                      "existing_year": clean(
+                          movie.get("year")
+                      ),
+                      "notes":
+                          "Matched by TMDB ID. "
+                          "Existing catalog metadata preserved."
                   })
 
                   continue
 
               # --------------------------------------------------------
-              # SECONDARY MATCH: normalized title + year.
-              # This is only used when there is no usable TMDB ID.
+              # IF THERE IS NO TMDB ID, TRY TITLE + YEAR
+              #
+              # This is only a fallback.
               # --------------------------------------------------------
 
-              normalized = normalize_title(title)
+              if not tmdb_id:
 
-              candidate = title_year_lookup.get(
-                  (normalized, source_year)
-              )
-
-              if candidate and not tmdb_id:
-                  existing_id = clean(
-                      candidate.get("tmdbId")
-                      or candidate.get("tmdb_id")
-                      or candidate.get("id")
+                  candidate = existing_by_title_year.get(
+                      (
+                          normalize_title(title),
+                          year
+                      )
                   )
 
-                  if existing_id and existing_id in merged_id_lookup:
-                      movie = merged_id_lookup[existing_id]
+                  if candidate:
 
-                      add_digital(movie, digital_source)
+                      candidate_id = clean(
+                          candidate.get("tmdbId")
+                          or candidate.get("tmdb_id")
+                          or candidate.get("id")
+                      )
 
-                      attached += 1
+                      if (
+                          candidate_id
+                          and candidate_id in merged_by_tmdb
+                      ):
+
+                          movie = merged_by_tmdb[candidate_id]
+
+                          add_digital(
+                              movie,
+                              digital_source
+                          )
+
+                          matched_count += 1
+
+                          review_rows.append({
+                              "result": "MATCH",
+                              "digital_title": title,
+                              "digital": digital_source,
+                              "tmdbId": candidate_id,
+                              "existing_title": clean(
+                                  movie.get("title")
+                              ),
+                              "existing_year": clean(
+                                  movie.get("year")
+                              ),
+                              "notes":
+                                  "Matched by normalized "
+                                  "title/year because no "
+                                  "TMDB ID was supplied."
+                          })
+
+                          continue
+
+              # --------------------------------------------------------
+              # NEW MOVIE
+              #
+              # A TMDB ID exists, but that ID does not exist in
+              # movies.js.
+              # --------------------------------------------------------
+
+              if tmdb_id:
+
+                  data = enriched_by_id.get(
+                      tmdb_id,
+                      {}
+                  )
+
+                  new_title = clean(
+                      data.get("tmdbTitle")
+                      or data.get("title")
+                      or title
+                  )
+
+                  new_year = clean(
+                      data.get("tmdbYear")
+                      or data.get("year")
+                      or year
+                  )
+
+                  # Prevent duplicate NEW records if the same TMDB ID
+                  # occurs more than once in the digital list.
+                  if tmdb_id in merged_by_tmdb:
+
+                      movie = merged_by_tmdb[tmdb_id]
+
+                      add_digital(
+                          movie,
+                          digital_source
+                      )
+
+                      matched_count += 1
 
                       review_rows.append({
                           "result": "MATCH",
                           "digital_title": title,
                           "digital": digital_source,
-                          "tmdbId": existing_id,
-                          "existing_title": clean(movie.get("title")),
-                          "existing_year": clean(movie.get("year")),
-                          "notes": "Matched by normalized title/year; existing metadata preserved."
+                          "tmdbId": tmdb_id,
+                          "existing_title": clean(
+                              movie.get("title")
+                          ),
+                          "existing_year": clean(
+                              movie.get("year")
+                          ),
+                          "notes":
+                              "Same TMDB ID already added "
+                              "during this merge; digital "
+                              "source combined."
                       })
 
                       continue
 
-              # --------------------------------------------------------
-              # NEW MOVIE: We have a TMDB ID but it isn't in movies.js.
-              #
-              # We create a new record using TMDB information from the
-              # enrichment output. We do NOT alter existing records.
-              # --------------------------------------------------------
-
-              if tmdb_id:
-                  data = enriched_item or {}
-
-                  new_record = {
-                      "title": clean(
+                  new_movie = {
+                      "title": new_title,
+                      "tmdbTitle": clean(
                           data.get("tmdbTitle")
-                          or data.get("title")
-                          or title
                       ),
-                      "year": clean(
-                          data.get("tmdbYear")
-                          or data.get("year")
-                          or source_year
+                      "type": "movie",
+                      "tmdbId": int(tmdb_id)
+                          if tmdb_id.isdigit()
+                          else tmdb_id,
+                      "year": new_year,
+                      "runtime": clean(
+                          data.get("tmdbRuntime")
+                          or data.get("runtime")
                       ),
-                      "tmdbId": tmdb_id,
-                      "digital": digital_source
+                      "genre": clean(
+                          data.get("tmdbGenre")
+                          or data.get("genre")
+                      ),
+                      "director": clean(
+                          data.get("tmdbDirector")
+                          or data.get("director")
+                      ),
+                      "cast": clean(
+                          data.get("tmdbCast")
+                          or data.get("cast")
+                      ),
+                      "synopsis": clean(
+                          data.get("tmdbOverview")
+                          or data.get("overview")
+                      ),
+                      "physical": [],
+                      "digital": []
                   }
 
-                  if data.get("tmdbOriginalTitle"):
-                      new_record["tmdbOriginalTitle"] = clean(
-                          data.get("tmdbOriginalTitle")
-                      )
+                  poster_path = clean(
+                      data.get("tmdbPosterPath")
+                  )
 
-                  if data.get("tmdbReleaseDate"):
-                      new_record["tmdbReleaseDate"] = clean(
-                          data.get("tmdbReleaseDate")
-                      )
+                  backdrop_path = clean(
+                      data.get("tmdbBackdropPath")
+                  )
 
-                  if data.get("tmdbOverview"):
-                      new_record["tmdbOverview"] = clean(
-                          data.get("tmdbOverview")
-                      )
+                  if poster_path:
+                      if poster_path.startswith("http"):
+                          new_movie["poster"] = poster_path
+                      else:
+                          new_movie["poster"] = (
+                              "https://image.tmdb.org/t/p/w500"
+                              + poster_path
+                          )
 
-                  if data.get("tmdbPosterPath"):
-                      new_record["tmdbPosterPath"] = clean(
-                          data.get("tmdbPosterPath")
-                      )
+                  if backdrop_path:
+                      if backdrop_path.startswith("http"):
+                          new_movie["backdrop"] = backdrop_path
+                      else:
+                          new_movie["backdrop"] = (
+                              "https://image.tmdb.org/t/p/w1280"
+                              + backdrop_path
+                          )
 
-                  if data.get("tmdbBackdropPath"):
-                      new_record["tmdbBackdropPath"] = clean(
-                          data.get("tmdbBackdropPath")
-                      )
+                  add_digital(
+                      new_movie,
+                      digital_source
+                  )
 
-                  merged.append(new_record)
-                  merged_id_lookup[tmdb_id] = new_record
+                  merged.append(new_movie)
 
-                  new_movies += 1
+                  merged_by_tmdb[tmdb_id] = new_movie
+
+                  new_count += 1
 
                   review_rows.append({
                       "result": "NEW",
@@ -325,14 +498,17 @@ jobs:
                       "tmdbId": tmdb_id,
                       "existing_title": "",
                       "existing_year": "",
-                      "notes": "TMDB ID not present in movies.js; new record created."
+                      "notes":
+                          "TMDB ID not found in movies.js. "
+                          "New record created using enriched data."
                   })
 
                   continue
 
               # --------------------------------------------------------
-              # REVIEW: no reliable TMDB ID.
-              # Do not create anything.
+              # MANUAL REVIEW
+              #
+              # Only records without a reliable TMDB ID get here.
               # --------------------------------------------------------
 
               review_count += 1
@@ -343,24 +519,35 @@ jobs:
                   "digital": digital_source,
                   "tmdbId": "",
                   "existing_title": "",
-                  "existing_year": "",
-                  "notes": "No reliable TMDB ID. Manual review required."
+                  "existing_year": year,
+                  "notes":
+                      "No TMDB ID available. "
+                      "Manual review required."
               })
 
           # ------------------------------------------------------------
-          # Write merged JSON.
+          # WRITE MERGED JSON
           # ------------------------------------------------------------
 
           output_json.write_text(
-              json.dumps(merged, indent=2, ensure_ascii=False),
+              json.dumps(
+                  merged,
+                  indent=2,
+                  ensure_ascii=False
+              ),
               encoding="utf-8"
           )
 
           # ------------------------------------------------------------
-          # Write review CSV.
+          # WRITE REVIEW CSV
           # ------------------------------------------------------------
 
-          with output_csv.open("w", encoding="utf-8", newline="") as f:
+          with output_csv.open(
+              "w",
+              encoding="utf-8",
+              newline=""
+          ) as f:
+
               writer = csv.DictWriter(
                   f,
                   fieldnames=[
@@ -375,23 +562,59 @@ jobs:
               )
 
               writer.writeheader()
+
               writer.writerows(review_rows)
+
+          # ------------------------------------------------------------
+          # FINAL REPORT
+          # ------------------------------------------------------------
 
           print("")
           print("========================================")
-          print("MERGE COMPLETE")
+          print("DIGITAL MOVIE MERGE COMPLETE")
           print("========================================")
-          print(f"Existing records preserved: {len(movies)}")
-          print(f"Digital records processed:   {len(digital_rows)}")
-          print(f"Digital matches attached:    {attached}")
-          print(f"New records created:         {new_movies}")
-          print(f"Manual reviews:              {review_count}")
+          print(
+              f"Existing movies preserved: {len(movies)}"
+          )
+          print(
+              f"Digital records processed:  {len(digital_rows)}"
+          )
+          print(
+              f"Digital matches attached:   {matched_count}"
+          )
+          print(
+              f"New movies created:         {new_count}"
+          )
+          print(
+              f"Manual reviews:             {review_count}"
+          )
+          print(
+              f"Final merged records:       {len(merged)}"
+          )
           print("")
-          print(f"Created: {output_json.name}")
-          print(f"Created: {output_csv.name}")
+          print(
+              f"Created: {output_json.name}"
+          )
+          print(
+              f"Created: {output_csv.name}"
+          )
           print("")
+          print("IMPORTANT:")
           print("movies.js was NOT modified.")
           print("========================================")
+
+          if review_count:
+              print("")
+              print("ITEMS REQUIRING MANUAL REVIEW:")
+              print("========================================")
+
+              for item in review_rows:
+                  if item["result"] == "REVIEW":
+                      print(
+                          f"- {item['digital_title']} "
+                          f"({item['digital']})"
+                      )
+
           PY
 
       - name: Commit merged files
@@ -399,8 +622,12 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add movies_digital_merged.json movies_digital_merge_review.csv
+          git add movies_digital_merged.json
+          git add movies_digital_merge_review.csv
 
-          git diff --cached --quiet || git commit -m "Create merged digital movie catalog"
-
-          git push
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Create merged digital movie catalog"
+            git push
+          fi
