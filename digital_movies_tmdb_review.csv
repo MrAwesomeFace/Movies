@@ -1,1 +1,1 @@
-title,digital,source_year,tmdbId,tmdbTitle,year,confidence,match_type,review
+title,digital,status,existing_match,source_tmdbId,source_year,tmdbId,tmdbTitle,tmdbYear,match_type,confidence,review
