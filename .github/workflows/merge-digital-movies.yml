@@ -20,7 +20,7 @@ jobs:
           const fs = require('fs');
 
           const MOVIES_FILE = 'movies.js';
-          const DIGITAL_FILE = 'digital_movies_enriched.csv';
+          const DIGITAL_FILE = 'digital_movies_tmdb_enriched.csv';
           const OUTPUT_FILE = 'movies_digital_merged.json';
           const REVIEW_FILE = 'movies_digital_merge_review.csv';
 
@@ -44,7 +44,10 @@ jobs:
                 row.push(cell);
                 cell = '';
               } else if ((c === '\n' || c === '\r') && !quoted) {
-                if (c === '\r' && text[i + 1] === '\n') i++;
+                if (c === '\r' && text[i + 1] === '\n') {
+                  i++;
+                }
+
                 row.push(cell);
                 cell = '';
 
@@ -60,92 +63,134 @@ jobs:
 
             if (cell !== '' || row.length > 0) {
               row.push(cell);
+
               if (row.some(v => v.trim() !== '')) {
                 rows.push(row);
               }
             }
 
-            if (rows.length === 0) return [];
+            if (rows.length === 0) {
+              return [];
+            }
 
             const headers = rows[0].map(h => h.trim());
 
             return rows.slice(1).map(values => {
               const obj = {};
-              headers.forEach((h, i) => {
-                obj[h] = (values[i] || '').trim();
+
+              headers.forEach((header, i) => {
+                obj[header] = (values[i] || '').trim();
               });
+
               return obj;
             });
           }
 
           function csvEscape(value) {
             value = value == null ? '' : String(value);
-            if (value.includes('"') || value.includes(',') || value.includes('\n')) {
+
+            if (
+              value.includes('"') ||
+              value.includes(',') ||
+              value.includes('\n')
+            ) {
               return '"' + value.replace(/"/g, '""') + '"';
             }
+
             return value;
           }
 
           function normalizeId(value) {
-            if (value === undefined || value === null) return '';
-            return String(value).trim().replace(/\.0$/, '');
-          }
-
-          function extractMoviesJS(text) {
-            let cleaned = text.trim();
-
-            cleaned = cleaned
-              .replace(/^export\s+default\s+/m, '')
-              .replace(/^const\s+\w+\s*=\s*/m, '')
-              .replace(/^let\s+\w+\s*=\s*/m, '')
-              .replace(/^var\s+\w+\s*=\s*/m, '');
-
-            cleaned = cleaned.replace(/;\s*$/, '');
-
-            try {
-              return JSON.parse(cleaned);
-            } catch (e) {
-              console.log('Direct JSON parse failed. Trying to locate the array...');
-
-              const start = cleaned.indexOf('[');
-              const end = cleaned.lastIndexOf(']');
-
-              if (start === -1 || end === -1) {
-                throw new Error('Could not find movie array in movies.js');
-              }
-
-              let arrayText = cleaned.substring(start, end + 1);
-
-              try {
-                return JSON.parse(arrayText);
-              } catch (e2) {
-                throw new Error(
-                  'movies.js could not be parsed as JSON. The file may contain JavaScript syntax that this workflow cannot safely parse.'
-                );
-              }
+            if (value === undefined || value === null) {
+              return '';
             }
+
+            return String(value)
+              .trim()
+              .replace(/\.0$/, '');
           }
 
           function findTmdbId(movie) {
-            const possible = [
+            const possibleIds = [
               movie.tmdbId,
               movie.tmdbID,
               movie.tmdb_id,
               movie.tmdb
             ];
 
-            for (const value of possible) {
+            for (const value of possibleIds) {
               const id = normalizeId(value);
-              if (id) return id;
+
+              if (id) {
+                return id;
+              }
             }
 
             return '';
           }
 
-          function addDigitalToMovie(movie, digitalSource) {
-            if (!digitalSource) return;
+          function extractMoviesJS(text) {
+            let cleaned = text.trim();
 
-            if (movie.digital === undefined || movie.digital === null || movie.digital === '') {
+            cleaned = cleaned.replace(
+              /^export\s+default\s+/m,
+              ''
+            );
+
+            cleaned = cleaned.replace(
+              /^const\s+\w+\s*=\s*/m,
+              ''
+            );
+
+            cleaned = cleaned.replace(
+              /^let\s+\w+\s*=\s*/m,
+              ''
+            );
+
+            cleaned = cleaned.replace(
+              /^var\s+\w+\s*=\s*/m,
+              ''
+            );
+
+            cleaned = cleaned.replace(/;\s*$/, '');
+
+            try {
+              return JSON.parse(cleaned);
+            } catch (error) {
+              const start = cleaned.indexOf('[');
+              const end = cleaned.lastIndexOf(']');
+
+              if (start === -1 || end === -1) {
+                throw new Error(
+                  'Could not find the movie array in movies.js.'
+                );
+              }
+
+              const arrayText = cleaned.substring(
+                start,
+                end + 1
+              );
+
+              try {
+                return JSON.parse(arrayText);
+              } catch (error2) {
+                throw new Error(
+                  'movies.js could not be parsed as JSON.'
+                );
+              }
+            }
+          }
+
+          function addDigitalToMovie(movie, digitalSource) {
+            if (!digitalSource) {
+              return;
+            }
+
+            if (
+              movie.digital === undefined ||
+              movie.digital === null ||
+              String(movie.digital).trim() === ''
+            ) {
               movie.digital = digitalSource;
               return;
             }
@@ -153,22 +198,22 @@ jobs:
             let existing = [];
 
             if (Array.isArray(movie.digital)) {
-              existing = movie.digital.flatMap(v =>
-                String(v)
+              existing = movie.digital.flatMap(value =>
+                String(value)
                   .split('|')
-                  .map(x => x.trim())
+                  .map(item => item.trim())
                   .filter(Boolean)
               );
             } else {
               existing = String(movie.digital)
                 .split('|')
-                .map(x => x.trim())
+                .map(item => item.trim())
                 .filter(Boolean);
             }
 
             const additions = String(digitalSource)
               .split('|')
-              .map(x => x.trim())
+              .map(item => item.trim())
               .filter(Boolean);
 
             for (const item of additions) {
@@ -181,9 +226,20 @@ jobs:
           }
 
           function makeNewMovie(row) {
-            const tmdbId = normalizeId(row.tmdbId || row.source_tmdbId);
-            const title = row.tmdbTitle || row.title || '';
-            const year = row.tmdbYear || row.year || row.source_year || '';
+            const tmdbId = normalizeId(
+              row.tmdbId || row.source_tmdbId
+            );
+
+            const title =
+              row.tmdbTitle ||
+              row.title ||
+              '';
+
+            const year =
+              row.tmdbYear ||
+              row.year ||
+              row.source_year ||
+              '';
 
             const movie = {
               title: title,
@@ -192,49 +248,97 @@ jobs:
               digital: row.digital || ''
             };
 
-            if (row.tmdbOriginalTitle) movie.originalTitle = row.tmdbOriginalTitle;
-            if (row.tmdbReleaseDate) movie.releaseDate = row.tmdbReleaseDate;
-            if (row.tmdbOverview) movie.overview = row.tmdbOverview;
-            if (row.tmdbPosterPath) movie.posterPath = row.tmdbPosterPath;
-            if (row.tmdbBackdropPath) movie.backdropPath = row.tmdbBackdropPath;
+            if (row.tmdbOriginalTitle) {
+              movie.originalTitle =
+                row.tmdbOriginalTitle;
+            }
+
+            if (row.tmdbReleaseDate) {
+              movie.releaseDate =
+                row.tmdbReleaseDate;
+            }
+
+            if (row.tmdbOverview) {
+              movie.overview =
+                row.tmdbOverview;
+            }
+
+            if (row.tmdbPosterPath) {
+              movie.posterPath =
+                row.tmdbPosterPath;
+            }
+
+            if (row.tmdbBackdropPath) {
+              movie.backdropPath =
+                row.tmdbBackdropPath;
+            }
 
             return movie;
           }
 
           if (!fs.existsSync(MOVIES_FILE)) {
-            throw new Error(`Missing ${MOVIES_FILE}`);
+            throw new Error(
+              `Missing ${MOVIES_FILE}`
+            );
           }
 
           if (!fs.existsSync(DIGITAL_FILE)) {
-            throw new Error(`Missing ${DIGITAL_FILE}`);
+            throw new Error(
+              `Missing ${DIGITAL_FILE}`
+            );
           }
 
-          const moviesText = fs.readFileSync(MOVIES_FILE, 'utf8');
-          const digitalText = fs.readFileSync(DIGITAL_FILE, 'utf8');
+          const moviesText =
+            fs.readFileSync(
+              MOVIES_FILE,
+              'utf8'
+            );
 
-          const movies = extractMoviesJS(moviesText);
-          const digitalRows = parseCSV(digitalText);
+          const digitalText =
+            fs.readFileSync(
+              DIGITAL_FILE,
+              'utf8'
+            );
+
+          const movies =
+            extractMoviesJS(moviesText);
+
+          const digitalRows =
+            parseCSV(digitalText);
 
           if (!Array.isArray(movies)) {
-            throw new Error('movies.js did not contain an array of movie records.');
+            throw new Error(
+              'movies.js did not contain an array.'
+            );
           }
 
-          console.log(`Existing movies: ${movies.length}`);
-          console.log(`Digital rows: ${digitalRows.length}`);
+          console.log(
+            `Existing movies: ${movies.length}`
+          );
 
-          /*
-           * IMPORTANT:
-           * We clone the existing records so the original movies.js
-           * information remains the source of truth.
-           */
-          const merged = movies.map(movie => ({ ...movie }));
+          console.log(
+            `Digital rows: ${digitalRows.length}`
+          );
+
+          const merged =
+            movies.map(movie => ({
+              ...movie
+            }));
 
           const byTmdbId = new Map();
 
-          for (let i = 0; i < merged.length; i++) {
-            const id = findTmdbId(merged[i]);
+          for (
+            let i = 0;
+            i < merged.length;
+            i++
+          ) {
+            const id =
+              findTmdbId(merged[i]);
 
-            if (id && !byTmdbId.has(id)) {
+            if (
+              id &&
+              !byTmdbId.has(id)
+            ) {
               byTmdbId.set(id, i);
             }
           }
@@ -246,12 +350,12 @@ jobs:
           let reviewed = 0;
 
           for (const row of digitalRows) {
-            const sourceId = normalizeId(row.tmdbId || row.source_tmdbId);
+            const sourceId =
+              normalizeId(
+                row.tmdbId ||
+                row.source_tmdbId
+              );
 
-            /*
-             * No TMDB ID means we cannot safely connect this to the
-             * existing catalog. Keep it for manual review.
-             */
             if (!sourceId) {
               reviewed++;
 
@@ -260,25 +364,23 @@ jobs:
                 title: row.title || '',
                 digital: row.digital || '',
                 tmdbId: '',
-                tmdbTitle: row.tmdbTitle || '',
-                year: row.tmdbYear || row.year || row.source_year || '',
-                reason: 'No TMDB ID available'
+                tmdbTitle:
+                  row.tmdbTitle || '',
+                year:
+                  row.tmdbYear ||
+                  row.year ||
+                  row.source_year ||
+                  '',
+                reason:
+                  'No TMDB ID available'
               });
 
               continue;
             }
 
-            /*
-             * PRIMARY MATCH:
-             * TMDB ID, NOT title.
-             *
-             * This is what allows:
-             *   Skyfall -> 007: Skyfall
-             *   renamed Fast & Furious records -> existing records
-             * etc.
-             */
             if (byTmdbId.has(sourceId)) {
-              const index = byTmdbId.get(sourceId);
+              const index =
+                byTmdbId.get(sourceId);
 
               addDigitalToMovie(
                 merged[index],
@@ -290,33 +392,29 @@ jobs:
               continue;
             }
 
-            /*
-             * No existing movie has this TMDB ID.
-             *
-             * Create a completely new movie record rather than
-             * throwing it away.
-             */
-            const newMovie = makeNewMovie(row);
+            const newMovie =
+              makeNewMovie(row);
 
             merged.push(newMovie);
 
-            byTmdbId.set(sourceId, merged.length - 1);
+            byTmdbId.set(
+              sourceId,
+              merged.length - 1
+            );
 
             added++;
           }
 
-          /*
-           * Write merged JSON.
-           */
           fs.writeFileSync(
             OUTPUT_FILE,
-            JSON.stringify(merged, null, 2) + '\n',
+            JSON.stringify(
+              merged,
+              null,
+              2
+            ) + '\n',
             'utf8'
           );
 
-          /*
-           * Write review CSV.
-           */
           const reviewHeaders = [
             'status',
             'title',
@@ -330,7 +428,11 @@ jobs:
           const reviewLines = [
             reviewHeaders.join(','),
             ...reviewRows.map(row =>
-              reviewHeaders.map(h => csvEscape(row[h])).join(',')
+              reviewHeaders
+                .map(header =>
+                  csvEscape(row[header])
+                )
+                .join(',')
             )
           ];
 
@@ -341,43 +443,83 @@ jobs:
           );
 
           console.log('');
-          console.log('======================================');
-          console.log('DIGITAL MOVIE MERGE COMPLETE');
-          console.log('======================================');
-          console.log(`Original movies:       ${movies.length}`);
-          console.log(`Digital rows:          ${digitalRows.length}`);
-          console.log(`Matched by TMDB ID:    ${matched}`);
-          console.log(`New movies added:      ${added}`);
-          console.log(`Manual review:         ${reviewed}`);
-          console.log(`Final merged records:  ${merged.length}`);
-          console.log('');
-          console.log(`Created: ${OUTPUT_FILE}`);
-          console.log(`Created: ${REVIEW_FILE}`);
-          console.log('======================================');
+          console.log(
+            '======================================'
+          );
+          console.log(
+            'DIGITAL MOVIE MERGE COMPLETE'
+          );
+          console.log(
+            '======================================'
+          );
 
-          /*
-           * Sanity checks.
-           */
+          console.log(
+            `Original movies:      ${movies.length}`
+          );
+
+          console.log(
+            `Digital rows:         ${digitalRows.length}`
+          );
+
+          console.log(
+            `Matched by TMDB ID:   ${matched}`
+          );
+
+          console.log(
+            `New movies added:     ${added}`
+          );
+
+          console.log(
+            `Manual review:        ${reviewed}`
+          );
+
+          console.log(
+            `Final records:        ${merged.length}`
+          );
+
+          console.log('');
+          console.log(
+            `Created: ${OUTPUT_FILE}`
+          );
+
+          console.log(
+            `Created: ${REVIEW_FILE}`
+          );
+
+          console.log(
+            '======================================'
+          );
+
           if (merged.length < movies.length) {
             throw new Error(
               'SANITY CHECK FAILED: merged catalog is smaller than the original catalog.'
             );
           }
 
-          if (!fs.existsSync(OUTPUT_FILE) || fs.statSync(OUTPUT_FILE).size < 10) {
-            throw new Error('SANITY CHECK FAILED: merged JSON is empty.');
+          if (
+            !fs.existsSync(OUTPUT_FILE) ||
+            fs.statSync(OUTPUT_FILE).size < 10
+          ) {
+            throw new Error(
+              'SANITY CHECK FAILED: merged JSON is empty.'
+            );
           }
 
-          /*
-           * Verify that digital information was actually incorporated.
-           */
-          const digitalCount = merged.filter(movie =>
-            movie.digital !== undefined &&
-            movie.digital !== null &&
-            String(movie.digital).trim() !== ''
-          ).length;
+          let digitalCount = 0;
 
-          console.log(`Records containing digital information: ${digitalCount}`);
+          for (const movie of merged) {
+            if (
+              movie.digital !== undefined &&
+              movie.digital !== null &&
+              String(movie.digital).trim() !== ''
+            ) {
+              digitalCount++;
+            }
+          }
+
+          console.log(
+            `Records containing digital information: ${digitalCount}`
+          );
 
           NODE
 
@@ -388,7 +530,10 @@ jobs:
 
           git add movies_digital_merged.json movies_digital_merge_review.csv
 
-          git diff --cached --quiet && echo "No changes to commit." && exit 0
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
 
           git commit -m "Create merged digital movie catalog"
           git push
