@@ -1,8 +1,9 @@
 
-/* =========================================================
-   BW'S MOVIE COLLECTION
-   Main visual design
-   ========================================================= */
+/*
+  =========================================================
+  BW'S MOVIE COLLECTION
+  Main visual design
+  ========================================================= */
 
 :root {
   --background: #0E3FA9;
@@ -359,13 +360,10 @@ main {
 
   text-align: center;
 
-  /* Keep titles to one line */
   white-space: nowrap;
 
-  /* Prevent long titles from changing card height */
   overflow: hidden;
 
-  /* Show ... when title is too long */
   text-overflow: ellipsis;
 }
 
@@ -381,7 +379,11 @@ main {
 
   aspect-ratio: 2 / 3;
 
-  overflow: hidden;
+  /*
+    The shelf needs to extend below the poster,
+    so the cover itself cannot clip it.
+  */
+  overflow: visible;
 
   border-radius: 7px;
 
@@ -390,6 +392,11 @@ main {
   box-shadow:
     0 6px 18px rgba(0, 0, 0, 0.45);
 }
+
+
+/* =========================================================
+   POSTER IMAGE CONTAINER
+   ========================================================= */
 
 .movie-cover-inner {
   position: absolute;
@@ -402,6 +409,8 @@ main {
   justify-content: flex-end;
 
   overflow: hidden;
+
+  border-radius: 7px;
 }
 
 
@@ -435,6 +444,8 @@ main {
     0 5px 8px rgba(0, 0, 0, 0.45);
 
   pointer-events: none;
+
+  z-index: 2;
 }
 
 
@@ -460,15 +471,6 @@ main {
 /* =========================================================
    FORMAT INDICATORS
    ========================================================= */
-
-/*
-  Format badges are intentionally hidden from the
-  collection grid.
-
-  Physical / digital information is still stored in
-  movies.js, filters still work, and the information
-  remains visible inside the movie viewer.
-*/
 
 .movie-badges {
   display: none;
