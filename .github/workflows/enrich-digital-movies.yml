@@ -16,7 +16,7 @@ jobs:
 
       - name: Enrich digital movies
         env:
-          TMDB_TOKEN: ${{ secrets.TMDB_READ_ACCESS_TOKEN }}
+          TMDB_TOKEN: ${{ secrets.TMDB_API_KEY }}
         run: |
           python3 - <<'PY'
           import csv
