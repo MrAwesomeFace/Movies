@@ -358,6 +358,60 @@ function createMovieCard(
 
 
   // =========================================================
+  // COVER
+  // =========================================================
+
+  const colors =
+    coverColors[
+      index % coverColors.length
+    ];
+
+  const cover =
+    document.createElement(
+      "div"
+    );
+
+  cover.className =
+    "movie-cover";
+
+  const coverInner =
+    document.createElement(
+      "div"
+    );
+
+  coverInner.className =
+    "movie-cover-inner";
+
+
+  // TMDB POSTER
+
+  if (movie.poster) {
+
+    coverInner.style.backgroundImage =
+      `url("${movie.poster}")`;
+
+    coverInner.style.backgroundSize =
+      "cover";
+
+    coverInner.style.backgroundPosition =
+      "center";
+
+    coverInner.style.backgroundRepeat =
+      "no-repeat";
+
+  } else {
+
+    coverInner.style.background =
+      `linear-gradient(
+        145deg,
+        ${colors[0]},
+        ${colors[1]}
+      )`;
+
+  }
+
+
+  // =========================================================
   // TITLE
   // =========================================================
 
@@ -512,58 +566,8 @@ function createMovieCard(
 
 
   // =========================================================
-  // COVER
+  // POSTER
   // =========================================================
-
-  const colors =
-    coverColors[
-      index % coverColors.length
-    ];
-
-  const cover =
-    document.createElement(
-      "div"
-    );
-
-  cover.className =
-    "movie-cover";
-
-  const coverInner =
-    document.createElement(
-      "div"
-    );
-
-  coverInner.className =
-    "movie-cover-inner";
-
-
-  // TMDB POSTER
-
-  if (movie.poster) {
-
-    coverInner.style.backgroundImage =
-      `url("${movie.poster}")`;
-
-    coverInner.style.backgroundSize =
-      "cover";
-
-    coverInner.style.backgroundPosition =
-      "center";
-
-    coverInner.style.backgroundRepeat =
-      "no-repeat";
-
-  } else {
-
-    coverInner.style.background =
-      `linear-gradient(
-        145deg,
-        ${colors[0]},
-        ${colors[1]}
-      )`;
-
-  }
-
 
   cover.appendChild(
     coverInner
