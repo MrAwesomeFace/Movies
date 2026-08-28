@@ -7,12 +7,11 @@ permissions:
   contents: write
 
 jobs:
-  enrich-digital-movies:
+  enrich:
     runs-on: ubuntu-latest
 
     steps:
-
-      - name: Check out repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Python
@@ -21,1086 +20,458 @@ jobs:
           python-version: "3.x"
 
       - name: Install requests
-        run: |
-          pip install requests
+        run: pip install requests
 
-      - name: Enrich digital movie list
+      - name: Enrich digital movies
         env:
           TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
         run: |
-          python <<'PYTHON'
-
+          python3 <<'PY'
           import csv
           import json
           import os
           import re
           import time
           import requests
-          from difflib import SequenceMatcher
 
+          INPUT = "digital_movies_import_queue.csv"
+          OUTPUT = "digital_movies_tmdb_enriched.json"
+          REVIEW = "digital_movies_tmdb_review.csv"
 
-          # ==========================================================
-          # SETTINGS
-          # ==========================================================
+          token = os.environ.get("TMDB_API_KEY")
 
-          INPUT_FILE = "digital_movies_import_queue.csv"
+          if not token:
+              raise SystemExit("TMDB_API_KEY secret is missing.")
 
-          OUTPUT_FILE = "digital_movies_tmdb_enriched.json"
+          headers = {
+              "Authorization": "Bearer " + token,
+              "Content-Type": "application/json"
+          }
 
-          REVIEW_FILE = "digital_movies_tmdb_review.csv"
-
-          API_KEY = os.environ.get("TMDB_API_KEY")
-
-          if not API_KEY:
-              raise SystemExit(
-                  "TMDB_API_KEY secret is not configured."
-              )
-
-          API_BASE = "https://api.themoviedb.org/3"
-
-          session = requests.Session()
-
-
-          # ==========================================================
-          # NORMALIZATION
-          # ==========================================================
+          base = "https://api.themoviedb.org/3"
 
           def clean(value):
               if value is None:
                   return ""
-
               return str(value).strip()
 
-
-          def normalize_title(title):
-
-              title = clean(title).lower()
-
-              title = title.replace("&", "and")
-              title = title.replace("’", "'")
-              title = title.replace("–", "-")
-              title = title.replace("—", "-")
-
-              title = re.sub(
-                  r"[^a-z0-9]+",
-                  " ",
-                  title
-              )
-
-              return " ".join(
-                  title.split()
-              )
-
-
-          def get_year(value):
-
-              match = re.search(
-                  r"\b(19\d{2}|20\d{2})\b",
-                  clean(value)
-              )
-
+          def year_from_text(value):
+              match = re.search(r"(19\d{2}|20\d{2})", clean(value))
               if match:
                   return int(match.group(1))
-
               return None
 
-
-          def movie_year(movie):
-
-              release_date = clean(
-                  movie.get("release_date")
-              )
-
-              if len(release_date) >= 4:
-
-                  try:
-                      return int(
-                          release_date[:4]
-                      )
-                  except ValueError:
-                      pass
-
-              return None
-
-
-          # ==========================================================
-          # TMDB API
-          # ==========================================================
+          def normalize(title):
+              title = clean(title).lower()
+              title = title.replace("&", "and")
+              title = re.sub(r"[^a-z0-9]+", " ", title)
+              return " ".join(title.split())
 
           def tmdb_get(path, params=None):
-
-              url = API_BASE + path
-
-              response = session.get(
-                  url,
+              r = requests.get(
+                  base + path,
+                  headers=headers,
                   params=params,
-                  headers={
-                      "Authorization":
-                          "Bearer " + API_KEY
-                  },
                   timeout=30
               )
 
-              if response.status_code != 200:
-
+              if r.status_code != 200:
                   raise RuntimeError(
-                      "TMDB returned HTTP "
-                      + str(response.status_code)
-                      + ": "
-                      + response.text[:500]
+                      "TMDB HTTP " +
+                      str(r.status_code) +
+                      ": " +
+                      r.text[:300]
                   )
 
-              return response.json()
+              return r.json()
 
+          def movie_year(movie):
+              date = clean(movie.get("release_date"))
+              if len(date) >= 4:
+                  try:
+                      return int(date[:4])
+                  except:
+                      pass
+              return None
 
-          # ==========================================================
-          # SCORE SEARCH RESULT
-          # ==========================================================
-
-          def score_candidate(
-              digital_title,
-              digital_year,
-              candidate
-          ):
-
-              candidate_title = clean(
-                  candidate.get("title")
-              )
-
-              title_score = SequenceMatcher(
-                  None,
-                  normalize_title(digital_title),
-                  normalize_title(candidate_title)
-              ).ratio()
-
-              candidate_year = movie_year(
-                  candidate
-              )
-
-              year_difference = None
-
-              if (
-                  digital_year is not None
-                  and candidate_year is not None
-              ):
-
-                  year_difference = abs(
-                      digital_year -
-                      candidate_year
-                  )
-
-              score = title_score
-
-              if year_difference == 0:
-                  score += 0.10
-
-              elif year_difference == 1:
-                  score += 0.04
-
-              elif (
-                  year_difference is not None
-                  and year_difference >= 3
-              ):
-
-                  score -= 0.10
-
-              return {
-                  "score": round(score, 4),
-                  "title_score": round(
-                      title_score,
-                      4
-                  ),
-                  "year_difference":
-                      year_difference
-              }
-
-
-          # ==========================================================
-          # FETCH COMPLETE MOVIE
-          # ==========================================================
-
-          def fetch_movie(tmdb_id):
-
-              return tmdb_get(
-                  "/movie/" + str(tmdb_id),
-                  {
-                      "append_to_response":
-                          "credits"
-                  }
-              )
-
-
-          # ==========================================================
-          # BUILD ENRICHED RECORD
-          # ==========================================================
-
-          def build_record(
-              row,
-              tmdb_movie,
-              method,
-              confidence,
-              title_score=None,
-              year_difference=None,
-              review_required=False,
-              review_reason=""
-          ):
-
-              release_date = clean(
-                  tmdb_movie.get("release_date")
-              )
-
-              return {
-
-                  "digital_title":
-                      clean(row.get("title")),
-
-                  "digital_year":
-                      get_year(row.get("year")),
-
-                  "digital":
-                      clean(row.get("digital")),
-
-                  "source_status":
-                      clean(row.get("status")),
-
-                  "source_existing_match":
-                      clean(
-                          row.get("existing_match")
-                      ),
-
-                  "source_notes":
-                      clean(row.get("notes")),
-
-                  "tmdb_id":
-                      tmdb_movie.get("id"),
-
-                  "tmdb_title":
-                      clean(
-                          tmdb_movie.get("title")
-                      ),
-
-                  "tmdb_original_title":
-                      clean(
-                          tmdb_movie.get(
-                              "original_title"
-                          )
-                      ),
-
-                  "tmdb_year":
-                      (
-                          int(release_date[:4])
-                          if len(release_date) >= 4
-                          else None
-                      ),
-
-                  "tmdb_release_date":
-                      release_date,
-
-                  "tmdb_overview":
-                      clean(
-                          tmdb_movie.get("overview")
-                      ),
-
-                  "tmdb_poster_path":
-                      clean(
-                          tmdb_movie.get(
-                              "poster_path"
-                          )
-                      ),
-
-                  "tmdb_backdrop_path":
-                      clean(
-                          tmdb_movie.get(
-                              "backdrop_path"
-                          )
-                      ),
-
-                  "match_method":
-                      method,
-
-                  "confidence":
-                      confidence,
-
-                  "title_score":
-                      title_score,
-
-                  "year_difference":
-                      year_difference,
-
-                  "review_required":
-                      review_required,
-
-                  "review_reason":
-                      review_reason
-              }
-
-
-          # ==========================================================
-          # LOAD DIGITAL FILE
-          # ==========================================================
-
-          print("")
-          print("========================================")
-          print("DIGITAL MOVIE TMDB ENRICHMENT")
-          print("========================================")
-          print("")
-
-          if not os.path.exists(INPUT_FILE):
-
-              raise SystemExit(
-                  "Could not find "
-                  + INPUT_FILE
-              )
-
+          print("Loading " + INPUT)
 
           with open(
-              INPUT_FILE,
+              INPUT,
               "r",
               encoding="utf-8-sig",
               newline=""
-          ) as file:
-
-              reader = csv.DictReader(file)
-
+          ) as f:
+              reader = csv.DictReader(f)
               rows = list(reader)
 
+          print("Rows loaded:", len(rows))
 
-          print(
-              "Digital rows loaded:",
-              len(rows)
-          )
-
-
-          # ==========================================================
-          # PROCESS MOVIES
-          # ==========================================================
+          if not rows:
+              raise SystemExit(
+                  "The input CSV contains no data rows."
+              )
 
           enriched = []
-
           review_rows = []
 
+          for index, row in enumerate(rows, 1):
 
-          for number, row in enumerate(
-              rows,
-              start=1
-          ):
-
-              title = clean(
-                  row.get("title")
-              )
+              title = clean(row.get("title"))
 
               if not title:
                   continue
 
-              digital_year = get_year(
-                  row.get("year")
-              )
-
-              supplied_tmdb_id = clean(
-                  row.get("tmdbId")
-              )
+              source_digital = clean(row.get("digital"))
+              supplied_id = clean(row.get("tmdbId"))
+              source_year = year_from_text(row.get("year"))
 
               print(
-                  "["
-                  + str(number)
-                  + "/"
-                  + str(len(rows))
-                  + "] "
-                  + title
+                  "[" +
+                  str(index) +
+                  "/" +
+                  str(len(rows)) +
+                  "] " +
+                  title
               )
 
+              record = {
+                  "title": title,
+                  "digital": source_digital,
+                  "source_year": source_year,
+                  "source_tmdb_id": supplied_id,
+                  "source_tmdb_title": clean(row.get("tmdbTitle")),
+                  "source_review": clean(row.get("review")),
+                  "source_variants": clean(row.get("source_variants")),
 
-              # ------------------------------------------------------
-              # CASE 1:
-              # CSV ALREADY HAS TMDB ID
-              # ------------------------------------------------------
+                  "tmdbId": "",
+                  "tmdbTitle": "",
+                  "originalTitle": "",
+                  "year": "",
+                  "releaseDate": "",
+                  "overview": "",
+                  "posterPath": "",
+                  "backdropPath": "",
 
-              if supplied_tmdb_id:
-
-                  try:
-
-                      movie = fetch_movie(
-                          supplied_tmdb_id
-                      )
-
-                      tmdb_year = movie_year(
-                          movie
-                      )
-
-                      year_difference = None
-
-                      if (
-                          digital_year is not None
-                          and tmdb_year is not None
-                      ):
-
-                          year_difference = abs(
-                              digital_year -
-                              tmdb_year
-                          )
-
-
-                      review_required = False
-                      review_reason = ""
-
-
-                      if (
-                          year_difference is not None
-                          and year_difference > 1
-                      ):
-
-                          review_required = True
-
-                          review_reason = (
-                              "Supplied TMDB ID "
-                              "has a different "
-                              "release year."
-                          )
-
-
-                      record = build_record(
-                          row,
-                          movie,
-                          "SUPPLIED_TMDB_ID",
-                          (
-                              "REVIEW"
-                              if review_required
-                              else "CONFIDENT"
-                          ),
-                          1.0,
-                          year_difference,
-                          review_required,
-                          review_reason
-                      )
-
-
-                      enriched.append(
-                          record
-                      )
-
-
-                      if review_required:
-
-                          review_rows.append(
-                              record
-                          )
-
-
-                  except Exception as error:
-
-                      record = {
-                          "digital_title":
-                              title,
-
-                          "digital_year":
-                              digital_year,
-
-                          "digital":
-                              clean(
-                                  row.get(
-                                      "digital"
-                                  )
-                              ),
-
-                          "source_status":
-                              clean(
-                                  row.get(
-                                      "status"
-                                  )
-                              ),
-
-                          "source_existing_match":
-                              clean(
-                                  row.get(
-                                      "existing_match"
-                                  )
-                              ),
-
-                          "source_notes":
-                              clean(
-                                  row.get(
-                                      "notes"
-                                  )
-                              ),
-
-                          "tmdb_id":
-                              supplied_tmdb_id,
-
-                          "tmdb_title":
-                              "",
-
-                          "tmdb_original_title":
-                              "",
-
-                          "tmdb_year":
-                              None,
-
-                          "tmdb_release_date":
-                              "",
-
-                          "tmdb_overview":
-                              "",
-
-                          "tmdb_poster_path":
-                              "",
-
-                          "tmdb_backdrop_path":
-                              "",
-
-                          "match_method":
-                              "TMDB_ID_ERROR",
-
-                          "confidence":
-                              "REVIEW",
-
-                          "title_score":
-                              None,
-
-                          "year_difference":
-                              None,
-
-                          "review_required":
-                              True,
-
-                          "review_reason":
-                              str(error)
-                      }
-
-
-                      enriched.append(
-                          record
-                      )
-
-                      review_rows.append(
-                          record
-                      )
-
-
-                  time.sleep(0.1)
-
-                  continue
-
-
-              # ------------------------------------------------------
-              # CASE 2:
-              # NO TMDB ID
-              # SEARCH TMDB
-              # ------------------------------------------------------
+                  "match_type": "",
+                  "confidence": "",
+                  "review": ""
+              }
 
               try:
 
-                  params = {
-                      "query": title,
-                      "include_adult": "false",
-                      "language": "en-US",
-                      "page": 1
-                  }
+                  # ------------------------------------------------
+                  # If the CSV already has a TMDB ID, trust it.
+                  # ------------------------------------------------
 
-                  if digital_year:
+                  if supplied_id:
 
-                      params["year"] = digital_year
-
-
-                  search = tmdb_get(
-                      "/search/movie",
-                      params
-                  )
-
-                  candidates = search.get(
-                      "results",
-                      []
-                  )
-
-
-                  if not candidates:
-
-                      record = {
-                          "digital_title":
-                              title,
-
-                          "digital_year":
-                              digital_year,
-
-                          "digital":
-                              clean(
-                                  row.get(
-                                      "digital"
-                                  )
-                              ),
-
-                          "source_status":
-                              clean(
-                                  row.get(
-                                      "status"
-                                  )
-                              ),
-
-                          "source_existing_match":
-                              clean(
-                                  row.get(
-                                      "existing_match"
-                                  )
-                              ),
-
-                          "source_notes":
-                              clean(
-                                  row.get(
-                                      "notes"
-                                  )
-                              ),
-
-                          "tmdb_id":
-                              None,
-
-                          "tmdb_title":
-                              "",
-
-                          "tmdb_original_title":
-                              "",
-
-                          "tmdb_year":
-                              None,
-
-                          "tmdb_release_date":
-                              "",
-
-                          "tmdb_overview":
-                              "",
-
-                          "tmdb_poster_path":
-                              "",
-
-                          "tmdb_backdrop_path":
-                              "",
-
-                          "match_method":
-                              "NO_RESULT",
-
-                          "confidence":
-                              "REVIEW",
-
-                          "title_score":
-                              None,
-
-                          "year_difference":
-                              None,
-
-                          "review_required":
-                              True,
-
-                          "review_reason":
-                              "TMDB returned no results."
-                      }
-
-
-                      enriched.append(
-                          record
+                      movie = tmdb_get(
+                          "/movie/" + supplied_id
                       )
 
-                      review_rows.append(
-                          record
-                      )
-
-                      time.sleep(0.1)
-
-                      continue
-
-
-                  # --------------------------------------------------
-                  # SCORE ALL CANDIDATES
-                  # --------------------------------------------------
-
-                  scored = []
-
-
-                  for candidate in candidates[:10]:
-
-                      scores = score_candidate(
-                          title,
-                          digital_year,
-                          candidate
-                      )
-
-                      scored.append({
-                          "movie":
-                              candidate,
-
-                          "scores":
-                              scores
-                      })
-
-
-                  scored.sort(
-                      key=lambda item:
-                          item["scores"]["score"],
-                      reverse=True
-                  )
-
-
-                  best = scored[0]
-
-                  best_movie = best["movie"]
-
-                  best_scores = best["scores"]
-
-
-                  # --------------------------------------------------
-                  # GET FULL TMDB RECORD
-                  # --------------------------------------------------
-
-                  full_movie = fetch_movie(
-                      best_movie.get("id")
-                  )
-
-
-                  title_score = (
-                      best_scores["title_score"]
-                  )
-
-                  year_difference = (
-                      best_scores[
-                          "year_difference"
-                      ]
-                  )
-
-
-                  # --------------------------------------------------
-                  # CONFIDENCE
-                  # --------------------------------------------------
-
-                  if (
-                      title_score >= 0.92
-                      and (
-                          year_difference is None
-                          or year_difference <= 1
-                      )
-                  ):
-
-                      confidence = "CONFIDENT"
-
-                      review_required = False
-
-                      review_reason = ""
-
-
-                  elif (
-                      title_score >= 0.80
-                      and (
-                          year_difference is None
-                          or year_difference <= 1
-                      )
-                  ):
-
-                      confidence = "LIKELY"
-
-                      review_required = True
-
-                      review_reason = (
-                          "Likely TMDB match; "
-                          "manual confirmation "
-                          "recommended."
-                      )
-
+                      record["match_type"] = "EXISTING_TMDB_ID"
+                      record["confidence"] = "CONFIDENT"
 
                   else:
 
-                      confidence = "REVIEW"
+                      # ------------------------------------------------
+                      # Search TMDB by title.
+                      # ------------------------------------------------
 
-                      review_required = True
+                      params = {
+                          "query": title,
+                          "include_adult": "false",
+                          "language": "en-US",
+                          "page": 1
+                      }
 
-                      review_reason = (
-                          "TMDB search result "
-                          "is uncertain."
-                      )
+                      results = tmdb_get(
+                          "/search/movie",
+                          params
+                      ).get("results", [])
 
+                      if not results:
 
-                  record = build_record(
-                      row,
-                      full_movie,
-                      "TMDB_SEARCH",
-                      confidence,
-                      title_score,
-                      year_difference,
-                      review_required,
-                      review_reason
-                  )
+                          record["match_type"] = "NO_RESULT"
+                          record["confidence"] = "REVIEW"
+                          record["review"] = (
+                              "TMDB returned no search results."
+                          )
 
+                          enriched.append(record)
+                          review_rows.append(record)
 
-                  # --------------------------------------------------
-                  # SAVE ALTERNATIVE RESULTS
-                  # --------------------------------------------------
+                          continue
 
-                  alternatives = []
+                      # ------------------------------------------------
+                      # Pick the best title/year combination.
+                      # ------------------------------------------------
 
+                      best = None
+                      best_score = -999
 
-                  for alternative in scored[1:4]:
+                      for candidate in results[:20]:
 
-                      alt_movie = (
-                          alternative["movie"]
-                      )
+                          candidate_title = clean(
+                              candidate.get("title")
+                          )
 
-                      alt_scores = (
-                          alternative["scores"]
-                      )
+                          candidate_year = movie_year(
+                              candidate
+                          )
 
-                      alternatives.append({
-                          "tmdb_id":
-                              alt_movie.get("id"),
+                          title_score = 0
 
-                          "title":
-                              clean(
-                                  alt_movie.get(
-                                      "title"
+                          if normalize(title) == normalize(candidate_title):
+                              title_score = 100
+                          else:
+                              a = normalize(title)
+                              b = normalize(candidate_title)
+
+                              if a and b:
+                                  common = 0
+
+                                  a_words = set(a.split())
+                                  b_words = set(b.split())
+
+                                  common = len(
+                                      a_words.intersection(b_words)
                                   )
-                              ),
 
-                          "year":
-                              movie_year(
-                                  alt_movie
-                              ),
+                                  title_score = (
+                                      common /
+                                      max(
+                                          len(a_words),
+                                          len(b_words)
+                                      )
+                                  ) * 80
 
-                          "title_score":
-                              alt_scores[
-                                  "title_score"
-                              ],
+                          year_score = 0
 
-                          "score":
-                              alt_scores[
-                                  "score"
-                              ]
-                      })
+                          if (
+                              source_year is not None
+                              and candidate_year is not None
+                          ):
 
+                              difference = abs(
+                                  source_year -
+                                  candidate_year
+                              )
 
-                  record["alternatives"] = (
-                      alternatives
-                  )
+                              if difference == 0:
+                                  year_score = 30
+                              elif difference == 1:
+                                  year_score = 15
+                              elif difference == 2:
+                                  year_score = 0
+                              else:
+                                  year_score = -30
 
+                          score = title_score + year_score
 
-                  enriched.append(
-                      record
-                  )
+                          if score > best_score:
 
+                              best_score = score
 
-                  if review_required:
+                              best = candidate
 
-                      review_rows.append(
-                          record
+                      if best is None:
+
+                          record["match_type"] = "NO_RESULT"
+                          record["confidence"] = "REVIEW"
+                          record["review"] = (
+                              "Could not identify a TMDB result."
+                          )
+
+                          enriched.append(record)
+                          review_rows.append(record)
+
+                          continue
+
+                      movie = tmdb_get(
+                          "/movie/" +
+                          str(best.get("id"))
                       )
 
+                      candidate_title = clean(
+                          movie.get("title")
+                      )
 
-              except Exception as error:
+                      candidate_year = movie_year(
+                          movie
+                      )
 
-                  record = {
-                      "digital_title":
-                          title,
+                      # ------------------------------------------------
+                      # Confidence rules.
+                      # ------------------------------------------------
 
-                      "digital_year":
-                          digital_year,
+                      title_exact = (
+                          normalize(title) ==
+                          normalize(candidate_title)
+                      )
 
-                      "digital":
-                          clean(
-                              row.get(
-                                  "digital"
-                              )
-                          ),
+                      year_matches = (
+                          source_year is None
+                          or candidate_year is None
+                          or abs(
+                              source_year -
+                              candidate_year
+                          ) <= 1
+                      )
 
-                      "source_status":
-                          clean(
-                              row.get(
-                                  "status"
-                              )
-                          ),
+                      if title_exact and year_matches:
 
-                      "source_existing_match":
-                          clean(
-                              row.get(
-                                  "existing_match"
-                              )
-                          ),
+                          record["confidence"] = "CONFIDENT"
+                          record["match_type"] = "TMDB_SEARCH"
 
-                      "source_notes":
-                          clean(
-                              row.get(
-                                  "notes"
-                              )
-                          ),
+                      elif best_score >= 70 and year_matches:
 
-                      "tmdb_id":
-                          None,
+                          record["confidence"] = "LIKELY"
+                          record["match_type"] = "TMDB_SEARCH"
+                          record["review"] = (
+                              "Likely match; manual confirmation recommended."
+                          )
 
-                      "tmdb_title":
-                          "",
+                      else:
 
-                      "tmdb_original_title":
-                          "",
+                          record["confidence"] = "REVIEW"
+                          record["match_type"] = "TMDB_SEARCH"
+                          record["review"] = (
+                              "TMDB match is uncertain."
+                          )
 
-                      "tmdb_year":
-                          None,
+                  # ------------------------------------------------
+                  # Store TMDB metadata.
+                  # ------------------------------------------------
 
-                      "tmdb_release_date":
-                          "",
-
-                      "tmdb_overview":
-                          "",
-
-                      "tmdb_poster_path":
-                          "",
-
-                      "tmdb_backdrop_path":
-                          "",
-
-                      "match_method":
-                          "SEARCH_ERROR",
-
-                      "confidence":
-                          "REVIEW",
-
-                      "title_score":
-                          None,
-
-                      "year_difference":
-                          None,
-
-                      "review_required":
-                          True,
-
-                      "review_reason":
-                          str(error)
-                  }
-
-
-                  enriched.append(
-                      record
+                  record["tmdbId"] = movie.get("id", "")
+                  record["tmdbTitle"] = clean(
+                      movie.get("title")
+                  )
+                  record["originalTitle"] = clean(
+                      movie.get("original_title")
+                  )
+                  record["year"] = (
+                      movie_year(movie)
+                      if movie_year(movie) is not None
+                      else ""
+                  )
+                  record["releaseDate"] = clean(
+                      movie.get("release_date")
+                  )
+                  record["overview"] = clean(
+                      movie.get("overview")
+                  )
+                  record["posterPath"] = clean(
+                      movie.get("poster_path")
+                  )
+                  record["backdropPath"] = clean(
+                      movie.get("backdrop_path")
                   )
 
-                  review_rows.append(
-                      record
-                  )
+                  if record["confidence"] != "CONFIDENT":
+                      review_rows.append(record)
 
+                  enriched.append(record)
 
-              time.sleep(0.1)
+              except Exception as e:
 
+                  record["match_type"] = "ERROR"
+                  record["confidence"] = "REVIEW"
+                  record["review"] = str(e)
 
-          # ==========================================================
-          # WRITE JSON
-          # ==========================================================
+                  enriched.append(record)
+                  review_rows.append(record)
+
+              time.sleep(0.05)
+
+          # ----------------------------------------------------------
+          # Write enriched JSON
+          # ----------------------------------------------------------
 
           with open(
-              OUTPUT_FILE,
+              OUTPUT,
               "w",
               encoding="utf-8"
-          ) as file:
+          ) as f:
 
               json.dump(
                   enriched,
-                  file,
+                  f,
                   indent=2,
                   ensure_ascii=False
               )
 
+          # ----------------------------------------------------------
+          # Write review CSV
+          # ----------------------------------------------------------
 
-          # ==========================================================
-          # WRITE REVIEW CSV
-          # ==========================================================
-
-          review_fields = [
-              "digital_title",
-              "digital_year",
+          fields = [
+              "title",
               "digital",
-              "tmdb_id",
-              "tmdb_title",
-              "tmdb_year",
+              "source_year",
+              "tmdbId",
+              "tmdbTitle",
+              "year",
               "confidence",
-              "title_score",
-              "year_difference",
-              "review_reason"
+              "match_type",
+              "review"
           ]
 
-
           with open(
-              REVIEW_FILE,
+              REVIEW,
               "w",
               encoding="utf-8",
               newline=""
-          ) as file:
+          ) as f:
 
               writer = csv.DictWriter(
-                  file,
-                  fieldnames=review_fields
+                  f,
+                  fieldnames=fields
               )
 
               writer.writeheader()
 
               for record in review_rows:
-
                   writer.writerow({
-                      field:
-                          record.get(
-                              field,
-                              ""
-                          )
-                      for field in review_fields
+                      field: record.get(field, "")
+                      for field in fields
                   })
-
-
-          # ==========================================================
-          # SUMMARY
-          # ==========================================================
 
           confident = sum(
               1
-              for record in enriched
-              if record["confidence"]
-              == "CONFIDENT"
+              for r in enriched
+              if r["confidence"] == "CONFIDENT"
           )
 
           likely = sum(
               1
-              for record in enriched
-              if record["confidence"]
-              == "LIKELY"
+              for r in enriched
+              if r["confidence"] == "LIKELY"
           )
 
-          review = sum(
+          reviews = sum(
               1
-              for record in enriched
-              if record["review_required"]
+              for r in enriched
+              if r["confidence"] == "REVIEW"
           )
-
 
           print("")
           print("========================================")
           print("TMDB ENRICHMENT COMPLETE")
           print("========================================")
-          print(
-              "Movies processed:",
-              len(enriched)
-          )
-          print(
-              "Confident:",
-              confident
-          )
-          print(
-              "Likely:",
-              likely
-          )
-          print(
-              "Manual review:",
-              review
-          )
+          print("Processed:", len(enriched))
+          print("Confident:", confident)
+          print("Likely:", likely)
+          print("Review:", reviews)
           print("")
-          print(
-              "Created:",
-              OUTPUT_FILE
-          )
-          print(
-              "Created:",
-              REVIEW_FILE
-          )
+          print("Created:", OUTPUT)
+          print("Created:", REVIEW)
 
-          PYTHON
+          PY
 
-      - name: Upload enrichment results
+      - name: Upload results
         uses: actions/upload-artifact@v4
         with:
           name: digital-movie-tmdb-enrichment
@@ -1108,14 +479,10 @@ jobs:
             digital_movies_tmdb_enriched.json
             digital_movies_tmdb_review.csv
 
-      - name: Commit enrichment results
+      - name: Commit results
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add digital_movies_tmdb_enriched.json
-          git add digital_movies_tmdb_review.csv
-
+          git add digital_movies_tmdb_enriched.json digital_movies_tmdb_review.csv
           git commit -m "Enrich digital movies with TMDB metadata" || true
-
           git push
