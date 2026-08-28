@@ -10,6 +10,7 @@ jobs:
 merge-digital-movies:
 runs-on: ubuntu-latest
 
+
 steps:
   - name: Checkout repository
     uses: actions/checkout@v4
@@ -130,51 +131,29 @@ steps:
       }
 
       function extractMoviesJS(text) {
-        let cleaned = text.trim();
-
-        const match = cleaned.match(
-          /^(?:const|let|var)\s+\w+\s*=\s*(\[[\s\S]*\])\s*;?\s*$/
+        const match = text.match(
+          /(?:const|let|var)\s+\w+\s*=\s*(\[[\s\S]*\])\s*;?\s*$/
         );
 
-        if (match) {
-          cleaned = match[1];
-        } else {
-          cleaned = cleaned.replace(
-            /^export\s+default\s+/m,
-            ''
+        if (!match) {
+          throw new Error(
+            'Could not find the movie array in movies.js. Expected format: const movies = [ ... ];'
           );
-
-          cleaned = cleaned.replace(
-            /^const\s+\w+\s*=\s*/,
-            ''
-          );
-
-          cleaned = cleaned.replace(
-            /^let\s+\w+\s*=\s*/,
-            ''
-          );
-
-          cleaned = cleaned.replace(
-            /^var\s+\w+\s*=\s*/,
-            ''
-          );
-
-          cleaned = cleaned.replace(/;\s*$/, '');
         }
 
         try {
-          const parsed = JSON.parse(cleaned);
+          const parsed = JSON.parse(match[1]);
 
           if (!Array.isArray(parsed)) {
             throw new Error(
-              'movies.js parsed successfully but did not contain an array.'
+              'movies.js did not contain an array.'
             );
           }
 
           return parsed;
         } catch (error) {
           throw new Error(
-            'movies.js could not be parsed. Expected format: const movies = [ ... ];'
+            'movies.js could not be parsed as JSON.'
           );
         }
       }
@@ -381,6 +360,7 @@ steps:
       );
 
       const movies = extractMoviesJS(moviesText);
+
       const digitalRows = parseCSV(digitalText);
 
       if (digitalRows.length === 0) {
@@ -389,8 +369,13 @@ steps:
         );
       }
 
-      console.log(`Existing movies: ${movies.length}`);
-      console.log(`Digital rows: ${digitalRows.length}`);
+      console.log(
+        `Existing movies: ${movies.length}`
+      );
+
+      console.log(
+        `Digital rows: ${digitalRows.length}`
+      );
 
       const merged = movies.map(movie => ({
         ...movie
@@ -398,10 +383,19 @@ steps:
 
       const byTmdbId = new Map();
 
-      for (let i = 0; i < merged.length; i++) {
-        const id = findTmdbId(merged[i]);
+      for (
+        let i = 0;
+        i < merged.length;
+        i++
+      ) {
+        const id = findTmdbId(
+          merged[i]
+        );
 
-        if (id && !byTmdbId.has(id)) {
+        if (
+          id &&
+          !byTmdbId.has(id)
+        ) {
           byTmdbId.set(id, i);
         }
       }
@@ -525,9 +519,15 @@ steps:
       );
 
       console.log('');
-      console.log('======================================');
-      console.log('DIGITAL MOVIE MERGE COMPLETE');
-      console.log('======================================');
+      console.log(
+        '======================================'
+      );
+      console.log(
+        'DIGITAL MOVIE MERGE COMPLETE'
+      );
+      console.log(
+        '======================================'
+      );
 
       console.log(
         `Original movies:          ${movies.length}`
@@ -566,7 +566,9 @@ steps:
         `Created: ${REVIEW_FILE}`
       );
 
-      console.log('======================================');
+      console.log(
+        '======================================'
+      );
 
       if (merged.length < movies.length) {
         throw new Error(
@@ -654,7 +656,9 @@ steps:
         `Validated new movie records: ${newMovies.length}`
       );
 
-      console.log('Sanity checks passed.');
+      console.log(
+        'Sanity checks passed.'
+      );
       NODE
 
   - name: Commit merged files
@@ -671,3 +675,4 @@ steps:
 
       git commit -m "Create merged digital movie catalog"
       git push
+
