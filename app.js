@@ -378,140 +378,6 @@ function createMovieCard(
 
 
   // =========================================================
-  // FORMAT INDICATORS
-  // =========================================================
-
-  const badges =
-    document.createElement(
-      "div"
-    );
-
-  badges.className =
-    "movie-badges";
-
-
-  // Physical badges
-
-  if (
-    movie.physical &&
-    movie.physical.length
-  ) {
-
-    movie.physical.forEach(
-      format => {
-
-        const badge =
-          document.createElement(
-            "span"
-          );
-
-        badge.className =
-          "movie-badge";
-
-        badge.textContent =
-          `💿 ${format}`;
-
-        badges.appendChild(
-          badge
-        );
-
-      }
-    );
-
-  }
-
-
-  // Digital badges
-
-  if (
-    movie.digital &&
-    movie.digital.length
-  ) {
-
-    movie.digital.forEach(
-      service => {
-
-        const badge =
-          document.createElement(
-            "span"
-          );
-
-        badge.className =
-          "movie-badge";
-
-        badge.textContent =
-          `📱 ${service}`;
-
-        badges.appendChild(
-          badge
-        );
-
-      }
-    );
-
-  }
-
-
-  // TV badge
-
-  if (
-    movie.type === "tv"
-  ) {
-
-    const badge =
-      document.createElement(
-        "span"
-      );
-
-    badge.className =
-      "movie-badge";
-
-    badge.textContent =
-      "TV";
-
-    badges.appendChild(
-      badge
-    );
-
-  }
-
-
-  // Misc badge
-
-  if (
-    movie.type === "misc"
-  ) {
-
-    const badge =
-      document.createElement(
-        "span"
-      );
-
-    badge.className =
-      "movie-badge";
-
-    badge.textContent =
-      "MISC";
-
-    badges.appendChild(
-      badge
-    );
-
-  }
-
-
-  if (
-    badges.children.length > 0
-  ) {
-
-    card.appendChild(
-      badges
-    );
-
-  }
-
-
-  // =========================================================
   // COVER
   // =========================================================
 
@@ -775,7 +641,9 @@ function openMovie(
   }
 
 
+  // =========================================================
   // FORMATS
+  // =========================================================
 
   modalFormats.innerHTML =
     "";
