@@ -1,0 +1,406 @@
+name: Merge Digital Movies
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Merge digital catalog
+        run: |
+          python3 - <<'PY'
+          import csv
+          import json
+          import re
+          from pathlib import Path
+
+          root = Path.cwd()
+
+          movies_path = root / "movies.js"
+          digital_path = root / "digital_movies_import_queue.csv"
+          enriched_path = root / "digital_movies_tmdb_enriched.json"
+
+          output_json = root / "movies_digital_merged.json"
+          output_csv = root / "movies_digital_merge_review.csv"
+
+          def clean(value):
+              if value is None:
+                  return ""
+              return str(value).strip()
+
+          def normalize_title(title):
+              title = clean(title).lower()
+              title = re.sub(r"[^a-z0-9]", "", title)
+              return title
+
+          def extract_movies_js():
+              text = movies_path.read_text(encoding="utf-8")
+
+              start = text.find("[")
+              end = text.rfind("]")
+
+              if start == -1 or end == -1:
+                  raise RuntimeError("Could not find movie array in movies.js")
+
+              array_text = text[start:end + 1]
+
+              try:
+                  return json.loads(array_text)
+              except Exception as e:
+                  raise RuntimeError(
+                      "Could not parse the movie array from movies.js: " + str(e)
+                  )
+
+          print("Loading existing movies.js...")
+          movies = extract_movies_js()
+
+          print(f"Existing catalog records: {len(movies)}")
+
+          print("Loading digital import queue...")
+          with digital_path.open("r", encoding="utf-8-sig", newline="") as f:
+              digital_rows = list(csv.DictReader(f))
+
+          print(f"Digital import records: {len(digital_rows)}")
+
+          print("Loading enriched TMDB data...")
+          with enriched_path.open("r", encoding="utf-8") as f:
+              enriched = json.load(f)
+
+          print(f"Enriched records: {len(enriched)}")
+
+          # ------------------------------------------------------------
+          # Build lookup tables for the existing catalog.
+          # TMDB ID is the primary source of truth.
+          # ------------------------------------------------------------
+
+          id_lookup = {}
+          title_year_lookup = {}
+
+          for movie in movies:
+              tmdb_id = clean(
+                  movie.get("tmdbId")
+                  or movie.get("tmdb_id")
+                  or movie.get("id")
+              )
+
+              title = clean(movie.get("title"))
+              year = clean(movie.get("year"))
+
+              if tmdb_id:
+                  id_lookup[tmdb_id] = movie
+
+              if title:
+                  title_year_lookup[
+                      (normalize_title(title), year)
+                  ] = movie
+
+          # ------------------------------------------------------------
+          # Enriched data lookup by source title + source TMDB ID.
+          # ------------------------------------------------------------
+
+          enriched_lookup = {}
+
+          for item in enriched:
+              key = (
+                  normalize_title(item.get("title")),
+                  clean(item.get("source_tmdbId"))
+              )
+              enriched_lookup[key] = item
+
+          # ------------------------------------------------------------
+          # Start with a deep copy of movies.js.
+          # Existing metadata will remain untouched.
+          # ------------------------------------------------------------
+
+          merged = json.loads(json.dumps(movies))
+
+          # Map IDs to the corresponding record in the copied catalog.
+          merged_id_lookup = {}
+
+          for movie in merged:
+              tmdb_id = clean(
+                  movie.get("tmdbId")
+                  or movie.get("tmdb_id")
+                  or movie.get("id")
+              )
+
+              if tmdb_id:
+                  merged_id_lookup[tmdb_id] = movie
+
+          review_rows = []
+
+          attached = 0
+          new_movies = 0
+          review_count = 0
+
+          # ------------------------------------------------------------
+          # Helper: find the digital media field.
+          # ------------------------------------------------------------
+
+          def get_digital_field(movie):
+              for field in ("digital", "digitalVersions", "digital_versions"):
+                  if field in movie:
+                      return field
+              return "digital"
+
+          def add_digital(movie, digital_source):
+              field = get_digital_field(movie)
+
+              if not digital_source:
+                  return
+
+              current = movie.get(field)
+
+              if current is None or current == "":
+                  movie[field] = digital_source
+                  return
+
+              if isinstance(current, list):
+                  values = [clean(x) for x in current]
+                  if digital_source not in values:
+                      values.append(digital_source)
+                  movie[field] = values
+                  return
+
+              current = clean(current)
+
+              existing_values = [
+                  x.strip() for x in current.split("|") if x.strip()
+              ]
+
+              if digital_source not in existing_values:
+                  existing_values.append(digital_source)
+
+              movie[field] = " | ".join(existing_values)
+
+          # ------------------------------------------------------------
+          # Process every digital record.
+          # ------------------------------------------------------------
+
+          for row in digital_rows:
+              title = clean(row.get("title"))
+              digital_source = clean(row.get("digital"))
+              source_tmdb_id = clean(row.get("tmdbId"))
+              source_year = clean(row.get("year"))
+
+              enriched_item = enriched_lookup.get(
+                  (normalize_title(title), source_tmdb_id)
+              )
+
+              tmdb_id = source_tmdb_id
+
+              if enriched_item:
+                  tmdb_id = clean(
+                      enriched_item.get("tmdbId")
+                      or enriched_item.get("source_tmdbId")
+                  )
+
+              # --------------------------------------------------------
+              # PRIMARY MATCH: TMDB ID
+              # --------------------------------------------------------
+
+              if tmdb_id and tmdb_id in merged_id_lookup:
+                  movie = merged_id_lookup[tmdb_id]
+
+                  add_digital(movie, digital_source)
+
+                  attached += 1
+
+                  review_rows.append({
+                      "result": "MATCH",
+                      "digital_title": title,
+                      "digital": digital_source,
+                      "tmdbId": tmdb_id,
+                      "existing_title": clean(movie.get("title")),
+                      "existing_year": clean(movie.get("year")),
+                      "notes": "Matched by TMDB ID; existing catalog metadata preserved."
+                  })
+
+                  continue
+
+              # --------------------------------------------------------
+              # SECONDARY MATCH: normalized title + year.
+              # This is only used when there is no usable TMDB ID.
+              # --------------------------------------------------------
+
+              normalized = normalize_title(title)
+
+              candidate = title_year_lookup.get(
+                  (normalized, source_year)
+              )
+
+              if candidate and not tmdb_id:
+                  existing_id = clean(
+                      candidate.get("tmdbId")
+                      or candidate.get("tmdb_id")
+                      or candidate.get("id")
+                  )
+
+                  if existing_id and existing_id in merged_id_lookup:
+                      movie = merged_id_lookup[existing_id]
+
+                      add_digital(movie, digital_source)
+
+                      attached += 1
+
+                      review_rows.append({
+                          "result": "MATCH",
+                          "digital_title": title,
+                          "digital": digital_source,
+                          "tmdbId": existing_id,
+                          "existing_title": clean(movie.get("title")),
+                          "existing_year": clean(movie.get("year")),
+                          "notes": "Matched by normalized title/year; existing metadata preserved."
+                      })
+
+                      continue
+
+              # --------------------------------------------------------
+              # NEW MOVIE: We have a TMDB ID but it isn't in movies.js.
+              #
+              # We create a new record using TMDB information from the
+              # enrichment output. We do NOT alter existing records.
+              # --------------------------------------------------------
+
+              if tmdb_id:
+                  data = enriched_item or {}
+
+                  new_record = {
+                      "title": clean(
+                          data.get("tmdbTitle")
+                          or data.get("title")
+                          or title
+                      ),
+                      "year": clean(
+                          data.get("tmdbYear")
+                          or data.get("year")
+                          or source_year
+                      ),
+                      "tmdbId": tmdb_id,
+                      "digital": digital_source
+                  }
+
+                  if data.get("tmdbOriginalTitle"):
+                      new_record["tmdbOriginalTitle"] = clean(
+                          data.get("tmdbOriginalTitle")
+                      )
+
+                  if data.get("tmdbReleaseDate"):
+                      new_record["tmdbReleaseDate"] = clean(
+                          data.get("tmdbReleaseDate")
+                      )
+
+                  if data.get("tmdbOverview"):
+                      new_record["tmdbOverview"] = clean(
+                          data.get("tmdbOverview")
+                      )
+
+                  if data.get("tmdbPosterPath"):
+                      new_record["tmdbPosterPath"] = clean(
+                          data.get("tmdbPosterPath")
+                      )
+
+                  if data.get("tmdbBackdropPath"):
+                      new_record["tmdbBackdropPath"] = clean(
+                          data.get("tmdbBackdropPath")
+                      )
+
+                  merged.append(new_record)
+                  merged_id_lookup[tmdb_id] = new_record
+
+                  new_movies += 1
+
+                  review_rows.append({
+                      "result": "NEW",
+                      "digital_title": title,
+                      "digital": digital_source,
+                      "tmdbId": tmdb_id,
+                      "existing_title": "",
+                      "existing_year": "",
+                      "notes": "TMDB ID not present in movies.js; new record created."
+                  })
+
+                  continue
+
+              # --------------------------------------------------------
+              # REVIEW: no reliable TMDB ID.
+              # Do not create anything.
+              # --------------------------------------------------------
+
+              review_count += 1
+
+              review_rows.append({
+                  "result": "REVIEW",
+                  "digital_title": title,
+                  "digital": digital_source,
+                  "tmdbId": "",
+                  "existing_title": "",
+                  "existing_year": "",
+                  "notes": "No reliable TMDB ID. Manual review required."
+              })
+
+          # ------------------------------------------------------------
+          # Write merged JSON.
+          # ------------------------------------------------------------
+
+          output_json.write_text(
+              json.dumps(merged, indent=2, ensure_ascii=False),
+              encoding="utf-8"
+          )
+
+          # ------------------------------------------------------------
+          # Write review CSV.
+          # ------------------------------------------------------------
+
+          with output_csv.open("w", encoding="utf-8", newline="") as f:
+              writer = csv.DictWriter(
+                  f,
+                  fieldnames=[
+                      "result",
+                      "digital_title",
+                      "digital",
+                      "tmdbId",
+                      "existing_title",
+                      "existing_year",
+                      "notes"
+                  ]
+              )
+
+              writer.writeheader()
+              writer.writerows(review_rows)
+
+          print("")
+          print("========================================")
+          print("MERGE COMPLETE")
+          print("========================================")
+          print(f"Existing records preserved: {len(movies)}")
+          print(f"Digital records processed:   {len(digital_rows)}")
+          print(f"Digital matches attached:    {attached}")
+          print(f"New records created:         {new_movies}")
+          print(f"Manual reviews:              {review_count}")
+          print("")
+          print(f"Created: {output_json.name}")
+          print(f"Created: {output_csv.name}")
+          print("")
+          print("movies.js was NOT modified.")
+          print("========================================")
+          PY
+
+      - name: Commit merged files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add movies_digital_merged.json movies_digital_merge_review.csv
+
+          git diff --cached --quiet || git commit -m "Create merged digital movie catalog"
+
+          git push
