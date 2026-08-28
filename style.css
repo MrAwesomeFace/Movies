@@ -1,18 +1,18 @@
 ```css
 /* =========================================================
    BW'S MOVIE COLLECTION
-   Dark Navy / Subtle Depth Visual Design
+   Blockbuster Blue / Subtle Depth Visual Design
    ========================================================= */
 
 :root {
-  --background: #071426;
-  --surface: #0b1d32;
-  --surface-light: #102b48;
+  --background: #0E3FA9;
+  --surface: #0a2f82;
+  --surface-light: #123b91;
 
   --text: #f2f4f7;
-  --muted: #8fa3b8;
+  --muted: #c1d0e7;
 
-  --border: rgba(255, 255, 255, 0.10);
+  --border: rgba(255, 255, 255, 0.14);
 
   --accent: #ffffff;
 }
@@ -36,8 +36,8 @@ body {
   background:
     linear-gradient(
       180deg,
-      #071426 0%,
-      #061221 100%
+      #0E3FA9 0%,
+      #0b3694 100%
     );
 
   color: var(--text);
@@ -66,13 +66,13 @@ body {
   padding: 18px 18px 14px;
 
   background:
-    rgba(7, 20, 38, 0.97);
+    rgba(5, 25, 70, 0.97);
 
   border-bottom:
-    1px solid rgba(255, 255, 255, 0.09);
+    1px solid rgba(255, 255, 255, 0.13);
 
   box-shadow:
-    0 5px 18px rgba(0, 0, 0, 0.32);
+    0 5px 18px rgba(0, 0, 0, 0.35);
 
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -90,7 +90,7 @@ body {
 h1 {
   margin: 0;
 
-  color: #f5f7fa;
+  color: #ffffff;
 
   font-size: 24px;
   font-weight: 700;
@@ -98,13 +98,13 @@ h1 {
   letter-spacing: -0.5px;
 
   text-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.35);
+    0 1px 3px rgba(0, 0, 0, 0.35);
 }
 
 #movie-count {
   margin: 4px 0 0;
 
-  color: #a5b6c8;
+  color: #c4d3e8;
 
   font-size: 13px;
 }
@@ -128,7 +128,7 @@ h1 {
   padding: 12px 14px;
 
   border:
-    1px solid rgba(255, 255, 255, 0.10);
+    1px solid rgba(255, 255, 255, 0.13);
 
   border-radius: 12px;
 
@@ -137,8 +137,8 @@ h1 {
   background:
     linear-gradient(
       180deg,
-      #0d2945,
-      #0a2139
+      #0c347f,
+      #082963
     );
 
   color: var(--text);
@@ -146,17 +146,17 @@ h1 {
   font-size: 16px;
 
   box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.035),
-    0 3px 9px rgba(0, 0, 0, 0.20);
+    inset 0 1px 1px rgba(255, 255, 255, 0.05),
+    0 3px 9px rgba(0, 0, 0, 0.25);
 }
 
 #search-input:focus {
   border-color:
-    rgba(255, 255, 255, 0.22);
+    rgba(255, 255, 255, 0.28);
 
   box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.04),
-    0 4px 13px rgba(0, 0, 0, 0.26);
+    inset 0 1px 1px rgba(255, 255, 255, 0.06),
+    0 4px 13px rgba(0, 0, 0, 0.30);
 }
 
 
@@ -175,15 +175,15 @@ button {
   flex-shrink: 0;
 
   border:
-    1px solid rgba(255, 255, 255, 0.11);
+    1px solid rgba(255, 255, 255, 0.13);
 
   border-radius: 50%;
 
   background:
     linear-gradient(
       145deg,
-      #102c49,
-      #0a1f35
+      #123b91,
+      #082963
     );
 
   color: var(--text);
@@ -193,8 +193,8 @@ button {
   cursor: pointer;
 
   box-shadow:
-    0 4px 10px rgba(0, 0, 0, 0.25),
-    inset 0 1px 1px rgba(255, 255, 255, 0.04);
+    0 4px 10px rgba(0, 0, 0, 0.28),
+    inset 0 1px 1px rgba(255, 255, 255, 0.05);
 
   transition:
     transform 0.15s ease,
@@ -206,13 +206,13 @@ button {
   background:
     linear-gradient(
       145deg,
-      #153957,
-      #0d2945
+      #16439d,
+      #0b3078
     );
 
   box-shadow:
-    0 6px 14px rgba(0, 0, 0, 0.30),
-    inset 0 1px 1px rgba(255, 255, 255, 0.06);
+    0 6px 14px rgba(0, 0, 0, 0.33),
+    inset 0 1px 1px rgba(255, 255, 255, 0.07);
 }
 
 .icon-button:active {
@@ -304,7 +304,7 @@ button {
 .filter-divider {
   flex-shrink: 0;
 
-  color: #526b84;
+  color: #9db5df;
 
   font-size: 20px;
   font-weight: 300;
@@ -325,18 +325,18 @@ button {
   padding: 8px 14px;
 
   border:
-    1px solid rgba(255, 255, 255, 0.10);
+    1px solid rgba(255, 255, 255, 0.14);
 
   border-radius: 999px;
 
   background:
     linear-gradient(
       180deg,
-      #102b47,
-      #0b2139
+      #17439a,
+      #0c3180
     );
 
-  color: #d3deea;
+  color: #e5ebf5;
 
   cursor: pointer;
 
@@ -345,8 +345,8 @@ button {
   white-space: nowrap;
 
   box-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.20),
-    inset 0 1px 1px rgba(255, 255, 255, 0.035);
+    0 2px 6px rgba(0, 0, 0, 0.22),
+    inset 0 1px 1px rgba(255, 255, 255, 0.05);
 
   transition:
     background 0.18s ease,
@@ -356,20 +356,20 @@ button {
 
 .filter:hover {
   border-color:
-    rgba(255, 255, 255, 0.19);
+    rgba(255, 255, 255, 0.24);
 
   background:
     linear-gradient(
       180deg,
-      #153653,
-      #0d2945
+      #1c4ca7,
+      #10398d
     );
 }
 
 .filter.active {
   background: #ffffff;
 
-  color: #101820;
+  color: #0a2d78;
 
   border-color: #ffffff;
 
@@ -390,8 +390,8 @@ button {
   background:
     linear-gradient(
       180deg,
-      #122f4c,
-      #0c253f
+      #19469d,
+      #103583
     );
 }
 
@@ -415,62 +415,12 @@ main {
    ========================================================= */
 
 .movie-grid {
-  position: relative;
-
   display: grid;
 
   grid-template-columns:
     repeat(2, minmax(0, 1fr));
 
   gap: 18px 12px;
-
-  /*
-     Gives the bottom of each row a little breathing room
-     so the shelf edge has somewhere to sit.
-  */
-  padding-bottom: 8px;
-}
-
-
-/* =========================================================
-   CONTINUOUS SHELF EFFECT
-   ========================================================= */
-
-/*
-   The shelf is deliberately understated.
-
-   The top line is the visible "edge" that the movie cases
-   appear to be sitting on.
-
-   The second line is the darker shadow beneath it.
-*/
-
-.movie-grid::after {
-  content: "";
-
-  position: absolute;
-
-  left: 0;
-  right: 0;
-
-  bottom: 0;
-
-  height: 7px;
-
-  border-top:
-    1px solid rgba(126, 157, 186, 0.28);
-
-  background:
-    linear-gradient(
-      180deg,
-      rgba(36, 67, 96, 0.55),
-      rgba(3, 12, 23, 0.85)
-    );
-
-  box-shadow:
-    0 4px 9px rgba(0, 0, 0, 0.45);
-
-  pointer-events: none;
 }
 
 
@@ -482,6 +432,12 @@ main {
   min-width: 0;
 
   cursor: pointer;
+
+  /*
+     Extra bottom padding gives the individual shelf
+     room to sit visually underneath the poster.
+  */
+  padding-bottom: 8px;
 
   transition:
     transform 0.22s ease,
@@ -508,14 +464,14 @@ main {
 
   border-radius: 7px;
 
-  background: #0a1d31;
+  background: #09275f;
 
   border:
-    1px solid rgba(255, 255, 255, 0.08);
+    1px solid rgba(255, 255, 255, 0.10);
 
   box-shadow:
-    0 8px 18px rgba(0, 0, 0, 0.34),
-    0 2px 5px rgba(0, 0, 0, 0.25);
+    0 8px 18px rgba(0, 0, 0, 0.40),
+    0 2px 5px rgba(0, 0, 0, 0.28);
 
   transition:
     box-shadow 0.22s ease,
@@ -525,16 +481,67 @@ main {
 
 
 /* =========================================================
+   INDIVIDUAL SHELF
+   ========================================================= */
+
+/*
+   This creates a small physical-looking shelf directly
+   underneath each movie poster.
+
+   The bright upper edge gives the impression of a shelf lip.
+   The darker lower edge creates the depth/shadow underneath.
+*/
+
+.movie-cover::after {
+  content: "";
+
+  position: absolute;
+
+  left: -2px;
+  right: -2px;
+
+  bottom: -5px;
+
+  height: 8px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(126, 162, 207, 0.85) 0px,
+      rgba(70, 108, 159, 0.80) 1px,
+      rgba(16, 42, 78, 0.95) 3px,
+      rgba(4, 17, 35, 1) 100%
+    );
+
+  border-radius: 1px;
+
+  box-shadow:
+    0 4px 7px rgba(0, 0, 0, 0.45);
+
+  pointer-events: none;
+
+  z-index: 3;
+}
+
+
+/* =========================================================
    MOVIE HOVER DEPTH
    ========================================================= */
 
 .movie-card:hover .movie-cover {
+  transform: translateY(-4px);
+
   box-shadow:
-    0 16px 30px rgba(0, 0, 0, 0.43),
-    0 5px 10px rgba(0, 0, 0, 0.28);
+    0 17px 32px rgba(0, 0, 0, 0.48),
+    0 5px 10px rgba(0, 0, 0, 0.30);
 
   border-color:
-    rgba(255, 255, 255, 0.15);
+    rgba(255, 255, 255, 0.18);
+}
+
+.movie-card:hover .movie-cover::after {
+  box-shadow:
+    0 6px 10px rgba(0, 0, 0, 0.50);
 }
 
 
@@ -557,11 +564,8 @@ main {
 
 
 /*
-   The original radial white glow has been removed.
-
-   The posters already contain plenty of highlights,
-   texture and lighting. Removing the artificial glow
-   lets the actual artwork stand out more naturally.
+   The original radial white glow has intentionally been
+   removed. The poster artwork provides its own lighting.
 */
 
 
@@ -572,7 +576,7 @@ main {
 .movie-card-title {
   margin-top: 7px;
 
-  color: #e8edf2;
+  color: #f1f4f8;
 
   font-size:
     clamp(12px, 2.8vw, 16px);
@@ -616,12 +620,12 @@ main {
   border-radius: 5px;
 
   background:
-    rgba(2, 12, 25, 0.84);
+    rgba(3, 18, 42, 0.86);
 
   color: white;
 
   border:
-    1px solid rgba(255, 255, 255, 0.09);
+    1px solid rgba(255, 255, 255, 0.10);
 
   font-size: 10px;
 
@@ -676,7 +680,7 @@ main {
   inset: 0;
 
   background:
-    rgba(1, 7, 15, 0.86);
+    rgba(1, 8, 22, 0.84);
 
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
@@ -696,20 +700,20 @@ main {
   padding: 20px;
 
   border:
-    1px solid rgba(255, 255, 255, 0.11);
+    1px solid rgba(255, 255, 255, 0.13);
 
   border-radius: 18px;
 
   background:
     linear-gradient(
       145deg,
-      #0d2945,
-      #081c31
+      #0b347f,
+      #06245c
     );
 
   box-shadow:
     0 25px 65px rgba(0, 0, 0, 0.65),
-    0 6px 18px rgba(0, 0, 0, 0.34);
+    0 6px 18px rgba(0, 0, 0, 0.35);
 }
 
 .modal-close {
@@ -724,12 +728,12 @@ main {
   height: 40px;
 
   border:
-    1px solid rgba(255, 255, 255, 0.09);
+    1px solid rgba(255, 255, 255, 0.10);
 
   border-radius: 50%;
 
   background:
-    rgba(2, 12, 24, 0.78);
+    rgba(2, 15, 40, 0.78);
 
   color: white;
 
@@ -739,7 +743,7 @@ main {
   cursor: pointer;
 
   box-shadow:
-    0 4px 10px rgba(0, 0, 0, 0.30);
+    0 4px 10px rgba(0, 0, 0, 0.32);
 }
 
 
@@ -983,8 +987,6 @@ main {
       repeat(4, minmax(0, 1fr));
 
     gap: 20px;
-
-    padding-bottom: 9px;
   }
 
   main {
@@ -1006,8 +1008,6 @@ main {
       repeat(6, minmax(0, 1fr));
 
     gap: 22px 16px;
-
-    padding-bottom: 10px;
   }
 
   .movie-card:hover {
