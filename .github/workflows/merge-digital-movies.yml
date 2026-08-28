@@ -1,3 +1,4 @@
+```yaml
 name: Merge Digital Movies
 
 on:
@@ -233,6 +234,10 @@ jobs:
             return String(value).trim();
           }
 
+          // ============================================================
+          // CATEGORY DETECTION FOR NEW MOVIES
+          // ============================================================
+
           function getCategories(row, title, overview, genre) {
             const categories = [];
 
@@ -280,19 +285,25 @@ jobs:
             ];
 
             if (
-              christmasTerms.some(term => text.includes(term))
+              christmasTerms.some(term =>
+                text.includes(term)
+              )
             ) {
               categories.push('christmas');
             }
 
             if (
-              baseballTerms.some(term => text.includes(term))
+              baseballTerms.some(term =>
+                text.includes(term)
+              )
             ) {
               categories.push('baseball');
             }
 
             if (
-              animatedTerms.some(term => text.includes(term))
+              animatedTerms.some(term =>
+                text.includes(term)
+              )
             ) {
               categories.push('animated');
             }
@@ -300,14 +311,10 @@ jobs:
             return categories;
           }
 
-          /*
-           * IMPORTANT:
-           * New digital-only movies are built using the same
-           * field structure as movies.js.
-           *
-           * Existing movies are NEVER rebuilt or overwritten.
-           * They remain the source of truth.
-           */
+          // ============================================================
+          // CREATE NEW MOVIE IN THE SAME FORMAT AS movies.js
+          // ============================================================
+
           function makeNewMovie(row) {
             const tmdbId = normalizeId(
               row.tmdbId || row.source_tmdbId
@@ -328,8 +335,17 @@ jobs:
             const overview =
               cleanText(row.tmdbOverview);
 
+            const runtime =
+              cleanText(row.tmdbRuntime);
+
             const genre =
               cleanText(row.tmdbGenre);
+
+            const director =
+              cleanText(row.tmdbDirector);
+
+            const cast =
+              cleanText(row.tmdbCast);
 
             const movie = {
               title: title,
@@ -340,15 +356,17 @@ jobs:
                 ? `https://image.tmdb.org/t/p/w500${posterPath}`
                 : '',
               year: year,
-              runtime: cleanText(row.tmdbRuntime),
+              runtime: runtime,
               genre: genre,
-              director: cleanText(row.tmdbDirector),
-              cast: cleanText(row.tmdbCast),
+              director: director,
+              cast: cast,
               synopsis: overview,
               physical: [],
               digital: cleanText(row.digital)
             };
 
+            // Add categories to NEW records only.
+            // Existing movies keep their original categories untouched.
             const categories = getCategories(
               row,
               title,
@@ -362,6 +380,10 @@ jobs:
 
             return movie;
           }
+
+          // ============================================================
+          // CHECK FILES
+          // ============================================================
 
           if (!fs.existsSync(MOVIES_FILE)) {
             throw new Error(
@@ -413,17 +435,18 @@ jobs:
             `Digital rows: ${digitalRows.length}`
           );
 
-          /*
-           * Clone the existing catalog.
-           * Nothing from the original catalog is discarded.
-           */
+          // ============================================================
+          // COPY ORIGINAL CATALOG
+          // ============================================================
+
           const merged = movies.map(movie => ({
             ...movie
           }));
 
-          /*
-           * Build TMDB ID lookup from the ORIGINAL catalog.
-           */
+          // ============================================================
+          // INDEX ORIGINAL MOVIES BY TMDB ID
+          // ============================================================
+
           const byTmdbId = new Map();
 
           for (
@@ -450,6 +473,10 @@ jobs:
           let reviewed = 0;
           let digitalAdded = 0;
 
+          // ============================================================
+          // MERGE DIGITAL DATA
+          // ============================================================
+
           for (const row of digitalRows) {
 
             const sourceId = normalizeId(
@@ -463,7 +490,12 @@ jobs:
             const digitalSource =
               cleanText(row.digital);
 
+            // ----------------------------------------------------------
+            // NO TMDB ID
+            // ----------------------------------------------------------
+
             if (!sourceId) {
+
               reviewed++;
 
               reviewRows.push({
@@ -484,12 +516,13 @@ jobs:
               continue;
             }
 
-            /*
-             * EXISTING MOVIE:
-             *
-             * The original movie remains completely intact.
-             * We only add the digital information.
-             */
+            // ----------------------------------------------------------
+            // MATCH EXISTING MOVIE
+            //
+            // Existing movie remains authoritative.
+            // Only digital information is added.
+            // ----------------------------------------------------------
+
             if (byTmdbId.has(sourceId)) {
 
               const index =
@@ -519,12 +552,10 @@ jobs:
               continue;
             }
 
-            /*
-             * NEW DIGITAL MOVIE:
-             *
-             * Only created when no existing movie has
-             * the same TMDB ID.
-             */
+            // ----------------------------------------------------------
+            // NO MATCH — CREATE NEW MOVIE
+            // ----------------------------------------------------------
+
             const newMovie =
               makeNewMovie(row);
 
@@ -538,13 +569,10 @@ jobs:
             added++;
           }
 
-          /*
-           * FINAL OUTPUT IS PURE JSON.
-           *
-           * It does NOT contain:
-           * const movies =
-           * or any other JavaScript wrapper.
-           */
+          // ============================================================
+          // WRITE MERGED JSON
+          // ============================================================
+
           fs.writeFileSync(
             OUTPUT_FILE,
             JSON.stringify(
@@ -554,6 +582,10 @@ jobs:
             ) + '\n',
             'utf8'
           );
+
+          // ============================================================
+          // WRITE REVIEW CSV
+          // ============================================================
 
           const reviewHeaders = [
             'status',
@@ -581,6 +613,10 @@ jobs:
             reviewLines.join('\n') + '\n',
             'utf8'
           );
+
+          // ============================================================
+          // REPORT
+          // ============================================================
 
           console.log('');
           console.log(
@@ -622,7 +658,6 @@ jobs:
           );
 
           console.log('');
-
           console.log(
             `Created: ${OUTPUT_FILE}`
           );
@@ -635,9 +670,9 @@ jobs:
             '======================================'
           );
 
-          /*
-           * SANITY CHECKS
-           */
+          // ============================================================
+          // SANITY CHECKS
+          // ============================================================
 
           if (merged.length < movies.length) {
             throw new Error(
@@ -657,6 +692,7 @@ jobs:
           let digitalCount = 0;
 
           for (const movie of merged) {
+
             if (
               movie.digital !== undefined &&
               movie.digital !== null &&
@@ -664,6 +700,7 @@ jobs:
             ) {
               digitalCount++;
             }
+
           }
 
           console.log(
@@ -676,9 +713,8 @@ jobs:
             );
           }
 
-          /*
-           * Validate every NEW record.
-           */
+          // Validate all newly-created records.
+
           const newMovies =
             merged.slice(movies.length);
 
@@ -749,3 +785,4 @@ jobs:
 
           git commit -m "Create merged digital movie catalog"
           git push
+```
