@@ -236,7 +236,7 @@ function renderMovies() {
 
 
   // =========================================================
-  // RANDOM 10
+  // RANDOM 12
   // =========================================================
 
   if (randomMode) {
@@ -2116,7 +2116,7 @@ function getFilteredMovies() {
 
 
 // =========================================================
-// GENERATE RANDOM 10
+// GENERATE RANDOM 12
 // =========================================================
 
 function generateRandomMovies() {
@@ -2158,14 +2158,14 @@ function generateRandomMovies() {
   randomMovies =
     shuffled.slice(
       0,
-      10
+      12
     );
 
 }
 
 
 // =========================================================
-// RANDOM 10 BUTTON
+// RANDOM 12 BUTTON
 // =========================================================
 
 if (randomButton) {
