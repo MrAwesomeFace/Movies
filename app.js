@@ -1,10 +1,10 @@
 /*
-
-BW'S MOVIE COLLECTION
-App functionality
-=================
-
+  =========================================================
+  BW'S MOVIE COLLECTION
+  App functionality
+  =========================================================
 */
+
 
 // =========================================================
 // ELEMENTS
@@ -40,6 +40,7 @@ const flipButton = document.getElementById("flip-button");
 const randomButton = document.getElementById("random-button");
 const showAllButton = document.getElementById("show-all-button");
 
+
 // =========================================================
 // CURRENT STATE
 // =========================================================
@@ -51,12 +52,13 @@ let randomMode = false;
 let randomMovies = [];
 
 let activeFilters = {
-type: "all",
-media: "all",
-genre: null,
-category: null,
-animated: "mixed"
+  type: "all",
+  media: "all",
+  genre: null,
+  category: null,
+  animated: "mixed"
 };
+
 
 // =========================================================
 // OPENING / CLOSING STATE
@@ -65,30 +67,33 @@ animated: "mixed"
 let selectedCard = null;
 
 let savedScrollY = 0;
+let savedScrollX = 0;
 
 let originalModalStyles = null;
 
 let isOpening = false;
 let isClosing = false;
 
+
 // =========================================================
 // SIMPLE COVER COLORS
 // =========================================================
 
 const coverColors = [
-["#182848", "#4b6cb7"],
-["#3a1c71", "#d76d77"],
-["#232526", "#414345"],
-["#42275a", "#734b6d"],
-["#134e5e", "#71b280"],
-["#642b73", "#c6426e"],
-["#0f2027", "#2c5364"],
-["#200122", "#6f0000"],
-["#141e30", "#243b55"],
-["#283c86", "#45a247"],
-["#4b1248", "#f0c27b"],
-["#16222a", "#3a6073"]
+  ["#182848", "#4b6cb7"],
+  ["#3a1c71", "#d76d77"],
+  ["#232526", "#414345"],
+  ["#42275a", "#734b6d"],
+  ["#134e5e", "#71b280"],
+  ["#642b73", "#c6426e"],
+  ["#0f2027", "#2c5364"],
+  ["#200122", "#6f0000"],
+  ["#141e30", "#243b55"],
+  ["#283c86", "#45a247"],
+  ["#4b1248", "#f0c27b"],
+  ["#16222a", "#3a6073"]
 ];
+
 
 // =========================================================
 // INITIALIZE
@@ -96,1057 +101,1068 @@ const coverColors = [
 
 renderMovies();
 
+
 // =========================================================
 // RENDER MOVIES
 // =========================================================
 
 function renderMovies() {
 
-movieGrid.innerHTML = "";
+  movieGrid.innerHTML = "";
 
-let filteredMovies = movies.filter(movie => {
+  let filteredMovies = movies.filter(movie => {
 
+    // TYPE FILTER
 
-// TYPE FILTER
-
-if (
-  activeFilters.type !== "all" &&
-  movie.type !== activeFilters.type
-) {
-  return false;
-}
-
-
-// PHYSICAL / DIGITAL FILTER
-
-if (
-  activeFilters.media === "physical" &&
-  (!movie.physical || movie.physical.length === 0)
-) {
-  return false;
-}
-
-if (
-  activeFilters.media === "digital" &&
-  (!movie.digital || movie.digital.length === 0)
-) {
-  return false;
-}
+    if (
+      activeFilters.type !== "all" &&
+      movie.type !== activeFilters.type
+    ) {
+      return false;
+    }
 
 
-// GENRE FILTER
+    // PHYSICAL / DIGITAL FILTER
 
-if (activeFilters.genre) {
+    if (
+      activeFilters.media === "physical" &&
+      (!movie.physical || movie.physical.length === 0)
+    ) {
+      return false;
+    }
 
-  const movieGenre =
-    (movie.genre || "").toLowerCase();
-
-  if (
-    !movieGenre.includes(
-      activeFilters.genre.toLowerCase()
-    )
-  ) {
-    return false;
-  }
-
-}
-
-
-// CATEGORY FILTER
-
-if (activeFilters.category) {
-
-  const categories =
-    movie.categories || [];
-
-  if (
-    !categories.includes(
-      activeFilters.category
-    )
-  ) {
-    return false;
-  }
-
-}
+    if (
+      activeFilters.media === "digital" &&
+      (!movie.digital || movie.digital.length === 0)
+    ) {
+      return false;
+    }
 
 
-// ANIMATED FILTER
+    // GENRE FILTER
 
-const isAnimated =
-  (movie.categories || []).includes("animated");
+    if (activeFilters.genre) {
 
-if (
-  activeFilters.animated === "hide" &&
-  isAnimated
-) {
-  return false;
-}
+      const movieGenre =
+        (movie.genre || "").toLowerCase();
 
-if (
-  activeFilters.animated === "only" &&
-  !isAnimated
-) {
-  return false;
-}
-
-
-// SEARCH
-
-if (currentSearch) {
-
-  const searchText =
-    currentSearch.toLowerCase();
-
-  const searchableText = [
-    movie.title,
-    movie.tmdbTitle,
-    movie.year,
-    movie.genre,
-    movie.director,
-    movie.cast,
-    movie.synopsis,
-    movie.type
-  ]
-    .filter(
-      value =>
-        value !== null &&
-        value !== undefined
-    )
-    .join(" ")
-    .toLowerCase();
-
-  if (
-    !searchableText.includes(
-      searchText
-    )
-  ) {
-    return false;
-  }
-
-}
-
-
-return true;
-
-
-});
-
-// =========================================================
-// RANDOM 50
-// =========================================================
-
-if (randomMode) {
-
-
-filteredMovies =
-  randomMovies.filter(
-    movie => filteredMovies.includes(movie)
-  );
-
-
-}
-
-// =========================================================
-// SORT ALPHABETICALLY
-// =========================================================
-
-if (!randomMode) {
-
-
-filteredMovies.sort(
-  (a, b) =>
-    a.title.localeCompare(
-      b.title,
-      undefined,
-      {
-        sensitivity: "base"
+      if (
+        !movieGenre.includes(
+          activeFilters.genre.toLowerCase()
+        )
+      ) {
+        return false;
       }
-    )
-);
+
+    }
 
 
-}
+    // CATEGORY FILTER
 
-// =========================================================
-// UPDATE COUNT
-// =========================================================
+    if (activeFilters.category) {
 
-const filtersAreActive =
-activeFilters.type !== "all" ||
-activeFilters.media !== "all" ||
-activeFilters.genre !== null ||
-activeFilters.category !== null ||
-activeFilters.animated !== "mixed";
+      const categories =
+        movie.categories || [];
 
-if (randomMode) {
+      if (
+        !categories.includes(
+          activeFilters.category
+        )
+      ) {
+        return false;
+      }
 
-
-movieCount.textContent =
-  `${filteredMovies.length} random titles`;
+    }
 
 
-} else if (
-currentSearch ||
-filtersAreActive
-) {
+    // ANIMATED FILTER
+
+    const isAnimated =
+      (movie.categories || []).includes("animated");
+
+    if (
+      activeFilters.animated === "hide" &&
+      isAnimated
+    ) {
+      return false;
+    }
+
+    if (
+      activeFilters.animated === "only" &&
+      !isAnimated
+    ) {
+      return false;
+    }
 
 
-movieCount.textContent =
-  `${filteredMovies.length} of ${movies.length} titles`;
+    // SEARCH
+
+    if (currentSearch) {
+
+      const searchText =
+        currentSearch.toLowerCase();
+
+      const searchableText = [
+        movie.title,
+        movie.tmdbTitle,
+        movie.year,
+        movie.genre,
+        movie.director,
+        movie.cast,
+        movie.synopsis,
+        movie.type
+      ]
+        .filter(
+          value =>
+            value !== null &&
+            value !== undefined
+        )
+        .join(" ")
+        .toLowerCase();
+
+      if (
+        !searchableText.includes(
+          searchText
+        )
+      ) {
+        return false;
+      }
+
+    }
 
 
-} else {
+    return true;
+
+  });
 
 
-movieCount.textContent =
-  `${movies.length} titles`;
+  // =========================================================
+  // RANDOM 50
+  // =========================================================
+
+  if (randomMode) {
+
+    filteredMovies =
+      randomMovies.filter(
+        movie => filteredMovies.includes(movie)
+      );
+
+  }
 
 
-}
+  // =========================================================
+  // SORT ALPHABETICALLY
+  // =========================================================
 
-// =========================================================
-// NO RESULTS
-// =========================================================
+  if (!randomMode) {
 
-if (
-filteredMovies.length === 0
-) {
-
-
-noResults.classList.remove(
-  "hidden"
-);
-
-return;
-
-
-} else {
-
-
-noResults.classList.add(
-  "hidden"
-);
-
-
-}
-
-// =========================================================
-// CREATE CARDS
-// =========================================================
-
-filteredMovies.forEach(
-(movie, index) => {
-
-
-  const card =
-    createMovieCard(
-      movie,
-      index
+    filteredMovies.sort(
+      (a, b) =>
+        a.title.localeCompare(
+          b.title,
+          undefined,
+          {
+            sensitivity: "base"
+          }
+        )
     );
 
-  movieGrid.appendChild(
-    card
+  }
+
+
+  // =========================================================
+  // UPDATE COUNT
+  // =========================================================
+
+  const filtersAreActive =
+    activeFilters.type !== "all" ||
+    activeFilters.media !== "all" ||
+    activeFilters.genre !== null ||
+    activeFilters.category !== null ||
+    activeFilters.animated !== "mixed";
+
+
+  if (randomMode) {
+
+    movieCount.textContent =
+      `${filteredMovies.length} random titles`;
+
+  } else if (
+    currentSearch ||
+    filtersAreActive
+  ) {
+
+    movieCount.textContent =
+      `${filteredMovies.length} of ${movies.length} titles`;
+
+  } else {
+
+    movieCount.textContent =
+      `${movies.length} titles`;
+
+  }
+
+
+  // =========================================================
+  // NO RESULTS
+  // =========================================================
+
+  if (
+    filteredMovies.length === 0
+  ) {
+
+    noResults.classList.remove(
+      "hidden"
+    );
+
+    return;
+
+  } else {
+
+    noResults.classList.add(
+      "hidden"
+    );
+
+  }
+
+
+  // =========================================================
+  // CREATE CARDS
+  // =========================================================
+
+  filteredMovies.forEach(
+    (movie, index) => {
+
+      const card =
+        createMovieCard(
+          movie,
+          index
+        );
+
+      movieGrid.appendChild(
+        card
+      );
+
+    }
   );
 
 }
 
-
-);
-
-}
 
 // =========================================================
 // CREATE MOVIE CARD
 // =========================================================
 
 function createMovieCard(
-movie,
-index
+  movie,
+  index
 ) {
 
-const card =
-document.createElement(
-"article"
-);
+  const card =
+    document.createElement(
+      "article"
+    );
 
-card.className =
-"movie-card";
+  card.className =
+    "movie-card";
 
-card.setAttribute(
-"tabindex",
-"0"
-);
-
-// =========================================================
-// TITLE
-// =========================================================
-
-const title =
-document.createElement(
-"div"
-);
-
-title.className =
-"movie-card-title";
-
-title.textContent =
-movie.title;
-
-card.appendChild(
-title
-);
-
-// =========================================================
-// COVER
-// =========================================================
-
-const colors =
-coverColors[
-index % coverColors.length
-];
-
-const cover =
-document.createElement(
-"div"
-);
-
-cover.className =
-"movie-cover";
-
-const coverInner =
-document.createElement(
-"div"
-);
-
-coverInner.className =
-"movie-cover-inner";
-
-// TMDB POSTER
-
-if (movie.poster) {
-
-
-coverInner.style.backgroundImage =
-  `url("${movie.poster}")`;
-
-coverInner.style.backgroundSize =
-  "cover";
-
-coverInner.style.backgroundPosition =
-  "center";
-
-coverInner.style.backgroundRepeat =
-  "no-repeat";
-
-
-} else {
-
-
-coverInner.style.background =
-  `linear-gradient(
-    145deg,
-    ${colors[0]},
-    ${colors[1]}
-  )`;
-
-
-}
-
-cover.appendChild(
-coverInner
-);
-
-card.appendChild(
-cover
-);
-
-// =========================================================
-// OPEN MOVIE
-// =========================================================
-
-card.addEventListener(
-"click",
-() => {
-
-
-  openMovieFromCard(
-    movie,
-    card
+  card.setAttribute(
+    "tabindex",
+    "0"
   );
 
-}
 
+  // =========================================================
+  // TITLE
+  // =========================================================
 
-);
-
-// =========================================================
-// KEYBOARD ACCESSIBILITY
-// =========================================================
-
-card.addEventListener(
-"keydown",
-event => {
-
-
-  if (
-    event.key === "Enter" ||
-    event.key === " "
-  ) {
-
-    event.preventDefault();
-
-    openMovieFromCard(
-      movie,
-      card
+  const title =
+    document.createElement(
+      "div"
     );
+
+  title.className =
+    "movie-card-title";
+
+  title.textContent =
+    movie.title;
+
+  card.appendChild(
+    title
+  );
+
+
+  // =========================================================
+  // COVER
+  // =========================================================
+
+  const colors =
+    coverColors[
+      index % coverColors.length
+    ];
+
+  const cover =
+    document.createElement(
+      "div"
+    );
+
+  cover.className =
+    "movie-cover";
+
+  const coverInner =
+    document.createElement(
+      "div"
+    );
+
+  coverInner.className =
+    "movie-cover-inner";
+
+
+  // TMDB POSTER
+
+  if (movie.poster) {
+
+    coverInner.style.backgroundImage =
+      `url("${movie.poster}")`;
+
+    coverInner.style.backgroundSize =
+      "cover";
+
+    coverInner.style.backgroundPosition =
+      "center";
+
+    coverInner.style.backgroundRepeat =
+      "no-repeat";
+
+  } else {
+
+    coverInner.style.background =
+      `linear-gradient(
+        145deg,
+        ${colors[0]},
+        ${colors[1]}
+      )`;
 
   }
 
+
+  cover.appendChild(
+    coverInner
+  );
+
+  card.appendChild(
+    cover
+  );
+
+
+  // =========================================================
+  // OPEN MOVIE
+  // =========================================================
+
+  card.addEventListener(
+    "click",
+    () => {
+
+      openMovieFromCard(
+        movie,
+        card
+      );
+
+    }
+  );
+
+
+  // =========================================================
+  // KEYBOARD ACCESSIBILITY
+  // =========================================================
+
+  card.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key === "Enter" ||
+        event.key === " "
+      ) {
+
+        event.preventDefault();
+
+        openMovieFromCard(
+          movie,
+          card
+        );
+
+      }
+
+    }
+  );
+
+
+  return card;
+
 }
 
-
-);
-
-return card;
-
-}
 
 // =========================================================
 // OPEN MOVIE FROM SHELF
+//
+// This is the important new behavior.
 //
 // The movie viewer starts at the exact location
 // of the selected shelf poster and grows from there.
 // =========================================================
 
 function openMovieFromCard(
-movie,
-card
+  movie,
+  card
 ) {
 
-if (
-isOpening ||
-isClosing ||
-currentMovie
-) {
-return;
-}
+  if (
+    isOpening ||
+    isClosing ||
+    currentMovie
+  ) {
+    return;
+  }
 
-isOpening = true;
 
-currentMovie =
-movie;
+  isOpening = true;
 
-selectedCard =
-card;
+  // Prevent the browser from auto-scrolling
+  // to the focused movie card.
+  if (document.activeElement) {
+    document.activeElement.blur();
+  }
 
-// =========================================================
-// CAPTURE EXACT CARD POSITION
-// =========================================================
+  currentMovie =
+    movie;
 
-const cardRect =
-card.getBoundingClientRect();
+  selectedCard =
+    card;
 
-const cover =
-card.querySelector(
-".movie-cover-inner"
-);
 
-const coverRect =
-cover.getBoundingClientRect();
+  // =========================================================
+  // CAPTURE EXACT CARD POSITION
+  // =========================================================
 
-// =========================================================
-// SAVE PAGE POSITION
-// =========================================================
+  const cardRect =
+    card.getBoundingClientRect();
 
-savedScrollY =
-window.scrollY;
+  const cover =
+    card.querySelector(
+      ".movie-cover-inner"
+    );
 
-// =========================================================
-// LOCK PAGE WITHOUT MOVING IT
-//
-// Instead of changing body to position: fixed,
-// prevent scrolling at the document level.
-// This keeps the movie shelf exactly where it is.
-// =========================================================
+  const coverRect =
+    cover.getBoundingClientRect();
 
-document.documentElement.style.overflow =
-"hidden";
 
-document.body.style.overflow =
-"hidden";
+  // =========================================================
+  // SAVE PAGE POSITION
+  // =========================================================
 
-// =========================================================
-// MARK SELECTED CARD
-// =========================================================
+  savedScrollY =
+    window.scrollY;
 
-card.classList.add(
-"selected"
-);
+  savedScrollX =
+    window.scrollX;
 
-// =========================================================
-// PREPARE MOVIE INFORMATION
-// =========================================================
 
-populateMovie(
-movie
-);
+  // =========================================================
+  // LOCK PAGE IN PLACE
+  //
+  // This prevents the browser from scrolling to the
+  // selected movie.
+  // =========================================================
 
-// =========================================================
-// REMEMBER MODAL'S ORIGINAL INLINE STYLES
-// =========================================================
+  document.body.style.position =
+    "fixed";
 
-originalModalStyles = {
+  document.body.style.top =
+    `-${savedScrollY}px`;
 
+  document.body.style.left =
+    "0";
 
-position:
-  modal.style.position,
+  document.body.style.right =
+    "0";
 
-inset:
-  modal.style.inset,
+  document.body.style.width =
+    "100%";
 
-width:
-  modal.style.width,
 
-height:
-  modal.style.height,
+  // =========================================================
+  // MARK SELECTED CARD
+  // =========================================================
 
-maxWidth:
-  modal.style.maxWidth,
-
-maxHeight:
-  modal.style.maxHeight,
-
-padding:
-  modal.style.padding,
-
-opacity:
-  modal.style.opacity,
-
-pointerEvents:
-  modal.style.pointerEvents
-
-
-};
-
-// =========================================================
-// SHOW MODAL WITHOUT ALLOWING THE BROWSER
-// TO POSITION IT NORMALLY
-// =========================================================
-
-modal.classList.remove(
-"hidden"
-);
-
-modal.style.position =
-"fixed";
-
-modal.style.inset =
-"0";
-
-modal.style.width =
-"100%";
-
-modal.style.height =
-"100%";
-
-modal.style.maxWidth =
-"none";
-
-modal.style.maxHeight =
-"none";
-
-modal.style.padding =
-"0";
-
-modal.style.pointerEvents =
-"none";
-
-modal.style.opacity =
-"1";
-
-// =========================================================
-// PREPARE MODAL CONTENT
-// =========================================================
-
-const content =
-modal.querySelector(
-".modal-content"
-);
-
-const viewer =
-modal.querySelector(
-".movie-viewer"
-);
-
-const controls =
-modal.querySelector(
-".movie-viewer-controls"
-);
-
-// Temporarily hide controls while the case
-// travels forward.
-
-if (controls) {
-
-
-controls.style.opacity =
-  "0";
-
-controls.style.pointerEvents =
-  "none";
-
-
-}
-
-// The modal content itself becomes the moving case.
-
-content.style.position =
-"fixed";
-
-content.style.margin =
-"0";
-
-content.style.padding =
-"0";
-
-content.style.maxWidth =
-"none";
-
-content.style.maxHeight =
-"none";
-
-content.style.width =
-`${coverRect.width}px`;
-
-content.style.height =
-`${coverRect.height}px`;
-
-content.style.left =
-`${coverRect.left}px`;
-
-content.style.top =
-`${coverRect.top}px`;
-
-content.style.overflow =
-"visible";
-
-content.style.border =
-"0";
-
-content.style.borderRadius =
-"9px";
-
-content.style.background =
-"transparent";
-
-content.style.boxShadow =
-"none";
-
-content.style.opacity =
-"1";
-
-content.style.transform =
-"none";
-
-content.style.transition =
-"none";
-
-// =========================================================
-// MAKE VIEWER FIT THE MOVING CASE
-// =========================================================
-
-if (viewer) {
-
-
-viewer.style.width =
-  "100%";
-
-viewer.style.height =
-  "100%";
-
-viewer.style.padding =
-  "0";
-
-viewer.style.gap =
-  "0";
-
-
-}
-
-if (flipContainer) {
-
-
-flipContainer.style.width =
-  "100%";
-
-flipContainer.style.height =
-  "100%";
-
-flipContainer.style.maxWidth =
-  "none";
-
-
-}
-
-if (flipContainer) {
-
-
-flipContainer.style.transition =
-  "none";
-
-
-}
-
-// =========================================================
-// FORCE BROWSER TO ACCEPT INITIAL POSITION
-// =========================================================
-
-content.getBoundingClientRect();
-
-// =========================================================
-// CREATE FINAL POSITION
-// =========================================================
-
-requestAnimationFrame(
-() => {
-
-
-  document.body.classList.add(
-    "movie-opening"
+  card.classList.add(
+    "selected"
   );
 
 
-  // Calculate a large case size.
+  // =========================================================
+  // PREPARE MOVIE INFORMATION
+  // =========================================================
 
-  const finalWidth =
-    Math.min(
-      window.innerWidth * 0.78,
-      420
+  populateMovie(
+    movie
+  );
+
+
+  // =========================================================
+  // REMEMBER MODAL'S ORIGINAL INLINE STYLES
+  // =========================================================
+
+  originalModalStyles = {
+
+    position:
+      modal.style.position,
+
+    inset:
+      modal.style.inset,
+
+    width:
+      modal.style.width,
+
+    height:
+      modal.style.height,
+
+    maxWidth:
+      modal.style.maxWidth,
+
+    maxHeight:
+      modal.style.maxHeight,
+
+    padding:
+      modal.style.padding,
+
+    opacity:
+      modal.style.opacity,
+
+    pointerEvents:
+      modal.style.pointerEvents
+
+  };
+
+
+  // =========================================================
+  // SHOW MODAL WITHOUT ALLOWING THE BROWSER
+  // TO POSITION IT NORMALLY
+  // =========================================================
+
+  modal.classList.remove(
+    "hidden"
+  );
+
+
+  modal.style.position =
+    "fixed";
+
+  modal.style.inset =
+    "0";
+
+  modal.style.width =
+    "100%";
+
+  modal.style.height =
+    "100%";
+
+  modal.style.maxWidth =
+    "none";
+
+  modal.style.maxHeight =
+    "none";
+
+  modal.style.padding =
+    "0";
+
+  modal.style.pointerEvents =
+    "none";
+
+  modal.style.opacity =
+    "1";
+
+
+  // =========================================================
+  // PREPARE MODAL CONTENT
+  // =========================================================
+
+  const content =
+    modal.querySelector(
+      ".modal-content"
     );
 
-  const finalHeight =
-    finalWidth * 1.5;
+  const viewer =
+    modal.querySelector(
+      ".movie-viewer"
+    );
 
-
-  const finalLeft =
-    (window.innerWidth -
-      finalWidth) / 2;
-
-  const finalTop =
-    Math.max(
-      55,
-      (window.innerHeight -
-        finalHeight) / 2
+  const controls =
+    modal.querySelector(
+      ".movie-viewer-controls"
     );
 
 
-  // Animate the case from the shelf
-  // toward the viewer.
+  // Temporarily hide controls while the case
+  // travels forward.
 
-  content.style.transition =
-    "left 0.65s cubic-bezier(0.16, 1, 0.3, 1), " +
-    "top 0.65s cubic-bezier(0.16, 1, 0.3, 1), " +
-    "width 0.65s cubic-bezier(0.16, 1, 0.3, 1), " +
-    "height 0.65s cubic-bezier(0.16, 1, 0.3, 1), " +
-    "filter 0.45s ease";
+  if (controls) {
 
-  content.style.left =
-    `${finalLeft}px`;
+    controls.style.opacity =
+      "0";
 
-  content.style.top =
-    `${finalTop}px`;
+    controls.style.pointerEvents =
+      "none";
+
+  }
+
+
+  // The modal content itself becomes the moving case.
+
+  content.style.position =
+    "fixed";
+
+  content.style.margin =
+    "0";
+
+  content.style.padding =
+    "0";
+
+  content.style.maxWidth =
+    "none";
+
+  content.style.maxHeight =
+    "none";
 
   content.style.width =
-    `${finalWidth}px`;
+    `${coverRect.width}px`;
 
   content.style.height =
-    `${finalHeight}px`;
+    `${coverRect.height}px`;
 
-  content.style.filter =
-    "drop-shadow(0 25px 45px rgba(0,0,0,.65))";
+  content.style.left =
+    `${coverRect.left}px`;
+
+  content.style.top =
+    `${coverRect.top}px`;
+
+  content.style.overflow =
+    "visible";
+
+  content.style.border =
+    "0";
+
+  content.style.borderRadius =
+    "9px";
+
+  content.style.background =
+    "transparent";
+
+  content.style.boxShadow =
+    "none";
+
+  content.style.opacity =
+    "1";
+
+  content.style.transform =
+    "none";
+
+  content.style.transition =
+    "none";
 
 
-  // =====================================================
-  // FINISH OPENING
-  // =====================================================
+  // =========================================================
+  // MAKE VIEWER FIT THE MOVING CASE
+  // =========================================================
 
-  setTimeout(
+  if (viewer) {
+
+    viewer.style.width =
+      "100%";
+
+    viewer.style.height =
+      "100%";
+
+    viewer.style.padding =
+      "0";
+
+    viewer.style.gap =
+      "0";
+
+  }
+
+
+  if (flipContainer) {
+
+    flipContainer.style.width =
+      "100%";
+
+    flipContainer.style.height =
+      "100%";
+
+    flipContainer.style.maxWidth =
+      "none";
+
+  }
+
+
+  if (flipContainer) {
+
+    flipContainer.style.transition =
+      "none";
+
+  }
+
+
+  // =========================================================
+  // FORCE BROWSER TO ACCEPT INITIAL POSITION
+  // =========================================================
+
+  content.getBoundingClientRect();
+
+
+  // =========================================================
+  // CREATE FINAL POSITION
+  // =========================================================
+
+  requestAnimationFrame(
     () => {
 
-      if (controls) {
+      // Add collection focus.
 
-        controls.style.transition =
-          "opacity 0.25s ease";
-
-        controls.style.opacity =
-          "1";
-
-        controls.style.pointerEvents =
-          "auto";
-
-      }
+      document.body.classList.add(
+        "movie-opening"
+      );
 
 
-      modal.style.pointerEvents =
-        "auto";
+      // Calculate a large case size.
 
-      isOpening =
-        false;
+      const finalWidth =
+        Math.min(
+          window.innerWidth * 0.78,
+          420
+        );
 
-    },
-    680
+      const finalHeight =
+        finalWidth * 1.5;
+
+
+      const finalLeft =
+        (window.innerWidth -
+          finalWidth) / 2;
+
+      const finalTop =
+        Math.max(
+          55,
+          (window.innerHeight -
+            finalHeight) / 2
+        );
+
+
+      // Animate the case from the shelf
+      // toward the viewer.
+
+      content.style.transition =
+        "left 0.65s cubic-bezier(0.16, 1, 0.3, 1), " +
+        "top 0.65s cubic-bezier(0.16, 1, 0.3, 1), " +
+        "width 0.65s cubic-bezier(0.16, 1, 0.3, 1), " +
+        "height 0.65s cubic-bezier(0.16, 1, 0.3, 1), " +
+        "filter 0.45s ease";
+
+      content.style.left =
+        `${finalLeft}px`;
+
+      content.style.top =
+        `${finalTop}px`;
+
+      content.style.width =
+        `${finalWidth}px`;
+
+      content.style.height =
+        `${finalHeight}px`;
+
+      content.style.filter =
+        "drop-shadow(0 25px 45px rgba(0,0,0,.65))";
+
+
+      // =====================================================
+      // FINISH OPENING
+      // =====================================================
+
+      setTimeout(
+        () => {
+
+          if (controls) {
+
+            controls.style.transition =
+              "opacity 0.25s ease";
+
+            controls.style.opacity =
+              "1";
+
+            controls.style.pointerEvents =
+              "auto";
+
+          }
+
+
+          // Allow interaction with the case.
+
+          modal.style.pointerEvents =
+            "auto";
+
+          isOpening =
+            false;
+
+        },
+        680
+      );
+
+    }
   );
 
 }
 
-
-);
-
-}
 
 // =========================================================
 // POPULATE MOVIE INFORMATION
 // =========================================================
 
 function populateMovie(
-movie
+  movie
 ) {
 
-// RESET FLIP
+  // RESET FLIP
 
-flipContainer.classList.remove(
-"flipped"
-);
-
-flipButton.textContent =
-"Flip case";
-
-// BASIC INFORMATION
-
-modalTitle.textContent =
-movie.title;
-
-modalYear.textContent =
-movie.year || "";
-
-modalRuntime.textContent =
-movie.runtime ||
-"Runtime unknown";
-
-modalGenre.textContent =
-movie.genre ||
-"Genre unknown";
-
-modalSynopsis.textContent =
-movie.synopsis ||
-"No synopsis added yet.";
-
-modalCast.textContent =
-movie.cast ||
-"Cast information not added.";
-
-modalDirector.textContent =
-movie.director ||
-"Director information not added.";
-
-// =========================================================
-// LARGE COVER
-// =========================================================
-
-const colorIndex =
-movies.indexOf(movie) %
-coverColors.length;
-
-const colors =
-coverColors[colorIndex];
-
-modalCover.innerHTML =
-"";
-
-// TMDB POSTER
-
-if (movie.poster) {
-
-
-modalCover.style.backgroundImage =
-  `url("${movie.poster}")`;
-
-modalCover.style.backgroundSize =
-  "cover";
-
-modalCover.style.backgroundPosition =
-  "center";
-
-modalCover.style.backgroundRepeat =
-  "no-repeat";
-
-
-const overlay =
-  document.createElement(
-    "div"
+  flipContainer.classList.remove(
+    "flipped"
   );
 
-overlay.style.position =
-  "absolute";
-
-overlay.style.inset =
-  "0";
-
-overlay.style.display =
-  "flex";
-
-overlay.style.flexDirection =
-  "column";
-
-overlay.style.justifyContent =
-  "flex-end";
-
-overlay.style.padding =
-  "20px";
-
-overlay.style.background =
-  "linear-gradient(to top, rgba(0,0,0,.8), rgba(0,0,0,0) 60%)";
+  flipButton.textContent =
+    "Flip case";
 
 
-modalCover.appendChild(
-  overlay
-);
+  // BASIC INFORMATION
+
+  modalTitle.textContent =
+    movie.title;
+
+  modalYear.textContent =
+    movie.year || "";
+
+  modalRuntime.textContent =
+    movie.runtime ||
+    "Runtime unknown";
+
+  modalGenre.textContent =
+    movie.genre ||
+    "Genre unknown";
+
+  modalSynopsis.textContent =
+    movie.synopsis ||
+    "No synopsis added yet.";
+
+  modalCast.textContent =
+    movie.cast ||
+    "Cast information not added.";
+
+  modalDirector.textContent =
+    movie.director ||
+    "Director information not added.";
 
 
-} else {
+  // =========================================================
+  // LARGE COVER
+  // =========================================================
+
+  const colorIndex =
+    movies.indexOf(movie) %
+    coverColors.length;
+
+  const colors =
+    coverColors[colorIndex];
+
+  modalCover.innerHTML =
+    "";
 
 
-modalCover.style.backgroundImage =
-  "";
+  // TMDB POSTER
 
-modalCover.style.background =
-  `linear-gradient(
-    145deg,
-    ${colors[0]},
-    ${colors[1]}
-  )`;
+  if (movie.poster) {
 
+    modalCover.style.backgroundImage =
+      `url("${movie.poster}")`;
 
-const coverText =
-  document.createElement(
-    "div"
-  );
+    modalCover.style.backgroundSize =
+      "cover";
 
-coverText.style.position =
-  "absolute";
+    modalCover.style.backgroundPosition =
+      "center";
 
-coverText.style.inset =
-  "0";
-
-coverText.style.display =
-  "flex";
-
-coverText.style.flexDirection =
-  "column";
-
-coverText.style.justifyContent =
-  "flex-end";
-
-coverText.style.padding =
-  "20px";
-
-coverText.style.background =
-  "radial-gradient(circle at 20% 15%, rgba(255,255,255,.22), transparent 32%)";
+    modalCover.style.backgroundRepeat =
+      "no-repeat";
 
 
-modalCover.appendChild(
-  coverText
-);
+    const overlay =
+      document.createElement(
+        "div"
+      );
+
+    overlay.style.position =
+      "absolute";
+
+    overlay.style.inset =
+      "0";
+
+    overlay.style.display =
+      "flex";
+
+    overlay.style.flexDirection =
+      "column";
+
+    overlay.style.justifyContent =
+      "flex-end";
+
+    overlay.style.padding =
+      "20px";
+
+    overlay.style.background =
+      "linear-gradient(to top, rgba(0,0,0,.8), rgba(0,0,0,0) 60%)";
 
 
-}
-
-// =========================================================
-// FORMATS
-// =========================================================
-
-modalFormats.innerHTML =
-"";
-
-const physical =
-movie.physical || [];
-
-const digital =
-movie.digital || [];
-
-physical.forEach(
-format => {
-
-
-  const item =
-    document.createElement(
-      "div"
+    modalCover.appendChild(
+      overlay
     );
 
-  item.className =
-    "format-item";
+  } else {
 
-  item.textContent =
-    `💿 Physical — ${format}`;
+    modalCover.style.backgroundImage =
+      "";
 
-  modalFormats.appendChild(
-    item
-  );
-
-}
-
-
-);
-
-digital.forEach(
-service => {
+    modalCover.style.background =
+      `linear-gradient(
+        145deg,
+        ${colors[0]},
+        ${colors[1]}
+      )`;
 
 
-  const item =
-    document.createElement(
-      "div"
+    const coverText =
+      document.createElement(
+        "div"
+      );
+
+    coverText.style.position =
+      "absolute";
+
+    coverText.style.inset =
+      "0";
+
+    coverText.style.display =
+      "flex";
+
+    coverText.style.flexDirection =
+      "column";
+
+    coverText.style.justifyContent =
+      "flex-end";
+
+    coverText.style.padding =
+      "20px";
+
+    coverText.style.background =
+      "radial-gradient(circle at 20% 15%, rgba(255,255,255,.22), transparent 32%)";
+
+
+    modalCover.appendChild(
+      coverText
     );
 
-  item.className =
-    "format-item";
+  }
 
-  item.textContent =
-    `📱 Digital — ${service}`;
 
-  modalFormats.appendChild(
-    item
+  // =========================================================
+  // FORMATS
+  // =========================================================
+
+  modalFormats.innerHTML =
+    "";
+
+  const physical =
+    movie.physical || [];
+
+  const digital =
+    movie.digital || [];
+
+
+  physical.forEach(
+    format => {
+
+      const item =
+        document.createElement(
+          "div"
+        );
+
+      item.className =
+        "format-item";
+
+      item.textContent =
+        `💿 Physical — ${format}`;
+
+      modalFormats.appendChild(
+        item
+      );
+
+    }
   );
 
-}
 
+  digital.forEach(
+    service => {
 
-);
+      const item =
+        document.createElement(
+          "div"
+        );
 
-if (
-physical.length === 0 &&
-digital.length === 0
-) {
+      item.className =
+        "format-item";
 
+      item.textContent =
+        `📱 Digital — ${service}`;
 
-const item =
-  document.createElement(
-    "div"
+      modalFormats.appendChild(
+        item
+      );
+
+    }
   );
 
-item.className =
-  "format-item";
 
-item.textContent =
-  "No format information added yet.";
+  if (
+    physical.length === 0 &&
+    digital.length === 0
+  ) {
 
-modalFormats.appendChild(
-  item
-);
+    const item =
+      document.createElement(
+        "div"
+      );
 
+    item.className =
+      "format-item";
+
+    item.textContent =
+      "No format information added yet.";
+
+    modalFormats.appendChild(
+      item
+    );
+
+  }
 
 }
 
-}
 
 // =========================================================
 // CLOSE MOVIE
@@ -1154,120 +1170,122 @@ modalFormats.appendChild(
 
 function closeMovie() {
 
-if (
-!currentMovie ||
-isClosing ||
-isOpening
-) {
-return;
-}
-
-isClosing =
-true;
-
-const content =
-modal.querySelector(
-".modal-content"
-);
-
-// =========================================================
-// GET ORIGINAL SHELF POSITION
-// =========================================================
-
-let targetRect = null;
-
-if (selectedCard) {
+  if (
+    !currentMovie ||
+    isClosing ||
+    isOpening
+  ) {
+    return;
+  }
 
 
-const cover =
-  selectedCard.querySelector(
-    ".movie-cover-inner"
+  isClosing =
+    true;
+
+
+  const content =
+    modal.querySelector(
+      ".modal-content"
+    );
+
+
+  // =========================================================
+  // GET ORIGINAL SHELF POSITION
+  // =========================================================
+
+  let targetRect = null;
+
+  if (selectedCard) {
+
+    const cover =
+      selectedCard.querySelector(
+        ".movie-cover-inner"
+      );
+
+    if (cover) {
+
+      // Because the page is locked, this is still
+      // the same visual location as when we opened it.
+
+      targetRect =
+        cover.getBoundingClientRect();
+
+    }
+
+  }
+
+
+  // =========================================================
+  // FALLBACK
+  // =========================================================
+
+  if (!targetRect) {
+
+    finishCloseMovie();
+
+    return;
+
+  }
+
+
+  // =========================================================
+  // HIDE CONTROLS
+  // =========================================================
+
+  const controls =
+    modal.querySelector(
+      ".movie-viewer-controls"
+    );
+
+  if (controls) {
+
+    controls.style.opacity =
+      "0";
+
+    controls.style.pointerEvents =
+      "none";
+
+  }
+
+
+  // =========================================================
+  // ANIMATE CASE BACK TO SHELF
+  // =========================================================
+
+  content.style.transition =
+    "left 0.55s cubic-bezier(0.4, 0, 0.8, 0.2), " +
+    "top 0.55s cubic-bezier(0.4, 0, 0.8, 0.2), " +
+    "width 0.55s cubic-bezier(0.4, 0, 0.8, 0.2), " +
+    "height 0.55s cubic-bezier(0.4, 0, 0.8, 0.2), " +
+    "filter 0.45s ease";
+
+  content.style.left =
+    `${targetRect.left}px`;
+
+  content.style.top =
+    `${targetRect.top}px`;
+
+  content.style.width =
+    `${targetRect.width}px`;
+
+  content.style.height =
+    `${targetRect.height}px`;
+
+  content.style.filter =
+    "drop-shadow(0 6px 12px rgba(0,0,0,.35))";
+
+
+  setTimeout(
+    () => {
+
+      finishCloseMovie();
+
+    },
+    580
   );
 
-if (cover) {
-
-  targetRect =
-    cover.getBoundingClientRect();
-
 }
 
-
-}
-
-// =========================================================
-// FALLBACK
-// =========================================================
-
-if (!targetRect) {
-
-
-finishCloseMovie();
-
-return;
-
-
-}
-
-// =========================================================
-// HIDE CONTROLS
-// =========================================================
-
-const controls =
-modal.querySelector(
-".movie-viewer-controls"
-);
-
-if (controls) {
-
-
-controls.style.opacity =
-  "0";
-
-controls.style.pointerEvents =
-  "none";
-
-
-}
-
-// =========================================================
-// ANIMATE CASE BACK TO SHELF
-// =========================================================
-
-content.style.transition =
-"left 0.55s cubic-bezier(0.4, 0, 0.8, 0.2), " +
-"top 0.55s cubic-bezier(0.4, 0, 0.8, 0.2), " +
-"width 0.55s cubic-bezier(0.4, 0, 0.8, 0.2), " +
-"height 0.55s cubic-bezier(0.4, 0, 0.8, 0.2), " +
-"filter 0.45s ease";
-
-content.style.left =
-`${targetRect.left}px`;
-
-content.style.top =
-`${targetRect.top}px`;
-
-content.style.width =
-`${targetRect.width}px`;
-
-content.style.height =
-`${targetRect.height}px`;
-
-content.style.filter =
-"drop-shadow(0 6px 12px rgba(0,0,0,.35))";
-
-setTimeout(
-() => {
-
-
-  finishCloseMovie();
-
-},
-580
-
-
-);
-
-}
 
 // =========================================================
 // FINISH CLOSE
@@ -1275,241 +1293,250 @@ setTimeout(
 
 function finishCloseMovie() {
 
-const content =
-modal.querySelector(
-".modal-content"
-);
-
-// =========================================================
-// REMOVE OPENING STATE
-// =========================================================
-
-document.body.classList.remove(
-"movie-opening"
-);
-
-// =========================================================
-// HIDE MODAL
-// =========================================================
-
-modal.classList.add(
-"hidden"
-);
-
-// =========================================================
-// RESET MODAL CONTENT
-// =========================================================
-
-content.style.position =
-"";
-
-content.style.margin =
-"";
-
-content.style.padding =
-"";
-
-content.style.maxWidth =
-"";
-
-content.style.maxHeight =
-"";
-
-content.style.width =
-"";
-
-content.style.height =
-"";
-
-content.style.left =
-"";
-
-content.style.top =
-"";
-
-content.style.overflow =
-"";
-
-content.style.border =
-"";
-
-content.style.borderRadius =
-"";
-
-content.style.background =
-"";
-
-content.style.boxShadow =
-"";
-
-content.style.opacity =
-"";
-
-content.style.transform =
-"";
-
-content.style.filter =
-"";
-
-content.style.transition =
-"";
-
-// =========================================================
-// RESET VIEWER
-// =========================================================
-
-const viewer =
-modal.querySelector(
-".movie-viewer"
-);
-
-if (viewer) {
+  const content =
+    modal.querySelector(
+      ".modal-content"
+    );
 
 
-viewer.style.width =
-  "";
+  // =========================================================
+  // REMOVE OPENING STATE
+  // =========================================================
 
-viewer.style.height =
-  "";
+  document.body.classList.remove(
+    "movie-opening"
+  );
 
-viewer.style.padding =
-  "";
 
-viewer.style.gap =
-  "";
+  // =========================================================
+  // HIDE MODAL
+  // =========================================================
 
+  modal.classList.add(
+    "hidden"
+  );
+
+
+  // =========================================================
+  // RESET MODAL CONTENT
+  // =========================================================
+
+  content.style.position =
+    "";
+
+  content.style.margin =
+    "";
+
+  content.style.padding =
+    "";
+
+  content.style.maxWidth =
+    "";
+
+  content.style.maxHeight =
+    "";
+
+  content.style.width =
+    "";
+
+  content.style.height =
+    "";
+
+  content.style.left =
+    "";
+
+  content.style.top =
+    "";
+
+  content.style.overflow =
+    "";
+
+  content.style.border =
+    "";
+
+  content.style.borderRadius =
+    "";
+
+  content.style.background =
+    "";
+
+  content.style.boxShadow =
+    "";
+
+  content.style.opacity =
+    "";
+
+  content.style.transform =
+    "";
+
+  content.style.filter =
+    "";
+
+  content.style.transition =
+    "";
+
+
+  // =========================================================
+  // RESET VIEWER
+  // =========================================================
+
+  const viewer =
+    modal.querySelector(
+      ".movie-viewer"
+    );
+
+  if (viewer) {
+
+    viewer.style.width =
+      "";
+
+    viewer.style.height =
+      "";
+
+    viewer.style.padding =
+      "";
+
+    viewer.style.gap =
+      "";
+
+  }
+
+
+  if (flipContainer) {
+
+    flipContainer.style.width =
+      "";
+
+    flipContainer.style.height =
+      "";
+
+    flipContainer.style.maxWidth =
+      "";
+
+    flipContainer.style.transition =
+      "";
+
+  }
+
+
+  const controls =
+    modal.querySelector(
+      ".movie-viewer-controls"
+    );
+
+  if (controls) {
+
+    controls.style.opacity =
+      "";
+
+    controls.style.pointerEvents =
+      "";
+
+    controls.style.transition =
+      "";
+
+  }
+
+
+  // =========================================================
+  // REMOVE SELECTED STATE
+  // =========================================================
+
+  if (selectedCard) {
+
+    selectedCard.classList.remove(
+      "selected"
+    );
+
+  }
+
+
+  // =========================================================
+  // UNLOCK PAGE
+  // =========================================================
+
+  document.body.style.position =
+    "";
+
+  document.body.style.top =
+    "";
+
+  document.body.style.left =
+    "";
+
+  document.body.style.right =
+    "";
+
+  document.body.style.width =
+    "";
+
+
+  window.scrollTo(
+    savedScrollX,
+    savedScrollY
+  );
+
+
+  // =========================================================
+  // CLEAR STATE
+  // =========================================================
+
+  selectedCard =
+    null;
+
+  currentMovie =
+    null;
+
+  isClosing =
+    false;
 
 }
 
-if (flipContainer) {
-
-
-flipContainer.style.width =
-  "";
-
-flipContainer.style.height =
-  "";
-
-flipContainer.style.maxWidth =
-  "";
-
-flipContainer.style.transition =
-  "";
-
-
-}
-
-const controls =
-modal.querySelector(
-".movie-viewer-controls"
-);
-
-if (controls) {
-
-
-controls.style.opacity =
-  "";
-
-controls.style.pointerEvents =
-  "";
-
-controls.style.transition =
-  "";
-
-
-}
-
-// =========================================================
-// REMOVE SELECTED STATE
-// =========================================================
-
-if (selectedCard) {
-
-
-selectedCard.classList.remove(
-  "selected"
-);
-
-
-}
-
-// =========================================================
-// UNLOCK PAGE
-// =========================================================
-
-document.documentElement.style.overflow =
-"";
-
-document.body.style.overflow =
-"";
-
-// =========================================================
-// RESTORE ORIGINAL SCROLL POSITION
-// =========================================================
-
-window.scrollTo(
-0,
-savedScrollY
-);
-
-// =========================================================
-// CLEAR STATE
-// =========================================================
-
-selectedCard =
-null;
-
-currentMovie =
-null;
-
-isClosing =
-false;
-
-}
 
 // =========================================================
 // CLOSE BUTTON
 // =========================================================
 
 modalClose.addEventListener(
-"click",
-closeMovie
+  "click",
+  closeMovie
 );
+
 
 // =========================================================
 // CLICK BACKDROP
 // =========================================================
 
 document.querySelector(
-".modal-backdrop"
+  ".modal-backdrop"
 ).addEventListener(
-"click",
-closeMovie
+  "click",
+  closeMovie
 );
+
 
 // =========================================================
 // ESCAPE KEY
 // =========================================================
 
 document.addEventListener(
-"keydown",
-event => {
+  "keydown",
+  event => {
 
+    if (
+      event.key === "Escape" &&
+      currentMovie &&
+      !isOpening &&
+      !isClosing
+    ) {
 
-if (
-  event.key === "Escape" &&
-  currentMovie &&
-  !isOpening &&
-  !isClosing
-) {
+      closeMovie();
 
-  closeMovie();
+    }
 
-}
-
-
-}
+  }
 );
+
 
 // =========================================================
 // FLIP CASE
@@ -1517,74 +1544,71 @@ if (
 
 function flipMovie() {
 
-if (
-isOpening ||
-isClosing ||
-!currentMovie
-) {
-return;
-}
-
-flipContainer.classList.toggle(
-"flipped"
-);
-
-if (
-flipContainer.classList.contains(
-"flipped"
-)
-) {
+  if (
+    isOpening ||
+    isClosing ||
+    !currentMovie
+  ) {
+    return;
+  }
 
 
-flipButton.textContent =
-  "Flip back";
+  flipContainer.classList.toggle(
+    "flipped"
+  );
 
 
-} else {
+  if (
+    flipContainer.classList.contains(
+      "flipped"
+    )
+  ) {
 
+    flipButton.textContent =
+      "Flip back";
 
-flipButton.textContent =
-  "Flip case";
+  } else {
 
+    flipButton.textContent =
+      "Flip case";
 
-}
+  }
 
 }
+
 
 flipButton.addEventListener(
-"click",
-event => {
+  "click",
+  event => {
 
+    event.stopPropagation();
 
-event.stopPropagation();
+    flipMovie();
 
-flipMovie();
-
-
-}
+  }
 );
+
 
 // =========================================================
 // CLICK CASE TO FLIP
 // =========================================================
 
 flipContainer.addEventListener(
-"click",
-event => {
+  "click",
+  event => {
 
+    if (
+      event.target === flipButton ||
+      event.target.closest(".primary-button")
+    ) {
+      return;
+    }
 
-if (
-  event.target === flipButton ||
-  event.target.closest(".primary-button")
-) {
-  return;
-}
+    flipMovie();
 
-flipMovie();
-
-
-}
+  }
 );
+
 
 // =========================================================
 // SWIPE TO FLIP
@@ -1593,262 +1617,260 @@ flipMovie();
 let touchStartX = 0;
 let touchStartY = 0;
 
-flipContainer.addEventListener(
-"touchstart",
-event => {
-
-
-const touch =
-  event.changedTouches[0];
-
-touchStartX =
-  touch.screenX;
-
-touchStartY =
-  touch.screenY;
-
-
-},
-{
-passive: true
-}
-);
 
 flipContainer.addEventListener(
-"touchend",
-event => {
+  "touchstart",
+  event => {
 
+    const touch =
+      event.changedTouches[0];
 
-if (
-  isOpening ||
-  isClosing
-) {
-  return;
-}
+    touchStartX =
+      touch.screenX;
 
-const touch =
-  event.changedTouches[0];
+    touchStartY =
+      touch.screenY;
 
-const differenceX =
-  touch.screenX -
-  touchStartX;
-
-const differenceY =
-  touch.screenY -
-  touchStartY;
-
-
-if (
-  Math.abs(differenceX) > 50 &&
-  Math.abs(differenceX) >
-    Math.abs(differenceY)
-) {
-
-  flipMovie();
-
-}
-
-
-},
-{
-passive: true
-}
+  },
+  {
+    passive: true
+  }
 );
+
+
+flipContainer.addEventListener(
+  "touchend",
+  event => {
+
+    if (
+      isOpening ||
+      isClosing
+    ) {
+      return;
+    }
+
+    const touch =
+      event.changedTouches[0];
+
+    const differenceX =
+      touch.screenX -
+      touchStartX;
+
+    const differenceY =
+      touch.screenY -
+      touchStartY;
+
+
+    if (
+      Math.abs(differenceX) > 50 &&
+      Math.abs(differenceX) >
+        Math.abs(differenceY)
+    ) {
+
+      flipMovie();
+
+    }
+
+  },
+  {
+    passive: true
+  }
+);
+
 
 // =========================================================
 // FILTER BUTTONS
 // =========================================================
 
 filters.forEach(
-button => {
+  button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        const group =
+          button.dataset.filterGroup;
+
+        const value =
+          button.dataset.filterValue;
 
 
-button.addEventListener(
-  "click",
-  () => {
+        // TYPE
 
-    const group =
-      button.dataset.filterGroup;
+        if (
+          group === "type"
+        ) {
 
-    const value =
-      button.dataset.filterValue;
+          activeFilters.type =
+            value;
 
-
-    // TYPE
-
-    if (
-      group === "type"
-    ) {
-
-      activeFilters.type =
-        value;
-
-      document
-        .querySelectorAll(
-          '[data-filter-group="type"]'
-        )
-        .forEach(
-          b =>
-            b.classList.toggle(
-              "active",
-              b.dataset.filterValue === value
+          document
+            .querySelectorAll(
+              '[data-filter-group="type"]'
             )
-        );
+            .forEach(
+              b =>
+                b.classList.toggle(
+                  "active",
+                  b.dataset.filterValue === value
+                )
+            );
 
-    }
+        }
 
 
-    // MEDIA
+        // MEDIA
 
-    if (
-      group === "media"
-    ) {
+        if (
+          group === "media"
+        ) {
 
-      activeFilters.media =
-        value;
+          activeFilters.media =
+            value;
 
-      document
-        .querySelectorAll(
-          '[data-filter-group="media"]'
-        )
-        .forEach(
-          b =>
-            b.classList.toggle(
-              "active",
-              b.dataset.filterValue === value
+          document
+            .querySelectorAll(
+              '[data-filter-group="media"]'
             )
-        );
+            .forEach(
+              b =>
+                b.classList.toggle(
+                  "active",
+                  b.dataset.filterValue === value
+                )
+            );
 
-    }
+        }
 
 
-    // GENRE
+        // GENRE
 
-    if (
-      group === "genre"
-    ) {
+        if (
+          group === "genre"
+        ) {
 
-      if (
-        activeFilters.genre === value
-      ) {
+          if (
+            activeFilters.genre === value
+          ) {
 
-        activeFilters.genre =
-          null;
+            activeFilters.genre =
+              null;
 
-        button.classList.remove(
-          "active"
-        );
+            button.classList.remove(
+              "active"
+            );
 
-      } else {
+          } else {
 
-        activeFilters.genre =
-          value;
+            activeFilters.genre =
+              value;
 
-        document
-          .querySelectorAll(
-            '[data-filter-group="genre"]'
-          )
-          .forEach(
-            b =>
-              b.classList.toggle(
-                "active",
-                b.dataset.filterValue === value
+            document
+              .querySelectorAll(
+                '[data-filter-group="genre"]'
               )
-          );
+              .forEach(
+                b =>
+                  b.classList.toggle(
+                    "active",
+                    b.dataset.filterValue === value
+                  )
+              );
 
-      }
+          }
 
-    }
+        }
 
 
-    // CATEGORY
+        // CATEGORY
 
-    if (
-      group === "category"
-    ) {
+        if (
+          group === "category"
+        ) {
 
-      if (
-        activeFilters.category === value
-      ) {
+          if (
+            activeFilters.category === value
+          ) {
 
-        activeFilters.category =
-          null;
+            activeFilters.category =
+              null;
 
-        button.classList.remove(
-          "active"
-        );
+            button.classList.remove(
+              "active"
+            );
 
-      } else {
+          } else {
 
-        activeFilters.category =
-          value;
+            activeFilters.category =
+              value;
 
-        document
-          .querySelectorAll(
-            '[data-filter-group="category"]'
-          )
-          .forEach(
-            b =>
-              b.classList.toggle(
-                "active",
-                b.dataset.filterValue === value
+            document
+              .querySelectorAll(
+                '[data-filter-group="category"]'
               )
-          );
+              .forEach(
+                b =>
+                  b.classList.toggle(
+                    "active",
+                    b.dataset.filterValue === value
+                  )
+              );
+
+          }
+
+        }
+
+
+        // ANIMATED
+
+        if (
+          group === "animated"
+        ) {
+
+          if (
+            activeFilters.animated === "mixed"
+          ) {
+
+            activeFilters.animated =
+              "hide";
+
+          } else if (
+            activeFilters.animated === "hide"
+          ) {
+
+            activeFilters.animated =
+              "only";
+
+          } else {
+
+            activeFilters.animated =
+              "mixed";
+
+          }
+
+          updateAnimatedButton();
+
+        }
+
+
+        // Changing filters invalidates old random list.
+
+        if (randomMode) {
+
+          generateRandomMovies();
+
+        }
+
+
+        renderMovies();
 
       }
-
-    }
-
-
-    // ANIMATED
-
-    if (
-      group === "animated"
-    ) {
-
-      if (
-        activeFilters.animated === "mixed"
-      ) {
-
-        activeFilters.animated =
-          "hide";
-
-      } else if (
-        activeFilters.animated === "hide"
-      ) {
-
-        activeFilters.animated =
-          "only";
-
-      } else {
-
-        activeFilters.animated =
-          "mixed";
-
-      }
-
-      updateAnimatedButton();
-
-    }
-
-
-    // Changing filters invalidates old random list.
-
-    if (randomMode) {
-
-      generateRandomMovies();
-
-    }
-
-
-    renderMovies();
+    );
 
   }
 );
 
-
-}
-);
 
 // =========================================================
 // UPDATE ANIMATED BUTTON
@@ -1856,271 +1878,53 @@ button.addEventListener(
 
 function updateAnimatedButton() {
 
-const animatedButton =
-document.querySelector(
-'[data-filter-group="animated"]'
-);
-
-if (!animatedButton) {
-return;
-}
-
-if (
-activeFilters.animated === "mixed"
-) {
+  const animatedButton =
+    document.querySelector(
+      '[data-filter-group="animated"]'
+    );
 
 
-animatedButton.textContent =
-  "Animated: Mixed";
-
-animatedButton.classList.add(
-  "active"
-);
-
-
-}
-
-if (
-activeFilters.animated === "hide"
-) {
-
-
-animatedButton.textContent =
-  "Animated: Hide";
-
-animatedButton.classList.remove(
-  "active"
-);
-
-
-}
-
-if (
-activeFilters.animated === "only"
-) {
-
-
-animatedButton.textContent =
-  "Animated: Only";
-
-animatedButton.classList.add(
-  "active"
-);
-
-
-}
-
-}
-
-// =========================================================
-// GET CURRENT FILTERED MOVIES
-// =========================================================
-
-function getFilteredMovies() {
-
-return movies.filter(movie => {
-
-
-// TYPE
-
-if (
-  activeFilters.type !== "all" &&
-  movie.type !== activeFilters.type
-) {
-  return false;
-}
-
-
-// MEDIA
-
-if (
-  activeFilters.media === "physical" &&
-  (!movie.physical || movie.physical.length === 0)
-) {
-  return false;
-}
-
-if (
-  activeFilters.media === "digital" &&
-  (!movie.digital || movie.digital.length === 0)
-) {
-  return false;
-}
-
-
-// GENRE
-
-if (activeFilters.genre) {
-
-  const movieGenre =
-    (movie.genre || "").toLowerCase();
-
-  if (
-    !movieGenre.includes(
-      activeFilters.genre.toLowerCase()
-    )
-  ) {
-    return false;
+  if (!animatedButton) {
+    return;
   }
-
-}
-
-
-// CATEGORY
-
-if (activeFilters.category) {
-
-  const categories =
-    movie.categories || [];
-
-  if (
-    !categories.includes(
-      activeFilters.category
-    )
-  ) {
-    return false;
-  }
-
-}
-
-
-// ANIMATED
-
-const isAnimated =
-  (movie.categories || []).includes(
-    "animated"
-  );
-
-
-if (
-  activeFilters.animated === "hide" &&
-  isAnimated
-) {
-  return false;
-}
-
-
-if (
-  activeFilters.animated === "only" &&
-  !isAnimated
-) {
-  return false;
-}
-
-
-// SEARCH
-
-if (currentSearch) {
-
-  const searchText =
-    currentSearch.toLowerCase();
-
-  const searchableText = [
-    movie.title,
-    movie.tmdbTitle,
-    movie.year,
-    movie.genre,
-    movie.director,
-    movie.cast,
-    movie.synopsis,
-    movie.type
-  ]
-    .filter(
-      value =>
-        value !== null &&
-        value !== undefined
-    )
-    .join(" ")
-    .toLowerCase();
 
 
   if (
-    !searchableText.includes(
-      searchText
-    )
+    activeFilters.animated === "mixed"
   ) {
-    return false;
+
+    animatedButton.textContent =
+      "Animated: Mixed";
+
+    animatedButton.classList.add(
+      "active"
+    );
+
   }
 
-}
+
+  if (
+    activeFilters.animated === "hide"
+  ) {
+
+    animatedButton.textContent =
+      "Animated: Hide";
+
+    animatedButton.classList.remove(
+      "active"
+    );
+
+  }
 
 
-return true;
+  if (
+    activeFilters.animated === "only"
+  ) {
 
+    animatedButton.textContent =
+      "Animated: Only";
 
-});
-
-}
-
-// =========================================================
-// GENERATE RANDOM 50
-// =========================================================
-
-function generateRandomMovies() {
-
-const availableMovies =
-getFilteredMovies();
-
-const shuffled =
-[...availableMovies];
-
-// Fisher-Yates shuffle
-
-for (
-let i = shuffled.length - 1;
-i > 0;
-i--
-) {
-
-
-const j =
-  Math.floor(
-    Math.random() * (i + 1)
-  );
-
-
-[
-  shuffled[i],
-  shuffled[j]
-] =
-[
-  shuffled[j],
-  shuffled[i]
-];
-
-
-}
-
-randomMovies =
-shuffled.slice(
-0,
-50
-);
-
-}
-
-// =========================================================
-// RANDOM 50 BUTTON
-// =========================================================
-
-if (randomButton) {
-
-randomButton.addEventListener(
-"click",
-() => {
-
-
-  randomMode =
-    true;
-
-  generateRandomMovies();
-
-  renderMovies();
-
-
-  if (showAllButton) {
-
-    showAllButton.classList.add(
+    animatedButton.classList.add(
       "active"
     );
 
@@ -2129,9 +1933,225 @@ randomButton.addEventListener(
 }
 
 
-);
+// =========================================================
+// GET CURRENT FILTERED MOVIES
+// =========================================================
+
+function getFilteredMovies() {
+
+  return movies.filter(movie => {
+
+    // TYPE
+
+    if (
+      activeFilters.type !== "all" &&
+      movie.type !== activeFilters.type
+    ) {
+      return false;
+    }
+
+
+    // MEDIA
+
+    if (
+      activeFilters.media === "physical" &&
+      (!movie.physical || movie.physical.length === 0)
+    ) {
+      return false;
+    }
+
+    if (
+      activeFilters.media === "digital" &&
+      (!movie.digital || movie.digital.length === 0)
+    ) {
+      return false;
+    }
+
+
+    // GENRE
+
+    if (activeFilters.genre) {
+
+      const movieGenre =
+        (movie.genre || "").toLowerCase();
+
+      if (
+        !movieGenre.includes(
+          activeFilters.genre.toLowerCase()
+        )
+      ) {
+        return false;
+      }
+
+    }
+
+
+    // CATEGORY
+
+    if (activeFilters.category) {
+
+      const categories =
+        movie.categories || [];
+
+      if (
+        !categories.includes(
+          activeFilters.category
+        )
+      ) {
+        return false;
+      }
+
+    }
+
+
+    // ANIMATED
+
+    const isAnimated =
+      (movie.categories || []).includes(
+        "animated"
+      );
+
+
+    if (
+      activeFilters.animated === "hide" &&
+      isAnimated
+    ) {
+      return false;
+    }
+
+
+    if (
+      activeFilters.animated === "only" &&
+      !isAnimated
+    ) {
+      return false;
+    }
+
+
+    // SEARCH
+
+    if (currentSearch) {
+
+      const searchText =
+        currentSearch.toLowerCase();
+
+      const searchableText = [
+        movie.title,
+        movie.tmdbTitle,
+        movie.year,
+        movie.genre,
+        movie.director,
+        movie.cast,
+        movie.synopsis,
+        movie.type
+      ]
+        .filter(
+          value =>
+            value !== null &&
+            value !== undefined
+        )
+        .join(" ")
+        .toLowerCase();
+
+
+      if (
+        !searchableText.includes(
+          searchText
+        )
+      ) {
+        return false;
+      }
+
+    }
+
+
+    return true;
+
+  });
 
 }
+
+
+// =========================================================
+// GENERATE RANDOM 50
+// =========================================================
+
+function generateRandomMovies() {
+
+  const availableMovies =
+    getFilteredMovies();
+
+
+  const shuffled =
+    [...availableMovies];
+
+
+  // Fisher-Yates shuffle
+
+  for (
+    let i = shuffled.length - 1;
+    i > 0;
+    i--
+  ) {
+
+    const j =
+      Math.floor(
+        Math.random() * (i + 1)
+      );
+
+
+    [
+      shuffled[i],
+      shuffled[j]
+    ] =
+    [
+      shuffled[j],
+      shuffled[i]
+    ];
+
+  }
+
+
+  randomMovies =
+    shuffled.slice(
+      0,
+      50
+    );
+
+}
+
+
+// =========================================================
+// RANDOM 50 BUTTON
+// =========================================================
+
+if (randomButton) {
+
+  randomButton.addEventListener(
+    "click",
+    () => {
+
+      randomMode =
+        true;
+
+      generateRandomMovies();
+
+      renderMovies();
+
+
+      if (showAllButton) {
+
+        showAllButton.classList.add(
+          "active"
+        );
+
+      }
+
+    }
+  );
+
+}
+
 
 // =========================================================
 // SHOW ALL BUTTON
@@ -2139,30 +2159,28 @@ randomButton.addEventListener(
 
 if (showAllButton) {
 
-showAllButton.addEventListener(
-"click",
-() => {
+  showAllButton.addEventListener(
+    "click",
+    () => {
+
+      randomMode =
+        false;
+
+      randomMovies =
+        [];
+
+      renderMovies();
 
 
-  randomMode =
-    false;
+      showAllButton.classList.remove(
+        "active"
+      );
 
-  randomMovies =
-    [];
-
-  renderMovies();
-
-
-  showAllButton.classList.remove(
-    "active"
+    }
   );
 
 }
 
-
-);
-
-}
 
 // =========================================================
 // SEARCH
@@ -2170,98 +2188,83 @@ showAllButton.addEventListener(
 
 if (searchToggle) {
 
-searchToggle.addEventListener(
-"click",
-() => {
+  searchToggle.addEventListener(
+    "click",
+    () => {
+
+      searchArea.classList.toggle(
+        "hidden"
+      );
 
 
-  searchArea.classList.toggle(
-    "hidden"
+      if (
+        !searchArea.classList.contains(
+          "hidden"
+        )
+      ) {
+
+        searchInput.focus();
+
+      }
+
+    }
   );
 
-
-  if (
-    !searchArea.classList.contains(
-      "hidden"
-    )
-  ) {
-
-    searchInput.focus();
-
-  }
-
 }
 
-
-);
-
-}
 
 if (searchInput) {
 
-searchInput.addEventListener(
-"input",
-event => {
+  searchInput.addEventListener(
+    "input",
+    event => {
+
+      currentSearch =
+        event.target.value.trim();
 
 
-  currentSearch =
-    event.target.value.trim();
+      if (randomMode) {
+
+        generateRandomMovies();
+
+      }
 
 
-  if (randomMode) {
+      renderMovies();
 
-    generateRandomMovies();
-
-  }
-
-
-  renderMovies();
-
-}
-
-
-);
+    }
+  );
 
 }
+
 
 // =========================================================
-// PREVENT BACKGROUND TOUCH SCROLL
+// PREVENT BACKGROUND SCROLL
 // WHILE MOVIE IS OPEN
 // =========================================================
 
 if (modal) {
 
-modal.addEventListener(
-"touchmove",
-event => {
+  modal.addEventListener(
+    "touchmove",
+    event => {
 
+      if (
+        currentMovie
+      ) {
 
-  if (
-    currentMovie
-  ) {
+        event.preventDefault();
 
-    const backContent =
-      event.target.closest(
-        ".back-content"
-      );
+      }
 
-    if (!backContent) {
-
-      event.preventDefault();
-
+    },
+    {
+      passive: false
     }
-
-  }
-
-},
-{
-  passive: false
-}
-
-
-);
+  );
 
 }
+
 
 // =========================================================
 // PREVENT BACKGROUND WHEEL SCROLL
@@ -2270,34 +2273,31 @@ event => {
 
 if (modal) {
 
-modal.addEventListener(
-"wheel",
-event => {
+  modal.addEventListener(
+    "wheel",
+    event => {
 
+      if (
+        currentMovie
+      ) {
 
-  if (
-    currentMovie
-  ) {
+        const backContent =
+          event.target.closest(
+            ".back-content"
+          );
 
-    const backContent =
-      event.target.closest(
-        ".back-content"
-      );
+        if (!backContent) {
 
-    if (!backContent) {
+          event.preventDefault();
 
-      event.preventDefault();
+        }
 
+      }
+
+    },
+    {
+      passive: false
     }
-
-  }
-
-},
-{
-  passive: false
-}
-
-
-);
+  );
 
 }
