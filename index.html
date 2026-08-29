@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -14,258 +15,260 @@
 
   <header class="site-header">
 
-    <div class="header-top">
+```
+<div class="header-top">
 
-      <div>
-        <h1>Mr. Movies Of The Future</h1>
-        <p id="movie-count">Loading collection...</p>
-      </div>
+  <div>
+    <h1>Mr. Movies Of The Future</h1>
+    <p id="movie-count">Loading collection...</p>
+  </div>
+
+  <button
+    id="search-toggle"
+    class="icon-button"
+    aria-label="Search"
+  >
+    🔍
+  </button>
+
+</div>
+
+
+<!-- SEARCH -->
+
+<div
+  id="search-area"
+  class="search-area hidden"
+>
+
+  <input
+    type="search"
+    id="search-input"
+    placeholder="Search movies..."
+    autocomplete="off"
+  >
+
+</div>
+
+
+<!-- FILTERS -->
+
+<nav
+  class="filters"
+  aria-label="Collection filters"
+>
+
+  <!-- ROW 1: TYPE + RANDOM -->
+
+  <div class="filter-row filter-row-main">
+
+    <div class="filter-group">
 
       <button
-        id="search-toggle"
-        class="icon-button"
-        aria-label="Search"
+        class="filter active"
+        data-filter-group="type"
+        data-filter-value="all"
       >
-        🔍
+        All
+      </button>
+
+      <button
+        class="filter"
+        data-filter-group="type"
+        data-filter-value="movie"
+      >
+        Movies
+      </button>
+
+      <button
+        class="filter"
+        data-filter-group="type"
+        data-filter-value="tv"
+      >
+        TV
+      </button>
+
+      <button
+        class="filter"
+        data-filter-group="type"
+        data-filter-value="misc"
+      >
+        Misc
+      </button>
+
+    </div>
+
+    <div class="filter-group filter-group-actions">
+
+      <button
+        id="random-button"
+        class="filter action-filter"
+      >
+        Random 50
+      </button>
+
+      <button
+        id="show-all-button"
+        class="filter action-filter"
+      >
+        Show All
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- ROW 2: GENRES + CATEGORIES -->
+
+  <div class="filter-row genre-category-row">
+
+    <div class="filter-group">
+
+      <button
+        class="filter genre-filter"
+        data-filter-group="genre"
+        data-filter-value="action"
+      >
+        Action
+      </button>
+
+      <button
+        class="filter genre-filter"
+        data-filter-group="genre"
+        data-filter-value="comedy"
+      >
+        Comedy
+      </button>
+
+      <button
+        class="filter genre-filter"
+        data-filter-group="genre"
+        data-filter-value="drama"
+      >
+        Drama
+      </button>
+
+      <button
+        class="filter genre-filter"
+        data-filter-group="genre"
+        data-filter-value="horror"
+      >
+        Horror
+      </button>
+
+      <button
+        class="filter genre-filter"
+        data-filter-group="genre"
+        data-filter-value="thriller"
+      >
+        Thriller
       </button>
 
     </div>
 
 
-    <!-- SEARCH -->
-
-    <div
-      id="search-area"
-      class="search-area hidden"
-    >
-
-      <input
-        type="search"
-        id="search-input"
-        placeholder="Search movies..."
-        autocomplete="off"
-      >
-
+    <div class="filter-divider">
+      |
     </div>
 
 
-    <!-- FILTERS -->
+    <div class="filter-group">
 
-    <nav
-      class="filters"
-      aria-label="Collection filters"
-    >
+      <button
+        class="filter category-filter"
+        data-filter-group="category"
+        data-filter-value="baseball"
+      >
+        Baseball
+      </button>
 
-      <!-- ROW 1: TYPE + RANDOM -->
+      <button
+        class="filter category-filter"
+        data-filter-group="category"
+        data-filter-value="christmas"
+      >
+        Christmas
+      </button>
 
-      <div class="filter-row filter-row-main">
+      <button
+        class="filter category-filter animated-filter"
+        data-filter-group="animated"
+        data-filter-value="mixed"
+      >
+        Animated: Mixed
+      </button>
 
-        <div class="filter-group">
+    </div>
 
-          <button
-            class="filter active"
-            data-filter-group="type"
-            data-filter-value="all"
-          >
-            All
-          </button>
-
-          <button
-            class="filter"
-            data-filter-group="type"
-            data-filter-value="movie"
-          >
-            Movies
-          </button>
-
-          <button
-            class="filter"
-            data-filter-group="type"
-            data-filter-value="tv"
-          >
-            TV
-          </button>
-
-          <button
-            class="filter"
-            data-filter-group="type"
-            data-filter-value="misc"
-          >
-            Misc
-          </button>
-
-        </div>
-
-        <div class="filter-group filter-group-actions">
-
-          <button
-            id="random-button"
-            class="filter action-filter"
-          >
-            Random 50
-          </button>
-
-          <button
-            id="show-all-button"
-            class="filter action-filter"
-          >
-            Show All
-          </button>
-
-        </div>
-
-      </div>
+  </div>
 
 
-      <!-- ROW 2: GENRES + CATEGORIES -->
+  <!-- ROW 3: MEDIA -->
 
-      <div class="filter-row genre-category-row">
+  <div class="filter-row">
 
-        <div class="filter-group">
+    <div class="filter-group">
 
-          <button
-            class="filter genre-filter"
-            data-filter-group="genre"
-            data-filter-value="action"
-          >
-            Action
-          </button>
+      <button
+        class="filter active"
+        data-filter-group="media"
+        data-filter-value="all"
+      >
+        All
+      </button>
 
-          <button
-            class="filter genre-filter"
-            data-filter-group="genre"
-            data-filter-value="comedy"
-          >
-            Comedy
-          </button>
+      <button
+        class="filter"
+        data-filter-group="media"
+        data-filter-value="physical"
+      >
+        Physical
+      </button>
 
-          <button
-            class="filter genre-filter"
-            data-filter-group="genre"
-            data-filter-value="drama"
-          >
-            Drama
-          </button>
+      <button
+        class="filter"
+        data-filter-group="media"
+        data-filter-value="digital"
+      >
+        Digital
+      </button>
 
-          <button
-            class="filter genre-filter"
-            data-filter-group="genre"
-            data-filter-value="horror"
-          >
-            Horror
-          </button>
+    </div>
 
-          <button
-            class="filter genre-filter"
-            data-filter-group="genre"
-            data-filter-value="thriller"
-          >
-            Thriller
-          </button>
+  </div>
 
-        </div>
-
-
-        <div class="filter-divider">
-          |
-        </div>
-
-
-        <div class="filter-group">
-
-          <button
-            class="filter category-filter"
-            data-filter-group="category"
-            data-filter-value="baseball"
-          >
-            Baseball
-          </button>
-
-          <button
-            class="filter category-filter"
-            data-filter-group="category"
-            data-filter-value="christmas"
-          >
-            Christmas
-          </button>
-
-          <button
-            class="filter category-filter animated-filter"
-            data-filter-group="animated"
-            data-filter-value="mixed"
-          >
-            Animated: Mixed
-          </button>
-
-        </div>
-
-      </div>
-
-
-      <!-- ROW 3: MEDIA -->
-
-      <div class="filter-row">
-
-        <div class="filter-group">
-
-          <button
-            class="filter active"
-            data-filter-group="media"
-            data-filter-value="all"
-          >
-            All
-          </button>
-
-          <button
-            class="filter"
-            data-filter-group="media"
-            data-filter-value="physical"
-          >
-            Physical
-          </button>
-
-          <button
-            class="filter"
-            data-filter-group="media"
-            data-filter-value="digital"
-          >
-            Digital
-          </button>
-
-        </div>
-
-      </div>
-
-    </nav>
+</nav>
+```
 
   </header>
-
 
   <!-- COLLECTION -->
 
   <main>
 
-    <section class="collection-section">
+```
+<section class="collection-section">
 
-      <div
-        id="movie-grid"
-        class="movie-grid"
-      >
-        <!-- Movie cards are inserted here by app.js -->
-      </div>
+  <div
+    id="movie-grid"
+    class="movie-grid"
+  >
+    <!-- Movie cards are inserted here by app.js -->
+  </div>
 
 
-      <div
-        id="no-results"
-        class="no-results hidden"
-      >
-        <p>No movies found.</p>
-      </div>
+  <div
+    id="no-results"
+    class="no-results hidden"
+  >
+    <p>No movies found.</p>
+  </div>
 
-    </section>
+</section>
+```
 
   </main>
-
 
   <!-- MOVIE DETAIL WINDOW -->
 
@@ -274,105 +277,102 @@
     class="modal hidden"
   >
 
-    <div class="modal-backdrop"></div>
+```
+<div class="modal-backdrop"></div>
 
 
-    <div class="modal-content">
+<div class="modal-content">
 
-      <button
-        id="modal-close"
-        class="modal-close"
-        aria-label="Close"
-      >
-        ×
-      </button>
-
-
-      <div class="movie-viewer">
-
-        <div
-          class="movie-flip-container"
-          id="movie-flip-container"
-        >
-
-          <div class="movie-flipper">
+  <button
+    id="modal-close"
+    class="modal-close"
+    aria-label="Close"
+  >
+    ×
+  </button>
 
 
-            <!-- FRONT -->
+  <div class="movie-viewer">
 
-            <div class="movie-face movie-front">
+    <div
+      class="movie-flip-container"
+      id="movie-flip-container"
+    >
 
-              <div
-                id="modal-cover"
-                class="large-cover"
-              ></div>
+      <div class="movie-flipper">
+
+
+        <!-- FRONT COVER -->
+
+        <div class="movie-face movie-front">
+
+          <div
+            id="modal-cover"
+            class="large-cover"
+          ></div>
+
+        </div>
+
+
+        <!-- BACK COVER -->
+
+        <div class="movie-face movie-back">
+
+          <div class="back-content">
+
+            <h2 id="modal-title"></h2>
+
+
+            <div class="movie-meta">
+
+              <span id="modal-year"></span>
+
+              <span>•</span>
+
+              <span id="modal-runtime"></span>
+
+              <span>•</span>
+
+              <span id="modal-genre"></span>
 
             </div>
 
 
-            <!-- BACK -->
+            <div class="movie-info-section">
 
-            <div class="movie-face movie-back">
+              <h3>About</h3>
 
-              <div class="back-content">
+              <p id="modal-synopsis"></p>
 
-                <h2 id="modal-title"></h2>
-
-
-                <div class="movie-meta">
-
-                  <span id="modal-year"></span>
-
-                  <span>•</span>
-
-                  <span id="modal-runtime"></span>
-
-                  <span>•</span>
-
-                  <span id="modal-genre"></span>
-
-                </div>
+            </div>
 
 
-                <div class="movie-info-section">
+            <div class="movie-info-section">
 
-                  <h3>About</h3>
+              <h3>Starring</h3>
 
-                  <p id="modal-synopsis"></p>
+              <p id="modal-cast"></p>
 
-                </div>
-
-
-                <div class="movie-info-section">
-
-                  <h3>Starring</h3>
-
-                  <p id="modal-cast"></p>
-
-                </div>
+            </div>
 
 
-                <div class="movie-info-section">
+            <div class="movie-info-section">
 
-                  <h3>Directed by</h3>
+              <h3>Directed by</h3>
 
-                  <p id="modal-director"></p>
+              <p id="modal-director"></p>
 
-                </div>
+            </div>
 
 
-                <div class="movie-info-section">
+            <div class="movie-info-section">
 
-                  <h3>Where to find it</h3>
+              <h3>Where to find it</h3>
 
-                  <div
-                    id="modal-formats"
-                    class="format-list"
-                  ></div>
-
-                </div>
-
-              </div>
+              <div
+                id="modal-formats"
+                class="format-list"
+              ></div>
 
             </div>
 
@@ -381,29 +381,73 @@
         </div>
 
 
-        <div class="movie-viewer-controls">
+        <!-- =================================================
+             PHYSICAL CASE SIDES
+             =================================================
 
-          <button
-            id="flip-button"
-            class="primary-button"
-          >
-            Flip case
-          </button>
+             These are actual 3D surfaces.
 
-          <p class="flip-hint">
-            Tap the cover or swipe to flip
-          </p>
+             They are intentionally separate from the
+             front and back so the case has visible
+             thickness when it rotates.
+        -->
+
+
+        <!-- LEFT / SPINE -->
+
+        <div class="movie-edge movie-edge-left">
+
+          <div class="movie-spine-title">
+            <span id="modal-spine-title"></span>
+          </div>
 
         </div>
+
+
+        <!-- RIGHT EDGE -->
+
+        <div class="movie-edge movie-edge-right"></div>
+
+
+        <!-- TOP EDGE -->
+
+        <div class="movie-edge movie-edge-top"></div>
+
+
+        <!-- BOTTOM EDGE -->
+
+        <div class="movie-edge movie-edge-bottom"></div>
+
 
       </div>
 
     </div>
 
+
+    <div class="movie-viewer-controls">
+
+      <button
+        id="flip-button"
+        class="primary-button"
+      >
+        Flip case
+      </button>
+
+      <p class="flip-hint">
+        Tap the cover or swipe to flip
+      </p>
+
+    </div>
+
   </div>
 
+</div>
+```
+
+  </div>
 
   <script src="movies.js"></script>
+
   <script src="app.js"></script>
 
 </body>
