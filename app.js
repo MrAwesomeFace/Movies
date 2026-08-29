@@ -966,6 +966,8 @@ function populateMovie(
   modalTitle.textContent =
     movie.title;
 
+document.getElementById("modal-spine-title").textContent = movie.title;
+  
   modalYear.textContent =
     movie.year || "";
 
