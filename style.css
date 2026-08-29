@@ -1,4 +1,5 @@
 /*
+
 BW'S MOVIE COLLECTION
 Main visual design
 ========================================================= */
@@ -638,7 +639,6 @@ MODAL CONTENT
 }
 
 .modal.movie-open .modal-content {
-
   opacity: 1;
 
   transform:
@@ -695,35 +695,32 @@ MOVIE VIEWER
 ========================================================= */
 
 /*
-The movie artwork itself is 2:3.
+  This is based directly on the working 3D box example.
 
-The case depth is deliberately thin so it
-looks like a real DVD/Blu-ray case rather
-than a rectangular block.
+  Movie covers are 2:3.
 
-The flip container remains responsive and
-continues using the existing viewer dimensions.
+  --case-depth is the physical thickness of the case.
+  18px gives us visible sides without making the case
+  look unrealistically thick.
 */
 
 .movie-flip-container {
   width: min(75vw, 360px);
 
-  perspective: 1400px;
+  perspective: 1200px;
 
   cursor: pointer;
 }
 
 /*
-The actual physical thickness of the case.
+  The flipper itself represents the CENTER of the
+  physical case, rather than the front cover.
 
-12px is intentionally small compared with
-the poster width. This keeps the spine/edges
-visible during rotation without making the
-case look excessively thick.
+  This is the important part of the working example.
 */
 
 .movie-flipper {
-  --case-depth: 12px;
+  --case-depth: 18px;
 
   position: relative;
 
@@ -734,32 +731,31 @@ case look excessively thick.
   transform-style: preserve-3d;
 
   /*
-  Center the entire physical case on its
-  rotation axis rather than rotating around
-  the front cover.
+    Move the complete case backward by half its depth
+    so the front and back rotate around the physical
+    center of the case.
   */
-
   transform:
     translateZ(calc(var(--case-depth) / -2));
 
   transition:
-    transform 0.65s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transform 0.95s cubic-bezier(0.4, 0.2, 0.2, 1);
 }
 
-/* =========================================================
-FLIPPED STATE
-========================================================= */
+/*
+  The working example does NOT simply rotate the
+  front/back faces. The entire physical case rotates.
+*/
 
 .movie-flip-container.flipped
 .movie-flipper {
-
   transform:
     translateZ(calc(var(--case-depth) / -2))
     rotateY(180deg);
 }
 
 /* =========================================================
-FRONT + BACK OF CASE
+3D CASE FRONT + BACK
 ========================================================= */
 
 .movie-face {
@@ -778,9 +774,11 @@ FRONT + BACK OF CASE
     0 12px 35px rgba(0, 0, 0, 0.65);
 }
 
-/* =========================================================
-FRONT
-========================================================= */
+/*
+  FRONT
+
+  Pushed outward by half the case thickness.
+*/
 
 .movie-front {
   display: flex;
@@ -791,18 +789,15 @@ FRONT
 
   padding: 18px;
 
-  /*
-  Front cover sits on the front half
-  of the physical case.
-  */
-
   transform:
     translateZ(calc(var(--case-depth) / 2));
 }
 
-/* =========================================================
-BACK
-========================================================= */
+/*
+  BACK
+
+  Same distance from the center, but facing backward.
+*/
 
 .movie-back {
   transform:
@@ -820,133 +815,121 @@ BACK
 }
 
 /* =========================================================
-FRONT COVER IMAGE
-========================================================= */
-
-.large-cover {
-  position: absolute;
-
-  inset: 0;
-
-  border-radius: 9px;
-
-  overflow: hidden;
-}
-
-/* =========================================================
-CASE LEFT / SPINE
+3D CASE LEFT + RIGHT SIDES
 ========================================================= */
 
 /*
-The side surfaces are the actual thickness
-of the case.
+  These are actual rectangular side surfaces.
 
-They are positioned at the center of the
-front/back dimensions and rotated into place.
+  Width = case depth
+  Height = case height
+
+  This is directly adapted from the working example.
 */
 
 .movie-edge {
   position: absolute;
 
-  display: flex;
+  display: block;
 
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
+
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+
+  pointer-events: none;
 
   background:
     linear-gradient(
       to right,
-      #171717,
-      #303030,
-      #171717
+      #242424,
+      #444444,
+      #202020
     );
 
-  overflow: hidden;
-
-  pointer-events: none;
-
   box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,0.06);
+    inset 0 0 0 1px rgba(255,255,255,0.08);
 }
 
-/* =========================================================
-LEFT / SPINE
-========================================================= */
+/* LEFT / SPINE */
 
 .movie-edge-left {
-
   width: var(--case-depth);
 
   height: 100%;
 
-  top: 0;
-
   left:
-    calc(50% - (var(--case-depth) / 2));
+    calc(
+      (100% - var(--case-depth)) / 2
+    );
 
   transform:
     rotateY(-90deg)
     translateZ(50%);
+
+  transform-origin: center;
 }
 
-/* =========================================================
-RIGHT EDGE
-========================================================= */
+/* RIGHT EDGE */
 
 .movie-edge-right {
-
   width: var(--case-depth);
 
   height: 100%;
 
-  top: 0;
-
   left:
-    calc(50% - (var(--case-depth) / 2));
+    calc(
+      (100% - var(--case-depth)) / 2
+    );
 
   transform:
     rotateY(90deg)
     translateZ(50%);
+
+  transform-origin: center;
 }
 
 /* =========================================================
-TOP EDGE
+3D CASE TOP + BOTTOM
 ========================================================= */
 
-.movie-edge-top {
+/*
+  These are also actual surfaces.
 
+  Width = case width
+  Height = case depth
+*/
+
+.movie-edge-top,
+.movie-edge-bottom {
   width: 100%;
 
   height: var(--case-depth);
 
-  left: 0;
-
   top:
-    calc(50% - (var(--case-depth) / 2));
+    calc(
+      (100% - var(--case-depth)) / 2
+    );
+}
 
+/* TOP */
+
+.movie-edge-top {
   transform:
     rotateX(90deg)
     translateZ(50%);
+
+  transform-origin: center;
 }
 
-/* =========================================================
-BOTTOM EDGE
-========================================================= */
+/* BOTTOM */
 
 .movie-edge-bottom {
-
-  width: 100%;
-
-  height: var(--case-depth);
-
-  left: 0;
-
-  top:
-    calc(50% - (var(--case-depth) / 2));
-
   transform:
     rotateX(-90deg)
     translateZ(50%);
+
+  transform-origin: center;
 }
 
 /* =========================================================
@@ -962,18 +945,36 @@ SPINE TITLE
   align-items: center;
   justify-content: center;
 
-  writing-mode: vertical-rl;
+  overflow: hidden;
+}
 
-  transform:
-    rotate(180deg);
+.movie-spine-title span {
+  display: block;
 
-  color: rgba(255,255,255,0.88);
+  width: max-content;
 
-  font-size: 9px;
+  color: #eeeeee;
+
+  font-size: 10px;
 
   font-weight: 600;
 
   white-space: nowrap;
+
+  transform:
+    rotate(-90deg);
+}
+
+/* =========================================================
+LARGE COVER
+========================================================= */
+
+.large-cover {
+  position: absolute;
+
+  inset: 0;
+
+  border-radius: 9px;
 
   overflow: hidden;
 }
