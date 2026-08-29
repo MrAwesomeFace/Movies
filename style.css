@@ -871,7 +871,7 @@ MOVIE VIEWER
 
   transform:
     rotateY(-90deg)
-    translateZ(calc(var(--case-depth) / 2));
+    translateZ(12px);
 
   transform-origin: center;
 }
