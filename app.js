@@ -106,7 +106,7 @@ movieGrid.innerHTML = "";
 
 let filteredMovies = movies.filter(movie => {
 
-```
+
 // TYPE FILTER
 
 if (
@@ -227,7 +227,7 @@ if (currentSearch) {
 
 
 return true;
-```
+
 
 });
 
@@ -237,12 +237,12 @@ return true;
 
 if (randomMode) {
 
-```
+
 filteredMovies =
   randomMovies.filter(
     movie => filteredMovies.includes(movie)
   );
-```
+
 
 }
 
@@ -252,7 +252,7 @@ filteredMovies =
 
 if (!randomMode) {
 
-```
+
 filteredMovies.sort(
   (a, b) =>
     a.title.localeCompare(
@@ -263,7 +263,7 @@ filteredMovies.sort(
       }
     )
 );
-```
+
 
 }
 
@@ -280,27 +280,27 @@ activeFilters.animated !== "mixed";
 
 if (randomMode) {
 
-```
+
 movieCount.textContent =
   `${filteredMovies.length} random titles`;
-```
+
 
 } else if (
 currentSearch ||
 filtersAreActive
 ) {
 
-```
+
 movieCount.textContent =
   `${filteredMovies.length} of ${movies.length} titles`;
-```
+
 
 } else {
 
-```
+
 movieCount.textContent =
   `${movies.length} titles`;
-```
+
 
 }
 
@@ -312,21 +312,21 @@ if (
 filteredMovies.length === 0
 ) {
 
-```
+
 noResults.classList.remove(
   "hidden"
 );
 
 return;
-```
+
 
 } else {
 
-```
+
 noResults.classList.add(
   "hidden"
 );
-```
+
 
 }
 
@@ -337,7 +337,7 @@ noResults.classList.add(
 filteredMovies.forEach(
 (movie, index) => {
 
-```
+
   const card =
     createMovieCard(
       movie,
@@ -349,7 +349,7 @@ filteredMovies.forEach(
   );
 
 }
-```
+
 
 );
 
@@ -425,7 +425,7 @@ coverInner.className =
 
 if (movie.poster) {
 
-```
+
 coverInner.style.backgroundImage =
   `url("${movie.poster}")`;
 
@@ -437,18 +437,18 @@ coverInner.style.backgroundPosition =
 
 coverInner.style.backgroundRepeat =
   "no-repeat";
-```
+
 
 } else {
 
-```
+
 coverInner.style.background =
   `linear-gradient(
     145deg,
     ${colors[0]},
     ${colors[1]}
   )`;
-```
+
 
 }
 
@@ -468,14 +468,14 @@ card.addEventListener(
 "click",
 () => {
 
-```
+
   openMovieFromCard(
     movie,
     card
   );
 
 }
-```
+
 
 );
 
@@ -487,7 +487,7 @@ card.addEventListener(
 "keydown",
 event => {
 
-```
+
   if (
     event.key === "Enter" ||
     event.key === " "
@@ -503,7 +503,7 @@ event => {
   }
 
 }
-```
+
 
 );
 
@@ -597,7 +597,7 @@ movie
 
 originalModalStyles = {
 
-```
+
 position:
   modal.style.position,
 
@@ -624,7 +624,7 @@ opacity:
 
 pointerEvents:
   modal.style.pointerEvents
-```
+
 
 };
 
@@ -688,13 +688,13 @@ modal.querySelector(
 
 if (controls) {
 
-```
+
 controls.style.opacity =
   "0";
 
 controls.style.pointerEvents =
   "none";
-```
+
 
 }
 
@@ -757,7 +757,7 @@ content.style.transition =
 
 if (viewer) {
 
-```
+
 viewer.style.width =
   "100%";
 
@@ -769,13 +769,13 @@ viewer.style.padding =
 
 viewer.style.gap =
   "0";
-```
+
 
 }
 
 if (flipContainer) {
 
-```
+
 flipContainer.style.width =
   "100%";
 
@@ -784,16 +784,16 @@ flipContainer.style.height =
 
 flipContainer.style.maxWidth =
   "none";
-```
+
 
 }
 
 if (flipContainer) {
 
-```
+
 flipContainer.style.transition =
   "none";
-```
+
 
 }
 
@@ -810,7 +810,7 @@ content.getBoundingClientRect();
 requestAnimationFrame(
 () => {
 
-```
+
   document.body.classList.add(
     "movie-opening"
   );
@@ -898,7 +898,7 @@ requestAnimationFrame(
   );
 
 }
-```
+
 
 );
 
@@ -967,7 +967,7 @@ modalCover.innerHTML =
 
 if (movie.poster) {
 
-```
+
 modalCover.style.backgroundImage =
   `url("${movie.poster}")`;
 
@@ -1011,11 +1011,11 @@ overlay.style.background =
 modalCover.appendChild(
   overlay
 );
-```
+
 
 } else {
 
-```
+
 modalCover.style.backgroundImage =
   "";
 
@@ -1057,7 +1057,7 @@ coverText.style.background =
 modalCover.appendChild(
   coverText
 );
-```
+
 
 }
 
@@ -1077,7 +1077,7 @@ movie.digital || [];
 physical.forEach(
 format => {
 
-```
+
   const item =
     document.createElement(
       "div"
@@ -1094,14 +1094,14 @@ format => {
   );
 
 }
-```
+
 
 );
 
 digital.forEach(
 service => {
 
-```
+
   const item =
     document.createElement(
       "div"
@@ -1118,7 +1118,7 @@ service => {
   );
 
 }
-```
+
 
 );
 
@@ -1127,7 +1127,7 @@ physical.length === 0 &&
 digital.length === 0
 ) {
 
-```
+
 const item =
   document.createElement(
     "div"
@@ -1142,7 +1142,7 @@ item.textContent =
 modalFormats.appendChild(
   item
 );
-```
+
 
 }
 
@@ -1178,7 +1178,7 @@ let targetRect = null;
 
 if (selectedCard) {
 
-```
+
 const cover =
   selectedCard.querySelector(
     ".movie-cover-inner"
@@ -1190,7 +1190,7 @@ if (cover) {
     cover.getBoundingClientRect();
 
 }
-```
+
 
 }
 
@@ -1200,11 +1200,11 @@ if (cover) {
 
 if (!targetRect) {
 
-```
+
 finishCloseMovie();
 
 return;
-```
+
 
 }
 
@@ -1219,13 +1219,13 @@ modal.querySelector(
 
 if (controls) {
 
-```
+
 controls.style.opacity =
   "0";
 
 controls.style.pointerEvents =
   "none";
-```
+
 
 }
 
@@ -1258,12 +1258,12 @@ content.style.filter =
 setTimeout(
 () => {
 
-```
+
   finishCloseMovie();
 
 },
 580
-```
+
 
 );
 
@@ -1365,7 +1365,7 @@ modal.querySelector(
 
 if (viewer) {
 
-```
+
 viewer.style.width =
   "";
 
@@ -1377,13 +1377,13 @@ viewer.style.padding =
 
 viewer.style.gap =
   "";
-```
+
 
 }
 
 if (flipContainer) {
 
-```
+
 flipContainer.style.width =
   "";
 
@@ -1395,7 +1395,7 @@ flipContainer.style.maxWidth =
 
 flipContainer.style.transition =
   "";
-```
+
 
 }
 
@@ -1406,7 +1406,7 @@ modal.querySelector(
 
 if (controls) {
 
-```
+
 controls.style.opacity =
   "";
 
@@ -1415,7 +1415,7 @@ controls.style.pointerEvents =
 
 controls.style.transition =
   "";
-```
+
 
 }
 
@@ -1425,11 +1425,11 @@ controls.style.transition =
 
 if (selectedCard) {
 
-```
+
 selectedCard.classList.remove(
   "selected"
 );
-```
+
 
 }
 
@@ -1495,7 +1495,7 @@ document.addEventListener(
 "keydown",
 event => {
 
-```
+
 if (
   event.key === "Escape" &&
   currentMovie &&
@@ -1506,7 +1506,7 @@ if (
   closeMovie();
 
 }
-```
+
 
 }
 );
@@ -1535,17 +1535,17 @@ flipContainer.classList.contains(
 )
 ) {
 
-```
+
 flipButton.textContent =
   "Flip back";
-```
+
 
 } else {
 
-```
+
 flipButton.textContent =
   "Flip case";
-```
+
 
 }
 
@@ -1555,11 +1555,11 @@ flipButton.addEventListener(
 "click",
 event => {
 
-```
+
 event.stopPropagation();
 
 flipMovie();
-```
+
 
 }
 );
@@ -1572,7 +1572,7 @@ flipContainer.addEventListener(
 "click",
 event => {
 
-```
+
 if (
   event.target === flipButton ||
   event.target.closest(".primary-button")
@@ -1581,7 +1581,7 @@ if (
 }
 
 flipMovie();
-```
+
 
 }
 );
@@ -1597,7 +1597,7 @@ flipContainer.addEventListener(
 "touchstart",
 event => {
 
-```
+
 const touch =
   event.changedTouches[0];
 
@@ -1606,7 +1606,7 @@ touchStartX =
 
 touchStartY =
   touch.screenY;
-```
+
 
 },
 {
@@ -1618,7 +1618,7 @@ flipContainer.addEventListener(
 "touchend",
 event => {
 
-```
+
 if (
   isOpening ||
   isClosing
@@ -1647,7 +1647,7 @@ if (
   flipMovie();
 
 }
-```
+
 
 },
 {
@@ -1662,7 +1662,7 @@ passive: true
 filters.forEach(
 button => {
 
-```
+
 button.addEventListener(
   "click",
   () => {
@@ -1845,7 +1845,7 @@ button.addEventListener(
 
   }
 );
-```
+
 
 }
 );
@@ -1869,14 +1869,14 @@ if (
 activeFilters.animated === "mixed"
 ) {
 
-```
+
 animatedButton.textContent =
   "Animated: Mixed";
 
 animatedButton.classList.add(
   "active"
 );
-```
+
 
 }
 
@@ -1884,14 +1884,14 @@ if (
 activeFilters.animated === "hide"
 ) {
 
-```
+
 animatedButton.textContent =
   "Animated: Hide";
 
 animatedButton.classList.remove(
   "active"
 );
-```
+
 
 }
 
@@ -1899,14 +1899,14 @@ if (
 activeFilters.animated === "only"
 ) {
 
-```
+
 animatedButton.textContent =
   "Animated: Only";
 
 animatedButton.classList.add(
   "active"
 );
-```
+
 
 }
 
@@ -1920,7 +1920,7 @@ function getFilteredMovies() {
 
 return movies.filter(movie => {
 
-```
+
 // TYPE
 
 if (
@@ -2046,7 +2046,7 @@ if (currentSearch) {
 
 
 return true;
-```
+
 
 });
 
@@ -2072,7 +2072,7 @@ i > 0;
 i--
 ) {
 
-```
+
 const j =
   Math.floor(
     Math.random() * (i + 1)
@@ -2087,7 +2087,7 @@ const j =
   shuffled[j],
   shuffled[i]
 ];
-```
+
 
 }
 
@@ -2109,7 +2109,7 @@ randomButton.addEventListener(
 "click",
 () => {
 
-```
+
   randomMode =
     true;
 
@@ -2127,7 +2127,7 @@ randomButton.addEventListener(
   }
 
 }
-```
+
 
 );
 
@@ -2143,7 +2143,7 @@ showAllButton.addEventListener(
 "click",
 () => {
 
-```
+
   randomMode =
     false;
 
@@ -2158,7 +2158,7 @@ showAllButton.addEventListener(
   );
 
 }
-```
+
 
 );
 
@@ -2174,7 +2174,7 @@ searchToggle.addEventListener(
 "click",
 () => {
 
-```
+
   searchArea.classList.toggle(
     "hidden"
   );
@@ -2191,7 +2191,7 @@ searchToggle.addEventListener(
   }
 
 }
-```
+
 
 );
 
@@ -2203,7 +2203,7 @@ searchInput.addEventListener(
 "input",
 event => {
 
-```
+
   currentSearch =
     event.target.value.trim();
 
@@ -2218,7 +2218,7 @@ event => {
   renderMovies();
 
 }
-```
+
 
 );
 
@@ -2235,7 +2235,7 @@ modal.addEventListener(
 "touchmove",
 event => {
 
-```
+
   if (
     currentMovie
   ) {
@@ -2257,7 +2257,7 @@ event => {
 {
   passive: false
 }
-```
+
 
 );
 
@@ -2274,7 +2274,7 @@ modal.addEventListener(
 "wheel",
 event => {
 
-```
+
   if (
     currentMovie
   ) {
@@ -2296,7 +2296,7 @@ event => {
 {
   passive: false
 }
-```
+
 
 );
 
