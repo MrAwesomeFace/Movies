@@ -67,7 +67,6 @@ let activeFilters = {
 let selectedCard = null;
 
 let savedScrollY = 0;
-let savedScrollX = 0;
 
 let originalModalStyles = null;
 
@@ -506,8 +505,6 @@ function createMovieCard(
 // =========================================================
 // OPEN MOVIE FROM SHELF
 //
-// This is the important new behavior.
-//
 // The movie viewer starts at the exact location
 // of the selected shelf poster and grows from there.
 // =========================================================
@@ -527,12 +524,6 @@ function openMovieFromCard(
 
 
   isOpening = true;
-
-  // Prevent the browser from auto-scrolling
-  // to the focused movie card.
-  if (document.activeElement) {
-    document.activeElement.blur();
-  }
 
   currentMovie =
     movie;
@@ -564,15 +555,9 @@ function openMovieFromCard(
   savedScrollY =
     window.scrollY;
 
-  savedScrollX =
-    window.scrollX;
-
 
   // =========================================================
   // LOCK PAGE IN PLACE
-  //
-  // This prevents the browser from scrolling to the
-  // selected movie.
   // =========================================================
 
   document.body.style.position =
@@ -589,6 +574,14 @@ function openMovieFromCard(
 
   document.body.style.width =
     "100%";
+
+
+  // =========================================================
+  // PREVENT THE CLICKED CARD FROM CAUSING
+  // ANY FOCUS-BASED SCROLLING
+  // =========================================================
+
+  card.blur();
 
 
   // =========================================================
@@ -646,8 +639,7 @@ function openMovieFromCard(
 
 
   // =========================================================
-  // SHOW MODAL WITHOUT ALLOWING THE BROWSER
-  // TO POSITION IT NORMALLY
+  // SHOW MODAL
   // =========================================================
 
   modal.classList.remove(
@@ -703,8 +695,7 @@ function openMovieFromCard(
     );
 
 
-  // Temporarily hide controls while the case
-  // travels forward.
+  // Temporarily hide controls.
 
   if (controls) {
 
@@ -717,7 +708,9 @@ function openMovieFromCard(
   }
 
 
-  // The modal content itself becomes the moving case.
+  // =========================================================
+  // THE MODAL CONTENT BECOMES THE MOVING CASE
+  // =========================================================
 
   content.style.position =
     "fixed";
@@ -815,7 +808,7 @@ function openMovieFromCard(
 
 
   // =========================================================
-  // FORCE BROWSER TO ACCEPT INITIAL POSITION
+  // FORCE INITIAL POSITION
   // =========================================================
 
   content.getBoundingClientRect();
@@ -828,14 +821,39 @@ function openMovieFromCard(
   requestAnimationFrame(
     () => {
 
-      // Add collection focus.
+      // =====================================================
+      // COLLECTION FOCUS
+      //
+      // IMPORTANT:
+      // The CSS currently applies scale(0.985) to <main>
+      // during movie-opening. That scale is what creates
+      // the apparent page movement/zoom depending on
+      // where the selected movie is located.
+      //
+      // Keep the blur and brightness effects, but explicitly
+      // cancel the scale here.
+      // =====================================================
 
       document.body.classList.add(
         "movie-opening"
       );
 
+      const main =
+        document.querySelector(
+          "main"
+        );
 
-      // Calculate a large case size.
+      if (main) {
+
+        main.style.transform =
+          "none";
+
+      }
+
+
+      // =====================================================
+      // CALCULATE LARGE CASE SIZE
+      // =====================================================
 
       const finalWidth =
         Math.min(
@@ -859,8 +877,9 @@ function openMovieFromCard(
         );
 
 
-      // Animate the case from the shelf
-      // toward the viewer.
+      // =====================================================
+      // ANIMATE CASE FROM SHELF
+      // =====================================================
 
       content.style.transition =
         "left 0.65s cubic-bezier(0.16, 1, 0.3, 1), " +
@@ -906,7 +925,7 @@ function openMovieFromCard(
           }
 
 
-          // Allow interaction with the case.
+          // Allow interaction with case.
 
           modal.style.pointerEvents =
             "auto";
@@ -1204,9 +1223,6 @@ function closeMovie() {
 
     if (cover) {
 
-      // Because the page is locked, this is still
-      // the same visual location as when we opened it.
-
       targetRect =
         cover.getBoundingClientRect();
 
@@ -1306,6 +1322,23 @@ function finishCloseMovie() {
   document.body.classList.remove(
     "movie-opening"
   );
+
+
+  // =========================================================
+  // RESTORE MAIN TRANSFORM
+  // =========================================================
+
+  const main =
+    document.querySelector(
+      "main"
+    );
+
+  if (main) {
+
+    main.style.transform =
+      "";
+
+  }
 
 
   // =========================================================
@@ -1472,7 +1505,7 @@ function finishCloseMovie() {
 
 
   window.scrollTo(
-    savedScrollX,
+    0,
     savedScrollY
   );
 
