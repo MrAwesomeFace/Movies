@@ -745,7 +745,7 @@ The case itself is centered on its middle axis.
     translateZ(calc(var(--case-depth) / -2));
 
   transition:
-    transform 1.15s cubic-bezier(.4, .2, .2, 1);
+    transform 2.0s cubic-bezier(.4, .2, .2, 1);
 }
 
 /* =========================================================
