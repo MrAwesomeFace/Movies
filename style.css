@@ -824,7 +824,13 @@ MOVIE VIEWER
   Width = case depth
   Height = case height
 
-  This is directly adapted from the working example.
+  FIX: translateZ() does not accept percentage values —
+  only length units. The original code used
+  translateZ(50%), which is invalid CSS. When one
+  function inside a transform list is invalid, the
+  ENTIRE transform is dropped, so these edges were
+  never rotating into place. Replaced with the actual
+  length equivalent: half the case depth.
 */
 
 .movie-edge {
@@ -865,7 +871,7 @@ MOVIE VIEWER
 
   transform:
     rotateY(-90deg)
-    translateZ(50%);
+    translateZ(calc(var(--case-depth) / 2));
 
   transform-origin: center;
 }
@@ -884,7 +890,7 @@ MOVIE VIEWER
 
   transform:
     rotateY(90deg)
-    translateZ(50%);
+    translateZ(calc(var(--case-depth) / 2));
 
   transform-origin: center;
 }
@@ -917,7 +923,7 @@ MOVIE VIEWER
 .movie-edge-top {
   transform:
     rotateX(90deg)
-    translateZ(50%);
+    translateZ(calc(var(--case-depth) / 2));
 
   transform-origin: center;
 }
@@ -927,7 +933,7 @@ MOVIE VIEWER
 .movie-edge-bottom {
   transform:
     rotateX(-90deg)
-    translateZ(50%);
+    translateZ(calc(var(--case-depth) / 2));
 
   transform-origin: center;
 }
