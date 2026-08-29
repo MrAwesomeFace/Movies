@@ -1,5 +1,4 @@
 /*
-
 BW'S MOVIE COLLECTION
 Main visual design
 ========================================================= */
@@ -695,13 +694,20 @@ MOVIE VIEWER
 ========================================================= */
 
 /*
-  This is based directly on the working 3D box example.
+  Physical movie case based on the known-working 3D box.
 
-  Movie covers are 2:3.
+  Movie cases are 2:3.
 
-  --case-depth is the physical thickness of the case.
-  18px gives us visible sides without making the case
-  look unrealistically thick.
+  The front and back are the full case dimensions.
+  The edge faces represent the physical thickness.
+
+  The side faces are positioned around the center of
+  the case and translated by half the CASE WIDTH.
+
+  The top and bottom faces use half the CASE HEIGHT.
+
+  The case depth is intentionally modest so it resembles
+  a DVD/Blu-ray case rather than a cube.
 */
 
 .movie-flip-container {
@@ -712,15 +718,8 @@ MOVIE VIEWER
   cursor: pointer;
 }
 
-/*
-  The flipper itself represents the CENTER of the
-  physical case, rather than the front cover.
-
-  This is the important part of the working example.
-*/
-
 .movie-flipper {
-  --case-depth: 18px;
+  --case-depth: 24px;
 
   position: relative;
 
@@ -731,26 +730,19 @@ MOVIE VIEWER
   transform-style: preserve-3d;
 
   /*
-    Move the complete case backward by half its depth
-    so the front and back rotate around the physical
-    center of the case.
+    Center the physical case on its depth axis.
   */
   transform:
-    translateZ(calc(var(--case-depth) / -2));
+    translateZ(-12px);
 
   transition:
-    transform 0.95s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transform 1s cubic-bezier(0.4, 0.2, 0.2, 1);
 }
-
-/*
-  The working example does NOT simply rotate the
-  front/back faces. The entire physical case rotates.
-*/
 
 .movie-flip-container.flipped
 .movie-flipper {
   transform:
-    translateZ(calc(var(--case-depth) / -2))
+    translateZ(-12px)
     rotateY(180deg);
 }
 
@@ -774,11 +766,7 @@ MOVIE VIEWER
     0 12px 35px rgba(0, 0, 0, 0.65);
 }
 
-/*
-  FRONT
-
-  Pushed outward by half the case thickness.
-*/
+/* FRONT */
 
 .movie-front {
   display: flex;
@@ -790,19 +778,15 @@ MOVIE VIEWER
   padding: 18px;
 
   transform:
-    translateZ(calc(var(--case-depth) / 2));
+    translateZ(12px);
 }
 
-/*
-  BACK
-
-  Same distance from the center, but facing backward.
-*/
+/* BACK */
 
 .movie-back {
   transform:
     rotateY(180deg)
-    translateZ(calc(var(--case-depth) / 2));
+    translateZ(12px);
 
   background:
     linear-gradient(
@@ -818,21 +802,6 @@ MOVIE VIEWER
 3D CASE LEFT + RIGHT SIDES
 ========================================================= */
 
-/*
-  These are actual rectangular side surfaces.
-
-  Width = case depth
-  Height = case height
-
-  FIX: translateZ() does not accept percentage values —
-  only length units. The original code used
-  translateZ(50%), which is invalid CSS. When one
-  function inside a transform list is invalid, the
-  ENTIRE transform is dropped, so these edges were
-  never rotating into place. Replaced with the actual
-  length equivalent: half the case depth.
-*/
-
 .movie-edge {
   position: absolute;
 
@@ -845,19 +814,13 @@ MOVIE VIEWER
 
   pointer-events: none;
 
-  background:
-    linear-gradient(
-      to right,
-      #242424,
-      #444444,
-      #202020
-    );
-
   box-shadow:
     inset 0 0 0 1px rgba(255,255,255,0.08);
 }
 
-/* LEFT / SPINE */
+/* =========================================================
+LEFT / SPINE
+========================================================= */
 
 .movie-edge-left {
   width: var(--case-depth);
@@ -869,14 +832,24 @@ MOVIE VIEWER
       (100% - var(--case-depth)) / 2
     );
 
+  background:
+    linear-gradient(
+      to right,
+      #202020,
+      #555555,
+      #242424
+    );
+
   transform:
     rotateY(-90deg)
-    translateZ(12px);
+    translateZ(180px);
 
   transform-origin: center;
 }
 
-/* RIGHT EDGE */
+/* =========================================================
+RIGHT EDGE
+========================================================= */
 
 .movie-edge-right {
   width: var(--case-depth);
@@ -888,23 +861,24 @@ MOVIE VIEWER
       (100% - var(--case-depth)) / 2
     );
 
+  background:
+    linear-gradient(
+      to right,
+      #242424,
+      #555555,
+      #202020
+    );
+
   transform:
     rotateY(90deg)
-    translateZ(12px);
+    translateZ(180px);
 
   transform-origin: center;
 }
 
 /* =========================================================
-3D CASE TOP + BOTTOM
+TOP + BOTTOM
 ========================================================= */
-
-/*
-  These are also actual surfaces.
-
-  Width = case width
-  Height = case depth
-*/
 
 .movie-edge-top,
 .movie-edge-bottom {
@@ -916,6 +890,13 @@ MOVIE VIEWER
     calc(
       (100% - var(--case-depth)) / 2
     );
+
+  background:
+    linear-gradient(
+      to bottom,
+      #555555,
+      #252525
+    );
 }
 
 /* TOP */
@@ -923,7 +904,7 @@ MOVIE VIEWER
 .movie-edge-top {
   transform:
     rotateX(90deg)
-    translateZ(calc(var(--case-depth) / 2));
+    translateZ(270px);
 
   transform-origin: center;
 }
@@ -933,7 +914,7 @@ MOVIE VIEWER
 .movie-edge-bottom {
   transform:
     rotateX(-90deg)
-    translateZ(calc(var(--case-depth) / 2));
+    translateZ(270px);
 
   transform-origin: center;
 }
