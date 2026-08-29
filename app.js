@@ -1,4 +1,3 @@
-
 /*
   =========================================================
   BW'S MOVIE COLLECTION
@@ -441,58 +440,23 @@ function createMovieCard(
 
 
   // =========================================================
-  // OPEN MOVIE — LIFT FROM SHELF
+  // OPEN MOVIE
   // =========================================================
-
-  function selectMovie() {
-
-    // Prevent multiple clicks while animation is running.
-
-    if (
-      card.classList.contains(
-        "movie-opening"
-      )
-    ) {
-      return;
-    }
-
-
-    card.classList.add(
-      "movie-opening"
-    );
-
-
-    /*
-      Give the CSS animation time to make the poster
-      appear to lift toward the viewer before opening
-      the movie viewer.
-    */
-
-    setTimeout(
-      () => {
-
-        openMovie(movie);
-
-        card.classList.remove(
-          "movie-opening"
-        );
-
-      },
-      260
-    );
-
-  }
-
 
   card.addEventListener(
     "click",
-    selectMovie
+    () => {
+
+      openMovieFromCard(
+        movie,
+        card
+      );
+
+    }
   );
 
 
-  // =========================================================
   // KEYBOARD ACCESSIBILITY
-  // =========================================================
 
   card.addEventListener(
     "keydown",
@@ -505,7 +469,10 @@ function createMovieCard(
 
         event.preventDefault();
 
-        selectMovie();
+        openMovieFromCard(
+          movie,
+          card
+        );
 
       }
 
@@ -519,16 +486,103 @@ function createMovieCard(
 
 
 // =========================================================
-// OPEN MOVIE
+// OPEN MOVIE FROM SHELF
 // =========================================================
 
-function openMovie(
-  movie
+function openMovieFromCard(
+  movie,
+  card
 ) {
+
+  if (
+    modal &&
+    !modal.classList.contains("hidden")
+  ) {
+    return;
+  }
+
 
   currentMovie =
     movie;
 
+
+  // =========================================================
+  // REMEMBER THE SELECTED CARD
+  // =========================================================
+
+  document
+    .querySelectorAll(".movie-card.selected")
+    .forEach(
+      existingCard =>
+        existingCard.classList.remove("selected")
+    );
+
+
+  card.classList.add(
+    "selected"
+  );
+
+
+  // =========================================================
+  // BRING THE COLLECTION INTO FOCUS MODE
+  // =========================================================
+
+  document.body.classList.add(
+    "movie-opening"
+  );
+
+
+  // =========================================================
+  // PREPARE MOVIE INFORMATION
+  // =========================================================
+
+  prepareMovieModal(
+    movie
+  );
+
+
+  // =========================================================
+  // SHOW MODAL
+  // =========================================================
+
+  modal.classList.remove(
+    "hidden"
+  );
+
+  document.body.style.overflow =
+    "hidden";
+
+
+  // =========================================================
+  // ALLOW THE OPENING ANIMATION TO START
+  // =========================================================
+
+  requestAnimationFrame(
+    () => {
+
+      requestAnimationFrame(
+        () => {
+
+          modal.classList.add(
+            "movie-open"
+          );
+
+        }
+      );
+
+    }
+  );
+
+}
+
+
+// =========================================================
+// PREPARE MOVIE MODAL
+// =========================================================
+
+function prepareMovieModal(
+  movie
+) {
 
   // RESET FLIP
 
@@ -540,7 +594,9 @@ function openMovie(
     "Flip case";
 
 
+  // =========================================================
   // BASIC INFORMATION
+  // =========================================================
 
   modalTitle.textContent =
     movie.title;
@@ -569,7 +625,9 @@ function openMovie(
     "Director information not added.";
 
 
+  // =========================================================
   // LARGE COVER
+  // =========================================================
 
   const colorIndex =
     movies.indexOf(movie) %
@@ -582,7 +640,9 @@ function openMovie(
     "";
 
 
+  // =========================================================
   // TMDB POSTER
+  // =========================================================
 
   if (movie.poster) {
 
@@ -765,18 +825,6 @@ function openMovie(
 
   }
 
-
-  // =========================================================
-  // SHOW MODAL
-  // =========================================================
-
-  modal.classList.remove(
-    "hidden"
-  );
-
-  document.body.style.overflow =
-    "hidden";
-
 }
 
 
@@ -786,15 +834,39 @@ function openMovie(
 
 function closeMovie() {
 
-  modal.classList.add(
-    "hidden"
+  modal.classList.remove(
+    "movie-open"
   );
 
-  document.body.style.overflow =
-    "";
 
-  currentMovie =
-    null;
+  document.body.classList.remove(
+    "movie-opening"
+  );
+
+
+  setTimeout(
+    () => {
+
+      modal.classList.add(
+        "hidden"
+      );
+
+      document.body.style.overflow =
+        "";
+
+      document
+        .querySelectorAll(".movie-card.selected")
+        .forEach(
+          card =>
+            card.classList.remove("selected")
+        );
+
+      currentMovie =
+        null;
+
+    },
+    450
+  );
 
 }
 
@@ -1539,4 +1611,3 @@ if (modal) {
   );
 
 }
-
