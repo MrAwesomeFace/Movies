@@ -47,6 +47,8 @@ const showAllButton = document.getElementById("show-all-button");
 let currentSearch = "";
 let currentMovie = null;
 
+let selectedCard = null;
+
 let randomMode = false;
 let randomMovies = [];
 
@@ -447,7 +449,7 @@ function createMovieCard(
     "click",
     () => {
 
-      openMovieFromCard(
+      openMovie(
         movie,
         card
       );
@@ -469,7 +471,7 @@ function createMovieCard(
 
         event.preventDefault();
 
-        openMovieFromCard(
+        openMovie(
           movie,
           card
         );
@@ -486,35 +488,35 @@ function createMovieCard(
 
 
 // =========================================================
-// OPEN MOVIE FROM SHELF
+// OPEN MOVIE
 // =========================================================
 
-function openMovieFromCard(
+function openMovie(
   movie,
   card
 ) {
 
-  if (
-    modal &&
-    !modal.classList.contains("hidden")
-  ) {
-    return;
-  }
-
-
   currentMovie =
     movie;
 
+  selectedCard =
+    card;
+
 
   // =========================================================
-  // REMEMBER THE SELECTED CARD
+  // PREPARE SELECTED CARD
   // =========================================================
 
   document
     .querySelectorAll(".movie-card.selected")
     .forEach(
-      existingCard =>
-        existingCard.classList.remove("selected")
+      existingCard => {
+
+        existingCard.classList.remove(
+          "selected"
+        );
+
+      }
     );
 
 
@@ -524,7 +526,15 @@ function openMovieFromCard(
 
 
   // =========================================================
-  // BRING THE COLLECTION INTO FOCUS MODE
+  // PREVENT PAGE FROM MOVING
+  // =========================================================
+
+  document.body.style.overflow =
+    "hidden";
+
+
+  // =========================================================
+  // START COLLECTION OPENING STATE
   // =========================================================
 
   document.body.classList.add(
@@ -533,58 +543,8 @@ function openMovieFromCard(
 
 
   // =========================================================
-  // PREPARE MOVIE INFORMATION
-  // =========================================================
-
-  prepareMovieModal(
-    movie
-  );
-
-
-  // =========================================================
-  // SHOW MODAL
-  // =========================================================
-
-  modal.classList.remove(
-    "hidden"
-  );
-
-  document.body.style.overflow =
-    "hidden";
-
-
-  // =========================================================
-  // ALLOW THE OPENING ANIMATION TO START
-  // =========================================================
-
-  requestAnimationFrame(
-    () => {
-
-      requestAnimationFrame(
-        () => {
-
-          modal.classList.add(
-            "movie-open"
-          );
-
-        }
-      );
-
-    }
-  );
-
-}
-
-
-// =========================================================
-// PREPARE MOVIE MODAL
-// =========================================================
-
-function prepareMovieModal(
-  movie
-) {
-
   // RESET FLIP
+  // =========================================================
 
   flipContainer.classList.remove(
     "flipped"
@@ -640,9 +600,7 @@ function prepareMovieModal(
     "";
 
 
-  // =========================================================
   // TMDB POSTER
-  // =========================================================
 
   if (movie.poster) {
 
@@ -825,6 +783,36 @@ function prepareMovieModal(
 
   }
 
+
+  // =========================================================
+  // SHOW MODAL
+  // =========================================================
+
+  /*
+    Give the selected card a moment to enter the
+    opening state before bringing the movie viewer forward.
+  */
+
+  requestAnimationFrame(
+    () => {
+
+      requestAnimationFrame(
+        () => {
+
+          modal.classList.remove(
+            "hidden"
+          );
+
+          modal.classList.add(
+            "movie-open"
+          );
+
+        }
+      );
+
+    }
+  );
+
 }
 
 
@@ -844,29 +832,49 @@ function closeMovie() {
   );
 
 
+  /*
+    Give the closing animation time to finish
+    before completely hiding the modal.
+  */
+
   setTimeout(
     () => {
 
-      modal.classList.add(
-        "hidden"
-      );
+      if (
+        !modal.classList.contains(
+          "movie-open"
+        )
+      ) {
 
-      document.body.style.overflow =
-        "";
-
-      document
-        .querySelectorAll(".movie-card.selected")
-        .forEach(
-          card =>
-            card.classList.remove("selected")
+        modal.classList.add(
+          "hidden"
         );
 
-      currentMovie =
-        null;
+      }
 
     },
     450
   );
+
+
+  document.body.style.overflow =
+    "";
+
+
+  if (selectedCard) {
+
+    selectedCard.classList.remove(
+      "selected"
+    );
+
+  }
+
+
+  selectedCard =
+    null;
+
+  currentMovie =
+    null;
 
 }
 
