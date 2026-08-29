@@ -50,11 +50,6 @@ let currentMovie = null;
 let randomMode = false;
 let randomMovies = [];
 
-let selectedCard = null;
-let openingClone = null;
-let savedScrollY = 0;
-let isOpeningMovie = false;
-
 let activeFilters = {
   type: "all",
   media: "all",
@@ -62,6 +57,15 @@ let activeFilters = {
   category: null,
   animated: "mixed"
 };
+
+
+// =========================================================
+// OPENING / SCROLL STATE
+// =========================================================
+
+let savedScrollY = 0;
+let openingCard = null;
+let openingClone = null;
 
 
 // =========================================================
@@ -491,54 +495,54 @@ function createMovieCard(
 
 
 // =========================================================
-// ANIMATE MOVIE FROM SHELF
+// OPEN MOVIE
+//
+// The important change here:
+//
+// The page position is captured BEFORE anything happens.
+// Scrolling is then locked.
+// The selected card remains in its original location while
+// the rest of the collection moves visually into the
+// background.
+//
+// The modal is displayed without causing the browser to
+// scroll to it.
 // =========================================================
 
-function animateMovieFromShelf(
-  card,
-  callback
+function openMovie(
+  movie,
+  card
 ) {
 
-  if (!card) {
-
-    callback();
-
+  if (
+    document.body.classList.contains(
+      "movie-opening"
+    )
+  ) {
     return;
-
   }
 
 
-  const poster =
-    card.querySelector(
-      ".movie-cover-inner"
-    );
+  currentMovie =
+    movie;
 
-  if (!poster) {
-
-    callback();
-
-    return;
-
-  }
+  openingCard =
+    card;
 
 
-  // ---------------------------------------------------------
-  // SAVE CURRENT SCROLL POSITION
-  // ---------------------------------------------------------
+  // =========================================================
+  // SAVE EXACT SCROLL POSITION
+  // =========================================================
 
   savedScrollY =
-    window.scrollY;
+    window.scrollY ||
+    window.pageYOffset ||
+    0;
 
 
-  // ---------------------------------------------------------
-  // PREVENT THE PAGE FROM MOVING
-  // ---------------------------------------------------------
-
-  document.documentElement.style.scrollBehavior =
-    "auto";
-
-  document.body.style.overflow =
-    "hidden";
+  // =========================================================
+  // PREVENT THE BROWSER FROM MOVING THE PAGE
+  // =========================================================
 
   document.body.style.position =
     "fixed";
@@ -556,251 +560,27 @@ function animateMovieFromShelf(
     "100%";
 
 
-  // ---------------------------------------------------------
-  // MARK CARD AS SELECTED
-  // ---------------------------------------------------------
-
-  selectedCard =
-    card;
+  // =========================================================
+  // MARK SELECTED MOVIE
+  // =========================================================
 
   card.classList.add(
     "selected"
   );
 
 
-  // ---------------------------------------------------------
-  // GET EXACT POSTER POSITION
-  // ---------------------------------------------------------
-
-  const rect =
-    poster.getBoundingClientRect();
-
-
-  // ---------------------------------------------------------
-  // CREATE FLOATING COPY
-  // ---------------------------------------------------------
-
-  openingClone =
-    poster.cloneNode(
-      true
-    );
-
-  openingClone.classList.add(
-    "movie-opening-clone"
-  );
-
-
-  // ---------------------------------------------------------
-  // INITIAL POSITION
-  // EXACTLY OVER ORIGINAL POSTER
-  // ---------------------------------------------------------
-
-  openingClone.style.position =
-    "fixed";
-
-  openingClone.style.left =
-    `${rect.left}px`;
-
-  openingClone.style.top =
-    `${rect.top}px`;
-
-  openingClone.style.width =
-    `${rect.width}px`;
-
-  openingClone.style.height =
-    `${rect.height}px`;
-
-  openingClone.style.margin =
-    "0";
-
-  openingClone.style.zIndex =
-    "1000";
-
-  openingClone.style.pointerEvents =
-    "none";
-
-  openingClone.style.borderRadius =
-    "9px";
-
-  openingClone.style.backgroundSize =
-    "cover";
-
-  openingClone.style.backgroundPosition =
-    "center";
-
-  openingClone.style.backgroundRepeat =
-    "no-repeat";
-
-  openingClone.style.boxShadow =
-    "0 8px 18px rgba(0,0,0,.45)";
-
-
-  // ---------------------------------------------------------
-  // NO TRANSITION YET
-  // ---------------------------------------------------------
-
-  openingClone.style.transition =
-    "none";
-
-
-  document.body.appendChild(
-    openingClone
-  );
-
-
-  // ---------------------------------------------------------
-  // HIDE ORIGINAL POSTER
-  // ---------------------------------------------------------
-
-  poster.style.visibility =
-    "hidden";
-
-
-  // ---------------------------------------------------------
-  // ACTIVATE COLLECTION FOCUS
-  // ---------------------------------------------------------
+  // =========================================================
+  // START COLLECTION FOCUS
+  // =========================================================
 
   document.body.classList.add(
     "movie-opening"
   );
 
 
-  // ---------------------------------------------------------
-  // FORCE BROWSER TO REGISTER START POSITION
-  // ---------------------------------------------------------
-
-  openingClone.getBoundingClientRect();
-
-
-  // ---------------------------------------------------------
-  // CALCULATE TARGET SIZE
-  // ---------------------------------------------------------
-
-  const targetWidth =
-    Math.min(
-      window.innerWidth * 0.72,
-      360
-    );
-
-  const targetHeight =
-    targetWidth * 1.5;
-
-
-  const targetLeft =
-    (window.innerWidth -
-      targetWidth) /
-    2;
-
-  const targetTop =
-    Math.max(
-      (window.innerHeight -
-        targetHeight) /
-      2 - 25,
-      20
-    );
-
-
-  // ---------------------------------------------------------
-  // ANIMATE
-  // ---------------------------------------------------------
-
-  requestAnimationFrame(
-    () => {
-
-      openingClone.style.transition =
-        "left .7s cubic-bezier(.16,1,.3,1), " +
-        "top .7s cubic-bezier(.16,1,.3,1), " +
-        "width .7s cubic-bezier(.16,1,.3,1), " +
-        "height .7s cubic-bezier(.16,1,.3,1), " +
-        "border-radius .7s ease, " +
-        "box-shadow .7s ease";
-
-
-      openingClone.style.left =
-        `${targetLeft}px`;
-
-      openingClone.style.top =
-        `${targetTop}px`;
-
-      openingClone.style.width =
-        `${targetWidth}px`;
-
-      openingClone.style.height =
-        `${targetHeight}px`;
-
-      openingClone.style.borderRadius =
-        "10px";
-
-      openingClone.style.boxShadow =
-        "0 25px 60px rgba(0,0,0,.65), " +
-        "0 8px 20px rgba(0,0,0,.5)";
-
-
-      // -----------------------------------------------------
-      // FINISH ANIMATION
-      // -----------------------------------------------------
-
-      setTimeout(
-        () => {
-
-          if (openingClone) {
-
-            openingClone.remove();
-
-            openingClone =
-              null;
-
-          }
-
-
-          // Reveal the actual viewer
-
-          callback();
-
-        },
-        720
-      );
-
-    }
-  );
-
-}
-
-
-// =========================================================
-// OPEN MOVIE
-// =========================================================
-
-function openMovie(
-  movie,
-  card
-) {
-
-  if (
-    isOpeningMovie
-  ) {
-    return;
-  }
-
-
-  if (
-    !modal ||
-    !flipContainer
-  ) {
-    return;
-  }
-
-
-  isOpeningMovie =
-    true;
-
-  currentMovie =
-    movie;
-
-
-  // ---------------------------------------------------------
+  // =========================================================
   // RESET FLIP
-  // ---------------------------------------------------------
+  // =========================================================
 
   flipContainer.classList.remove(
     "flipped"
@@ -810,9 +590,9 @@ function openMovie(
     "Flip case";
 
 
-  // ---------------------------------------------------------
+  // =========================================================
   // BASIC INFORMATION
-  // ---------------------------------------------------------
+  // =========================================================
 
   modalTitle.textContent =
     movie.title;
@@ -841,9 +621,9 @@ function openMovie(
     "Director information not added.";
 
 
-  // ---------------------------------------------------------
+  // =========================================================
   // LARGE COVER
-  // ---------------------------------------------------------
+  // =========================================================
 
   const colorIndex =
     movies.indexOf(movie) %
@@ -853,12 +633,6 @@ function openMovie(
     coverColors[colorIndex];
 
   modalCover.innerHTML =
-    "";
-
-  modalCover.style.backgroundImage =
-    "";
-
-  modalCover.style.background =
     "";
 
 
@@ -973,8 +747,6 @@ function openMovie(
     movie.digital || [];
 
 
-  // Physical
-
   physical.forEach(
     format => {
 
@@ -997,8 +769,6 @@ function openMovie(
   );
 
 
-  // Digital
-
   digital.forEach(
     service => {
 
@@ -1020,8 +790,6 @@ function openMovie(
     }
   );
 
-
-  // No format information
 
   if (
     physical.length === 0 &&
@@ -1047,46 +815,40 @@ function openMovie(
 
 
   // =========================================================
-  // START SHELF ANIMATION
+  // SHOW MODAL WITHOUT SCROLLING
   // =========================================================
 
-  animateMovieFromShelf(
-    card,
+  modal.classList.remove(
+    "hidden"
+  );
+
+
+  // Force the browser to keep the current visual position.
+
+  window.scrollTo(
+    0,
+    savedScrollY
+  );
+
+
+  // Let the browser render the initial state first.
+
+  requestAnimationFrame(
     () => {
 
-      // -------------------------------------------------------
-      // SHOW MODAL AFTER POSTER HAS ARRIVED
-      // -------------------------------------------------------
-
-      modal.classList.remove(
-        "hidden"
-      );
-
-
-      // Force the browser to register the initial state
-
-      modal.getBoundingClientRect();
-
-
-      // Activate viewer
-
-      modal.classList.add(
-        "movie-open"
-      );
-
-
-      // -------------------------------------------------------
-      // FINISH
-      // -------------------------------------------------------
-
-      setTimeout(
+      requestAnimationFrame(
         () => {
 
-          isOpeningMovie =
-            false;
+          modal.classList.add(
+            "movie-open"
+          );
 
-        },
-        500
+          window.scrollTo(
+            0,
+            savedScrollY
+          );
+
+        }
       );
 
     }
@@ -1101,117 +863,76 @@ function openMovie(
 
 function closeMovie() {
 
-  if (
-    isOpeningMovie
-  ) {
-    return;
-  }
-
-
-  // ---------------------------------------------------------
-  // CLOSE MODAL
-  // ---------------------------------------------------------
+  // =========================================================
+  // BEGIN CLOSE ANIMATION
+  // =========================================================
 
   modal.classList.remove(
     "movie-open"
   );
 
 
-  // ---------------------------------------------------------
-  // REMOVE COLLECTION FOCUS
-  // ---------------------------------------------------------
-
   document.body.classList.remove(
     "movie-opening"
   );
 
 
-  // ---------------------------------------------------------
-  // RESTORE BODY
-  // ---------------------------------------------------------
+  if (openingCard) {
 
-  document.body.style.overflow =
-    "";
-
-  document.body.style.position =
-    "";
-
-  document.body.style.top =
-    "";
-
-  document.body.style.left =
-    "";
-
-  document.body.style.right =
-    "";
-
-  document.body.style.width =
-    "";
-
-
-  // ---------------------------------------------------------
-  // RESTORE SCROLL POSITION
-  // ---------------------------------------------------------
-
-  window.scrollTo(
-    0,
-    savedScrollY
-  );
-
-
-  // ---------------------------------------------------------
-  // RESTORE SELECTED POSTER
-  // ---------------------------------------------------------
-
-  if (selectedCard) {
-
-    const poster =
-      selectedCard.querySelector(
-        ".movie-cover-inner"
-      );
-
-    if (poster) {
-
-      poster.style.visibility =
-        "";
-
-    }
-
-    selectedCard.classList.remove(
+    openingCard.classList.remove(
       "selected"
     );
 
   }
 
 
-  selectedCard =
-    null;
-
-  currentMovie =
-    null;
-
-
-  // ---------------------------------------------------------
-  // ACTUALLY HIDE MODAL AFTER FADE
-  // ---------------------------------------------------------
+  // =========================================================
+  // WAIT FOR THE VISUAL CLOSE
+  // BEFORE RESTORING THE PAGE
+  // =========================================================
 
   setTimeout(
     () => {
 
-      if (
-        !modal.classList.contains(
-          "movie-open"
-        )
-      ) {
+      modal.classList.add(
+        "hidden"
+      );
 
-        modal.classList.add(
-          "hidden"
-        );
 
-      }
+      // Restore normal body positioning.
+
+      document.body.style.position =
+        "";
+
+      document.body.style.top =
+        "";
+
+      document.body.style.left =
+        "";
+
+      document.body.style.right =
+        "";
+
+      document.body.style.width =
+        "";
+
+
+      // Return to EXACTLY where the user was.
+
+      window.scrollTo(
+        0,
+        savedScrollY
+      );
+
+
+      currentMovie =
+        null;
+
+      openingCard =
+        null;
 
     },
-    500
+    450
   );
 
 }
