@@ -1,4 +1,4 @@
-# /*
+/*
 
 BW'S MOVIE COLLECTION
 App functionality
