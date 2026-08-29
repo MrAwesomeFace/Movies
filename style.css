@@ -531,7 +531,6 @@ body.movie-opening
   opacity: 1;
 
   filter: none;
-
 }
 
 
@@ -589,11 +588,6 @@ body.movie-opening
 .modal.hidden {
   display: none;
 }
-
-
-/* =========================================================
-   MODAL OPEN STATE
-   ========================================================= */
 
 .modal.movie-open {
   opacity: 1;
@@ -668,7 +662,6 @@ body.movie-opening
 }
 
 .modal.movie-open .modal-content {
-
   opacity: 1;
 
   transform:
@@ -730,18 +723,18 @@ body.movie-opening
 .movie-flip-container {
   width: min(75vw, 360px);
 
-  perspective: 1400px;
+  perspective: 1800px;
 
-  perspective-origin: 50% 50%;
+  perspective-origin: center center;
 
   cursor: pointer;
 
-  transform-style: preserve-3d;
+  position: relative;
 }
 
 
 /* =========================================================
-   3D CASE
+   ACTUAL 3D CASE
    ========================================================= */
 
 .movie-flipper {
@@ -753,24 +746,17 @@ body.movie-opening
 
   transform-style: preserve-3d;
 
-  /*
-    This is the physical depth of the case.
-
-    18px is intentionally noticeable.
-    The side faces below use this same depth.
-  */
-
-  --case-depth: 18px;
-
   transform-origin: center center;
 
   transition:
-    transform 0.65s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transform 0.75s cubic-bezier(0.4, 0.2, 0.2, 1);
+
+  will-change: transform;
 }
 
 
 /* =========================================================
-   ROTATION
+   FLIP
    ========================================================= */
 
 .movie-flip-container.flipped
@@ -781,7 +767,7 @@ body.movie-opening
 
 
 /* =========================================================
-   FRONT + BACK OF CASE
+   FRONT + BACK
    ========================================================= */
 
 .movie-face {
@@ -796,10 +782,10 @@ body.movie-opening
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 
+  transform-style: preserve-3d;
+
   box-shadow:
     0 12px 35px rgba(0, 0, 0, 0.65);
-
-  transform-style: preserve-3d;
 }
 
 
@@ -816,13 +802,10 @@ body.movie-opening
 
   padding: 18px;
 
-  /*
-    Pull the front face toward the viewer by half
-    the case thickness.
-  */
-
   transform:
-    translateZ(calc(var(--case-depth) / 2));
+    translateZ(8px);
+
+  background: #111;
 }
 
 
@@ -833,7 +816,7 @@ body.movie-opening
 .movie-back {
   transform:
     rotateY(180deg)
-    translateZ(calc(var(--case-depth) / 2));
+    translateZ(8px);
 
   background:
     linear-gradient(
@@ -843,96 +826,6 @@ body.movie-opening
     );
 
   color: #181818;
-}
-
-
-/* =========================================================
-   CASE SPINE / LEFT EDGE
-   ========================================================= */
-
-.movie-flipper::before {
-
-  content: "";
-
-  position: absolute;
-
-  top: 0;
-  bottom: 0;
-
-  left: 0;
-
-  width: var(--case-depth);
-
-  /*
-    Move the side face halfway back into the object.
-  */
-
-  transform:
-    translateX(calc(var(--case-depth) / -2))
-    rotateY(90deg);
-
-  transform-origin: center center;
-
-  background:
-    linear-gradient(
-      to right,
-      #171717 0%,
-      #3a3a3a 35%,
-      #171717 100%
-    );
-
-  border-radius: 3px;
-
-  box-shadow:
-    inset 1px 0 rgba(255,255,255,0.12),
-    inset -2px 0 rgba(0,0,0,0.65);
-
-  pointer-events: none;
-
-  z-index: 0;
-}
-
-
-/* =========================================================
-   CASE RIGHT EDGE
-   ========================================================= */
-
-.movie-flipper::after {
-
-  content: "";
-
-  position: absolute;
-
-  top: 0;
-  bottom: 0;
-
-  right: 0;
-
-  width: var(--case-depth);
-
-  transform:
-    translateX(calc(var(--case-depth) / 2))
-    rotateY(90deg);
-
-  transform-origin: center center;
-
-  background:
-    linear-gradient(
-      to right,
-      #171717 0%,
-      #454545 45%,
-      #161616 100%
-    );
-
-  border-radius: 3px;
-
-  box-shadow:
-    inset 1px 0 rgba(255,255,255,0.10),
-    inset -2px 0 rgba(0,0,0,0.65);
-
-  pointer-events: none;
-
-  z-index: 0;
 }
 
 
@@ -948,9 +841,211 @@ body.movie-opening
   border-radius: 9px;
 
   overflow: hidden;
+}
+
+
+/* =========================================================
+   CASE THICKNESS
+   =========================================================
+
+   These four surfaces are the actual sides of the case.
+
+   Thickness = 16px.
+
+   The front and back sit 8px away from the center.
+   The side panels connect them.
+
+   This is what creates the visible spine/edge when
+   the case rotates.
+   ========================================================= */
+
+.movie-flipper::before,
+.movie-flipper::after {
+  content: "";
+
+  position: absolute;
+
+  top: 8px;
+
+  height: calc(100% - 16px);
+
+  width: 16px;
+
+  transform-style: preserve-3d;
+
+  pointer-events: none;
+
+  z-index: 10;
+}
+
+
+/* =========================================================
+   RIGHT SIDE
+   ========================================================= */
+
+.movie-flipper::before {
+
+  right: -8px;
+
+  background:
+    linear-gradient(
+      to right,
+      #111111 0%,
+      #292929 35%,
+      #555555 55%,
+      #181818 100%
+    );
+
+  border-radius: 0 3px 3px 0;
+
+  transform-origin: left center;
 
   transform:
-    translateZ(1px);
+    rotateY(90deg);
+}
+
+
+/* =========================================================
+   LEFT SIDE / SPINE
+   ========================================================= */
+
+.movie-flipper::after {
+
+  left: -8px;
+
+  background:
+    linear-gradient(
+      to left,
+      #111111 0%,
+      #292929 35%,
+      #555555 55%,
+      #181818 100%
+    );
+
+  border-radius: 3px 0 0 3px;
+
+  transform-origin: right center;
+
+  transform:
+    rotateY(-90deg);
+}
+
+
+/* =========================================================
+   TOP AND BOTTOM THICKNESS
+   =========================================================
+
+   The top and bottom surfaces are added to the faces
+   themselves so we can create all four sides of the box.
+   ========================================================= */
+
+.movie-front::before,
+.movie-front::after,
+.movie-back::before,
+.movie-back::after {
+  content: "";
+
+  position: absolute;
+
+  left: 8px;
+
+  width: calc(100% - 16px);
+
+  height: 16px;
+
+  pointer-events: none;
+
+  transform-style: preserve-3d;
+
+  z-index: 20;
+}
+
+
+/* =========================================================
+   FRONT TOP EDGE
+   ========================================================= */
+
+.movie-front::before {
+
+  top: -8px;
+
+  background:
+    linear-gradient(
+      to bottom,
+      #555555,
+      #1a1a1a
+    );
+
+  transform-origin: center bottom;
+
+  transform:
+    rotateX(90deg);
+}
+
+
+/* =========================================================
+   FRONT BOTTOM EDGE
+   ========================================================= */
+
+.movie-front::after {
+
+  bottom: -8px;
+
+  background:
+    linear-gradient(
+      to top,
+      #555555,
+      #181818
+    );
+
+  transform-origin: center top;
+
+  transform:
+    rotateX(-90deg);
+}
+
+
+/* =========================================================
+   BACK TOP EDGE
+   ========================================================= */
+
+.movie-back::before {
+
+  top: -8px;
+
+  background:
+    linear-gradient(
+      to bottom,
+      #b8b09f,
+      #777064
+    );
+
+  transform-origin: center bottom;
+
+  transform:
+    rotateX(90deg);
+}
+
+
+/* =========================================================
+   BACK BOTTOM EDGE
+   ========================================================= */
+
+.movie-back::after {
+
+  bottom: -8px;
+
+  background:
+    linear-gradient(
+      to top,
+      #b8b09f,
+      #777064
+    );
+
+  transform-origin: center top;
+
+  transform:
+    rotateX(-90deg);
 }
 
 
@@ -964,14 +1059,6 @@ body.movie-opening
   overflow-y: auto;
 
   padding: 24px;
-
-  /*
-    Keep the back content slightly forward of
-    the physical back surface.
-  */
-
-  transform:
-    translateZ(1px);
 }
 
 .back-content h2 {
@@ -1121,8 +1208,10 @@ body.movie-opening
 
 @media (prefers-reduced-motion: reduce) {
 
-  * ,
+  *,
+
   *::before,
+
   *::after {
 
     transition-duration:
