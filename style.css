@@ -494,13 +494,6 @@ main {
   z-index: 20;
 }
 
-
-/*
-  Leave the shelf behind.
-
-  The enlarged case takes over visually.
-*/
-
 .movie-card.selected .movie-cover-inner {
   opacity: 0;
 }
@@ -569,7 +562,7 @@ body.movie-opening
 
 
 /* =========================================================
-   MOVIE MODAL
+   MODAL
    ========================================================= */
 
 .modal {
@@ -588,12 +581,6 @@ body.movie-opening
   opacity: 0;
 
   pointer-events: none;
-
-  /*
-    The modal itself is only the stage.
-    The .modal-content becomes the actual
-    moving movie case during opening.
-  */
 
   transition:
     opacity 0.45s ease;
@@ -644,7 +631,7 @@ body.movie-opening
 
 
 /* =========================================================
-   MODAL CONTENT / MOVING CASE
+   MODAL CONTENT
    ========================================================= */
 
 .modal-content {
@@ -740,30 +727,21 @@ body.movie-opening
    3D CASE CONTAINER
    ========================================================= */
 
-/*
-  This is the important part.
-
-  The perspective belongs on the outer container.
-  The inner flipper is the physical object that rotates.
-*/
-
 .movie-flip-container {
+
   width: min(75vw, 360px);
 
-  perspective: 1800px;
+  perspective: 1600px;
 
   perspective-origin:
     center center;
 
   cursor: pointer;
 
-  transform-style: preserve-3d;
-
-  /*
-    Give the rotating case enough visual depth.
-  */
-
   position: relative;
+
+  transform-style:
+    preserve-3d;
 }
 
 
@@ -772,13 +750,15 @@ body.movie-opening
    ========================================================= */
 
 .movie-flipper {
+
   position: relative;
 
   width: 100%;
 
   aspect-ratio: 2 / 3;
 
-  transform-style: preserve-3d;
+  transform-style:
+    preserve-3d;
 
   transform-origin:
     center center;
@@ -786,12 +766,8 @@ body.movie-opening
   transition:
     transform 0.75s cubic-bezier(0.4, 0.15, 0.2, 1);
 
-  /*
-    Prevent the browser from flattening
-    the child faces into a flat plane.
-  */
-
-  will-change: transform;
+  will-change:
+    transform;
 }
 
 
@@ -809,10 +785,102 @@ body.movie-opening
 
 
 /* =========================================================
+   CASE DEPTH
+   ========================================================= */
+
+/*
+  Front and back are physically separated.
+
+  This gives the object actual thickness instead of
+  simply rotating two planes on top of one another.
+*/
+
+.movie-front {
+
+  transform:
+    translateZ(5px);
+
+}
+
+.movie-back {
+
+  transform:
+    rotateY(180deg)
+    translateZ(5px);
+
+}
+
+
+/* =========================================================
+   CASE SIDE EDGES
+   ========================================================= */
+
+.movie-flipper::before,
+.movie-flipper::after {
+
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  bottom: 0;
+
+  width: 10px;
+
+  background:
+    linear-gradient(
+      to right,
+      #111111,
+      #555555,
+      #181818
+    );
+
+  transform-style:
+    preserve-3d;
+
+  pointer-events: none;
+
+  z-index: 10;
+
+}
+
+
+/* =========================================================
+   LEFT EDGE
+   ========================================================= */
+
+.movie-flipper::before {
+
+  left: 0;
+
+  transform:
+    translateX(-5px)
+    rotateY(90deg);
+
+}
+
+
+/* =========================================================
+   RIGHT EDGE
+   ========================================================= */
+
+.movie-flipper::after {
+
+  right: 0;
+
+  transform:
+    translateX(5px)
+    rotateY(-90deg);
+
+}
+
+
+/* =========================================================
    FRONT + BACK OF CASE
    ========================================================= */
 
 .movie-face {
+
   position: absolute;
 
   inset: 0;
@@ -821,17 +889,18 @@ body.movie-opening
 
   border-radius: 9px;
 
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  backface-visibility:
+    hidden;
 
-  /*
-    Keep the faces in their own 3D space.
-  */
+  -webkit-backface-visibility:
+    hidden;
 
-  transform-style: preserve-3d;
+  transform-style:
+    preserve-3d;
 
   box-shadow:
     0 12px 35px rgba(0, 0, 0, 0.65);
+
 }
 
 
@@ -849,12 +918,9 @@ body.movie-opening
 
   padding: 18px;
 
-  /*
-    Tiny thickness illusion along the vertical edge.
-  */
-
   border-right:
-    2px solid rgba(0, 0, 0, 0.28);
+    1px solid rgba(255,255,255,0.08);
+
 }
 
 
@@ -882,7 +948,8 @@ body.movie-opening
 .movie-back {
 
   transform:
-    rotateY(180deg);
+    rotateY(180deg)
+    translateZ(5px);
 
   background:
     linear-gradient(
@@ -893,13 +960,8 @@ body.movie-opening
 
   color: #181818;
 
-  /*
-    Make the back feel like a solid physical
-    surface rather than a floating sheet.
-  */
-
   border-left:
-    2px solid rgba(0, 0, 0, 0.25);
+    1px solid rgba(0,0,0,0.25);
 
 }
 
@@ -916,17 +978,12 @@ body.movie-opening
 
   padding: 24px;
 
-  /*
-    Keep scrolling inside the back of the case.
-  */
-
   overscroll-behavior:
     contain;
 
   -webkit-overflow-scrolling:
     touch;
 }
-
 
 .back-content h2 {
 
@@ -937,7 +994,6 @@ body.movie-opening
   line-height: 1;
 
 }
-
 
 .movie-meta {
 
@@ -953,13 +1009,11 @@ body.movie-opening
 
 }
 
-
 .movie-info-section {
 
   margin-top: 18px;
 
 }
-
 
 .movie-info-section h3 {
 
@@ -972,7 +1026,6 @@ body.movie-opening
   letter-spacing: 0.08em;
 
 }
-
 
 .movie-info-section p {
 
@@ -996,8 +1049,8 @@ body.movie-opening
   flex-direction: column;
 
   gap: 6px;
-}
 
+}
 
 .format-item {
 
@@ -1029,7 +1082,6 @@ body.movie-opening
 
 }
 
-
 .primary-button {
 
   padding: 11px 18px;
@@ -1047,7 +1099,6 @@ body.movie-opening
   cursor: pointer;
 
 }
-
 
 .flip-hint {
 
@@ -1110,9 +1161,7 @@ body.movie-opening
 @media (prefers-reduced-motion: reduce) {
 
   *,
-
   *::before,
-
   *::after {
 
     transition-duration:
