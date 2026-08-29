@@ -441,20 +441,58 @@ function createMovieCard(
 
 
   // =========================================================
-  // OPEN MOVIE
+  // OPEN MOVIE — LIFT FROM SHELF
   // =========================================================
+
+  function selectMovie() {
+
+    // Prevent multiple clicks while animation is running.
+
+    if (
+      card.classList.contains(
+        "movie-opening"
+      )
+    ) {
+      return;
+    }
+
+
+    card.classList.add(
+      "movie-opening"
+    );
+
+
+    /*
+      Give the CSS animation time to make the poster
+      appear to lift toward the viewer before opening
+      the movie viewer.
+    */
+
+    setTimeout(
+      () => {
+
+        openMovie(movie);
+
+        card.classList.remove(
+          "movie-opening"
+        );
+
+      },
+      260
+    );
+
+  }
+
 
   card.addEventListener(
     "click",
-    () => {
-
-      openMovie(movie);
-
-    }
+    selectMovie
   );
 
 
+  // =========================================================
   // KEYBOARD ACCESSIBILITY
+  // =========================================================
 
   card.addEventListener(
     "keydown",
@@ -467,7 +505,7 @@ function createMovieCard(
 
         event.preventDefault();
 
-        openMovie(movie);
+        selectMovie();
 
       }
 
@@ -728,7 +766,9 @@ function openMovie(
   }
 
 
+  // =========================================================
   // SHOW MODAL
+  // =========================================================
 
   modal.classList.remove(
     "hidden"
