@@ -52,11 +52,11 @@ let randomMode = false;
 let randomMovies = [];
 
 let activeFilters = {
-  type: "all",
+  type: "movie",
   media: "all",
   genre: null,
   category: null,
-  animated: "mixed"
+  animated: "hide"
 };
 
 
@@ -236,7 +236,7 @@ function renderMovies() {
 
 
   // =========================================================
-  // RANDOM 50
+  // RANDOM 10
   // =========================================================
 
   if (randomMode) {
@@ -2106,7 +2106,7 @@ function getFilteredMovies() {
 
 
 // =========================================================
-// GENERATE RANDOM 50
+// GENERATE RANDOM 10
 // =========================================================
 
 function generateRandomMovies() {
@@ -2148,14 +2148,14 @@ function generateRandomMovies() {
   randomMovies =
     shuffled.slice(
       0,
-      50
+      10
     );
 
 }
 
 
 // =========================================================
-// RANDOM 50 BUTTON
+// RANDOM 10 BUTTON
 // =========================================================
 
 if (randomButton) {
