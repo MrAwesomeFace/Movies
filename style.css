@@ -1,4 +1,3 @@
-
 /*
   =========================================================
   BW'S MOVIE COLLECTION
@@ -42,6 +41,9 @@ body {
     Helvetica,
     Arial,
     sans-serif;
+
+  transition:
+    background 0.45s ease;
 }
 
 
@@ -63,6 +65,10 @@ body {
 
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+
+  transition:
+    opacity 0.4s ease,
+    filter 0.4s ease;
 }
 
 .header-top {
@@ -310,6 +316,14 @@ main {
   margin: 0 auto;
 
   padding: 22px 16px 50px;
+
+  position: relative;
+  z-index: 1;
+
+  transition:
+    filter 0.45s ease,
+    opacity 0.45s ease,
+    transform 0.45s ease;
 }
 
 .movie-grid {
@@ -331,8 +345,12 @@ main {
 
   cursor: pointer;
 
+  position: relative;
+
   transition:
-    opacity 0.18s ease;
+    opacity 0.25s ease,
+    filter 0.25s ease,
+    transform 0.25s ease;
 }
 
 
@@ -387,7 +405,7 @@ main {
 
 
 /* =========================================================
-   POSTER IMAGE / CASE
+   POSTER IMAGE
    ========================================================= */
 
 .movie-cover-inner {
@@ -405,12 +423,6 @@ main {
 
   border-radius: 7px;
 
-  /*
-    Gives the poster the appearance of an actual
-    physical case rather than a flat image.
-  */
-  border: 1px solid rgba(255, 255, 255, 0.14);
-
   box-shadow:
     0 6px 18px rgba(0, 0, 0, 0.45);
 
@@ -419,10 +431,6 @@ main {
     box-shadow 0.20s ease;
 
   z-index: 3;
-
-  transform-origin: center bottom;
-
-  will-change: transform;
 }
 
 
@@ -462,47 +470,75 @@ main {
 
 
 /* =========================================================
-   HOVER — POSTER LIFTS FROM STATIONARY SHELF
+   NORMAL HOVER
    ========================================================= */
 
 @media (hover: hover) {
 
   .movie-card:hover .movie-cover-inner {
-
-    transform:
-      translateY(-5px);
+    transform: translateY(-5px);
 
     box-shadow:
       0 10px 18px rgba(0, 0, 0, 0.42),
       0 20px 30px rgba(0, 0, 0, 0.30);
-
   }
 
 }
 
 
 /* =========================================================
-   SELECT — PULL CASE TOWARD VIEWER
+   SELECTED MOVIE
    ========================================================= */
 
-.movie-card.movie-opening .movie-cover-inner {
+.movie-card.selected {
+  z-index: 20;
+}
 
-  /*
-    The poster moves upward and slightly toward the
-    viewer. The shelf itself does NOT move.
-  */
+
+/*
+  Leave the shelf behind.
+
+  The poster itself disappears visually as the
+  enlarged movie viewer takes over.
+*/
+
+.movie-card.selected .movie-cover-inner {
+  opacity: 0;
+}
+
+
+/* =========================================================
+   COLLECTION FOCUS MODE
+   ========================================================= */
+
+body.movie-opening main {
+  filter:
+    blur(2px)
+    brightness(0.55);
 
   transform:
-    translateY(-18px)
-    scale(1.045);
+    scale(0.985);
+}
 
-  box-shadow:
-    0 18px 28px rgba(0, 0, 0, 0.50),
-    0 30px 50px rgba(0, 0, 0, 0.35);
+body.movie-opening .site-header {
+  opacity: 0.55;
 
-  transition:
-    transform 0.26s cubic-bezier(0.2, 0.8, 0.2, 1),
-    box-shadow 0.26s ease;
+  filter:
+    blur(1px);
+}
+
+
+/* =========================================================
+   KEEP SELECTED SHELF VISIBLE
+   ========================================================= */
+
+body.movie-opening
+.movie-card.selected
+.movie-cover::after {
+
+  opacity: 1;
+
+  filter: none;
 
 }
 
@@ -549,21 +585,68 @@ main {
   justify-content: center;
 
   padding: 15px;
+
+  /*
+    Start essentially invisible.
+    JavaScript adds .movie-open after the
+    movie-opening state has begun.
+  */
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transition:
+    opacity 0.45s ease;
 }
 
 .modal.hidden {
   display: none;
 }
 
+
+/* =========================================================
+   MODAL OPEN STATE
+   ========================================================= */
+
+.modal.movie-open {
+  opacity: 1;
+
+  pointer-events: auto;
+}
+
+
+/* =========================================================
+   MODAL BACKDROP
+   ========================================================= */
+
 .modal-backdrop {
   position: absolute;
   inset: 0;
 
-  background: rgba(0, 0, 0, 0.82);
+  background:
+    rgba(0, 0, 0, 0.55);
 
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter:
+    blur(7px);
+
+  -webkit-backdrop-filter:
+    blur(7px);
+
+  opacity: 0;
+
+  transition:
+    opacity 0.45s ease;
 }
+
+.modal.movie-open .modal-backdrop {
+  opacity: 1;
+}
+
+
+/* =========================================================
+   MODAL CONTENT
+   ========================================================= */
 
 .modal-content {
   position: relative;
@@ -578,14 +661,44 @@ main {
 
   padding: 20px;
 
-  border: 1px solid var(--border);
+  border: 1px solid rgba(255,255,255,0.10);
+
   border-radius: 18px;
 
   background: var(--surface);
 
   box-shadow:
     0 20px 60px rgba(0, 0, 0, 0.7);
+
+  /*
+    Start slightly smaller and lower.
+    It grows into position as the movie comes forward.
+  */
+
+  opacity: 0;
+
+  transform:
+    translateY(55px)
+    scale(0.72);
+
+  transition:
+    opacity 0.45s ease,
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+.modal.movie-open .modal-content {
+
+  opacity: 1;
+
+  transform:
+    translateY(0)
+    scale(1);
+}
+
+
+/* =========================================================
+   MODAL CLOSE
+   ========================================================= */
 
 .modal-close {
   position: absolute;
@@ -863,9 +976,11 @@ main {
 
 @media (prefers-reduced-motion: reduce) {
 
-  .movie-cover-inner {
-    transition: none;
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
   }
 
 }
-
