@@ -892,11 +892,11 @@ function openMovieFromCard(
       // =====================================================
 
       content.style.transition =
-        "left 0.65s cubic-bezier(0.16, 1, 0.3, 1), " +
-        "top 0.65s cubic-bezier(0.16, 1, 0.3, 1), " +
-        "width 0.65s cubic-bezier(0.16, 1, 0.3, 1), " +
-        "height 0.65s cubic-bezier(0.16, 1, 0.3, 1), " +
-        "box-shadow 0.45s ease";
+        "left 0.9s cubic-bezier(0.16, 1, 0.3, 1), " +
+        "top 0.9s cubic-bezier(0.16, 1, 0.3, 1), " +
+        "width 0.9s cubic-bezier(0.16, 1, 0.3, 1), " +
+        "height 0.9s cubic-bezier(0.16, 1, 0.3, 1), " +
+        "box-shadow 0.65s ease";
 
       content.style.left =
         `${finalLeft}px`;
@@ -944,7 +944,7 @@ function openMovieFromCard(
             false;
 
         },
-        680
+        930
       );
 
     }
