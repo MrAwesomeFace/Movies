@@ -697,30 +697,30 @@ padding-top: 10px;
 }
 
 /* =========================================================
-3D CASE CONTAINER
+3D FLIP CONTAINER
 ========================================================= */
 
 .movie-flip-container {
 
 width: min(75vw, 360px);
 
-perspective: 1100px;
+/*
+Stronger perspective makes the rotation visibly
+three-dimensional instead of looking like a flat
+card rotating in place.
+*/
+
+perspective: 900px;
 
 perspective-origin: center center;
 
 cursor: pointer;
 
-/*
-Critical:
-The perspective belongs to the container while
-the actual case remains a separate 3D object.
-*/
-
 transform-style: preserve-3d;
 }
 
 /* =========================================================
-3D CASE
+FLIPPER
 ========================================================= */
 
 .movie-flipper {
@@ -734,17 +734,28 @@ aspect-ratio: 2 / 3;
 transform-style: preserve-3d;
 
 /*
-Physical case thickness.
+Keep the rotation on the object itself.
 */
 
---case-depth: 14px;
+transform-origin: center center;
 
 transition:
 transform 0.85s cubic-bezier(0.25, 0.65, 0.25, 1);
 }
 
 /* =========================================================
-FRONT + BACK OF CASE
+IMPORTANT — ACTUAL FLIP
+========================================================= */
+
+.movie-flip-container.flipped
+.movie-flipper {
+
+transform:
+rotateY(180deg);
+}
+
+/* =========================================================
+FRONT + BACK
 ========================================================= */
 
 .movie-face {
@@ -781,10 +792,12 @@ justify-content: flex-end;
 
 padding: 18px;
 
+/*
+Slightly forward from the rotation center.
+*/
+
 transform:
-translateZ(
-calc(var(--case-depth) / 2)
-);
+translateZ(3px);
 }
 
 /* =========================================================
@@ -795,9 +808,7 @@ BACK
 
 transform:
 rotateY(180deg)
-translateZ(
-calc(var(--case-depth) / 2)
-);
+translateZ(3px);
 
 background:
 linear-gradient(
@@ -807,88 +818,6 @@ linear-gradient(
 );
 
 color: #181818;
-}
-
-/* =========================================================
-CASE SPINE / THICKNESS
-========================================================= */
-
-/*
-These side surfaces are generated visually with
-pseudo-elements on the 3D case.
-
-They remain perpendicular to the front/back faces,
-so they become visible as the case turns.
-*/
-
-.movie-flipper::before,
-.movie-flipper::after {
-
-content: "";
-
-position: absolute;
-
-pointer-events: none;
-
-transform-style: preserve-3d;
-
-}
-
-/* LEFT / RIGHT SIDE EDGES */
-
-.movie-flipper::before {
-
-top: 0;
-
-bottom: 0;
-
-left: 0;
-
-width:
-var(--case-depth);
-
-background:
-linear-gradient(
-to right,
-#111111,
-#444444,
-#171717
-);
-
-transform-origin:
-left center;
-
-transform:
-rotateY(90deg);
-
-}
-
-/* TOP / BOTTOM EDGE EFFECT */
-
-.movie-flipper::after {
-
-left: 0;
-
-right: 0;
-
-bottom: 0;
-
-height:
-var(--case-depth);
-
-background:
-linear-gradient(
-to bottom,
-#555555,
-#111111
-);
-
-transform-origin:
-center bottom;
-
-transform:
-rotateX(90deg);
-
 }
 
 /* =========================================================
@@ -1088,9 +1017,7 @@ REDUCED MOTION
 @media (prefers-reduced-motion: reduce) {
 
 *,
-
 *::before,
-
 *::after {
 
 
