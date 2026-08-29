@@ -1,10 +1,10 @@
 /*
-  =========================================================
-  BW'S MOVIE COLLECTION
-  App functionality
-  =========================================================
-*/
 
+BW'S MOVIE COLLECTION
+App functionality
+=================
+
+*/
 
 // =========================================================
 // ELEMENTS
@@ -40,7 +40,6 @@ const flipButton = document.getElementById("flip-button");
 const randomButton = document.getElementById("random-button");
 const showAllButton = document.getElementById("show-all-button");
 
-
 // =========================================================
 // CURRENT STATE
 // =========================================================
@@ -52,47 +51,38 @@ let randomMode = false;
 let randomMovies = [];
 
 let activeFilters = {
-  type: "all",
-  media: "all",
-  genre: null,
-  category: null,
-  animated: "mixed"
+type: "all",
+media: "all",
+genre: null,
+category: null,
+animated: "mixed"
 };
 
-
 // =========================================================
-// OPENING / CLOSING STATE
+// SCROLL LOCK STATE
 // =========================================================
-
-let selectedCard = null;
 
 let savedScrollY = 0;
-
-let originalModalStyles = null;
-
-let isOpening = false;
-let isClosing = false;
-
+let scrollLocked = false;
 
 // =========================================================
 // SIMPLE COVER COLORS
 // =========================================================
 
 const coverColors = [
-  ["#182848", "#4b6cb7"],
-  ["#3a1c71", "#d76d77"],
-  ["#232526", "#414345"],
-  ["#42275a", "#734b6d"],
-  ["#134e5e", "#71b280"],
-  ["#642b73", "#c6426e"],
-  ["#0f2027", "#2c5364"],
-  ["#200122", "#6f0000"],
-  ["#141e30", "#243b55"],
-  ["#283c86", "#45a247"],
-  ["#4b1248", "#f0c27b"],
-  ["#16222a", "#3a6073"]
+["#182848", "#4b6cb7"],
+["#3a1c71", "#d76d77"],
+["#232526", "#414345"],
+["#42275a", "#734b6d"],
+["#134e5e", "#71b280"],
+["#642b73", "#c6426e"],
+["#0f2027", "#2c5364"],
+["#200122", "#6f0000"],
+["#141e30", "#243b55"],
+["#283c86", "#45a247"],
+["#4b1248", "#f0c27b"],
+["#16222a", "#3a6073"]
 ];
-
 
 // =========================================================
 // INITIALIZE
@@ -100,1059 +90,826 @@ const coverColors = [
 
 renderMovies();
 
-
 // =========================================================
 // RENDER MOVIES
 // =========================================================
 
 function renderMovies() {
 
-  movieGrid.innerHTML = "";
+movieGrid.innerHTML = "";
 
-  let filteredMovies = movies.filter(movie => {
+let filteredMovies = movies.filter(movie => {
 
-    // TYPE FILTER
+```
+// TYPE FILTER
 
-    if (
-      activeFilters.type !== "all" &&
-      movie.type !== activeFilters.type
-    ) {
-      return false;
-    }
-
-
-    // PHYSICAL / DIGITAL FILTER
-
-    if (
-      activeFilters.media === "physical" &&
-      (!movie.physical || movie.physical.length === 0)
-    ) {
-      return false;
-    }
-
-    if (
-      activeFilters.media === "digital" &&
-      (!movie.digital || movie.digital.length === 0)
-    ) {
-      return false;
-    }
+if (
+  activeFilters.type !== "all" &&
+  movie.type !== activeFilters.type
+) {
+  return false;
+}
 
 
-    // GENRE FILTER
+// PHYSICAL / DIGITAL FILTER
 
-    if (activeFilters.genre) {
+if (
+  activeFilters.media === "physical" &&
+  (!movie.physical || movie.physical.length === 0)
+) {
+  return false;
+}
 
-      const movieGenre =
-        (movie.genre || "").toLowerCase();
-
-      if (
-        !movieGenre.includes(
-          activeFilters.genre.toLowerCase()
-        )
-      ) {
-        return false;
-      }
-
-    }
-
-
-    // CATEGORY FILTER
-
-    if (activeFilters.category) {
-
-      const categories =
-        movie.categories || [];
-
-      if (
-        !categories.includes(
-          activeFilters.category
-        )
-      ) {
-        return false;
-      }
-
-    }
+if (
+  activeFilters.media === "digital" &&
+  (!movie.digital || movie.digital.length === 0)
+) {
+  return false;
+}
 
 
-    // ANIMATED FILTER
+// GENRE FILTER
 
-    const isAnimated =
-      (movie.categories || []).includes("animated");
+if (activeFilters.genre) {
 
-    if (
-      activeFilters.animated === "hide" &&
-      isAnimated
-    ) {
-      return false;
-    }
-
-    if (
-      activeFilters.animated === "only" &&
-      !isAnimated
-    ) {
-      return false;
-    }
-
-
-    // SEARCH
-
-    if (currentSearch) {
-
-      const searchText =
-        currentSearch.toLowerCase();
-
-      const searchableText = [
-        movie.title,
-        movie.tmdbTitle,
-        movie.year,
-        movie.genre,
-        movie.director,
-        movie.cast,
-        movie.synopsis,
-        movie.type
-      ]
-        .filter(
-          value =>
-            value !== null &&
-            value !== undefined
-        )
-        .join(" ")
-        .toLowerCase();
-
-      if (
-        !searchableText.includes(
-          searchText
-        )
-      ) {
-        return false;
-      }
-
-    }
-
-
-    return true;
-
-  });
-
-
-  // =========================================================
-  // RANDOM 50
-  // =========================================================
-
-  if (randomMode) {
-
-    filteredMovies =
-      randomMovies.filter(
-        movie => filteredMovies.includes(movie)
-      );
-
-  }
-
-
-  // =========================================================
-  // SORT ALPHABETICALLY
-  // =========================================================
-
-  if (!randomMode) {
-
-    filteredMovies.sort(
-      (a, b) =>
-        a.title.localeCompare(
-          b.title,
-          undefined,
-          {
-            sensitivity: "base"
-          }
-        )
-    );
-
-  }
-
-
-  // =========================================================
-  // UPDATE COUNT
-  // =========================================================
-
-  const filtersAreActive =
-    activeFilters.type !== "all" ||
-    activeFilters.media !== "all" ||
-    activeFilters.genre !== null ||
-    activeFilters.category !== null ||
-    activeFilters.animated !== "mixed";
-
-
-  if (randomMode) {
-
-    movieCount.textContent =
-      `${filteredMovies.length} random titles`;
-
-  } else if (
-    currentSearch ||
-    filtersAreActive
-  ) {
-
-    movieCount.textContent =
-      `${filteredMovies.length} of ${movies.length} titles`;
-
-  } else {
-
-    movieCount.textContent =
-      `${movies.length} titles`;
-
-  }
-
-
-  // =========================================================
-  // NO RESULTS
-  // =========================================================
+  const movieGenre =
+    (movie.genre || "").toLowerCase();
 
   if (
-    filteredMovies.length === 0
+    !movieGenre.includes(
+      activeFilters.genre.toLowerCase()
+    )
   ) {
-
-    noResults.classList.remove(
-      "hidden"
-    );
-
-    return;
-
-  } else {
-
-    noResults.classList.add(
-      "hidden"
-    );
-
+    return false;
   }
-
-
-  // =========================================================
-  // CREATE CARDS
-  // =========================================================
-
-  filteredMovies.forEach(
-    (movie, index) => {
-
-      const card =
-        createMovieCard(
-          movie,
-          index
-        );
-
-      movieGrid.appendChild(
-        card
-      );
-
-    }
-  );
 
 }
 
+
+// CATEGORY FILTER
+
+if (activeFilters.category) {
+
+  const categories =
+    movie.categories || [];
+
+  if (
+    !categories.includes(
+      activeFilters.category
+    )
+  ) {
+    return false;
+  }
+
+}
+
+
+// ANIMATED FILTER
+
+const isAnimated =
+  (movie.categories || []).includes("animated");
+
+if (
+  activeFilters.animated === "hide" &&
+  isAnimated
+) {
+  return false;
+}
+
+if (
+  activeFilters.animated === "only" &&
+  !isAnimated
+) {
+  return false;
+}
+
+
+// SEARCH
+
+if (currentSearch) {
+
+  const searchText =
+    currentSearch.toLowerCase();
+
+  const searchableText = [
+    movie.title,
+    movie.tmdbTitle,
+    movie.year,
+    movie.genre,
+    movie.director,
+    movie.cast,
+    movie.synopsis,
+    movie.type
+  ]
+    .filter(
+      value =>
+        value !== null &&
+        value !== undefined
+    )
+    .join(" ")
+    .toLowerCase();
+
+  if (
+    !searchableText.includes(
+      searchText
+    )
+  ) {
+    return false;
+  }
+
+}
+
+
+return true;
+```
+
+});
+
+// =========================================================
+// RANDOM 50
+// =========================================================
+
+if (randomMode) {
+
+```
+filteredMovies =
+  randomMovies.filter(
+    movie => filteredMovies.includes(movie)
+  );
+```
+
+}
+
+// =========================================================
+// SORT ALPHABETICALLY
+// =========================================================
+
+if (!randomMode) {
+
+```
+filteredMovies.sort(
+  (a, b) =>
+    a.title.localeCompare(
+      b.title,
+      undefined,
+      {
+        sensitivity: "base"
+      }
+    )
+);
+```
+
+}
+
+// =========================================================
+// UPDATE COUNT
+// =========================================================
+
+const filtersAreActive =
+activeFilters.type !== "all" ||
+activeFilters.media !== "all" ||
+activeFilters.genre !== null ||
+activeFilters.category !== null ||
+activeFilters.animated !== "mixed";
+
+if (randomMode) {
+
+```
+movieCount.textContent =
+  `${filteredMovies.length} random titles`;
+```
+
+} else if (
+currentSearch ||
+filtersAreActive
+) {
+
+```
+movieCount.textContent =
+  `${filteredMovies.length} of ${movies.length} titles`;
+```
+
+} else {
+
+```
+movieCount.textContent =
+  `${movies.length} titles`;
+```
+
+}
+
+// =========================================================
+// NO RESULTS
+// =========================================================
+
+if (
+filteredMovies.length === 0
+) {
+
+```
+noResults.classList.remove(
+  "hidden"
+);
+
+return;
+```
+
+} else {
+
+```
+noResults.classList.add(
+  "hidden"
+);
+```
+
+}
+
+// =========================================================
+// CREATE CARDS
+// =========================================================
+
+filteredMovies.forEach(
+(movie, index) => {
+
+```
+  const card =
+    createMovieCard(
+      movie,
+      index
+    );
+
+  movieGrid.appendChild(
+    card
+  );
+
+}
+```
+
+);
+
+}
 
 // =========================================================
 // CREATE MOVIE CARD
 // =========================================================
 
 function createMovieCard(
-  movie,
-  index
+movie,
+index
 ) {
 
-  const card =
-    document.createElement(
-      "article"
-    );
+const card =
+document.createElement(
+"article"
+);
 
-  card.className =
-    "movie-card";
+card.className =
+"movie-card";
 
-  card.setAttribute(
-    "tabindex",
-    "0"
-  );
+card.setAttribute(
+"tabindex",
+"0"
+);
 
+// =========================================================
+// TITLE
+// =========================================================
 
-  // =========================================================
-  // TITLE
-  // =========================================================
+const title =
+document.createElement(
+"div"
+);
 
-  const title =
-    document.createElement(
-      "div"
-    );
+title.className =
+"movie-card-title";
 
-  title.className =
-    "movie-card-title";
+title.textContent =
+movie.title;
 
-  title.textContent =
-    movie.title;
+card.appendChild(
+title
+);
 
-  card.appendChild(
-    title
-  );
+// =========================================================
+// COVER
+// =========================================================
 
+const colors =
+coverColors[
+index % coverColors.length
+];
 
-  // =========================================================
-  // COVER
-  // =========================================================
+const cover =
+document.createElement(
+"div"
+);
 
-  const colors =
-    coverColors[
-      index % coverColors.length
-    ];
+cover.className =
+"movie-cover";
 
-  const cover =
-    document.createElement(
-      "div"
-    );
+const coverInner =
+document.createElement(
+"div"
+);
 
-  cover.className =
-    "movie-cover";
+coverInner.className =
+"movie-cover-inner";
 
-  const coverInner =
-    document.createElement(
-      "div"
-    );
+// TMDB POSTER
 
-  coverInner.className =
-    "movie-cover-inner";
+if (movie.poster) {
 
+```
+coverInner.style.backgroundImage =
+  `url("${movie.poster}")`;
 
-  // TMDB POSTER
+coverInner.style.backgroundSize =
+  "cover";
 
-  if (movie.poster) {
+coverInner.style.backgroundPosition =
+  "center";
 
-    coverInner.style.backgroundImage =
-      `url("${movie.poster}")`;
+coverInner.style.backgroundRepeat =
+  "no-repeat";
+```
 
-    coverInner.style.backgroundSize =
-      "cover";
+} else {
 
-    coverInner.style.backgroundPosition =
-      "center";
-
-    coverInner.style.backgroundRepeat =
-      "no-repeat";
-
-  } else {
-
-    coverInner.style.background =
-      `linear-gradient(
-        145deg,
-        ${colors[0]},
-        ${colors[1]}
-      )`;
-
-  }
-
-
-  cover.appendChild(
-    coverInner
-  );
-
-  card.appendChild(
-    cover
-  );
-
-
-  // =========================================================
-  // OPEN MOVIE
-  // =========================================================
-
-  card.addEventListener(
-    "click",
-    () => {
-
-      openMovieFromCard(
-        movie,
-        card
-      );
-
-    }
-  );
-
-
-  // =========================================================
-  // KEYBOARD ACCESSIBILITY
-  // =========================================================
-
-  card.addEventListener(
-    "keydown",
-    event => {
-
-      if (
-        event.key === "Enter" ||
-        event.key === " "
-      ) {
-
-        event.preventDefault();
-
-        openMovieFromCard(
-          movie,
-          card
-        );
-
-      }
-
-    }
-  );
-
-
-  return card;
+```
+coverInner.style.background =
+  `linear-gradient(
+    145deg,
+    ${colors[0]},
+    ${colors[1]}
+  )`;
+```
 
 }
 
+cover.appendChild(
+coverInner
+);
+
+card.appendChild(
+cover
+);
 
 // =========================================================
-// OPEN MOVIE FROM SHELF
-//
-// This is the important new behavior.
-//
-// The movie viewer starts at the exact location
-// of the selected shelf poster and grows from there.
+// OPEN MOVIE
 // =========================================================
 
-function openMovieFromCard(
-  movie,
-  card
+card.addEventListener(
+"click",
+() => {
+
+```
+  openMovie(
+    movie,
+    card
+  );
+
+}
+```
+
+);
+
+// KEYBOARD ACCESSIBILITY
+
+card.addEventListener(
+"keydown",
+event => {
+
+```
+  if (
+    event.key === "Enter" ||
+    event.key === " "
+  ) {
+
+    event.preventDefault();
+
+    openMovie(
+      movie,
+      card
+    );
+
+  }
+
+}
+```
+
+);
+
+return card;
+
+}
+
+// =========================================================
+// LOCK PAGE SCROLL
+// =========================================================
+
+function lockPageScroll() {
+
+if (scrollLocked) {
+return;
+}
+
+savedScrollY =
+window.scrollY;
+
+scrollLocked =
+true;
+
+document.body.dataset.savedScroll =
+String(savedScrollY);
+
+document.body.style.position =
+"fixed";
+
+document.body.style.top =
+`-${savedScrollY}px`;
+
+document.body.style.left =
+"0";
+
+document.body.style.right =
+"0";
+
+document.body.style.width =
+"100%";
+
+}
+
+// =========================================================
+// UNLOCK PAGE SCROLL
+// =========================================================
+
+function unlockPageScroll() {
+
+if (!scrollLocked) {
+return;
+}
+
+const restoreY =
+savedScrollY;
+
+document.body.style.position =
+"";
+
+document.body.style.top =
+"";
+
+document.body.style.left =
+"";
+
+document.body.style.right =
+"";
+
+document.body.style.width =
+"";
+
+delete document.body.dataset.savedScroll;
+
+scrollLocked =
+false;
+
+window.scrollTo(
+0,
+restoreY
+);
+
+}
+
+// =========================================================
+// OPEN MOVIE
+// =========================================================
+
+function openMovie(
+movie,
+card
 ) {
 
-  if (
-    isOpening ||
-    isClosing ||
-    currentMovie
-  ) {
-    return;
-  }
+currentMovie =
+movie;
+
+// =========================================================
+// SAVE CURRENT POSITION BEFORE ANYTHING ELSE
+// =========================================================
+
+savedScrollY =
+window.scrollY;
+
+// =========================================================
+// MARK SELECTED CARD
+// =========================================================
+
+document
+.querySelectorAll(
+".movie-card.selected"
+)
+.forEach(
+selectedCard =>
+selectedCard.classList.remove(
+"selected"
+)
+);
+
+if (card) {
+
+```
+card.classList.add(
+  "selected"
+);
+```
+
+}
+
+// =========================================================
+// LOCK PAGE IN EXACT CURRENT POSITION
+// =========================================================
+
+lockPageScroll();
+
+// =========================================================
+// COLLECTION OPENING STATE
+// =========================================================
+
+document.body.classList.add(
+"movie-opening"
+);
+
+// RESET FLIP
+
+flipContainer.classList.remove(
+"flipped"
+);
+
+flipButton.textContent =
+"Flip case";
+
+// BASIC INFORMATION
+
+modalTitle.textContent =
+movie.title;
+
+modalYear.textContent =
+movie.year || "";
+
+modalRuntime.textContent =
+movie.runtime ||
+"Runtime unknown";
+
+modalGenre.textContent =
+movie.genre ||
+"Genre unknown";
+
+modalSynopsis.textContent =
+movie.synopsis ||
+"No synopsis added yet.";
+
+modalCast.textContent =
+movie.cast ||
+"Cast information not added.";
+
+modalDirector.textContent =
+movie.director ||
+"Director information not added.";
+
+// =========================================================
+// LARGE COVER
+// =========================================================
+
+const colorIndex =
+movies.indexOf(movie) %
+coverColors.length;
+
+const colors =
+coverColors[colorIndex];
+
+modalCover.innerHTML =
+"";
+
+// TMDB POSTER
+
+if (movie.poster) {
+
+```
+modalCover.style.backgroundImage =
+  `url("${movie.poster}")`;
+
+modalCover.style.backgroundSize =
+  "cover";
+
+modalCover.style.backgroundPosition =
+  "center";
+
+modalCover.style.backgroundRepeat =
+  "no-repeat";
 
 
-  isOpening = true;
-
-  currentMovie =
-    movie;
-
-  selectedCard =
-    card;
-
-
-  // =========================================================
-  // CAPTURE EXACT CARD POSITION
-  // =========================================================
-
-  const cardRect =
-    card.getBoundingClientRect();
-
-  const cover =
-    card.querySelector(
-      ".movie-cover-inner"
-    );
-
-  const coverRect =
-    cover.getBoundingClientRect();
-
-
-  // =========================================================
-  // SAVE PAGE POSITION
-  // =========================================================
-
-  savedScrollY =
-    window.scrollY;
-
-
-  // =========================================================
-  // LOCK PAGE IN PLACE
-  //
-  // This prevents the browser from scrolling to the
-  // selected movie.
-  // =========================================================
-
-  document.body.style.position =
-    "fixed";
-
-  document.body.style.top =
-    `-${savedScrollY}px`;
-
-  document.body.style.left =
-    "0";
-
-  document.body.style.right =
-    "0";
-
-  document.body.style.width =
-    "100%";
-
-
-  // =========================================================
-  // MARK SELECTED CARD
-  // =========================================================
-
-  card.classList.add(
-    "selected"
+const overlay =
+  document.createElement(
+    "div"
   );
 
+overlay.style.position =
+  "absolute";
 
-  // =========================================================
-  // PREPARE MOVIE INFORMATION
-  // =========================================================
+overlay.style.inset =
+  "0";
 
-  populateMovie(
-    movie
+overlay.style.display =
+  "flex";
+
+overlay.style.flexDirection =
+  "column";
+
+overlay.style.justifyContent =
+  "flex-end";
+
+overlay.style.padding =
+  "20px";
+
+overlay.style.background =
+  "linear-gradient(to top, rgba(0,0,0,.8), rgba(0,0,0,0) 60%)";
+
+
+modalCover.appendChild(
+  overlay
+);
+```
+
+} else {
+
+```
+// FALLBACK COVER
+
+modalCover.style.backgroundImage =
+  "";
+
+modalCover.style.background =
+  `linear-gradient(
+    145deg,
+    ${colors[0]},
+    ${colors[1]}
+  )`;
+
+
+const coverText =
+  document.createElement(
+    "div"
   );
 
+coverText.style.position =
+  "absolute";
 
-  // =========================================================
-  // REMEMBER MODAL'S ORIGINAL INLINE STYLES
-  // =========================================================
+coverText.style.inset =
+  "0";
 
-  originalModalStyles = {
+coverText.style.display =
+  "flex";
 
-    position:
-      modal.style.position,
+coverText.style.flexDirection =
+  "column";
 
-    inset:
-      modal.style.inset,
+coverText.style.justifyContent =
+  "flex-end";
 
-    width:
-      modal.style.width,
+coverText.style.padding =
+  "20px";
 
-    height:
-      modal.style.height,
-
-    maxWidth:
-      modal.style.maxWidth,
-
-    maxHeight:
-      modal.style.maxHeight,
-
-    padding:
-      modal.style.padding,
-
-    opacity:
-      modal.style.opacity,
-
-    pointerEvents:
-      modal.style.pointerEvents
-
-  };
+coverText.style.background =
+  "radial-gradient(circle at 20% 15%, rgba(255,255,255,.22), transparent 32%)";
 
 
-  // =========================================================
-  // SHOW MODAL WITHOUT ALLOWING THE BROWSER
-  // TO POSITION IT NORMALLY
-  // =========================================================
+modalCover.appendChild(
+  coverText
+);
+```
 
-  modal.classList.remove(
-    "hidden"
+}
+
+// =========================================================
+// FORMATS
+// =========================================================
+
+modalFormats.innerHTML =
+"";
+
+const physical =
+movie.physical || [];
+
+const digital =
+movie.digital || [];
+
+// Physical
+
+physical.forEach(
+format => {
+
+```
+  const item =
+    document.createElement(
+      "div"
+    );
+
+  item.className =
+    "format-item";
+
+  item.textContent =
+    `💿 Physical — ${format}`;
+
+  modalFormats.appendChild(
+    item
   );
 
+}
+```
 
-  modal.style.position =
-    "fixed";
+);
 
-  modal.style.inset =
-    "0";
+// Digital
 
-  modal.style.width =
-    "100%";
+digital.forEach(
+service => {
 
-  modal.style.height =
-    "100%";
-
-  modal.style.maxWidth =
-    "none";
-
-  modal.style.maxHeight =
-    "none";
-
-  modal.style.padding =
-    "0";
-
-  modal.style.pointerEvents =
-    "none";
-
-  modal.style.opacity =
-    "1";
-
-
-  // =========================================================
-  // PREPARE MODAL CONTENT
-  // =========================================================
-
-  const content =
-    modal.querySelector(
-      ".modal-content"
+```
+  const item =
+    document.createElement(
+      "div"
     );
 
-  const viewer =
-    modal.querySelector(
-      ".movie-viewer"
-    );
+  item.className =
+    "format-item";
 
-  const controls =
-    modal.querySelector(
-      ".movie-viewer-controls"
-    );
+  item.textContent =
+    `📱 Digital — ${service}`;
 
+  modalFormats.appendChild(
+    item
+  );
 
-  // Temporarily hide controls while the case
-  // travels forward.
+}
+```
 
-  if (controls) {
+);
 
-    controls.style.opacity =
-      "0";
+// No format information
 
-    controls.style.pointerEvents =
-      "none";
+if (
+physical.length === 0 &&
+digital.length === 0
+) {
 
-  }
+```
+const item =
+  document.createElement(
+    "div"
+  );
 
+item.className =
+  "format-item";
 
-  // The modal content itself becomes the moving case.
+item.textContent =
+  "No format information added yet.";
 
-  content.style.position =
-    "fixed";
+modalFormats.appendChild(
+  item
+);
+```
 
-  content.style.margin =
-    "0";
+}
 
-  content.style.padding =
-    "0";
+// =========================================================
+// SHOW MODAL
+// =========================================================
 
-  content.style.maxWidth =
-    "none";
+modal.classList.remove(
+"hidden"
+);
 
-  content.style.maxHeight =
-    "none";
+// Allow the modal CSS animation to start
+// on the next browser frame.
 
-  content.style.width =
-    `${coverRect.width}px`;
+requestAnimationFrame(
+() => {
 
-  content.style.height =
-    `${coverRect.height}px`;
-
-  content.style.left =
-    `${coverRect.left}px`;
-
-  content.style.top =
-    `${coverRect.top}px`;
-
-  content.style.overflow =
-    "visible";
-
-  content.style.border =
-    "0";
-
-  content.style.borderRadius =
-    "9px";
-
-  content.style.background =
-    "transparent";
-
-  content.style.boxShadow =
-    "none";
-
-  content.style.opacity =
-    "1";
-
-  content.style.transform =
-    "none";
-
-  content.style.transition =
-    "none";
-
-
-  // =========================================================
-  // MAKE VIEWER FIT THE MOVING CASE
-  // =========================================================
-
-  if (viewer) {
-
-    viewer.style.width =
-      "100%";
-
-    viewer.style.height =
-      "100%";
-
-    viewer.style.padding =
-      "0";
-
-    viewer.style.gap =
-      "0";
-
-  }
-
-
-  if (flipContainer) {
-
-    flipContainer.style.width =
-      "100%";
-
-    flipContainer.style.height =
-      "100%";
-
-    flipContainer.style.maxWidth =
-      "none";
-
-  }
-
-
-  if (flipContainer) {
-
-    flipContainer.style.transition =
-      "none";
-
-  }
-
-
-  // =========================================================
-  // FORCE BROWSER TO ACCEPT INITIAL POSITION
-  // =========================================================
-
-  content.getBoundingClientRect();
-
-
-  // =========================================================
-  // CREATE FINAL POSITION
-  // =========================================================
-
+```
   requestAnimationFrame(
     () => {
 
-      // Add collection focus.
-
-      document.body.classList.add(
-        "movie-opening"
-      );
-
-
-      // Calculate a large case size.
-
-      const finalWidth =
-        Math.min(
-          window.innerWidth * 0.78,
-          420
-        );
-
-      const finalHeight =
-        finalWidth * 1.5;
-
-
-      const finalLeft =
-        (window.innerWidth -
-          finalWidth) / 2;
-
-      const finalTop =
-        Math.max(
-          55,
-          (window.innerHeight -
-            finalHeight) / 2
-        );
-
-
-      // Animate the case from the shelf
-      // toward the viewer.
-
-      content.style.transition =
-        "left 0.65s cubic-bezier(0.16, 1, 0.3, 1), " +
-        "top 0.65s cubic-bezier(0.16, 1, 0.3, 1), " +
-        "width 0.65s cubic-bezier(0.16, 1, 0.3, 1), " +
-        "height 0.65s cubic-bezier(0.16, 1, 0.3, 1), " +
-        "filter 0.45s ease";
-
-      content.style.left =
-        `${finalLeft}px`;
-
-      content.style.top =
-        `${finalTop}px`;
-
-      content.style.width =
-        `${finalWidth}px`;
-
-      content.style.height =
-        `${finalHeight}px`;
-
-      content.style.filter =
-        "drop-shadow(0 25px 45px rgba(0,0,0,.65))";
-
-
-      // =====================================================
-      // FINISH OPENING
-      // =====================================================
-
-      setTimeout(
-        () => {
-
-          if (controls) {
-
-            controls.style.transition =
-              "opacity 0.25s ease";
-
-            controls.style.opacity =
-              "1";
-
-            controls.style.pointerEvents =
-              "auto";
-
-          }
-
-
-          // Allow interaction with the case.
-
-          modal.style.pointerEvents =
-            "auto";
-
-          isOpening =
-            false;
-
-        },
-        680
+      modal.classList.add(
+        "movie-open"
       );
 
     }
   );
 
 }
+```
 
-
-// =========================================================
-// POPULATE MOVIE INFORMATION
-// =========================================================
-
-function populateMovie(
-  movie
-) {
-
-  // RESET FLIP
-
-  flipContainer.classList.remove(
-    "flipped"
-  );
-
-  flipButton.textContent =
-    "Flip case";
-
-
-  // BASIC INFORMATION
-
-  modalTitle.textContent =
-    movie.title;
-
-  modalYear.textContent =
-    movie.year || "";
-
-  modalRuntime.textContent =
-    movie.runtime ||
-    "Runtime unknown";
-
-  modalGenre.textContent =
-    movie.genre ||
-    "Genre unknown";
-
-  modalSynopsis.textContent =
-    movie.synopsis ||
-    "No synopsis added yet.";
-
-  modalCast.textContent =
-    movie.cast ||
-    "Cast information not added.";
-
-  modalDirector.textContent =
-    movie.director ||
-    "Director information not added.";
-
-
-  // =========================================================
-  // LARGE COVER
-  // =========================================================
-
-  const colorIndex =
-    movies.indexOf(movie) %
-    coverColors.length;
-
-  const colors =
-    coverColors[colorIndex];
-
-  modalCover.innerHTML =
-    "";
-
-
-  // TMDB POSTER
-
-  if (movie.poster) {
-
-    modalCover.style.backgroundImage =
-      `url("${movie.poster}")`;
-
-    modalCover.style.backgroundSize =
-      "cover";
-
-    modalCover.style.backgroundPosition =
-      "center";
-
-    modalCover.style.backgroundRepeat =
-      "no-repeat";
-
-
-    const overlay =
-      document.createElement(
-        "div"
-      );
-
-    overlay.style.position =
-      "absolute";
-
-    overlay.style.inset =
-      "0";
-
-    overlay.style.display =
-      "flex";
-
-    overlay.style.flexDirection =
-      "column";
-
-    overlay.style.justifyContent =
-      "flex-end";
-
-    overlay.style.padding =
-      "20px";
-
-    overlay.style.background =
-      "linear-gradient(to top, rgba(0,0,0,.8), rgba(0,0,0,0) 60%)";
-
-
-    modalCover.appendChild(
-      overlay
-    );
-
-  } else {
-
-    modalCover.style.backgroundImage =
-      "";
-
-    modalCover.style.background =
-      `linear-gradient(
-        145deg,
-        ${colors[0]},
-        ${colors[1]}
-      )`;
-
-
-    const coverText =
-      document.createElement(
-        "div"
-      );
-
-    coverText.style.position =
-      "absolute";
-
-    coverText.style.inset =
-      "0";
-
-    coverText.style.display =
-      "flex";
-
-    coverText.style.flexDirection =
-      "column";
-
-    coverText.style.justifyContent =
-      "flex-end";
-
-    coverText.style.padding =
-      "20px";
-
-    coverText.style.background =
-      "radial-gradient(circle at 20% 15%, rgba(255,255,255,.22), transparent 32%)";
-
-
-    modalCover.appendChild(
-      coverText
-    );
-
-  }
-
-
-  // =========================================================
-  // FORMATS
-  // =========================================================
-
-  modalFormats.innerHTML =
-    "";
-
-  const physical =
-    movie.physical || [];
-
-  const digital =
-    movie.digital || [];
-
-
-  physical.forEach(
-    format => {
-
-      const item =
-        document.createElement(
-          "div"
-        );
-
-      item.className =
-        "format-item";
-
-      item.textContent =
-        `💿 Physical — ${format}`;
-
-      modalFormats.appendChild(
-        item
-      );
-
-    }
-  );
-
-
-  digital.forEach(
-    service => {
-
-      const item =
-        document.createElement(
-          "div"
-        );
-
-      item.className =
-        "format-item";
-
-      item.textContent =
-        `📱 Digital — ${service}`;
-
-      modalFormats.appendChild(
-        item
-      );
-
-    }
-  );
-
-
-  if (
-    physical.length === 0 &&
-    digital.length === 0
-  ) {
-
-    const item =
-      document.createElement(
-        "div"
-      );
-
-    item.className =
-      "format-item";
-
-    item.textContent =
-      "No format information added yet.";
-
-    modalFormats.appendChild(
-      item
-    );
-
-  }
+);
 
 }
-
 
 // =========================================================
 // CLOSE MOVIE
@@ -1160,373 +917,88 @@ function populateMovie(
 
 function closeMovie() {
 
-  if (
-    !currentMovie ||
-    isClosing ||
-    isOpening
-  ) {
-    return;
-  }
+modal.classList.remove(
+"movie-open"
+);
 
+document.body.classList.remove(
+"movie-opening"
+);
 
-  isClosing =
-    true;
+// Give the closing animation time to finish
+// before hiding the modal and restoring the page.
 
+setTimeout(
+() => {
 
-  const content =
-    modal.querySelector(
-      ".modal-content"
-    );
-
-
-  // =========================================================
-  // GET ORIGINAL SHELF POSITION
-  // =========================================================
-
-  let targetRect = null;
-
-  if (selectedCard) {
-
-    const cover =
-      selectedCard.querySelector(
-        ".movie-cover-inner"
-      );
-
-    if (cover) {
-
-      // Because the page is locked, this is still
-      // the same visual location as when we opened it.
-
-      targetRect =
-        cover.getBoundingClientRect();
-
-    }
-
-  }
-
-
-  // =========================================================
-  // FALLBACK
-  // =========================================================
-
-  if (!targetRect) {
-
-    finishCloseMovie();
-
-    return;
-
-  }
-
-
-  // =========================================================
-  // HIDE CONTROLS
-  // =========================================================
-
-  const controls =
-    modal.querySelector(
-      ".movie-viewer-controls"
-    );
-
-  if (controls) {
-
-    controls.style.opacity =
-      "0";
-
-    controls.style.pointerEvents =
-      "none";
-
-  }
-
-
-  // =========================================================
-  // ANIMATE CASE BACK TO SHELF
-  // =========================================================
-
-  content.style.transition =
-    "left 0.55s cubic-bezier(0.4, 0, 0.8, 0.2), " +
-    "top 0.55s cubic-bezier(0.4, 0, 0.8, 0.2), " +
-    "width 0.55s cubic-bezier(0.4, 0, 0.8, 0.2), " +
-    "height 0.55s cubic-bezier(0.4, 0, 0.8, 0.2), " +
-    "filter 0.45s ease";
-
-  content.style.left =
-    `${targetRect.left}px`;
-
-  content.style.top =
-    `${targetRect.top}px`;
-
-  content.style.width =
-    `${targetRect.width}px`;
-
-  content.style.height =
-    `${targetRect.height}px`;
-
-  content.style.filter =
-    "drop-shadow(0 6px 12px rgba(0,0,0,.35))";
-
-
-  setTimeout(
-    () => {
-
-      finishCloseMovie();
-
-    },
-    580
-  );
-
-}
-
-
-// =========================================================
-// FINISH CLOSE
-// =========================================================
-
-function finishCloseMovie() {
-
-  const content =
-    modal.querySelector(
-      ".modal-content"
-    );
-
-
-  // =========================================================
-  // REMOVE OPENING STATE
-  // =========================================================
-
-  document.body.classList.remove(
-    "movie-opening"
-  );
-
-
-  // =========================================================
-  // HIDE MODAL
-  // =========================================================
-
+```
   modal.classList.add(
     "hidden"
   );
 
-
-  // =========================================================
-  // RESET MODAL CONTENT
-  // =========================================================
-
-  content.style.position =
-    "";
-
-  content.style.margin =
-    "";
-
-  content.style.padding =
-    "";
-
-  content.style.maxWidth =
-    "";
-
-  content.style.maxHeight =
-    "";
-
-  content.style.width =
-    "";
-
-  content.style.height =
-    "";
-
-  content.style.left =
-    "";
-
-  content.style.top =
-    "";
-
-  content.style.overflow =
-    "";
-
-  content.style.border =
-    "";
-
-  content.style.borderRadius =
-    "";
-
-  content.style.background =
-    "";
-
-  content.style.boxShadow =
-    "";
-
-  content.style.opacity =
-    "";
-
-  content.style.transform =
-    "";
-
-  content.style.filter =
-    "";
-
-  content.style.transition =
-    "";
-
-
-  // =========================================================
-  // RESET VIEWER
-  // =========================================================
-
-  const viewer =
-    modal.querySelector(
-      ".movie-viewer"
+  document
+    .querySelectorAll(
+      ".movie-card.selected"
+    )
+    .forEach(
+      card =>
+        card.classList.remove(
+          "selected"
+        )
     );
-
-  if (viewer) {
-
-    viewer.style.width =
-      "";
-
-    viewer.style.height =
-      "";
-
-    viewer.style.padding =
-      "";
-
-    viewer.style.gap =
-      "";
-
-  }
-
-
-  if (flipContainer) {
-
-    flipContainer.style.width =
-      "";
-
-    flipContainer.style.height =
-      "";
-
-    flipContainer.style.maxWidth =
-      "";
-
-    flipContainer.style.transition =
-      "";
-
-  }
-
-
-  const controls =
-    modal.querySelector(
-      ".movie-viewer-controls"
-    );
-
-  if (controls) {
-
-    controls.style.opacity =
-      "";
-
-    controls.style.pointerEvents =
-      "";
-
-    controls.style.transition =
-      "";
-
-  }
-
-
-  // =========================================================
-  // REMOVE SELECTED STATE
-  // =========================================================
-
-  if (selectedCard) {
-
-    selectedCard.classList.remove(
-      "selected"
-    );
-
-  }
-
-
-  // =========================================================
-  // UNLOCK PAGE
-  // =========================================================
-
-  document.body.style.position =
-    "";
-
-  document.body.style.top =
-    "";
-
-  document.body.style.left =
-    "";
-
-  document.body.style.right =
-    "";
-
-  document.body.style.width =
-    "";
-
-
-  window.scrollTo(
-    0,
-    savedScrollY
-  );
-
-
-  // =========================================================
-  // CLEAR STATE
-  // =========================================================
-
-  selectedCard =
-    null;
 
   currentMovie =
     null;
 
-  isClosing =
-    false;
+  unlockPageScroll();
+
+},
+450
+```
+
+);
 
 }
 
-
-// =========================================================
-// CLOSE BUTTON
-// =========================================================
-
 modalClose.addEventListener(
-  "click",
-  closeMovie
+"click",
+closeMovie
 );
 
-
 // =========================================================
-// CLICK BACKDROP
+// CLICK OUTSIDE MOVIE
 // =========================================================
 
 document.querySelector(
-  ".modal-backdrop"
+".modal-backdrop"
 ).addEventListener(
-  "click",
-  closeMovie
+"click",
+closeMovie
 );
-
 
 // =========================================================
 // ESCAPE KEY
 // =========================================================
 
 document.addEventListener(
-  "keydown",
-  event => {
+"keydown",
+event => {
 
-    if (
-      event.key === "Escape" &&
-      currentMovie &&
-      !isOpening &&
-      !isClosing
-    ) {
+```
+if (
+  event.key === "Escape" &&
+  !modal.classList.contains(
+    "hidden"
+  )
+) {
 
-      closeMovie();
+  closeMovie();
 
-    }
+}
+```
 
-  }
+}
 );
-
 
 // =========================================================
 // FLIP CASE
@@ -1534,71 +1006,53 @@ document.addEventListener(
 
 function flipMovie() {
 
-  if (
-    isOpening ||
-    isClosing ||
-    !currentMovie
-  ) {
-    return;
-  }
+flipContainer.classList.toggle(
+"flipped"
+);
 
+if (
+flipContainer.classList.contains(
+"flipped"
+)
+) {
 
-  flipContainer.classList.toggle(
-    "flipped"
-  );
+```
+flipButton.textContent =
+  "Flip back";
+```
 
+} else {
 
-  if (
-    flipContainer.classList.contains(
-      "flipped"
-    )
-  ) {
-
-    flipButton.textContent =
-      "Flip back";
-
-  } else {
-
-    flipButton.textContent =
-      "Flip case";
-
-  }
+```
+flipButton.textContent =
+  "Flip case";
+```
 
 }
 
+}
 
 flipButton.addEventListener(
-  "click",
-  event => {
-
-    event.stopPropagation();
-
-    flipMovie();
-
-  }
+"click",
+flipMovie
 );
-
-
-// =========================================================
-// CLICK CASE TO FLIP
-// =========================================================
 
 flipContainer.addEventListener(
-  "click",
-  event => {
+"click",
+event => {
 
-    if (
-      event.target === flipButton ||
-      event.target.closest(".primary-button")
-    ) {
-      return;
-    }
+```
+if (
+  event.target === flipButton
+) {
+  return;
+}
 
-    flipMovie();
+flipMovie();
+```
 
-  }
+}
 );
-
 
 // =========================================================
 // SWIPE TO FLIP
@@ -1607,370 +1061,162 @@ flipContainer.addEventListener(
 let touchStartX = 0;
 let touchStartY = 0;
 
-
 flipContainer.addEventListener(
-  "touchstart",
-  event => {
+"touchstart",
+event => {
 
-    const touch =
-      event.changedTouches[0];
+```
+const touch =
+  event.changedTouches[0];
 
-    touchStartX =
-      touch.screenX;
+touchStartX =
+  touch.screenX;
 
-    touchStartY =
-      touch.screenY;
+touchStartY =
+  touch.screenY;
+```
 
-  },
-  {
-    passive: true
-  }
+},
+{
+passive: true
+}
 );
 
-
 flipContainer.addEventListener(
-  "touchend",
-  event => {
+"touchend",
+event => {
 
-    if (
-      isOpening ||
-      isClosing
-    ) {
-      return;
-    }
+```
+const touch =
+  event.changedTouches[0];
 
-    const touch =
-      event.changedTouches[0];
+const differenceX =
+  touch.screenX -
+  touchStartX;
 
-    const differenceX =
-      touch.screenX -
-      touchStartX;
-
-    const differenceY =
-      touch.screenY -
-      touchStartY;
+const differenceY =
+  touch.screenY -
+  touchStartY;
 
 
-    if (
-      Math.abs(differenceX) > 50 &&
-      Math.abs(differenceX) >
-        Math.abs(differenceY)
-    ) {
+if (
+  Math.abs(differenceX) > 50 &&
+  Math.abs(differenceX) >
+    Math.abs(differenceY)
+) {
 
-      flipMovie();
+  flipMovie();
 
-    }
+}
+```
 
-  },
-  {
-    passive: true
-  }
+},
+{
+passive: true
+}
 );
-
 
 // =========================================================
 // FILTER BUTTONS
 // =========================================================
 
 filters.forEach(
-  button => {
+button => {
 
-    button.addEventListener(
-      "click",
-      () => {
+```
+button.addEventListener(
+  "click",
+  () => {
 
-        const group =
-          button.dataset.filterGroup;
+    const group =
+      button.dataset.filterGroup;
 
-        const value =
-          button.dataset.filterValue;
+    const value =
+      button.dataset.filterValue;
 
-
-        // TYPE
-
-        if (
-          group === "type"
-        ) {
-
-          activeFilters.type =
-            value;
-
-          document
-            .querySelectorAll(
-              '[data-filter-group="type"]'
-            )
-            .forEach(
-              b =>
-                b.classList.toggle(
-                  "active",
-                  b.dataset.filterValue === value
-                )
-            );
-
-        }
-
-
-        // MEDIA
-
-        if (
-          group === "media"
-        ) {
-
-          activeFilters.media =
-            value;
-
-          document
-            .querySelectorAll(
-              '[data-filter-group="media"]'
-            )
-            .forEach(
-              b =>
-                b.classList.toggle(
-                  "active",
-                  b.dataset.filterValue === value
-                )
-            );
-
-        }
-
-
-        // GENRE
-
-        if (
-          group === "genre"
-        ) {
-
-          if (
-            activeFilters.genre === value
-          ) {
-
-            activeFilters.genre =
-              null;
-
-            button.classList.remove(
-              "active"
-            );
-
-          } else {
-
-            activeFilters.genre =
-              value;
-
-            document
-              .querySelectorAll(
-                '[data-filter-group="genre"]'
-              )
-              .forEach(
-                b =>
-                  b.classList.toggle(
-                    "active",
-                    b.dataset.filterValue === value
-                  )
-              );
-
-          }
-
-        }
-
-
-        // CATEGORY
-
-        if (
-          group === "category"
-        ) {
-
-          if (
-            activeFilters.category === value
-          ) {
-
-            activeFilters.category =
-              null;
-
-            button.classList.remove(
-              "active"
-            );
-
-          } else {
-
-            activeFilters.category =
-              value;
-
-            document
-              .querySelectorAll(
-                '[data-filter-group="category"]'
-              )
-              .forEach(
-                b =>
-                  b.classList.toggle(
-                    "active",
-                    b.dataset.filterValue === value
-                  )
-              );
-
-          }
-
-        }
-
-
-        // ANIMATED
-
-        if (
-          group === "animated"
-        ) {
-
-          if (
-            activeFilters.animated === "mixed"
-          ) {
-
-            activeFilters.animated =
-              "hide";
-
-          } else if (
-            activeFilters.animated === "hide"
-          ) {
-
-            activeFilters.animated =
-              "only";
-
-          } else {
-
-            activeFilters.animated =
-              "mixed";
-
-          }
-
-          updateAnimatedButton();
-
-        }
-
-
-        // Changing filters invalidates old random list.
-
-        if (randomMode) {
-
-          generateRandomMovies();
-
-        }
-
-
-        renderMovies();
-
-      }
-    );
-
-  }
-);
-
-
-// =========================================================
-// UPDATE ANIMATED BUTTON
-// =========================================================
-
-function updateAnimatedButton() {
-
-  const animatedButton =
-    document.querySelector(
-      '[data-filter-group="animated"]'
-    );
-
-
-  if (!animatedButton) {
-    return;
-  }
-
-
-  if (
-    activeFilters.animated === "mixed"
-  ) {
-
-    animatedButton.textContent =
-      "Animated: Mixed";
-
-    animatedButton.classList.add(
-      "active"
-    );
-
-  }
-
-
-  if (
-    activeFilters.animated === "hide"
-  ) {
-
-    animatedButton.textContent =
-      "Animated: Hide";
-
-    animatedButton.classList.remove(
-      "active"
-    );
-
-  }
-
-
-  if (
-    activeFilters.animated === "only"
-  ) {
-
-    animatedButton.textContent =
-      "Animated: Only";
-
-    animatedButton.classList.add(
-      "active"
-    );
-
-  }
-
-}
-
-
-// =========================================================
-// GET CURRENT FILTERED MOVIES
-// =========================================================
-
-function getFilteredMovies() {
-
-  return movies.filter(movie => {
 
     // TYPE
 
     if (
-      activeFilters.type !== "all" &&
-      movie.type !== activeFilters.type
+      group === "type"
     ) {
-      return false;
+
+      activeFilters.type =
+        value;
+
+      document
+        .querySelectorAll(
+          '[data-filter-group="type"]'
+        )
+        .forEach(
+          b =>
+            b.classList.toggle(
+              "active",
+              b.dataset.filterValue === value
+            )
+        );
+
     }
 
 
     // MEDIA
 
     if (
-      activeFilters.media === "physical" &&
-      (!movie.physical || movie.physical.length === 0)
+      group === "media"
     ) {
-      return false;
-    }
 
-    if (
-      activeFilters.media === "digital" &&
-      (!movie.digital || movie.digital.length === 0)
-    ) {
-      return false;
+      activeFilters.media =
+        value;
+
+      document
+        .querySelectorAll(
+          '[data-filter-group="media"]'
+        )
+        .forEach(
+          b =>
+            b.classList.toggle(
+              "active",
+              b.dataset.filterValue === value
+            )
+        );
+
     }
 
 
     // GENRE
 
-    if (activeFilters.genre) {
-
-      const movieGenre =
-        (movie.genre || "").toLowerCase();
+    if (
+      group === "genre"
+    ) {
 
       if (
-        !movieGenre.includes(
-          activeFilters.genre.toLowerCase()
-        )
+        activeFilters.genre === value
       ) {
-        return false;
+
+        activeFilters.genre =
+          null;
+
+        button.classList.remove(
+          "active"
+        );
+
+      } else {
+
+        activeFilters.genre =
+          value;
+
+        document
+          .querySelectorAll(
+            '[data-filter-group="genre"]'
+          )
+          .forEach(
+            b =>
+              b.classList.toggle(
+                "active",
+                b.dataset.filterValue === value
+              )
+          );
+
       }
 
     }
@@ -1978,17 +1224,38 @@ function getFilteredMovies() {
 
     // CATEGORY
 
-    if (activeFilters.category) {
-
-      const categories =
-        movie.categories || [];
+    if (
+      group === "category"
+    ) {
 
       if (
-        !categories.includes(
-          activeFilters.category
-        )
+        activeFilters.category === value
       ) {
-        return false;
+
+        activeFilters.category =
+          null;
+
+        button.classList.remove(
+          "active"
+        );
+
+      } else {
+
+        activeFilters.category =
+          value;
+
+        document
+          .querySelectorAll(
+            '[data-filter-group="category"]'
+          )
+          .forEach(
+            b =>
+              b.classList.toggle(
+                "active",
+                b.dataset.filterValue === value
+              )
+          );
+
       }
 
     }
@@ -1996,71 +1263,255 @@ function getFilteredMovies() {
 
     // ANIMATED
 
-    const isAnimated =
-      (movie.categories || []).includes(
-        "animated"
-      );
-
-
     if (
-      activeFilters.animated === "hide" &&
-      isAnimated
+      group === "animated"
     ) {
-      return false;
-    }
-
-
-    if (
-      activeFilters.animated === "only" &&
-      !isAnimated
-    ) {
-      return false;
-    }
-
-
-    // SEARCH
-
-    if (currentSearch) {
-
-      const searchText =
-        currentSearch.toLowerCase();
-
-      const searchableText = [
-        movie.title,
-        movie.tmdbTitle,
-        movie.year,
-        movie.genre,
-        movie.director,
-        movie.cast,
-        movie.synopsis,
-        movie.type
-      ]
-        .filter(
-          value =>
-            value !== null &&
-            value !== undefined
-        )
-        .join(" ")
-        .toLowerCase();
-
 
       if (
-        !searchableText.includes(
-          searchText
-        )
+        activeFilters.animated === "mixed"
       ) {
-        return false;
+
+        activeFilters.animated =
+          "hide";
+
+      } else if (
+        activeFilters.animated === "hide"
+      ) {
+
+        activeFilters.animated =
+          "only";
+
+      } else {
+
+        activeFilters.animated =
+          "mixed";
+
       }
+
+      updateAnimatedButton();
 
     }
 
 
-    return true;
+    // Changing filters invalidates the old random list.
 
-  });
+    if (randomMode) {
+
+      generateRandomMovies();
+
+    }
+
+
+    renderMovies();
+
+  }
+);
+```
+
+}
+);
+
+// =========================================================
+// UPDATE ANIMATED BUTTON
+// =========================================================
+
+function updateAnimatedButton() {
+
+const animatedButton =
+document.querySelector(
+'[data-filter-group="animated"]'
+);
+
+if (!animatedButton) {
+return;
+}
+
+if (
+activeFilters.animated === "mixed"
+) {
+
+```
+animatedButton.textContent =
+  "Animated: Mixed";
+
+animatedButton.classList.add(
+  "active"
+);
+```
 
 }
 
+if (
+activeFilters.animated === "hide"
+) {
+
+```
+animatedButton.textContent =
+  "Animated: Hide";
+
+animatedButton.classList.remove(
+  "active"
+);
+```
+
+}
+
+if (
+activeFilters.animated === "only"
+) {
+
+```
+animatedButton.textContent =
+  "Animated: Only";
+
+animatedButton.classList.add(
+  "active"
+);
+```
+
+}
+
+}
+
+// =========================================================
+// GET CURRENT FILTERED MOVIES
+// =========================================================
+
+function getFilteredMovies() {
+
+return movies.filter(movie => {
+
+```
+// Type
+
+if (
+  activeFilters.type !== "all" &&
+  movie.type !== activeFilters.type
+) {
+  return false;
+}
+
+
+// Media
+
+if (
+  activeFilters.media === "physical" &&
+  (!movie.physical || movie.physical.length === 0)
+) {
+  return false;
+}
+
+if (
+  activeFilters.media === "digital" &&
+  (!movie.digital || movie.digital.length === 0)
+) {
+  return false;
+}
+
+
+// Genre
+
+if (activeFilters.genre) {
+
+  const movieGenre =
+    (movie.genre || "").toLowerCase();
+
+  if (
+    !movieGenre.includes(
+      activeFilters.genre.toLowerCase()
+    )
+  ) {
+    return false;
+  }
+
+}
+
+
+// Category
+
+if (activeFilters.category) {
+
+  const categories =
+    movie.categories || [];
+
+  if (
+    !categories.includes(
+      activeFilters.category
+    )
+  ) {
+    return false;
+  }
+
+}
+
+
+// Animated
+
+const isAnimated =
+  (movie.categories || []).includes(
+    "animated"
+  );
+
+
+if (
+  activeFilters.animated === "hide" &&
+  isAnimated
+) {
+  return false;
+}
+
+
+if (
+  activeFilters.animated === "only" &&
+  !isAnimated
+) {
+  return false;
+}
+
+
+// Search
+
+if (currentSearch) {
+
+  const searchText =
+    currentSearch.toLowerCase();
+
+  const searchableText = [
+    movie.title,
+    movie.tmdbTitle,
+    movie.year,
+    movie.genre,
+    movie.director,
+    movie.cast,
+    movie.synopsis,
+    movie.type
+  ]
+    .filter(
+      value =>
+        value !== null &&
+        value !== undefined
+    )
+    .join(" ")
+    .toLowerCase();
+
+
+  if (
+    !searchableText.includes(
+      searchText
+    )
+  ) {
+    return false;
+  }
+
+}
+
+
+return true;
+```
+
+});
+
+}
 
 // =========================================================
 // GENERATE RANDOM 50
@@ -2068,48 +1519,46 @@ function getFilteredMovies() {
 
 function generateRandomMovies() {
 
-  const availableMovies =
-    getFilteredMovies();
+const availableMovies =
+getFilteredMovies();
+
+const shuffled =
+[...availableMovies];
+
+// Fisher-Yates shuffle
+
+for (
+let i = shuffled.length - 1;
+i > 0;
+i--
+) {
+
+```
+const j =
+  Math.floor(
+    Math.random() * (i + 1)
+  );
 
 
-  const shuffled =
-    [...availableMovies];
-
-
-  // Fisher-Yates shuffle
-
-  for (
-    let i = shuffled.length - 1;
-    i > 0;
-    i--
-  ) {
-
-    const j =
-      Math.floor(
-        Math.random() * (i + 1)
-      );
-
-
-    [
-      shuffled[i],
-      shuffled[j]
-    ] =
-    [
-      shuffled[j],
-      shuffled[i]
-    ];
-
-  }
-
-
-  randomMovies =
-    shuffled.slice(
-      0,
-      50
-    );
+[
+  shuffled[i],
+  shuffled[j]
+] =
+[
+  shuffled[j],
+  shuffled[i]
+];
+```
 
 }
 
+randomMovies =
+shuffled.slice(
+0,
+50
+);
+
+}
 
 // =========================================================
 // RANDOM 50 BUTTON
@@ -2117,31 +1566,33 @@ function generateRandomMovies() {
 
 if (randomButton) {
 
-  randomButton.addEventListener(
-    "click",
-    () => {
+randomButton.addEventListener(
+"click",
+() => {
 
-      randomMode =
-        true;
+```
+  randomMode =
+    true;
 
-      generateRandomMovies();
+  generateRandomMovies();
 
-      renderMovies();
+  renderMovies();
 
 
-      if (showAllButton) {
+  if (showAllButton) {
 
-        showAllButton.classList.add(
-          "active"
-        );
+    showAllButton.classList.add(
+      "active"
+    );
 
-      }
-
-    }
-  );
+  }
 
 }
+```
 
+);
+
+}
 
 // =========================================================
 // SHOW ALL BUTTON
@@ -2149,28 +1600,30 @@ if (randomButton) {
 
 if (showAllButton) {
 
-  showAllButton.addEventListener(
-    "click",
-    () => {
+showAllButton.addEventListener(
+"click",
+() => {
 
-      randomMode =
-        false;
+```
+  randomMode =
+    false;
 
-      randomMovies =
-        [];
+  randomMovies =
+    [];
 
-      renderMovies();
+  renderMovies();
 
 
-      showAllButton.classList.remove(
-        "active"
-      );
-
-    }
+  showAllButton.classList.remove(
+    "active"
   );
 
 }
+```
 
+);
+
+}
 
 // =========================================================
 // SEARCH
@@ -2178,116 +1631,86 @@ if (showAllButton) {
 
 if (searchToggle) {
 
-  searchToggle.addEventListener(
-    "click",
-    () => {
+searchToggle.addEventListener(
+"click",
+() => {
 
-      searchArea.classList.toggle(
-        "hidden"
-      );
-
-
-      if (
-        !searchArea.classList.contains(
-          "hidden"
-        )
-      ) {
-
-        searchInput.focus();
-
-      }
-
-    }
+```
+  searchArea.classList.toggle(
+    "hidden"
   );
 
-}
 
+  if (
+    !searchArea.classList.contains(
+      "hidden"
+    )
+  ) {
+
+    searchInput.focus();
+
+  }
+
+}
+```
+
+);
+
+}
 
 if (searchInput) {
 
-  searchInput.addEventListener(
-    "input",
-    event => {
+searchInput.addEventListener(
+"input",
+event => {
 
-      currentSearch =
-        event.target.value.trim();
-
-
-      if (randomMode) {
-
-        generateRandomMovies();
-
-      }
+```
+  currentSearch =
+    event.target.value.trim();
 
 
-      renderMovies();
+  if (randomMode) {
 
-    }
-  );
+    generateRandomMovies();
+
+  }
+
+
+  renderMovies();
 
 }
+```
 
+);
+
+}
 
 // =========================================================
 // PREVENT BACKGROUND SCROLL
-// WHILE MOVIE IS OPEN
+// WHILE MODAL IS OPEN
 // =========================================================
 
 if (modal) {
 
-  modal.addEventListener(
-    "touchmove",
-    event => {
+modal.addEventListener(
+"touchmove",
+event => {
 
-      if (
-        currentMovie
-      ) {
+```
+  if (
+    event.target === modal
+  ) {
 
-        event.preventDefault();
+    event.preventDefault();
 
-      }
+  }
 
-    },
-    {
-      passive: false
-    }
-  );
-
+},
+{
+  passive: false
 }
+```
 
-
-// =========================================================
-// PREVENT BACKGROUND WHEEL SCROLL
-// WHILE MOVIE IS OPEN
-// =========================================================
-
-if (modal) {
-
-  modal.addEventListener(
-    "wheel",
-    event => {
-
-      if (
-        currentMovie
-      ) {
-
-        const backContent =
-          event.target.closest(
-            ".back-content"
-          );
-
-        if (!backContent) {
-
-          event.preventDefault();
-
-        }
-
-      }
-
-    },
-    {
-      passive: false
-    }
-  );
+);
 
 }
