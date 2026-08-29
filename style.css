@@ -1,18 +1,17 @@
 /*
-
 =========================================================
 BW'S MOVIE COLLECTION
 Main visual design
 ========================================================= */
 
 :root {
---background: #0E3FA9;
---surface: #1b1b1b;
---surface-light: #252525;
---text: #f5f5f5;
---muted: #999999;
---border: #333333;
---accent: #ffffff;
+  --background: #0E3FA9;
+  --surface: #1b1b1b;
+  --surface-light: #252525;
+  --text: #f5f5f5;
+  --muted: #999999;
+  --border: #333333;
+  --accent: #ffffff;
 }
 
 /* =========================================================
@@ -21,29 +20,29 @@ BASIC RESET
 
 * {
   box-sizing: border-box;
-  }
+}
 
 html {
-background: var(--background);
+  background: var(--background);
 }
 
 body {
-margin: 0;
+  margin: 0;
 
-background: var(--background);
-color: var(--text);
+  background: var(--background);
+  color: var(--text);
 
-font-family:
--apple-system,
-BlinkMacSystemFont,
-"Segoe UI",
-Roboto,
-Helvetica,
-Arial,
-sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
 
-transition:
-background 0.45s ease;
+  transition:
+    background 0.45s ease;
 }
 
 /* =========================================================
@@ -51,51 +50,51 @@ HEADER
 ========================================================= */
 
 .site-header {
-position: sticky;
-top: 0;
+  position: sticky;
+  top: 0;
 
-z-index: 10;
+  z-index: 10;
 
-padding: 18px 18px 14px;
+  padding: 18px 18px 14px;
 
-background: rgba(14, 63, 169, 0.96);
+  background: rgba(14, 63, 169, 0.96);
 
-border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
 
-backdrop-filter: blur(12px);
--webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 
-transition:
-opacity 0.4s ease,
-filter 0.4s ease;
+  transition:
+    opacity 0.4s ease,
+    filter 0.4s ease;
 }
 
 .header-top {
-display: flex;
+  display: flex;
 
-align-items: center;
-justify-content: space-between;
+  align-items: center;
+  justify-content: space-between;
 
-gap: 15px;
+  gap: 15px;
 }
 
 h1 {
-margin: 0;
+  margin: 0;
 
-color: #f5f5f5;
+  color: #f5f5f5;
 
-font-size: 24px;
-font-weight: 700;
+  font-size: 24px;
+  font-weight: 700;
 
-letter-spacing: -0.5px;
+  letter-spacing: -0.5px;
 }
 
 #movie-count {
-margin: 4px 0 0;
+  margin: 4px 0 0;
 
-color: #d0d9ee;
+  color: #d0d9ee;
 
-font-size: 13px;
+  font-size: 13px;
 }
 
 /* =========================================================
@@ -103,31 +102,31 @@ SEARCH
 ========================================================= */
 
 .search-area {
-margin-top: 12px;
+  margin-top: 12px;
 }
 
 .search-area.hidden {
-display: none;
+  display: none;
 }
 
 #search-input {
-width: 100%;
+  width: 100%;
 
-padding: 12px 14px;
+  padding: 12px 14px;
 
-border: 1px solid var(--border);
-border-radius: 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
 
-outline: none;
+  outline: none;
 
-background: var(--surface);
-color: var(--text);
+  background: var(--surface);
+  color: var(--text);
 
-font-size: 16px;
+  font-size: 16px;
 }
 
 #search-input:focus {
-border-color: #666666;
+  border-color: #666666;
 }
 
 /* =========================================================
@@ -135,28 +134,28 @@ BUTTONS
 ========================================================= */
 
 button {
-font-family: inherit;
+  font-family: inherit;
 }
 
 .icon-button {
-width: 42px;
-height: 42px;
+  width: 42px;
+  height: 42px;
 
-flex-shrink: 0;
+  flex-shrink: 0;
 
-border: 1px solid var(--border);
-border-radius: 50%;
+  border: 1px solid var(--border);
+  border-radius: 50%;
 
-background: var(--surface);
-color: var(--text);
+  background: var(--surface);
+  color: var(--text);
 
-font-size: 18px;
+  font-size: 18px;
 
-cursor: pointer;
+  cursor: pointer;
 }
 
 .icon-button:active {
-transform: scale(0.95);
+  transform: scale(0.95);
 }
 
 /* =========================================================
@@ -164,15 +163,15 @@ FILTER BAR
 ========================================================= */
 
 .filters {
-display: flex;
+  display: flex;
 
-flex-direction: column;
+  flex-direction: column;
 
-gap: 7px;
+  gap: 7px;
 
-margin-top: 14px;
+  margin-top: 14px;
 
-width: 100%;
+  width: 100%;
 }
 
 /* =========================================================
@@ -180,21 +179,21 @@ FILTER ROW
 ========================================================= */
 
 .filter-row {
-display: flex;
+  display: flex;
 
-align-items: center;
+  align-items: center;
 
-gap: 8px;
+  gap: 8px;
 
-width: 100%;
+  width: 100%;
 
-overflow-x: auto;
+  overflow-x: auto;
 
-scrollbar-width: none;
+  scrollbar-width: none;
 }
 
 .filter-row::-webkit-scrollbar {
-display: none;
+  display: none;
 }
 
 /* =========================================================
@@ -202,13 +201,13 @@ FILTER GROUP
 ========================================================= */
 
 .filter-group {
-display: flex;
+  display: flex;
 
-align-items: center;
+  align-items: center;
 
-gap: 8px;
+  gap: 8px;
 
-flex-shrink: 0;
+  flex-shrink: 0;
 }
 
 /* =========================================================
@@ -216,13 +215,13 @@ FIRST ROW
 ========================================================= */
 
 .filter-row-main {
-justify-content: space-between;
+  justify-content: space-between;
 
-overflow: visible;
+  overflow: visible;
 }
 
 .filter-group-actions {
-margin-left: auto;
+  margin-left: auto;
 }
 
 /* =========================================================
@@ -230,7 +229,7 @@ SECOND ROW
 ========================================================= */
 
 .genre-category-row {
-overflow-x: auto;
+  overflow-x: auto;
 }
 
 /* =========================================================
@@ -238,16 +237,16 @@ FILTER DIVIDER
 ========================================================= */
 
 .filter-divider {
-flex-shrink: 0;
+  flex-shrink: 0;
 
-color: #b9c6e5;
+  color: #b9c6e5;
 
-font-size: 20px;
-font-weight: 300;
+  font-size: 20px;
+  font-weight: 300;
 
-line-height: 1;
+  line-height: 1;
 
-margin: 0 2px;
+  margin: 0 2px;
 }
 
 /* =========================================================
@@ -255,30 +254,30 @@ INDIVIDUAL FILTER
 ========================================================= */
 
 .filter {
-flex-shrink: 0;
+  flex-shrink: 0;
 
-padding: 8px 14px;
+  padding: 8px 14px;
 
-border: 1px solid var(--border);
-border-radius: 999px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
 
-background: var(--surface);
-color: #dddddd;
+  background: var(--surface);
+  color: #dddddd;
 
-cursor: pointer;
+  cursor: pointer;
 
-font-size: 14px;
+  font-size: 14px;
 
-white-space: nowrap;
+  white-space: nowrap;
 }
 
 .filter:hover {
-border-color: #555555;
+  border-color: #555555;
 }
 
 .filter.active {
-background: var(--accent);
-color: #111111;
+  background: var(--accent);
+  color: #111111;
 }
 
 /* =========================================================
@@ -286,11 +285,11 @@ SPECIAL FILTERS
 ========================================================= */
 
 .animated-filter {
-min-width: 130px;
+  min-width: 130px;
 }
 
 .action-filter {
-background: #202020;
+  background: #202020;
 }
 
 /* =========================================================
@@ -298,20 +297,20 @@ MAIN COLLECTION
 ========================================================= */
 
 main {
-width: 100%;
-max-width: 1200px;
+  width: 100%;
+  max-width: 1200px;
 
-margin: 0 auto;
+  margin: 0 auto;
 
-padding: 22px 16px 50px;
+  padding: 22px 16px 50px;
 
-position: relative;
-z-index: 1;
+  position: relative;
+  z-index: 1;
 
-transition:
-filter 0.45s ease,
-opacity 0.45s ease,
-transform 0.45s ease;
+  transition:
+    filter 0.45s ease,
+    opacity 0.45s ease,
+    transform 0.45s ease;
 }
 
 .movie-grid {
@@ -321,13 +320,6 @@ transform 0.45s ease;
     repeat(2, minmax(0, 1fr));
 
   gap: 18px 12px;
-
-  width: 100%;
-}
-
-.movie-grid > .movie-card {
-  min-width: 0;
-  width: 100%;
 }
 
 /* =========================================================
@@ -335,16 +327,18 @@ MOVIE CARDS
 ========================================================= */
 
 .movie-card {
-min-width: 0;
+  min-width: 0;
 
-cursor: pointer;
+  width: 100%;
 
-position: relative;
+  cursor: pointer;
 
-transition:
-opacity 0.25s ease,
-filter 0.25s ease,
-transform 0.25s ease;
+  position: relative;
+
+  transition:
+    opacity 0.25s ease,
+    filter 0.25s ease,
+    transform 0.25s ease;
 }
 
 /* =========================================================
@@ -352,27 +346,27 @@ MOVIE TITLE
 ========================================================= */
 
 .movie-card-title {
-width: 100%;
+  width: 100%;
 
-margin-top: 0;
-margin-bottom: 8px;
+  margin-top: 0;
+  margin-bottom: 8px;
 
-color: #f2f2f2;
+  color: #f2f2f2;
 
-font-size:
-clamp(12px, 2.8vw, 16px);
+  font-size:
+    clamp(12px, 2.8vw, 16px);
 
-font-weight: 600;
+  font-weight: 600;
 
-line-height: 1.15;
+  line-height: 1.15;
 
-text-align: center;
+  text-align: center;
 
-white-space: nowrap;
+  white-space: nowrap;
 
-overflow: hidden;
+  overflow: hidden;
 
-text-overflow: ellipsis;
+  text-overflow: ellipsis;
 }
 
 /* =========================================================
@@ -380,19 +374,19 @@ MOVIE COVER / SHELF AREA
 ========================================================= */
 
 .movie-cover {
-position: relative;
+  position: relative;
 
-width: 100%;
+  width: 100%;
 
-aspect-ratio: 2 / 3;
+  aspect-ratio: 2 / 3;
 
-overflow: visible;
+  overflow: visible;
 
-border-radius: 7px;
+  border-radius: 7px;
 
-background: #292929;
+  background: #292929;
 
-box-shadow: none;
+  box-shadow: none;
 }
 
 /* =========================================================
@@ -400,28 +394,28 @@ POSTER IMAGE
 ========================================================= */
 
 .movie-cover-inner {
-position: absolute;
+  position: absolute;
 
-inset: 0;
+  inset: 0;
 
-display: flex;
+  display: flex;
 
-flex-direction: column;
+  flex-direction: column;
 
-justify-content: flex-end;
+  justify-content: flex-end;
 
-overflow: hidden;
+  overflow: hidden;
 
-border-radius: 7px;
+  border-radius: 7px;
 
-box-shadow:
-0 6px 18px rgba(0, 0, 0, 0.45);
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.45);
 
-transition:
-transform 0.20s ease,
-box-shadow 0.20s ease;
+  transition:
+    transform 0.20s ease,
+    box-shadow 0.20s ease;
 
-z-index: 3;
+  z-index: 3;
 }
 
 /* =========================================================
@@ -429,33 +423,33 @@ INDIVIDUAL SHELF
 ========================================================= */
 
 .movie-cover::after {
-content: "";
+  content: "";
 
-position: absolute;
+  position: absolute;
 
-left: -4%;
-right: -4%;
+  left: -4%;
+  right: -4%;
 
-bottom: -7px;
+  bottom: -7px;
 
-height: 9px;
+  height: 9px;
 
-border-radius: 2px;
+  border-radius: 2px;
 
-background:
-linear-gradient(
-to bottom,
-#777777 0%,
-#555555 35%,
-#303030 100%
-);
+  background:
+    linear-gradient(
+      to bottom,
+      #777777 0%,
+      #555555 35%,
+      #303030 100%
+    );
 
-box-shadow:
-0 5px 8px rgba(0, 0, 0, 0.45);
+  box-shadow:
+    0 5px 8px rgba(0, 0, 0, 0.45);
 
-pointer-events: none;
+  pointer-events: none;
 
-z-index: 1;
+  z-index: 1;
 }
 
 /* =========================================================
@@ -464,16 +458,13 @@ NORMAL HOVER
 
 @media (hover: hover) {
 
-.movie-card:hover .movie-cover-inner {
-transform: translateY(-5px);
+  .movie-card:hover .movie-cover-inner {
+    transform: translateY(-5px);
 
-```
-box-shadow:
-  0 10px 18px rgba(0, 0, 0, 0.42),
-  0 20px 30px rgba(0, 0, 0, 0.30);
-```
-
-}
+    box-shadow:
+      0 10px 18px rgba(0, 0, 0, 0.42),
+      0 20px 30px rgba(0, 0, 0, 0.30);
+  }
 
 }
 
@@ -482,11 +473,11 @@ SELECTED MOVIE
 ========================================================= */
 
 .movie-card.selected {
-z-index: 20;
+  z-index: 20;
 }
 
 .movie-card.selected .movie-cover-inner {
-opacity: 0;
+  opacity: 0;
 }
 
 /* =========================================================
@@ -494,19 +485,19 @@ COLLECTION FOCUS MODE
 ========================================================= */
 
 body.movie-opening main {
-filter:
-blur(2px)
-brightness(0.55);
+  filter:
+    blur(2px)
+    brightness(0.55);
 
-transform:
-scale(0.985);
+  transform:
+    scale(0.985);
 }
 
 body.movie-opening .site-header {
-opacity: 0.55;
+  opacity: 0.55;
 
-filter:
-blur(1px);
+  filter:
+    blur(1px);
 }
 
 /* =========================================================
@@ -517,9 +508,9 @@ body.movie-opening
 .movie-card.selected
 .movie-cover::after {
 
-opacity: 1;
+  opacity: 1;
 
-filter: none;
+  filter: none;
 }
 
 /* =========================================================
@@ -527,7 +518,7 @@ FORMAT INDICATORS
 ========================================================= */
 
 .movie-badges {
-display: none;
+  display: none;
 }
 
 /* =========================================================
@@ -535,15 +526,15 @@ NO RESULTS
 ========================================================= */
 
 .no-results {
-padding: 60px 20px;
+  padding: 60px 20px;
 
-text-align: center;
+  text-align: center;
 
-color: var(--muted);
+  color: var(--muted);
 }
 
 .no-results.hidden {
-display: none;
+  display: none;
 }
 
 /* =========================================================
@@ -551,28 +542,28 @@ MODAL
 ========================================================= */
 
 .modal {
-position: fixed;
-inset: 0;
+  position: fixed;
+  inset: 0;
 
-z-index: 50;
+  z-index: 50;
 
-display: flex;
+  display: flex;
 
-align-items: center;
-justify-content: center;
+  align-items: center;
+  justify-content: center;
 
-padding: 15px;
+  padding: 15px;
 
-opacity: 0;
+  opacity: 0;
 
-pointer-events: none;
+  pointer-events: none;
 
-transition:
-opacity 0.45s ease;
+  transition:
+    opacity 0.45s ease;
 }
 
 .modal.hidden {
-display: none;
+  display: none;
 }
 
 /* =========================================================
@@ -580,9 +571,9 @@ MODAL OPEN STATE
 ========================================================= */
 
 .modal.movie-open {
-opacity: 1;
+  opacity: 1;
 
-pointer-events: auto;
+  pointer-events: auto;
 }
 
 /* =========================================================
@@ -590,26 +581,26 @@ MODAL BACKDROP
 ========================================================= */
 
 .modal-backdrop {
-position: absolute;
-inset: 0;
+  position: absolute;
+  inset: 0;
 
-background:
-rgba(0, 0, 0, 0.55);
+  background:
+    rgba(0, 0, 0, 0.55);
 
-backdrop-filter:
-blur(7px);
+  backdrop-filter:
+    blur(7px);
 
--webkit-backdrop-filter:
-blur(7px);
+  -webkit-backdrop-filter:
+    blur(7px);
 
-opacity: 0;
+  opacity: 0;
 
-transition:
-opacity 0.45s ease;
+  transition:
+    opacity 0.45s ease;
 }
 
 .modal.movie-open .modal-backdrop {
-opacity: 1;
+  opacity: 1;
 }
 
 /* =========================================================
@@ -617,44 +608,44 @@ MODAL CONTENT
 ========================================================= */
 
 .modal-content {
-position: relative;
+  position: relative;
 
-z-index: 1;
+  z-index: 1;
 
-width: min(900px, 100%);
+  width: min(900px, 100%);
 
-max-height: 94vh;
+  max-height: 94vh;
 
-overflow-y: auto;
+  overflow-y: auto;
 
-padding: 20px;
+  padding: 20px;
 
-border: 1px solid rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.10);
 
-border-radius: 18px;
+  border-radius: 18px;
 
-background: var(--surface);
+  background: var(--surface);
 
-box-shadow:
-0 20px 60px rgba(0, 0, 0, 0.7);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.7);
 
-opacity: 0;
+  opacity: 0;
 
-transform:
-translateY(55px)
-scale(0.72);
+  transform:
+    translateY(55px)
+    scale(0.72);
 
-transition:
-opacity 0.45s ease,
-transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    opacity 0.45s ease,
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .modal.movie-open .modal-content {
-opacity: 1;
+  opacity: 1;
 
-transform:
-translateY(0)
-scale(1);
+  transform:
+    translateY(0)
+    scale(1);
 }
 
 /* =========================================================
@@ -662,27 +653,27 @@ MODAL CLOSE
 ========================================================= */
 
 .modal-close {
-position: absolute;
+  position: absolute;
 
-top: 10px;
-right: 12px;
+  top: 10px;
+  right: 12px;
 
-z-index: 5;
+  z-index: 5;
 
-width: 40px;
-height: 40px;
+  width: 40px;
+  height: 40px;
 
-border: 0;
-border-radius: 50%;
+  border: 0;
+  border-radius: 50%;
 
-background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.6);
 
-color: white;
+  color: white;
 
-font-size: 28px;
-line-height: 1;
+  font-size: 28px;
+  line-height: 1;
 
-cursor: pointer;
+  cursor: pointer;
 }
 
 /* =========================================================
@@ -690,15 +681,15 @@ MOVIE VIEWER
 ========================================================= */
 
 .movie-viewer {
-display: flex;
+  display: flex;
 
-flex-direction: column;
+  flex-direction: column;
 
-align-items: center;
+  align-items: center;
 
-gap: 18px;
+  gap: 18px;
 
-padding-top: 10px;
+  padding-top: 10px;
 }
 
 /* =========================================================
@@ -721,22 +712,15 @@ IMPORTANT GEOMETRY:
 * Top/bottom sides are rotated around the center and
   positioned HALF THE CASE HEIGHT from the center.
 
-This matches the geometry of the working example rather
-than attempting to position the side faces using the
-thickness itself.
+This matches the geometry of the working example.
 */
 
 .movie-flip-container {
-width: min(75vw, 360px);
+  width: min(75vw, 360px);
 
-perspective: 1200px;
+  perspective: 1200px;
 
-cursor: pointer;
-
-/*
-Do not apply filter, opacity, transform, or other
-flattening properties here.
-*/
+  cursor: pointer;
 }
 
 /*
@@ -746,45 +730,22 @@ The case itself is centered on its middle axis.
 */
 
 .movie-flipper {
+  --case-depth: 24px;
 
-/*
-Physical thickness of the movie case.
+  position: relative;
 
-```
-24px is deliberately thicker than the previous
-12px test so the side surfaces should be obvious
-during rotation without looking like a book.
-```
+  width: 100%;
 
-*/
+  aspect-ratio: 2 / 3;
 
---case-depth: 24px;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
 
-position: relative;
+  transform:
+    translateZ(calc(var(--case-depth) / -2));
 
-width: 100%;
-
-aspect-ratio: 2 / 3;
-
-transform-style: preserve-3d;
-
-/*
-Exactly the same centering technique as the
-known-working example.
-*/
-
-transform:
-translateZ(calc(var(--case-depth) / -2));
-
-transition:
-transform 1.15s cubic-bezier(.4, .2, .2, 1);
-
-/*
-Prevent the browser from treating the case as
-a flat 2D object.
-*/
-
--webkit-transform-style: preserve-3d;
+  transition:
+    transform 1.15s cubic-bezier(.4, .2, .2, 1);
 }
 
 /* =========================================================
@@ -794,9 +755,9 @@ FLIPPED CASE
 .movie-flip-container.flipped
 .movie-flipper {
 
-transform:
-translateZ(calc(var(--case-depth) / -2))
-rotateY(180deg);
+  transform:
+    translateZ(calc(var(--case-depth) / -2))
+    rotateY(180deg);
 
 }
 
@@ -806,28 +767,24 @@ FRONT + BACK FACES
 
 .movie-face {
 
-position: absolute;
+  position: absolute;
 
-display: block;
+  display: block;
 
-width: 100%;
-height: 100%;
+  width: 100%;
+  height: 100%;
 
-inset: 0;
+  inset: 0;
 
-overflow: hidden;
+  overflow: hidden;
 
-border-radius: 9px;
+  border-radius: 9px;
 
-/*
-Critical for the front/back faces.
-*/
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 
-backface-visibility: hidden;
--webkit-backface-visibility: hidden;
-
-box-shadow:
-0 12px 35px rgba(0, 0, 0, 0.65);
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.65);
 
 }
 
@@ -837,21 +794,16 @@ FRONT
 
 .movie-front {
 
-display: flex;
+  display: flex;
 
-flex-direction: column;
+  flex-direction: column;
 
-justify-content: flex-end;
+  justify-content: flex-end;
 
-padding: 18px;
+  padding: 18px;
 
-/*
-Front face sits HALF the physical depth forward
-from the center of the case.
-*/
-
-transform:
-translateZ(calc(var(--case-depth) / 2));
+  transform:
+    translateZ(calc(var(--case-depth) / 2));
 
 }
 
@@ -861,23 +813,18 @@ BACK
 
 .movie-back {
 
-/*
-Back face is reversed and pushed HALF the depth
-behind the center.
-*/
+  transform:
+    rotateY(180deg)
+    translateZ(calc(var(--case-depth) / 2));
 
-transform:
-rotateY(180deg)
-translateZ(calc(var(--case-depth) / 2));
+  background:
+    linear-gradient(
+      135deg,
+      #eee9dd,
+      #d8d0c0
+    );
 
-background:
-linear-gradient(
-135deg,
-#eee9dd,
-#d8d0c0
-);
-
-color: #181818;
+  color: #181818;
 
 }
 
@@ -885,44 +832,29 @@ color: #181818;
 3D CASE EDGES
 ========================================================= */
 
-/*
-The edge surfaces are based directly on the geometry
-of the original working example.
-
-The SIDE FACE itself is only as wide as the physical
-thickness.
-
-But its translateZ position is HALF THE CASE WIDTH.
-
-This is the key difference from the previous version.
-
-We use explicit pixel lengths here because translateZ()
-cannot use percentage values.
-*/
-
 .movie-edge {
 
-position: absolute;
+  position: absolute;
 
-display: block;
+  display: block;
 
-overflow: hidden;
+  overflow: hidden;
 
-pointer-events: none;
+  pointer-events: none;
 
-backface-visibility: hidden;
--webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 
-background:
-linear-gradient(
-to right,
-#242424,
-#444444,
-#202020
-);
+  background:
+    linear-gradient(
+      to right,
+      #242424,
+      #444444,
+      #202020
+    );
 
-box-shadow:
-inset 0 0 0 1px rgba(255,255,255,0.08);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.08);
 
 }
 
@@ -930,54 +862,25 @@ inset 0 0 0 1px rgba(255,255,255,0.08);
 LEFT / SPINE
 ========================================================= */
 
-/*
-The case width is variable, so the JS-driven modal size
-is used to establish the actual geometry.
-
-The movie case is always 2:3, meaning:
-
-```
-width = W
-height = 1.5W
-```
-
-The side surface is depth x height.
-
-The side is centered horizontally before rotation,
-exactly like the working example.
-*/
-
 .movie-edge-left {
 
-width:
-var(--case-depth);
+  width:
+    var(--case-depth);
 
-height:
-100%;
+  height:
+    100%;
 
-left:
-calc(
-(100% - var(--case-depth)) / 2
-);
+  left:
+    calc(
+      (100% - var(--case-depth)) / 2
+    );
 
-/*
-CRITICAL:
+  transform:
+    rotateY(-90deg)
+    translateZ(var(--case-half-width));
 
-```
-Rotate first, then move outward by HALF THE WIDTH.
-
-Since translateZ cannot use percentages, the actual
-width is supplied by the custom property below.
-```
-
-*/
-
-transform:
-rotateY(-90deg)
-translateZ(var(--case-half-width));
-
-transform-origin:
-center;
+  transform-origin:
+    center;
 
 }
 
@@ -987,23 +890,23 @@ RIGHT EDGE
 
 .movie-edge-right {
 
-width:
-var(--case-depth);
+  width:
+    var(--case-depth);
 
-height:
-100%;
+  height:
+    100%;
 
-left:
-calc(
-(100% - var(--case-depth)) / 2
-);
+  left:
+    calc(
+      (100% - var(--case-depth)) / 2
+    );
 
-transform:
-rotateY(90deg)
-translateZ(var(--case-half-width));
+  transform:
+    rotateY(90deg)
+    translateZ(var(--case-half-width));
 
-transform-origin:
-center;
+  transform-origin:
+    center;
 
 }
 
@@ -1014,16 +917,16 @@ TOP + BOTTOM
 .movie-edge-top,
 .movie-edge-bottom {
 
-width:
-100%;
+  width:
+    100%;
 
-height:
-var(--case-depth);
+  height:
+    var(--case-depth);
 
-top:
-calc(
-(100% - var(--case-depth)) / 2
-);
+  top:
+    calc(
+      (100% - var(--case-depth)) / 2
+    );
 
 }
 
@@ -1033,12 +936,12 @@ TOP
 
 .movie-edge-top {
 
-transform:
-rotateX(90deg)
-translateZ(var(--case-half-height));
+  transform:
+    rotateX(90deg)
+    translateZ(var(--case-half-height));
 
-transform-origin:
-center;
+  transform-origin:
+    center;
 
 }
 
@@ -1048,12 +951,12 @@ BOTTOM
 
 .movie-edge-bottom {
 
-transform:
-rotateX(-90deg)
-translateZ(var(--case-half-height));
+  transform:
+    rotateX(-90deg)
+    translateZ(var(--case-half-height));
 
-transform-origin:
-center;
+  transform-origin:
+    center;
 
 }
 
@@ -1061,48 +964,25 @@ center;
 CASE DIMENSIONS
 ========================================================= */
 
-/*
-The movie case is 2:3.
-
-The largest modal case created by app.js is 420px wide.
-
-These variables therefore provide the exact dimensions
-needed for the current maximum case.
-
-The JavaScript below overrides them automatically on
-the actual case so smaller screens remain proportional.
-*/
-
 .movie-flipper {
 
---case-half-width: 210px;
+  --case-half-width: 210px;
 
---case-half-height: 315px;
+  --case-half-height: 315px;
 
 }
-
-/*
-On smaller screens, calculate the dimensions from the
-actual rendered width.
-
-The container is 75vw up to 360px during normal CSS
-layout, while the opening animation temporarily sets
-the container to the modal size.
-*/
 
 @media (max-width: 599px) {
 
-.movie-flipper {
+  .movie-flipper {
 
-```
---case-half-width:
-  calc(min(75vw, 360px) / 2);
+    --case-half-width:
+      calc(min(75vw, 360px) / 2);
 
---case-half-height:
-  calc(min(75vw, 360px) * 0.75);
-```
+    --case-half-height:
+      calc(min(75vw, 360px) * 0.75);
 
-}
+  }
 
 }
 
@@ -1112,34 +992,34 @@ SPINE TITLE
 
 .movie-spine-title {
 
-width: 100%;
-height: 100%;
+  width: 100%;
+  height: 100%;
 
-display: flex;
+  display: flex;
 
-align-items: center;
-justify-content: center;
+  align-items: center;
+  justify-content: center;
 
-overflow: hidden;
+  overflow: hidden;
 
 }
 
 .movie-spine-title span {
 
-display: block;
+  display: block;
 
-width: max-content;
+  width: max-content;
 
-color: #eeeeee;
+  color: #eeeeee;
 
-font-size: 10px;
+  font-size: 10px;
 
-font-weight: 600;
+  font-weight: 600;
 
-white-space: nowrap;
+  white-space: nowrap;
 
-transform:
-rotate(-90deg);
+  transform:
+    rotate(-90deg);
 
 }
 
@@ -1149,13 +1029,13 @@ LARGE COVER
 
 .large-cover {
 
-position: absolute;
+  position: absolute;
 
-inset: 0;
+  inset: 0;
 
-border-radius: 9px;
+  border-radius: 9px;
 
-overflow: hidden;
+  overflow: hidden;
 
 }
 
@@ -1165,63 +1045,63 @@ BACK CONTENT
 
 .back-content {
 
-height: 100%;
+  height: 100%;
 
-overflow-y: auto;
+  overflow-y: auto;
 
-padding: 24px;
+  padding: 24px;
 
 }
 
 .back-content h2 {
 
-margin: 0 0 7px;
+  margin: 0 0 7px;
 
-font-size: 28px;
+  font-size: 28px;
 
-line-height: 1;
+  line-height: 1;
 
 }
 
 .movie-meta {
 
-display: flex;
+  display: flex;
 
-gap: 7px;
+  gap: 7px;
 
-margin-bottom: 20px;
+  margin-bottom: 20px;
 
-color: #555;
+  color: #555;
 
-font-size: 13px;
+  font-size: 13px;
 
 }
 
 .movie-info-section {
 
-margin-top: 18px;
+  margin-top: 18px;
 
 }
 
 .movie-info-section h3 {
 
-margin: 0 0 5px;
+  margin: 0 0 5px;
 
-font-size: 12px;
+  font-size: 12px;
 
-text-transform: uppercase;
+  text-transform: uppercase;
 
-letter-spacing: 0.08em;
+  letter-spacing: 0.08em;
 
 }
 
 .movie-info-section p {
 
-margin: 0;
+  margin: 0;
 
-font-size: 14px;
+  font-size: 14px;
 
-line-height: 1.45;
+  line-height: 1.45;
 
 }
 
@@ -1231,29 +1111,29 @@ FORMAT LIST ON BACK
 
 .format-list {
 
-display: flex;
+  display: flex;
 
-flex-direction: column;
+  flex-direction: column;
 
-gap: 6px;
+  gap: 6px;
 
 }
 
 .format-item {
 
-display: flex;
+  display: flex;
 
-align-items: center;
+  align-items: center;
 
-gap: 8px;
+  gap: 8px;
 
-padding: 7px 9px;
+  padding: 7px 9px;
 
-border-radius: 7px;
+  border-radius: 7px;
 
-background: rgba(0, 0, 0, 0.08);
+  background: rgba(0, 0, 0, 0.08);
 
-font-size: 13px;
+  font-size: 13px;
 
 }
 
@@ -1263,35 +1143,34 @@ VIEWER CONTROLS
 
 .movie-viewer-controls {
 
-text-align: center;
+  text-align: center;
 
 }
 
 .primary-button {
 
-padding: 11px 18px;
+  padding: 11px 18px;
 
-border: 0;
+  border: 0;
+  border-radius: 999px;
 
-border-radius: 999px;
+  background: white;
 
-background: white;
+  color: #111;
 
-color: #111;
+  font-weight: 600;
 
-font-weight: 600;
-
-cursor: pointer;
+  cursor: pointer;
 
 }
 
 .flip-hint {
 
-margin: 8px 0 0;
+  margin: 8px 0 0;
 
-color: var(--muted);
+  color: var(--muted);
 
-font-size: 12px;
+  font-size: 12px;
 
 }
 
@@ -1301,25 +1180,21 @@ TABLET / IPAD
 
 @media (min-width: 600px) {
 
-.movie-grid {
+  .movie-grid {
 
-```
-grid-template-columns:
-  repeat(4, minmax(0, 1fr));
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr));
 
-gap: 20px;
-```
+    gap: 20px;
 
-}
+  }
 
-main {
+  main {
 
-```
-padding-left: 24px;
-padding-right: 24px;
-```
+    padding-left: 24px;
+    padding-right: 24px;
 
-}
+  }
 
 }
 
@@ -1329,16 +1204,14 @@ DESKTOP
 
 @media (min-width: 1000px) {
 
-.movie-grid {
+  .movie-grid {
 
-```
-grid-template-columns:
-  repeat(6, minmax(0, 1fr));
+    grid-template-columns:
+      repeat(6, minmax(0, 1fr));
 
-gap: 22px 16px;
-```
+    gap: 22px 16px;
 
-}
+  }
 
 }
 
@@ -1348,20 +1221,16 @@ REDUCED MOTION
 
 @media (prefers-reduced-motion: reduce) {
 
-*,
+  *,
+  *::before,
+  *::after {
 
-*::before,
+    transition-duration:
+      0.01ms !important;
 
-*::after {
+    animation-duration:
+      0.01ms !important;
 
-```
-transition-duration:
-  0.01ms !important;
-
-animation-duration:
-  0.01ms !important;
-```
-
-}
+  }
 
 }
