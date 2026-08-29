@@ -879,6 +879,16 @@ function openMovieFromCard(
 
       // =====================================================
       // ANIMATE CASE FROM SHELF
+      //
+      // NOTE: box-shadow is used here instead of
+      // filter: drop-shadow(...). Applying `filter` to an
+      // ancestor of an element using transform-style:
+      // preserve-3d forces the browser to flatten that 3D
+      // context into a single 2D layer, which is why the
+      // case edges were invisible even after they were
+      // added to the DOM with correct transforms. box-shadow
+      // does not create a flattening context, so it's safe
+      // to animate here.
       // =====================================================
 
       content.style.transition =
@@ -886,7 +896,7 @@ function openMovieFromCard(
         "top 0.65s cubic-bezier(0.16, 1, 0.3, 1), " +
         "width 0.65s cubic-bezier(0.16, 1, 0.3, 1), " +
         "height 0.65s cubic-bezier(0.16, 1, 0.3, 1), " +
-        "filter 0.45s ease";
+        "box-shadow 0.45s ease";
 
       content.style.left =
         `${finalLeft}px`;
@@ -900,8 +910,8 @@ function openMovieFromCard(
       content.style.height =
         `${finalHeight}px`;
 
-      content.style.filter =
-        "drop-shadow(0 25px 45px rgba(0,0,0,.65))";
+      content.style.boxShadow =
+        "0 25px 45px rgba(0,0,0,.65)";
 
 
       // =====================================================
@@ -966,8 +976,9 @@ function populateMovie(
   modalTitle.textContent =
     movie.title;
 
-document.getElementById("modal-spine-title").textContent = movie.title;
-  
+  document.getElementById("modal-spine-title").textContent =
+    movie.title;
+
   modalYear.textContent =
     movie.year || "";
 
@@ -1275,7 +1286,7 @@ function closeMovie() {
     "top 0.55s cubic-bezier(0.4, 0, 0.8, 0.2), " +
     "width 0.55s cubic-bezier(0.4, 0, 0.8, 0.2), " +
     "height 0.55s cubic-bezier(0.4, 0, 0.8, 0.2), " +
-    "filter 0.45s ease";
+    "box-shadow 0.45s ease";
 
   content.style.left =
     `${targetRect.left}px`;
@@ -1289,8 +1300,8 @@ function closeMovie() {
   content.style.height =
     `${targetRect.height}px`;
 
-  content.style.filter =
-    "drop-shadow(0 6px 12px rgba(0,0,0,.35))";
+  content.style.boxShadow =
+    "0 6px 12px rgba(0,0,0,.35)";
 
 
   setTimeout(
@@ -1402,9 +1413,6 @@ function finishCloseMovie() {
     "";
 
   content.style.transform =
-    "";
-
-  content.style.filter =
     "";
 
   content.style.transition =
