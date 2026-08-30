@@ -1,0 +1,683 @@
+name: Inventory Cleanup - TMDB Review
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inventory-cleanup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install requests
+
+      - name: Run inventory cleanup review
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+        run: |
+          python <<'PYTHON'
+          import json
+          import re
+          import requests
+          from difflib import SequenceMatcher
+          from pathlib import Path
+
+          TMDB_API_KEY = __import__("os").environ["TMDB_API_KEY"]
+
+          MOVIES_FILE = Path("movies.js")
+          INPUT_FILE = Path("inventory_cleanup.json")
+          REPORT_FILE = Path("inventory_cleanup_report.md")
+
+          API_BASE = "https://api.themoviedb.org/3"
+
+          headers = {
+              "Authorization": f"Bearer {TMDB_API_KEY}",
+              "accept": "application/json"
+          }
+
+          # ---------------------------------------------------------
+          # HELPERS
+          # ---------------------------------------------------------
+
+          def normalize(text):
+              if not text:
+                  return ""
+
+              text = text.lower()
+
+              text = text.replace("&", " and ")
+              text = text.replace("’", "'")
+              text = text.replace("–", "-")
+              text = text.replace("—", "-")
+
+              text = re.sub(r"[^a-z0-9]+", " ", text)
+
+              return " ".join(text.split())
+
+
+          def similarity(a, b):
+              return SequenceMatcher(
+                  None,
+                  normalize(a),
+                  normalize(b)
+              ).ratio()
+
+
+          def clean_title(title):
+              title = title.strip()
+
+              if title.lower().startswith("the "):
+                  return title[4:] + ", The"
+
+              return title
+
+
+          def load_movies():
+              text = MOVIES_FILE.read_text(encoding="utf-8")
+
+              # movies.js is:
+              #
+              # const movies = [
+              #   {...}
+              # ];
+              #
+              # We only need the JSON array.
+
+              start = text.find("[")
+              end = text.rfind("]")
+
+              if start == -1 or end == -1:
+                  raise RuntimeError("Could not locate movies array in movies.js")
+
+              return json.loads(text[start:end + 1])
+
+
+          def tmdb_search(title, media_type=None):
+              params = {
+                  "query": title,
+                  "include_adult": "false",
+                  "language": "en-US"
+              }
+
+              endpoint = f"{API_BASE}/search/multi"
+
+              response = requests.get(
+                  endpoint,
+                  headers=headers,
+                  params=params,
+                  timeout=30
+              )
+
+              response.raise_for_status()
+
+              results = response.json().get("results", [])
+
+              if media_type:
+                  results = [
+                      r for r in results
+                      if r.get("media_type") == media_type
+                  ]
+
+              return results
+
+
+          def candidate_score(source_title, result):
+              result_title = (
+                  result.get("title")
+                  or result.get("name")
+                  or ""
+              )
+
+              score = similarity(source_title, result_title)
+
+              # Exact normalized title is a very strong signal.
+              if normalize(source_title) == normalize(result_title):
+                  score += 0.35
+
+              return min(score, 1.0)
+
+
+          def find_best_tmdb_match(title, special=None):
+              results = tmdb_search(title)
+
+              if not results:
+                  return None, [], "NO_RESULTS"
+
+              scored = []
+
+              for result in results:
+                  result["_match_score"] = candidate_score(title, result)
+                  scored.append(result)
+
+              scored.sort(
+                  key=lambda x: x["_match_score"],
+                  reverse=True
+              )
+
+              best = scored[0]
+
+              # If the title is obviously a special case, we don't
+              # automatically accept weak matches.
+              threshold = 0.78
+
+              if special:
+                  threshold = 0.84
+
+              if best["_match_score"] < threshold:
+                  return best, scored[:5], "REVIEW"
+
+              if len(scored) > 1:
+                  gap = (
+                      best["_match_score"]
+                      - scored[1]["_match_score"]
+                  )
+
+                  if gap < 0.08:
+                      return best, scored[:5], "REVIEW"
+
+              return best, scored[:5], "MATCH"
+
+
+          # ---------------------------------------------------------
+          # LOAD DATA
+          # ---------------------------------------------------------
+
+          print("Loading movies.js...")
+          movies = load_movies()
+
+          print(f"Loaded {len(movies)} catalog records.")
+
+          print("Loading inventory cleanup instructions...")
+          instructions = json.loads(
+              INPUT_FILE.read_text(encoding="utf-8")
+          )
+
+          additions = instructions.get("add", [])
+          removals = instructions.get("remove", [])
+          the_fixes = instructions.get("move_the_to_end", [])
+          tmdb_corrections = instructions.get("tmdb_corrections", [])
+
+          print(f"Additions: {len(additions)}")
+          print(f"Removals: {len(removals)}")
+          print(f'The fixes: {len(the_fixes)}')
+          print(f"TMDB corrections: {len(tmdb_corrections)}")
+
+          # ---------------------------------------------------------
+          # EXISTING CATALOG INDEXES
+          # ---------------------------------------------------------
+
+          by_tmdb = {}
+
+          for movie in movies:
+              tmdb_id = movie.get("tmdbId")
+
+              if tmdb_id is not None:
+                  by_tmdb.setdefault(
+                      str(tmdb_id),
+                      []
+                  ).append(movie)
+
+          # ---------------------------------------------------------
+          # REPORT
+          # ---------------------------------------------------------
+
+          report = []
+
+          report.append("# Inventory Cleanup TMDB Review")
+          report.append("")
+          report.append("**REPORT ONLY — no changes were made to `movies.js`.**")
+          report.append("")
+          report.append(f"- Existing catalog records: **{len(movies)}**")
+          report.append(f"- Inventory additions: **{len(additions)}**")
+          report.append(f"- Explicit removals: **{len(removals)}**")
+          report.append(f"- Alphabetical `The` fixes: **{len(the_fixes)}**")
+          report.append(f"- TMDB corrections: **{len(tmdb_corrections)}**")
+          report.append("")
+
+          # ---------------------------------------------------------
+          # ADDITIONS
+          # ---------------------------------------------------------
+
+          report.append("## ADDITIONS")
+          report.append("")
+
+          addition_matches = []
+
+          for i, item in enumerate(additions, 1):
+
+              title = item["title"]
+              fmt = item.get("format", "")
+              special = item.get("special")
+
+              print(
+                  f"[ADD {i}/{len(additions)}] "
+                  f"{title} ({fmt})"
+              )
+
+              best, candidates, status = find_best_tmdb_match(
+                  title,
+                  special
+              )
+
+              if best:
+                  tmdb_id = best.get("id")
+                  tmdb_title = (
+                      best.get("title")
+                      or best.get("name")
+                      or ""
+                  )
+                  media_type = best.get("media_type", "")
+
+                  existing = by_tmdb.get(
+                      str(tmdb_id),
+                      []
+                  )
+
+                  if existing:
+                      action = "ADD_FORMAT_TO_EXISTING"
+                  else:
+                      action = "CREATE_NEW_RECORD"
+
+                  report.append(
+                      f"### {title}"
+                  )
+
+                  report.append(
+                      f"- Format: `{fmt}`"
+                  )
+
+                  report.append(
+                      f"- TMDB: `{tmdb_id}` — {tmdb_title}"
+                  )
+
+                  report.append(
+                      f"- Type: `{media_type}`"
+                  )
+
+                  report.append(
+                      f"- Match score: `{best['_match_score']:.3f}`"
+                  )
+
+                  report.append(
+                      f"- Match status: **{status}**"
+                  )
+
+                  report.append(
+                      f"- Proposed action: **{action}**"
+                  )
+
+                  if special:
+                      report.append(
+                          f"- Special instruction: {special}"
+                      )
+
+                  if existing:
+                      existing_titles = ", ".join(
+                          m.get("title", "")
+                          for m in existing
+                      )
+
+                      report.append(
+                          f"- Existing catalog record(s): {existing_titles}"
+                      )
+
+                  if status == "REVIEW":
+                      report.append("")
+                      report.append("**Top candidates:**")
+
+                      for candidate in candidates:
+                          ctitle = (
+                              candidate.get("title")
+                              or candidate.get("name")
+                              or ""
+                          )
+
+                          report.append(
+                              f"- `{candidate.get('id')}` "
+                              f"{ctitle} "
+                              f"({candidate.get('release_date') or candidate.get('first_air_date') or 'no date'}) "
+                              f"score `{candidate['_match_score']:.3f}`"
+                          )
+
+                  report.append("")
+
+                  addition_matches.append({
+                      "source_title": title,
+                      "format": fmt,
+                      "tmdbId": tmdb_id,
+                      "tmdbTitle": tmdb_title,
+                      "type": media_type,
+                      "score": best["_match_score"],
+                      "status": status,
+                      "action": action
+                  })
+
+              else:
+
+                  report.append(
+                      f"### {title}"
+                  )
+
+                  report.append(
+                      f"- Format: `{fmt}`"
+                  )
+
+                  report.append(
+                      "- **NO TMDB RESULTS**"
+                  )
+
+                  report.append("")
+
+                  addition_matches.append({
+                      "source_title": title,
+                      "format": fmt,
+                      "tmdbId": None,
+                      "tmdbTitle": None,
+                      "type": None,
+                      "score": 0,
+                      "status": "NO_RESULTS",
+                      "action": "MANUAL_REVIEW"
+                  })
+
+          # ---------------------------------------------------------
+          # REMOVALS
+          # ---------------------------------------------------------
+
+          report.append("## REMOVALS")
+          report.append("")
+
+          normalized_catalog_titles = [
+              (
+                  movie,
+                  normalize(movie.get("title", "")),
+                  normalize(movie.get("tmdbTitle", ""))
+              )
+              for movie in movies
+          ]
+
+          for title in removals:
+
+              target = normalize(title)
+
+              matches = []
+
+              for movie, ntitle, ntmdbtitle in normalized_catalog_titles:
+
+                  if (
+                      target == ntitle
+                      or target == ntmdbtitle
+                      or similarity(title, movie.get("title", "")) >= 0.92
+                  ):
+                      matches.append(movie)
+
+              report.append(
+                  f"### {title}"
+              )
+
+              if len(matches) == 1:
+
+                  movie = matches[0]
+
+                  report.append(
+                      f"- **FOUND** → `{movie.get('title')}` "
+                      f"(TMDB `{movie.get('tmdbId')}`)"
+                  )
+
+                  report.append(
+                      "- Proposed action: **REMOVE**"
+                  )
+
+              elif len(matches) > 1:
+
+                  report.append(
+                      "- **MULTIPLE MATCHES — MANUAL REVIEW**"
+                  )
+
+                  for movie in matches:
+                      report.append(
+                          f"- `{movie.get('title')}` "
+                          f"(TMDB `{movie.get('tmdbId')}`)"
+                      )
+
+              else:
+
+                  report.append(
+                      "- **NOT FOUND — MANUAL REVIEW**"
+                  )
+
+              report.append("")
+
+          # ---------------------------------------------------------
+          # THE FIXES
+          # ---------------------------------------------------------
+
+          report.append("## ALPHABETICAL `THE` FIXES")
+          report.append("")
+
+          for title in the_fixes:
+
+              target = normalize(title)
+
+              matches = []
+
+              for movie, ntitle, ntmdbtitle in normalized_catalog_titles:
+
+                  if (
+                      target == ntitle
+                      or target == ntmdbtitle
+                  ):
+                      matches.append(movie)
+
+              new_title = clean_title(title)
+
+              report.append(
+                  f"### {title}"
+              )
+
+              report.append(
+                  f"- Proposed title: **{new_title}**"
+              )
+
+              if len(matches) == 1:
+
+                  movie = matches[0]
+
+                  report.append(
+                      f"- Found: `{movie.get('title')}` "
+                      f"(TMDB `{movie.get('tmdbId')}`)"
+                  )
+
+                  report.append(
+                      "- Proposed action: **RENAME TITLE ONLY**"
+                  )
+
+              elif len(matches) > 1:
+
+                  report.append(
+                      "- **MULTIPLE MATCHES — MANUAL REVIEW**"
+                  )
+
+              else:
+
+                  report.append(
+                      "- **NOT FOUND — MANUAL REVIEW**"
+                  )
+
+              report.append("")
+
+          # ---------------------------------------------------------
+          # TMDB CORRECTIONS
+          # ---------------------------------------------------------
+
+          report.append("## TMDB CORRECTIONS")
+          report.append("")
+
+          for correction in tmdb_corrections:
+
+              title = correction["title"]
+              instruction = correction.get("instruction", "")
+
+              report.append(
+                  f"### {title}"
+              )
+
+              report.append(
+                  f"- Instruction: {instruction}"
+              )
+
+              target = normalize(title)
+
+              matches = []
+
+              for movie, ntitle, ntmdbtitle in normalized_catalog_titles:
+
+                  if (
+                      target == ntitle
+                      or target == ntmdbtitle
+                      or similarity(title, movie.get("title", "")) >= 0.90
+                  ):
+                      matches.append(movie)
+
+              if len(matches) == 1:
+
+                  current = matches[0]
+
+                  report.append(
+                      f"- Current catalog record: `{current.get('title')}`"
+                  )
+
+                  report.append(
+                      f"- Current TMDB ID: `{current.get('tmdbId')}`"
+                  )
+
+                  search_title = title
+
+                  best, candidates, status = find_best_tmdb_match(
+                      search_title,
+                      instruction
+                  )
+
+                  if best:
+
+                      tmdb_title = (
+                          best.get("title")
+                          or best.get("name")
+                          or ""
+                      )
+
+                      report.append(
+                          f"- Proposed TMDB: `{best.get('id')}` — {tmdb_title}"
+                      )
+
+                      report.append(
+                          f"- Score: `{best['_match_score']:.3f}`"
+                      )
+
+                      report.append(
+                          f"- Status: **{status}**"
+                      )
+
+                      if status == "REVIEW":
+
+                          report.append("")
+                          report.append("**Top candidates:**")
+
+                          for candidate in candidates:
+
+                              ctitle = (
+                                  candidate.get("title")
+                                  or candidate.get("name")
+                                  or ""
+                              )
+
+                              report.append(
+                                  f"- `{candidate.get('id')}` "
+                                  f"{ctitle} "
+                                  f"({candidate.get('release_date') or candidate.get('first_air_date') or 'no date'}) "
+                                  f"score `{candidate['_match_score']:.3f}`"
+                              )
+
+                  else:
+
+                      report.append(
+                          "- **NO TMDB RESULTS**"
+                      )
+
+              elif len(matches) > 1:
+
+                  report.append(
+                      "- **MULTIPLE CATALOG MATCHES — MANUAL REVIEW**"
+                  )
+
+                  for movie in matches:
+
+                      report.append(
+                          f"- `{movie.get('title')}` "
+                          f"(TMDB `{movie.get('tmdbId')}`)"
+                      )
+
+              else:
+
+                  report.append(
+                      "- **CATALOG RECORD NOT FOUND — MANUAL REVIEW**"
+                  )
+
+              report.append("")
+
+          # ---------------------------------------------------------
+          # SUMMARY
+          # ---------------------------------------------------------
+
+          report.append("## IMPORTANT")
+          report.append("")
+          report.append(
+              "This workflow intentionally made **NO CHANGES** "
+              "to `movies.js`."
+          )
+          report.append("")
+          report.append(
+              "Review this report before running the apply phase."
+          )
+
+          REPORT_FILE.write_text(
+              "\n".join(report),
+              encoding="utf-8"
+          )
+
+          # Also save machine-readable results.
+          Path("inventory_cleanup_results.json").write_text(
+              json.dumps(
+                  addition_matches,
+                  indent=2
+              ),
+              encoding="utf-8"
+          )
+
+          print("")
+          print("=" * 60)
+          print("INVENTORY CLEANUP REVIEW COMPLETE")
+          print("=" * 60)
+          print("")
+          print("No changes were made to movies.js.")
+          print("")
+          PYTHON
+
+      - name: Upload cleanup report
+        uses: actions/upload-artifact@v4
+        with:
+          name: inventory-cleanup-report
+          path: |
+            inventory_cleanup_report.md
+            inventory_cleanup_results.json
