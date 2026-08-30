@@ -30,7 +30,7 @@ jobs:
           from pathlib import Path
           from copy import deepcopy
 
-          APPROVED_FILE = Path("approved-review.json")
+          APPROVED_FILE = Path("inventory_cleanup_approvals.json")
           MOVIES_FILE = Path("movies.js")
 
           print("=" * 70)
@@ -44,7 +44,7 @@ jobs:
           if not APPROVED_FILE.exists():
               raise FileNotFoundError(
                   f"Could not find {APPROVED_FILE}. "
-                  "Make sure approved-review.json is in the repository root."
+                  "Make sure inventory_cleanup_approvals.json is in the repository root."
               )
 
           with APPROVED_FILE.open("r", encoding="utf-8") as f:
