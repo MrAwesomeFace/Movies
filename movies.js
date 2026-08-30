@@ -808,28 +808,10 @@ const movies = [
       "Movies Anywhere"
     ],
     "categories": [
-      "animated"
     ],
     "tmdbTitle": "Aladdin"
   },
-  {
-    "title": "Aladdin",
-    "tmdbTitle": "Aladdin",
-    "type": "movie",
-    "tmdbId": 812,
-    "poster": "",
-    "year": "",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
-    "synopsis": "",
-    "physical": [
-      "DVD"
-    ],
-    "digital": [],
-    "special": "animated version"
-  },
+
   {
     "title": "Aladdin and the King of Thieves",
     "tmdbTitle": "Aladdin and the King of Thieves",
@@ -13953,7 +13935,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "Return of Jafar, The",
+    "title": "Aladdin: The Return of Jafar",
     "tmdbTitle": "The Return of Jafar",
     "type": "movie",
     "tmdbId": 15969,
