@@ -829,7 +829,6 @@ const movies = [
     "categories": [
       "animated"
     ]
-    "animated": true
   },
   {
     "title": "Aladdin and the King of Thieves",
