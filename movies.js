@@ -826,6 +826,9 @@ const movies = [
       "DVD"
     ],
     "digital": [],
+    "categories": [
+      "animated"
+    ]
     "animated": true
   },
   {
@@ -845,6 +848,9 @@ const movies = [
       "Fandango",
       "Movies Anywhere"
     ]
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Aladdin: The Return of Jafar",
@@ -862,6 +868,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
+    ]
+    "categories": [
+      "animated"
     ]
   },
   {
@@ -896,6 +905,9 @@ const movies = [
       "DVD"
     ],
     "digital": []
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "All Dogs Go to Heaven 2",
@@ -913,6 +925,9 @@ const movies = [
       "DVD"
     ],
     "digital": []
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Almost Famous",
@@ -1567,23 +1582,7 @@ const movies = [
       "Movies Anywhere"
     ]
   },
-  {
-    "title": "Bad Company",
-    "tmdbTitle": "Bad Company",
-    "type": "movie",
-    "tmdbId": 3132,
-    "poster": "",
-    "year": "",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
-    "synopsis": "",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
+
   {
     "title": "Bad Santa",
     "type": "movie",
@@ -1785,6 +1784,9 @@ const movies = [
       "Fandango",
       "Movies Anywhere"
     ]
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Batman Begins",
@@ -1881,6 +1883,9 @@ const movies = [
       "Fandango",
       "Movies Anywhere"
     ]
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Batman: The Animated Series",
@@ -1953,7 +1958,9 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "special": "animated version"
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Beauty and the Beast",
@@ -2176,6 +2183,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
+    ]
+    "categories": [
+      "animated"
     ]
   },
   {
@@ -4953,6 +4963,9 @@ const movies = [
       "DVD"
     ],
     "digital": []
+    "categories": [
+      "baseball"
+    ]
   },
   {
     "title": "Edward Scissorhands",
@@ -5438,9 +5451,7 @@ const movies = [
       "Fandango",
       "Movies Anywhere"
     ],
-    "categories": [
-      "christmas"
-    ]
+
   },
   {
     "title": "Expendables, The",
@@ -5461,9 +5472,7 @@ const movies = [
       "Fandango",
       "Movies Anywhere"
     ],
-    "categories": [
-      "christmas"
-    ]
+
   },
   {
     "title": "Eye See You",
@@ -10251,6 +10260,9 @@ const movies = [
       "Fandango",
       "Movies Anywhere"
     ]
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "La Femme Nikita - Complete First Season",
@@ -10376,6 +10388,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
+    ]
+    "categories": [
+      "animated"
     ]
   },
   {
@@ -10604,6 +10619,9 @@ const movies = [
       "Fandango",
       "Movies Anywhere"
     ]
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Lethal Weapon",
@@ -10740,6 +10758,9 @@ const movies = [
       "DVD"
     ],
     "digital": []
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Limitless",
@@ -10815,6 +10836,9 @@ const movies = [
       "DVD"
     ],
     "digital": []
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Little Mermaid, The",
@@ -11874,7 +11898,7 @@ const movies = [
       "Movies Anywhere"
     ],
     "categories": [
-      "christmas"
+      "animated","christmas"
     ]
   },
   {
@@ -12152,6 +12176,10 @@ const movies = [
       "DVD"
     ],
     "digital": []
+
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Monsters, Inc.",
@@ -14087,6 +14115,9 @@ const movies = [
     "digital": [
       "Prime"
     ]
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Ratatouille",
@@ -14442,6 +14473,9 @@ const movies = [
       "DVD"
     ],
     "digital": []
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Rock of Ages",
@@ -15321,6 +15355,9 @@ const movies = [
       "DVD"
     ],
     "digital": []
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Secret of the Wings",
@@ -15338,6 +15375,9 @@ const movies = [
       "DVD"
     ],
     "digital": []
+    "categories": [
+      "animated"
+    ]
   },
   {
     "title": "Secret Window",
@@ -16600,6 +16640,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
+    ]
+    "categories": [
+      "animated"
     ]
   },
   {
