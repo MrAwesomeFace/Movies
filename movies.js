@@ -1645,23 +1645,7 @@ const movies = [
       "Movies Anywhere"
     ]
   },
-  {
-    "title": "Ballistic: Ecks vs. Sever",
-    "tmdbTitle": "Ballistic: Ecks vs. Sever",
-    "type": "movie",
-    "tmdbId": 10550,
-    "poster": "https://image.tmdb.org/t/p/w500/7Jcb486hN7hQRZTsb0RybFGeDOQ.jpg",
-    "year": "2002",
-    "runtime": "91m",
-    "genre": "Action / Adventure / Thriller / Science Fiction",
-    "director": "Wych Kaosayananda",
-    "cast": "Antonio Banderas, Lucy Liu, Gregg Henry, Ray Park, Talisa Soto, Miguel Sandoval",
-    "synopsis": "Jeremiah Ecks, an FBI agent, realizes that he must join with his lifelong enemy, Agent Sever, a rogue DIA agent with whom he is in mortal combat, in order to defeat a common enemy. That enemy has developed a \"micro-device\" that can be injected into victims in order to kill them at will.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
+
   {
     "title": "Bandits",
     "tmdbTitle": "Bandits",
