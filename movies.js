@@ -5973,7 +5973,7 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
     "categories": [
       "baseball"
     ],
@@ -12962,23 +12962,7 @@ const movies = [
     ],
     "digital": []
   },
-  {
-    "title": "Our Idiot Brother",
-    "tmdbTitle": "Our Idiot Brother",
-    "type": "movie",
-    "tmdbId": 59968,
-    "poster": "",
-    "year": "",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
-    "synopsis": "",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
+
   {
     "title": "Out of Sight",
     "tmdbTitle": "Out of Sight",
