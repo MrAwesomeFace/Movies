@@ -846,7 +846,7 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
     "categories": [
       "animated"
     ]
@@ -867,7 +867,7 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
     "categories": [
       "animated"
     ]
@@ -903,7 +903,7 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
     "categories": [
       "animated"
     ]
@@ -923,7 +923,7 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
     "categories": [
       "animated"
     ]
@@ -1782,7 +1782,7 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
     "categories": [
       "animated"
     ]
@@ -1881,7 +1881,7 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
     "categories": [
       "animated"
     ]
@@ -2182,7 +2182,7 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
     "categories": [
       "animated"
     ]
@@ -4961,7 +4961,7 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
     "categories": [
       "baseball"
     ]
@@ -10258,7 +10258,7 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
     "categories": [
       "animated"
     ]
@@ -10387,7 +10387,7 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
     "categories": [
       "animated"
     ]
@@ -10617,7 +10617,7 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
     "categories": [
       "animated"
     ]
@@ -10756,7 +10756,7 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
     "categories": [
       "animated"
     ]
@@ -10834,7 +10834,7 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
     "categories": [
       "animated"
     ]
@@ -12174,7 +12174,7 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
 
     "categories": [
       "animated"
@@ -14113,7 +14113,7 @@ const movies = [
     "physical": [],
     "digital": [
       "Prime"
-    ]
+    ],
     "categories": [
       "animated"
     ]
@@ -14471,7 +14471,7 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
     "categories": [
       "animated"
     ]
@@ -15353,7 +15353,7 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
     "categories": [
       "animated"
     ]
@@ -15373,7 +15373,7 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
     "categories": [
       "animated"
     ]
@@ -16639,7 +16639,7 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
     "categories": [
       "animated"
     ]
