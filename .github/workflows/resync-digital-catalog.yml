@@ -1,0 +1,888 @@
+name: Resync Digital Catalog
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  resync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Resync digital inventory against catalog
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+
+          const MOVIES_FILE = 'movies.js';
+          const INPUT_FILE = 'inventory_resync_updates.json';
+
+          const REVIEW_FILE = 'inventory_resync_review.json';
+          const RESULT_FILE = 'inventory_resync_results.json';
+
+          console.log('========================================');
+          console.log('DIGITAL INVENTORY RESYNC');
+          console.log('========================================');
+          console.log('');
+
+          if (!fs.existsSync(MOVIES_FILE)) {
+            throw new Error(`Missing ${MOVIES_FILE}`);
+          }
+
+          if (!fs.existsSync(INPUT_FILE)) {
+            throw new Error(`Missing ${INPUT_FILE}`);
+          }
+
+          // ------------------------------------------------------------
+          // Load movies.js
+          // ------------------------------------------------------------
+
+          const moviesText = fs.readFileSync(MOVIES_FILE, 'utf8');
+
+          const arrayStart = moviesText.indexOf('[');
+          const arrayEnd = moviesText.lastIndexOf(']');
+
+          if (arrayStart === -1 || arrayEnd === -1) {
+            throw new Error('Could not locate movie array in movies.js');
+          }
+
+          const movies = JSON.parse(
+            moviesText.substring(arrayStart, arrayEnd + 1)
+          );
+
+          // ------------------------------------------------------------
+          // Load inventory resync file
+          // ------------------------------------------------------------
+
+          const input = JSON.parse(
+            fs.readFileSync(INPUT_FILE, 'utf8')
+          );
+
+          /*
+           * The resync file may be either:
+           *
+           *   [
+           *     {...},
+           *     {...}
+           *   ]
+           *
+           * or an object containing the records in a property.
+           */
+
+          let records = [];
+
+          if (Array.isArray(input)) {
+            records = input;
+          } else if (Array.isArray(input.records)) {
+            records = input.records;
+          } else if (Array.isArray(input.updates)) {
+            records = input.updates;
+          } else if (Array.isArray(input.items)) {
+            records = input.items;
+          } else {
+            throw new Error(
+              'Could not find an array of records in inventory_resync_updates.json'
+            );
+          }
+
+          console.log('Catalog records:', movies.length);
+          console.log('Resync records:', records.length);
+          console.log('');
+
+          // ------------------------------------------------------------
+          // Helpers
+          // ------------------------------------------------------------
+
+          function clean(value) {
+            return String(value ?? '').trim();
+          }
+
+          function lower(value) {
+            return clean(value).toLowerCase();
+          }
+
+          function normalizeTitle(value) {
+            return lower(value)
+              .replace(/&/g, 'and')
+              .replace(/[’']/g, '')
+              .replace(/[.,:;!?()[\]{}]/g, ' ')
+              .replace(/\s+/g, ' ')
+              .trim();
+          }
+
+          function numericId(value) {
+            const s = clean(value);
+            if (!s) return '';
+
+            const n = Number(s);
+
+            if (!Number.isFinite(n)) {
+              return '';
+            }
+
+            return String(Math.trunc(n));
+          }
+
+          function getTmdbId(movie) {
+            return numericId(
+              movie.tmdbId ??
+              movie.tmdbID ??
+              movie.tmdb_id
+            );
+          }
+
+          function getYear(movie) {
+            return clean(
+              movie.year ??
+              movie.tmdbYear ??
+              movie.source_year
+            );
+          }
+
+          function getTitle(movie) {
+            return clean(
+              movie.title ??
+              movie.tmdbTitle ??
+              movie.name
+            );
+          }
+
+          function getType(movie) {
+            const value = lower(
+              movie.type ??
+              movie.mediaType ??
+              movie.media_type ??
+              ''
+            );
+
+            if (
+              value === 'tv' ||
+              value === 'show' ||
+              value === 'series' ||
+              value === 'television'
+            ) {
+              return 'tv';
+            }
+
+            if (
+              value === 'movie' ||
+              value === 'film'
+            ) {
+              return 'movie';
+            }
+
+            return '';
+          }
+
+          function getSeason(movie) {
+            const possible = [
+              movie.season,
+              movie.seasonNumber,
+              movie.season_number,
+              movie.seasonNum
+            ];
+
+            for (const value of possible) {
+              if (
+                value !== undefined &&
+                value !== null &&
+                clean(value) !== ''
+              ) {
+                const n = Number(value);
+
+                if (Number.isFinite(n)) {
+                  return String(Math.trunc(n));
+                }
+
+                return clean(value);
+              }
+            }
+
+            return '';
+          }
+
+          function getDigital(movie) {
+            const value =
+              movie.digital ??
+              movie.digitalSources ??
+              movie.digital_source ??
+              movie.digital_source_name ??
+              '';
+
+            if (Array.isArray(value)) {
+              return value
+                .map(clean)
+                .filter(Boolean);
+            }
+
+            return clean(value)
+              .split('|')
+              .map(clean)
+              .filter(Boolean);
+          }
+
+          function unique(values) {
+            return [...new Set(
+              values
+                .map(clean)
+                .filter(Boolean)
+            )];
+          }
+
+          function getSource(record) {
+            const candidates = [
+              record.digital,
+              record.source,
+              record.platform,
+              record.provider,
+              record.service,
+              record.digitalSource,
+              record.digital_source
+            ];
+
+            for (const value of candidates) {
+              if (Array.isArray(value)) {
+                const found = value
+                  .map(clean)
+                  .filter(Boolean);
+
+                if (found.length) {
+                  return unique(found);
+                }
+              }
+
+              if (clean(value)) {
+                return unique(
+                  clean(value)
+                    .split('|')
+                    .map(clean)
+                );
+              }
+            }
+
+            return [];
+          }
+
+          function getRecordTitle(record) {
+            return clean(
+              record.title ??
+              record.name ??
+              record.tmdbTitle ??
+              record.showTitle ??
+              record.seriesTitle
+            );
+          }
+
+          function getRecordTmdbId(record) {
+            return numericId(
+              record.tmdbId ??
+              record.tmdbID ??
+              record.tmdb_id ??
+              record.showTmdbId ??
+              record.seriesTmdbId
+            );
+          }
+
+          function getRecordYear(record) {
+            return clean(
+              record.year ??
+              record.tmdbYear ??
+              record.source_year
+            );
+          }
+
+          function getRecordSeason(record) {
+            return clean(
+              record.season ??
+              record.seasonNumber ??
+              record.season_number ??
+              record.seasonNum
+            );
+          }
+
+          function looksLikeTv(record, catalogMovie) {
+            const explicitType = getType(record);
+
+            if (explicitType === 'tv') {
+              return true;
+            }
+
+            if (explicitType === 'movie') {
+              return false;
+            }
+
+            if (getRecordSeason(record)) {
+              return true;
+            }
+
+            if (
+              clean(record.showTitle) ||
+              clean(record.seriesTitle)
+            ) {
+              return true;
+            }
+
+            if (catalogMovie && getType(catalogMovie) === 'tv') {
+              return true;
+            }
+
+            return false;
+          }
+
+          function seasonKey(movie) {
+            const id = getTmdbId(movie);
+            const season = getSeason(movie);
+
+            if (!id || !season) {
+              return '';
+            }
+
+            return `${id}|S${season}`;
+          }
+
+          function titleSeasonKey(title, season) {
+            const normalized = normalizeTitle(title);
+
+            if (!normalized || !season) {
+              return '';
+            }
+
+            return `${normalized}|S${season}`;
+          }
+
+          // ------------------------------------------------------------
+          // Build catalog indexes
+          // ------------------------------------------------------------
+
+          const byTmdb = new Map();
+          const byTitleYear = new Map();
+          const byTvSeason = new Map();
+          const byTvTitleSeason = new Map();
+
+          for (const movie of movies) {
+            const id = getTmdbId(movie);
+            const title = getTitle(movie);
+            const year = getYear(movie);
+            const type = getType(movie);
+            const season = getSeason(movie);
+
+            if (id) {
+              if (!byTmdb.has(id)) {
+                byTmdb.set(id, []);
+              }
+
+              byTmdb.get(id).push(movie);
+            }
+
+            if (title) {
+              const key =
+                `${normalizeTitle(title)}|${year}`;
+
+              if (!byTitleYear.has(key)) {
+                byTitleYear.set(key, []);
+              }
+
+              byTitleYear.get(key).push(movie);
+            }
+
+            if (type === 'tv' && id && season) {
+              const key = `${id}|S${season}`;
+
+              if (!byTvSeason.has(key)) {
+                byTvSeason.set(key, []);
+              }
+
+              byTvSeason.get(key).push(movie);
+            }
+
+            if (type === 'tv' && title && season) {
+              const key =
+                titleSeasonKey(title, season);
+
+              if (!byTvTitleSeason.has(key)) {
+                byTvTitleSeason.set(key, []);
+              }
+
+              byTvTitleSeason.get(key).push(movie);
+            }
+          }
+
+          // ------------------------------------------------------------
+          // Results
+          // ------------------------------------------------------------
+
+          const matches = [];
+          const newItems = [];
+          const reviews = [];
+
+          let matchedByTmdbSeason = 0;
+          let matchedByTmdb = 0;
+          let matchedByTitleYear = 0;
+          let matchedByTvTitleSeason = 0;
+
+          // ------------------------------------------------------------
+          // Process each incoming record
+          // ------------------------------------------------------------
+
+          for (const record of records) {
+
+            const title = getRecordTitle(record);
+            const tmdbId = getRecordTmdbId(record);
+            const year = getRecordYear(record);
+            const season = getRecordSeason(record);
+            const digitalSources = getSource(record);
+
+            const isTv = looksLikeTv(record);
+
+            const base = {
+              input: record,
+              title,
+              tmdbId,
+              year,
+              season,
+              type: isTv ? 'tv' : 'movie',
+              digitalSources
+            };
+
+            if (!title && !tmdbId) {
+              reviews.push({
+                ...base,
+                reason: 'No usable title or TMDB ID.'
+              });
+
+              continue;
+            }
+
+            // ----------------------------------------------------------
+            // TV: exact TMDB show + season
+            //
+            // THIS IS THE IMPORTANT PART.
+            //
+            // House S1 and House S2 are NOT treated as the same item.
+            // ----------------------------------------------------------
+
+            if (isTv && tmdbId && season) {
+
+              const key = `${tmdbId}|S${season}`;
+              const candidates = byTvSeason.get(key) || [];
+
+              if (candidates.length === 1) {
+
+                matches.push({
+                  ...base,
+                  action: 'MATCH',
+                  matchType: 'tv_tmdb_season',
+                  catalogIndex: movies.indexOf(candidates[0]),
+                  catalogTitle: getTitle(candidates[0]),
+                  catalogSeason: getSeason(candidates[0]),
+                  catalogTmdbId: getTmdbId(candidates[0])
+                });
+
+                matchedByTmdbSeason++;
+                continue;
+              }
+
+              if (candidates.length > 1) {
+
+                reviews.push({
+                  ...base,
+                  reason:
+                    'Multiple catalog entries have the same TV TMDB ID and season.',
+                  candidates: candidates.map(movie => ({
+                    title: getTitle(movie),
+                    year: getYear(movie),
+                    season: getSeason(movie),
+                    tmdbId: getTmdbId(movie)
+                  }))
+                });
+
+                continue;
+              }
+            }
+
+            // ----------------------------------------------------------
+            // TV: title + season fallback
+            // ----------------------------------------------------------
+
+            if (isTv && title && season) {
+
+              const key =
+                titleSeasonKey(title, season);
+
+              const candidates =
+                byTvTitleSeason.get(key) || [];
+
+              if (candidates.length === 1) {
+
+                matches.push({
+                  ...base,
+                  action: 'MATCH',
+                  matchType: 'tv_title_season',
+                  catalogIndex: movies.indexOf(candidates[0]),
+                  catalogTitle: getTitle(candidates[0]),
+                  catalogSeason: getSeason(candidates[0]),
+                  catalogTmdbId: getTmdbId(candidates[0])
+                });
+
+                matchedByTvTitleSeason++;
+                continue;
+              }
+
+              if (candidates.length > 1) {
+
+                reviews.push({
+                  ...base,
+                  reason:
+                    'Multiple TV catalog entries match title and season.',
+                  candidates: candidates.map(movie => ({
+                    title: getTitle(movie),
+                    year: getYear(movie),
+                    season: getSeason(movie),
+                    tmdbId: getTmdbId(movie)
+                  }))
+                });
+
+                continue;
+              }
+            }
+
+            // ----------------------------------------------------------
+            // Movie or TV fallback: exact TMDB ID
+            //
+            // For TV this is only reached when there is no season
+            // information available.
+            // ----------------------------------------------------------
+
+            if (tmdbId) {
+
+              const candidates =
+                byTmdb.get(tmdbId) || [];
+
+              if (candidates.length === 1) {
+
+                const movie = candidates[0];
+
+                // Never allow an incoming TV season to silently
+                // match a generic show record.
+
+                if (
+                  isTv &&
+                  season &&
+                  !getSeason(movie)
+                ) {
+                  reviews.push({
+                    ...base,
+                    reason:
+                      'TV record has a season number, but catalog match does not identify a season.'
+                  });
+
+                  continue;
+                }
+
+                matches.push({
+                  ...base,
+                  action: 'MATCH',
+                  matchType: 'tmdb_id',
+                  catalogIndex: movies.indexOf(movie),
+                  catalogTitle: getTitle(movie),
+                  catalogSeason: getSeason(movie),
+                  catalogTmdbId: getTmdbId(movie)
+                });
+
+                matchedByTmdb++;
+                continue;
+              }
+
+              if (candidates.length > 1) {
+
+                reviews.push({
+                  ...base,
+                  reason:
+                    'TMDB ID matches multiple catalog entries; additional information is required.',
+                  candidates: candidates.map(movie => ({
+                    title: getTitle(movie),
+                    year: getYear(movie),
+                    season: getSeason(movie),
+                    type: getType(movie),
+                    tmdbId: getTmdbId(movie)
+                  }))
+                });
+
+                continue;
+              }
+            }
+
+            // ----------------------------------------------------------
+            // Movie fallback: title + year
+            // ----------------------------------------------------------
+
+            if (!isTv && title && year) {
+
+              const key =
+                `${normalizeTitle(title)}|${year}`;
+
+              const candidates =
+                byTitleYear.get(key) || [];
+
+              if (candidates.length === 1) {
+
+                matches.push({
+                  ...base,
+                  action: 'MATCH',
+                  matchType: 'title_year',
+                  catalogIndex: movies.indexOf(candidates[0]),
+                  catalogTitle: getTitle(candidates[0]),
+                  catalogSeason: '',
+                  catalogTmdbId: getTmdbId(candidates[0])
+                });
+
+                matchedByTitleYear++;
+                continue;
+              }
+
+              if (candidates.length > 1) {
+
+                reviews.push({
+                  ...base,
+                  reason:
+                    'Multiple catalog entries match title and year.',
+                  candidates: candidates.map(movie => ({
+                    title: getTitle(movie),
+                    year: getYear(movie),
+                    tmdbId: getTmdbId(movie),
+                    type: getType(movie)
+                  }))
+                });
+
+                continue;
+              }
+            }
+
+            // ----------------------------------------------------------
+            // No match
+            // ----------------------------------------------------------
+
+            newItems.push({
+              ...base,
+              action: 'NEW',
+              reason:
+                isTv && season
+                  ? 'No existing catalog entry found for this TV show season.'
+                  : 'No existing catalog entry found.'
+            });
+          }
+
+          // ------------------------------------------------------------
+          // Prevent the same catalog item from receiving conflicting
+          // digital updates.
+          // ------------------------------------------------------------
+
+          const groupedMatches = new Map();
+
+          for (const match of matches) {
+
+            const index = match.catalogIndex;
+
+            if (!groupedMatches.has(index)) {
+              groupedMatches.set(index, []);
+            }
+
+            groupedMatches.get(index).push(match);
+          }
+
+          const updates = [];
+
+          for (const [catalogIndex, items] of groupedMatches) {
+
+            const movie = movies[catalogIndex];
+
+            const incomingSources = unique(
+              items.flatMap(x => x.digitalSources || [])
+            );
+
+            const existingSources =
+              getDigital(movie);
+
+            const combinedSources =
+              unique([
+                ...existingSources,
+                ...incomingSources
+              ]);
+
+            const addedSources =
+              combinedSources.filter(
+                source => !existingSources.includes(source)
+              );
+
+            updates.push({
+              action: 'UPDATE_DIGITAL',
+              catalogIndex,
+              title: getTitle(movie),
+              tmdbId: getTmdbId(movie),
+              type: getType(movie),
+              season: getSeason(movie),
+
+              existingDigital: existingSources,
+              incomingDigital: incomingSources,
+              finalDigital: combinedSources,
+              addedDigital: addedSources,
+
+              matches: items.map(item => ({
+                inputTitle: item.title,
+                inputTmdbId: item.tmdbId,
+                inputYear: item.year,
+                inputSeason: item.season,
+                matchType: item.matchType
+              }))
+            });
+          }
+
+          // ------------------------------------------------------------
+          // Create summary
+          // ------------------------------------------------------------
+
+          const summary = {
+            generated: new Date().toISOString(),
+
+            catalogRecords: movies.length,
+            inputRecords: records.length,
+
+            matched: matches.length,
+            newItems: newItems.length,
+            reviews: reviews.length,
+
+            matchMethods: {
+              tvTmdbSeason: matchedByTmdbSeason,
+              tvTitleSeason: matchedByTvTitleSeason,
+              tmdbId: matchedByTmdb,
+              titleYear: matchedByTitleYear
+            },
+
+            catalogUpdates: updates.length,
+
+            digitalSourcesToAdd:
+              updates.reduce(
+                (total, item) =>
+                  total + item.addedDigital.length,
+                0
+              )
+          };
+
+          // ------------------------------------------------------------
+          // Write result files
+          // ------------------------------------------------------------
+
+          const result = {
+            generated: new Date().toISOString(),
+
+            summary,
+
+            updates,
+
+            newItems,
+
+            reviews
+          };
+
+          fs.writeFileSync(
+            RESULT_FILE,
+            JSON.stringify(result, null, 2),
+            'utf8'
+          );
+
+          fs.writeFileSync(
+            REVIEW_FILE,
+            JSON.stringify(
+              {
+                generated: new Date().toISOString(),
+                summary,
+                reviews
+              },
+              null,
+              2
+            ),
+            'utf8'
+          );
+
+          // ------------------------------------------------------------
+          // Console report
+          // ------------------------------------------------------------
+
+          console.log('');
+          console.log('========================================');
+          console.log('RESYNC COMPLETE');
+          console.log('========================================');
+          console.log('');
+
+          console.log('Catalog records:', movies.length);
+          console.log('Input records:', records.length);
+          console.log('');
+
+          console.log('MATCHED:', matches.length);
+          console.log('NEW:', newItems.length);
+          console.log('REVIEW:', reviews.length);
+          console.log('');
+
+          console.log('Match methods:');
+          console.log(
+            '  TV TMDB ID + Season:',
+            matchedByTmdbSeason
+          );
+          console.log(
+            '  TV Title + Season:',
+            matchedByTvTitleSeason
+          );
+          console.log(
+            '  TMDB ID:',
+            matchedByTmdb
+          );
+          console.log(
+            '  Title + Year:',
+            matchedByTitleYear
+          );
+
+          console.log('');
+          console.log(
+            'Catalog records receiving digital updates:',
+            updates.length
+          );
+
+          console.log(
+            'Digital sources to add:',
+            summary.digitalSourcesToAdd
+          );
+
+          console.log('');
+
+          console.log('Created:', RESULT_FILE);
+          console.log('Created:', REVIEW_FILE);
+
+          console.log('');
+          console.log(
+            'IMPORTANT: movies.js was NOT modified.'
+          );
+          NODE
+
+      - name: Upload resync results
+        uses: actions/upload-artifact@v4
+        with:
+          name: inventory-resync-results
+          path: |
+            inventory_resync_results.json
+            inventory_resync_review.json
+
+      - name: Commit resync results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add inventory_resync_results.json inventory_resync_review.json
+
+          git commit -m "Generate inventory resync results" || true
+
+          git push
