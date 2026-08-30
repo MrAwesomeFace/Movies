@@ -1,4 +1,3 @@
-
 name: Inventory Cleanup - TMDB Review
 
 on:
@@ -31,15 +30,18 @@ jobs:
           python <<'PYTHON'
           import json
           import re
+          import os
           import html
           import requests
           from difflib import SequenceMatcher
           from pathlib import Path
+          from datetime import datetime, timezone
 
-          TMDB_API_KEY = __import__("os").environ["TMDB_API_KEY"]
+          TMDB_API_KEY = os.environ["TMDB_API_KEY"]
 
           MOVIES_FILE = Path("movies.js")
           INPUT_FILE = Path("inventory_cleanup.json")
+
           REPORT_FILE = Path("inventory_cleanup_report.md")
           RESULTS_FILE = Path("inventory_cleanup_results.json")
           HTML_FILE = Path("inventory_cleanup_review.html")
@@ -50,6 +52,9 @@ jobs:
               "Authorization": f"Bearer {TMDB_API_KEY}",
               "accept": "application/json"
           }
+
+          session = requests.Session()
+          session.headers.update(headers)
 
           # =========================================================
           # HELPERS
@@ -88,10 +93,6 @@ jobs:
               return title
 
 
-          def escape(value):
-              return html.escape(str(value or ""))
-
-
           def load_movies():
               text = MOVIES_FILE.read_text(encoding="utf-8")
 
@@ -106,337 +107,261 @@ jobs:
               return json.loads(text[start:end + 1])
 
 
-          # =========================================================
-          # TITLE INTELLIGENCE
-          # =========================================================
+          def tmdb_get(endpoint, params=None):
+              url = f"{API_BASE}{endpoint}"
 
-          # These are not TMDB IDs.
-          # They are search corrections for obvious inventory typos
-          # and common collection naming conventions.
-          TITLE_CORRECTIONS = {
-              "the dilemna": "The Dilemma",
-              "fierce creatrues": "Fierce Creatures",
-              "what to expect when expcting":
-                  "What to Expect When Expecting",
-              "who if by see": "Who If By Sea",
-              "little memaid 3": "The Little Mermaid III",
-              "mallrats 10 anniverary": "Mallrats",
-          }
-
-
-          # Known edition words should not become part of the
-          # TMDB title search.
-          EDITION_WORDS = [
-              "bootleg",
-              "anniversary",
-              "10 anniversary",
-              "10th anniversary",
-              "special edition",
-              "collector's edition",
-              "collectors edition",
-              "director's cut",
-              "directors cut",
-              "extended edition",
-              "ultimate edition",
-              "limited edition",
-          ]
-
-
-          def identify_tv_season(title):
-              """
-              Returns season information when the source title clearly
-              represents a television season.
-              """
-
-              pattern = re.search(
-                  r"\bseason\s+(\d+)\b",
-                  title,
-                  flags=re.IGNORECASE
-              )
-
-              if pattern:
-                  return int(pattern.group(1))
-
-              # Volume-based TV collections are also often TV.
-              if re.search(
-                  r"\bvolume\s+\d+\b",
-                  title,
-                  flags=re.IGNORECASE
-              ):
-                  return None
-
-              return None
-
-
-          def extract_year(title):
-              match = re.search(r"\b(19\d{2}|20\d{2})\b", title)
-
-              if match:
-                  return int(match.group(1))
-
-              return None
-
-
-          def prepare_search_title(title):
-              original = title.strip()
-              normalized = normalize(original)
-
-              corrected = TITLE_CORRECTIONS.get(
-                  normalized,
-                  original
-              )
-
-              year = extract_year(corrected)
-
-              # Remove edition descriptors from the actual TMDB search.
-              search_title = corrected
-
-              for word in EDITION_WORDS:
-                  search_title = re.sub(
-                      r"\b" + re.escape(word) + r"\b",
-                      "",
-                      search_title,
-                      flags=re.IGNORECASE
-                  )
-
-              # Remove season information from TV search title.
-              search_title = re.sub(
-                  r"\bseason\s+\d+\b",
-                  "",
-                  search_title,
-                  flags=re.IGNORECASE
-              )
-
-              search_title = re.sub(
-                  r"\bvolume\s+\d+\b",
-                  "",
-                  search_title,
-                  flags=re.IGNORECASE
-              )
-
-              search_title = " ".join(search_title.split())
-
-              return {
-                  "original": original,
-                  "corrected": corrected,
-                  "search_title": search_title,
-                  "year": year,
-                  "season": identify_tv_season(original)
-              }
-
-
-          # =========================================================
-          # TMDB SEARCH
-          # =========================================================
-
-          def tmdb_search(endpoint_name, title):
-              params = {
-                  "query": title,
-                  "include_adult": "false",
-                  "language": "en-US",
-                  "page": 1
-              }
-
-              endpoint = f"{API_BASE}/search/{endpoint_name}"
-
-              response = requests.get(
-                  endpoint,
-                  headers=headers,
-                  params=params,
+              response = session.get(
+                  url,
+                  params=params or {},
                   timeout=30
               )
 
               response.raise_for_status()
 
-              return response.json().get("results", [])
+              return response.json()
 
 
-          def get_result_title(result):
-              return (
-                  result.get("title")
-                  or result.get("name")
-                  or ""
+          def tmdb_search_movie(title):
+              data = tmdb_get(
+                  "/search/movie",
+                  {
+                      "query": title,
+                      "include_adult": "false",
+                      "language": "en-US"
+                  }
               )
 
+              return data.get("results", [])
 
-          def get_result_year(result):
-              date = (
-                  result.get("release_date")
-                  or result.get("first_air_date")
-                  or ""
+
+          def tmdb_search_tv(title):
+              data = tmdb_get(
+                  "/search/tv",
+                  {
+                      "query": title,
+                      "include_adult": "false",
+                      "language": "en-US"
+                  }
               )
 
-              if len(date) >= 4:
-                  try:
-                      return int(date[:4])
-                  except Exception:
-                      pass
-
-              return None
+              return data.get("results", [])
 
 
-          def score_candidate(source_title, candidate, expected_type):
-              source = normalize(source_title)
-              candidate_title = normalize(
-                  get_result_title(candidate)
+          def tmdb_movie_details(tmdb_id):
+              try:
+                  return tmdb_get(
+                      f"/movie/{tmdb_id}",
+                      {
+                          "language": "en-US"
+                      }
+                  )
+              except Exception:
+                  return {}
+
+
+          def tmdb_tv_details(tmdb_id):
+              try:
+                  return tmdb_get(
+                      f"/tv/{tmdb_id}",
+                      {
+                          "language": "en-US"
+                      }
+                  )
+              except Exception:
+                  return {}
+
+
+          def tmdb_tv_season(tmdb_id, season_number):
+              try:
+                  return tmdb_get(
+                      f"/tv/{tmdb_id}/season/{season_number}",
+                      {
+                          "language": "en-US"
+                      }
+                  )
+              except Exception:
+                  return None
+
+
+          # =========================================================
+          # TITLE / SEASON PARSING
+          # =========================================================
+
+          SEASON_PATTERNS = [
+              re.compile(
+                  r"^(.*?)[\s\-_:]*(?:season|s)\s*0*(\d+)\s*$",
+                  re.IGNORECASE
+              ),
+              re.compile(
+                  r"^(.*?)\s+(\d+)\s*$",
+                  re.IGNORECASE
               )
+          ]
+
+
+          def parse_tv_season(title):
+              """
+              Detect common forms such as:
+
+                  Friends Season 4
+                  Friends season 04
+                  Friends S4
+                  Friends S04
+                  Friends - Season 4
+                  Friends 4
+
+              The bare-number form is only treated as a season when
+              the surrounding title strongly resembles a TV show.
+              """
+
+              original = title.strip()
+
+              for pattern in SEASON_PATTERNS[:1]:
+                  match = pattern.match(original)
+
+                  if match:
+                      show_title = match.group(1).strip()
+                      season_number = int(match.group(2))
+
+                      if show_title:
+                          return {
+                              "is_tv_season": True,
+                              "show_title": show_title,
+                              "season": season_number
+                          }
+
+              return {
+                  "is_tv_season": False,
+                  "show_title": original,
+                  "season": None
+              }
+
+
+          # =========================================================
+          # MATCH SCORING
+          # =========================================================
+
+          def candidate_score(source_title, result, media_type="movie"):
+              if media_type == "tv":
+                  result_title = (
+                      result.get("name")
+                      or result.get("original_name")
+                      or ""
+                  )
+              else:
+                  result_title = (
+                      result.get("title")
+                      or result.get("original_title")
+                      or ""
+                  )
+
+              source_normalized = normalize(source_title)
+              result_normalized = normalize(result_title)
 
               score = similarity(
-                  source,
-                  candidate_title
+                  source_title,
+                  result_title
               )
 
-              # Exact normalized title is extremely strong.
-              if source == candidate_title:
-                  score += 0.30
+              # Exact normalized title.
+              if source_normalized == result_normalized:
+                  score += 0.40
 
-              # Ignore common leading "the".
-              source_without_the = re.sub(
-                  r"^the ",
-                  "",
-                  source
+              # One title containing the other is useful, but not enough
+              # to guarantee a match.
+              elif (
+                  source_normalized in result_normalized
+                  or result_normalized in source_normalized
+              ):
+                  score += 0.08
+
+              return min(score, 1.0)
+
+
+          def result_title(result, media_type):
+              if media_type == "tv":
+                  return (
+                      result.get("name")
+                      or result.get("original_name")
+                      or ""
+                  )
+
+              return (
+                  result.get("title")
+                  or result.get("original_title")
+                  or ""
               )
 
-              candidate_without_the = re.sub(
-                  r"^the ",
-                  "",
-                  candidate_title
-              )
 
-              if source_without_the == candidate_without_the:
-                  score += 0.20
+          def release_date(result, media_type):
+              if media_type == "tv":
+                  return result.get("first_air_date") or ""
 
-              candidate_type = candidate.get(
-                  "media_type",
-                  expected_type
-              )
-
-              # Strongly prefer the type we actually expect.
-              if candidate_type == expected_type:
-                  score += 0.20
-              else:
-                  score -= 0.35
-
-              # Year information, when supplied by the source,
-              # is a very strong signal.
-              source_year = extract_year(source_title)
-
-              if source_year:
-                  candidate_year = get_result_year(candidate)
-
-                  if candidate_year == source_year:
-                      score += 0.30
-                  elif candidate_year:
-                      score -= min(
-                          abs(candidate_year - source_year) * 0.03,
-                          0.30
-                      )
-
-              return max(0.0, min(score, 1.0))
+              return result.get("release_date") or ""
 
 
-          def build_candidates(info):
-              title = info["search_title"]
-              original = info["original"]
-              season = info["season"]
+          def prepare_movie_candidates(title, special=None):
+              results = tmdb_search_movie(title)
 
-              candidates = []
+              scored = []
 
-              # Explicit season -> TV only.
-              if season is not None:
-                  results = tmdb_search("tv", title)
+              for result in results:
+                  result = dict(result)
 
-                  for result in results:
-                      result["media_type"] = "tv"
-                      result["_match_score"] = score_candidate(
-                          original,
-                          result,
-                          "tv"
-                      )
-                      candidates.append(result)
-
-                  return candidates
-
-              # Normal inventory items:
-              #
-              # Search movies FIRST.
-              # Search TV as a secondary possibility so a TV result
-              # cannot automatically win just because TMDB ranked it
-              # highly in /search/multi.
-              movie_results = tmdb_search(
-                  "movie",
-                  title
-              )
-
-              for result in movie_results:
-                  result["media_type"] = "movie"
-                  result["_match_score"] = score_candidate(
-                      original,
+                  result["_match_score"] = candidate_score(
+                      title,
                       result,
                       "movie"
                   )
-                  candidates.append(result)
 
-              tv_results = tmdb_search(
-                  "tv",
-                  title
-              )
+                  scored.append(result)
 
-              for result in tv_results:
-                  result["media_type"] = "tv"
-                  result["_match_score"] = score_candidate(
-                      original,
-                      result,
-                      "movie"
-                  )
-                  candidates.append(result)
-
-              candidates.sort(
+              scored.sort(
                   key=lambda x: x["_match_score"],
                   reverse=True
               )
 
-              return candidates
+              # Keep enough candidates for human selection.
+              return scored[:8]
 
 
-          def find_best_tmdb_match(title, special=None):
-              info = prepare_search_title(title)
+          def prepare_tv_candidates(show_title):
+              results = tmdb_search_tv(show_title)
 
-              candidates = build_candidates(info)
+              scored = []
 
-              if not candidates:
-                  return None, [], "NO_RESULTS", info
+              for result in results:
+                  result = dict(result)
 
-              # Remove obviously poor results.
-              candidates = [
-                  c for c in candidates
-                  if c["_match_score"] >= 0.35
-              ]
+                  result["_match_score"] = candidate_score(
+                      show_title,
+                      result,
+                      "tv"
+                  )
 
-              if not candidates:
-                  return None, [], "NO_RESULTS", info
+                  scored.append(result)
 
-              candidates.sort(
+              scored.sort(
                   key=lambda x: x["_match_score"],
                   reverse=True
               )
+
+              return scored[:8]
+
+
+          def determine_status(candidates, special=None):
+              if not candidates:
+                  return "NO_RESULTS"
 
               best = candidates[0]
 
-              threshold = 0.82
+              threshold = 0.78
 
               if special:
-                  threshold = 0.86
-
-              # Explicit TV season can be accepted at a slightly
-              # lower threshold because the source gives us type.
-              if info["season"] is not None:
-                  threshold = 0.75
-
-              status = "MATCH"
+                  threshold = 0.82
 
               if best["_match_score"] < threshold:
-                  status = "REVIEW"
+                  return "REVIEW"
 
               if len(candidates) > 1:
                   gap = (
@@ -444,22 +369,12 @@ jobs:
                       - candidates[1]["_match_score"]
                   )
 
-                  # Close candidates require human approval.
-                  if gap < 0.08:
-                      status = "REVIEW"
+                  # Small score gaps are deliberately treated as
+                  # ambiguous instead of automatically accepted.
+                  if gap < 0.10:
+                      return "REVIEW"
 
-              # A non-movie result should NEVER automatically win
-              # a normal movie inventory item.
-              if info["season"] is None:
-                  if best.get("media_type") != "movie":
-                      status = "REVIEW"
-
-              return (
-                  best,
-                  candidates[:8],
-                  status,
-                  info
-              )
+              return "MATCH"
 
 
           # =========================================================
@@ -474,9 +389,7 @@ jobs:
           print("Loading inventory cleanup instructions...")
 
           instructions = json.loads(
-              INPUT_FILE.read_text(
-                  encoding="utf-8"
-              )
+              INPUT_FILE.read_text(encoding="utf-8")
           )
 
           additions = instructions.get("add", [])
@@ -490,14 +403,11 @@ jobs:
           print(f"Additions: {len(additions)}")
           print(f"Removals: {len(removals)}")
           print(f"The fixes: {len(the_fixes)}")
-          print(
-              f"TMDB corrections: "
-              f"{len(tmdb_corrections)}"
-          )
+          print(f"TMDB corrections: {len(tmdb_corrections)}")
 
 
           # =========================================================
-          # EXISTING CATALOG INDEX
+          # EXISTING CATALOG INDEXES
           # =========================================================
 
           by_tmdb = {}
@@ -513,279 +423,283 @@ jobs:
 
 
           # =========================================================
+          # MACHINE-READABLE REVIEW DATA
+          # =========================================================
+
+          review_items = []
+
+          item_counter = 0
+
+          def next_item_id():
+              global item_counter
+              item_counter += 1
+              return f"review-{item_counter:04d}"
+
+
+          # =========================================================
           # ADDITIONS
           # =========================================================
 
-          addition_matches = []
+          print("")
+          print("=" * 60)
+          print("PROCESSING ADDITIONS")
+          print("=" * 60)
 
-          for i, item in enumerate(additions, 1):
+          for index, item in enumerate(additions, 1):
 
-              title = item["title"]
+              source_title = item["title"]
               fmt = item.get("format", "")
               special = item.get("special")
 
               print(
-                  f"[ADD {i}/{len(additions)}] "
-                  f"{title} ({fmt})"
+                  f"[ADD {index}/{len(additions)}] "
+                  f"{source_title} ({fmt})"
               )
 
-              best, candidates, status, info = (
-                  find_best_tmdb_match(
-                      title,
+              parsed = parse_tv_season(source_title)
+
+              # -----------------------------------------------------
+              # TV SEASON
+              # -----------------------------------------------------
+
+              if parsed["is_tv_season"]:
+
+                  show_title = parsed["show_title"]
+                  season_number = parsed["season"]
+
+                  candidates = prepare_tv_candidates(
+                      show_title
+                  )
+
+                  status = determine_status(
+                      candidates,
                       special
                   )
-              )
 
-              if best:
+                  enriched_candidates = []
 
-                  tmdb_id = best.get("id")
+                  for candidate in candidates:
 
-                  tmdb_title = get_result_title(
-                      best
-                  )
+                      candidate_id = candidate.get("id")
 
-                  media_type = best.get(
-                      "media_type",
-                      ""
-                  )
-
-                  existing = by_tmdb.get(
-                      str(tmdb_id),
-                      []
-                  )
-
-                  if existing:
-                      action = (
-                          "ADD_FORMAT_TO_EXISTING"
-                      )
-                  else:
-                      action = (
-                          "CREATE_NEW_RECORD"
+                      details = tmdb_tv_details(
+                          candidate_id
                       )
 
-                  addition_matches.append({
-                      "source_title": title,
+                      number_of_seasons = details.get(
+                          "number_of_seasons"
+                      )
+
+                      season = tmdb_tv_season(
+                          candidate_id,
+                          season_number
+                      )
+
+                      season_exists = season is not None
+
+                      c = {
+                          "tmdbId": candidate_id,
+                          "tmdbTitle": result_title(
+                              candidate,
+                              "tv"
+                          ),
+                          "type": "tv",
+                          "score": candidate["_match_score"],
+                          "first_air_date": release_date(
+                              candidate,
+                              "tv"
+                          ),
+                          "number_of_seasons":
+                              number_of_seasons,
+                          "season": season_number,
+                          "season_exists": season_exists
+                      }
+
+                      # A candidate that does not contain the
+                      # requested season should not be treated as a
+                      # valid automatic match.
+                      if not season_exists:
+                          c["invalid_for_requested_season"] = True
+
+                      enriched_candidates.append(c)
+
+                  valid_candidates = [
+                      c
+                      for c in enriched_candidates
+                      if not c.get(
+                          "invalid_for_requested_season"
+                      )
+                  ]
+
+                  if not valid_candidates:
+                      status = "REVIEW"
+
+                  elif len(valid_candidates) > 1:
+                      best = valid_candidates[0]
+
+                      if (
+                          best["score"]
+                          - valid_candidates[1]["score"]
+                          < 0.10
+                      ):
+                          status = "REVIEW"
+
+                  best = (
+                      valid_candidates[0]
+                      if valid_candidates
+                      else None
+                  )
+
+                  action = (
+                      "ADD_FORMAT_TO_EXISTING"
+                      if best
+                      and str(best["tmdbId"]) in by_tmdb
+                      else "CREATE_NEW_RECORD"
+                  )
+
+                  review_items.append({
+                      "id": next_item_id(),
+                      "category": "addition",
+                      "source_title": source_title,
                       "format": fmt,
                       "special": special,
-                      "search_title": info[
-                          "search_title"
-                      ],
-                      "corrected_title": info[
-                          "corrected"
-                      ],
-                      "tmdbId": tmdb_id,
-                      "tmdbTitle": tmdb_title,
-                      "type": media_type,
-                      "score": best[
-                          "_match_score"
-                      ],
+                      "type": "tv",
+                      "season": season_number,
+                      "show_title": show_title,
                       "status": status,
                       "action": action,
-                      "existing_titles": [
-                          m.get("title", "")
-                          for m in existing
-                      ],
-                      "candidates": [
-                          {
-                              "tmdbId": c.get("id"),
-                              "tmdbTitle": get_result_title(c),
-                              "type": c.get(
-                                  "media_type",
-                                  ""
-                              ),
-                              "score": c[
-                                  "_match_score"
-                              ],
-                              "year": get_result_year(c)
-                          }
-                          for c in candidates
-                      ]
+                      "selected": (
+                          best["tmdbId"]
+                          if best
+                          else None
+                      ),
+                      "selected_tmdbTitle": (
+                          best["tmdbTitle"]
+                          if best
+                          else None
+                      ),
+                      "selected_score": (
+                          best["score"]
+                          if best
+                          else 0
+                      ),
+                      "candidates": enriched_candidates
                   })
 
-              else:
+                  continue
 
-                  addition_matches.append({
-                      "source_title": title,
-                      "format": fmt,
-                      "special": special,
-                      "search_title": info[
-                          "search_title"
-                      ],
-                      "corrected_title": info[
-                          "corrected"
-                      ],
-                      "tmdbId": None,
-                      "tmdbTitle": None,
-                      "type": None,
-                      "score": 0,
-                      "status": "NO_RESULTS",
-                      "action": "MANUAL_REVIEW",
-                      "existing_titles": [],
-                      "candidates": []
-                  })
+              # -----------------------------------------------------
+              # MOVIE
+              # -----------------------------------------------------
+
+              candidates = prepare_movie_candidates(
+                  source_title,
+                  special
+              )
+
+              status = determine_status(
+                  candidates,
+                  special
+              )
+
+              enriched_candidates = []
+
+              for candidate in candidates:
+
+                  tmdb_id = candidate.get("id")
+
+                  details = tmdb_movie_details(
+                      tmdb_id
+                  )
+
+                  c = {
+                      "tmdbId": tmdb_id,
+                      "tmdbTitle": result_title(
+                          candidate,
+                          "movie"
+                      ),
+                      "type": "movie",
+                      "score": candidate["_match_score"],
+                      "release_date": release_date(
+                          candidate,
+                          "movie"
+                      ),
+                      "overview": (
+                          details.get("overview")
+                          or candidate.get("overview")
+                          or ""
+                      )
+                  }
+
+                  enriched_candidates.append(c)
+
+              best = (
+                  enriched_candidates[0]
+                  if enriched_candidates
+                  else None
+              )
+
+              action = (
+                  "ADD_FORMAT_TO_EXISTING"
+                  if best
+                  and str(best["tmdbId"]) in by_tmdb
+                  else "CREATE_NEW_RECORD"
+              )
+
+              review_items.append({
+                  "id": next_item_id(),
+                  "category": "addition",
+                  "source_title": source_title,
+                  "format": fmt,
+                  "special": special,
+                  "type": "movie",
+                  "season": None,
+                  "show_title": None,
+                  "status": status,
+                  "action": action,
+                  "selected": (
+                      best["tmdbId"]
+                      if best
+                      else None
+                  ),
+                  "selected_tmdbTitle": (
+                      best["tmdbTitle"]
+                      if best
+                      else None
+                  ),
+                  "selected_score": (
+                      best["score"]
+                      if best
+                      else 0
+                  ),
+                  "candidates": enriched_candidates
+              })
 
 
           # =========================================================
-          # MARK DEFAULT DECISION
-          # =========================================================
-
-          for item in addition_matches:
-
-              # High-confidence matches are pre-selected.
-              #
-              # Anything requiring review is left unselected.
-              if (
-                  item["status"] == "MATCH"
-                  and item["tmdbId"] is not None
-              ):
-                  item["default_decision"] = "ACCEPT"
-              else:
-                  item["default_decision"] = "REVIEW"
-
-
-          # =========================================================
-          # MARK EXISTING CATALOG INFORMATION
+          # EXISTING CATALOG TITLE INDEX
           # =========================================================
 
           normalized_catalog_titles = [
               (
                   movie,
-                  normalize(
-                      movie.get("title", "")
-                  ),
-                  normalize(
-                      movie.get("tmdbTitle", "")
-                  )
+                  normalize(movie.get("title", "")),
+                  normalize(movie.get("tmdbTitle", ""))
               )
               for movie in movies
           ]
 
 
           # =========================================================
-          # MARKDOWN REPORT
-          # =========================================================
-
-          report = []
-
-          report.append(
-              "# Inventory Cleanup TMDB Review"
-          )
-          report.append("")
-          report.append(
-              "**REPORT ONLY — no changes were made "
-              "to `movies.js`.**"
-          )
-          report.append("")
-          report.append(
-              f"- Existing catalog records: "
-              f"**{len(movies)}**"
-          )
-          report.append(
-              f"- Inventory additions: "
-              f"**{len(additions)}**"
-          )
-          report.append(
-              f"- Explicit removals: "
-              f"**{len(removals)}**"
-          )
-          report.append(
-              f"- Alphabetical `The` fixes: "
-              f"**{len(the_fixes)}**"
-          )
-          report.append(
-              f"- TMDB corrections: "
-              f"**{len(tmdb_corrections)}**"
-          )
-          report.append("")
-
-          report.append("## ADDITIONS")
-          report.append("")
-
-          for item in addition_matches:
-
-              report.append(
-                  f"### {item['source_title']}"
-              )
-
-              report.append(
-                  f"- Format: `{item['format']}`"
-              )
-
-              if item.get("special"):
-                  report.append(
-                      f"- Special instruction: "
-                      f"{item['special']}"
-                  )
-
-              report.append(
-                  f"- Search title: "
-                  f"`{item['search_title']}`"
-              )
-
-              report.append(
-                  f"- TMDB: "
-                  f"`{item['tmdbId']}` — "
-                  f"{item['tmdbTitle']}"
-              )
-
-              report.append(
-                  f"- Type: `{item['type']}`"
-              )
-
-              report.append(
-                  f"- Match score: "
-                  f"`{item['score']:.3f}`"
-              )
-
-              report.append(
-                  f"- Match status: "
-                  f"**{item['status']}**"
-              )
-
-              report.append(
-                  f"- Proposed action: "
-                  f"**{item['action']}**"
-              )
-
-              if item["existing_titles"]:
-                  report.append(
-                      "- Existing catalog record(s): "
-                      + ", ".join(
-                          item["existing_titles"]
-                      )
-                  )
-
-              if item["candidates"]:
-                  report.append("")
-                  report.append(
-                      "**Top candidates:**"
-                  )
-
-                  for candidate in item[
-                      "candidates"
-                  ]:
-                      report.append(
-                          f"- `{candidate['tmdbId']}` "
-                          f"{candidate['tmdbTitle']} "
-                          f"({candidate['type']}, "
-                          f"{candidate['year'] or 'no year'}) "
-                          f"score "
-                          f"`{candidate['score']:.3f}`"
-                      )
-
-              report.append("")
-
-
-          # =========================================================
           # REMOVALS
           # =========================================================
 
-          report.append("## REMOVALS")
-          report.append("")
+          removal_results = []
 
           for title in removals:
 
               target = normalize(title)
+
               matches = []
 
               for movie, ntitle, ntmdbtitle in (
@@ -802,59 +716,36 @@ jobs:
                   ):
                       matches.append(movie)
 
-              report.append(
-                  f"### {title}"
-              )
-
               if len(matches) == 1:
-
-                  movie = matches[0]
-
-                  report.append(
-                      f"- **FOUND** → "
-                      f"`{movie.get('title')}` "
-                      f"(TMDB `{movie.get('tmdbId')}`)"
-                  )
-
-                  report.append(
-                      "- Proposed action: **REMOVE**"
-                  )
-
+                  status = "MATCH"
               elif len(matches) > 1:
-
-                  report.append(
-                      "- **MULTIPLE MATCHES — "
-                      "MANUAL REVIEW**"
-                  )
-
-                  for movie in matches:
-                      report.append(
-                          f"- `{movie.get('title')}` "
-                          f"(TMDB `{movie.get('tmdbId')}`)"
-                      )
-
+                  status = "REVIEW"
               else:
+                  status = "NO_RESULTS"
 
-                  report.append(
-                      "- **NOT FOUND — "
-                      "MANUAL REVIEW**"
-                  )
-
-              report.append("")
+              removal_results.append({
+                  "title": title,
+                  "status": status,
+                  "matches": [
+                      {
+                          "title": m.get("title"),
+                          "tmdbId": m.get("tmdbId")
+                      }
+                      for m in matches
+                  ]
+              })
 
 
           # =========================================================
           # THE FIXES
           # =========================================================
 
-          report.append(
-              "## ALPHABETICAL `THE` FIXES"
-          )
-          report.append("")
+          the_results = []
 
           for title in the_fixes:
 
               target = normalize(title)
+
               matches = []
 
               for movie, ntitle, ntmdbtitle in (
@@ -869,52 +760,32 @@ jobs:
 
               new_title = clean_title(title)
 
-              report.append(
-                  f"### {title}"
-              )
-
-              report.append(
-                  f"- Proposed title: **{new_title}**"
-              )
-
               if len(matches) == 1:
-
-                  movie = matches[0]
-
-                  report.append(
-                      f"- Found: "
-                      f"`{movie.get('title')}` "
-                      f"(TMDB `{movie.get('tmdbId')}`)"
-                  )
-
-                  report.append(
-                      "- Proposed action: "
-                      "**RENAME TITLE ONLY**"
-                  )
-
+                  status = "MATCH"
               elif len(matches) > 1:
-
-                  report.append(
-                      "- **MULTIPLE MATCHES — "
-                      "MANUAL REVIEW**"
-                  )
-
+                  status = "REVIEW"
               else:
+                  status = "NO_RESULTS"
 
-                  report.append(
-                      "- **NOT FOUND — "
-                      "MANUAL REVIEW**"
-                  )
-
-              report.append("")
+              the_results.append({
+                  "title": title,
+                  "new_title": new_title,
+                  "status": status,
+                  "matches": [
+                      {
+                          "title": m.get("title"),
+                          "tmdbId": m.get("tmdbId")
+                      }
+                      for m in matches
+                  ]
+              })
 
 
           # =========================================================
           # TMDB CORRECTIONS
           # =========================================================
 
-          report.append("## TMDB CORRECTIONS")
-          report.append("")
+          correction_results = []
 
           for correction in tmdb_corrections:
 
@@ -924,15 +795,8 @@ jobs:
                   ""
               )
 
-              report.append(
-                  f"### {title}"
-              )
-
-              report.append(
-                  f"- Instruction: {instruction}"
-              )
-
               target = normalize(title)
+
               matches = []
 
               for movie, ntitle, ntmdbtitle in (
@@ -949,81 +813,302 @@ jobs:
                   ):
                       matches.append(movie)
 
-              if len(matches) == 1:
+              if len(matches) != 1:
 
-                  current = matches[0]
+                  correction_results.append({
+                      "title": title,
+                      "instruction": instruction,
+                      "status": "REVIEW",
+                      "catalog_matches": [
+                          {
+                              "title": m.get("title"),
+                              "tmdbId": m.get("tmdbId")
+                          }
+                          for m in matches
+                      ],
+                      "candidates": []
+                  })
 
-                  report.append(
-                      f"- Current catalog record: "
-                      f"`{current.get('title')}`"
+                  continue
+
+              current = matches[0]
+
+              parsed = parse_tv_season(title)
+
+              if parsed["is_tv_season"]:
+                  candidates = prepare_tv_candidates(
+                      parsed["show_title"]
                   )
-
-                  report.append(
-                      f"- Current TMDB ID: "
-                      f"`{current.get('tmdbId')}`"
-                  )
-
-                  best, candidates, status, info = (
-                      find_best_tmdb_match(
-                          title,
-                          instruction
-                      )
-                  )
-
-                  if best:
-
-                      tmdb_title = get_result_title(
-                          best
-                      )
-
-                      report.append(
-                          f"- Proposed TMDB: "
-                          f"`{best.get('id')}` — "
-                          f"{tmdb_title}"
-                      )
-
-                      report.append(
-                          f"- Score: "
-                          f"`{best['_match_score']:.3f}`"
-                      )
-
-                      report.append(
-                          f"- Status: **{status}**"
-                      )
-
-                  else:
-
-                      report.append(
-                          "- **NO TMDB RESULTS**"
-                      )
-
-              elif len(matches) > 1:
-
-                  report.append(
-                      "- **MULTIPLE CATALOG MATCHES — "
-                      "MANUAL REVIEW**"
-                  )
-
+                  media_type = "tv"
+                  search_title = parsed["show_title"]
               else:
+                  candidates = prepare_movie_candidates(
+                      title,
+                      instruction
+                  )
+                  media_type = "movie"
+                  search_title = title
+
+              enriched = []
+
+              for candidate in candidates:
+
+                  tmdb_id = candidate.get("id")
+
+                  if media_type == "tv":
+                      tmdb_title = result_title(
+                          candidate,
+                          "tv"
+                      )
+                      date = release_date(
+                          candidate,
+                          "tv"
+                      )
+                  else:
+                      tmdb_title = result_title(
+                          candidate,
+                          "movie"
+                      )
+                      date = release_date(
+                          candidate,
+                          "movie"
+                      )
+
+                  enriched.append({
+                      "tmdbId": tmdb_id,
+                      "tmdbTitle": tmdb_title,
+                      "type": media_type,
+                      "score": candidate["_match_score"],
+                      "release_date": date
+                  })
+
+              status = determine_status(
+                  candidates,
+                  instruction
+              )
+
+              correction_results.append({
+                  "title": title,
+                  "instruction": instruction,
+                  "status": status,
+                  "current": {
+                      "title": current.get("title"),
+                      "tmdbId": current.get("tmdbId")
+                  },
+                  "candidates": enriched
+              })
+
+
+          # =========================================================
+          # RESULTS JSON
+          # =========================================================
+
+          results = {
+              "generated_at": datetime.now(
+                  timezone.utc
+              ).isoformat(),
+
+              "catalog_count": len(movies),
+
+              "review_items": review_items,
+
+              "removals": removal_results,
+
+              "the_fixes": the_results,
+
+              "tmdb_corrections": correction_results
+          }
+
+          RESULTS_FILE.write_text(
+              json.dumps(
+                  results,
+                  indent=2
+              ),
+              encoding="utf-8"
+          )
+
+
+          # =========================================================
+          # MARKDOWN REPORT
+          # =========================================================
+
+          report = []
+
+          report.append("# Inventory Cleanup TMDB Review")
+          report.append("")
+          report.append(
+              "**REPORT ONLY — no changes were made to `movies.js`.**"
+          )
+          report.append("")
+          report.append(
+              f"- Existing catalog records: **{len(movies)}**"
+          )
+          report.append(
+              f"- Inventory additions: **{len(additions)}**"
+          )
+          report.append(
+              f"- Explicit removals: **{len(removals)}**"
+          )
+          report.append(
+              f"- Alphabetical `The` fixes: **{len(the_fixes)}**"
+          )
+          report.append(
+              f"- TMDB corrections: **{len(tmdb_corrections)}**"
+          )
+          report.append("")
+
+          report.append("## ADDITIONS")
+          report.append("")
+
+          for item in review_items:
+
+              report.append(
+                  f"### {item['source_title']}"
+              )
+
+              if item.get("season") is not None:
+                  report.append(
+                      f"- TV show: `{item['show_title']}`"
+                  )
+                  report.append(
+                      f"- Season: `{item['season']}`"
+                  )
+
+              report.append(
+                  f"- Format: `{item['format']}`"
+              )
+
+              report.append(
+                  f"- Status: **{item['status']}**"
+              )
+
+              if item.get("special"):
+                  report.append(
+                      f"- Special instruction: "
+                      f"{item['special']}"
+                  )
+
+              report.append(
+                  f"- Candidates: "
+                  f"**{len(item['candidates'])}**"
+              )
+
+              for candidate in item["candidates"][:5]:
+
+                  season_note = ""
+
+                  if candidate.get("season") is not None:
+                      season_note = (
+                          f" — Season "
+                          f"{candidate['season']} "
+                          f"{'FOUND' if candidate.get('season_exists') else 'NOT FOUND'}"
+                      )
 
                   report.append(
-                      "- **CATALOG RECORD NOT FOUND — "
-                      "MANUAL REVIEW**"
+                      f"- `{candidate['tmdbId']}` "
+                      f"{candidate['tmdbTitle']} "
+                      f"score "
+                      f"`{candidate['score']:.3f}`"
+                      f"{season_note}"
                   )
 
               report.append("")
 
+          report.append("## REMOVALS")
+          report.append("")
+
+          for item in removal_results:
+
+              report.append(
+                  f"### {item['title']}"
+              )
+
+              report.append(
+                  f"- Status: **{item['status']}**"
+              )
+
+              for match in item["matches"]:
+
+                  report.append(
+                      f"- `{match['tmdbId']}` "
+                      f"{match['title']}"
+                  )
+
+              report.append("")
+
+          report.append("## ALPHABETICAL `THE` FIXES")
+          report.append("")
+
+          for item in the_results:
+
+              report.append(
+                  f"### {item['title']}"
+              )
+
+              report.append(
+                  f"- Proposed title: "
+                  f"**{item['new_title']}**"
+              )
+
+              report.append(
+                  f"- Status: **{item['status']}**"
+              )
+
+              report.append("")
+
+          report.append("## TMDB CORRECTIONS")
+          report.append("")
+
+          for item in correction_results:
+
+              report.append(
+                  f"### {item['title']}"
+              )
+
+              report.append(
+                  f"- Instruction: "
+                  f"{item['instruction']}"
+              )
+
+              report.append(
+                  f"- Status: **{item['status']}**"
+              )
+
+              if item.get("current"):
+                  report.append(
+                      f"- Current catalog record: "
+                      f"`{item['current']['title']}`"
+                  )
+
+                  report.append(
+                      f"- Current TMDB ID: "
+                      f"`{item['current']['tmdbId']}`"
+                  )
+
+              for candidate in item.get(
+                  "candidates",
+                  []
+              )[:5]:
+
+                  report.append(
+                      f"- `{candidate['tmdbId']}` "
+                      f"{candidate['tmdbTitle']} "
+                      f"score "
+                      f"`{candidate['score']:.3f}`"
+                  )
+
+              report.append("")
 
           report.append("## IMPORTANT")
           report.append("")
           report.append(
-              "This workflow intentionally made "
-              "**NO CHANGES** to `movies.js`."
+              "This workflow intentionally made **NO CHANGES** "
+              "to `movies.js`."
           )
           report.append("")
           report.append(
-              "Use `inventory_cleanup_review.html` "
-              "to approve or reject proposed additions."
+              "Use the interactive HTML review to choose "
+              "specific candidates."
           )
 
           REPORT_FILE.write_text(
@@ -1033,778 +1118,1047 @@ jobs:
 
 
           # =========================================================
-          # MACHINE-READABLE RESULTS
-          # =========================================================
-
-          RESULTS_FILE.write_text(
-              json.dumps(
-                  addition_matches,
-                  indent=2
-              ),
-              encoding="utf-8"
-          )
-
-
-          # =========================================================
           # INTERACTIVE HTML REVIEW
           # =========================================================
 
-          html_items = []
-
-          for index, item in enumerate(
-              addition_matches
-          ):
-
-              candidate_html = ""
-
-              for candidate in item["candidates"]:
-
-                  candidate_html += f"""
-                  <div class="candidate">
-                    <strong>{escape(candidate['tmdbTitle'])}</strong>
-                    <span>
-                      TMDB {escape(candidate['tmdbId'])}
-                      · {escape(candidate['type'])}
-                      · {escape(candidate['year'] or 'no year')}
-                      · score {candidate['score']:.3f}
-                    </span>
-                  </div>
-                  """
-
-              existing_html = ""
-
-              if item["existing_titles"]:
-                  existing_html = (
-                      "<div class='existing'>"
-                      "Existing catalog: "
-                      + escape(
-                          ", ".join(
-                              item["existing_titles"]
-                          )
-                      )
-                      + "</div>"
-                  )
-
-              status_class = (
-                  "match"
-                  if item["status"] == "MATCH"
-                  else "review"
-              )
-
-              html_items.append(
-                  f"""
-                  <div class="item {status_class}"
-                       data-index="{index}">
-
-                    <div class="item-header">
-                      <div>
-                        <h2>
-                          {escape(item['source_title'])}
-                        </h2>
-                        <div class="meta">
-                          Format:
-                          <strong>
-                            {escape(item['format'])}
-                          </strong>
-                        </div>
-                      </div>
-
-                      <div class="status">
-                        {escape(item['status'])}
-                      </div>
-                    </div>
-
-                    <div class="proposal">
-
-                      <div class="source">
-                        <label>Inventory</label>
-                        <strong>
-                          {escape(item['source_title'])}
-                        </strong>
-                      </div>
-
-                      <div class="arrow">→</div>
-
-                      <div class="tmdb">
-                        <label>Proposed TMDB</label>
-                        <strong>
-                          {escape(item['tmdbTitle'] or 'NO MATCH')}
-                        </strong>
-                        <span>
-                          {escape(item['type'] or '')}
-                          {(
-                              ' · TMDB ' +
-                              str(item['tmdbId'])
-                          ) if item['tmdbId'] else ''}
-                        </span>
-                      </div>
-
-                    </div>
-
-                    <div class="details">
-                      <span>
-                        Score:
-                        <strong>
-                          {item['score']:.3f}
-                        </strong>
-                      </span>
-
-                      <span>
-                        Action:
-                        <strong>
-                          {escape(item['action'])}
-                        </strong>
-                      </span>
-
-                      <span>
-                        Search:
-                        <strong>
-                          {escape(item['search_title'])}
-                        </strong>
-                      </span>
-                    </div>
-
-                    {existing_html}
-
-                    <div class="candidates">
-                      <h3>Other candidates</h3>
-                      {candidate_html or '<em>No other candidates</em>'}
-                    </div>
-
-                    <div class="decision">
-                      <button
-                        class="accept"
-                        onclick="setDecision({index}, 'ACCEPT')">
-                        ✓ Accept
-                      </button>
-
-                      <button
-                        class="reject"
-                        onclick="setDecision({index}, 'REJECT')">
-                        ✕ Reject
-                      </button>
-
-                      <button
-                        class="manual"
-                        onclick="setDecision({index}, 'MANUAL_REVIEW')">
-                        ? Manual Review
-                      </button>
-
-                      <span
-                        class="decision-label"
-                        id="decision-{index}">
-                      </span>
-                    </div>
-
-                  </div>
-                  """
+          def esc(value):
+              return html.escape(
+                  str(value if value is not None else "")
               )
 
 
-          data_json = json.dumps(
-              addition_matches
-          ).replace(
-              "</",
-              "<\\/"
-          )
+          html_parts = []
 
-
-          review_html = f"""<!DOCTYPE html>
+          html_parts.append("""
+          <!DOCTYPE html>
           <html lang="en">
           <head>
           <meta charset="UTF-8">
-          <meta name="viewport"
-                content="width=device-width, initial-scale=1.0">
-
+          <meta name="viewport" content="width=device-width, initial-scale=1">
           <title>Inventory Cleanup Review</title>
 
           <style>
-          * {{
-            box-sizing: border-box;
-          }}
+          body {
+              font-family: Arial, sans-serif;
+              margin: 0;
+              background: #f3f4f6;
+              color: #222;
+          }
 
-          body {{
-            margin: 0;
-            font-family:
-              -apple-system,
-              BlinkMacSystemFont,
-              "Segoe UI",
-              sans-serif;
-            background: #f3f4f6;
-            color: #111827;
-          }}
+          header {
+              background: #111827;
+              color: white;
+              padding: 24px;
+              position: sticky;
+              top: 0;
+              z-index: 10;
+              box-shadow: 0 2px 8px rgba(0,0,0,.2);
+          }
 
-          header {{
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            background: #111827;
-            color: white;
-            padding: 20px;
-            box-shadow:
-              0 2px 10px rgba(0,0,0,.25);
-          }}
+          header h1 {
+              margin: 0 0 8px 0;
+          }
 
-          header h1 {{
-            margin: 0 0 6px;
-            font-size: 24px;
-          }}
+          .stats {
+              display: flex;
+              gap: 20px;
+              flex-wrap: wrap;
+              font-size: 14px;
+          }
 
-          header p {{
-            margin: 0;
-            opacity: .8;
-          }}
+          .controls {
+              padding: 18px 24px;
+              background: white;
+              border-bottom: 1px solid #ddd;
+              position: sticky;
+              top: 91px;
+              z-index: 9;
+          }
 
-          .toolbar {{
-            margin-top: 15px;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-          }}
+          button {
+              border: 0;
+              border-radius: 6px;
+              padding: 10px 15px;
+              cursor: pointer;
+              font-weight: bold;
+          }
 
-          button {{
-            border: 0;
-            border-radius: 7px;
-            padding: 10px 15px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-          }}
+          .approve {
+              background: #166534;
+              color: white;
+          }
 
-          .toolbar button {{
-            background: white;
-            color: #111827;
-          }}
+          .manual {
+              background: #92400e;
+              color: white;
+          }
 
-          .toolbar button.primary {{
-            background: #22c55e;
-            color: white;
-          }}
+          .download {
+              background: #1d4ed8;
+              color: white;
+          }
 
-          .toolbar button.warning {{
-            background: #f59e0b;
-            color: white;
-          }}
+          .filter {
+              background: #374151;
+              color: white;
+              margin-right: 6px;
+          }
 
-          #summary {{
-            max-width: 1100px;
-            margin: 20px auto;
-            padding: 0 20px;
-            font-weight: 600;
-          }}
+          main {
+              max-width: 1200px;
+              margin: 24px auto;
+              padding: 0 18px;
+          }
 
-          main {{
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 20px 50px;
-          }}
+          .item {
+              background: white;
+              border-radius: 10px;
+              margin-bottom: 20px;
+              padding: 20px;
+              box-shadow: 0 1px 4px rgba(0,0,0,.12);
+              border-left: 6px solid #9ca3af;
+          }
 
-          .item {{
-            background: white;
-            border-radius: 10px;
-            margin-bottom: 18px;
-            padding: 20px;
-            box-shadow:
-              0 1px 4px rgba(0,0,0,.12);
-            border-left: 6px solid #9ca3af;
-          }}
+          .item.match {
+              border-left-color: #16a34a;
+          }
 
-          .item.match {{
-            border-left-color: #22c55e;
-          }}
+          .item.review {
+              border-left-color: #f59e0b;
+          }
 
-          .item.review {{
-            border-left-color: #f59e0b;
-          }}
+          .item.no-results {
+              border-left-color: #dc2626;
+          }
 
-          .item.accepted {{
-            background: #f0fdf4;
-          }}
+          .item h2 {
+              margin-top: 0;
+          }
 
-          .item.rejected {{
-            opacity: .55;
-          }}
+          .meta {
+              color: #555;
+              margin-bottom: 14px;
+          }
 
-          .item.manual {{
-            background: #fffbeb;
-          }}
+          .candidate {
+              border: 2px solid #ddd;
+              border-radius: 8px;
+              padding: 14px;
+              margin: 10px 0;
+              cursor: pointer;
+          }
 
-          .item-header {{
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-          }}
+          .candidate:hover {
+              border-color: #2563eb;
+              background: #f8fafc;
+          }
 
-          h2 {{
-            margin: 0 0 5px;
-            font-size: 20px;
-          }}
+          .candidate.selected {
+              border-color: #2563eb;
+              background: #eff6ff;
+          }
 
-          h3 {{
-            font-size: 14px;
-            margin: 18px 0 8px;
-          }}
+          .candidate.invalid {
+              opacity: .55;
+              background: #fef2f2;
+          }
 
-          label {{
-            display: block;
-            text-transform: uppercase;
-            font-size: 11px;
-            color: #6b7280;
-            letter-spacing: .05em;
-            margin-bottom: 4px;
-          }}
+          .candidate-title {
+              font-size: 18px;
+              font-weight: bold;
+          }
 
-          .meta {{
-            color: #6b7280;
-            font-size: 13px;
-          }}
+          .candidate-details {
+              font-size: 13px;
+              color: #555;
+              margin-top: 5px;
+          }
 
-          .status {{
-            font-size: 12px;
-            font-weight: 700;
-            padding: 5px 9px;
-            border-radius: 5px;
-            background: #e5e7eb;
-            height: fit-content;
-          }}
+          .candidate-overview {
+              margin-top: 8px;
+              font-size: 14px;
+              line-height: 1.4;
+          }
 
-          .match .status {{
-            background: #dcfce7;
-            color: #166534;
-          }}
+          .decision {
+              margin-top: 15px;
+              padding-top: 15px;
+              border-top: 1px solid #ddd;
+          }
 
-          .review .status {{
-            background: #fef3c7;
-            color: #92400e;
-          }}
+          .status {
+              display: inline-block;
+              padding: 4px 8px;
+              border-radius: 4px;
+              font-size: 12px;
+              font-weight: bold;
+          }
 
-          .proposal {{
-            display: grid;
-            grid-template-columns:
-              minmax(0,1fr)
-              auto
-              minmax(0,1fr);
-            gap: 20px;
-            align-items: center;
-            margin-top: 20px;
-            padding: 16px;
-            background: #f9fafb;
-            border-radius: 8px;
-          }}
+          .status-MATCH {
+              background: #dcfce7;
+              color: #166534;
+          }
 
-          .proposal strong {{
-            display: block;
-            font-size: 17px;
-          }}
+          .status-REVIEW {
+              background: #fef3c7;
+              color: #92400e;
+          }
 
-          .proposal span {{
-            display: block;
-            color: #6b7280;
-            font-size: 13px;
-            margin-top: 4px;
-          }}
+          .status-NO_RESULTS {
+              background: #fee2e2;
+              color: #991b1b;
+          }
 
-          .arrow {{
-            font-size: 25px;
-            color: #6b7280;
-          }}
+          .hidden {
+              display: none;
+          }
 
-          .details {{
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 14px;
-            color: #6b7280;
-            font-size: 13px;
-          }}
+          .summary {
+              background: white;
+              padding: 20px;
+              border-radius: 10px;
+              margin-bottom: 20px;
+          }
 
-          .details strong {{
-            color: #111827;
-          }}
-
-          .existing {{
-            margin-top: 12px;
-            padding: 10px;
-            background: #eff6ff;
-            border-radius: 6px;
-            color: #1e40af;
-            font-size: 13px;
-          }}
-
-          .candidate {{
-            padding: 8px 10px;
-            border-bottom: 1px solid #e5e7eb;
-          }}
-
-          .candidate:last-child {{
-            border-bottom: 0;
-          }}
-
-          .candidate strong {{
-            display: block;
-          }}
-
-          .candidate span {{
-            display: block;
-            color: #6b7280;
-            font-size: 12px;
-            margin-top: 2px;
-          }}
-
-          .decision {{
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-          }}
-
-          .accept {{
-            background: #16a34a;
-            color: white;
-          }}
-
-          .reject {{
-            background: #dc2626;
-            color: white;
-          }}
-
-          .manual {{
-            background: #f59e0b;
-            color: white;
-          }}
-
-          .decision-label {{
-            margin-left: 8px;
-            font-weight: 700;
-          }}
-
-          .empty {{
-            text-align: center;
-            padding: 50px;
-            color: #6b7280;
-          }}
-
-          @media (max-width: 700px) {{
-            .proposal {{
-              grid-template-columns: 1fr;
-            }}
-
-            .arrow {{
-              transform: rotate(90deg);
-              text-align: center;
-            }}
-          }}
+          textarea {
+              width: 100%;
+              min-height: 100px;
+              box-sizing: border-box;
+              margin-top: 10px;
+          }
           </style>
           </head>
 
           <body>
 
           <header>
-            <h1>Inventory Cleanup Review</h1>
-            <p>
-              Review proposed TMDB matches before anything
-              is added to movies.js.
-            </p>
-
-            <div class="toolbar">
-              <button onclick="acceptAllMatches()">
-                Accept All High-Confidence Matches
-              </button>
-
-              <button
-                class="warning"
-                onclick="clearAll()">
-                Clear Decisions
-              </button>
-
-              <button
-                class="primary"
-                onclick="downloadApproved()">
-                Export Approved Changes
-              </button>
-            </div>
+              <h1>Inventory Cleanup Review</h1>
+              <div class="stats">
+                  <span id="totalCount"></span>
+                  <span id="approvedCount"></span>
+                  <span id="manualCount"></span>
+                  <span id="skippedCount"></span>
+              </div>
           </header>
 
-          <div id="summary"></div>
+          <div class="controls">
+              <button class="filter" onclick="showAll()">All</button>
+              <button class="filter" onclick="showNeedsReview()">Needs Review</button>
+              <button class="filter" onclick="showUnresolved()">Unresolved</button>
+              <button class="filter" onclick="showApproved()">Approved</button>
+              <button class="download" onclick="downloadResults()">
+                  Download Decisions JSON
+              </button>
+          </div>
 
           <main>
-            {''.join(html_items)}
-          </main>
 
-          <script>
+          <div class="summary">
+              <strong>How this works</strong>
+              <p>
+              Green items have a strong proposed match.
+              Yellow items need your decision.
+              Click a candidate to select it.
+              You can choose a different candidate than the
+              automatic suggestion.
+              </p>
+              <p>
+              For TV seasons, the workflow searches for the
+              <strong>show</strong> first and then verifies that
+              the requested season actually exists.
+              </p>
+          </div>
+          """)
 
-          const items = {data_json};
+          # ---------------------------------------------------------
+          # HTML ITEMS
+          # ---------------------------------------------------------
 
-          const decisions = {{}};
+          for item in review_items:
 
-          items.forEach((item, index) => {{
-            if (item.default_decision === "ACCEPT") {{
-              decisions[index] = "ACCEPT";
-            }}
-          }});
-
-          function setDecision(index, decision) {{
-            decisions[index] = decision;
-
-            const item =
-              document.querySelector(
-                '[data-index="' + index + '"]'
-              );
-
-            const label =
-              document.getElementById(
-                "decision-" + index
-              );
-
-            item.classList.remove(
-              "accepted",
-              "rejected",
-              "manual"
-            );
-
-            if (decision === "ACCEPT") {{
-              item.classList.add("accepted");
-              label.textContent = "✓ ACCEPTED";
-              label.style.color = "#166534";
-            }}
-
-            else if (decision === "REJECT") {{
-              item.classList.add("rejected");
-              label.textContent = "✕ REJECTED";
-              label.style.color = "#991b1b";
-            }}
-
-            else {{
-              item.classList.add("manual");
-              label.textContent =
-                "? MANUAL REVIEW";
-              label.style.color = "#92400e";
-            }}
-
-            updateSummary();
-          }}
-
-
-          function acceptAllMatches() {{
-            items.forEach((item, index) => {{
-              if (
-                item.status === "MATCH" &&
-                item.tmdbId !== null
-              ) {{
-                setDecision(
-                  index,
-                  "ACCEPT"
-                );
-              }}
-            }});
-          }}
-
-
-          function clearAll() {{
-            Object.keys(decisions).forEach(
-              key => delete decisions[key]
-            );
-
-            items.forEach((item, index) => {{
-              const el =
-                document.querySelector(
-                  '[data-index="' + index + '"]'
-                );
-
-              const label =
-                document.getElementById(
-                  "decision-" + index
-                );
-
-              el.classList.remove(
-                "accepted",
-                "rejected",
-                "manual"
-              );
-
-              label.textContent = "";
-            }});
-
-            updateSummary();
-          }}
-
-
-          function updateSummary() {{
-
-            let accepted = 0;
-            let rejected = 0;
-            let manual = 0;
-            let undecided = 0;
-
-            items.forEach((item, index) => {{
-
-              const decision =
-                decisions[index];
-
-              if (decision === "ACCEPT")
-                accepted++;
-
-              else if (decision === "REJECT")
-                rejected++;
-
-              else if (
-                decision === "MANUAL_REVIEW"
+              status_class = item["status"].lower().replace(
+                  "_",
+                  "-"
               )
-                manual++;
 
-              else
-                undecided++;
-            }});
+              html_parts.append(
+                  f"""
+                  <section
+                      class="item {status_class}"
+                      data-status="{esc(item['status'])}"
+                      id="{esc(item['id'])}"
+                  >
+                  <h2>{esc(item['source_title'])}</h2>
+                  """
+              )
 
-            document.getElementById(
-              "summary"
-            ).textContent =
-              "Total: " + items.length +
-              " · Accepted: " + accepted +
-              " · Rejected: " + rejected +
-              " · Manual Review: " + manual +
-              " · Undecided: " + undecided;
-          }}
+              if item.get("season") is not None:
 
-
-          function downloadApproved() {{
-
-            const approved = [];
-
-            items.forEach((item, index) => {{
-
-              if (
-                decisions[index] === "ACCEPT"
-              ) {{
-
-                approved.push({{
-                  source_title:
-                    item.source_title,
-
-                  format:
-                    item.format,
-
-                  special:
-                    item.special || null,
-
-                  tmdbId:
-                    item.tmdbId,
-
-                  tmdbTitle:
-                    item.tmdbTitle,
-
-                  type:
-                    item.type,
-
-                  action:
-                    item.action,
-
-                  score:
-                    item.score
-                }});
-              }}
-            }});
-
-            const output = {{
-              generated_at:
-                new Date().toISOString(),
-
-              approved_count:
-                approved.length,
-
-              approved:
-                approved
-            }};
-
-            const blob =
-              new Blob(
-                [
-                  JSON.stringify(
-                    output,
-                    null,
-                    2
+                  html_parts.append(
+                      f"""
+                      <div class="meta">
+                      <strong>TV Show:</strong>
+                      {esc(item['show_title'])}
+                      &nbsp; | &nbsp;
+                      <strong>Season:</strong>
+                      {item['season']}
+                      &nbsp; | &nbsp;
+                      <strong>Format:</strong>
+                      {esc(item['format'])}
+                      </div>
+                      """
                   )
-                ],
-                {{
-                  type:
-                    "application/json"
-                }}
-              );
 
-            const url =
-              URL.createObjectURL(blob);
+              else:
 
-            const a =
-              document.createElement("a");
+                  html_parts.append(
+                      f"""
+                      <div class="meta">
+                      <strong>Format:</strong>
+                      {esc(item['format'])}
+                      </div>
+                      """
+                  )
 
-            a.href = url;
+              if item.get("special"):
 
-            a.download =
-              "inventory_cleanup_approved.json";
+                  html_parts.append(
+                      f"""
+                      <div class="meta">
+                      <strong>Special instruction:</strong>
+                      {esc(item['special'])}
+                      </div>
+                      """
+                  )
 
-            document.body.appendChild(a);
+              html_parts.append(
+                  f"""
+                  <span class="status status-{esc(item['status'])}">
+                      {esc(item['status'])}
+                  </span>
+                  """
+              )
 
-            a.click();
+              if not item["candidates"]:
 
-            a.remove();
+                  html_parts.append(
+                      """
+                      <p>
+                      <strong>No TMDB candidates found.</strong>
+                      This item should be manually researched.
+                      </p>
+                      """
+                  )
 
-            URL.revokeObjectURL(url);
-          }}
+              for index, candidate in enumerate(
+                  item["candidates"]
+              ):
 
-          updateSummary();
+                  candidate_id = (
+                      f"{item['id']}-candidate-{index}"
+                  )
 
-          </script>
+                  invalid = candidate.get(
+                      "invalid_for_requested_season",
+                      False
+                  )
 
-          </body>
-          </html>
-          """
+                  invalid_class = (
+                      " invalid"
+                      if invalid
+                      else ""
+                  )
+
+                  checked = (
+                      " checked"
+                      if (
+                          index == 0
+                          and not invalid
+                          and item["status"] == "MATCH"
+                      )
+                      else ""
+                  )
+
+                  html_parts.append(
+                      f"""
+                      <label
+                          class="candidate{invalid_class}"
+                          for="{esc(candidate_id)}"
+                      >
+
+                      <input
+                          type="radio"
+                          id="{esc(candidate_id)}"
+                          name="{esc(item['id'])}"
+                          value="{esc(candidate['tmdbId'])}"
+                          data-title="{esc(candidate['tmdbTitle'])}"
+                          data-score="{candidate['score']}"
+                          data-season-exists="{str(
+                              candidate.get(
+                                  'season_exists',
+                                  True
+                              )
+                          ).lower()}"
+                          {checked}
+                          onchange="selectCandidate(
+                              '{esc(item['id'])}',
+                              {index}
+                          )"
+                      >
+
+                      <span class="candidate-title">
+                          {esc(candidate['tmdbTitle'])}
+                      </span>
+
+                      <div class="candidate-details">
+                          TMDB ID:
+                          <strong>{candidate['tmdbId']}</strong>
+                          &nbsp; | &nbsp;
+                          Match score:
+                          <strong>{candidate['score']:.3f}</strong>
+                          """
+                  )
+
+                  if candidate.get("release_date"):
+                      html_parts.append(
+                          f"""
+                          &nbsp; | &nbsp;
+                          Date:
+                          {esc(candidate['release_date'])}
+                          """
+                      )
+
+                  if candidate.get(
+                      "number_of_seasons"
+                  ) is not None:
+
+                      html_parts.append(
+                          f"""
+                          &nbsp; | &nbsp;
+                          Seasons:
+                          {candidate['number_of_seasons']}
+                          """
+                      )
+
+                  if item.get("season") is not None:
+
+                      if candidate.get(
+                          "season_exists"
+                      ):
+
+                          html_parts.append(
+                              f"""
+                              <br>
+                              <strong>
+                              Season {item['season']} FOUND
+                              </strong>
+                              """
+                          )
+
+                      else:
+
+                          html_parts.append(
+                              f"""
+                              <br>
+                              <strong>
+                              Season {item['season']}
+                              NOT FOUND — do not select
+                              </strong>
+                              """
+                          )
+
+                  html_parts.append(
+                      """
+                      </div>
+                      """
+                  )
+
+                  if candidate.get("overview"):
+
+                      html_parts.append(
+                          f"""
+                          <div class="candidate-overview">
+                          {esc(candidate['overview'])}
+                          </div>
+                          """
+                      )
+
+                  html_parts.append(
+                      """
+                      </label>
+                      """
+                  )
+
+              html_parts.append(
+                  f"""
+                  <div class="decision">
+                      <button
+                          class="approve"
+                          onclick="approveItem('{esc(item['id'])}')"
+                      >
+                          Approve Selected
+                      </button>
+
+                      <button
+                          class="manual"
+                          onclick="manualItem('{esc(item['id'])}')"
+                      >
+                          Manual Review / Skip
+                      </button>
+
+                      <div>
+                          <textarea
+                              id="{esc(item['id'])}-notes"
+                              placeholder="Optional notes..."
+                          ></textarea>
+                      </div>
+
+                      <div id="{esc(item['id'])}-decision"></div>
+                  </div>
+
+                  </section>
+                  """
+              )
+
+          # ---------------------------------------------------------
+          # JAVASCRIPT
+          # ---------------------------------------------------------
+
+          review_json = json.dumps(
+              review_items
+          ).replace(
+              "</",
+              "<\\/"
+          )
+
+          html_parts.append(
+              f"""
+              </main>
+
+              <script>
+
+              const reviewItems = {review_json};
+
+              const decisions = {{}};
+
+              function updateStats() {{
+
+                  const total = reviewItems.length;
+
+                  let approved = 0;
+                  let manual = 0;
+                  let skipped = 0;
+
+                  Object.values(decisions).forEach(d => {{
+
+                      if (d.decision === "APPROVE") {{
+                          approved++;
+                      }}
+
+                      if (d.decision === "MANUAL_REVIEW") {{
+                          manual++;
+                      }}
+
+                      if (d.decision === "SKIP") {{
+                          skipped++;
+                      }}
+
+                  }});
+
+                  document.getElementById(
+                      "totalCount"
+                  ).textContent =
+                      "Total: " + total;
+
+                  document.getElementById(
+                      "approvedCount"
+                  ).textContent =
+                      "Approved: " + approved;
+
+                  document.getElementById(
+                      "manualCount"
+                  ).textContent =
+                      "Manual Review: " + manual;
+
+                  document.getElementById(
+                      "skippedCount"
+                  ).textContent =
+                      "Undecided: " +
+                      (total - approved - manual - skipped);
+              }}
+
+              function selectCandidate(itemId, index) {{
+
+                  const item = reviewItems.find(
+                      x => x.id === itemId
+                  );
+
+                  if (!item) return;
+
+                  const candidate =
+                      item.candidates[index];
+
+                  if (!candidate) return;
+
+                  if (
+                      candidate.invalid_for_requested_season
+                  ) {{
+                      alert(
+                          "This candidate does not contain " +
+                          "the requested TV season."
+                      );
+                      return;
+                  }}
+
+                  document
+                      .querySelectorAll(
+                          "#" + itemId + " .candidate"
+                      )
+                      .forEach(
+                          x => x.classList.remove(
+                              "selected"
+                          )
+                      );
+
+                  const inputs =
+                      document.querySelectorAll(
+                          "#" + itemId +
+                          " input[type=radio]"
+                      );
+
+                  if (inputs[index]) {{
+                      inputs[index]
+                          .closest(".candidate")
+                          .classList.add(
+                              "selected"
+                          );
+                  }}
+              }}
+
+              function approveItem(itemId) {{
+
+                  const item = reviewItems.find(
+                      x => x.id === itemId
+                  );
+
+                  if (!item) return;
+
+                  const selected =
+                      document.querySelector(
+                          "#" + itemId +
+                          " input[type=radio]:checked"
+                      );
+
+                  if (!selected) {{
+                      alert(
+                          "Select a TMDB candidate first."
+                      );
+                      return;
+                  }}
+
+                  if (
+                      selected.dataset.seasonExists ===
+                      "false"
+                  ) {{
+                      alert(
+                          "That TV candidate does not " +
+                          "contain the requested season."
+                      );
+                      return;
+                  }}
+
+                  const notes =
+                      document.getElementById(
+                          itemId + "-notes"
+                      ).value;
+
+                  decisions[itemId] = {{
+
+                      decision: "APPROVE",
+
+                      tmdbId: Number(
+                          selected.value
+                      ),
+
+                      tmdbTitle:
+                          selected.dataset.title,
+
+                      score: Number(
+                          selected.dataset.score
+                      ),
+
+                      notes: notes
+
+                  }};
+
+                  showDecision(
+                      itemId,
+                      "APPROVED"
+                  );
+
+                  updateStats();
+              }}
+
+              function manualItem(itemId) {{
+
+                  const notes =
+                      document.getElementById(
+                          itemId + "-notes"
+                      ).value;
+
+                  decisions[itemId] = {{
+
+                      decision: "MANUAL_REVIEW",
+
+                      tmdbId: null,
+
+                      tmdbTitle: null,
+
+                      score: 0,
+
+                      notes: notes
+
+                  }};
+
+                  showDecision(
+                      itemId,
+                      "MANUAL REVIEW"
+                  );
+
+                  updateStats();
+              }}
+
+              function showDecision(itemId, text) {{
+
+                  const box =
+                      document.getElementById(
+                          itemId + "-decision"
+                      );
+
+                  box.innerHTML =
+                      "<p><strong>Decision: " +
+                      text +
+                      "</strong></p>";
+              }}
+
+              function showAll() {{
+                  document
+                      .querySelectorAll(".item")
+                      .forEach(
+                          x => x.classList.remove(
+                              "hidden"
+                          )
+                      );
+              }}
+
+              function showNeedsReview() {{
+
+                  document
+                      .querySelectorAll(".item")
+                      .forEach(item => {{
+
+                          const status =
+                              item.dataset.status;
+
+                          item.classList.toggle(
+                              "hidden",
+                              status === "MATCH"
+                          );
+
+                      }});
+              }}
+
+              function showUnresolved() {{
+
+                  document
+                      .querySelectorAll(".item")
+                      .forEach(item => {{
+
+                          const id = item.id;
+
+                          const d =
+                              decisions[id];
+
+                          item.classList.toggle(
+                              "hidden",
+                              !!d
+                          );
+
+                      }});
+              }}
+
+              function showApproved() {{
+
+                  document
+                      .querySelectorAll(".item")
+                      .forEach(item => {{
+
+                          const id = item.id;
+
+                          const d =
+                              decisions[id];
+
+                          item.classList.toggle(
+                              "hidden",
+                              !d ||
+                              d.decision !==
+                              "APPROVE"
+                          );
+
+                      }});
+              }}
+
+              function downloadResults() {{
+
+                  const output = {{
+
+                      generated_at:
+                          new Date().toISOString(),
+
+                      approved_count:
+                          Object.values(
+                              decisions
+                          ).filter(
+                              d =>
+                                  d.decision ===
+                                  "APPROVE"
+                          ).length,
+
+                      manual_review_count:
+                          Object.values(
+                              decisions
+                          ).filter(
+                              d =>
+                                  d.decision ===
+                                  "MANUAL_REVIEW"
+                          ).length,
+
+                      undecided_count:
+                          reviewItems.length -
+                          Object.keys(
+                              decisions
+                          ).length,
+
+                      approved:
+                          Object.entries(
+                              decisions
+                          )
+                          .filter(
+                              ([id, d]) =>
+                                  d.decision ===
+                                  "APPROVE"
+                          )
+                          .map(
+                              ([id, d]) => {{
+
+                                  const item =
+                                      reviewItems.find(
+                                          x =>
+                                              x.id === id
+                                      );
+
+                                  return {{
+
+                                      source_title:
+                                          item.source_title,
+
+                                      format:
+                                          item.format,
+
+                                      special:
+                                          item.special,
+
+                                      type:
+                                          item.type,
+
+                                      season:
+                                          item.season,
+
+                                      show_title:
+                                          item.show_title,
+
+                                      tmdbId:
+                                          d.tmdbId,
+
+                                      tmdbTitle:
+                                          d.tmdbTitle,
+
+                                      action:
+                                          item.action,
+
+                                      score:
+                                          d.score,
+
+                                      notes:
+                                          d.notes
+
+                                  }};
+                              }}
+                          ),
+
+                      manual_review:
+                          Object.entries(
+                              decisions
+                          )
+                          .filter(
+                              ([id, d]) =>
+                                  d.decision ===
+                                  "MANUAL_REVIEW"
+                          )
+                          .map(
+                              ([id, d]) => {{
+
+                                  const item =
+                                      reviewItems.find(
+                                          x =>
+                                              x.id === id
+                                      );
+
+                                  return {{
+
+                                      source_title:
+                                          item.source_title,
+
+                                      format:
+                                          item.format,
+
+                                      special:
+                                          item.special,
+
+                                      type:
+                                          item.type,
+
+                                      season:
+                                          item.season,
+
+                                      show_title:
+                                          item.show_title,
+
+                                      notes:
+                                          d.notes
+
+                                  }};
+                              }}
+                          ),
+
+                      undecided:
+                          reviewItems
+                          .filter(
+                              item =>
+                                  !decisions[
+                                      item.id
+                                  ]
+                          )
+                          .map(
+                              item => item
+                          )
+
+                  }};
+
+                  const blob =
+                      new Blob(
+                          [
+                              JSON.stringify(
+                                  output,
+                                  null,
+                                  2
+                              )
+                          ],
+                          {{
+                              type:
+                                  "application/json"
+                          }}
+                      );
+
+                  const url =
+                      URL.createObjectURL(
+                          blob
+                      );
+
+                  const a =
+                      document.createElement(
+                          "a"
+                      );
+
+                  a.href = url;
+
+                  a.download =
+                      "inventory_cleanup_approved.json";
+
+                  a.click();
+
+                  URL.revokeObjectURL(url);
+              }}
+
+              updateStats();
+
+              </script>
+
+              </body>
+              </html>
+              """
+          )
 
           HTML_FILE.write_text(
-              review_html,
+              "".join(html_parts),
               encoding="utf-8"
           )
 
 
           # =========================================================
-          # FINAL CONSOLE OUTPUT
+          # FINAL CONSOLE SUMMARY
           # =========================================================
+
+          match_count = sum(
+              1
+              for x in review_items
+              if x["status"] == "MATCH"
+          )
+
+          review_count = sum(
+              1
+              for x in review_items
+              if x["status"] == "REVIEW"
+          )
+
+          no_result_count = sum(
+              1
+              for x in review_items
+              if x["status"] == "NO_RESULTS"
+          )
+
+          tv_count = sum(
+              1
+              for x in review_items
+              if x["type"] == "tv"
+          )
 
           print("")
           print("=" * 60)
           print("INVENTORY CLEANUP REVIEW COMPLETE")
           print("=" * 60)
           print("")
-          print(
-              f"Processed {len(addition_matches)} "
-              f"inventory additions."
-          )
+          print(f"Catalog records: {len(movies)}")
+          print(f"Addition records: {len(review_items)}")
+          print(f"Strong matches: {match_count}")
+          print(f"Needs review: {review_count}")
+          print(f"No results: {no_result_count}")
+          print(f"TV season records: {tv_count}")
           print("")
-          print(
-              "Created:"
-          )
-          print(
-              "  inventory_cleanup_report.md"
-          )
-          print(
-              "  inventory_cleanup_results.json"
-          )
-          print(
-              "  inventory_cleanup_review.html"
-          )
+          print("Generated:")
+          print(f"  {HTML_FILE}")
+          print(f"  {REPORT_FILE}")
+          print(f"  {RESULTS_FILE}")
           print("")
-          print(
-              "No changes were made to movies.js."
-          )
+          print("No changes were made to movies.js.")
           print("")
 
 
-      - name: Upload cleanup review files
+      - name: Upload cleanup review
         uses: actions/upload-artifact@v4
         with:
           name: inventory-cleanup-review
           path: |
+            inventory_cleanup_review.html
             inventory_cleanup_report.md
             inventory_cleanup_results.json
-            inventory_cleanup_review.html
-
