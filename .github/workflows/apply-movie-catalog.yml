@@ -21,7 +21,7 @@ jobs:
 
       - name: Apply approved catalog updates
         env:
-          APPROVED_FILE: approved-review.json
+          APPROVED_FILE: inventory_cleanup_approvals.json
           MOVIES_FILE: movies.js
         run: |
           python <<'PYTHON'
