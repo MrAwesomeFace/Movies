@@ -11,6 +11,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      # ============================================================
+      # CHECKOUT
+      # ============================================================
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -19,104 +24,205 @@ jobs:
         with:
           python-version: "3.x"
 
+      # ============================================================
+      # APPLY CATALOG UPDATES
+      # ============================================================
+
       - name: Apply approved catalog updates
         env:
-          APPROVED_FILE: inventory_cleanup_approvals.json
-          MOVIES_FILE: movies.js
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
         run: |
+
           python <<'PYTHON'
+
           import json
+          import os
           import re
+          import urllib.request
           from pathlib import Path
-          from copy import deepcopy
+          from difflib import SequenceMatcher
 
-          APPROVED_FILE = Path("inventory_cleanup_approvals.json")
+
+          # ============================================================
+          # FILES
+          # ============================================================
+
           MOVIES_FILE = Path("movies.js")
+          APPROVALS_FILE = Path("inventory_cleanup_approvals.json")
+          CLEANUP_FILE = Path("inventory_cleanup.json")
+
+          TMDB_API_KEY = os.environ.get("TMDB_API_KEY", "")
+
 
           print("=" * 70)
-          print("MOVIE CATALOG FINALIZER")
+          print("BW MOVIE CATALOG FINALIZER")
           print("=" * 70)
 
-          # ------------------------------------------------------------
-          # LOAD APPROVAL FILE
-          # ------------------------------------------------------------
 
-          if not APPROVED_FILE.exists():
+          # ============================================================
+          # REQUIRED FILE CHECKS
+          # ============================================================
+
+          print()
+          print("Checking repository files...")
+
+          if not MOVIES_FILE.exists():
               raise FileNotFoundError(
-                  f"Could not find {APPROVED_FILE}. "
-                  "Make sure inventory_cleanup_approvals.json is in the repository root."
+                  f"ERROR: {MOVIES_FILE} was not found in "
+                  f"{Path.cwd()}"
               )
 
-          with APPROVED_FILE.open("r", encoding="utf-8") as f:
-              review = json.load(f)
+          if not APPROVALS_FILE.exists():
+              raise FileNotFoundError(
+                  f"ERROR: {APPROVALS_FILE} was not found in "
+                  f"{Path.cwd()}"
+              )
 
-          approved = review.get("approved", [])
-          manual_review = review.get("manual_review", [])
-          undecided = review.get("undecided", [])
+          if not CLEANUP_FILE.exists():
+              raise FileNotFoundError(
+                  f"ERROR: {CLEANUP_FILE} was not found in "
+                  f"{Path.cwd()}"
+              )
 
+          print(f"FOUND: {MOVIES_FILE}")
+          print(f"FOUND: {APPROVALS_FILE}")
+          print(f"FOUND: {CLEANUP_FILE}")
+
+
+          # ============================================================
+          # LOAD JSON FILES
+          # ============================================================
+
+          with APPROVALS_FILE.open("r", encoding="utf-8") as f:
+              approvals = json.load(f)
+
+          with CLEANUP_FILE.open("r", encoding="utf-8") as f:
+              cleanup = json.load(f)
+
+          approved = approvals.get("approved", [])
+          manual_review = approvals.get("manual_review", [])
+          undecided = approvals.get("undecided", [])
+
+          remove_titles = cleanup.get("remove", [])
+          move_the_titles = cleanup.get("move_the_to_end", [])
+
+          print()
           print(f"Approved items:       {len(approved)}")
           print(f"Manual review items:  {len(manual_review)}")
           print(f"Undecided items:      {len(undecided)}")
+          print(f"Removal list:         {len(remove_titles)}")
+          print(f'"The" move list:      {len(move_the_titles)}')
 
-          # ------------------------------------------------------------
+
+          # ============================================================
           # LOAD movies.js
           #
-          # movies.js is expected to contain:
+          # The existing file is:
           #
           # const movies = [
           #   ...
           # ];
           #
-          # We extract the array and parse it as JSON.
-          # ------------------------------------------------------------
+          # We preserve the wrapper and replace only the array.
+          # ============================================================
 
-          if not MOVIES_FILE.exists():
-              raise FileNotFoundError("movies.js was not found.")
-
-          movies_text = MOVIES_FILE.read_text(encoding="utf-8")
-
-          match = re.search(
-              r'(?:const|let|var)\s+movies\s*=\s*(\[[\s\S]*?\])\s*;',
-              movies_text
+          movies_text = MOVIES_FILE.read_text(
+              encoding="utf-8"
           )
 
-          if not match:
+          start = movies_text.find("[")
+
+          end = movies_text.rfind("]")
+
+          if start == -1 or end == -1 or end <= start:
               raise RuntimeError(
-                  "Could not locate the movies array in movies.js."
+                  "ERROR: Could not locate the movies array in movies.js."
               )
 
-          array_text = match.group(1)
+          array_text = movies_text[start:end + 1]
 
           try:
               movies = json.loads(array_text)
-          except json.JSONDecodeError as e:
+          except json.JSONDecodeError as error:
               raise RuntimeError(
-                  f"Could not parse movies.js as JSON: {e}"
+                  "ERROR: movies.js contains an array that could not "
+                  f"be parsed as JSON: {error}"
               )
 
           if not isinstance(movies, list):
-              raise RuntimeError("The movies array is not a list.")
+              raise RuntimeError(
+                  "ERROR: movies.js array is not a list."
+              )
 
-          print(f"Existing catalog entries: {len(movies)}")
+          original_count = len(movies)
 
-          # ------------------------------------------------------------
+          print()
+          print(f"Existing catalog entries: {original_count}")
+
+
+          # ============================================================
           # HELPERS
-          # ------------------------------------------------------------
+          # ============================================================
 
-          def norm(value):
+          def clean(value):
               if value is None:
                   return ""
 
-              value = str(value).lower().strip()
-
-              value = value.replace("&", "and")
-              value = re.sub(r"['’]", "", value)
-              value = re.sub(r"[^a-z0-9]+", " ", value)
-
-              return re.sub(r"\s+", " ", value).strip()
+              return str(value).strip()
 
 
-          def get_tmdb_id(item):
+          def normalize(value):
+              if value is None:
+                  return ""
+
+              text = str(value).lower()
+
+              text = text.replace("&", "and")
+
+              text = re.sub(
+                  r"['’]",
+                  "",
+                  text
+              )
+
+              text = re.sub(
+                  r"[^a-z0-9]+",
+                  " ",
+                  text
+              )
+
+              return " ".join(text.split())
+
+
+          def loose_normalize(value):
+              """
+              Used for the separately approved removal list.
+
+              Removes common articles/conjunctions so things like:
+
+                  Fox Hound 2
+                  The Fox and the Hound 2
+
+              can still be recognized as the same intended item.
+              """
+
+              words = normalize(value).split()
+
+              ignored = {
+                  "the",
+                  "a",
+                  "an",
+                  "and"
+              }
+
+              return " ".join(
+                  word
+                  for word in words
+                  if word not in ignored
+              )
+
+
+          def tmdb_id(item):
               value = item.get("tmdbId")
 
               if value in (None, "", 0):
@@ -128,459 +234,1185 @@ jobs:
                   return None
 
 
-          def get_season(item):
+          def season_number(item):
               value = item.get("season")
 
-              if value in (None, "", 0):
-                  return None
+              if value not in (None, ""):
+                  try:
+                      return int(value)
+                  except Exception:
+                      pass
 
-              try:
-                  return int(value)
-              except Exception:
-                  return None
+              title = clean(item.get("title"))
+
+              match = re.search(
+                  r"\bseason\s+(\d+)\b",
+                  title,
+                  flags=re.IGNORECASE
+              )
+
+              if match:
+                  return int(match.group(1))
+
+              return None
 
 
           def is_tv(item):
-              return str(item.get("type", "")).lower() == "tv"
+              return clean(
+                  item.get("type")
+              ).lower() == "tv"
 
 
-          def is_movie(item):
-              return str(item.get("type", "")).lower() == "movie"
+          def normalize_list(value):
+              if value is None:
+                  return []
+
+              if isinstance(value, list):
+                  result = []
+
+                  for item in value:
+                      if item is None:
+                          continue
+
+                      text = clean(item)
+
+                      if text and text not in result:
+                          result.append(text)
+
+                  return result
+
+              text = clean(value)
+
+              if not text:
+                  return []
+
+              return [text]
 
 
-          def formats_for(item):
-              """
-              Find the format field used by the existing catalog.
-              The current catalog normally uses 'formats'.
-              """
+          def add_unique(array, value):
+              if not isinstance(array, list):
+                  array = []
 
-              formats = item.get("formats")
+              value = clean(value)
 
-              if formats is None:
-                  return {}
+              if value and value not in array:
+                  array.append(value)
 
-              if isinstance(formats, dict):
-                  return deepcopy(formats)
+              return array
 
-              return {}
+
+          # ============================================================
+          # FORMAT HANDLING
+          # ============================================================
+
+          def physical_format(value):
+
+              text = clean(value).lower()
+
+              if not text:
+                  return None
+
+              if text in {
+                  "blu",
+                  "blu-ray",
+                  "bluray"
+              }:
+                  return "Blu-ray"
+
+              if "4k" in text or "uhd" in text:
+                  return "4K UHD"
+
+              if "blu-ray" in text or "bluray" in text:
+                  return "Blu-ray"
+
+              if "dvd" in text:
+                  return "DVD"
+
+              if "vhs" in text:
+                  return "VHS"
+
+              return clean(value)
+
+
+          def digital_format(value):
+
+              text = clean(value).lower()
+
+              mapping = {
+                  "apple": "Apple",
+                  "prime": "Prime",
+                  "fandango": "Fandango"
+              }
+
+              if text in mapping:
+                  return mapping[text]
+
+              return clean(value)
 
 
           def add_format(item, fmt):
-              """
-              Add a format without destroying existing formats.
-              """
+
+              fmt = clean(fmt).lower()
 
               if not fmt:
                   return
 
-              fmt = str(fmt).lower().strip()
+              physical_formats = normalize_list(
+                  item.get("physical")
+              )
 
-              if not fmt:
-                  return
+              digital_formats = normalize_list(
+                  item.get("digital")
+              )
 
-              formats = formats_for(item)
+              if fmt in {
+                  "dvd",
+                  "blu",
+                  "blu-ray",
+                  "bluray",
+                  "4k",
+                  "uhd",
+                  "4k uhd",
+                  "vhs"
+              }:
 
-              # Existing format object
-              if fmt not in formats:
-                  formats[fmt] = True
+                  value = physical_format(fmt)
 
-              item["formats"] = formats
+                  if value:
+                      physical_formats = add_unique(
+                          physical_formats,
+                          value
+                      )
 
+                  item["physical"] = physical_formats
 
-          def title_for_sort(title):
-              """
-              Alphabetical convention:
-                The American President -> American President, The
+              else:
 
-              The actual displayed title is changed as well, because
-              the catalog has historically used this convention.
-              """
+                  value = digital_format(fmt)
 
-              if not title:
-                  return ""
+                  if value:
+                      digital_formats = add_unique(
+                          digital_formats,
+                          value
+                      )
 
-              title = str(title).strip()
-
-              if title.lower().startswith("the "):
-                  return title[4:].strip() + ", The"
-
-              return title
-
-
-          def clean_display_title(title):
-              """
-              Convert TMDB title into the catalog's established
-              alphabetical form.
-              """
-
-              if not title:
-                  return title
-
-              title = str(title).strip()
-
-              if title.lower().startswith("the "):
-                  return title[4:].strip() + ", The"
-
-              return title
+                  item["digital"] = digital_formats
 
 
-          # ------------------------------------------------------------
-          # EXISTING RECORD LOOKUPS
-          # ------------------------------------------------------------
+          # ============================================================
+          # TMDB API
+          # ============================================================
 
-          def find_movie_by_tmdb(tmdb_id):
-              if tmdb_id is None:
+          def tmdb_request(path):
+
+              if not TMDB_API_KEY:
+                  return {}
+
+              url = (
+                  "https://api.themoviedb.org/3"
+                  + path
+                  + "?api_key="
+                  + TMDB_API_KEY
+                  + "&language=en-US"
+              )
+
+              request = urllib.request.Request(
+                  url,
+                  headers={
+                      "User-Agent": "BW-Movie-Catalog"
+                  }
+              )
+
+              try:
+
+                  with urllib.request.urlopen(
+                      request,
+                      timeout=30
+                  ) as response:
+
+                      return json.load(response)
+
+              except Exception as error:
+
+                  print(
+                      f"WARNING: TMDB request failed for "
+                      f"{path}: {error}"
+                  )
+
+                  return {}
+
+
+          def get_movie_details(tmdb):
+
+              return tmdb_request(
+                  f"/movie/{tmdb}"
+              )
+
+
+          def get_tv_details(tmdb):
+
+              return tmdb_request(
+                  f"/tv/{tmdb}"
+              )
+
+
+          def get_tv_season_details(
+              tmdb,
+              season
+          ):
+
+              return tmdb_request(
+                  f"/tv/{tmdb}/season/{season}"
+              )
+
+
+          # ============================================================
+          # CATEGORY DETECTION
+          #
+          # This follows the same basic logic already used by the
+          # existing digital merge workflow.
+          # ============================================================
+
+          CHRISTMAS_TERMS = [
+              "christmas",
+              "xmas",
+              "santa",
+              "north pole",
+              "holiday",
+              "holly",
+              "grinch",
+              "mistletoe",
+              "noel",
+              "nativity",
+              "christmas eve",
+              "christmas day",
+              "rudolph",
+              "frosty"
+          ]
+
+          BASEBALL_TERMS = [
+              "baseball",
+              "major league baseball",
+              "mlb",
+              "little league",
+              "pitcher",
+              "pitching",
+              "home run",
+              "batting",
+              "ballplayer",
+              "baseball team",
+              "yankees",
+              "red sox",
+              "cubs",
+              "cardinals",
+              "dodgers",
+              "mets",
+              "braves",
+              "orioles",
+              "tigers",
+              "twins",
+              "athletics",
+              "mariners",
+              "padres",
+              "pirates",
+              "rangers",
+              "royals",
+              "angels",
+              "diamondbacks",
+              "astros",
+              "guardians",
+              "brewers",
+              "rockies",
+              "rays",
+              "phillies",
+              "nationals",
+              "white sox",
+              "reds",
+              "blue jays",
+              "giants"
+          ]
+
+          ANIMATED_TERMS = [
+              "animation",
+              "animated"
+          ]
+
+
+          def detect_categories(item):
+
+              categories = normalize_list(
+                  item.get("categories")
+              )
+
+              existing_lower = {
+                  x.lower()
+                  for x in categories
+              }
+
+              text = " ".join([
+                  clean(item.get("title")),
+                  clean(item.get("tmdbTitle")),
+                  clean(item.get("synopsis")),
+                  clean(item.get("genre")),
+                  clean(item.get("director")),
+                  clean(item.get("cast"))
+              ]).lower()
+
+              if any(
+                  term in text
+                  for term in CHRISTMAS_TERMS
+              ):
+
+                  if "christmas" not in existing_lower:
+
+                      categories.append(
+                          "christmas"
+                      )
+
+
+              if any(
+                  term in text
+                  for term in BASEBALL_TERMS
+              ):
+
+                  if "baseball" not in existing_lower:
+
+                      categories.append(
+                          "baseball"
+                      )
+
+
+              if any(
+                  term in text
+                  for term in ANIMATED_TERMS
+              ):
+
+                  if "animated" not in existing_lower:
+
+                      categories.append(
+                          "animated"
+                      )
+
+
+              if categories:
+
+                  item["categories"] = categories
+
+              elif "categories" in item:
+
+                  item.pop("categories", None)
+
+
+          # ============================================================
+          # FIND EXISTING MOVIE
+          # ============================================================
+
+          def find_movie(tmdb):
+
+              if tmdb is None:
                   return None
 
               for item in movies:
+
                   if is_tv(item):
                       continue
 
-                  existing_id = get_tmdb_id(item)
-
-                  if existing_id == tmdb_id:
+                  if tmdb_id(item) == tmdb:
                       return item
 
               return None
 
 
-          def find_tv_by_show_and_season(tmdb_id, season):
-              """
-              IMPORTANT:
-              TV matching is deliberately stricter than movie matching.
+          # ============================================================
+          # FIND EXISTING TV SEASON
+          #
+          # IMPORTANT:
+          #
+          # TV shows are matched by BOTH:
+          #
+          #   TMDB show ID
+          #   season number
+          #
+          # This means:
+          #
+          # Dexter Season 2
+          # Dexter Season 3
+          #
+          # remain separate catalog records.
+          # ============================================================
 
-              A TV record is considered the same physical item only when:
-                1. TMDB show ID matches
-                2. Season number matches
+          def find_tv_season(
+              tmdb,
+              season
+          ):
 
-              This prevents:
-                Dexter Season 2
-                Dexter Season 3
-
-              from collapsing into one record.
-              """
-
-              if tmdb_id is None or season is None:
+              if tmdb is None or season is None:
                   return None
 
               for item in movies:
+
                   if not is_tv(item):
                       continue
 
-                  existing_id = get_tmdb_id(item)
-                  existing_season = get_season(item)
+                  if tmdb_id(item) != tmdb:
+                      continue
 
-                  if (
-                      existing_id == tmdb_id
-                      and existing_season == season
-                  ):
+                  existing_season = season_number(
+                      item
+                  )
+
+                  if existing_season == season:
                       return item
 
               return None
 
 
-          def find_tv_show_without_season(tmdb_id):
-              """
-              Used only as a fallback for older catalog records that may
-              not yet have a season field.
-              """
+          # ============================================================
+          # CREATE MOVIE RECORD
+          # ============================================================
 
-              if tmdb_id is None:
-                  return None
+          def create_movie_record(
+              approval
+          ):
 
-              for item in movies:
-                  if not is_tv(item):
-                      continue
+              tmdb = tmdb_id(
+                  approval
+              )
 
-                  if get_tmdb_id(item) == tmdb_id:
-                      return item
+              tmdb_title = clean(
+                  approval.get("tmdbTitle")
+              )
 
-              return None
+              source_title = clean(
+                  approval.get("source_title")
+              )
 
+              details = {}
 
-          # ------------------------------------------------------------
-          # CREATE NEW RECORD
-          # ------------------------------------------------------------
+              if tmdb:
+                  details = get_movie_details(
+                      tmdb
+                  )
 
-          def create_record(item):
-              tmdb_id = get_tmdb_id(item)
-              season = get_season(item)
-              tmdb_title = item.get("tmdbTitle") or item.get("source_title")
+              title = (
+                  tmdb_title
+                  or details.get("title")
+                  or source_title
+              )
 
               record = {
-                  "title": clean_display_title(tmdb_title),
-                  "type": item.get("type", "movie"),
-                  "tmdbId": tmdb_id,
+                  "title": title,
+                  "tmdbTitle": (
+                      tmdb_title
+                      or details.get("title")
+                      or title
+                  ),
+                  "type": "movie",
+                  "tmdbId": tmdb,
+                  "poster": "",
+                  "year": "",
+                  "runtime": "",
+                  "genre": "",
+                  "director": "",
+                  "cast": "",
+                  "synopsis": "",
+                  "physical": [],
+                  "digital": []
               }
 
-              # Preserve year if the source file already provides it.
-              if item.get("year") not in (None, ""):
-                  record["year"] = item["year"]
 
-              # TV-specific information
-              if is_tv(item):
-                  record["season"] = season
+              if details:
 
-              # Formats
-              record["formats"] = {}
+                  record["title"] = (
+                      details.get("title")
+                      or title
+                  )
 
-              fmt = item.get("format")
+                  record["tmdbTitle"] = (
+                      details.get("title")
+                      or record["tmdbTitle"]
+                  )
 
-              if fmt:
-                  add_format(record, fmt)
+                  release_date = clean(
+                      details.get("release_date")
+                  )
 
-              # Preserve special information when explicitly supplied.
-              special = item.get("special")
+                  record["year"] = (
+                      release_date[:4]
+                      if release_date
+                      else ""
+                  )
+
+                  runtime = details.get(
+                      "runtime"
+                  )
+
+                  if runtime:
+                      record["runtime"] = (
+                          f"{runtime}m"
+                      )
+
+                  genres = [
+                      g.get("name")
+                      for g in details.get(
+                          "genres",
+                          []
+                      )
+                      if g.get("name")
+                  ]
+
+                  record["genre"] = (
+                      " / ".join(genres)
+                  )
+
+                  record["synopsis"] = (
+                      details.get(
+                          "overview",
+                          ""
+                      )
+                  )
+
+                  poster = details.get(
+                      "poster_path"
+                  )
+
+                  if poster:
+                      record["poster"] = (
+                          "https://image.tmdb.org/t/p/w500"
+                          + poster
+                      )
+
+
+              # Preserve the special unique-item rule.
+              special = clean(
+                  approval.get("special")
+              )
 
               if special:
+
                   record["special"] = special
+
+
+              add_format(
+                  record,
+                  approval.get("format")
+              )
+
 
               return record
 
 
-          # ------------------------------------------------------------
-          # APPROVED ITEMS
-          # ------------------------------------------------------------
+          # ============================================================
+          # CREATE TV SEASON RECORD
+          # ============================================================
+
+          def create_tv_record(
+              approval
+          ):
+
+              tmdb = tmdb_id(
+                  approval
+              )
+
+              season = season_number(
+                  approval
+              )
+
+              if tmdb is None:
+                  raise RuntimeError(
+                      "TV approval has no TMDB ID: "
+                      + clean(
+                          approval.get(
+                              "source_title"
+                          )
+                      )
+                  )
+
+              if season is None:
+                  raise RuntimeError(
+                      "TV approval has no season number: "
+                      + clean(
+                          approval.get(
+                              "source_title"
+                          )
+                      )
+                  )
+
+              show_details = get_tv_details(
+                  tmdb
+              )
+
+              season_details = (
+                  get_tv_season_details(
+                      tmdb,
+                      season
+                  )
+              )
+
+              show_title = (
+                  clean(
+                      approval.get(
+                          "tmdbTitle"
+                      )
+                  )
+                  or show_details.get(
+                      "name"
+                  )
+                  or clean(
+                      approval.get(
+                          "show_title"
+                      )
+                  )
+                  or clean(
+                      approval.get(
+                          "source_title"
+                      )
+                  )
+              )
+
+              record_title = (
+                  f"{show_title} - Season {season}"
+              )
+
+              poster = ""
+
+              if season_details.get(
+                  "poster_path"
+              ):
+
+                  poster = (
+                      "https://image.tmdb.org/t/p/w500"
+                      + season_details[
+                          "poster_path"
+                      ]
+                  )
+
+              elif show_details.get(
+                  "poster_path"
+              ):
+
+                  poster = (
+                      "https://image.tmdb.org/t/p/w500"
+                      + show_details[
+                          "poster_path"
+                      ]
+                  )
+
+
+              first_air_date = clean(
+                  show_details.get(
+                      "first_air_date"
+                  )
+              )
+
+              genres = [
+                  g.get("name")
+                  for g in show_details.get(
+                      "genres",
+                      []
+                  )
+                  if g.get("name")
+              ]
+
+
+              record = {
+                  "title": record_title,
+                  "tmdbTitle": show_title,
+                  "type": "tv",
+                  "tmdbId": tmdb,
+                  "season": season,
+                  "poster": poster,
+                  "year": (
+                      first_air_date[:4]
+                      if first_air_date
+                      else ""
+                  ),
+                  "runtime": "",
+                  "genre": " / ".join(genres),
+                  "director": "",
+                  "cast": "",
+                  "synopsis": clean(
+                      show_details.get(
+                          "overview"
+                      )
+                  ),
+                  "physical": [],
+                  "digital": []
+              }
+
+
+              add_format(
+                  record,
+                  approval.get("format")
+              )
+
+
+              return record
+
+
+          # ============================================================
+          # APPLY APPROVED ITEMS
+          # ============================================================
 
           created = 0
           updated = 0
-          skipped = 0
 
           print()
           print("=" * 70)
           print("APPLYING APPROVED ITEMS")
           print("=" * 70)
 
+
           for approval in approved:
 
-              action = str(
-                  approval.get("action", "")
-              ).upper().strip()
+              approval_type = clean(
+                  approval.get("type")
+              ).lower()
 
-              tmdb_id = get_tmdb_id(approval)
-              season = get_season(approval)
-              fmt = approval.get("format")
-
-              source_title = approval.get(
-                  "source_title",
-                  approval.get("tmdbTitle", "")
+              tmdb = tmdb_id(
+                  approval
               )
 
-              special = approval.get("special")
+              fmt = clean(
+                  approval.get("format")
+              )
+
+              source_title = clean(
+                  approval.get(
+                      "source_title"
+                  )
+              )
+
+              special = clean(
+                  approval.get(
+                      "special"
+                  )
+              )
+
 
               # --------------------------------------------------------
               # TV
               # --------------------------------------------------------
 
-              if is_tv(approval):
+              if approval_type == "tv":
 
-                  existing = find_tv_by_show_and_season(
-                      tmdb_id,
+                  season = season_number(
+                      approval
+                  )
+
+                  existing = find_tv_season(
+                      tmdb,
                       season
                   )
 
                   if existing:
 
-                      add_format(existing, fmt)
+                      add_format(
+                          existing,
+                          fmt
+                      )
 
-                      # Keep TMDB's canonical title, but apply the
-                      # catalog's alphabetical convention.
-                      if approval.get("tmdbTitle"):
-                          existing["title"] = clean_display_title(
-                              approval["tmdbTitle"]
+                      existing["tmdbId"] = tmdb
+                      existing["season"] = season
+
+                      if approval.get(
+                          "tmdbTitle"
+                      ):
+
+                          existing["tmdbTitle"] = (
+                              approval[
+                                  "tmdbTitle"
+                              ]
                           )
 
-                      existing["tmdbId"] = tmdb_id
-                      existing["season"] = season
+                      if special:
+                          existing["special"] = (
+                              special
+                          )
 
                       updated += 1
 
                       print(
-                          f"UPDATED TV: {source_title} "
+                          f"UPDATED TV: "
+                          f"{source_title} "
                           f"(season {season})"
                       )
 
                   else:
 
-                      record = create_record(approval)
+                      record = create_tv_record(
+                          approval
+                      )
 
-                      movies.append(record)
+                      movies.append(
+                          record
+                      )
 
                       created += 1
 
                       print(
-                          f"CREATED TV: {source_title} "
+                          f"CREATED TV: "
+                          f"{source_title} "
                           f"(season {season})"
                       )
 
                   continue
 
-              # --------------------------------------------------------
-              # MOVIES
-              # --------------------------------------------------------
-
-              existing = find_movie_by_tmdb(tmdb_id)
 
               # --------------------------------------------------------
-              # UNIQUE ITEM PROTECTION
-              #
-              # Almost Famous Bootleg is intentionally NOT the same
-              # catalog item as Almost Famous.
-              #
-              # Any future approval with "unique item" in special is
-              # always treated as a separate record.
+              # MOVIE
               # --------------------------------------------------------
 
               unique_item = (
-                  isinstance(special, str)
-                  and (
-                      "unique item" in special.lower()
-                      or "do not merge" in special.lower()
-                  )
+                  "unique item" in special.lower()
+                  or "do not merge" in special.lower()
               )
 
-              if unique_item:
-                  existing = None
+
+              existing = None
+
+              if not unique_item:
+                  existing = find_movie(
+                      tmdb
+                  )
+
 
               if existing:
 
-                  add_format(existing, fmt)
+                  add_format(
+                      existing,
+                      fmt
+                  )
 
-                  if approval.get("tmdbTitle"):
-                      existing["title"] = clean_display_title(
-                          approval["tmdbTitle"]
+                  if approval.get(
+                      "tmdbTitle"
+                  ):
+
+                      existing["tmdbTitle"] = (
+                          approval[
+                              "tmdbTitle"
+                          ]
                       )
 
-                  existing["tmdbId"] = tmdb_id
+                  if special:
+                      existing["special"] = (
+                          special
+                      )
 
                   updated += 1
 
                   print(
-                      f"UPDATED MOVIE: {source_title}"
+                      f"UPDATED MOVIE: "
+                      f"{source_title}"
                   )
 
               else:
 
-                  record = create_record(approval)
+                  record = create_movie_record(
+                      approval
+                  )
 
-                  movies.append(record)
+                  # ----------------------------------------------------
+                  # UNIQUE ITEM
+                  #
+                  # Do not rename Almost Famous Bootleg to simply
+                  # Almost Famous. Preserve the user's inventory title.
+                  # ----------------------------------------------------
+
+                  if unique_item:
+
+                      record["title"] = (
+                          source_title
+                          .strip()
+                          .title()
+                      )
+
+                      record["special"] = (
+                          special
+                      )
+
+                  movies.append(
+                      record
+                  )
 
                   created += 1
 
                   print(
-                      f"CREATED MOVIE: {source_title}"
+                      f"CREATED MOVIE: "
+                      f"{source_title}"
                   )
 
-          # ------------------------------------------------------------
-          # REMOVE ITEMS
-          #
-          # These are the catalog items previously identified as
-          # needing removal.
-          #
-          # Matching is normalized so punctuation/capitalization does
-          # not matter.
-          # ------------------------------------------------------------
 
-          REMOVE_TITLES = {
-              "wimbledon",
-              "tokyo drift",
-              "the christmas story",
-              "christmas story",
-              "muppets take manhattan",
-              "the muppets take manhattan",
-          }
+          # ============================================================
+          # REMOVE SEPARATELY APPROVED ITEMS
+          #
+          # These are NOT the 15 manual-review items.
+          #
+          # They come from inventory_cleanup.json.
+          # ============================================================
 
           print()
           print("=" * 70)
-          print("REMOVING RETIRED CATALOG ITEMS")
+          print("REMOVING APPROVED RETIRED ITEMS")
           print("=" * 70)
 
-          before_count = len(movies)
+          remove_keys = {
+              loose_normalize(title)
+              for title in remove_titles
+          }
 
           kept = []
+          removed = []
 
           for item in movies:
 
-              title = item.get("title", "")
-              normalized = norm(title)
+              item_title = clean(
+                  item.get("title")
+              )
 
-              # Account for our "The" alphabetical convention.
-              if normalized.endswith(" the"):
-                  normalized = normalized[:-4].strip()
+              item_key = loose_normalize(
+                  item_title
+              )
 
-              should_remove = normalized in {
-                  norm(x).removesuffix(" the").strip()
-                  for x in REMOVE_TITLES
-              }
+              should_remove = (
+                  item_key in remove_keys
+              )
 
               if should_remove:
-                  print(f"REMOVED: {title}")
-                  continue
 
-              kept.append(item)
+                  removed.append(
+                      item_title
+                  )
+
+                  print(
+                      f"REMOVED: {item_title}"
+                  )
+
+              else:
+
+                  kept.append(
+                      item
+                  )
 
           movies = kept
 
-          removed_count = before_count - len(movies)
 
-          # ------------------------------------------------------------
-          # APPLY TITLE CONVENTION
-          # ------------------------------------------------------------
+          # ============================================================
+          # MOVE "THE" TO THE END
+          #
+          # ONLY the separately approved titles are changed.
+          #
+          # Example:
+          #
+          # The American President
+          #
+          # becomes:
+          #
+          # American President, The
+          # ============================================================
 
           print()
           print("=" * 70)
-          print("APPLYING ALPHABETICAL TITLE CONVENTION")
+          print('APPLYING APPROVED "THE" TITLE MOVES')
           print("=" * 70)
+
+
+          move_the_keys = {
+              normalize(title)
+              for title in move_the_titles
+          }
+
+
+          def move_the_to_end(
+              title
+          ):
+
+              title = clean(title)
+
+              if not title:
+                  return title
+
+              if not title.lower().startswith(
+                  "the "
+              ):
+                  return title
+
+              return (
+                  title[4:].strip()
+                  + ", The"
+              )
+
 
           for item in movies:
 
-              title = item.get("title")
+              title = clean(
+                  item.get("title")
+              )
 
               if not title:
                   continue
 
-              new_title = clean_display_title(title)
+              normalized = normalize(
+                  title
+              )
 
-              if new_title != title:
-                  print(
-                      f"TITLE: {title} -> {new_title}"
+              # Also recognize an item already moved.
+              if normalized.endswith(
+                  " the"
+              ):
+
+                  base = normalized[:-4].strip()
+
+                  for original in move_the_keys:
+
+                      original_base = (
+                          original[4:].strip()
+                          if original.startswith(
+                              "the "
+                          )
+                          else original
+                      )
+
+                      if base == original_base:
+
+                          # Already correctly formatted.
+                          break
+
+                  continue
+
+
+              if normalized in move_the_keys:
+
+                  new_title = move_the_to_end(
+                      title
                   )
 
-                  item["title"] = new_title
+                  if new_title != title:
 
-          # ------------------------------------------------------------
-          # NORMALIZE TV RECORDS
+                      print(
+                          f"TITLE: "
+                          f"{title} -> {new_title}"
+                      )
+
+                      item["title"] = (
+                          new_title
+                      )
+
+
+          # ============================================================
+          # AUTOMATIC CATEGORY TAGGING
           #
-          # Older TV records may not have season data. We do not invent
-          # a season number. They are left alone rather than risking
-          # corrupting existing catalog information.
-          # ------------------------------------------------------------
+          # Existing categories are preserved.
+          #
+          # New categories are added when the catalog data clearly
+          # identifies:
+          #
+          #   baseball
+          #   christmas
+          #   animated
+          # ============================================================
+
+          print()
+          print("=" * 70)
+          print("APPLYING AUTOMATIC CATEGORIES")
+          print("=" * 70)
+
+
+          category_counts = {
+              "baseball": 0,
+              "christmas": 0,
+              "animated": 0
+          }
+
+
+          before_category_state = {}
+
+          for item in movies:
+
+              before_category_state[
+                  id(item)
+              ] = set(
+                  x.lower()
+                  for x in normalize_list(
+                      item.get(
+                          "categories"
+                      )
+                  )
+              )
+
+              detect_categories(
+                  item
+              )
+
+              after = set(
+                  x.lower()
+                  for x in normalize_list(
+                      item.get(
+                          "categories"
+                      )
+                  )
+              )
+
+              for category in category_counts:
+
+                  if (
+                      category in after
+                      and category not in
+                      before_category_state[
+                          id(item)
+                      ]
+                  ):
+
+                      category_counts[
+                          category
+                      ] += 1
+
+                      print(
+                          f"TAGGED: "
+                          f"{item.get('title')} "
+                          f"-> {category}"
+                      )
+
+
+          # ============================================================
+          # SANITIZE TV SEASON FIELDS
+          # ============================================================
 
           for item in movies:
 
               if is_tv(item):
 
-                  if "season" not in item:
-                      item["season"] = None
+                  season = season_number(
+                      item
+                  )
 
-          # ------------------------------------------------------------
+                  if season is not None:
+
+                      item["season"] = (
+                          season
+                      )
+
+
+          # ============================================================
           # SORT
           #
-          # The catalog's displayed title is already in alphabetical
-          # convention, so standard title sorting handles:
+          # The title itself controls alphabetical placement.
           #
-          #   American President, The
-          #   Office Space
-          #   Silence of the Lambs, The
-          #
-          # TV seasons remain grouped together.
-          # ------------------------------------------------------------
+          # TV seasons remain grouped under the same show.
+          # ============================================================
 
           def sort_key(item):
 
-              title = norm(item.get("title", ""))
+              title = normalize(
+                  item.get(
+                      "title",
+                      ""
+                  )
+              )
 
-              season = get_season(item)
+              season = season_number(
+                  item
+              )
 
               if season is None:
                   season_sort = 0
@@ -590,26 +1422,44 @@ jobs:
               return (
                   title,
                   season_sort,
-                  str(item.get("type", "")),
-                  str(item.get("tmdbId", "")),
+                  normalize(
+                      item.get(
+                          "type",
+                          ""
+                      )
+                  ),
+                  str(
+                      tmdb_id(item)
+                      or ""
+                  )
               )
 
-          movies.sort(key=sort_key)
 
-          # ------------------------------------------------------------
+          movies.sort(
+              key=sort_key
+          )
+
+
+          # ============================================================
           # WRITE movies.js
-          # ------------------------------------------------------------
+          #
+          # Preserve:
+          #
+          # const movies =
+          #
+          # and the ending semicolon.
+          # ============================================================
 
-          formatted_json = json.dumps(
+          formatted_array = json.dumps(
               movies,
               indent=2,
               ensure_ascii=False
           )
 
           new_movies_text = (
-              "const movies = "
-              + formatted_json
-              + ";\n"
+              movies_text[:start]
+              + formatted_array
+              + movies_text[end + 1:]
           )
 
           MOVIES_FILE.write_text(
@@ -617,45 +1467,260 @@ jobs:
               encoding="utf-8"
           )
 
-          # ------------------------------------------------------------
-          # REPORT
-          # ------------------------------------------------------------
+
+          # ============================================================
+          # SANITY CHECK
+          # ============================================================
+
+          verify_text = MOVIES_FILE.read_text(
+              encoding="utf-8"
+          )
+
+          verify_start = verify_text.find(
+              "["
+          )
+
+          verify_end = verify_text.rfind(
+              "]"
+          )
+
+          if (
+              verify_start == -1
+              or verify_end == -1
+          ):
+
+              raise RuntimeError(
+                  "SANITY CHECK FAILED: "
+                  "movies.js no longer contains an array."
+              )
+
+
+          try:
+
+              verify_movies = json.loads(
+                  verify_text[
+                      verify_start:
+                      verify_end + 1
+                  ]
+              )
+
+          except Exception as error:
+
+              raise RuntimeError(
+                  "SANITY CHECK FAILED: "
+                  f"movies.js cannot be parsed: {error}"
+              )
+
+
+          if not isinstance(
+              verify_movies,
+              list
+          ):
+
+              raise RuntimeError(
+                  "SANITY CHECK FAILED: "
+                  "movies.js array is not a list."
+              )
+
+
+          # Make sure no duplicate movie IDs were accidentally created,
+          # except where TV seasons are intentionally separate.
+
+          movie_ids = {}
+
+          for item in verify_movies:
+
+              if is_tv(item):
+                  continue
+
+              current_id = tmdb_id(
+                  item
+              )
+
+              if current_id is None:
+                  continue
+
+              if current_id in movie_ids:
+
+                  title_a = movie_ids[
+                      current_id
+                  ]
+
+                  title_b = clean(
+                      item.get("title")
+                  )
+
+                  # The only intentional duplicate-ID exception is a
+                  # separately protected unique item.
+
+                  special_a = clean(
+                      next(
+                          (
+                              x.get(
+                                  "special"
+                              )
+                              for x in verify_movies
+                              if tmdb_id(x)
+                              == current_id
+                              and clean(
+                                  x.get(
+                                      "title"
+                                  )
+                              )
+                              == title_a
+                          ),
+                          ""
+                      )
+                  )
+
+                  special_b = clean(
+                      item.get(
+                          "special"
+                      )
+                  )
+
+                  if not (
+                      "unique item"
+                      in (
+                          special_a
+                          + " "
+                          + special_b
+                      ).lower()
+                  ):
+
+                      raise RuntimeError(
+                          "SANITY CHECK FAILED: "
+                          f"duplicate movie TMDB ID "
+                          f"{current_id}: "
+                          f"{title_a} / {title_b}"
+                      )
+
+              else:
+
+                  movie_ids[
+                      current_id
+                  ] = clean(
+                      item.get("title")
+                  )
+
+
+          # ============================================================
+          # FINAL REPORT
+          # ============================================================
 
           print()
           print("=" * 70)
           print("FINAL REPORT")
           print("=" * 70)
 
-          print(f"Original entries:       {before_count}")
-          print(f"Created:                {created}")
-          print(f"Updated:                {updated}")
-          print(f"Removed:                {removed_count}")
-          print(f"Final catalog entries:  {len(movies)}")
-          print(f"Manual review ignored:  {len(manual_review)}")
-          print(f"Undecided ignored:      {len(undecided)}")
+          print(
+              f"Original entries:       {original_count}"
+          )
+
+          print(
+              f"Approved applied:       {len(approved)}"
+          )
+
+          print(
+              f"Created:                {created}"
+          )
+
+          print(
+              f"Updated:                {updated}"
+          )
+
+          print(
+              f"Removed:                {len(removed)}"
+          )
+
+          print(
+              f"Final entries:          {len(movies)}"
+          )
+
+          print(
+              f"Manual review skipped:  {len(manual_review)}"
+          )
+
+          print(
+              f"Undecided skipped:      {len(undecided)}"
+          )
 
           print()
-          print("movies.js successfully updated.")
+          print("Automatic category additions:")
+
+          print(
+              f"  Baseball:             "
+              f"{category_counts['baseball']}"
+          )
+
+          print(
+              f"  Christmas:            "
+              f"{category_counts['christmas']}"
+          )
+
+          print(
+              f"  Animated:             "
+              f"{category_counts['animated']}"
+          )
+
+          print()
+          print(
+              "movies.js successfully updated and validated."
+          )
 
           PYTHON
+
+
+      # ============================================================
+      # SHOW WHAT CHANGED
+      # ============================================================
 
       - name: Show catalog changes
         run: |
           echo "============================================================"
-          echo "GIT DIFF"
+          echo "GIT STATUS"
           echo "============================================================"
+
+          git status --short
+
+          echo ""
+          echo "============================================================"
+          echo "MOVIES.JS DIFF STATISTICS"
+          echo "============================================================"
+
+          git diff --stat -- movies.js
+
+          echo ""
+          echo "============================================================"
+          echo "REMOVAL / TITLE / CATALOG DIFF"
+          echo "============================================================"
+
           git diff -- movies.js || true
+
+
+      # ============================================================
+      # COMMIT
+      # ============================================================
 
       - name: Commit updated catalog
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git config user.name "BW Movie Catalog"
+
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
 
           git add movies.js
 
           if git diff --cached --quiet; then
+
             echo "No changes to commit."
+
           else
-            git commit -m "Apply approved movie catalog updates"
+
+            git commit \
+              -m "Apply approved movie catalog updates"
+
             git push
+
           fi
