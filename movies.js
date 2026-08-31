@@ -6948,6 +6948,23 @@ const movies = [
     ]
   },
   {
+    "title": "Ghostbusters",
+    "type": "movie",
+    "tmdbId": 43074,
+    "poster": "https://image.tmdb.org/t/p/w500/wJmWliwXIgZOCCVOcGRBhce7xPS.jpg",
+    "year": "2016",
+    "runtime": "117m",
+    "genre": "Action / Fantasy / Comedy",
+    "director": "Paul Feig",
+    "cast": "Kristen Wiig, Melissa McCarthy, Kate McKinnon, Leslie Jones, Chris Hemsworth, Neil Casey",
+    "synopsis": "Following a ghost invasion of Manhattan, paranormal enthusiasts Erin Gilbert and Abby Yates, nuclear engineer Jillian Holtzmann, and subway worker Patty Tolan band together to stop the otherworldly threat.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Ghostbusters II",
     "type": "movie",
     "tmdbId": 2978,
