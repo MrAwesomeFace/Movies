@@ -12493,6 +12493,22 @@ const movies = [
     "digital": []
   },
   {
+    "title": "National Lampoon's Van Wilder",
+    "type": "movie",
+    "tmdbId": 11452,
+    "poster": "https://image.tmdb.org/t/p/w500/4IvM4qnzlo62oLmS54FtyRt54ze.jpg",
+    "year": "2002",
+    "runtime": "92m",
+    "genre": "Comedy / Romance",
+    "director": "Walt Becker",
+    "cast": "Ryan Reynolds, Tara Reid, Tim Matheson, Kal Penn, Teck Holmes, Daniel Cosgrove",
+    "synopsis": "Van Wilder has been attending college for far too many years and is scared to graduate, but Van’s father eventually realizes what is going on. When he stops paying his son's tuition fees, Van must come up with the money if he wants to stay in college, so he and his friends come up with a great fund-raising idea – throwing parties. However, when the college magazine finds out and reporter Gwen is sent to do a story on Van Wilder, things get a little complicated.",
+    "physical": [
+      "DVD"
+    ],
+    "digital": []
+  },
+  {
     "title": "National Lampoon's Vegas Vacation",
     "tmdbTitle": "Vegas Vacation",
     "type": "movie",
