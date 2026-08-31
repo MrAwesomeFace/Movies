@@ -5233,23 +5233,7 @@ const movies = [
     ],
     "digital": []
   },
-  {
-    "title": "Ever After",
-    "tmdbTitle": "Ever After",
-    "type": "movie",
-    "tmdbId": 1438207,
-    "poster": "https://image.tmdb.org/t/p/w500/ghL5WDgc1dvvNSEQ0dld7k6CTnt.jpg",
-    "year": "2026",
-    "runtime": "125m",
-    "genre": "Horror / Fantasy",
-    "director": "László Illés",
-    "cast": "Malcolm McDowell, Mark Sheppard, Bonnie Aarons, Michael Berryman, Kane Hodder, Rebecka Johnston",
-    "synopsis": "A group of girlfriends arrive at a forest lodge to celebrate, but things take a horrific turn as they realize that the forest is home to bloodthirsty lunatics who perceive themselves to be characters from classic fairy tales.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
+
   {
     "title": "Everybody Loves Raymond - Complete Eighth Season",
     "tmdbTitle": "Everybody Loves Raymond",
