@@ -1160,6 +1160,22 @@ const movies = [
     ]
   },
   {
+    "title": "An Evening with Kevin Smith",
+    "type": "movie",
+    "tmdbId": 14348,
+    "poster": "https://image.tmdb.org/t/p/w500/w37BFY3m4iGqg1dXCk1gbw2AJ5q.jpg",
+    "year": "2002",
+    "runtime": "224m",
+    "genre": "Comedy / Documentary",
+    "director": "J.M. Kenny",
+    "cast": "Kevin Smith, Jason Mewes, Scott Mosier",
+    "synopsis": "Kevin Smith interacts in Q&A sessions throughout various college stops in the USA.",
+    "physical": [
+      "DVD"
+    ],
+    "digital": []
+  },
+  {
     "title": "Angels & Demons",
     "tmdbTitle": "Angels & Demons",
     "type": "movie",
