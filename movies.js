@@ -16640,6 +16640,22 @@ const movies = [
     ]
   },
   {
+    "title": "Take the Lead",
+    "type": "movie",
+    "tmdbId": 12763,
+    "poster": "https://image.tmdb.org/t/p/w500/vkGSs0eeOOISEe9jddBZnRSkn46.jpg",
+    "year": "2006",
+    "runtime": "118m",
+    "genre": "Drama / Music",
+    "director": "Liz Friedlander",
+    "cast": "Antonio Banderas, Rob Brown, Yaya DaCosta, Alfre Woodard, John Ortiz, Laura Benanti",
+    "synopsis": "A former professional dancer volunteers to teach dance in the New York public school system and, while his background first clashes with his students' tastes, together they create a completely new style of dance. Based on the story of ballroom dancer, Pierre Dulane.",
+    "physical": [
+      "DVD"
+    ],
+    "digital": []
+  },
+  {
     "title": "Taken",
     "type": "movie",
     "tmdbId": 8681,
