@@ -145,6 +145,25 @@ const movies = [
     ]
   },
   {
+    "title": "2016 World Series Champions: The Chicago Cubs",
+    "type": "movie",
+    "tmdbId": 522710,
+    "poster": "https://image.tmdb.org/t/p/w500/kql8l06FjXuZ7yqmWQItFYg4NVB.jpg",
+    "year": "2016",
+    "runtime": "98m",
+    "genre": "Documentary",
+    "director": "Jed Tuminaro",
+    "cast": "Vince Vaughn",
+    "synopsis": "This historic official film from Major League Baseball presents the exciting story of the Chicago Cubs 2016 World Series championship run through comprehensive highlights, exclusive access and interviews, and breathtaking footage.",
+    "physical": [
+      "Blu-ray"
+    ],
+    "digital": [],
+    "categories": [
+      "baseball"
+    ]
+  },
+  {
     "title": "21",
     "tmdbTitle": "21",
     "type": "movie",
