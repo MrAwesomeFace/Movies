@@ -1581,7 +1581,6 @@ const movies = [
       "Movies Anywhere"
     ]
   },
-
   {
     "title": "Bad Santa",
     "type": "movie",
@@ -5449,8 +5448,7 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ],
-
+    ]
   },
   {
     "title": "Expendables, The",
@@ -5470,8 +5468,7 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ],
-
+    ]
   },
   {
     "title": "Eye See You",
@@ -11897,7 +11894,8 @@ const movies = [
       "Movies Anywhere"
     ],
     "categories": [
-      "animated","christmas"
+      "animated",
+      "christmas"
     ]
   },
   {
@@ -12175,7 +12173,6 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-
     "categories": [
       "animated"
     ]
@@ -17074,6 +17071,27 @@ const movies = [
       "Fandango",
       "Movies Anywhere"
     ]
+  },
+  {
+    "title": "The Little Mermaid: Ariel's Beginning",
+    "tmdbTitle": "The Little Mermaid: Ariel's Beginning",
+    "type": "movie",
+    "tmdbId": 13676,
+    "poster": "https://image.tmdb.org/t/p/w500/6EwcdQH134T4HGr0W3m2FnLjTnc.jpg",
+    "year": "2008",
+    "runtime": "77m",
+    "genre": "Family / Animation",
+    "director": "Peggy Holmes",
+    "cast": "Jodi Benson, Samuel E. Wright, Jim Cummings, Sally Field, Tara Strong, Jennifer Hale",
+    "synopsis": "Follow Ariel's adventures before she gave up her fins for true love. When Ariel wasn't singing with her sisters, she spent time with her mother, Queen Athena. Ariel is devastated when Athena is killed by pirates, and after King Triton outlaws all singing. Along with pals Flounder and Sebastian, Ariel sets off in hopes of changing her father's decision to ban music from the kingdom.",
+    "physical": [
+      "DVD"
+    ],
+    "digital": [],
+    "categories": [
+      "Animated"
+    ],
+    "animated": true
   },
   {
     "title": "Thelma & Louise",
