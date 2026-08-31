@@ -8018,6 +8018,25 @@ const movies = [
     ]
   },
   {
+    "title": "Home Alone 4",
+    "type": "movie",
+    "tmdbId": 12536,
+    "poster": "https://image.tmdb.org/t/p/w500/qRktvMOO2QaCL7gvNyvZDoxPOZj.jpg",
+    "year": "2002",
+    "runtime": "84m",
+    "genre": "Comedy / Family / TV Movie",
+    "director": "Rod Daniel",
+    "cast": "Mike Weinberg, French Stewart, Missi Pyle, Erick Avari, Barbara Babcock, Jason Beghe",
+    "synopsis": "Kevin McCallister's parents have split up. Now living with his mom, he decides to spend Christmas with his dad at the mansion of his father's rich girlfriend, Natalie. Meanwhile robber Marv Merchants, one of the villains from the first two movies, partners up with a new criminal named Vera to hit Natalie's mansion.",
+    "physical": [
+      "DVD"
+    ],
+    "digital": [],
+    "categories": [
+      "christmas"
+    ]
+  },
+  {
     "title": "Home for the Holidays",
     "tmdbTitle": "Home for the Holidays",
     "type": "movie",
