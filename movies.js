@@ -3176,7 +3176,6 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "animated": true,
     "categories": [
       "animated"
     ]
@@ -6072,7 +6071,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [
+      "Fandango"
+    ]
   },
   {
     "title": "Fighter, The",
@@ -17090,8 +17091,7 @@ const movies = [
     "digital": [],
     "categories": [
       "Animated"
-    ],
-    "animated": true
+    ]
   },
   {
     "title": "Thelma & Louise",
