@@ -9,7 +9,7 @@ on:
         type: string
 
       media_type:
-        description: "movie or tv"
+        description: "Movie or TV"
         required: true
         default: "movie"
         type: choice
@@ -17,26 +17,71 @@ on:
           - movie
           - tv
 
-      format:
-        description: "Physical format (DVD, Blu-ray, 4K, etc.)"
+      physical_dvd:
+        description: "Physical: DVD"
         required: true
-        default: "DVD"
-        type: string
+        default: false
+        type: boolean
 
-      categories:
-        description: "Optional categories, comma-separated (baseball, christmas, etc.)"
+      physical_bluray:
+        description: "Physical: Blu-ray"
+        required: true
+        default: false
+        type: boolean
+
+      physical_4k:
+        description: "Physical: 4K"
+        required: true
+        default: false
+        type: boolean
+
+      digital_fandango:
+        description: "Digital: Fandango"
+        required: true
+        default: false
+        type: boolean
+
+      digital_movies_anywhere:
+        description: "Digital: Movies Anywhere"
+        required: true
+        default: false
+        type: boolean
+
+      digital_prime:
+        description: "Digital: Prime"
+        required: true
+        default: false
+        type: boolean
+
+      digital_apple:
+        description: "Digital: Apple"
+        required: true
+        default: false
+        type: boolean
+
+      tag_christmas:
+        description: "Tag: Christmas"
+        required: true
+        default: false
+        type: boolean
+
+      tag_baseball:
+        description: "Tag: Baseball"
+        required: true
+        default: false
+        type: boolean
+
+      tag_animated:
+        description: "Tag: Animated"
+        required: true
+        default: false
+        type: boolean
+
+      other_categories:
+        description: "Other categories, comma-separated"
         required: false
         default: ""
         type: string
-
-      animated:
-        description: "Animated? yes/no"
-        required: true
-        default: "no"
-        type: choice
-        options:
-          - no
-          - yes
 
 jobs:
   add-movie:
@@ -55,14 +100,27 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Add movie
+      - name: Add or update movie
         env:
           TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
           TMDB_ID: ${{ inputs.tmdb_id }}
           MEDIA_TYPE: ${{ inputs.media_type }}
-          FORMAT: ${{ inputs.format }}
-          CATEGORIES: ${{ inputs.categories }}
-          ANIMATED: ${{ inputs.animated }}
+
+          PHYSICAL_DVD: ${{ inputs.physical_dvd }}
+          PHYSICAL_BLURAY: ${{ inputs.physical_bluray }}
+          PHYSICAL_4K: ${{ inputs.physical_4k }}
+
+          DIGITAL_FANDANGO: ${{ inputs.digital_fandango }}
+          DIGITAL_MOVIES_ANYWHERE: ${{ inputs.digital_movies_anywhere }}
+          DIGITAL_PRIME: ${{ inputs.digital_prime }}
+          DIGITAL_APPLE: ${{ inputs.digital_apple }}
+
+          TAG_CHRISTMAS: ${{ inputs.tag_christmas }}
+          TAG_BASEBALL: ${{ inputs.tag_baseball }}
+          TAG_ANIMATED: ${{ inputs.tag_animated }}
+
+          OTHER_CATEGORIES: ${{ inputs.other_categories }}
+
         run: |
           cat > add_movie.py <<'PYTHON'
           import json
@@ -71,105 +129,184 @@ jobs:
           import urllib.error
           import urllib.request
 
+
+          # =========================================================
+          # INPUTS
+          # =========================================================
+
           API_KEY = os.environ["TMDB_API_KEY"]
-          TMDB_ID = os.environ["TMDB_ID"]
-          MEDIA_TYPE = os.environ["MEDIA_TYPE"]
-          FORMAT = os.environ["FORMAT"]
-          CATEGORIES = os.environ.get("CATEGORIES", "")
-          ANIMATED = os.environ["ANIMATED"].lower() == "yes"
+          TMDB_ID = os.environ["TMDB_ID"].strip()
+          MEDIA_TYPE = os.environ["MEDIA_TYPE"].strip().lower()
 
           if MEDIA_TYPE not in ("movie", "tv"):
               raise SystemExit("ERROR: media_type must be movie or tv")
 
-          # ---------------------------------------------------------
-          # Fetch TMDB data
-          # ---------------------------------------------------------
+          if not TMDB_ID.isdigit():
+              raise SystemExit("ERROR: TMDB ID must be a number")
 
-          url = (
-              f"https://api.themoviedb.org/3/{MEDIA_TYPE}/"
-              f"{TMDB_ID}?language=en-US"
-          )
 
-          request = urllib.request.Request(
-              url,
-              headers={
-                  "User-Agent": "BW-Movie-Collection",
-                  "Authorization": f"Bearer {API_KEY}",
-                  "accept": "application/json",
-              }
-          )
+          # =========================================================
+          # SELECTED PHYSICAL FORMATS
+          # =========================================================
 
-          try:
-              with urllib.request.urlopen(request) as response:
-                  data = json.load(response)
-          except urllib.error.HTTPError as e:
-              if e.code == 401:
+          selected_physical = []
+
+          if os.environ.get("PHYSICAL_DVD", "").lower() == "true":
+              selected_physical.append("DVD")
+
+          if os.environ.get("PHYSICAL_BLURAY", "").lower() == "true":
+              selected_physical.append("Blu-ray")
+
+          if os.environ.get("PHYSICAL_4K", "").lower() == "true":
+              selected_physical.append("4K")
+
+
+          # =========================================================
+          # SELECTED DIGITAL SERVICES
+          # =========================================================
+
+          selected_digital = []
+
+          if os.environ.get("DIGITAL_FANDANGO", "").lower() == "true":
+              selected_digital.append("Fandango")
+
+          if os.environ.get("DIGITAL_MOVIES_ANYWHERE", "").lower() == "true":
+              selected_digital.append("Movies Anywhere")
+
+          if os.environ.get("DIGITAL_PRIME", "").lower() == "true":
+              selected_digital.append("Prime")
+
+          if os.environ.get("DIGITAL_APPLE", "").lower() == "true":
+              selected_digital.append("Apple")
+
+
+          # =========================================================
+          # SELECTED CATEGORIES / TAGS
+          # =========================================================
+
+          selected_categories = []
+
+          if os.environ.get("TAG_CHRISTMAS", "").lower() == "true":
+              selected_categories.append("christmas")
+
+          if os.environ.get("TAG_BASEBALL", "").lower() == "true":
+              selected_categories.append("baseball")
+
+          if os.environ.get("TAG_ANIMATED", "").lower() == "true":
+              selected_categories.append("animated")
+
+
+          # Additional free-form categories.
+          other_categories = os.environ.get("OTHER_CATEGORIES", "")
+
+          if other_categories.strip():
+              for category in other_categories.split(","):
+                  category = category.strip().lower()
+
+                  if category and category not in selected_categories:
+                      selected_categories.append(category)
+
+
+          # =========================================================
+          # TMDB API HELPER
+          # =========================================================
+
+          def tmdb_get(path):
+              url = (
+                  f"https://api.themoviedb.org/3/{path}"
+                  f"?language=en-US"
+              )
+
+              request = urllib.request.Request(
+                  url,
+                  headers={
+                      "User-Agent": "BW-Movie-Collection",
+                      "Authorization": f"Bearer {API_KEY}",
+                      "accept": "application/json",
+                  }
+              )
+
+              try:
+                  with urllib.request.urlopen(request) as response:
+                      return json.load(response)
+
+              except urllib.error.HTTPError as e:
+                  if e.code == 401:
+                      raise SystemExit(
+                          "ERROR: TMDB returned 401 Unauthorized. "
+                          "Check that TMDB_API_KEY is a valid v4 Read Access Token."
+                      )
+
+                  if e.code == 404:
+                      raise SystemExit(
+                          f"ERROR: TMDB ID {TMDB_ID} was not found as a {MEDIA_TYPE}."
+                      )
+
                   raise SystemExit(
-                      "ERROR: TMDB returned 401 Unauthorized. Check that the "
-                      "TMDB_API_KEY secret is a valid v4 Read Access Token "
-                      "(not a v3 API key) and hasn't expired."
+                      f"ERROR: TMDB request failed with HTTP {e.code}: "
+                      f"{e.read()[:300]}"
                   )
-              raise SystemExit(f"ERROR: TMDB request failed with HTTP {e.code}: {e.read()[:300]}")
 
-          # ---------------------------------------------------------
-          # Basic information
-          # ---------------------------------------------------------
+
+          # =========================================================
+          # FETCH TMDB DATA
+          # =========================================================
+
+          data = tmdb_get(f"{MEDIA_TYPE}/{TMDB_ID}")
+
+
+          # =========================================================
+          # BASIC INFORMATION
+          # =========================================================
 
           if MEDIA_TYPE == "movie":
-              title = data.get("title", "")
+              tmdb_title = data.get("title", "")
               year = data.get("release_date", "")[:4]
               runtime_value = data.get("runtime")
-              cast_url_type = "movie"
+
           else:
-              title = data.get("name", "")
+              tmdb_title = data.get("name", "")
               year = data.get("first_air_date", "")[:4]
               runtime_value = None
-              cast_url_type = "tv"
 
-          if not title:
+          if not tmdb_title:
               raise SystemExit("ERROR: TMDB returned no title")
 
+
           runtime = ""
+
           if runtime_value:
               runtime = f"{runtime_value}m"
+
           elif data.get("episode_run_time"):
               runtime = f"{data['episode_run_time'][0]}m"
 
-          # ---------------------------------------------------------
-          # Check whether this TMDB ID already exists
-          # ---------------------------------------------------------
 
-          with open("movies.js", "r", encoding="utf-8") as f:
-              existing = f.read()
+          # =========================================================
+          # NORMALIZE TITLE FOR ALPHABETICAL SORTING
+          #
+          # "The Godfather" -> "Godfather, The"
+          #
+          # tmdbTitle remains the original TMDB title.
+          # =========================================================
 
-          id_pattern = rf'"tmdbId"\s*:\s*{re.escape(str(TMDB_ID))}\b'
+          def normalize_title(title):
+              if title.lower().startswith("the "):
+                  return title[4:] + ", The"
 
-          if re.search(id_pattern, existing):
-              raise SystemExit(
-                  f"STOP: TMDB ID {TMDB_ID} already exists in movies.js. "
-                  "Nothing was changed."
-              )
+              return title
 
-          # ---------------------------------------------------------
-          # Fetch credits
-          # ---------------------------------------------------------
 
-          credits_url = (
-              f"https://api.themoviedb.org/3/{MEDIA_TYPE}/"
-              f"{TMDB_ID}/credits?language=en-US"
+          normalized_title = normalize_title(tmdb_title)
+
+
+          # =========================================================
+          # FETCH CREDITS
+          # =========================================================
+
+          credits = tmdb_get(
+              f"{MEDIA_TYPE}/{TMDB_ID}/credits"
           )
-
-          request = urllib.request.Request(
-              credits_url,
-              headers={
-                  "User-Agent": "BW-Movie-Collection",
-                  "Authorization": f"Bearer {API_KEY}",
-                  "accept": "application/json",
-              }
-          )
-
-          with urllib.request.urlopen(request) as response:
-              credits = json.load(response)
 
           cast = [
               person["name"]
@@ -183,9 +320,10 @@ jobs:
               if person.get("job") == "Director"
           ]
 
-          # ---------------------------------------------------------
-          # Genres
-          # ---------------------------------------------------------
+
+          # =========================================================
+          # GENRES
+          # =========================================================
 
           genres = [
               genre["name"]
@@ -193,84 +331,224 @@ jobs:
               if genre.get("name")
           ]
 
-          # Automatically recognize animation from TMDB.
-          if any(g.lower() == "animation" for g in genres):
-              ANIMATED = True
 
-          # ---------------------------------------------------------
-          # Poster
-          # ---------------------------------------------------------
+          # =========================================================
+          # POSTER
+          # =========================================================
 
           poster_path = data.get("poster_path")
 
           poster = ""
+
           if poster_path:
               poster = (
                   "https://image.tmdb.org/t/p/w500"
                   + poster_path
               )
 
-          # ---------------------------------------------------------
-          # Categories
-          # ---------------------------------------------------------
 
-          categories = []
+          # =========================================================
+          # LOAD EXISTING MOVIES
+          # =========================================================
 
-          if CATEGORIES.strip():
-              categories = [
-                  x.strip()
-                  for x in CATEGORIES.split(",")
-                  if x.strip()
-              ]
+          with open("movies.js", "r", encoding="utf-8") as f:
+              existing = f.read()
 
-          # ---------------------------------------------------------
-          # Build movie object
-          # ---------------------------------------------------------
-
-          movie = {
-              "title": title,
-              "tmdbTitle": title,
-              "type": MEDIA_TYPE,
-              "tmdbId": int(TMDB_ID),
-              "poster": poster,
-              "year": year,
-              "runtime": runtime,
-              "genre": " / ".join(genres),
-              "director": ", ".join(directors),
-              "cast": ", ".join(cast),
-              "synopsis": data.get("overview", ""),
-              "physical": [FORMAT],
-              "digital": [],
-          }
-
-          # Only add these fields when they were requested.
-          if categories:
-              movie["categories"] = categories
-
-          if ANIMATED:
-              movie["animated"] = True
-
-          # ---------------------------------------------------------
-          # Insert alphabetically into movies.js
-          # ---------------------------------------------------------
-
-          # Convert the existing JS array into JSON-compatible data.
           start = existing.find("[")
           end = existing.rfind("]")
 
           if start == -1 or end == -1:
-              raise SystemExit("ERROR: Could not locate movies array.")
+              raise SystemExit(
+                  "ERROR: Could not locate movies array in movies.js."
+              )
 
           array_text = existing[start:end + 1]
-          array_text = re.sub(r",(\s*[\}\]])", r"\1", array_text)  # tolerate trailing commas
 
-          movies = json.loads(array_text)
+          # Remove trailing commas so JSON can be parsed.
+          array_text = re.sub(
+              r",(\s*[\}\]])",
+              r"\1",
+              array_text
+          )
 
-          movies.append(movie)
+          try:
+              movies = json.loads(array_text)
+
+          except json.JSONDecodeError as e:
+              raise SystemExit(
+                  f"ERROR: Could not parse movies.js as JSON: {e}"
+              )
+
+
+          # =========================================================
+          # FIND EXISTING TMDB ID
+          # =========================================================
+
+          existing_index = None
+
+          for index, movie in enumerate(movies):
+              if str(movie.get("tmdbId")) == str(TMDB_ID):
+                  existing_index = index
+                  break
+
+
+          # =========================================================
+          # UPDATE EXISTING ENTRY
+          # =========================================================
+
+          if existing_index is not None:
+
+              existing_movie = movies[existing_index]
+
+              existing_type = existing_movie.get("type")
+
+              if existing_type and existing_type != MEDIA_TYPE:
+                  raise SystemExit(
+                      f"STOP: TMDB ID {TMDB_ID} already exists as "
+                      f"type '{existing_type}', but this run specified "
+                      f"'{MEDIA_TYPE}'. Nothing was changed."
+                  )
+
+              # -----------------------------------------------------
+              # Physical
+              # -----------------------------------------------------
+
+              physical = existing_movie.get("physical", [])
+
+              if not isinstance(physical, list):
+                  physical = [physical] if physical else []
+
+              for fmt in selected_physical:
+                  if fmt not in physical:
+                      physical.append(fmt)
+
+              existing_movie["physical"] = physical
+
+
+              # -----------------------------------------------------
+              # Digital
+              # -----------------------------------------------------
+
+              digital = existing_movie.get("digital", [])
+
+              if not isinstance(digital, list):
+                  digital = [digital] if digital else []
+
+              for service in selected_digital:
+                  if service not in digital:
+                      digital.append(service)
+
+              existing_movie["digital"] = digital
+
+
+              # -----------------------------------------------------
+              # Categories / tags
+              # -----------------------------------------------------
+
+              categories = existing_movie.get("categories", [])
+
+              if not isinstance(categories, list):
+                  categories = [categories] if categories else []
+
+              for category in selected_categories:
+                  if category not in categories:
+                      categories.append(category)
+
+              if categories:
+                  existing_movie["categories"] = categories
+
+              elif "categories" in existing_movie:
+                  del existing_movie["categories"]
+
+
+              # -----------------------------------------------------
+              # Remove legacy animated field if it exists.
+              # Animation is now a category/tag.
+              # -----------------------------------------------------
+
+              if "animated" in existing_movie:
+                  del existing_movie["animated"]
+
+
+              print("")
+              print("========================================")
+              print("EXISTING MOVIE UPDATED")
+              print("========================================")
+              print(f"Title:      {existing_movie.get('title', normalized_title)}")
+              print(f"TMDB Title: {existing_movie.get('tmdbTitle', tmdb_title)}")
+              print(f"TMDB ID:    {TMDB_ID}")
+              print(f"Type:       {MEDIA_TYPE}")
+              print(f"Physical:   {', '.join(physical) or 'none'}")
+              print(f"Digital:    {', '.join(digital) or 'none'}")
+              print(f"Categories: {', '.join(categories) or 'none'}")
+
+
+          # =========================================================
+          # ADD BRAND-NEW ENTRY
+          # =========================================================
+
+          else:
+
+              movie = {
+                  "title": normalized_title,
+                  "type": MEDIA_TYPE,
+                  "tmdbId": int(TMDB_ID),
+                  "poster": poster,
+                  "year": year,
+                  "runtime": runtime,
+                  "genre": " / ".join(genres),
+                  "director": ", ".join(directors),
+                  "cast": ", ".join(cast),
+                  "synopsis": data.get("overview", ""),
+                  "physical": selected_physical,
+                  "digital": selected_digital,
+              }
+
+              if selected_categories:
+                  movie["categories"] = selected_categories
+
+              movies.append(movie)
+
+              print("")
+              print("========================================")
+              print("NEW MOVIE ADDED")
+              print("========================================")
+              print(f"Title:      {normalized_title}")
+              print(f"TMDB Title: {tmdb_title}")
+              print(f"TMDB ID:    {TMDB_ID}")
+              print(f"Type:       {MEDIA_TYPE}")
+              print(f"Physical:   {', '.join(selected_physical) or 'none'}")
+              print(f"Digital:    {', '.join(selected_digital) or 'none'}")
+              print(f"Categories: {', '.join(selected_categories) or 'none'}")
+
+
+          # =========================================================
+          # REMOVE LEGACY ANIMATED FIELD FROM ALL ENTRIES
+          #
+          # This makes sure the new workflow doesn't leave old
+          # animated:true fields behind if an entry is touched.
+          # =========================================================
+
+          for movie in movies:
+              if "animated" in movie:
+                  del movie["animated"]
+
+
+          # =========================================================
+          # SORT CATALOG
+          #
+          # Titles are already normalized when new entries are added.
+          # Existing entries remain as they are.
+          # =========================================================
 
           movies.sort(
               key=lambda m: m.get("title", "").lower()
           )
+
+
+          # =========================================================
+          # WRITE MOVIES.JS
+          # =========================================================
 
           new_array = json.dumps(
               movies,
@@ -287,19 +565,12 @@ jobs:
           with open("movies.js", "w", encoding="utf-8") as f:
               f.write(new_content)
 
-          print("")
-          print("========================================")
-          print("MOVIE ADDED")
-          print("========================================")
-          print(f"Title:      {title}")
-          print(f"Year:       {year}")
-          print(f"TMDB ID:    {TMDB_ID}")
-          print(f"Type:       {MEDIA_TYPE}")
-          print(f"Format:     {FORMAT}")
-          print(f"Animated:   {ANIMATED}")
-          print(f"Categories: {', '.join(categories) or 'none'}")
+
           print("")
           print("movies.js updated successfully.")
+          print("")
+
+
           PYTHON
 
           python add_movie.py
@@ -310,5 +581,11 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git add movies.js
-          git commit -m "Add movie: ${{ inputs.tmdb_id }}"
+
+          if git diff --cached --quiet; then
+            echo "No changes were made."
+            exit 0
+          fi
+
+          git commit -m "Add/update movie: ${{ inputs.tmdb_id }}"
           git push
