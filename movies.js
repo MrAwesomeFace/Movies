@@ -1176,7 +1176,6 @@ const movies = [
     ],
     "digital": [],
     "categories": [
-      "baseball"
     ]
   },
   {
@@ -1638,7 +1637,6 @@ const movies = [
       "Movies Anywhere"
     ],
     "categories": [
-      "baseball"
     ]
   },
   {
@@ -2688,7 +2686,6 @@ const movies = [
     ],
     "digital": [],
     "categories": [
-      "baseball"
     ]
   },
   {
@@ -3005,7 +3002,6 @@ const movies = [
     ],
     "digital": [],
     "categories": [
-      "baseball"
     ]
   },
   {
@@ -4461,7 +4457,6 @@ const movies = [
     ],
     "digital": [],
     "categories": [
-      "christmas"
     ]
   },
   {
@@ -4620,7 +4615,6 @@ const movies = [
     ],
     "digital": [],
     "categories": [
-      "christmas"
     ]
   },
   {
@@ -4659,9 +4653,7 @@ const movies = [
       "Fandango",
       "Movies Anywhere"
     ],
-    "special": "existing catalog item; add physical format only",
     "categories": [
-      "baseball"
     ]
   },
   {
@@ -4850,7 +4842,6 @@ const movies = [
     ],
     "digital": [],
     "categories": [
-      "christmas"
     ]
   },
   {
@@ -6629,7 +6620,6 @@ const movies = [
       "Movies Anywhere"
     ],
     "categories": [
-      "christmas"
     ]
   },
   {
@@ -6847,8 +6837,6 @@ const movies = [
     ],
     "digital": [],
     "categories": [
-      "christmas",
-      "baseball"
     ]
   },
   {
@@ -7277,7 +7265,6 @@ const movies = [
     ],
     "digital": [],
     "categories": [
-      "christmas"
     ]
   },
   {
@@ -7300,7 +7287,6 @@ const movies = [
       "Movies Anywhere"
     ],
     "categories": [
-      "christmas"
     ]
   },
   {
@@ -7340,7 +7326,6 @@ const movies = [
     ],
     "digital": [],
     "categories": [
-      "baseball"
     ]
   },
   {
@@ -7362,7 +7347,6 @@ const movies = [
       "Movies Anywhere"
     ],
     "categories": [
-      "baseball"
     ]
   },
   {
@@ -7604,24 +7588,7 @@ const movies = [
       "Movies Anywhere"
     ]
   },
-  {
-    "title": "Harry Potter and the Philosopher's Stone",
-    "tmdbTitle": "Harry Potter and the Philosopher's Stone",
-    "type": "movie",
-    "tmdbId": 671,
-    "poster": "https://image.tmdb.org/t/p/w500/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg",
-    "year": "2001",
-    "runtime": "152m",
-    "genre": "Adventure / Fantasy",
-    "director": "Chris Columbus",
-    "cast": "Daniel Radcliffe, Rupert Grint, Emma Watson, Richard Harris, Tom Felton, Alan Rickman",
-    "synopsis": "Harry Potter has lived under the stairs at his aunt and uncle's house his whole life. But on his 11th birthday, he learns he's a powerful wizard—with a place waiting for him at the Hogwarts School of Witchcraft and Wizardry. As he learns to harness his newfound powers with the help of the school's kindly headmaster, Harry uncovers the truth about his parents' deaths—and about the villain who's to blame.",
-    "physical": [],
-    "digital": [
-      "Fandango",
-      "Movies Anywhere"
-    ]
-  },
+
   {
     "title": "Harry Potter and the Prisoner of Azkaban",
     "type": "movie",
@@ -8559,7 +8526,6 @@ const movies = [
       "Movies Anywhere"
     ],
     "categories": [
-      "baseball"
     ]
   },
   {
@@ -8874,7 +8840,6 @@ const movies = [
     ],
     "digital": [],
     "categories": [
-      "baseball"
     ]
   },
   {
@@ -9822,23 +9787,7 @@ const movies = [
       "Movies Anywhere"
     ]
   },
-  {
-    "title": "Justified - Complete Fifth Season",
-    "tmdbTitle": "Justified",
-    "type": "tv",
-    "tmdbId": 1436,
-    "poster": "https://image.tmdb.org/t/p/w500/hRsSxqSvllVWHhNbJj3HvLAWWEL.jpg",
-    "year": "2014",
-    "runtime": "",
-    "genre": "Crime / Drama",
-    "director": "",
-    "cast": "Timothy Olyphant, Walton Goggins, Nick Searcy, Jere Burns, Joelle Carter, Jacob Pitts",
-    "synopsis": "A character drama based on the 2001 Elmore Leonard short story \"Fire in the Hole.\" Leonard's tale centers around U.S. Marshal Raylan Givens of Kentucky, a quiet but strong-willed official of the law. The tale covers his high-stakes job, as well as his strained relationships with his ex-wife and father.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
+
   {
     "title": "Justified - Complete First Season",
     "tmdbTitle": "Justified",
@@ -9856,23 +9805,7 @@ const movies = [
     ],
     "digital": []
   },
-  {
-    "title": "Justified - Complete Fourth Season",
-    "tmdbTitle": "Justified",
-    "type": "tv",
-    "tmdbId": 1436,
-    "poster": "https://image.tmdb.org/t/p/w500/fNg659kFpX261TXkjOIpu1fqQyE.jpg",
-    "year": "2013",
-    "runtime": "",
-    "genre": "Crime / Drama",
-    "director": "",
-    "cast": "Timothy Olyphant, Walton Goggins, Nick Searcy, Jere Burns, Joelle Carter, Jacob Pitts",
-    "synopsis": "A character drama based on the 2001 Elmore Leonard short story \"Fire in the Hole.\" Leonard's tale centers around U.S. Marshal Raylan Givens of Kentucky, a quiet but strong-willed official of the law. The tale covers his high-stakes job, as well as his strained relationships with his ex-wife and father.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
+
   {
     "title": "Justified - Complete Second Season",
     "tmdbTitle": "Justified",
@@ -9890,40 +9823,7 @@ const movies = [
     ],
     "digital": []
   },
-  {
-    "title": "Justified - Complete Sixth Season",
-    "tmdbTitle": "Justified",
-    "type": "tv",
-    "tmdbId": 1436,
-    "poster": "https://image.tmdb.org/t/p/w500/fHXFewDkwJuiaqbxKEPd2zzkkoO.jpg",
-    "year": "2015",
-    "runtime": "",
-    "genre": "Crime / Drama",
-    "director": "",
-    "cast": "Timothy Olyphant, Walton Goggins, Nick Searcy, Jere Burns, Joelle Carter, Jacob Pitts",
-    "synopsis": "A character drama based on the 2001 Elmore Leonard short story \"Fire in the Hole.\" Leonard's tale centers around U.S. Marshal Raylan Givens of Kentucky, a quiet but strong-willed official of the law. The tale covers his high-stakes job, as well as his strained relationships with his ex-wife and father.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
-  {
-    "title": "Justified - Complete Third Season",
-    "tmdbTitle": "Justified",
-    "type": "tv",
-    "tmdbId": 1436,
-    "poster": "https://image.tmdb.org/t/p/w500/nBI2GK6wRat59yUYlnTRLOPVkVB.jpg",
-    "year": "2012",
-    "runtime": "",
-    "genre": "Crime / Drama",
-    "director": "",
-    "cast": "Timothy Olyphant, Walton Goggins, Nick Searcy, Jere Burns, Joelle Carter, Jacob Pitts",
-    "synopsis": "A character drama based on the 2001 Elmore Leonard short story \"Fire in the Hole.\" Leonard's tale centers around U.S. Marshal Raylan Givens of Kentucky, a quiet but strong-willed official of the law. The tale covers his high-stakes job, as well as his strained relationships with his ex-wife and father.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
+
   {
     "title": "Karate Kid Part II, The",
     "tmdbTitle": "The Karate Kid Part II",
@@ -10369,27 +10269,7 @@ const movies = [
     ],
     "digital": []
   },
-  {
-    "title": "Land Before Time XII: The Great Day of the Flyers, The",
-    "tmdbTitle": "The Land Before Time XII: The Great Day of the Flyers",
-    "type": "movie",
-    "tmdbId": 31933,
-    "poster": "https://image.tmdb.org/t/p/w500/7WKZksck9oLWBQnSZYdmrhaY3At.jpg",
-    "year": "2006",
-    "runtime": "77m",
-    "genre": "Animation / Family / Adventure",
-    "director": "Charles Grosvenor",
-    "cast": "John Ingle, Nick Price, Frank Welker, Aria Noelle Curzon, Rob Paulsen, Camryn Manheim",
-    "synopsis": "As the Great Day of the Flyers nears, the Great Valley's flying youngsters are eager to participate in the annual exhibition to show off their skills. Everyone, that is, except free-spirited pterodactyl Petrie, whose individualism causes problems when it comes to staying in formation. Enter his dinosaur pals Littlefoot, Cera, Spike and Ducky, who encourage Petrie to embrace his uniqueness.",
-    "physical": [],
-    "digital": [
-      "Fandango",
-      "Movies Anywhere"
-    ],
-    "categories": [
-      "animated"
-    ]
-  },
+ 
   {
     "title": "Last Holiday",
     "tmdbTitle": "Last Holiday",
@@ -10736,7 +10616,6 @@ const movies = [
     ],
     "digital": [],
     "categories": [
-      "christmas"
     ]
   },
   {
@@ -11327,26 +11206,7 @@ const movies = [
       "christmas"
     ]
   },
-  {
-    "title": "Many Adventures of Winnie the Pooh, The",
-    "tmdbTitle": "The Many Adventures of Winnie the Pooh",
-    "type": "movie",
-    "tmdbId": 250480,
-    "poster": "https://image.tmdb.org/t/p/w500/nefc61WQGahSWoNRrndoqinrZQu.jpg",
-    "year": "1977",
-    "runtime": "74m",
-    "genre": "Animation / Family / Adventure",
-    "director": "John Lounsbery, Wolfgang Reitherman",
-    "cast": "Sterling Holloway, John Fiedler, Junius Matthews, Paul Winchell, Ralph Wright, Howard Morris",
-    "synopsis": "Whether we’re young or forever young at heart, the Hundred Acre Wood calls to that place in each of us that still believes in magic. Join pals Pooh, Piglet, Kanga, Roo, Owl, Rabbit, Tigger and Christopher Robin as they enjoy their days together and sing their way through adventures.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": [],
-    "categories": [
-      "animated"
-    ]
-  },
+
   {
     "title": "Mary Poppins",
     "tmdbTitle": "Mary Poppins",
@@ -11806,7 +11666,7 @@ const movies = [
     "special": "Jodie Foster movie"
   },
   {
-    "title": "MIB 3",
+    "title": "Men in Black 3",
     "tmdbTitle": "Men in Black 3",
     "type": "movie",
     "tmdbId": 41154,
@@ -11823,7 +11683,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "MIB II",
+    "title": "Men in Black",
     "tmdbTitle": "Men in Black",
     "type": "movie",
     "tmdbId": 607,
@@ -12310,7 +12170,6 @@ const movies = [
     "digital": [],
     "tmdbTitle": "Mr. Destiny",
     "categories": [
-      "baseball"
     ]
   },
   {
@@ -12571,7 +12430,6 @@ const movies = [
     ],
     "digital": [],
     "categories": [
-      "christmas"
     ]
   },
   {
@@ -12639,24 +12497,7 @@ const movies = [
     ],
     "digital": []
   },
-  {
-    "title": "Natural Born Killers",
-    "tmdbTitle": "Natural Born Killers",
-    "type": "movie",
-    "tmdbId": 241,
-    "poster": "https://image.tmdb.org/t/p/w500/fEKZwT91gxvkAoyPgpNXo8W5fu0.jpg",
-    "year": "1994",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
-    "synopsis": "Two victims of traumatized childhoods become lovers and serial murderers irresponsibly glorified by the mass media.",
-    "physical": [],
-    "digital": [
-      "Fandango",
-      "Movies Anywhere"
-    ]
-  },
+
   {
     "title": "Natural, The",
     "type": "movie",
@@ -13253,7 +13094,6 @@ const movies = [
       "Movies Anywhere"
     ],
     "categories": [
-      "christmas"
     ]
   },
   {
@@ -13514,7 +13354,6 @@ const movies = [
     ],
     "digital": [],
     "categories": [
-      "baseball"
     ]
   },
   {
@@ -13534,29 +13373,9 @@ const movies = [
     ],
     "digital": [],
     "categories": [
-      "baseball"
     ]
   },
-  {
-    "title": "Pirates of the Caribbean: On Stranger Tides",
-    "tmdbTitle": "Pirates of the Caribbean: On Stranger Tides",
-    "type": "movie",
-    "tmdbId": 1865,
-    "poster": "https://image.tmdb.org/t/p/w500/keGfSvCmYj7CvdRx36OdVrAEibE.jpg",
-    "year": "2011",
-    "runtime": "136m",
-    "genre": "Adventure / Action / Fantasy",
-    "director": "Rob Marshall",
-    "cast": "Johnny Depp, Penélope Cruz, Geoffrey Rush, Ian McShane, Kevin McNally, Sam Claflin",
-    "synopsis": "When Jack crosses paths with a woman from his past, he's not sure if it's love...or if she's a ruthless con artist using him to find the fabled Fountain of Youth.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": [],
-    "categories": [
-      "baseball"
-    ]
-  },
+
   {
     "title": "Pirates of the Caribbean: The Curse of the Black Pearl",
     "tmdbTitle": "Pirates of the Caribbean: The Curse of the Black Pearl",
@@ -13574,7 +13393,6 @@ const movies = [
     ],
     "digital": [],
     "categories": [
-      "baseball"
     ]
   },
   {
@@ -13983,7 +13801,6 @@ const movies = [
       "Prime"
     ],
     "categories": [
-      "christmas"
     ]
   },
   {
@@ -14493,7 +14310,6 @@ const movies = [
       "Movies Anywhere"
     ],
     "categories": [
-      "christmas"
     ]
   },
   {
@@ -15144,7 +14960,6 @@ const movies = [
     ],
     "digital": [],
     "categories": [
-      "christmas"
     ]
   },
   {
@@ -15408,7 +15223,6 @@ const movies = [
     ],
     "digital": [],
     "categories": [
-      "baseball"
     ]
   },
   {
@@ -16079,24 +15893,7 @@ const movies = [
       "Movies Anywhere"
     ]
   },
-  {
-    "title": "Social Network, The",
-    "tmdbTitle": "The Social Network",
-    "type": "movie",
-    "tmdbId": 37799,
-    "poster": "https://image.tmdb.org/t/p/w500/n0ybibhJtQ5icDqTp8eRytcIHJx.jpg",
-    "year": "2010",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
-    "synopsis": "In 2003, Harvard undergrad and computer programmer Mark Zuckerberg begins work on a new concept that eventually turns into the global social network known as Facebook. Six years later, Mark is one of the youngest billionaires ever, but his unprecedented success leads to both personal and legal complications when he ends up on the receiving end of two lawsuits, one involving his former friend.",
-    "physical": [],
-    "digital": [
-      "Fandango",
-      "Movies Anywhere"
-    ]
-  },
+
   {
     "title": "Something's Gotta Give",
     "tmdbTitle": "Something's Gotta Give",
@@ -16543,8 +16340,6 @@ const movies = [
     ],
     "digital": [],
     "categories": [
-      "christmas",
-      "baseball"
     ]
   },
   {
@@ -16618,7 +16413,6 @@ const movies = [
       "Fandango"
     ],
     "categories": [
-      "christmas"
     ]
   },
   {
@@ -16782,23 +16576,7 @@ const movies = [
       "animated"
     ]
   },
-  {
-    "title": "Take the Lead",
-    "tmdbTitle": "Take the Lead",
-    "type": "movie",
-    "tmdbId": 12763,
-    "poster": "",
-    "year": "",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
-    "synopsis": "",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
+
   {
     "title": "Taken",
     "type": "movie",
@@ -17074,7 +16852,7 @@ const movies = [
     ]
   },
   {
-    "title": "The Little Mermaid: Ariel's Beginning",
+    "title": "Little Mermaid: Ariel's Beginning",
     "tmdbTitle": "The Little Mermaid: Ariel's Beginning",
     "type": "movie",
     "tmdbId": 13676,
@@ -18147,23 +17925,7 @@ const movies = [
       "Movies Anywhere"
     ]
   },
-  {
-    "title": "Van Wilder",
-    "type": "movie",
-    "tmdbId": 11635,
-    "poster": "https://image.tmdb.org/t/p/w500/nYtuwNHpEoIbTgS3aFPSEwZNN6l.jpg",
-    "year": "2003",
-    "runtime": "92m",
-    "genre": "Comedy",
-    "director": "Todd Phillips",
-    "cast": "Luke Wilson, Will Ferrell, Vince Vaughn, Jeremy Piven, Ellen Pompeo, Craig Kilborn",
-    "synopsis": "Three friends attempt to recapture their glory days by opening up a fraternity near their alma mater.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": [],
-    "tmdbTitle": "Old School"
-  },
+
   {
     "title": "Vanilla Sky",
     "tmdbTitle": "Vanilla Sky",
@@ -18198,7 +17960,6 @@ const movies = [
     ],
     "digital": [],
     "categories": [
-      "baseball"
     ]
   },
   {
@@ -18219,7 +17980,7 @@ const movies = [
     "digital": []
   },
   {
-    "title": "Vegas Vacation",
+    "title": "National Lampoon's Vegas Vacation",
     "tmdbTitle": "Vegas Vacation",
     "type": "movie",
     "tmdbId": 11419,
@@ -18574,7 +18335,6 @@ const movies = [
     ],
     "digital": [],
     "categories": [
-      "baseball"
     ],
     "tmdbTitle": "What Happens in Vegas"
   },
@@ -18919,23 +18679,7 @@ const movies = [
     ],
     "digital": []
   },
-  {
-    "title": "WWE From the Vault: Shawn Michaels",
-    "tmdbTitle": "",
-    "type": "misc",
-    "tmdbId": null,
-    "poster": "",
-    "year": "",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
-    "synopsis": "",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
+
   {
     "title": "WWE WrestleMania X-Seven",
     "tmdbTitle": "WWE WrestleMania X-Seven",
@@ -18953,40 +18697,7 @@ const movies = [
     ],
     "digital": []
   },
-  {
-    "title": "WWE: An Evening with Kevin Smith",
-    "tmdbTitle": "",
-    "type": "misc",
-    "tmdbId": null,
-    "poster": "",
-    "year": "",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
-    "synopsis": "",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
-  {
-    "title": "WWE: An Evening with Kevin Smith 2",
-    "tmdbTitle": "",
-    "type": "misc",
-    "tmdbId": null,
-    "poster": "",
-    "year": "",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
-    "synopsis": "",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
+
   {
     "title": "X-Men",
     "tmdbTitle": "X-Men",
