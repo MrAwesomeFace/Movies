@@ -7751,22 +7751,7 @@ const movies = [
       "Movies Anywhere"
     ]
   },
-  {
-    "title": "Harry Potter and the Sorcerer's Stone",
-    "type": "movie",
-    "tmdbId": null,
-    "poster": "",
-    "year": "",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
-    "synopsis": "",
-    "physical": [
-      "DVD"
-    ],
-    "digital": []
-  },
+
   {
     "title": "Haul Out the Holly",
     "tmdbTitle": "Haul Out the Holly",
