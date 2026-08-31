@@ -15277,6 +15277,22 @@ const movies = [
     "digital": []
   },
   {
+    "title": "Sevendust Retrospect",
+    "type": "movie",
+    "tmdbId": 500074,
+    "poster": "https://image.tmdb.org/t/p/w500/xTleHPZlzpURnQhLqTn2rmlMUgL.jpg",
+    "year": "2011",
+    "runtime": "140m",
+    "genre": "",
+    "director": "",
+    "cast": "Lajon Witherspoon, Clint Lowery, John Connolly, Vince Hornsby, Morgan Rose",
+    "synopsis": "Retrospect is a video release by alternative metal band Sevendust, featuring behind-the-scenes footage, music videos, and live performances.",
+    "physical": [
+      "DVD"
+    ],
+    "digital": []
+  },
+  {
     "title": "Shade",
     "type": "movie",
     "tmdbId": 14576,
