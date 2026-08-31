@@ -4088,6 +4088,22 @@ const movies = [
     ]
   },
   {
+    "title": "Death Race 2000",
+    "type": "movie",
+    "tmdbId": 13282,
+    "poster": "https://image.tmdb.org/t/p/w500/kwM8kkNGtv62gfPWVhD6qFxjDzg.jpg",
+    "year": "1975",
+    "runtime": "80m",
+    "genre": "Action / Science Fiction / Comedy",
+    "director": "Paul Bartel",
+    "cast": "David Carradine, Simone Griffeth, Sylvester Stallone, Mary Woronov, Roberta Collins, Martin Kove",
+    "synopsis": "In a boorish future, the government sponsors a popular, but bloody, cross-country race in which points are scored by mowing down pedestrians. Five teams, each comprised of a male and female, compete using cars equipped with deadly weapons. Frankenstein, the mysterious returning champion, has become America's hero, but this time he has a passenger from the underground resistance.",
+    "physical": [
+      "DVD"
+    ],
+    "digital": []
+  },
+  {
     "title": "Death Race 2050",
     "tmdbTitle": "Death Race 2050",
     "type": "movie",
