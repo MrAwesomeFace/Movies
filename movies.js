@@ -941,7 +941,8 @@ const movies = [
     "cast": "Billy Crudup, Frances McDormand, Kate Hudson, Jason Lee, Patrick Fugit, Zooey Deschanel",
     "synopsis": "In 1973, a precocious 15-year-old aspiring rock journalist lands a dream assignment from Rolling Stone to tour with a rising rock band, embarking on a coming-of-age journey as he discovers the exhilarating and heartbreaking realities behind rock stardom.",
     "physical": [
-      "DVD"
+      "DVD",
+      "Blu-ray"
     ],
     "digital": []
   },
