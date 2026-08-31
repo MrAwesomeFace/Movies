@@ -1176,6 +1176,22 @@ const movies = [
     "digital": []
   },
   {
+    "title": "An Evening with Kevin Smith 2: Evening Harder",
+    "type": "movie",
+    "tmdbId": 16768,
+    "poster": "https://image.tmdb.org/t/p/w500/zpZBBYMepcCExBhAX08XfgkXdQE.jpg",
+    "year": "2006",
+    "runtime": "239m",
+    "genre": "Comedy / Documentary",
+    "director": "J.M. Kenny",
+    "cast": "Kevin Smith, Jason Mewes, Jennifer Schwalbach Smith, Grace Smith, Harley Quinn Smith",
+    "synopsis": "In this second Q&amp;A with Kevin Smith he now enters the homes of some of his fans in Toronto and London.",
+    "physical": [
+      "DVD"
+    ],
+    "digital": []
+  },
+  {
     "title": "Angels & Demons",
     "tmdbTitle": "Angels & Demons",
     "type": "movie",
