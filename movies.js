@@ -5233,7 +5233,22 @@ const movies = [
     ],
     "digital": []
   },
-
+  {
+    "title": "EverAfter",
+    "type": "movie",
+    "tmdbId": 9454,
+    "poster": "https://image.tmdb.org/t/p/w500/9TspO5dThMBioF0DFrvy6YqrngH.jpg",
+    "year": "1998",
+    "runtime": "121m",
+    "genre": "Drama / Romance / Comedy",
+    "director": "Andy Tennant",
+    "cast": "Drew Barrymore, Anjelica Huston, Dougray Scott, Patrick Godfrey, Megan Dodds, Melanie Lynskey",
+    "synopsis": "Danielle, a vibrant young woman, was forced into servitude after the death of her father when she was a young girl. Danielle's stepmother, Rodmilla, is a heartless woman who forces Danielle to do the cooking and cleaning, while she tries to marry off the eldest of her two daughters to the prince. But Danielle's life takes a wonderful turn when, under the guise of a visiting royal, she meets the charming Prince Henry.",
+    "physical": [
+      "DVD"
+    ],
+    "digital": []
+  },
   {
     "title": "Everybody Loves Raymond - Complete Eighth Season",
     "tmdbTitle": "Everybody Loves Raymond",
