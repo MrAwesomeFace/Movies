@@ -1120,6 +1120,22 @@ const movies = [
     "digital": []
   },
   {
+    "title": "American, The",
+    "type": "movie",
+    "tmdbId": 27579,
+    "poster": "https://image.tmdb.org/t/p/w500/5OEOsRaBsSxD0qBtAhus0iKDzr.jpg",
+    "year": "2010",
+    "runtime": "104m",
+    "genre": "Crime / Drama / Thriller",
+    "director": "Anton Corbijn",
+    "cast": "George Clooney, Violante Placido, Thekla Reuten, Paolo Bonacelli, Johan Leysen, Irina Björklund",
+    "synopsis": "Dispatched to a small Italian town to await further orders, assassin Jack embarks on a double life that may be more relaxing than is good for him.",
+    "physical": [
+      "DVD"
+    ],
+    "digital": []
+  },
+  {
     "title": "An American Tail",
     "tmdbTitle": "An American Tail",
     "type": "movie",
