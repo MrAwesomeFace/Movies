@@ -6678,6 +6678,26 @@ const movies = [
     "categories": []
   },
   {
+    "title": "Frosty Returns",
+    "type": "movie",
+    "tmdbId": 28042,
+    "poster": "https://image.tmdb.org/t/p/w500/r4XMrwhhhic6W6LvxBTxzs8kXlt.jpg",
+    "year": "1992",
+    "runtime": "24m",
+    "genre": "Animation / Family / TV Movie",
+    "director": "Evert Brown, Bill Melendez",
+    "cast": "Jonathan Winters, John Goodman, Elisabeth Moss, Brian Doyle-Murray, Jan Hooks, Andrea Martin",
+    "synopsis": "Mr. Twitchell, a greedy old businessman, has invented Summer Wheeze: a spray that instantly removes snow and slush! Now Holly has to keep Frosty from melting, and convince everybody that snow's actually a good thing.",
+    "physical": [
+      "DVD"
+    ],
+    "digital": [],
+    "categories": [
+      "christmas",
+      "animated"
+    ]
+  },
+  {
     "title": "Frosty the Snowman",
     "type": "movie",
     "tmdbId": 13675,
