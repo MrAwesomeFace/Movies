@@ -3103,6 +3103,25 @@ const movies = [
     ]
   },
   {
+    "title": "Chicago Cubs 2016 World Series Collector's Edition",
+    "type": "movie",
+    "tmdbId": 631038,
+    "poster": "https://image.tmdb.org/t/p/w500/p9XXbUdpqC73vZBzUoChhCz2J1A.jpg",
+    "year": "",
+    "runtime": "1200m",
+    "genre": "",
+    "director": "",
+    "cast": "",
+    "synopsis": "\"I love tradition. I think tradition is worth time mentally, and tradition is worth being upheld, but curses and superstitions are not.” – Joe Maddon  The wait is over, the Chicago Cubs™ are 2016 World Series® champions! The Cubs overcame a 3-1 game deficit to the Cleveland Indians™ to win a 7-game Fall Classic™ for the ages. Dominating pitching, spectacular defense, and clutch offense all helped the Cubs end a 108-year title drought in dramatic fashion.  THE CHICAGO CUBS 2016 WORLD SERIES COLLECTOR'S EDITION includes all 7 games of the Fall Classic, as well as a bonus disc of the pennant-clinching NLCS™ Game 6 at Wrigley Field™. Relive every moment of the 2016 World Series starring Kris Bryant, Anthony Rizzo, Dexter Fowler, Javier Báez, Jake Arrieta, Jon Lester, and World Series MVP Ben Zobrist.",
+    "physical": [
+      "Blu-ray"
+    ],
+    "digital": [],
+    "categories": [
+      "baseball"
+    ]
+  },
+  {
     "title": "Chicago Cubs: Legends, Great Games & Collector's Edition, The",
     "tmdbTitle": "",
     "type": "misc",
