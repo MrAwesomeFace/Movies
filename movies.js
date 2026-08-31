@@ -7623,6 +7623,25 @@ const movies = [
     ]
   },
   {
+    "title": "Harry Potter and the Philosopher's Stone",
+    "type": "movie",
+    "tmdbId": 671,
+    "poster": "https://image.tmdb.org/t/p/w500/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg",
+    "year": "2001",
+    "runtime": "152m",
+    "genre": "Adventure / Fantasy",
+    "director": "Chris Columbus",
+    "cast": "Daniel Radcliffe, Rupert Grint, Emma Watson, Richard Harris, Tom Felton, Alan Rickman",
+    "synopsis": "Harry Potter has lived under the stairs at his aunt and uncle's house his whole life. But on his 11th birthday, he learns he's a powerful wizard—with a place waiting for him at the Hogwarts School of Witchcraft and Wizardry. As he learns to harness his newfound powers with the help of the school's kindly headmaster, Harry uncovers the truth about his parents' deaths—and about the villain who's to blame.",
+    "physical": [
+      "DVD"
+    ],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Harry Potter and the Prisoner of Azkaban",
     "type": "movie",
     "tmdbId": 673,
