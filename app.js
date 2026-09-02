@@ -2668,21 +2668,74 @@ renderMovies();
 
 if (modal) {
 
-modal.addEventListener(
-"touchmove",
-event => {
+  // -------------------------------------------------------
+  // TOUCH SCROLLING
+  //
+  // Allow .back-content to scroll normally.
+  // Prevent touch scrolling everywhere else in the modal
+  // so the page behind the movie stays locked.
+  // -------------------------------------------------------
 
-if (currentMovie) {
+  modal.addEventListener(
+    "touchmove",
+    event => {
 
-event.preventDefault();
+      if (!currentMovie) {
+        return;
+      }
 
-}
+      const backContent =
+        event.target.closest(
+          ".back-content"
+        );
 
-},
-{
-passive: false
-}
-);
+      // Let the movie information area scroll.
+      if (backContent) {
+        return;
+      }
+
+      // Prevent the background/modal from scrolling.
+      event.preventDefault();
+
+    },
+    {
+      passive: false
+    }
+  );
+
+  // -------------------------------------------------------
+  // MOUSE / TRACKPAD WHEEL
+  //
+  // Allow .back-content to scroll with a mouse wheel or
+  // trackpad, but prevent the background from scrolling.
+  // -------------------------------------------------------
+
+  modal.addEventListener(
+    "wheel",
+    event => {
+
+      if (!currentMovie) {
+        return;
+      }
+
+      const backContent =
+        event.target.closest(
+          ".back-content"
+        );
+
+      // Let the movie information area scroll.
+      if (backContent) {
+        return;
+      }
+
+      // Prevent the background/modal from scrolling.
+      event.preventDefault();
+
+    },
+    {
+      passive: false
+    }
+  );
 
 modal.addEventListener(
 "wheel",
