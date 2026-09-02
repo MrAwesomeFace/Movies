@@ -2,7 +2,8 @@
 =========================================================
 BW'S MOVIE COLLECTION
 Main visual design
-========================================================= */
+=========================================================
+*/
 
 :root {
   --background: #0E3FA9;
@@ -12,7 +13,10 @@ Main visual design
   --muted: #999999;
   --border: #333333;
   --accent: #ffffff;
+  --reservation-red: #c62828;
+  --reservation-red-dark: #8f1d1d;
 }
+
 
 /* =========================================================
 BASIC RESET
@@ -45,6 +49,7 @@ body {
     background 0.45s ease;
 }
 
+
 /* =========================================================
 HEADER
 ========================================================= */
@@ -59,7 +64,8 @@ HEADER
 
   background: rgba(14, 63, 169, 0.96);
 
-  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  border-bottom:
+    1px solid rgba(0, 0, 0, 0.25);
 
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -75,7 +81,7 @@ HEADER
   align-items: center;
   justify-content: space-between;
 
-  gap: 15px;
+  gap: 10px;
 }
 
 h1 {
@@ -97,6 +103,7 @@ h1 {
   font-size: 13px;
 }
 
+
 /* =========================================================
 SEARCH
 ========================================================= */
@@ -114,7 +121,9 @@ SEARCH
 
   padding: 12px 14px;
 
-  border: 1px solid var(--border);
+  border:
+    1px solid var(--border);
+
   border-radius: 12px;
 
   outline: none;
@@ -128,6 +137,7 @@ SEARCH
 #search-input:focus {
   border-color: #666666;
 }
+
 
 /* =========================================================
 BUTTONS
@@ -143,7 +153,9 @@ button {
 
   flex-shrink: 0;
 
-  border: 1px solid var(--border);
+  border:
+    1px solid var(--border);
+
   border-radius: 50%;
 
   background: var(--surface);
@@ -157,6 +169,79 @@ button {
 .icon-button:active {
   transform: scale(0.95);
 }
+
+
+/* =========================================================
+RESERVATION FILTER
+========================================================= */
+
+.reservation-filter-wrapper {
+  flex-shrink: 0;
+
+  margin-left: auto;
+}
+
+.reservation-filter {
+  appearance: none;
+  -webkit-appearance: none;
+
+  min-width: 150px;
+
+  padding:
+    9px 34px 9px 13px;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.18);
+
+  border-radius: 999px;
+
+  outline: none;
+
+  background-color: #202020;
+
+  background-image:
+    linear-gradient(
+      45deg,
+      transparent 50%,
+      #bbbbbb 50%
+    ),
+    linear-gradient(
+      135deg,
+      #bbbbbb 50%,
+      transparent 50%
+    );
+
+  background-position:
+    calc(100% - 17px) 50%,
+    calc(100% - 12px) 50%;
+
+  background-size:
+    5px 5px,
+    5px 5px;
+
+  background-repeat: no-repeat;
+
+  color: #eeeeee;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.reservation-filter:hover {
+  border-color: #555555;
+}
+
+.reservation-filter:focus {
+  border-color: #777777;
+}
+
+.reservation-filter option {
+  background: #202020;
+  color: #eeeeee;
+}
+
 
 /* =========================================================
 FILTER BAR
@@ -173,6 +258,7 @@ FILTER BAR
 
   width: 100%;
 }
+
 
 /* =========================================================
 FILTER ROW
@@ -196,6 +282,7 @@ FILTER ROW
   display: none;
 }
 
+
 /* =========================================================
 FILTER GROUP
 ========================================================= */
@@ -209,6 +296,7 @@ FILTER GROUP
 
   flex-shrink: 0;
 }
+
 
 /* =========================================================
 FIRST ROW
@@ -224,6 +312,7 @@ FIRST ROW
   margin-left: auto;
 }
 
+
 /* =========================================================
 SECOND ROW
 ========================================================= */
@@ -231,6 +320,7 @@ SECOND ROW
 .genre-category-row {
   overflow-x: auto;
 }
+
 
 /* =========================================================
 FILTER DIVIDER
@@ -249,6 +339,7 @@ FILTER DIVIDER
   margin: 0 2px;
 }
 
+
 /* =========================================================
 INDIVIDUAL FILTER
 ========================================================= */
@@ -256,9 +347,12 @@ INDIVIDUAL FILTER
 .filter {
   flex-shrink: 0;
 
-  padding: 8px 14px;
+  padding:
+    8px 14px;
 
-  border: 1px solid var(--border);
+  border:
+    1px solid var(--border);
+
   border-radius: 999px;
 
   background: var(--surface);
@@ -280,6 +374,7 @@ INDIVIDUAL FILTER
   color: #111111;
 }
 
+
 /* =========================================================
 SPECIAL FILTERS
 ========================================================= */
@@ -292,6 +387,7 @@ SPECIAL FILTERS
   background: #202020;
 }
 
+
 /* =========================================================
 MAIN COLLECTION
 ========================================================= */
@@ -302,7 +398,8 @@ main {
 
   margin: 0 auto;
 
-  padding: 22px 16px 50px;
+  padding:
+    22px 16px 50px;
 
   position: relative;
   z-index: 1;
@@ -319,8 +416,10 @@ main {
   grid-template-columns:
     repeat(2, minmax(0, 1fr));
 
-  gap: 18px 12px;
+  gap:
+    18px 12px;
 }
+
 
 /* =========================================================
 MOVIE CARDS
@@ -340,6 +439,7 @@ MOVIE CARDS
     filter 0.25s ease,
     transform 0.25s ease;
 }
+
 
 /* =========================================================
 MOVIE TITLE
@@ -369,6 +469,7 @@ MOVIE TITLE
   text-overflow: ellipsis;
 }
 
+
 /* =========================================================
 MOVIE COVER / SHELF AREA
 ========================================================= */
@@ -388,6 +489,7 @@ MOVIE COVER / SHELF AREA
 
   box-shadow: none;
 }
+
 
 /* =========================================================
 POSTER IMAGE
@@ -417,6 +519,100 @@ POSTER IMAGE
 
   z-index: 3;
 }
+
+
+/* =========================================================
+RESERVATION RIBBON
+========================================================= */
+
+/*
+ * The ribbon sits on the lower-right corner.
+ *
+ * It is deliberately NOT a diagonal ribbon running
+ * toward the center of the poster.
+ *
+ * The shape follows the lower-right edge and bottom-right
+ * edge, creating the "/"-style corner mark we discussed.
+ */
+
+.reservation-ribbon {
+  position: absolute;
+
+  right: -2px;
+  bottom: -2px;
+
+  width: 58px;
+  height: 58px;
+
+  z-index: 6;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  color: white;
+
+  font-size: 13px;
+  font-weight: 800;
+
+  text-align: center;
+}
+
+
+/*
+ * Main red slash.
+ */
+
+.reservation-ribbon::before {
+  content: "";
+
+  position: absolute;
+
+  width: 82px;
+  height: 17px;
+
+  right: -23px;
+  bottom: 10px;
+
+  background:
+    linear-gradient(
+      to bottom,
+      #e53935,
+      var(--reservation-red-dark)
+    );
+
+  border-radius: 2px;
+
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.45);
+
+  transform:
+    rotate(-45deg);
+
+  transform-origin:
+    center;
+}
+
+
+/*
+ * Number sits on the ribbon.
+ */
+
+.reservation-ribbon {
+  display: flex;
+
+  align-items: flex-end;
+  justify-content: flex-end;
+
+  padding:
+    0 7px 7px 0;
+}
+
+.reservation-ribbon {
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
 
 /* =========================================================
 INDIVIDUAL SHELF
@@ -452,14 +648,18 @@ INDIVIDUAL SHELF
   z-index: 1;
 }
 
+
 /* =========================================================
 NORMAL HOVER
 ========================================================= */
 
 @media (hover: hover) {
 
-  .movie-card:hover .movie-cover-inner {
-    transform: translateY(-5px);
+  .movie-card:hover
+  .movie-cover-inner {
+
+    transform:
+      translateY(-5px);
 
     box-shadow:
       0 10px 18px rgba(0, 0, 0, 0.42),
@@ -467,6 +667,7 @@ NORMAL HOVER
   }
 
 }
+
 
 /* =========================================================
 SELECTED MOVIE
@@ -476,9 +677,11 @@ SELECTED MOVIE
   z-index: 20;
 }
 
-.movie-card.selected .movie-cover-inner {
+.movie-card.selected
+.movie-cover-inner {
   opacity: 0;
 }
+
 
 /* =========================================================
 COLLECTION FOCUS MODE
@@ -500,6 +703,7 @@ body.movie-opening .site-header {
     blur(1px);
 }
 
+
 /* =========================================================
 KEEP SELECTED SHELF VISIBLE
 ========================================================= */
@@ -513,6 +717,7 @@ body.movie-opening
   filter: none;
 }
 
+
 /* =========================================================
 FORMAT INDICATORS
 ========================================================= */
@@ -521,12 +726,14 @@ FORMAT INDICATORS
   display: none;
 }
 
+
 /* =========================================================
 NO RESULTS
 ========================================================= */
 
 .no-results {
-  padding: 60px 20px;
+  padding:
+    60px 20px;
 
   text-align: center;
 
@@ -536,6 +743,7 @@ NO RESULTS
 .no-results.hidden {
   display: none;
 }
+
 
 /* =========================================================
 MODAL
@@ -566,6 +774,7 @@ MODAL
   display: none;
 }
 
+
 /* =========================================================
 MODAL OPEN STATE
 ========================================================= */
@@ -575,6 +784,7 @@ MODAL OPEN STATE
 
   pointer-events: auto;
 }
+
 
 /* =========================================================
 MODAL BACKDROP
@@ -599,9 +809,11 @@ MODAL BACKDROP
     opacity 0.45s ease;
 }
 
-.modal.movie-open .modal-backdrop {
+.modal.movie-open
+.modal-backdrop {
   opacity: 1;
 }
+
 
 /* =========================================================
 MODAL CONTENT
@@ -612,7 +824,8 @@ MODAL CONTENT
 
   z-index: 1;
 
-  width: min(900px, 100%);
+  width:
+    min(900px, 100%);
 
   max-height: 94vh;
 
@@ -620,7 +833,8 @@ MODAL CONTENT
 
   padding: 20px;
 
-  border: 1px solid rgba(255,255,255,0.10);
+  border:
+    1px solid rgba(255,255,255,0.10);
 
   border-radius: 18px;
 
@@ -640,13 +854,16 @@ MODAL CONTENT
     transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.modal.movie-open .modal-content {
+.modal.movie-open
+.modal-content {
+
   opacity: 1;
 
   transform:
     translateY(0)
     scale(1);
 }
+
 
 /* =========================================================
 MODAL CLOSE
@@ -666,7 +883,8 @@ MODAL CLOSE
   border: 0;
   border-radius: 50%;
 
-  background: rgba(0, 0, 0, 0.6);
+  background:
+    rgba(0, 0, 0, 0.6);
 
   color: white;
 
@@ -675,6 +893,7 @@ MODAL CLOSE
 
   cursor: pointer;
 }
+
 
 /* =========================================================
 MOVIE VIEWER
@@ -692,42 +911,20 @@ MOVIE VIEWER
   padding-top: 10px;
 }
 
+
 /* =========================================================
 3D MOVIE CASE
 ========================================================= */
 
-/*
-REBUILT FROM THE KNOWN-WORKING 3D BOX EXAMPLE.
-
-Movie cases are 2:3.
-
-The physical thickness is controlled by --case-depth.
-
-IMPORTANT GEOMETRY:
-
-* The flipper is translated backward by HALF THE DEPTH.
-* Front/back are positioned HALF THE DEPTH from center.
-* Left/right sides are rotated around the center and
-  positioned HALF THE CASE WIDTH from the center.
-* Top/bottom sides are rotated around the center and
-  positioned HALF THE CASE HEIGHT from the center.
-
-This matches the geometry of the working example.
-*/
-
 .movie-flip-container {
-  width: min(75vw, 360px);
+  width:
+    min(75vw, 360px);
 
-  perspective: 1200px;
+  perspective:
+    1200px;
 
   cursor: pointer;
 }
-
-/*
-The physical case.
-
-The case itself is centered on its middle axis.
-*/
 
 .movie-flipper {
   --case-depth: 24px;
@@ -742,11 +939,14 @@ The case itself is centered on its middle axis.
   -webkit-transform-style: preserve-3d;
 
   transform:
-    translateZ(calc(var(--case-depth) / -2));
+    translateZ(
+      calc(var(--case-depth) / -2)
+    );
 
   transition:
     transform 2.0s cubic-bezier(.4, .2, .2, 1);
 }
+
 
 /* =========================================================
 FLIPPED CASE
@@ -756,10 +956,13 @@ FLIPPED CASE
 .movie-flipper {
 
   transform:
-    translateZ(calc(var(--case-depth) / -2))
+    translateZ(
+      calc(var(--case-depth) / -2)
+    )
     rotateY(180deg);
 
 }
+
 
 /* =========================================================
 FRONT + BACK FACES
@@ -788,6 +991,7 @@ FRONT + BACK FACES
 
 }
 
+
 /* =========================================================
 FRONT
 ========================================================= */
@@ -803,9 +1007,12 @@ FRONT
   padding: 18px;
 
   transform:
-    translateZ(calc(var(--case-depth) / 2));
+    translateZ(
+      calc(var(--case-depth) / 2)
+    );
 
 }
+
 
 /* =========================================================
 BACK
@@ -815,7 +1022,9 @@ BACK
 
   transform:
     rotateY(180deg)
-    translateZ(calc(var(--case-depth) / 2));
+    translateZ(
+      calc(var(--case-depth) / 2)
+    );
 
   background:
     linear-gradient(
@@ -827,6 +1036,7 @@ BACK
   color: #181818;
 
 }
+
 
 /* =========================================================
 3D CASE EDGES
@@ -854,9 +1064,12 @@ BACK
     );
 
   box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,0.08);
+    inset
+    0 0 0 1px
+    rgba(255,255,255,0.08);
 
 }
+
 
 /* =========================================================
 LEFT / SPINE
@@ -872,17 +1085,21 @@ LEFT / SPINE
 
   left:
     calc(
-      (100% - var(--case-depth)) / 2
+      (100% - var(--case-depth))
+      / 2
     );
 
   transform:
     rotateY(-90deg)
-    translateZ(var(--case-half-width));
+    translateZ(
+      var(--case-half-width)
+    );
 
   transform-origin:
     center;
 
 }
+
 
 /* =========================================================
 RIGHT EDGE
@@ -898,17 +1115,21 @@ RIGHT EDGE
 
   left:
     calc(
-      (100% - var(--case-depth)) / 2
+      (100% - var(--case-depth))
+      / 2
     );
 
   transform:
     rotateY(90deg)
-    translateZ(var(--case-half-width));
+    translateZ(
+      var(--case-half-width)
+    );
 
   transform-origin:
     center;
 
 }
+
 
 /* =========================================================
 TOP + BOTTOM
@@ -925,10 +1146,12 @@ TOP + BOTTOM
 
   top:
     calc(
-      (100% - var(--case-depth)) / 2
+      (100% - var(--case-depth))
+      / 2
     );
 
 }
+
 
 /* =========================================================
 TOP
@@ -938,12 +1161,15 @@ TOP
 
   transform:
     rotateX(90deg)
-    translateZ(var(--case-half-height));
+    translateZ(
+      var(--case-half-height)
+    );
 
   transform-origin:
     center;
 
 }
+
 
 /* =========================================================
 BOTTOM
@@ -953,12 +1179,15 @@ BOTTOM
 
   transform:
     rotateX(-90deg)
-    translateZ(var(--case-half-height));
+    translateZ(
+      var(--case-half-height)
+    );
 
   transform-origin:
     center;
 
 }
+
 
 /* =========================================================
 CASE DIMENSIONS
@@ -966,9 +1195,11 @@ CASE DIMENSIONS
 
 .movie-flipper {
 
-  --case-half-width: 210px;
+  --case-half-width:
+    210px;
 
-  --case-half-height: 315px;
+  --case-half-height:
+    315px;
 
 }
 
@@ -977,14 +1208,21 @@ CASE DIMENSIONS
   .movie-flipper {
 
     --case-half-width:
-      calc(min(75vw, 360px) / 2);
+      calc(
+        min(75vw, 360px)
+        / 2
+      );
 
     --case-half-height:
-      calc(min(75vw, 360px) * 0.75);
+      calc(
+        min(75vw, 360px)
+        * 0.75
+      );
 
   }
 
 }
+
 
 /* =========================================================
 SPINE TITLE
@@ -1023,6 +1261,7 @@ SPINE TITLE
 
 }
 
+
 /* =========================================================
 LARGE COVER
 ========================================================= */
@@ -1038,6 +1277,7 @@ LARGE COVER
   overflow: hidden;
 
 }
+
 
 /* =========================================================
 BACK CONTENT
@@ -1055,7 +1295,8 @@ BACK CONTENT
 
 .back-content h2 {
 
-  margin: 0 0 7px;
+  margin:
+    0 0 7px;
 
   font-size: 28px;
 
@@ -1085,7 +1326,8 @@ BACK CONTENT
 
 .movie-info-section h3 {
 
-  margin: 0 0 5px;
+  margin:
+    0 0 5px;
 
   font-size: 12px;
 
@@ -1104,6 +1346,7 @@ BACK CONTENT
   line-height: 1.45;
 
 }
+
 
 /* =========================================================
 FORMAT LIST ON BACK
@@ -1127,15 +1370,131 @@ FORMAT LIST ON BACK
 
   gap: 8px;
 
-  padding: 7px 9px;
+  padding:
+    7px 9px;
 
   border-radius: 7px;
 
-  background: rgba(0, 0, 0, 0.08);
+  background:
+    rgba(0, 0, 0, 0.08);
 
   font-size: 13px;
 
 }
+
+
+/* =========================================================
+RESERVATION SECTION
+========================================================= */
+
+.reservation-section {
+  margin-top: 22px;
+}
+
+#reservation-status {
+  margin-bottom: 10px;
+
+  color: #555555;
+
+  font-size: 13px;
+
+  line-height: 1.4;
+}
+
+
+/*
+ * Reservation buttons are created dynamically by app.js.
+ */
+
+.reservation-controls {
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 7px;
+
+}
+
+.reservation-person-button,
+.reservation-off-button {
+
+  padding:
+    9px 13px;
+
+  border:
+    1px solid #aaa;
+
+  border-radius: 999px;
+
+  background:
+    rgba(255, 255, 255, 0.55);
+
+  color: #222222;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
+
+}
+
+.reservation-person-button:hover,
+.reservation-off-button:hover {
+
+  border-color:
+    #666666;
+
+}
+
+.reservation-person-button:active,
+.reservation-off-button:active {
+
+  transform:
+    scale(0.96);
+
+}
+
+
+/*
+ * A person's button becomes red when that person
+ * currently has the movie reserved.
+ */
+
+.reservation-person-button.reserved {
+
+  background:
+    var(--reservation-red);
+
+  border-color:
+    var(--reservation-red-dark);
+
+  color: white;
+
+}
+
+
+/*
+ * Turn Off is intentionally more subdued.
+ */
+
+.reservation-off-button {
+
+  background:
+    rgba(0, 0, 0, 0.08);
+
+  color:
+    #555555;
+
+}
+
 
 /* =========================================================
 VIEWER CONTROLS
@@ -1149,7 +1508,8 @@ VIEWER CONTROLS
 
 .primary-button {
 
-  padding: 11px 18px;
+  padding:
+    11px 18px;
 
   border: 0;
   border-radius: 999px;
@@ -1166,13 +1526,15 @@ VIEWER CONTROLS
 
 .flip-hint {
 
-  margin: 8px 0 0;
+  margin:
+    8px 0 0;
 
   color: var(--muted);
 
   font-size: 12px;
 
 }
+
 
 /* =========================================================
 TABLET / IPAD
@@ -1185,18 +1547,23 @@ TABLET / IPAD
     grid-template-columns:
       repeat(4, minmax(0, 1fr));
 
-    gap: 20px;
+    gap:
+      20px;
 
   }
 
   main {
 
-    padding-left: 24px;
-    padding-right: 24px;
+    padding-left:
+      24px;
+
+    padding-right:
+      24px;
 
   }
 
 }
+
 
 /* =========================================================
 DESKTOP
@@ -1209,11 +1576,54 @@ DESKTOP
     grid-template-columns:
       repeat(6, minmax(0, 1fr));
 
-    gap: 22px 16px;
+    gap:
+      22px 16px;
 
   }
 
 }
+
+
+/* =========================================================
+SMALL PHONES
+========================================================= */
+
+@media (max-width: 430px) {
+
+  .header-top {
+
+    gap: 7px;
+
+  }
+
+  h1 {
+
+    font-size: 21px;
+
+  }
+
+  .reservation-filter {
+
+    min-width: 125px;
+
+    padding:
+      8px 29px 8px 10px;
+
+    font-size: 12px;
+
+  }
+
+  .icon-button {
+
+    width: 38px;
+    height: 38px;
+
+    font-size: 16px;
+
+  }
+
+}
+
 
 /* =========================================================
 REDUCED MOTION
