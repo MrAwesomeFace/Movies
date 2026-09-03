@@ -682,12 +682,10 @@ POSTER (FRONT COVER)
  * The spine takes the left 6% as its own separate region,
  * so the two never overlap and can't develop a seam.
  *
- * Only the TOP-left corner gets a small taper (matching
- * the spine's top-inner value below), so the diagonal cut
- * continues smoothly across the boundary at the top. The
- * bottom-left corner stays square/flush — the case is
- * resting on the shelf there, so there's no reason for
- * that edge to recede too.
+ * Plain rectangle — no corner cut here. The cut belongs
+ * entirely to the spine (it's what sells "this is the
+ * case's side, turning away from you"); the poster is a
+ * normal, intact cover.
  */
 
 .movie-cover-inner {
@@ -707,15 +705,6 @@ POSTER (FRONT COVER)
   overflow: hidden;
 
   border-radius: 0 7px 7px 0;
-
-  clip-path:
-    polygon(
-      0% 4%,
-      6% 0%,
-      100% 0%,
-      100% 100%,
-      0% 100%
-    );
 
   box-shadow:
     0 6px 14px rgba(0, 0, 0, 0.5);
@@ -751,14 +740,15 @@ SPINE (LEFT EDGE — TOP CORNER CUT ONLY)
 ========================================================= */
 
 /*
- * A thin strip (6% of the card). Only the TOP corners are
- * cut: the outer (far-left) corner gets the main cut
- * (16%), and the inner/seam corner gets a small matching
- * cut (4%) — the SAME value used on the poster's own top
- * corner — so the diagonal reads as one continuous line
- * across both pieces. The bottom edge is left straight and
- * flush, since that's where the case actually rests on the
- * shelf.
+ * A thin strip (6% of the card). Only the far-left OUTER
+ * corner is cut (16%) — that's the true corner of the
+ * whole case. The cut resolves back to full height (0%)
+ * by the time it reaches the inner/seam edge, so it never
+ * touches the poster — the two pieces meet along a plain
+ * straight line, with the diagonal contained entirely
+ * within the spine's own narrow strip. The bottom edge is
+ * left straight and flush throughout, since that's where
+ * the case actually rests on the shelf.
  */
 
 .case-spine-face {
@@ -777,7 +767,7 @@ SPINE (LEFT EDGE — TOP CORNER CUT ONLY)
   clip-path:
     polygon(
       0% 16%,
-      100% 4%,
+      100% 0%,
       100% 100%,
       0% 100%
     );
