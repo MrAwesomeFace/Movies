@@ -224,6 +224,10 @@ RESERVATION FILTER
   white-space: nowrap;
 }
 
+.reservation-label-short {
+  display: none;
+}
+
 .reservation-filter {
   appearance: none;
   -webkit-appearance: none;
@@ -1894,15 +1898,19 @@ DESKTOP
 /* =========================================================
 PHONES (ALL SIZES)
 =========================================================
-Row 1 normally keeps Type/Media on the left and Staff
-Picks/Show All/Reservations pinned right on one line
-(overflow: visible, so the right-side content doesn't get
-clipped). On a phone, that combined content is often wider
-than the screen — and since there's no local scroll
-container to catch that overflow, it was spilling out and
-dragging the whole page into horizontal scroll instead of
-just this row. Letting it wrap keeps everything visible on
-its own extra line(s), with no scrolling required at all.
+Row 1 holds two groups: Type/Media on the left, and Staff
+Picks/Show All/Reservations on the right (via margin-left:
+auto on the desktop layout). On a phone those two groups
+together are wider than the screen.
+
+Rather than letting the row wrap — which grows the total
+row count every time content doesn't fit, including
+whenever the search box is open — each group is forced
+onto its own full-width line (flex-basis: 100%) and then
+scrolls horizontally WITHIN itself if it's still too wide,
+exactly like the Genre/Category row already does. That
+keeps the header at a fixed 3 filter rows on phones,
+regardless of search state, all left-justified.
 ========================================================= */
 
 @media (max-width: 599px) {
@@ -1915,15 +1923,55 @@ its own extra line(s), with no scrolling required at all.
 
   }
 
-  .filter-group-actions {
+  .filter-row-main
+  > .filter-group,
+  .filter-row-main
+  > .filter-group-actions {
 
-    width: 100%;
+    flex-basis: 100%;
+
+    overflow-x: auto;
+
+    scrollbar-width: none;
 
   }
 
-  .filter-group-actions-top {
+  .filter-row-main
+  > .filter-group::-webkit-scrollbar,
+  .filter-row-main
+  > .filter-group-actions::-webkit-scrollbar {
 
-    justify-content: flex-end;
+    display: none;
+
+  }
+
+  .filter-group-actions {
+
+    flex-direction: row;
+
+    align-items: center;
+
+    justify-content: flex-start;
+
+    margin-left: 0;
+
+  }
+
+  /*
+   * "Reservations" -> "RSVP" — mobile only. Desktop and
+   * tablet keep the full word (the short/full spans are
+   * toggled here, not swapped via JS).
+   */
+
+  .reservation-label-full {
+
+    display: none;
+
+  }
+
+  .reservation-label-short {
+
+    display: inline;
 
   }
 
