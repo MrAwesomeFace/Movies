@@ -1892,6 +1892,45 @@ DESKTOP
 
 
 /* =========================================================
+PHONES (ALL SIZES)
+=========================================================
+Row 1 normally keeps Type/Media on the left and Staff
+Picks/Show All/Reservations pinned right on one line
+(overflow: visible, so the right-side content doesn't get
+clipped). On a phone, that combined content is often wider
+than the screen — and since there's no local scroll
+container to catch that overflow, it was spilling out and
+dragging the whole page into horizontal scroll instead of
+just this row. Letting it wrap keeps everything visible on
+its own extra line(s), with no scrolling required at all.
+========================================================= */
+
+@media (max-width: 599px) {
+
+  .filter-row-main {
+
+    flex-wrap: wrap;
+
+    row-gap: 10px;
+
+  }
+
+  .filter-group-actions {
+
+    width: 100%;
+
+  }
+
+  .filter-group-actions-top {
+
+    justify-content: flex-end;
+
+  }
+
+}
+
+
+/* =========================================================
 SMALL PHONES
 ========================================================= */
 
