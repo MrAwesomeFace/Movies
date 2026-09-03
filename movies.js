@@ -8618,6 +8618,24 @@ const movies = [
     ]
   },
   {
+    "title": "How the Grinch Stole Christmas!",
+    "type": "movie",
+    "tmdbId": 13377,
+    "poster": "https://image.tmdb.org/t/p/w500/7ir0iRuPK9OEuH569cp0nF5CJce.jpg",
+    "year": "1966",
+    "runtime": "25m",
+    "genre": "Animation / Family / Comedy",
+    "director": "Chuck Jones",
+    "cast": "Boris Karloff, June Foray, Dal McKennon, Thurl Ravenscroft",
+    "synopsis": "Bitter and hateful, the Grinch is irritated at the thought of a nearby village having a happy time celebrating Christmas. Disguised as Santa Claus, with his dog made to look like a reindeer, he decides to raid the village to steal all the Christmas things.",
+    "physical": [],
+    "digital": [],
+    "categories": [
+      "christmas",
+      "animated"
+    ]
+  },
+  {
     "title": "How to Lose a Guy in 10 Days",
     "tmdbTitle": "How to Lose a Guy in 10 Days",
     "type": "movie",
