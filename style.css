@@ -178,13 +178,50 @@ button {
 
 
 /* =========================================================
+VISUALLY HIDDEN (screen-reader only)
+========================================================= */
+
+.visually-hidden {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+
+  padding: 0;
+  margin: -1px;
+
+  overflow: hidden;
+
+  clip: rect(0, 0, 0, 0);
+
+  white-space: nowrap;
+
+  border: 0;
+}
+
+
+/* =========================================================
 RESERVATION FILTER
 ========================================================= */
 
 .reservation-filter-wrapper {
   flex-shrink: 0;
 
-  margin-left: auto;
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+.reservation-filter-label {
+  flex-shrink: 0;
+
+  color: var(--text);
+
+  font-size: 13px;
+
+  white-space: nowrap;
 }
 
 .reservation-filter {
@@ -246,6 +283,15 @@ RESERVATION FILTER
 .reservation-filter option {
   background: #071433;
   color: var(--gold);
+}
+
+
+/* =========================================================
+GENRE FILTER (dropdown — reuses the reservation-filter look)
+========================================================= */
+
+.genre-filter-select {
+  min-width: 130px;
 }
 
 
@@ -314,8 +360,35 @@ FIRST ROW
   overflow: visible;
 }
 
+
+/* =========================================================
+RIGHT-SIDE ACTIONS STACK
+=========================================================
+Staff Picks / Show All sit on their own line; Reservations
+sits directly below them on a second line, all anchored to
+the right edge of the row.
+========================================================= */
+
 .filter-group-actions {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: flex-end;
+
+  gap: 6px;
+
+  flex-shrink: 0;
+
   margin-left: auto;
+}
+
+.filter-group-actions-top {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
 }
 
 
@@ -362,7 +435,7 @@ INDIVIDUAL FILTER
   border-radius: 999px;
 
   background: transparent;
-  color: var(--gold);
+  color: var(--text);
 
   cursor: pointer;
 
@@ -395,7 +468,7 @@ SPECIAL FILTERS
     1px solid var(--gold);
 
   background: transparent;
-  color: var(--gold);
+  color: var(--text);
 }
 
 .action-filter:hover {
@@ -1844,6 +1917,12 @@ SMALL PHONES
       8px 29px 8px 10px;
 
     font-size: 12px;
+
+  }
+
+  .genre-filter-select {
+
+    min-width: 110px;
 
   }
 
