@@ -8628,8 +8628,11 @@ const movies = [
     "director": "Chuck Jones",
     "cast": "Boris Karloff, June Foray, Dal McKennon, Thurl Ravenscroft",
     "synopsis": "Bitter and hateful, the Grinch is irritated at the thought of a nearby village having a happy time celebrating Christmas. Disguised as Santa Claus, with his dog made to look like a reindeer, he decides to raid the village to steal all the Christmas things.",
-    "physical": [],
-    "digital": [],
+    "physical": ["DVD"],
+    "digital": ["Fandango",
+      "Movies Anywhere",
+      "Prime"
+  ],
     "categories": [
       "christmas",
       "animated"
