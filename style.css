@@ -6,15 +6,21 @@ Main visual design
 */
 
 :root {
-  --background: #0E3FA9;
+  --background: #020D27;
   --surface: #1b1b1b;
   --surface-light: #252525;
   --text: #f5f5f5;
   --muted: #999999;
   --border: #333333;
   --accent: #ffffff;
+  --gold: #FBCD36;
+  --gold-dark: #c99f1f;
   --reservation-red: #c62828;
   --reservation-red-dark: #8f1d1d;
+
+  --wood-highlight: #8a6239;
+  --wood-mid: #2F1D11;
+  --wood-dark: #140b05;
 }
 
 
@@ -62,7 +68,7 @@ HEADER
 
   padding: 18px 18px 14px;
 
-  background: rgba(14, 63, 169, 0.96);
+  background: rgba(2, 13, 39, 0.96);
 
   border-bottom:
     1px solid rgba(0, 0, 0, 0.25);
@@ -87,7 +93,7 @@ HEADER
 h1 {
   margin: 0;
 
-  color: #f5f5f5;
+  color: var(--gold);
 
   font-size: 24px;
   font-weight: 700;
@@ -191,23 +197,23 @@ RESERVATION FILTER
     9px 34px 9px 13px;
 
   border:
-    1px solid rgba(255, 255, 255, 0.18);
+    1px solid var(--gold);
 
   border-radius: 999px;
 
   outline: none;
 
-  background-color: #202020;
+  background-color: transparent;
 
   background-image:
     linear-gradient(
       45deg,
       transparent 50%,
-      #bbbbbb 50%
+      var(--gold) 50%
     ),
     linear-gradient(
       135deg,
-      #bbbbbb 50%,
+      var(--gold) 50%,
       transparent 50%
     );
 
@@ -221,7 +227,7 @@ RESERVATION FILTER
 
   background-repeat: no-repeat;
 
-  color: #eeeeee;
+  color: var(--gold);
 
   font-size: 13px;
   font-weight: 600;
@@ -230,16 +236,16 @@ RESERVATION FILTER
 }
 
 .reservation-filter:hover {
-  border-color: #555555;
+  border-color: var(--gold-dark);
 }
 
 .reservation-filter:focus {
-  border-color: #777777;
+  border-color: var(--gold-dark);
 }
 
 .reservation-filter option {
-  background: #202020;
-  color: #eeeeee;
+  background: #071433;
+  color: var(--gold);
 }
 
 
@@ -370,7 +376,14 @@ INDIVIDUAL FILTER
 }
 
 .filter.active {
-  background: var(--accent);
+  background: transparent;
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.filter[data-filter-group="type"].active {
+  background: var(--gold);
+  border-color: var(--gold);
   color: #111111;
 }
 
@@ -384,7 +397,9 @@ SPECIAL FILTERS
 }
 
 .action-filter {
-  background: #202020;
+  background: transparent;
+  border-color: var(--gold);
+  color: var(--gold);
 }
 
 
@@ -413,11 +428,99 @@ main {
 .movie-grid {
   display: grid;
 
+  position: relative;
+
   grid-template-columns:
     repeat(2, minmax(0, 1fr));
 
-  gap:
-    18px 12px;
+  row-gap: 50px;
+  column-gap: 12px;
+}
+
+
+/* =========================================================
+CONTINUOUS SHELF BOARD
+=========================================================
+One board per row, spanning the full row width plus a
+slight overhang past the end cases, added by app.js
+(updateShelves) after each render. Two-tone wood: a lit
+top surface where the case bases actually rest, and a
+taller, darker body below it so the board reads as having
+real thickness rather than a thin bar.
+========================================================= */
+
+.shelf-board {
+  position: absolute;
+
+  left: -16px;
+  right: -16px;
+
+  height: 33px;
+
+  border-radius: 3px;
+
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.16) 0px,
+      rgba(0, 0, 0, 0.16) 2px,
+      transparent 2px,
+      transparent 7px
+    ),
+    linear-gradient(
+      to bottom,
+      var(--wood-highlight) 0%,
+      var(--wood-highlight) 16%,
+      var(--wood-mid) 18%,
+      var(--wood-mid) 58%,
+      var(--wood-dark) 100%
+    );
+
+  background-blend-mode:
+    multiply,
+    normal;
+
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.28),
+    0 12px 18px rgba(0, 0, 0, 0.6);
+
+  pointer-events: none;
+
+  z-index: 0;
+}
+
+
+/* =========================================================
+SHELF FRONT LIP
+=========================================================
+Sits ABOVE the cases in stacking order (z-index 4, higher
+than the front face's 3) and overlaps the last few pixels
+of each case's bottom edge — so the shelf visually holds
+the cases in place from the front, rather than just being
+a backdrop they float in front of.
+========================================================= */
+
+.shelf-lip {
+  position: absolute;
+
+  height: 8px;
+
+  border-radius: 2px;
+
+  background:
+    linear-gradient(
+      to bottom,
+      var(--wood-highlight) 0%,
+      var(--wood-mid) 100%
+    );
+
+  box-shadow:
+    0 3px 6px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+
+  pointer-events: none;
+
+  z-index: 4;
 }
 
 
@@ -442,35 +545,6 @@ MOVIE CARDS
 
 
 /* =========================================================
-MOVIE TITLE
-========================================================= */
-
-.movie-card-title {
-  width: 100%;
-
-  margin-top: 0;
-  margin-bottom: 8px;
-
-  color: #f2f2f2;
-
-  font-size:
-    clamp(12px, 2.8vw, 16px);
-
-  font-weight: 600;
-
-  line-height: 1.15;
-
-  text-align: center;
-
-  white-space: nowrap;
-
-  overflow: hidden;
-
-  text-overflow: ellipsis;
-}
-
-
-/* =========================================================
 MOVIE COVER / SHELF AREA
 ========================================================= */
 
@@ -482,23 +556,64 @@ MOVIE COVER / SHELF AREA
   aspect-ratio: 2 / 3;
 
   overflow: visible;
-
-  border-radius: 7px;
-
-  background: #292929;
-
-  box-shadow: none;
 }
 
 
 /* =========================================================
-POSTER IMAGE
+CONTACT SHADOW
 ========================================================= */
+
+.movie-cover::before {
+  content: "";
+
+  position: absolute;
+
+  left: 4%;
+  right: 4%;
+
+  bottom: -6px;
+
+  height: 13px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(0, 0, 0, 0.6) 0%,
+      rgba(0, 0, 0, 0) 72%
+    );
+
+  pointer-events: none;
+
+  z-index: 0;
+}
+
+
+/* =========================================================
+POSTER (FRONT COVER)
+========================================================= */
+
+/*
+ * Occupies the right 94% of the card — NOT the full width.
+ * The spine takes the left 6% as its own separate region,
+ * so the two never overlap and can't develop a seam.
+ *
+ * Only the TOP-left corner gets a small taper (matching
+ * the spine's top-inner value below), so the diagonal cut
+ * continues smoothly across the boundary at the top. The
+ * bottom-left corner stays square/flush — the case is
+ * resting on the shelf there, so there's no reason for
+ * that edge to recede too.
+ */
 
 .movie-cover-inner {
   position: absolute;
 
-  inset: 0;
+  left: 6%;
+  right: 0;
+  top: 0;
+  bottom: 0;
 
   display: flex;
 
@@ -508,16 +623,109 @@ POSTER IMAGE
 
   overflow: hidden;
 
-  border-radius: 7px;
+  border-radius: 0 7px 7px 0;
+
+  clip-path:
+    polygon(
+      0% 4%,
+      6% 0%,
+      100% 0%,
+      100% 100%,
+      0% 100%
+    );
 
   box-shadow:
-    0 6px 18px rgba(0, 0, 0, 0.45);
+    0 6px 14px rgba(0, 0, 0, 0.5);
 
   transition:
     transform 0.20s ease,
     box-shadow 0.20s ease;
 
   z-index: 3;
+}
+
+.movie-cover-inner::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      118deg,
+      rgba(255, 255, 255, 0.16) 0%,
+      rgba(255, 255, 255, 0.04) 18%,
+      rgba(255, 255, 255, 0) 34%
+    );
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+SPINE (LEFT EDGE — TOP CORNER CUT ONLY)
+========================================================= */
+
+/*
+ * A thin strip (6% of the card). Only the TOP corners are
+ * cut: the outer (far-left) corner gets the main cut
+ * (16%), and the inner/seam corner gets a small matching
+ * cut (4%) — the SAME value used on the poster's own top
+ * corner — so the diagonal reads as one continuous line
+ * across both pieces. The bottom edge is left straight and
+ * flush, since that's where the case actually rests on the
+ * shelf.
+ */
+
+.case-spine-face {
+  position: absolute;
+
+  top: 0;
+  bottom: 0;
+  left: 0;
+
+  width: 6%;
+
+  overflow: hidden;
+
+  border-radius: 2px 0 0 2px;
+
+  clip-path:
+    polygon(
+      0% 16%,
+      100% 4%,
+      100% 100%,
+      0% 100%
+    );
+
+  box-shadow:
+    inset -2px 0 3px rgba(0, 0, 0, 0.4);
+
+  transition:
+    transform 0.20s ease;
+
+  z-index: 2;
+
+  pointer-events: none;
+}
+
+.case-spine-face::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.18) 0%,
+      rgba(255, 255, 255, 0.04) 45%,
+      rgba(0, 0, 0, 0.15) 100%
+    );
+
+  pointer-events: none;
 }
 
 
@@ -615,8 +823,16 @@ RESERVATION RIBBON
 
 
 /* =========================================================
-INDIVIDUAL SHELF
+INDIVIDUAL SHELF (SELECTED-CARD FALLBACK ONLY)
 ========================================================= */
+
+/*
+ * Hidden during normal browsing — the continuous
+ * .shelf-board per row handles that. This only reappears
+ * under the selected card while it's mid-flight, so the
+ * shelf still reads as continuous through the blur/focus
+ * transition (see "KEEP SELECTED SHELF VISIBLE" below).
+ */
 
 .movie-cover::after {
   content: "";
@@ -635,9 +851,9 @@ INDIVIDUAL SHELF
   background:
     linear-gradient(
       to bottom,
-      #777777 0%,
-      #555555 35%,
-      #303030 100%
+      var(--wood-highlight) 0%,
+      var(--wood-mid) 45%,
+      var(--wood-dark) 100%
     );
 
   box-shadow:
@@ -646,6 +862,8 @@ INDIVIDUAL SHELF
   pointer-events: none;
 
   z-index: 1;
+
+  opacity: 0;
 }
 
 
@@ -659,11 +877,19 @@ NORMAL HOVER
   .movie-cover-inner {
 
     transform:
-      translateY(-5px);
+      translateY(-16px);
 
     box-shadow:
       0 10px 18px rgba(0, 0, 0, 0.42),
       0 20px 30px rgba(0, 0, 0, 0.30);
+  }
+
+  .movie-card:hover
+  .case-spine-face {
+
+    transform:
+      translateY(-16px);
+
   }
 
 }
@@ -678,7 +904,9 @@ SELECTED MOVIE
 }
 
 .movie-card.selected
-.movie-cover-inner {
+.movie-cover-inner,
+.movie-card.selected
+.case-spine-face {
   opacity: 0;
 }
 
@@ -1545,10 +1773,10 @@ TABLET / IPAD
   .movie-grid {
 
     grid-template-columns:
-      repeat(4, minmax(0, 1fr));
+      repeat(6, minmax(0, 1fr));
 
-    gap:
-      20px;
+    row-gap: 52px;
+    column-gap: 14px;
 
   }
 
@@ -1574,10 +1802,10 @@ DESKTOP
   .movie-grid {
 
     grid-template-columns:
-      repeat(6, minmax(0, 1fr));
+      repeat(8, minmax(0, 1fr));
 
-    gap:
-      22px 16px;
+    row-gap: 54px;
+    column-gap: 14px;
 
   }
 
