@@ -7750,7 +7750,6 @@ const movies = [
       "Movies Anywhere"
     ]
   },
-
   {
     "title": "Haul Out the Holly",
     "tmdbTitle": "Haul Out the Holly",
@@ -12157,7 +12156,6 @@ const movies = [
       "baseball"
     ]
   },
-
   {
     "title": "Monster Squad, The",
     "tmdbTitle": "The Monster Squad",
@@ -12542,6 +12540,22 @@ const movies = [
     "director": "",
     "cast": "",
     "synopsis": "Only one man has the particular set of skills... to lead Police Squad and save the world: Lt. Frank Drebin Jr. Following in his father's footsteps, he must solve a murder case to prevent Police Squad from closure.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ]
+  },
+  {
+    "title": "Naked Gun: From the Files of Police Squad!, The",
+    "type": "movie",
+    "tmdbId": 37136,
+    "poster": "https://image.tmdb.org/t/p/w500/zT0mhZqZQJE1gSY5Eg9qcGP4NYo.jpg",
+    "year": "1988",
+    "runtime": "86m",
+    "genre": "Comedy / Crime",
+    "director": "David Zucker",
+    "cast": "Leslie Nielsen, Priscilla Presley, Ricardo Montalban, George Kennedy, O. J. Simpson, Susan Beaubian",
+    "synopsis": "When the bumbling Lieutenant Frank Drebin investigates events following the shooting of his partner, he stumbles upon an attempt to assassinate Queen Elizabeth II.",
     "physical": [],
     "digital": [
       "Fandango"
