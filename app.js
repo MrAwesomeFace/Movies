@@ -147,6 +147,79 @@ const coverColors = [
 ];
 
 // =========================================================
+// SPINE COLOR (MUTED VERSION OF THE PALETTE)
+// =========================================================
+
+/*
+
+* Takes a palette hex color and blends it toward grey
+* (desaturate) and then toward black (darken), so the
+* spine still relates to that movie's palette without
+* being a bright, mismatched color next to a photo.
+  */
+
+function muteColor(
+hex,
+desaturateAmount,
+darkenAmount
+) {
+
+const parsed =
+hex.replace(
+"#",
+""
+);
+
+const r =
+parseInt(
+parsed.substring(0, 2),
+16
+);
+
+const g =
+parseInt(
+parsed.substring(2, 4),
+16
+);
+
+const b =
+parseInt(
+parsed.substring(4, 6),
+16
+);
+
+const gray =
+0.299 * r +
+0.587 * g +
+0.114 * b;
+
+let mutedR =
+r + (gray - r) * desaturateAmount;
+
+let mutedG =
+g + (gray - g) * desaturateAmount;
+
+let mutedB =
+b + (gray - b) * desaturateAmount;
+
+mutedR =
+mutedR * (1 - darkenAmount);
+
+mutedG =
+mutedG * (1 - darkenAmount);
+
+mutedB =
+mutedB * (1 - darkenAmount);
+
+return (
+`rgb(${Math.round(mutedR)}, ` +
+`${Math.round(mutedG)}, ` +
+`${Math.round(mutedB)})`
+);
+
+}
+
+// =========================================================
 // RESERVATION HELPERS
 // =========================================================
 
@@ -688,7 +761,7 @@ let filteredMovies =
 getFilteredMovies();
 
 // =========================================================
-// RANDOM 12
+// RANDOM 16
 // =========================================================
 
 if (randomMode) {
@@ -795,7 +868,177 @@ card
 }
 );
 
+// =========================================================
+// SHELVES
+// =========================================================
+
+scheduleShelfUpdate();
+
 }
+
+// =========================================================
+// CONTINUOUS SHELF BOARDS
+// =========================================================
+
+let shelfResizeTimeout =
+null;
+
+function updateShelves() {
+
+document
+.querySelectorAll(
+".shelf-board, .shelf-lip"
+)
+.forEach(
+board =>
+board.remove()
+);
+
+const cards =
+Array.from(
+movieGrid.querySelectorAll(
+".movie-card"
+)
+);
+
+if (cards.length === 0) {
+
+return;
+
+}
+
+// =========================================================
+// GROUP CARDS INTO ROWS
+// =========================================================
+
+/*
+
+* Grouped by offsetTop (layout position, unaffected by
+* the case's 3D tilt transform) rather than the
+* rendered/rotated bounding box — that keeps every card
+* in a visual row bucketed together even though the
+* tilt makes their rendered edges uneven.
+  */
+
+const rows =
+new Map();
+
+cards.forEach(
+card => {
+
+const rowKey =
+Math.round(
+card.offsetTop
+);
+
+const rowBottom =
+card.offsetTop +
+card.offsetHeight;
+
+if (!rows.has(rowKey)) {
+
+rows.set(
+rowKey,
+[]
+);
+
+}
+
+rows.get(rowKey).push(
+rowBottom
+);
+
+}
+);
+
+// =========================================================
+// BUILD ONE BOARD PER ROW
+// =========================================================
+
+rows.forEach(
+bottoms => {
+
+const rowBottom =
+Math.max(
+...bottoms
+);
+
+const board =
+document.createElement(
+"div"
+);
+
+board.className =
+"shelf-board";
+
+board.style.top =
+`${rowBottom}px`;
+
+const lip =
+document.createElement(
+"div"
+);
+
+lip.className =
+"shelf-lip";
+
+lip.style.top =
+`${rowBottom - 6}px`;
+
+lip.style.left =
+"-16px";
+
+lip.style.right =
+"-16px";
+
+/*
+
+* Inserted first so movie cards, which come later
+* in the DOM, paint on top of the board — but the lip
+* keeps its higher z-index (set in CSS) so it still
+* renders in front of the case bottoms despite being
+* early in the DOM.
+  */
+
+movieGrid.insertBefore(
+lip,
+movieGrid.firstChild
+);
+
+movieGrid.insertBefore(
+board,
+movieGrid.firstChild
+);
+
+}
+);
+
+}
+
+function scheduleShelfUpdate() {
+
+requestAnimationFrame(
+updateShelves
+);
+
+}
+
+window.addEventListener(
+"resize",
+() => {
+
+clearTimeout(
+shelfResizeTimeout
+);
+
+shelfResizeTimeout =
+setTimeout(
+scheduleShelfUpdate,
+150
+);
+
+}
+);
 
 // =========================================================
 // CREATE MOVIE CARD
@@ -820,26 +1063,7 @@ card.setAttribute(
 );
 
 // =========================================================
-// TITLE
-// =========================================================
-
-const title =
-document.createElement(
-"div"
-);
-
-title.className =
-"movie-card-title";
-
-title.textContent =
-movie.title;
-
-card.appendChild(
-title
-);
-
-// =========================================================
-// COVER
+// COVER (SPINE + POSTER, FLAT 2D)
 // =========================================================
 
 const colors =
@@ -889,6 +1113,33 @@ ${colors[1]}
 
 }
 
+const spine =
+document.createElement(
+"div"
+);
+
+spine.className =
+"case-spine-face";
+
+/*
+
+* Darkened version of the palette color, with only a
+* light touch of desaturation — enough to read as the
+* case's edge sitting in shadow, without crushing out the
+* movie's actual color the way heavier desaturation did.
+  */
+
+spine.style.background =
+`linear-gradient(
+to bottom,
+${muteColor(colors[0], 0.12, 0.15)},
+${muteColor(colors[0], 0.12, 0.55)}
+)`;
+
+cover.appendChild(
+spine
+);
+
 cover.appendChild(
 coverInner
 );
@@ -921,7 +1172,14 @@ ribbon.className =
 ribbon.textContent =
 movieReservations.length;
 
-cover.appendChild(
+/*
+
+* Attached to the front face (not the outer cover) so
+* the ribbon tilts along with the case instead of
+* floating flat over it.
+  */
+
+coverInner.appendChild(
 ribbon
 );
 
@@ -1001,12 +1259,22 @@ selectedCard =
 card;
 
 // =========================================================
-// CAPTURE EXACT POSTER POSITION
+// CAPTURE EXACT CASE POSITION
 // =========================================================
+
+/*
+
+* Captured from .movie-cover (the outer wrapper spanning
+* both the spine and the poster), not just the poster —
+* otherwise the flight animation would only carry the
+* poster's ~94% width, visually leaving the spine behind
+* for the trip instead of the whole case moving as one
+* piece.
+  */
 
 const cover =
 card.querySelector(
-".movie-cover-inner"
+".movie-cover"
 );
 
 const coverRect =
@@ -2505,7 +2773,7 @@ return true;
 }
 
 // =========================================================
-// GENERATE RANDOM 12
+// GENERATE RANDOM 16
 // =========================================================
 
 function generateRandomMovies() {
@@ -2548,13 +2816,13 @@ shuffled[i]
 randomMovies =
 shuffled.slice(
 0,
-12
+16
 );
 
 }
 
 // =========================================================
-// RANDOM 12 BUTTON
+// RANDOM 16 BUTTON
 // =========================================================
 
 if (randomButton) {
@@ -2736,30 +3004,5 @@ if (modal) {
       passive: false
     }
   );
-
-modal.addEventListener(
-"wheel",
-event => {
-
-if (currentMovie) {
-
-const backContent =
-event.target.closest(
-".back-content"
-);
-
-if (!backContent) {
-
-event.preventDefault();
-
-}
-
-}
-
-},
-{
-passive: false
-}
-);
 
 }
