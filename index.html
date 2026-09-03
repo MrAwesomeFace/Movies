@@ -64,7 +64,8 @@ autocomplete="off"
 >
 
   <!-- =====================================================
-       ROW 1: TYPE + ACTIONS
+       ROW 1: TYPE + MEDIA (left)
+       STAFF PICKS / SHOW ALL + RESERVATIONS (right)
        ===================================================== -->
 
   <div class="filter-row filter-row-main">
@@ -72,13 +73,12 @@ autocomplete="off"
 
 <div class="filter-group">
 
-  <button
-    class="filter"
-    data-filter-group="type"
-    data-filter-value="all"
-  >
-    All
-  </button>
+  <!--
+    No "All" buttons for Type or Media — clicking the
+    active pill again turns it back off (same toggle
+    behavior Genre/Category already use), so there's
+    nothing dedicated to click for "all" instead.
+  -->
 
   <button
     class="filter active"
@@ -104,26 +104,72 @@ autocomplete="off"
     Misc
   </button>
 
+  <div class="filter-divider">
+    |
+  </div>
+
+  <button
+    class="filter"
+    data-filter-group="media"
+    data-filter-value="physical"
+  >
+    Physical
+  </button>
+
+  <button
+    class="filter"
+    data-filter-group="media"
+    data-filter-value="digital"
+  >
+    Digital
+  </button>
+
 </div>
 
 
-<!-- RIGHT SIDE ACTIONS -->
+<!-- RIGHT SIDE: ACTIONS (top) + RESERVATIONS (bottom) -->
 
-<div class="filter-group filter-group-actions">
+<div class="filter-group-actions">
 
-  <button
-    id="random-button"
-    class="filter action-filter"
-  >
-    Staff Picks
-  </button>
+  <div class="filter-group-actions-top">
 
-  <button
-    id="show-all-button"
-    class="filter action-filter"
-  >
-    Show All
-  </button>
+    <button
+      id="random-button"
+      class="filter action-filter"
+    >
+      Staff Picks
+    </button>
+
+    <button
+      id="show-all-button"
+      class="filter action-filter"
+    >
+      Show All
+    </button>
+
+  </div>
+
+  <div class="filter-group reservation-filter-wrapper">
+
+    <label
+      for="reservation-filter"
+      class="reservation-filter-label"
+    >
+      Reservations
+    </label>
+
+    <select
+      id="reservation-filter"
+      class="filter reservation-filter"
+      aria-label="Filter movies by reservation"
+    >
+      <option value="all">All Movies</option>
+      <option value="Bryon">Bryon</option>
+      <option value="Angie">Angie</option>
+      <option value="Joey">Joey</option>
+    </select>
+
+  </div>
 
 </div>
 
@@ -131,7 +177,7 @@ autocomplete="off"
   </div>
 
   <!-- =====================================================
-       ROW 2: GENRES + CATEGORIES
+       ROW 2: GENRE DROPDOWN (left), CATEGORY + ANIMATED (right)
        ===================================================== -->
 
   <div class="filter-row genre-category-row">
@@ -139,45 +185,26 @@ autocomplete="off"
 
 <div class="filter-group">
 
-  <button
-    class="filter genre-filter"
-    data-filter-group="genre"
-    data-filter-value="action"
+  <label
+    for="genre-filter"
+    class="visually-hidden"
   >
-    Action
-  </button>
+    Genre
+  </label>
 
-  <button
-    class="filter genre-filter"
-    data-filter-group="genre"
-    data-filter-value="comedy"
+  <select
+    id="genre-filter"
+    class="reservation-filter genre-filter-select"
+    aria-label="Filter movies by genre"
   >
-    Comedy
-  </button>
-
-  <button
-    class="filter genre-filter"
-    data-filter-group="genre"
-    data-filter-value="drama"
-  >
-    Drama
-  </button>
-
-  <button
-    class="filter genre-filter"
-    data-filter-group="genre"
-    data-filter-value="horror"
-  >
-    Horror
-  </button>
-
-  <button
-    class="filter genre-filter"
-    data-filter-group="genre"
-    data-filter-value="thriller"
-  >
-    Thriller
-  </button>
+    <option value="">All Genres</option>
+    <option value="action">Action</option>
+    <option value="classic">Classic</option>
+    <option value="comedy">Comedy</option>
+    <option value="drama">Drama</option>
+    <option value="horror">Horror</option>
+    <option value="thriller">Thriller</option>
+  </select>
 
 </div>
 
@@ -212,69 +239,6 @@ autocomplete="off"
   >
     Animated: Hide
   </button>
-
-</div>
-
-
-  </div>
-
-  <!-- =====================================================
-       ROW 3: MEDIA + RESERVATIONS
-       ===================================================== -->
-
-  <div class="filter-row filter-row-media">
-
-
-<div class="filter-group">
-
-  <button
-    class="filter active"
-    data-filter-group="media"
-    data-filter-value="all"
-  >
-    All
-  </button>
-
-  <button
-    class="filter"
-    data-filter-group="media"
-    data-filter-value="physical"
-  >
-    Physical
-  </button>
-
-  <button
-    class="filter"
-    data-filter-group="media"
-    data-filter-value="digital"
-  >
-    Digital
-  </button>
-
-</div>
-
-
-<!-- FAR RIGHT: RESERVATIONS -->
-
-<div class="filter-group reservation-filter-wrapper">
-
-  <label
-    for="reservation-filter"
-    class="reservation-filter-label"
-  >
-    Reservations
-  </label>
-
-  <select
-    id="reservation-filter"
-    class="filter reservation-filter"
-    aria-label="Filter movies by reservation"
-  >
-    <option value="all">All Movies</option>
-    <option value="Bryon">Bryon</option>
-    <option value="Angie">Angie</option>
-    <option value="Joey">Joey</option>
-  </select>
 
 </div>
 
