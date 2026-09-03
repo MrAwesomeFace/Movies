@@ -19033,6 +19033,26 @@ const movies = [
     "digital": []
   },
   {
+    "title": "Year Without a Santa Claus, The",
+    "type": "movie",
+    "tmdbId": 13397,
+    "poster": "https://image.tmdb.org/t/p/w500/gc5vz1sZXk1DilIzkQLZ2ujuiWQ.jpg",
+    "year": "1974",
+    "runtime": "51m",
+    "genre": "Animation / Family / TV Movie / Fantasy",
+    "director": "Arthur Rankin Jr., Jules Bass",
+    "cast": "Shirley Booth, Mickey Rooney, Dick Shawn, George S. Irving, Bob McFadden, Rhoda Mann",
+    "synopsis": "Feeling forgotten by the children of the world, old St. Nick decides to skip his gift-giving journey and take a vacation. Mrs. Claus and two spunky little elves, Jingle and Jangle, set out to see to where all the season's cheer has disappeared. Aided by a magical snowfall, they reawaken the spirit of Christmas in children's hearts and put Santa back in action.",
+    "physical": [
+      "DVD"
+    ],
+    "digital": [],
+    "categories": [
+      "christmas",
+      "animated"
+    ]
+  },
+  {
     "title": "Yes Man",
     "tmdbTitle": "Yes Man",
     "type": "movie",
