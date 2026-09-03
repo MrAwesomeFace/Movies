@@ -3104,7 +3104,7 @@ const movies = [
   },
   {
     "title": "Chicago Cubs 2016 World Series Collector's Edition",
-    "type": "movie",
+    "type": "misc",
     "tmdbId": 631038,
     "poster": "https://image.tmdb.org/t/p/w500/p9XXbUdpqC73vZBzUoChhCz2J1A.jpg",
     "year": "",
@@ -15446,7 +15446,7 @@ const movies = [
   },
   {
     "title": "Sevendust Retrospect",
-    "type": "movie",
+    "type": "misc",
     "tmdbId": 500074,
     "poster": "https://image.tmdb.org/t/p/w500/xTleHPZlzpURnQhLqTn2rmlMUgL.jpg",
     "year": "2011",
@@ -18872,7 +18872,7 @@ const movies = [
   {
     "title": "WWE WrestleMania X-Seven",
     "tmdbTitle": "WWE WrestleMania X-Seven",
-    "type": "movie",
+    "type": "misc",
     "tmdbId": 209740,
     "poster": "https://image.tmdb.org/t/p/w500/pn7Ko3G2gVJLZOgLqmD97NuR6Xj.jpg",
     "year": "2001",
