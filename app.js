@@ -92,6 +92,9 @@ document.getElementById("show-all-button");
 const reservationFilter =
 document.getElementById("reservation-filter");
 
+const genreFilter =
+document.getElementById("genre-filter");
+
 // =========================================================
 // CURRENT STATE
 // =========================================================
@@ -2313,7 +2316,28 @@ button.dataset.filterValue;
 // TYPE
 // =====================================================
 
+/*
+
+* No "All" button — clicking the already-active pill
+* turns it back off (activeFilters.type = "all"),
+* same toggle pattern Genre/Category already use.
+  */
+
 if (group === "type") {
+
+if (
+activeFilters.type ===
+value
+) {
+
+activeFilters.type =
+"all";
+
+button.classList.remove(
+"active"
+);
+
+} else {
 
 activeFilters.type =
 value;
@@ -2333,43 +2357,26 @@ value
 
 }
 
+}
+
 // =====================================================
 // MEDIA
 // =====================================================
 
+/*
+
+* Same toggle-off pattern as Type — no "All" button.
+  */
+
 if (group === "media") {
 
-activeFilters.media =
-value;
-
-document
-.querySelectorAll(
-'[data-filter-group="media"]'
-)
-.forEach(
-b =>
-b.classList.toggle(
-"active",
-b.dataset.filterValue ===
-value
-)
-);
-
-}
-
-// =====================================================
-// GENRE
-// =====================================================
-
-if (group === "genre") {
-
 if (
-activeFilters.genre ===
+activeFilters.media ===
 value
 ) {
 
-activeFilters.genre =
-null;
+activeFilters.media =
+"all";
 
 button.classList.remove(
 "active"
@@ -2377,12 +2384,12 @@ button.classList.remove(
 
 } else {
 
-activeFilters.genre =
+activeFilters.media =
 value;
 
 document
 .querySelectorAll(
-'[data-filter-group="genre"]'
+'[data-filter-group="media"]'
 )
 .forEach(
 b =>
@@ -2487,6 +2494,40 @@ renderMovies();
 
 }
 );
+
+// =========================================================
+// GENRE DROPDOWN
+// =========================================================
+
+/*
+
+* Genre lives as a <select>, not pills — includes
+* "Classic", which getFilteredMovies() treats as a
+* computed year rule, not a text tag (see below).
+  */
+
+if (genreFilter) {
+
+genreFilter.addEventListener(
+"change",
+event => {
+
+activeFilters.genre =
+event.target.value ||
+null;
+
+if (randomMode) {
+
+generateRandomMovies();
+
+}
+
+renderMovies();
+
+}
+);
+
+}
 
 // =========================================================
 // RESERVATION DROPDOWN
@@ -2627,7 +2668,35 @@ return false;
 // GENRE
 // =====================================================
 
+/*
+
+* "Classic" is a computed rule (year < 1980), not a
+* text tag on the movie — so it stays correct on its
+* own as movies are added, with nothing to manually
+* tag in movies.js. Every other genre still matches
+* by text as before.
+  */
+
 if (activeFilters.genre) {
+
+if (activeFilters.genre === "classic") {
+
+const movieYear =
+parseInt(
+movie.year,
+10
+);
+
+if (
+Number.isNaN(movieYear) ||
+movieYear >= 1980
+) {
+
+return false;
+
+}
+
+} else {
 
 const movieGenre =
 (movie.genre || "")
@@ -2640,6 +2709,8 @@ activeFilters.genre.toLowerCase()
 ) {
 
 return false;
+
+}
 
 }
 
