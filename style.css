@@ -682,10 +682,13 @@ POSTER (FRONT COVER)
  * The spine takes the left 6% as its own separate region,
  * so the two never overlap and can't develop a seam.
  *
- * Plain rectangle — no corner cut here. The cut belongs
- * entirely to the spine (it's what sells "this is the
- * case's side, turning away from you"); the poster is a
- * normal, intact cover.
+ * Plain rectangle, uniformly rounded on all four corners —
+ * no corner cut here. The cut belongs entirely to the
+ * spine (it's what sells "this is the case's side, turning
+ * away from you"); the poster is a normal, intact cover.
+ * The spine's own edge sits right behind this corner, so
+ * rounding it doesn't expose any gap — just a sliver of
+ * the spine, which reads as the case's edge peeking out.
  */
 
 .movie-cover-inner {
@@ -704,7 +707,7 @@ POSTER (FRONT COVER)
 
   overflow: hidden;
 
-  border-radius: 0 7px 7px 0;
+  border-radius: 7px;
 
   box-shadow:
     0 6px 14px rgba(0, 0, 0, 0.5);
