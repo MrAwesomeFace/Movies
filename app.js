@@ -811,7 +811,7 @@ activeFilters.reservation !== "all";
 if (randomMode) {
 
 movieCount.textContent =
-`${filteredMovies.length} random titles`;
+`${filteredMovies.length} Staff Picks`;
 
 } else if (
 currentSearch ||
@@ -2838,13 +2838,9 @@ generateRandomMovies();
 
 renderMovies();
 
-if (showAllButton) {
-
-showAllButton.classList.add(
+randomButton.classList.add(
 "active"
 );
-
-}
 
 }
 );
@@ -2869,9 +2865,13 @@ randomMovies =
 
 renderMovies();
 
-showAllButton.classList.remove(
+if (randomButton) {
+
+randomButton.classList.remove(
 "active"
 );
+
+}
 
 }
 );
