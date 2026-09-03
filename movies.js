@@ -2545,8 +2545,7 @@ const movies = [
     ],
     "digital": [],
     "categories": [
-      "animated",
-      "christmas"
+      "animated"
     ]
   },
   {
@@ -8223,7 +8222,6 @@ const movies = [
     ],
     "digital": [],
     "categories": [
-      "christmas",
       "animated"
     ]
   },
@@ -9151,8 +9149,7 @@ const movies = [
     ],
     "digital": [],
     "categories": [
-      "animated",
-      "christmas"
+      "animated"
     ]
   },
   {
@@ -12160,28 +12157,7 @@ const movies = [
       "baseball"
     ]
   },
-  {
-    "title": "Monster by Mistake",
-    "type": "tv",
-    "tmdbId": 13377,
-    "poster": "https://image.tmdb.org/t/p/w500/phtIssm6rTE5w0mRBo1afYAG1UB.jpg",
-    "year": "1999",
-    "runtime": "30m",
-    "genre": "Animation / Sci-Fi & Fantasy",
-    "director": "",
-    "cast": "Jayne Eastwood, Tony Rosato, Susan Roman, Megan Fahlenbock, Daniel DeSanto, William Colgate",
-    "synopsis": "An 8 year old boy named Warren accidentally gets mixed up in a magic spell and turns into a monster every time he sneezes.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": [
-      "Prime"
-    ],
-    "categories": [
-      "christmas",
-      "animated"
-    ]
-  },
+
   {
     "title": "Monster Squad, The",
     "tmdbTitle": "The Monster Squad",
@@ -14706,6 +14682,7 @@ const movies = [
     ],
     "digital": [],
     "categories": [
+      "animated",
       "christmas"
     ],
     "tmdbTitle": "Rudolph the Red-Nosed Reindeer"
