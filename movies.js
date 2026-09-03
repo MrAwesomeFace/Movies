@@ -146,7 +146,7 @@ const movies = [
   },
   {
     "title": "2016 World Series Champions: The Chicago Cubs",
-    "type": "movie",
+    "type": "misc",
     "tmdbId": 522710,
     "poster": "https://image.tmdb.org/t/p/w500/kql8l06FjXuZ7yqmWQItFYg4NVB.jpg",
     "year": "2016",
@@ -1197,7 +1197,7 @@ const movies = [
   },
   {
     "title": "An Evening with Kevin Smith",
-    "type": "movie",
+    "type": "misc",
     "tmdbId": 14348,
     "poster": "https://image.tmdb.org/t/p/w500/w37BFY3m4iGqg1dXCk1gbw2AJ5q.jpg",
     "year": "2002",
@@ -1213,7 +1213,7 @@ const movies = [
   },
   {
     "title": "An Evening with Kevin Smith 2: Evening Harder",
-    "type": "movie",
+    "type": "misc",
     "tmdbId": 16768,
     "poster": "https://image.tmdb.org/t/p/w500/zpZBBYMepcCExBhAX08XfgkXdQE.jpg",
     "year": "2006",
@@ -7848,7 +7848,7 @@ const movies = [
   },
   {
     "title": "Hello Again Everybody: The Harry Caray Story",
-    "type": "movie",
+    "type": "misc",
     "tmdbId": 391481,
     "poster": "https://image.tmdb.org/t/p/w500/hl9WSmaBKvbaVSUX3sruzgXF2A5.jpg",
     "year": "2006",
@@ -17117,7 +17117,7 @@ const movies = [
   },
   {
     "title": "This Old Cub",
-    "type": "movie",
+    "type": "misc",
     "tmdbId": 59906,
     "poster": "https://image.tmdb.org/t/p/w500/kvSrWSJajSIuuBWj6pzcD8v0E22.jpg",
     "year": "2004",
@@ -18888,7 +18888,7 @@ const movies = [
   },
   {
     "title": "WWE: From the Vault: Shawn Michaels",
-    "type": "movie",
+    "type": "misc",
     "tmdbId": 330960,
     "poster": "https://image.tmdb.org/t/p/w500/yfOn4kss62OZ2iDyU64vfXWfTYD.jpg",
     "year": "2003",
