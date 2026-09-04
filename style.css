@@ -2219,6 +2219,66 @@ body.theme-arcade {
 }
 
 /*
+ * Side lighting containers — the individual shapes are
+ * created by app.js (renderArcadeSideLighting), which gives
+ * each one its own random shape/rotation/flip/color/spacing.
+ * A single repeating background tile can never look organic,
+ * since every repeat is mechanically identical — this is why
+ * that's not done as a CSS background pattern.
+ */
+
+.arcade-side-lighting {
+  display: none;
+}
+
+body.theme-arcade .arcade-side-lighting {
+
+  display: block;
+
+  position: absolute;
+
+  top: 0;
+  left: 30px;
+
+  width: 40px;
+  height: 0;
+
+  pointer-events: none;
+
+  z-index: 0;
+}
+
+body.theme-arcade .arcade-side-lighting.right {
+
+  left: auto;
+  right: 30px;
+}
+
+@media (max-width: 1299px) {
+
+  body.theme-arcade .arcade-side-lighting {
+
+    display: none;
+  }
+
+}
+
+.arcade-side-icon {
+  position: absolute;
+
+  left: 0;
+
+  pointer-events: none;
+}
+
+body.theme-arcade .arcade-side-lighting.right .arcade-side-icon {
+
+  left: auto;
+  right: 0;
+}
+
+
+/*
  * Ambient cyan/magenta light spill — fixed so it doesn't
  * repeat or scroll oddly with page length, sits behind all
  * real content (z-index 0, main is z-index 1).
@@ -2266,6 +2326,48 @@ body.theme-arcade .shelf-board {
     0 0 14px 3px rgba(0, 255, 242, 0.55),
     0 0 28px 7px rgba(0, 255, 242, 0.3),
     0 12px 20px rgba(0, 0, 0, 0.7);
+
+  animation: arcade-shelf-flicker 4.5s infinite;
+}
+
+@keyframes arcade-shelf-flicker {
+
+  0%, 92%, 100% {
+    box-shadow:
+      0 0 5px 1px #00fff2,
+      0 0 14px 3px rgba(0, 255, 242, 0.55),
+      0 0 28px 7px rgba(0, 255, 242, 0.3),
+      0 12px 20px rgba(0, 0, 0, 0.7);
+  }
+
+  93% {
+    box-shadow:
+      0 0 2px 0px rgba(0, 255, 242, 0.3),
+      0 12px 20px rgba(0, 0, 0, 0.7);
+  }
+
+  94% {
+    box-shadow:
+      0 0 5px 1px #00fff2,
+      0 0 14px 3px rgba(0, 255, 242, 0.55),
+      0 0 28px 7px rgba(0, 255, 242, 0.3),
+      0 12px 20px rgba(0, 0, 0, 0.7);
+  }
+
+  96% {
+    box-shadow:
+      0 0 2px 0px rgba(0, 255, 242, 0.25),
+      0 12px 20px rgba(0, 0, 0, 0.7);
+  }
+
+  97% {
+    box-shadow:
+      0 0 5px 1px #00fff2,
+      0 0 14px 3px rgba(0, 255, 242, 0.55),
+      0 0 28px 7px rgba(0, 255, 242, 0.3),
+      0 12px 20px rgba(0, 0, 0, 0.7);
+  }
+
 }
 
 body.theme-arcade .shelf-lip {
@@ -2275,4 +2377,270 @@ body.theme-arcade .shelf-lip {
   box-shadow:
     0 0 5px 1px #ff2fd1,
     0 0 12px 2px rgba(255, 47, 209, 0.55);
+}
+
+
+/* =========================================================
+STAGE 2: PILLS, DROPDOWNS, SEARCH
+=========================================================
+Resting pills/buttons: steady cyan glow, no motion. Active
+ones: dark background with a slow pulsing magenta glow —
+replaces an earlier chasing-streak version that needed a
+separate measured outline-path per pill (since "Movies" and
+"Animated: Hide" are nowhere near the same size) and never
+quite read clearly at this small a scale. The pulse needs
+none of that — same animation works for every pill, and now
+for the dropdowns too, which the chase couldn't reach since
+they're native <select> elements with no child to host a
+moving streak.
+========================================================= */
+
+body.theme-arcade .filter,
+body.theme-arcade .action-filter {
+
+  border-color: #00fff2;
+
+  box-shadow:
+    0 0 4px 1px rgba(0, 255, 242, 0.6),
+    0 0 10px 2px rgba(0, 255, 242, 0.35);
+}
+
+body.theme-arcade .filter:hover,
+body.theme-arcade .action-filter:hover {
+
+  background: rgba(0, 255, 242, 0.12);
+}
+
+body.theme-arcade .filter.active,
+body.theme-arcade .action-filter.active {
+
+  background: #0a0a0d;
+
+  border-color: rgba(255, 47, 209, 0.5);
+
+  color: #fff0fa;
+
+  animation: arcade-pill-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes arcade-pill-pulse {
+
+  0%, 100% {
+
+    box-shadow:
+      0 0 4px 1px rgba(255, 47, 209, 0.5),
+      0 0 10px 2px rgba(255, 47, 209, 0.3);
+
+    border-color: rgba(255, 47, 209, 0.5);
+  }
+
+  50% {
+
+    box-shadow:
+      0 0 8px 2px rgba(255, 47, 209, 0.95),
+      0 0 22px 6px rgba(255, 47, 209, 0.6);
+
+    border-color: rgba(255, 47, 209, 1);
+  }
+
+}
+
+body.theme-arcade .genre-category-row {
+
+  padding: 10px 0;
+}
+
+@media (max-width: 599px) {
+
+  body.theme-arcade .filter-row-main > .filter-group,
+  body.theme-arcade .filter-row-main > .filter-group-actions {
+
+    padding: 10px 0;
+  }
+
+}
+
+body.theme-arcade .reservation-filter {
+
+  background-color: transparent;
+
+  color: var(--text);
+
+  border-color: #00fff2;
+
+  box-shadow:
+    0 0 4px 1px rgba(0, 255, 242, 0.6),
+    0 0 10px 2px rgba(0, 255, 242, 0.35);
+}
+
+body.theme-arcade .reservation-filter:focus:not(.active) {
+
+  background-color: transparent;
+
+  color: var(--text);
+}
+
+body.theme-arcade .reservation-filter:hover,
+body.theme-arcade .reservation-filter:focus {
+
+  border-color: #ff2fd1;
+}
+
+body.theme-arcade .reservation-filter.active {
+
+  background-color: #0a0a0d;
+
+  border-color: #ff2fd1;
+
+  color: #fff0fa;
+
+  animation: arcade-pill-pulse 2.4s ease-in-out infinite;
+}
+
+body.theme-arcade #search-input {
+
+  border-color: rgba(0, 255, 242, 0.55);
+
+  box-shadow:
+    0 0 4px 1px rgba(0, 255, 242, 0.5),
+    0 0 10px 2px rgba(0, 255, 242, 0.25);
+}
+
+body.theme-arcade #search-input:focus {
+
+  border-color: #00fff2;
+
+  box-shadow:
+    0 0 5px 1px rgba(0, 255, 242, 0.8),
+    0 0 14px 3px rgba(0, 255, 242, 0.5);
+}
+
+body.theme-arcade .icon-button {
+
+  border-color: rgba(0, 255, 242, 0.6);
+
+  color: #00fff2;
+
+  box-shadow:
+    0 0 4px 1px rgba(0, 255, 242, 0.5),
+    0 0 10px 2px rgba(0, 255, 242, 0.25);
+}
+
+
+/* =========================================================
+STAGE 3: SIDE LIGHTING, HEADER GLOW, RIBBON, FOCUS RINGS, MODAL
+========================================================= */
+
+/*
+ * Per-case glow — tinted to each card's own palette color
+ * (set as --glow-color in app.js, same color already used
+ * for that card's poster gradient). filter:drop-shadow (not
+ * box-shadow, which the case already uses for its elevation
+ * shadow) wraps around the actual combined silhouette of the
+ * spine + poster together, and follows them through the
+ * hover-lift transition since it's recalculated from what's
+ * actually rendered each frame. Doesn't touch layout/size,
+ * so the flight-to-modal animation's bounding-box math is
+ * unaffected.
+ */
+
+body.theme-arcade .movie-cover {
+
+  filter:
+    drop-shadow(0 0 4px var(--glow-color, rgba(0, 255, 242, 0.5)))
+    drop-shadow(0 0 10px var(--glow-color, rgba(0, 255, 242, 0.5)));
+}
+
+/*
+ * Header glow — cyan on the icon and "Mr. Movies", magenta
+ * on "Rewind" specifically, echoing the two-color scheme and
+ * keeping the emphasis that word already had from the skew.
+ */
+
+body.theme-arcade .site-logo {
+
+  filter:
+    drop-shadow(0 0 4px rgba(0, 255, 242, 0.8))
+    drop-shadow(0 0 10px rgba(0, 255, 242, 0.5));
+}
+
+body.theme-arcade h1 {
+
+  text-shadow:
+    0 0 4px rgba(0, 255, 242, 0.8),
+    0 0 12px rgba(0, 255, 242, 0.5),
+    0 0 24px rgba(0, 255, 242, 0.25);
+}
+
+body.theme-arcade .site-title-rewind {
+
+  text-shadow:
+    0 0 4px rgba(255, 47, 209, 0.9),
+    0 0 12px rgba(255, 47, 209, 0.6),
+    0 0 24px rgba(255, 47, 209, 0.35);
+}
+
+/*
+ * Reservation ribbon — same shape/position, just the red
+ * swapped for neon magenta with a glow.
+ */
+
+body.theme-arcade .reservation-ribbon::before {
+
+  background:
+    linear-gradient(
+      to bottom,
+      #ff2fd1,
+      #b5008f
+    );
+
+  box-shadow:
+    0 0 4px 1px rgba(255, 47, 209, 0.7),
+    0 2px 5px rgba(0, 0, 0, 0.45);
+}
+
+/*
+ * Focus rings — a real accessibility improvement riding
+ * along with the theme, not just decoration.
+ */
+
+body.theme-arcade .movie-card:focus-visible {
+
+  outline: none;
+
+  border-radius: 8px;
+
+  box-shadow:
+    0 0 0 3px rgba(0, 255, 242, 0.8),
+    0 0 14px 4px rgba(0, 255, 242, 0.5);
+}
+
+body.theme-arcade .filter:focus-visible,
+body.theme-arcade .action-filter:focus-visible,
+body.theme-arcade .icon-button:focus-visible,
+body.theme-arcade .reservation-filter:focus-visible {
+
+  outline: 2px solid #00fff2;
+
+  outline-offset: 2px;
+}
+
+/*
+ * Modal border — deliberately narrow in scope. The open/
+ * close flight animation controls box-shadow via inline
+ * styles in app.js (which always win over stylesheet rules
+ * regardless of specificity), so a CSS box-shadow here would
+ * get silently overridden the moment a movie opens. Using
+ * border-color plus filter:drop-shadow instead — neither is
+ * ever touched by that JS — avoids the conflict entirely
+ * rather than fighting it.
+ */
+
+body.theme-arcade .modal-content {
+
+  border-color: rgba(0, 255, 242, 0.4);
+
+  filter:
+    drop-shadow(0 0 8px rgba(0, 255, 242, 0.35))
+    drop-shadow(0 0 20px rgba(255, 47, 209, 0.2));
 }
