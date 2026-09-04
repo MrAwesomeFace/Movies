@@ -241,7 +241,7 @@ RESERVATION FILTER
     9px 34px 9px 13px;
 
   border:
-    1px solid var(--text);
+    1px solid var(--gold);
 
   border-radius: 999px;
 
@@ -288,19 +288,21 @@ RESERVATION FILTER
 }
 
 .reservation-filter.active {
+  background-color: var(--gold);
+
   border-color: var(--gold);
 
-  color: var(--gold);
+  color: #111111;
 
   background-image:
     linear-gradient(
       45deg,
       transparent 50%,
-      var(--gold) 50%
+      #111111 50%
     ),
     linear-gradient(
       135deg,
-      var(--gold) 50%,
+      #111111 50%,
       transparent 50%
     );
 }
