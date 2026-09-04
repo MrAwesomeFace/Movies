@@ -36,6 +36,10 @@ html {
   background: var(--background);
 }
 
+html.theme-arcade {
+  background: #05030a;
+}
+
 body {
   margin: 0;
 
@@ -88,6 +92,16 @@ HEADER
   justify-content: space-between;
 
   gap: 10px;
+}
+
+.header-icon-buttons {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  flex-shrink: 0;
 }
 
 .site-title {
@@ -2156,4 +2170,109 @@ REDUCED MOTION
 
   }
 
+}
+
+
+/* =========================================================
+ARCADE THEME (ALTERNATE — TOGGLEABLE)
+=========================================================
+Everything in this section is scoped under body.theme-arcade.
+That class is only ever added by the theme-toggle button in
+app.js — with it absent, nothing below can apply, so the
+default look is structurally unaffected regardless of what
+gets added here.
+
+STAGE 1 of the build: the toggle button's own styling, the
+brick-pattern wall background, ambient light spill, and the
+shelf's neon reskin (cyan board + magenta lip, matching the
+two-color combo from the original concept). Movie cases are
+intentionally untouched — this only reskins the environment
+around them. Pill/search glow states come in a later stage.
+
+One thing that changed from the original mockups: those were
+built as a single fixed-height "stage." The real site scrolls
+and stacks many shelf rows, so a perspective floor with its
+own horizon doesn't translate cleanly if repeated behind every
+row — multiple stacked horizons wouldn't read correctly. For
+now this stage ships the brick wall (which tiles correctly at
+any page length) and holds off on the zigzag floor until we've
+seen the brick wall live and can figure out the right one-time
+placement for it (e.g. as a single band below the last row)
+rather than guessing at it blind.
+========================================================= */
+
+#theme-toggle {
+  font-size: 20px;
+}
+
+body.theme-arcade {
+
+  --background: #05030a;
+
+  background-color: #05030a;
+
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='60'%3E%3Cline x1='0' y1='0' x2='90' y2='0' stroke='rgba(56,189,255,0.24)' stroke-width='1'/%3E%3Cline x1='0' y1='30' x2='90' y2='30' stroke='rgba(56,189,255,0.24)' stroke-width='1'/%3E%3Cline x1='0' y1='60' x2='90' y2='60' stroke='rgba(56,189,255,0.24)' stroke-width='1'/%3E%3Cline x1='0' y1='0' x2='0' y2='30' stroke='rgba(56,189,255,0.24)' stroke-width='1'/%3E%3Cline x1='90' y1='0' x2='90' y2='30' stroke='rgba(56,189,255,0.24)' stroke-width='1'/%3E%3Cline x1='45' y1='30' x2='45' y2='60' stroke='rgba(56,189,255,0.24)' stroke-width='1'/%3E%3C/svg%3E");
+
+  background-repeat: repeat;
+  background-size: 90px 60px;
+}
+
+/*
+ * Ambient cyan/magenta light spill — fixed so it doesn't
+ * repeat or scroll oddly with page length, sits behind all
+ * real content (z-index 0, main is z-index 1).
+ */
+
+body.theme-arcade::before {
+  content: "";
+
+  position: fixed;
+  inset: 0;
+
+  pointer-events: none;
+
+  z-index: 0;
+
+  background:
+    radial-gradient(
+      circle at 8% 15%,
+      rgba(0, 255, 242, 0.08) 0%,
+      rgba(0, 255, 242, 0) 45%
+    ),
+    radial-gradient(
+      circle at 92% 30%,
+      rgba(255, 47, 209, 0.07) 0%,
+      rgba(255, 47, 209, 0) 45%
+    );
+}
+
+/*
+ * Shelf reskin — same two-color cyan/magenta combo as the
+ * original neon-shelf concept. Only background/box-shadow
+ * are touched; position, sizing, and z-index (which handle
+ * the "holding the cases in place" effect) stay exactly as
+ * they are in the default theme.
+ */
+
+body.theme-arcade .shelf-board {
+
+  background: #0a0a0d;
+
+  background-image: none;
+
+  box-shadow:
+    0 0 5px 1px #00fff2,
+    0 0 14px 3px rgba(0, 255, 242, 0.55),
+    0 0 28px 7px rgba(0, 255, 242, 0.3),
+    0 12px 20px rgba(0, 0, 0, 0.7);
+}
+
+body.theme-arcade .shelf-lip {
+
+  background: #0a0a0d;
+
+  box-shadow:
+    0 0 5px 1px #ff2fd1,
+    0 0 12px 2px rgba(255, 47, 209, 0.55);
 }
