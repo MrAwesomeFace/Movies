@@ -95,6 +95,9 @@ document.getElementById("reservation-filter");
 const genreFilter =
 document.getElementById("genre-filter");
 
+const themeToggle =
+document.getElementById("theme-toggle");
+
 // =========================================================
 // CURRENT STATE
 // =========================================================
@@ -796,6 +799,47 @@ summary
 );
 
 }
+
+}
+
+// =========================================================
+// THEME TOGGLE (ARCADE MODE)
+// =========================================================
+
+/*
+
+* The class itself gets applied on load by the inline
+* script in index.html (before body renders, to avoid a
+* flash of the wrong theme) — this just handles the click
+* to flip it afterward, applied to both <html> and <body>
+* so both of their backgrounds switch (a CSS custom
+* property redefined on body doesn't cascade upward to an
+* ancestor like html, so html needs the class too).
+  */
+
+if (themeToggle) {
+
+themeToggle.addEventListener(
+"click",
+() => {
+
+const isArcade =
+document.body.classList.toggle(
+"theme-arcade"
+);
+
+document.documentElement.classList.toggle(
+"theme-arcade",
+isArcade
+);
+
+localStorage.setItem(
+"mrMoviesTheme",
+isArcade ? "arcade" : "default"
+);
+
+}
+);
 
 }
 
