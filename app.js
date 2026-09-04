@@ -1170,6 +1170,29 @@ ${colors[0]},
 ${colors[1]}
 )`;
 
+/*
+
+* No poster (no TMDB match, etc.) — show the title as
+* text on the gradient instead of a blank colored
+* rectangle, so the case is still identifiable. Fully
+* automatic: nothing to upload or map per movie.
+  */
+
+const fallbackTitle =
+document.createElement(
+"div"
+);
+
+fallbackTitle.className =
+"poster-fallback-title";
+
+fallbackTitle.textContent =
+movie.title;
+
+coverInner.appendChild(
+fallbackTitle
+);
+
 }
 
 const spine =
@@ -1772,6 +1795,21 @@ modalCover.style.background =
 ${colors[0]},
 ${colors[1]}
 )`;
+
+const fallbackTitle =
+document.createElement(
+"div"
+);
+
+fallbackTitle.className =
+"poster-fallback-title poster-fallback-title-large";
+
+fallbackTitle.textContent =
+movie.title;
+
+modalCover.appendChild(
+fallbackTitle
+);
 
 }
 
