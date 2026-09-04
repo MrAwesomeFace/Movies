@@ -284,6 +284,54 @@ String(movieId)
 }
 
 // =========================================================
+// UPDATE RESERVATION COUNTS IN THE DROPDOWN
+// =========================================================
+
+/*
+
+* Rewrites each person's <option> label to include how
+* many movies they currently have reserved, e.g.
+* "Bryon (3)". Called any time the local `reservations`
+* array changes — after the initial load, and after any
+* add/remove.
+  */
+
+function updateReservationCounts() {
+
+if (!reservationFilter) {
+
+return;
+
+}
+
+RESERVATION_PEOPLE.forEach(
+person => {
+
+const count =
+reservations.filter(
+reservation =>
+reservation.reserved_for ===
+person
+).length;
+
+const option =
+reservationFilter.querySelector(
+`option[value="${person}"]`
+);
+
+if (option) {
+
+option.textContent =
+`${person} (${count})`;
+
+}
+
+}
+);
+
+}
+
+// =========================================================
 // LOAD RESERVATIONS
 // =========================================================
 
@@ -316,6 +364,8 @@ Array.isArray(data)
 ? data
 : [];
 
+updateReservationCounts();
+
 /*
 
 * Do not rebuild the shelf while a movie is open.
@@ -343,6 +393,8 @@ error
 );
 
 reservations = [];
+
+updateReservationCounts();
 
 }
 
@@ -424,6 +476,8 @@ data.updated_at
 
 }
 
+updateReservationCounts();
+
 updateReservationPanel(
 movie
 );
@@ -496,6 +550,8 @@ item =>
 String(item.id) !==
 String(reservation.id)
 );
+
+updateReservationCounts();
 
 updateReservationPanel(
 movie
@@ -2516,6 +2572,11 @@ activeFilters.genre =
 event.target.value ||
 null;
 
+genreFilter.classList.toggle(
+"active",
+event.target.value !== ""
+);
+
 if (randomMode) {
 
 generateRandomMovies();
@@ -2541,6 +2602,11 @@ event => {
 
 activeFilters.reservation =
 event.target.value;
+
+reservationFilter.classList.toggle(
+"active",
+event.target.value !== "all"
+);
 
 if (randomMode) {
 
