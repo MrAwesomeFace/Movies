@@ -153,6 +153,54 @@ const coverColors = [
 ];
 
 // =========================================================
+// HEX TO RGBA
+// =========================================================
+
+/*
+
+* Used for the arcade theme's per-case glow tint — converts
+* one of a card's own palette colors into an rgba() string
+* at a given alpha, so the glow is set as a real color value
+* rather than needing a second parallel palette maintained
+* just for glow tints.
+  */
+
+function hexToRgba(
+hex,
+alpha
+) {
+
+const parsed =
+hex.replace(
+"#",
+""
+);
+
+const r =
+parseInt(
+parsed.substring(0, 2),
+16
+);
+
+const g =
+parseInt(
+parsed.substring(2, 4),
+16
+);
+
+const b =
+parseInt(
+parsed.substring(4, 6),
+16
+);
+
+return (
+`rgba(${r}, ${g}, ${b}, ${alpha})`
+);
+
+}
+
+// =========================================================
 // SPINE COLOR (MUTED VERSION OF THE PALETTE)
 // =========================================================
 
@@ -803,6 +851,217 @@ summary
 }
 
 // =========================================================
+// ARCADE THEME — SIDE LIGHTING
+// =========================================================
+
+/*
+
+* Three shape templates: two different zigzag/bolt variants
+* and the rewind-logo's own double-arrow, drawn as neon-tube
+* outlines (stroke, not fill) so they read as light rather
+* than flat icons. Each placed instance gets its own random
+* shape choice, color, horizontal flip, slight rotation, and
+* vertical spacing — a single repeating CSS tile can't do
+* any of that, since every repeat of it is identical.
+*
+* Movie reel, VHS tape, and DVD disc added for more variety
+* in what CAN show up — density stays the same, only the
+* pool of possible shapes got bigger.
+  */
+
+const ARCADE_SIDE_SHAPE_TEMPLATES = [
+
+color =>
+`<svg width="60" height="180" viewBox="0 0 30 90">` +
+`<polyline points="20,5 8,35 18,38 4,85" fill="none" ` +
+`stroke="${color}" stroke-width="2.5" stroke-linecap="round" ` +
+`stroke-linejoin="round"/></svg>`,
+
+color =>
+`<svg width="60" height="180" viewBox="0 0 30 90">` +
+`<polyline points="6,5 22,30 10,34 26,85" fill="none" ` +
+`stroke="${color}" stroke-width="2.5" stroke-linecap="round" ` +
+`stroke-linejoin="round"/></svg>`,
+
+color =>
+`<svg width="60" height="60" viewBox="0 0 32 32">` +
+`<path d="M16 16 L28 6 L28 26 Z" fill="none" stroke="${color}" ` +
+`stroke-width="2"/>` +
+`<path d="M4 16 L16 6 L16 26 Z" fill="none" stroke="${color}" ` +
+`stroke-width="2"/></svg>`,
+
+// Movie reel — rim, three spool holes, center hub
+
+color =>
+`<svg width="68" height="68" viewBox="0 0 34 34">` +
+`<circle cx="17" cy="17" r="15" fill="none" stroke="${color}" ` +
+`stroke-width="2"/>` +
+`<circle cx="17" cy="8" r="3.2" fill="none" stroke="${color}" ` +
+`stroke-width="2"/>` +
+`<circle cx="25" cy="20" r="3.2" fill="none" stroke="${color}" ` +
+`stroke-width="2"/>` +
+`<circle cx="9" cy="20" r="3.2" fill="none" stroke="${color}" ` +
+`stroke-width="2"/>` +
+`<circle cx="17" cy="17" r="2" fill="none" stroke="${color}" ` +
+`stroke-width="2"/></svg>`,
+
+// VHS tape — cassette body with two spool windows
+
+color =>
+`<svg width="92" height="60" viewBox="0 0 46 30">` +
+`<rect x="2" y="2" width="42" height="26" rx="3" fill="none" ` +
+`stroke="${color}" stroke-width="2"/>` +
+`<circle cx="14" cy="15" r="6" fill="none" stroke="${color}" ` +
+`stroke-width="2"/>` +
+`<circle cx="32" cy="15" r="6" fill="none" stroke="${color}" ` +
+`stroke-width="2"/></svg>`,
+
+// DVD disc — outer rim, center hole. No middle data ring —
+// that read as visual noise rather than a disc.
+
+color =>
+`<svg width="68" height="68" viewBox="0 0 34 34">` +
+`<circle cx="17" cy="17" r="15" fill="none" stroke="${color}" ` +
+`stroke-width="2"/>` +
+`<circle cx="17" cy="17" r="2.5" fill="none" stroke="${color}" ` +
+`stroke-width="2"/></svg>`
+
+];
+
+const ARCADE_SIDE_COLORS = [
+"#00fff2",
+"#ff2fd1"
+];
+
+function renderArcadeSideLighting() {
+
+const leftContainer =
+document.getElementById(
+"arcade-side-lighting-left"
+);
+
+const rightContainer =
+document.getElementById(
+"arcade-side-lighting-right"
+);
+
+if (!leftContainer || !rightContainer) {
+
+return;
+
+}
+
+leftContainer.innerHTML =
+"";
+
+rightContainer.innerHTML =
+"";
+
+if (
+!document.body.classList.contains(
+"theme-arcade"
+)
+) {
+
+return;
+
+}
+
+if (window.innerWidth < 1300) {
+
+return;
+
+}
+
+const totalHeight =
+document.body.scrollHeight;
+
+[leftContainer, rightContainer].forEach(
+container => {
+
+let position =
+150;
+
+while (position < totalHeight - 100) {
+
+const shapeIndex =
+Math.floor(
+Math.random() *
+ARCADE_SIDE_SHAPE_TEMPLATES.length
+);
+
+const template =
+ARCADE_SIDE_SHAPE_TEMPLATES[
+shapeIndex
+];
+
+const color =
+ARCADE_SIDE_COLORS[
+Math.floor(
+Math.random() *
+ARCADE_SIDE_COLORS.length
+)
+];
+
+const flip =
+Math.random() < 0.5
+? -1
+: 1;
+
+/*
+
+* The VHS tape (index 4) is a solid wide rectangle, so
+* its full width is what has to fit in the narrow side
+* margin. Rotating it near-vertical instead of the usual
+* subtle wobble swaps its effective horizontal footprint
+* down to roughly its height instead of its width — so it
+* can stay full-size instead of needing to be shrunk.
+  */
+
+const isVhsTape =
+shapeIndex === 4;
+
+const rotate =
+isVhsTape
+? (85 + Math.random() * 10).toFixed(1)
+: (Math.random() * 20 - 10).toFixed(1);
+
+const wrapper =
+document.createElement(
+"div"
+);
+
+wrapper.className =
+"arcade-side-icon";
+
+wrapper.style.top =
+`${position}px`;
+
+wrapper.style.transform =
+`scaleX(${flip}) rotate(${rotate}deg)`;
+
+wrapper.style.filter =
+`drop-shadow(0 0 4px ${color}) ` +
+`drop-shadow(0 0 9px ${color})`;
+
+wrapper.innerHTML =
+template(color);
+
+container.appendChild(
+wrapper
+);
+
+position +=
+380 + Math.random() * 240;
+
+}
+
+}
+);
+
+}
+
+// =========================================================
 // THEME TOGGLE (ARCADE MODE)
 // =========================================================
 
@@ -838,6 +1097,8 @@ localStorage.setItem(
 isArcade ? "arcade" : "default"
 );
 
+renderArcadeSideLighting();
+
 }
 );
 
@@ -850,6 +1111,8 @@ isArcade ? "arcade" : "default"
 renderMovies();
 
 loadReservations();
+
+renderArcadeSideLighting();
 
 // =========================================================
 // RENDER MOVIES
@@ -1077,6 +1340,22 @@ board.className =
 board.style.top =
 `${rowBottom}px`;
 
+/*
+
+* Random negative delay so each row's flicker is out of
+* phase with the others — without this, every board runs
+* the exact same 4.5s cycle in perfect lockstep, which
+* reads as artificial. A negative delay (rather than a
+* positive one) desyncs immediately on the first frame
+* instead of only after the first cycle completes. Only
+* matters in the arcade theme (default theme has no
+* flicker animation on .shelf-board to begin with), so
+* this is harmless either way.
+  */
+
+board.style.animationDelay =
+`-${(Math.random() * 4.5).toFixed(2)}s`;
+
 const lip =
 document.createElement(
 "div"
@@ -1121,7 +1400,13 @@ movieGrid.firstChild
 function scheduleShelfUpdate() {
 
 requestAnimationFrame(
-updateShelves
+() => {
+
+updateShelves();
+
+renderArcadeSideLighting();
+
+}
 );
 
 }
@@ -1182,6 +1467,19 @@ document.createElement(
 
 cover.className =
 "movie-cover";
+
+/*
+
+* Arcade theme's per-case glow — set unconditionally (a
+* no-op in the default theme, since nothing there reads
+* this property) rather than only inside an arcade check,
+* keeping this in one place instead of two code paths.
+  */
+
+cover.style.setProperty(
+"--glow-color",
+hexToRgba(colors[1], 0.55)
+);
 
 const coverInner =
 document.createElement(
