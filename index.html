@@ -22,6 +22,15 @@
 
 <body>
 
+<script>
+  (function () {
+    if (localStorage.getItem("mrMoviesTheme") === "arcade") {
+      document.documentElement.classList.add("theme-arcade");
+      document.body.classList.add("theme-arcade");
+    }
+  })();
+</script>
+
   <header class="site-header">
 
 <div class="header-top">
@@ -46,6 +55,22 @@
     <p id="movie-count">Loading collection...</p>
   </div>
 
+<div class="header-icon-buttons">
+
+<button
+id="theme-toggle"
+class="icon-button"
+aria-label="Toggle arcade theme"
+title="Toggle arcade theme"
+
+>
+
+
+🕹️
+
+
+  </button>
+
 <button
 id="search-toggle"
 class="icon-button"
@@ -58,6 +83,8 @@ aria-label="Search"
 
 
   </button>
+
+</div>
 
 </div>
 
