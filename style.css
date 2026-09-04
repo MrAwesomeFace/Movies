@@ -128,7 +128,7 @@ SEARCH
   padding: 12px 14px;
 
   border:
-    1px solid var(--border);
+    1px solid var(--gold-dark);
 
   border-radius: 12px;
 
@@ -141,7 +141,10 @@ SEARCH
 }
 
 #search-input:focus {
-  border-color: #666666;
+  border-color: var(--gold);
+
+  box-shadow:
+    0 0 0 3px rgba(251, 205, 54, 0.15);
 }
 
 
@@ -160,12 +163,12 @@ button {
   flex-shrink: 0;
 
   border:
-    1px solid var(--border);
+    1px solid var(--gold);
 
   border-radius: 50%;
 
-  background: var(--surface);
-  color: var(--text);
+  background: transparent;
+  color: var(--gold);
 
   font-size: 18px;
 
@@ -238,7 +241,7 @@ RESERVATION FILTER
     9px 34px 9px 13px;
 
   border:
-    1px solid var(--gold);
+    1px solid var(--text);
 
   border-radius: 999px;
 
@@ -250,11 +253,11 @@ RESERVATION FILTER
     linear-gradient(
       45deg,
       transparent 50%,
-      var(--gold) 50%
+      var(--text) 50%
     ),
     linear-gradient(
       135deg,
-      var(--gold) 50%,
+      var(--text) 50%,
       transparent 50%
     );
 
@@ -268,7 +271,7 @@ RESERVATION FILTER
 
   background-repeat: no-repeat;
 
-  color: var(--gold);
+  color: var(--text);
 
   font-size: 13px;
   font-weight: 600;
@@ -284,9 +287,27 @@ RESERVATION FILTER
   border-color: var(--gold-dark);
 }
 
+.reservation-filter.active {
+  border-color: var(--gold);
+
+  color: var(--gold);
+
+  background-image:
+    linear-gradient(
+      45deg,
+      transparent 50%,
+      var(--gold) 50%
+    ),
+    linear-gradient(
+      135deg,
+      var(--gold) 50%,
+      transparent 50%
+    );
+}
+
 .reservation-filter option {
   background: #071433;
-  color: var(--gold);
+  color: var(--text);
 }
 
 
