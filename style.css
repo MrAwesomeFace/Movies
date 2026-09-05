@@ -104,6 +104,14 @@ HEADER
   flex-shrink: 0;
 }
 
+.marquee-frame {
+  position: relative;
+
+  display: inline-flex;
+
+  padding: 12px 28px;
+}
+
 .site-title {
   display: flex;
 
@@ -149,7 +157,7 @@ h1 {
 }
 
 #movie-count {
-  margin: 4px 0 0;
+  margin: 14px 0 0;
 
   color: #d0d9ee;
 
@@ -707,6 +715,10 @@ MOVIE COVER / SHELF AREA
   width: 100%;
 
   aspect-ratio: 2 / 3;
+
+  filter:
+    drop-shadow(0 0 4px rgba(251, 205, 54, 0.35))
+    drop-shadow(0 0 10px rgba(251, 205, 54, 0.17));
 
   overflow: visible;
 }
@@ -1831,17 +1843,25 @@ RESERVATION SECTION
  * Reservation buttons are created dynamically by app.js.
  */
 
-.reservation-controls {
+.reservation-people {
 
   display: flex;
 
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 
   gap: 7px;
 
+  overflow-x: auto;
+
+  scrollbar-width: none;
 }
 
-.reservation-person-button,
+.reservation-people::-webkit-scrollbar {
+
+  display: none;
+}
+
+.reservation-person,
 .reservation-off-button {
 
   padding:
@@ -1871,7 +1891,7 @@ RESERVATION SECTION
 
 }
 
-.reservation-person-button:hover,
+.reservation-person:hover,
 .reservation-off-button:hover {
 
   border-color:
@@ -1879,7 +1899,7 @@ RESERVATION SECTION
 
 }
 
-.reservation-person-button:active,
+.reservation-person:active,
 .reservation-off-button:active {
 
   transform:
@@ -1893,7 +1913,7 @@ RESERVATION SECTION
  * currently has the movie reserved.
  */
 
-.reservation-person-button.reserved {
+.reservation-person.reserved {
 
   background:
     var(--reservation-red);
@@ -2643,4 +2663,355 @@ body.theme-arcade .modal-content {
   filter:
     drop-shadow(0 0 8px rgba(0, 255, 242, 0.35))
     drop-shadow(0 0 20px rgba(255, 47, 209, 0.2));
+}
+
+
+/* =========================================================
+COIN SLOT
+=========================================================
+Faint (opacity only, no glow at all) until 23 seconds on
+the site, then it lights up and pulses — a small easter
+egg meant to be noticed through curiosity, not a toolbar
+feature. Timer is in app.js and runs from page load
+regardless of theme, so switching into arcade mode after
+already being on the site a while shows it already lit
+rather than restarting the wait.
+========================================================= */
+
+.coin-slot-button {
+  display: none;
+}
+
+body.theme-arcade .coin-slot-button {
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: transparent;
+
+  border: none;
+
+  padding: 0;
+
+  cursor: pointer;
+
+  opacity: 0.35;
+}
+
+body.theme-arcade .coin-slot-button svg {
+  display: block;
+}
+
+body.theme-arcade .coin-slot-button.lit {
+
+  opacity: 1;
+
+  animation: coin-slot-pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes coin-slot-pulse {
+
+  0%, 100% {
+
+    filter:
+      drop-shadow(0 0 4px rgba(255, 20, 40, 0.6))
+      drop-shadow(0 0 10px rgba(255, 20, 40, 0.4))
+      drop-shadow(0 0 18px rgba(255, 20, 40, 0.2));
+  }
+
+  50% {
+
+    filter:
+      drop-shadow(0 0 5px rgba(255, 20, 40, 1))
+      drop-shadow(0 0 14px rgba(255, 20, 40, 0.75))
+      drop-shadow(0 0 26px rgba(255, 20, 40, 0.45));
+  }
+
+}
+
+/*
+ * The "power surge" flash on click — a full-screen white
+ * strobe rather than trying to individually re-trigger every
+ * separate glowing element's own animation (shelves, pills,
+ * header, side lighting all have different, unrelated CSS).
+ * Naturally inert everywhere: opacity starts at 0 and only
+ * .active (added by the coin slot's click handler) plays the
+ * animation, and that handler is only reachable through a
+ * button that doesn't exist outside arcade mode.
+ */
+
+#coin-flicker-overlay {
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 200;
+
+  background:
+    linear-gradient(
+      115deg,
+      rgba(0, 255, 242, 0.55) 0%,
+      rgba(0, 255, 242, 0.75) 15%,
+      rgba(255, 255, 255, 0.92) 40%,
+      rgba(255, 47, 209, 0.78) 65%,
+      rgba(255, 47, 209, 0.55) 100%
+    );
+
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+#coin-flicker-overlay.active {
+
+  animation: coin-flicker-flash 0.9s steps(1, end);
+}
+
+@keyframes coin-flicker-flash {
+
+  0% { opacity: 0; }
+  8% { opacity: 0.85; }
+  16% { opacity: 0.08; }
+  24% { opacity: 0.9; }
+  33% { opacity: 0.05; }
+  44% { opacity: 0.7; }
+  56% { opacity: 0; }
+  70% { opacity: 0.5; }
+  85% { opacity: 0; }
+  100% { opacity: 0; }
+
+}
+
+
+/* =========================================================
+CASE BACK
+=========================================================
+The default cream/tan back (styled to look like a physical
+DVD insert) never got touched by any of this — flipping a
+case in arcade mode landed you on a bright, default-looking
+page in the middle of an otherwise all-dark theme. Black
+background, white body text, cyan accents on the title and
+section labels for a bit of the same color language as
+everything else.
+
+Follow-on fixes below are necessary, not scope creep: a few
+things (the format-item overlay, the reservation buttons)
+were tuned for a light background and would be flatly
+unreadable — an rgba(0,0,0,0.08) overlay on black is
+invisible — sitting on black instead.
+========================================================= */
+
+body.theme-arcade .movie-back {
+
+  background:
+    linear-gradient(
+      135deg,
+      #0a0a0d,
+      #05030a
+    );
+
+  color: #f5f5f5;
+}
+
+body.theme-arcade .back-content h2 {
+
+  color: #00fff2;
+
+  text-shadow:
+    0 0 6px rgba(0, 255, 242, 0.6);
+}
+
+body.theme-arcade .movie-info-section h3 {
+
+  color: #00fff2;
+}
+
+body.theme-arcade .movie-meta {
+
+  color: #9aa5bd;
+}
+
+body.theme-arcade .format-item {
+
+  background: rgba(255, 255, 255, 0.08);
+}
+
+body.theme-arcade #reservation-status {
+
+  color: #9aa5bd;
+}
+
+body.theme-arcade .reservation-person {
+
+  background: transparent;
+
+  border-color: rgba(0, 255, 242, 0.5);
+
+  color: #d7ddec;
+}
+
+body.theme-arcade .reservation-person:hover {
+
+  border-color: #00fff2;
+}
+
+body.theme-arcade .reservation-person.reserved {
+
+  background: rgba(255, 47, 209, 0.18);
+
+  border-color: #ff2fd1;
+
+  color: #fff0fa;
+}
+
+body.theme-arcade .reservation-off-button {
+
+  background: rgba(255, 255, 255, 0.06);
+
+  color: #9aa5bd;
+}
+
+
+/* =========================================================
+MARQUEE LIGHTS (DEFAULT THEME ONLY)
+=========================================================
+The opposite scoping direction from everything arcade —
+hidden specifically WHEN body.theme-arcade is present,
+visible otherwise. Static dim glow at rest; after 30s on
+the site a chase runs a few laps, then one bulb pops (with
+a screen flash) and the whole string settles into a random
+on/off pattern rather than resetting to fully lit — meant
+to read as "a real marquee sign with a couple of dead
+bulbs," not a clean, deliberate pattern.
+========================================================= */
+
+.marquee-bulb {
+
+  position: absolute;
+
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #7a5a1f;
+
+  box-shadow:
+    0 0 3px 1px rgba(255, 210, 74, 0.35);
+
+  pointer-events: none;
+
+  z-index: 5;
+
+  transition:
+    background 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+body.theme-arcade .marquee-bulb {
+
+  display: none;
+}
+
+.marquee-bulb.lit {
+
+  background: #fff2c4;
+
+  box-shadow:
+    0 0 6px 2px #ffd24a,
+    0 0 12px 4px rgba(255, 210, 74, 0.8);
+}
+
+.marquee-bulb.dead {
+
+  background: #2a2015;
+
+  box-shadow: none;
+}
+
+/*
+ * Warm gold/white flash for the pop — a separate overlay
+ * from the coin slot's cyan/magenta one, since this belongs
+ * to the default theme's own palette, not arcade's. Same
+ * inert-until-.active mechanism as that one.
+ */
+
+#marquee-pop-flash {
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 199;
+
+  background: rgba(255, 230, 160, 0.85);
+
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+#marquee-pop-flash.active {
+
+  animation: marquee-pop-flash-anim 0.5s steps(1, end);
+}
+
+@keyframes marquee-pop-flash-anim {
+
+  0% { opacity: 0; }
+  15% { opacity: 0.9; }
+  35% { opacity: 0.1; }
+  55% { opacity: 0.6; }
+  100% { opacity: 0; }
+
+}
+
+
+/* =========================================================
+MARQUEE RESET BUTTON
+=========================================================
+Sits in the same layout slot as the coin slot, opposite
+scoping (visible default, hidden arcade) — the two never
+appear at once, so they naturally share that spot. Subtly
+muted at all times rather than a timed reveal like the coin
+slot, since the ask here was just "unobtrusive," not
+"hidden until discovered."
+========================================================= */
+
+body.theme-arcade .marquee-reset-button {
+
+  display: none;
+}
+
+.marquee-reset-button {
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: transparent;
+
+  border: none;
+
+  padding: 0;
+
+  cursor: pointer;
+
+  opacity: 0.2;
+
+  transition: opacity 0.15s ease;
+}
+
+.marquee-reset-button:hover {
+
+  opacity: 0.75;
+}
+
+.marquee-reset-button svg {
+
+  display: block;
 }
