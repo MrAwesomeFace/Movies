@@ -60,6 +60,20 @@
 <div class="header-icon-buttons">
 
 <button
+id="mobile-filters-toggle"
+class="icon-button mobile-only-icon"
+aria-label="Show filters"
+aria-expanded="false"
+
+>
+
+
+☰
+
+
+  </button>
+
+<button
 id="theme-toggle"
 class="icon-button"
 aria-label="Toggle arcade theme"
@@ -82,6 +96,28 @@ aria-label="Search"
 
 
 🔍
+
+
+  </button>
+
+<button
+id="coin-slot-button-mobile"
+class="coin-slot-button-mobile mobile-only-icon"
+aria-label="Insert coin"
+
+>
+25&#162;
+</button>
+
+<button
+id="marquee-reset-button-mobile"
+class="marquee-reset-button-mobile mobile-only-icon"
+aria-label="Reset marquee lights"
+
+>
+
+
+💡
 
 
   </button>
@@ -131,6 +167,8 @@ autocomplete="off"
     nothing dedicated to click for "all" instead.
   -->
 
+  <div class="type-pills-wrap">
+
   <button
     class="filter active"
     data-filter-group="type"
@@ -155,12 +193,14 @@ autocomplete="off"
     Misc
   </button>
 
-  <div class="filter-divider">
+  </div>
+
+  <div class="filter-divider media-divider">
     |
   </div>
 
   <button
-    class="filter"
+    class="filter media-pill"
     data-filter-group="media"
     data-filter-value="physical"
   >
@@ -168,7 +208,7 @@ autocomplete="off"
   </button>
 
   <button
-    class="filter"
+    class="filter media-pill"
     data-filter-group="media"
     data-filter-value="digital"
   >
@@ -191,12 +231,22 @@ autocomplete="off"
       Staff Picks
     </button>
 
-    <button
-      id="show-all-button"
-      class="filter action-filter"
+    <label
+      for="media-filter-mobile"
+      class="visually-hidden"
     >
-      Show All
-    </button>
+      Format
+    </label>
+
+    <select
+      id="media-filter-mobile"
+      class="reservation-filter mobile-only-filter"
+      aria-label="Filter movies by format"
+    >
+      <option value="all">All Formats</option>
+      <option value="physical">Physical</option>
+      <option value="digital">Digital</option>
+    </select>
 
     <button
       id="coin-slot-button"
@@ -229,7 +279,7 @@ autocomplete="off"
 
   </div>
 
-  <div class="filter-group reservation-filter-wrapper">
+  <div class="filter-group reservation-filter-wrapper mobile-collapsible">
 
     <label
       for="reservation-filter"
@@ -290,12 +340,12 @@ autocomplete="off"
 </div>
 
 
-<div class="filter-divider">
+<div class="filter-divider category-divider mobile-collapsible">
   |
 </div>
 
 
-<div class="filter-group">
+<div class="filter-group category-group mobile-collapsible">
 
   <button
     class="filter category-filter"
