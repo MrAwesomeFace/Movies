@@ -86,9 +86,6 @@ document.getElementById("flip-button");
 const randomButton =
 document.getElementById("random-button");
 
-const showAllButton =
-document.getElementById("show-all-button");
-
 const reservationFilter =
 document.getElementById("reservation-filter");
 
@@ -103,6 +100,18 @@ document.getElementById("coin-slot-button");
 
 const coinFlickerOverlay =
 document.getElementById("coin-flicker-overlay");
+
+const mobileFiltersToggle =
+document.getElementById("mobile-filters-toggle");
+
+const coinSlotButtonMobile =
+document.getElementById("coin-slot-button-mobile");
+
+const marqueeResetButtonMobile =
+document.getElementById("marquee-reset-button-mobile");
+
+const mediaFilterMobile =
+document.getElementById("media-filter-mobile");
 
 // =========================================================
 // CURRENT STATE
@@ -1199,6 +1208,47 @@ isArcade ? "arcade" : "default"
 );
 
 renderArcadeSideLighting();
+
+}
+);
+
+}
+
+// =========================================================
+// MOBILE FILTERS TOGGLE
+// =========================================================
+
+/*
+
+* Mobile-only — reveals Type, Category, and Reservations,
+* which are hidden by default on phones (see the PHONES
+* media query in style.css) to keep the header from being
+* three full scrolling rows before you've even seen a
+* movie. Genre, the Media dropdown, and Staff Picks stay
+* visible regardless, since those were the ones worth
+* keeping immediately reachable.
+  */
+
+if (mobileFiltersToggle) {
+
+mobileFiltersToggle.addEventListener(
+"click",
+() => {
+
+const isOpen =
+document.body.classList.toggle(
+"mobile-filters-open"
+);
+
+mobileFiltersToggle.classList.toggle(
+"active",
+isOpen
+);
+
+mobileFiltersToggle.setAttribute(
+"aria-expanded",
+isOpen ? "true" : "false"
+);
 
 }
 );
@@ -2915,29 +2965,14 @@ value
 activeFilters.media =
 "all";
 
-button.classList.remove(
-"active"
-);
-
 } else {
 
 activeFilters.media =
 value;
 
-document
-.querySelectorAll(
-'[data-filter-group="media"]'
-)
-.forEach(
-b =>
-b.classList.toggle(
-"active",
-b.dataset.filterValue ===
-value
-)
-);
-
 }
+
+syncMediaFilterUI();
 
 }
 
@@ -3031,6 +3066,69 @@ renderMovies();
 
 }
 );
+
+// =========================================================
+// MEDIA FILTER SYNC (PILLS + MOBILE DROPDOWN)
+// =========================================================
+
+/*
+
+* Media has two different controls now — desktop pills and
+* a mobile dropdown — that both drive the same
+* activeFilters.media value. Whichever one changes, this
+* keeps the OTHER one visually consistent too, so a mid-
+* session resize (going from mobile width to desktop width
+* or back) never leaves the now-visible control looking
+* stale relative to what's actually filtered.
+  */
+
+function syncMediaFilterUI() {
+
+document
+.querySelectorAll(
+'[data-filter-group="media"]'
+)
+.forEach(
+b =>
+b.classList.toggle(
+"active",
+b.dataset.filterValue ===
+activeFilters.media
+)
+);
+
+if (mediaFilterMobile) {
+
+mediaFilterMobile.value =
+activeFilters.media;
+
+}
+
+}
+
+if (mediaFilterMobile) {
+
+mediaFilterMobile.addEventListener(
+"change",
+event => {
+
+activeFilters.media =
+event.target.value;
+
+syncMediaFilterUI();
+
+if (randomMode) {
+
+generateRandomMovies();
+
+}
+
+renderMovies();
+
+}
+);
+
+}
 
 // =========================================================
 // GENRE DROPDOWN
@@ -3440,8 +3538,19 @@ shuffled.slice(
 }
 
 // =========================================================
-// RANDOM 16 BUTTON
+// STAFF PICKS / SHOW ALL (MERGED TOGGLE)
 // =========================================================
+
+/*
+
+* One button doing what used to be two — "Show All" only
+* ever had one job (undo Staff Picks), which made it a
+* toggle already, just built as two separate buttons. The
+* label describes what clicking it does NEXT, not the
+* current state (like a play/pause button showing "Pause"
+* while playing) — Staff Picks -> tap -> Show All -> tap ->
+* back to Staff Picks.
+  */
 
 if (randomButton) {
 
@@ -3450,46 +3559,34 @@ randomButton.addEventListener(
 () => {
 
 randomMode =
-true;
+!randomMode;
+
+if (randomMode) {
 
 generateRandomMovies();
 
-renderMovies();
+randomButton.textContent =
+"Show All";
 
 randomButton.classList.add(
 "active"
 );
 
-}
-);
-
-}
-
-// =========================================================
-// SHOW ALL BUTTON
-// =========================================================
-
-if (showAllButton) {
-
-showAllButton.addEventListener(
-"click",
-() => {
-
-randomMode =
-false;
+} else {
 
 randomMovies =
 [];
 
-renderMovies();
-
-if (randomButton) {
+randomButton.textContent =
+"Staff Picks";
 
 randomButton.classList.remove(
 "active"
 );
 
 }
+
+renderMovies();
 
 }
 );
@@ -3941,11 +4038,7 @@ document.getElementById(
 "marquee-reset-button"
 );
 
-if (marqueeResetButton) {
-
-marqueeResetButton.addEventListener(
-"click",
-() => {
+function triggerMarqueeReset() {
 
 clearInterval(
 marqueeChaseInterval
@@ -3959,6 +4052,21 @@ buildMarqueeBulbs();
 scheduleMarqueeChase();
 
 }
+
+if (marqueeResetButton) {
+
+marqueeResetButton.addEventListener(
+"click",
+triggerMarqueeReset
+);
+
+}
+
+if (marqueeResetButtonMobile) {
+
+marqueeResetButtonMobile.addEventListener(
+"click",
+triggerMarqueeReset
 );
 
 }
@@ -3989,6 +4097,14 @@ coinSlotButton.classList.add(
 
 }
 
+if (coinSlotButtonMobile) {
+
+coinSlotButtonMobile.classList.add(
+"lit"
+);
+
+}
+
 },
 23000
 );
@@ -3996,11 +4112,7 @@ coinSlotButton.classList.add(
 let coinSlotBusy =
 false;
 
-if (coinSlotButton) {
-
-coinSlotButton.addEventListener(
-"click",
-() => {
+function triggerCoinSlot() {
 
 /*
 
@@ -4094,6 +4206,21 @@ false;
 );
 
 }
+
+if (coinSlotButton) {
+
+coinSlotButton.addEventListener(
+"click",
+triggerCoinSlot
+);
+
+}
+
+if (coinSlotButtonMobile) {
+
+coinSlotButtonMobile.addEventListener(
+"click",
+triggerCoinSlot
 );
 
 }
