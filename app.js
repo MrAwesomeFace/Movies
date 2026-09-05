@@ -1215,6 +1215,108 @@ renderArcadeSideLighting();
 }
 
 // =========================================================
+// GENRE RELOCATION (MOBILE ONLY)
+// =========================================================
+
+/*
+
+* Genre can't just be shown/hidden with CSS to land in the
+* kept row on mobile — it lives in a genuinely different
+* parent container than Staff Picks in the HTML, and CSS
+* can only reorder siblings that already share one parent.
+* This physically moves the SAME element back and forth
+* (never duplicates it) as the screen crosses the mobile
+* breakpoint, so there's exactly one genre-filter-group in
+* the DOM at all times, just relocated.
+  */
+
+function relocateGenreForMobile() {
+
+const genreGroup =
+document.getElementById(
+"genre-filter-group"
+);
+
+const actionsTop =
+document.querySelector(
+".filter-group-actions-top"
+);
+
+const genreCategoryLeft =
+document.querySelector(
+".genre-category-left"
+);
+
+if (
+!genreGroup ||
+!actionsTop ||
+!genreCategoryLeft
+) {
+
+return;
+
+}
+
+const isMobile =
+window.innerWidth <= 599;
+
+if (
+isMobile &&
+genreGroup.parentElement !==
+actionsTop
+) {
+
+actionsTop.insertBefore(
+genreGroup,
+actionsTop.firstChild
+);
+
+document.body.classList.add(
+"genre-relocated"
+);
+
+} else if (
+!isMobile &&
+genreGroup.parentElement ===
+actionsTop
+) {
+
+genreCategoryLeft.insertBefore(
+genreGroup,
+genreCategoryLeft.firstChild
+);
+
+document.body.classList.remove(
+"genre-relocated"
+);
+
+}
+
+}
+
+relocateGenreForMobile();
+
+let genreRelocateResizeTimeout =
+null;
+
+window.addEventListener(
+"resize",
+() => {
+
+clearTimeout(
+genreRelocateResizeTimeout
+);
+
+genreRelocateResizeTimeout =
+setTimeout(
+relocateGenreForMobile,
+150
+);
+
+}
+);
+
+// =========================================================
 // MOBILE FILTERS TOGGLE
 // =========================================================
 
@@ -3904,6 +4006,38 @@ flashOverlay.classList.add(
 
 /*
 
+* Reset button lights up 7 seconds after the bulbs
+* actually pop — tied to this real event rather than a
+* separately-estimated "23s plus however long the chase
+* ran" number, so it's always correct regardless of chase
+* timing.
+  */
+
+setTimeout(
+() => {
+
+if (marqueeResetButton) {
+
+marqueeResetButton.classList.add(
+"lit"
+);
+
+}
+
+if (marqueeResetButtonMobile) {
+
+marqueeResetButtonMobile.classList.add(
+"lit"
+);
+
+}
+
+},
+7000
+);
+
+/*
+
 * Independent random per bulb naturally produces the
 * irregular clumpy look asked for (a couple on, one off,
 * a few off) — no special clustering logic needed, that's
@@ -4050,6 +4184,78 @@ false;
 buildMarqueeBulbs();
 
 scheduleMarqueeChase();
+
+/*
+
+* "Light turning on" — a single bright fade-in-then-out,
+* deliberately a different animation from the mid-sequence
+* pop's strobing flicker, so the two moments feel distinct
+* rather than reusing the exact same effect for two
+* different meanings.
+  */
+
+const flashOverlay =
+document.getElementById(
+"marquee-pop-flash"
+);
+
+if (flashOverlay) {
+
+flashOverlay.classList.remove(
+"light-on"
+);
+
+void flashOverlay.offsetWidth;
+
+flashOverlay.classList.add(
+"light-on"
+);
+
+}
+
+/*
+
+* Same random-card-click mechanic the coin slot already
+* uses — picks from whatever's actually on screen right
+* now, opened through the real flight animation rather
+* than a separate open path.
+  */
+
+setTimeout(
+() => {
+
+if (
+isOpening ||
+isClosing ||
+currentMovie
+) {
+
+return;
+
+}
+
+const cards =
+movieGrid.querySelectorAll(
+".movie-card"
+);
+
+if (cards.length > 0) {
+
+const randomCard =
+cards[
+Math.floor(
+Math.random() *
+cards.length
+)
+];
+
+randomCard.click();
+
+}
+
+},
+500
+);
 
 }
 
