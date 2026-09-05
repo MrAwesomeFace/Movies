@@ -98,6 +98,12 @@ document.getElementById("genre-filter");
 const themeToggle =
 document.getElementById("theme-toggle");
 
+const coinSlotButton =
+document.getElementById("coin-slot-button");
+
+const coinFlickerOverlay =
+document.getElementById("coin-flicker-overlay");
+
 // =========================================================
 // CURRENT STATE
 // =========================================================
@@ -767,12 +773,12 @@ button.classList.add(
 );
 
 button.textContent =
-`✓ ${person} — Reserved`;
+`✓ ${person}`;
 
 } else {
 
 button.textContent =
-`Reserve for ${person}`;
+person;
 
 }
 
@@ -884,7 +890,7 @@ color =>
 `stroke-linejoin="round"/></svg>`,
 
 color =>
-`<svg width="60" height="60" viewBox="0 0 32 32">` +
+`<svg width="78" height="78" viewBox="0 0 32 32">` +
 `<path d="M16 16 L28 6 L28 26 Z" fill="none" stroke="${color}" ` +
 `stroke-width="2"/>` +
 `<path d="M4 16 L16 6 L16 26 Z" fill="none" stroke="${color}" ` +
@@ -905,16 +911,21 @@ color =>
 `<circle cx="17" cy="17" r="2" fill="none" stroke="${color}" ` +
 `stroke-width="2"/></svg>`,
 
-// VHS tape — cassette body with two spool windows
+// VHS tape — cassette body, spool windows, and the
+// rectangular tape window between them that a real VHS
+// has — without it, two bare circles just read as a
+// speaker, not a tape.
 
 color =>
-`<svg width="92" height="60" viewBox="0 0 46 30">` +
-`<rect x="2" y="2" width="42" height="26" rx="3" fill="none" ` +
+`<svg width="112" height="60" viewBox="0 0 56 30">` +
+`<rect x="2" y="2" width="52" height="26" rx="3" fill="none" ` +
 `stroke="${color}" stroke-width="2"/>` +
-`<circle cx="14" cy="15" r="6" fill="none" stroke="${color}" ` +
+`<circle cx="14" cy="16" r="6" fill="none" stroke="${color}" ` +
 `stroke-width="2"/>` +
-`<circle cx="32" cy="15" r="6" fill="none" stroke="${color}" ` +
-`stroke-width="2"/></svg>`,
+`<circle cx="42" cy="16" r="6" fill="none" stroke="${color}" ` +
+`stroke-width="2"/>` +
+`<rect x="23" y="11" width="10" height="9" fill="none" ` +
+`stroke="${color}" stroke-width="2"/></svg>`,
 
 // DVD disc — outer rim, center hole. No middle data ring —
 // that read as visual noise rather than a disc.
@@ -924,7 +935,84 @@ color =>
 `<circle cx="17" cy="17" r="15" fill="none" stroke="${color}" ` +
 `stroke-width="2"/>` +
 `<circle cx="17" cy="17" r="2.5" fill="none" stroke="${color}" ` +
-`stroke-width="2"/></svg>`
+`stroke-width="2"/></svg>`,
+
+// Open clapboard — hinge, board with three label lines, and
+// the top stick genuinely rotated open (via an SVG <g>
+// transform around the hinge point) rather than just tilted,
+// with diagonal stripes across it.
+
+color =>
+`<svg width="90" height="104" viewBox="0 -8 50 58">` +
+`<rect x="6" y="20" width="38" height="28" rx="2" fill="none" ` +
+`stroke="${color}" stroke-width="2"/>` +
+`<line x1="10" y1="28" x2="40" y2="28" stroke="${color}" ` +
+`stroke-width="1"/>` +
+`<line x1="10" y1="34" x2="40" y2="34" stroke="${color}" ` +
+`stroke-width="1"/>` +
+`<line x1="10" y1="40" x2="40" y2="40" stroke="${color}" ` +
+`stroke-width="1"/>` +
+`<rect x="4" y="16" width="6" height="8" rx="1" fill="none" ` +
+`stroke="${color}" stroke-width="1.5"/>` +
+`<g transform="rotate(-25 8 20)">` +
+`<rect x="6" y="10" width="38" height="8" rx="2" fill="none" ` +
+`stroke="${color}" stroke-width="2"/>` +
+`<line x1="12" y1="10" x2="16" y2="18" stroke="${color}" ` +
+`stroke-width="1.5"/>` +
+`<line x1="20" y1="10" x2="24" y2="18" stroke="${color}" ` +
+`stroke-width="1.5"/>` +
+`<line x1="28" y1="10" x2="32" y2="18" stroke="${color}" ` +
+`stroke-width="1.5"/>` +
+`<line x1="36" y1="10" x2="40" y2="18" stroke="${color}" ` +
+`stroke-width="1.5"/>` +
+`</g></svg>`,
+
+// Film strip — square sprocket holes along the top and
+// bottom edges, two square frame windows in between. Wide
+// like the VHS, so it gets the same near-vertical rotation
+// treatment (see isFilmStrip below), just with more allowed
+// variance since it's a bigger, sturdier-looking shape.
+
+color =>
+`<svg width="120" height="78" viewBox="0 0 68 44">` +
+`<rect x="2" y="2" width="64" height="40" rx="2" fill="none" ` +
+`stroke="${color}" stroke-width="2"/>` +
+`<rect x="4" y="4" width="4" height="4" fill="none" ` +
+`stroke="${color}" stroke-width="1"/>` +
+`<rect x="12" y="4" width="4" height="4" fill="none" ` +
+`stroke="${color}" stroke-width="1"/>` +
+`<rect x="20" y="4" width="4" height="4" fill="none" ` +
+`stroke="${color}" stroke-width="1"/>` +
+`<rect x="28" y="4" width="4" height="4" fill="none" ` +
+`stroke="${color}" stroke-width="1"/>` +
+`<rect x="36" y="4" width="4" height="4" fill="none" ` +
+`stroke="${color}" stroke-width="1"/>` +
+`<rect x="44" y="4" width="4" height="4" fill="none" ` +
+`stroke="${color}" stroke-width="1"/>` +
+`<rect x="52" y="4" width="4" height="4" fill="none" ` +
+`stroke="${color}" stroke-width="1"/>` +
+`<rect x="60" y="4" width="4" height="4" fill="none" ` +
+`stroke="${color}" stroke-width="1"/>` +
+`<rect x="4" y="36" width="4" height="4" fill="none" ` +
+`stroke="${color}" stroke-width="1"/>` +
+`<rect x="12" y="36" width="4" height="4" fill="none" ` +
+`stroke="${color}" stroke-width="1"/>` +
+`<rect x="20" y="36" width="4" height="4" fill="none" ` +
+`stroke="${color}" stroke-width="1"/>` +
+`<rect x="28" y="36" width="4" height="4" fill="none" ` +
+`stroke="${color}" stroke-width="1"/>` +
+`<rect x="36" y="36" width="4" height="4" fill="none" ` +
+`stroke="${color}" stroke-width="1"/>` +
+`<rect x="44" y="36" width="4" height="4" fill="none" ` +
+`stroke="${color}" stroke-width="1"/>` +
+`<rect x="52" y="36" width="4" height="4" fill="none" ` +
+`stroke="${color}" stroke-width="1"/>` +
+`<rect x="60" y="36" width="4" height="4" fill="none" ` +
+`stroke="${color}" stroke-width="1"/>` +
+`<rect x="4" y="10" width="24" height="24" rx="2" fill="none" ` +
+`stroke="${color}" stroke-width="1.5"/>` +
+`<rect x="36" y="10" width="24" height="24" rx="2" fill="none" ` +
+`stroke="${color}" stroke-width="1.5"/></svg>`
 
 ];
 
@@ -1021,9 +1109,22 @@ Math.random() < 0.5
 const isVhsTape =
 shapeIndex === 4;
 
+/*
+
+* Film strip (index 7) is also wide, same reasoning as the
+* VHS — but bigger and sturdier-looking, so it gets more
+* allowed tilt variance (80-100 instead of VHS's tight
+* 85-95) without looking as rigidly locked to dead vertical.
+  */
+
+const isFilmStrip =
+shapeIndex === 7;
+
 const rotate =
 isVhsTape
 ? (85 + Math.random() * 10).toFixed(1)
+: isFilmStrip
+? (80 + Math.random() * 20).toFixed(1)
 : (Math.random() * 20 - 10).toFixed(1);
 
 const wrapper =
@@ -3389,6 +3490,608 @@ randomButton.classList.remove(
 );
 
 }
+
+}
+);
+
+}
+
+// =========================================================
+// MARQUEE LIGHTS (DEFAULT THEME ONLY)
+// =========================================================
+
+/*
+
+* Opposite of every arcade feature — these are hidden BY
+* CSS when body.theme-arcade is present, so building/timing
+* them regardless of theme is harmless; they simply won't be
+* visible while arcade mode is active.
+*
+* Bulb placement: computes ONE set of x-positions and ONE
+* set of y-positions, then uses each set for BOTH opposite
+* edges (reversed for the second one). That guarantees the
+* top and bottom edges always have identically-placed bulbs,
+* and same for left/right — the earlier version computed
+* each of the four edges independently with separate
+* start/stop math, which could quietly drift out of sync
+* with each other and leave gaps.
+  */
+
+let marqueeBulbs =
+[];
+
+let marqueeChaseInterval =
+null;
+
+let marqueePoppedOnce =
+false;
+
+function buildMarqueeBulbs() {
+
+const container =
+document.querySelector(
+".marquee-frame"
+);
+
+if (!container) {
+
+return;
+
+}
+
+container
+.querySelectorAll(
+".marquee-bulb"
+)
+.forEach(
+bulb =>
+bulb.remove()
+);
+
+const fw =
+container.offsetWidth;
+
+const fh =
+container.offsetHeight;
+
+const spacing =
+20;
+
+const inset =
+-8;
+
+const bulbSize =
+7;
+
+const half =
+bulbSize / 2;
+
+/*
+
+* Every position below is a bulb CENTER — converted to a
+* top-left CSS position uniformly at the very end, for every
+* bulb with no exceptions. The previous version compensated
+* for bulb size only at the bottom-edge corners (a "-7"
+* adjustment) but never on the interior points used for the
+* left/right edges — that mismatch between two different
+* conventions is exactly what made vertical edges look off
+* while horizontal ones (which never mixed conventions)
+* looked fine.
+  */
+
+const leftEdge =
+inset + half;
+
+const rightEdge =
+fw - inset - half;
+
+const topEdge =
+inset + half;
+
+const bottomEdge =
+fh - inset - half;
+
+const nx =
+Math.max(
+2,
+Math.round(
+(rightEdge - leftEdge) / spacing
+)
+);
+
+const ny =
+Math.max(
+2,
+Math.round(
+(bottomEdge - topEdge) / spacing
+)
+);
+
+const xCenters =
+[];
+
+for (
+let i = 0;
+i <= nx;
+i++
+) {
+
+xCenters.push(
+leftEdge +
+(i * (rightEdge - leftEdge)) / nx
+);
+
+}
+
+const yCenters =
+[];
+
+for (
+let i = 1;
+i < ny;
+i++
+) {
+
+yCenters.push(
+topEdge +
+(i * (bottomEdge - topEdge)) / ny
+);
+
+}
+
+const centers =
+[];
+
+xCenters.forEach(
+x =>
+centers.push(
+{ x: x, y: topEdge }
+)
+);
+
+yCenters.forEach(
+y =>
+centers.push(
+{ x: rightEdge, y: y }
+)
+);
+
+[...xCenters]
+.reverse()
+.forEach(
+x =>
+centers.push(
+{ x: x, y: bottomEdge }
+)
+);
+
+[...yCenters]
+.reverse()
+.forEach(
+y =>
+centers.push(
+{ x: leftEdge, y: y }
+)
+);
+
+marqueeBulbs =
+centers.map(
+c => {
+
+const bulb =
+document.createElement(
+"div"
+);
+
+bulb.className =
+"marquee-bulb lit";
+
+bulb.style.left =
+`${c.x - half}px`;
+
+bulb.style.top =
+`${c.y - half}px`;
+
+container.appendChild(
+bulb
+);
+
+return bulb;
+
+}
+);
+
+}
+
+function startMarqueeChase() {
+
+if (
+marqueePoppedOnce ||
+marqueeBulbs.length === 0
+) {
+
+return;
+
+}
+
+const windowSize =
+3;
+
+let position =
+0;
+
+let steps =
+0;
+
+const totalSteps =
+marqueeBulbs.length * 3;
+
+marqueeChaseInterval =
+setInterval(
+() => {
+
+marqueeBulbs.forEach(
+bulb =>
+bulb.classList.remove(
+"lit"
+)
+);
+
+for (
+let i = 0;
+i < windowSize;
+i++
+) {
+
+marqueeBulbs[
+(position + i) %
+marqueeBulbs.length
+].classList.add(
+"lit"
+);
+
+}
+
+position =
+(position + 1) %
+marqueeBulbs.length;
+
+steps++;
+
+if (steps >= totalSteps) {
+
+clearInterval(
+marqueeChaseInterval
+);
+
+popMarqueeBulb();
+
+}
+
+},
+180
+);
+
+}
+
+function popMarqueeBulb() {
+
+marqueePoppedOnce =
+true;
+
+marqueeBulbs.forEach(
+bulb =>
+bulb.classList.remove(
+"lit"
+)
+);
+
+const flashOverlay =
+document.getElementById(
+"marquee-pop-flash"
+);
+
+if (flashOverlay) {
+
+flashOverlay.classList.remove(
+"active"
+);
+
+void flashOverlay.offsetWidth;
+
+flashOverlay.classList.add(
+"active"
+);
+
+}
+
+/*
+
+* Independent random per bulb naturally produces the
+* irregular clumpy look asked for (a couple on, one off,
+* a few off) — no special clustering logic needed, that's
+* just what a random sequence looks like.
+  */
+
+setTimeout(
+() => {
+
+marqueeBulbs.forEach(
+bulb => {
+
+bulb.classList.remove(
+"dead"
+);
+
+if (Math.random() < 0.65) {
+
+bulb.classList.add(
+"lit"
+);
+
+} else {
+
+bulb.classList.add(
+"dead"
+);
+
+}
+
+}
+);
+
+},
+300
+);
+
+}
+
+buildMarqueeBulbs();
+
+/*
+
+* Rebuilds once the custom fonts are actually applied —
+* the very first build above happens synchronously as this
+* script runs, which can be before VT323/Iceland have
+* finished loading, so that initial measurement may reflect
+* a fallback font's (different) width rather than the final
+* one. document.fonts.ready resolves once real fonts are in
+* place, giving an accurate second measurement.
+  */
+
+if (
+document.fonts &&
+document.fonts.ready
+) {
+
+document.fonts.ready.then(
+() => {
+
+if (!marqueePoppedOnce) {
+
+buildMarqueeBulbs();
+
+}
+
+}
+);
+
+}
+
+let marqueeChaseTimeout =
+null;
+
+function scheduleMarqueeChase() {
+
+clearTimeout(
+marqueeChaseTimeout
+);
+
+marqueeChaseTimeout =
+setTimeout(
+startMarqueeChase,
+23000
+);
+
+}
+
+scheduleMarqueeChase();
+
+let marqueeResizeTimeout =
+null;
+
+window.addEventListener(
+"resize",
+() => {
+
+clearTimeout(
+marqueeResizeTimeout
+);
+
+marqueeResizeTimeout =
+setTimeout(
+() => {
+
+/*
+
+* Only rebuilds pre-pop — once it's settled into its
+* random pattern, a resize shouldn't wipe that out and
+* reset everything back to a fresh dim string.
+  */
+
+if (!marqueePoppedOnce) {
+
+buildMarqueeBulbs();
+
+}
+
+},
+150
+);
+
+}
+);
+
+// =========================================================
+// MARQUEE RESET BUTTON
+// =========================================================
+
+const marqueeResetButton =
+document.getElementById(
+"marquee-reset-button"
+);
+
+if (marqueeResetButton) {
+
+marqueeResetButton.addEventListener(
+"click",
+() => {
+
+clearInterval(
+marqueeChaseInterval
+);
+
+marqueePoppedOnce =
+false;
+
+buildMarqueeBulbs();
+
+scheduleMarqueeChase();
+
+}
+);
+
+}
+
+// =========================================================
+// COIN SLOT
+// =========================================================
+
+/*
+
+* Faint until 23 seconds on the site, regardless of theme
+* — so switching into arcade mode after already browsing
+* a while shows it already lit rather than restarting the
+* wait. Resets every fresh page load, same as everything
+* else on the site (no localStorage — this one's meant to
+* stay a small per-visit surprise, not something remembered
+* forever once found).
+  */
+
+setTimeout(
+() => {
+
+if (coinSlotButton) {
+
+coinSlotButton.classList.add(
+"lit"
+);
+
+}
+
+},
+23000
+);
+
+let coinSlotBusy =
+false;
+
+if (coinSlotButton) {
+
+coinSlotButton.addEventListener(
+"click",
+() => {
+
+/*
+
+* Same guards used everywhere else a movie could open —
+* refuses to fire while something's already opening,
+* closing, or open, plus its own busy flag for the brief
+* window between the flash starting and the random card
+* actually getting clicked.
+  */
+
+if (
+coinSlotBusy ||
+isOpening ||
+isClosing ||
+currentMovie
+) {
+
+return;
+
+}
+
+const cards =
+movieGrid.querySelectorAll(
+".movie-card"
+);
+
+if (cards.length === 0) {
+
+return;
+
+}
+
+coinSlotBusy =
+true;
+
+if (coinFlickerOverlay) {
+
+coinFlickerOverlay.classList.remove(
+"active"
+);
+
+/*
+
+* Forces a reflow so the animation restarts cleanly
+* if this ever fires again shortly after finishing.
+  */
+
+void coinFlickerOverlay.offsetWidth;
+
+coinFlickerOverlay.classList.add(
+"active"
+);
+
+}
+
+setTimeout(
+() => {
+
+/*
+
+* Re-queried here rather than reusing the NodeList
+* captured above, in case a render happened during
+* the flash (reservations loading, etc.) — picks
+* from whatever's actually on screen right now.
+  */
+
+const currentCards =
+movieGrid.querySelectorAll(
+".movie-card"
+);
+
+if (currentCards.length > 0) {
+
+const randomCard =
+currentCards[
+Math.floor(
+Math.random() *
+currentCards.length
+)
+];
+
+randomCard.click();
+
+}
+
+coinSlotBusy =
+false;
+
+},
+700
+);
 
 }
 );
