@@ -104,6 +104,62 @@ HEADER
   flex-shrink: 0;
 }
 
+/*
+ * Mobile-only elements — hidden here unconditionally, made
+ * visible again inside the PHONES media query below. Kept
+ * as separate elements from their desktop counterparts
+ * (rather than one element that reflows) since the coin
+ * slot's tall vertical shape and the compact circular mobile
+ * badge are genuinely different shapes, not just different
+ * sizes of the same one.
+ */
+
+.mobile-only-icon,
+.mobile-only-filter {
+
+  display: none;
+}
+
+.coin-slot-button-mobile,
+.marquee-reset-button-mobile {
+
+  width: 32px;
+  height: 32px;
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  align-items: center;
+  justify-content: center;
+
+  font-size: 15px;
+}
+
+.coin-slot-button-mobile {
+
+  border: 1px solid #ff1428;
+
+  color: #ff1428;
+
+  font-family: monospace;
+  font-weight: bold;
+  font-size: 9px;
+
+  opacity: 0.2;
+}
+
+.marquee-reset-button-mobile {
+
+  border: 1px solid #FBCD36;
+
+  font-size: 13px;
+
+  opacity: 0.12;
+}
+
 .marquee-frame {
   position: relative;
 
@@ -232,6 +288,11 @@ button {
 
 .icon-button:active {
   transform: scale(0.95);
+}
+
+#mobile-filters-toggle.active {
+  background: var(--gold);
+  color: #111111;
 }
 
 
@@ -2109,6 +2170,116 @@ regardless of search state, all left-justified.
 
   }
 
+  /*
+   * 2x2 icon grid — DOM order is filters-toggle, theme-
+   * toggle, search-toggle, [coin-or-bulb], which a 2-column
+   * grid auto-places as: top-left, top-right, bottom-left,
+   * bottom-right — exactly the requested order. On desktop
+   * these same elements stay in their existing single-row
+   * flex layout; only mobile switches to a grid.
+   */
+
+  .header-icon-buttons {
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 34px);
+
+    grid-auto-rows: 34px;
+
+    gap: 6px;
+
+  }
+
+  .mobile-only-icon {
+
+    display: flex;
+  }
+
+  /*
+   * Only one of these two should ever be visible at once —
+   * theme-scoped exactly like their desktop counterparts.
+   */
+
+  body.theme-arcade .marquee-reset-button-mobile {
+
+    display: none;
+  }
+
+  body:not(.theme-arcade) .coin-slot-button-mobile {
+
+    display: none;
+  }
+
+  /*
+   * The desktop tall coin slot / lightbulb-reset are
+   * redundant with the compact mobile versions above —
+   * hidden here so they don't show twice.
+   */
+
+  .coin-slot-button,
+  .marquee-reset-button {
+
+    display: none !important;
+  }
+
+  /*
+   * Media becomes a dropdown on mobile (kept visible, next
+   * to Staff Picks) instead of the two pills desktop uses —
+   * the pills and their divider are hidden unconditionally
+   * on mobile, not just while collapsed, since they're fully
+   * replaced here rather than tucked behind the toggle.
+   */
+
+  .mobile-only-filter {
+
+    display: inline-flex;
+
+    min-width: 0;
+
+    flex-shrink: 0;
+  }
+
+  .media-pill,
+  .media-divider {
+
+    display: none;
+  }
+
+  /*
+   * Type, Category, and Reservations are hidden by default
+   * and only appear once the filters toggle is opened —
+   * Genre, Staff Picks, and the new Format dropdown stay
+   * visible always, matching what was decided on to keep.
+   */
+
+  .type-pills-wrap,
+  .category-group,
+  .category-divider,
+  .reservation-filter-wrapper {
+
+    display: none;
+  }
+
+  body.mobile-filters-open .type-pills-wrap {
+
+    display: flex;
+
+  }
+
+  body.mobile-filters-open .category-group,
+  body.mobile-filters-open .reservation-filter-wrapper {
+
+    display: flex;
+
+  }
+
+  body.mobile-filters-open .category-divider {
+
+    display: block;
+
+  }
+
 }
 
 
@@ -2121,6 +2292,12 @@ SMALL PHONES
   .header-top {
 
     gap: 7px;
+
+  }
+
+  .marquee-frame {
+
+    padding: 8px 16px;
 
   }
 
@@ -2697,7 +2874,7 @@ body.theme-arcade .coin-slot-button {
 
   cursor: pointer;
 
-  opacity: 0.35;
+  opacity: 0.2;
 }
 
 body.theme-arcade .coin-slot-button svg {
@@ -2705,6 +2882,13 @@ body.theme-arcade .coin-slot-button svg {
 }
 
 body.theme-arcade .coin-slot-button.lit {
+
+  opacity: 1;
+
+  animation: coin-slot-pulse 2.2s ease-in-out infinite;
+}
+
+.coin-slot-button-mobile.lit {
 
   opacity: 1;
 
@@ -3001,7 +3185,7 @@ body.theme-arcade .marquee-reset-button {
 
   cursor: pointer;
 
-  opacity: 0.2;
+  opacity: 0.12;
 
   transition: opacity 0.15s ease;
 }
