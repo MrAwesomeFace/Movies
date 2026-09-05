@@ -224,13 +224,6 @@ autocomplete="off"
 
   <div class="filter-group-actions-top">
 
-    <button
-      id="random-button"
-      class="filter action-filter"
-    >
-      Staff Picks
-    </button>
-
     <label
       for="media-filter-mobile"
       class="visually-hidden"
@@ -247,6 +240,13 @@ autocomplete="off"
       <option value="physical">Physical</option>
       <option value="digital">Digital</option>
     </select>
+
+    <button
+      id="random-button"
+      class="filter action-filter"
+    >
+      Staff Picks
+    </button>
 
     <button
       id="coin-slot-button"
@@ -279,29 +279,6 @@ autocomplete="off"
 
   </div>
 
-  <div class="filter-group reservation-filter-wrapper mobile-collapsible">
-
-    <label
-      for="reservation-filter"
-      class="reservation-filter-label"
-    >
-      <span class="reservation-label-full">Reservations</span>
-      <span class="reservation-label-short">RSVP</span>
-    </label>
-
-    <select
-      id="reservation-filter"
-      class="filter reservation-filter"
-      aria-label="Filter movies by reservation"
-    >
-      <option value="all">All Movies</option>
-      <option value="Bryon">Bryon</option>
-      <option value="Angie">Angie</option>
-      <option value="Joey">Joey</option>
-    </select>
-
-  </div>
-
 </div>
 
 
@@ -311,10 +288,13 @@ autocomplete="off"
        ROW 2: GENRE DROPDOWN (left), CATEGORY + ANIMATED (right)
        ===================================================== -->
 
-  <div class="filter-row genre-category-row">
+  <div class="filter-row genre-category-row" id="genre-category-row">
 
 
-<div class="filter-group">
+<div class="genre-category-left">
+
+
+<div class="filter-group" id="genre-filter-group">
 
   <label
     for="genre-filter"
@@ -370,6 +350,33 @@ autocomplete="off"
   >
     Animated: Hide
   </button>
+
+</div>
+
+
+</div>
+
+
+<div class="filter-group reservation-filter-wrapper mobile-collapsible">
+
+  <label
+    for="reservation-filter"
+    class="reservation-filter-label"
+  >
+    <span class="reservation-label-full">Reservations</span>
+    <span class="reservation-label-short">RSVP</span>
+  </label>
+
+  <select
+    id="reservation-filter"
+    class="filter reservation-filter"
+    aria-label="Filter movies by reservation"
+  >
+    <option value="all">All Movies</option>
+    <option value="Bryon">Bryon</option>
+    <option value="Angie">Angie</option>
+    <option value="Joey">Joey</option>
+  </select>
 
 </div>
 
