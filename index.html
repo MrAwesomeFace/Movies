@@ -420,4 +420,156 @@ aria-label="Close"
   id="movie-flip-container"
 >
 
-  <d
+  <div class="movie-flipper">
+
+
+    <!-- FRONT COVER -->
+
+    <div class="movie-face movie-front">
+
+      <div
+        id="modal-cover"
+        class="large-cover"
+      ></div>
+
+    </div>
+
+
+    <!-- BACK COVER -->
+
+    <div class="movie-face movie-back">
+
+      <div class="back-content">
+
+        <h2 id="modal-title"></h2>
+
+
+        <div class="movie-meta">
+
+          <span id="modal-year"></span>
+
+          <span>•</span>
+
+          <span id="modal-runtime"></span>
+
+          <span>•</span>
+
+          <span id="modal-genre"></span>
+
+        </div>
+
+
+        <div class="movie-info-section">
+
+          <h3>About</h3>
+
+          <p id="modal-synopsis"></p>
+
+        </div>
+
+
+        <div class="movie-info-section">
+
+          <h3>Starring</h3>
+
+          <p id="modal-cast"></p>
+
+        </div>
+
+
+        <div class="movie-info-section">
+
+          <h3>Directed by</h3>
+
+          <p id="modal-director"></p>
+
+        </div>
+
+
+        <div class="movie-info-section">
+
+          <h3>Where to find it</h3>
+
+          <div
+            id="modal-formats"
+            class="format-list"
+          ></div>
+
+        </div>
+
+
+        <!--
+          RESERVATIONS ARE CREATED BY app.js
+
+          Do not add reservation HTML here.
+          app.js creates the reservation panel
+          automatically and keeps it synchronized
+          with the reservation API.
+        -->
+
+      </div>
+
+    </div>
+
+
+    <!-- CASE EDGES -->
+
+    <div class="movie-edge movie-edge-left">
+
+      <div class="movie-spine-title">
+
+        <span id="modal-spine-title"></span>
+
+      </div>
+
+    </div>
+
+    <div class="movie-edge movie-edge-right"></div>
+
+    <div class="movie-edge movie-edge-top"></div>
+
+    <div class="movie-edge movie-edge-bottom"></div>
+
+
+  </div>
+
+</div>
+
+
+<div class="movie-viewer-controls">
+
+  <button
+    id="flip-button"
+    class="primary-button"
+  >
+    Flip case
+  </button>
+
+  <p class="flip-hint">
+    Tap the cover or swipe to flip
+  </p>
+
+</div>
+
+
+  </div>
+
+</div>
+
+  </div>
+
+  <!-- =========================================================
+       MOVIE DATA
+       ========================================================= -->
+
+  <script src="movies.js"></script>
+
+  <!-- =========================================================
+       APP FUNCTIONALITY
+       ========================================================= -->
+
+  <script src="app.js"></script>
+
+</body>
+
+</html>
