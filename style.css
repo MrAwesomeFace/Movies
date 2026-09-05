@@ -168,6 +168,11 @@ HEADER
   padding: 12px 28px;
 }
 
+body.theme-arcade .marquee-frame {
+
+  padding: 0;
+}
+
 .site-title {
   display: flex;
 
@@ -213,11 +218,16 @@ h1 {
 }
 
 #movie-count {
-  margin: 14px 0 0;
+  margin: 10px 0 0;
 
   color: #d0d9ee;
 
   font-size: 13px;
+}
+
+body.theme-arcade #movie-count {
+
+  margin: 4px 0 0;
 }
 
 
@@ -449,7 +459,7 @@ FILTER BAR
 
   gap: 7px;
 
-  margin-top: 14px;
+  margin-top: 6px;
 
   width: 100%;
 }
@@ -492,12 +502,22 @@ FILTER GROUP
   flex-shrink: 0;
 }
 
+.type-pills-wrap {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
 
 /* =========================================================
 FIRST ROW
 ========================================================= */
 
 .filter-row-main {
+  align-items: flex-start;
+
   justify-content: space-between;
 
   overflow: visible;
@@ -515,11 +535,11 @@ the right edge of the row.
 .filter-group-actions {
   display: flex;
 
-  flex-direction: column;
+  flex-direction: row;
 
-  align-items: flex-end;
+  align-items: center;
 
-  gap: 6px;
+  gap: 16px;
 
   flex-shrink: 0;
 
@@ -540,7 +560,19 @@ SECOND ROW
 ========================================================= */
 
 .genre-category-row {
+  justify-content: space-between;
+
   overflow-x: auto;
+}
+
+.genre-category-left {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  flex-shrink: 0;
 }
 
 
@@ -2191,6 +2223,28 @@ regardless of search state, all left-justified.
 
   }
 
+  /*
+   * The existing .icon-button size rules (38-42px, from
+   * before this grid existed) would otherwise conflict with
+   * the 34px grid cells and the 32px mobile badges — three
+   * different sizes competing in one grid is exactly what
+   * made the coin badge look mismatched. Forcing every
+   * child here to one consistent size fixes that.
+   */
+
+  .header-icon-buttons button {
+
+    width: 34px !important;
+    height: 34px !important;
+
+    font-size: 15px !important;
+  }
+
+  #mobile-filters-toggle {
+
+    font-size: 20px !important;
+  }
+
   .mobile-only-icon {
 
     display: flex;
@@ -2277,6 +2331,22 @@ regardless of search state, all left-justified.
   body.mobile-filters-open .category-divider {
 
     display: block;
+
+  }
+
+  /*
+   * Genre gets physically relocated into the kept row on
+   * mobile (see relocateGenreForMobile in app.js) — once
+   * it's gone, this row would otherwise be visually empty
+   * whenever the panel is collapsed (Category is already
+   * hidden until expanded), leaving a blank gap. Hidden here
+   * specifically for that collapsed state; expanding still
+   * shows the row so Category remains reachable.
+   */
+
+  body.genre-relocated:not(.mobile-filters-open) .genre-category-row {
+
+    display: none;
 
   }
 
@@ -3153,6 +3223,19 @@ body.theme-arcade .marquee-bulb {
 
 }
 
+#marquee-pop-flash.light-on {
+
+  animation: marquee-light-on-anim 0.6s ease-out;
+}
+
+@keyframes marquee-light-on-anim {
+
+  0% { opacity: 0; }
+  20% { opacity: 0.95; }
+  100% { opacity: 0; }
+
+}
+
 
 /* =========================================================
 MARQUEE RESET BUTTON
@@ -3198,4 +3281,14 @@ body.theme-arcade .marquee-reset-button {
 .marquee-reset-button svg {
 
   display: block;
+}
+
+.marquee-reset-button.lit,
+.marquee-reset-button-mobile.lit {
+
+  opacity: 1;
+
+  filter:
+    drop-shadow(0 0 4px rgba(251, 205, 54, 0.8))
+    drop-shadow(0 0 9px rgba(251, 205, 54, 0.5));
 }
