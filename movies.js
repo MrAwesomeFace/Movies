@@ -8628,11 +8628,14 @@ const movies = [
     "director": "Chuck Jones",
     "cast": "Boris Karloff, June Foray, Dal McKennon, Thurl Ravenscroft",
     "synopsis": "Bitter and hateful, the Grinch is irritated at the thought of a nearby village having a happy time celebrating Christmas. Disguised as Santa Claus, with his dog made to look like a reindeer, he decides to raid the village to steal all the Christmas things.",
-    "physical": ["DVD"],
-    "digital": ["Fandango",
+    "physical": [
+      "DVD"
+    ],
+    "digital": [
+      "Fandango",
       "Movies Anywhere",
       "Prime"
-  ],
+    ],
     "categories": [
       "christmas",
       "animated"
@@ -9329,6 +9332,22 @@ const movies = [
     ],
     "categories": [
       "animated"
+    ]
+  },
+  {
+    "title": "Interstellar",
+    "type": "movie",
+    "tmdbId": 157336,
+    "poster": "https://image.tmdb.org/t/p/w500/yQvGrMoipbRoddT0ZR8tPoR7NfX.jpg",
+    "year": "2014",
+    "runtime": "169m",
+    "genre": "Adventure / Drama / Science Fiction",
+    "director": "Christopher Nolan",
+    "cast": "Matthew McConaughey, Anne Hathaway, Michael Caine, Jessica Chastain, Casey Affleck, Wes Bentley",
+    "synopsis": "The adventures of a group of explorers who make use of a newly discovered wormhole to surpass the limitations on human space travel and conquer the vast distances involved in an interstellar voyage.",
+    "physical": [],
+    "digital": [
+      "Fandango"
     ]
   },
   {
