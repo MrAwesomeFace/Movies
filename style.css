@@ -225,6 +225,20 @@ h1 {
   font-size: 13px;
 }
 
+.flavor-text {
+  margin: 3px 0 0;
+
+  color: #8a93ab;
+
+  font-size: 11.5px;
+
+  font-style: italic;
+}
+
+.flavor-text:empty {
+  display: none;
+}
+
 body.theme-arcade #movie-count {
 
   margin: 4px 0 0;
@@ -685,7 +699,7 @@ main {
   position: relative;
 
   grid-template-columns:
-    repeat(2, minmax(0, 1fr));
+    repeat(3, minmax(0, 1fr));
 
   row-gap: 50px;
   column-gap: 12px;
@@ -795,6 +809,95 @@ MOVIE CARDS
     opacity 0.25s ease,
     filter 0.25s ease,
     transform 0.25s ease;
+}
+
+/*
+ * Fast & Furious rush — exiting cards blast off fast with
+ * a slight blur (motion streak), entering cards rush in
+ * from off-screen. --rush-x is set inline per-card in JS
+ * for a bit of randomized direction so it doesn't look like
+ * a single robotic line of cards.
+ */
+
+.movie-card.rush-exit {
+  animation: rush-exit-anim 0.45s cubic-bezier(0.5, 0, 1, 1) forwards;
+}
+
+@keyframes rush-exit-anim {
+  0% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    transform: translateX(var(--rush-x, 400px)) scale(0.85);
+    opacity: 0;
+    filter: blur(4px);
+  }
+}
+
+.movie-card.rush-enter {
+  animation: rush-enter-anim 0.4s cubic-bezier(0, 0, 0.3, 1) both;
+}
+
+@keyframes rush-enter-anim {
+  0% {
+    transform: translateX(-120px);
+    opacity: 0;
+    filter: blur(3px);
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.sticky-note {
+  position: absolute;
+
+  top: 10px;
+  left: 10px;
+
+  width: 62%;
+
+  max-width: 130px;
+
+  background: #fff4a3;
+
+  color: #3a3010;
+
+  padding: 7px 8px;
+
+  font-family: 'Comic Sans MS', 'Segoe Print', cursive;
+
+  font-size: 10.5px;
+
+  line-height: 1.35;
+
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.4);
+
+  transform: rotate(-6deg);
+
+  transition: transform 0.20s ease;
+
+  z-index: 3;
+
+  pointer-events: none;
+}
+
+.empty-reservation-card .sticky-note {
+  top: 42%;
+  right: auto;
+  left: 50%;
+
+  width: 72%;
+
+  max-width: none;
+
+  text-align: center;
+
+  transform: translate(-50%, -50%) rotate(-4deg);
 }
 
 
@@ -948,6 +1051,49 @@ the banner logo for visual consistency.
   -webkit-box-orient: vertical;
 
   word-break: break-word;
+}
+
+
+/* =========================================================
+EMPTY RESERVATION SHELF
+========================================================= */
+
+.empty-reservation-card .poster-fallback-title {
+  color: #b8b8b8;
+}
+
+.empty-reservation-mark {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 10px;
+}
+
+.empty-reservation-svg {
+  width: 55%;
+
+  height: auto;
+}
+
+/*
+ * Overrides the grid layout entirely when this single
+ * placeholder card is the only thing being shown — grid
+ * would otherwise place a lone item at the first column
+ * (visually left-aligned) rather than centered.
+ */
+
+#movie-grid.single-card-centered {
+  display: flex;
+
+  justify-content: center;
+}
+
+#movie-grid.single-card-centered .movie-card {
+  width: 200px;
+
+  max-width: 45%;
 }
 
 
@@ -1181,6 +1327,24 @@ NORMAL HOVER
 
   }
 
+  .movie-card:hover
+  .sticky-note {
+
+    transform:
+      translateY(-16px)
+      rotate(-6deg);
+
+  }
+
+  .movie-card.empty-reservation-card:hover
+  .sticky-note {
+
+    transform:
+      translate(-50%, calc(-50% - 16px))
+      rotate(-4deg);
+
+  }
+
 }
 
 
@@ -1381,6 +1545,13 @@ MODAL CONTENT
     scale(1);
 }
 
+/*
+ * Rewind glitch — a brief VHS-static moment on close,
+ * playing into the site's own name. The scanline overlay
+ * uses repeating-linear-gradient (cheap, no image asset),
+ * and the whole thing self-removes after 400ms in JS.
+ */
+
 
 /* =========================================================
 MODAL CLOSE
@@ -1543,15 +1714,310 @@ BACK
       calc(var(--case-depth) / 2)
     );
 
+  color: #f0e6c8;
+
+}
+
+/*
+ * Subtle procedural paper grain — a low-opacity SVG noise
+ * filter rather than an image asset, so there's nothing to
+ * host or load.
+ */
+
+.back-texture {
+  position: absolute;
+
+  inset: 0;
+
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.18'/%3E%3C/svg%3E");
+
+  opacity: 0.7;
+
+  pointer-events: none;
+
+  z-index: 5;
+}
+
+/*
+ * Thumbnail float — reserves its TRUE combined height
+ * (image + nothing else hanging below it) so wrapped
+ * synopsis text correctly clears it rather than
+ * overlapping anything positioned outside the float's own
+ * box.
+ */
+
+.back-top-row {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-start;
+
+  gap: 14px;
+}
+
+.back-title-meta {
+  flex: 1;
+
+  min-width: 0;
+}
+
+.back-thumb-float {
+  flex-shrink: 0;
+
+  width: 55px;
+}
+
+.back-thumb-image {
+  width: 55px;
+  height: 82px;
+
+  border-radius: 4px;
+
+  background-size: cover;
+  background-position: center;
+
+  background-color: #2a2a4a;
+
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+}
+
+.back-synopsis {
+  font-size: 12px;
+
+  line-height: 1.55;
+
+  margin-top: 10px;
+
+  padding-right: 4px;
+
+  max-width: calc(100% - 8px);
+}
+
+.back-cast-section {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+
+  margin-top: 20px;
+}
+
+.back-section-heading {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  font-size: 11px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.8px;
+
+  opacity: 0.85;
+
+  margin: 0 0 3px;
+}
+
+.back-section-heading svg {
+  width: 14px;
+  height: 14px;
+
+  flex-shrink: 0;
+}
+
+.back-badge-row {
+  display: flex;
+
+  gap: 6px;
+
+  margin-top: 10px;
+}
+
+.back-feature-badge {
+  display: inline-block;
+
+  font-size: 9px;
+
+  border-radius: 3px;
+
+  padding: 2px 6px;
+
+  letter-spacing: 0.3px;
+
+  border: 1px solid currentColor;
+
+  opacity: 0.85;
+}
+
+.collection-preview {
+  display: none;
+
+  gap: 6px;
+
+  margin-top: 14px;
+
+  margin-bottom: 4px;
+}
+
+.preview-poster {
+  flex: 1;
+
+  aspect-ratio: 2 / 3;
+
+  border-radius: 4px;
+
+  background-size: cover;
+  background-position: center;
+
+  background-color: #333;
+
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.back-barcode-area {
+  display: flex;
+
+  justify-content: flex-end;
+
+  margin-top: 14px;
+}
+
+.back-barcode-clickable {
+  position: relative;
+
+  text-align: center;
+
+  cursor: pointer;
+
+  background: transparent;
+
+  border: none;
+
+  padding: 0;
+
+  font: inherit;
+
+  color: inherit;
+}
+
+.back-barcode-sticker {
+  display: block;
+
+  background: #f5f5f0;
+
+  padding: 6px 8px 5px;
+
+  border-radius: 3px;
+
+  position: relative;
+
+  overflow: hidden;
+
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.back-barcode-bars {
+  display: block;
+
+  height: 28px;
+  width: 90px;
+
   background:
-    linear-gradient(
-      135deg,
-      #eee9dd,
-      #d8d0c0
+    repeating-linear-gradient(
+      90deg,
+      #111 0px, #111 2px,
+      transparent 2px, transparent 3px,
+      #111 3px, #111 4px,
+      transparent 4px, transparent 6px,
+      #111 6px, #111 7px,
+      transparent 7px, transparent 8px,
+      #111 8px, #111 9px,
+      transparent 9px, transparent 11px
     );
+}
 
-  color: #181818;
+.back-barcode-number {
+  display: block;
 
+  font-size: 8px;
+
+  color: #333;
+
+  margin-top: 3px;
+
+  font-family: monospace;
+
+  letter-spacing: 1px;
+}
+
+.back-scan-line {
+  position: absolute;
+
+  left: 0;
+  right: 0;
+
+  height: 3px;
+
+  background: #5fae5f;
+
+  box-shadow: 0 0 8px 2px #5fae5f;
+
+  top: -3px;
+
+  opacity: 0;
+}
+
+.back-scan-line.scanning {
+  animation: back-scan-sweep 0.7s ease-in-out;
+}
+
+@keyframes back-scan-sweep {
+  0% { top: -3px; opacity: 1; }
+  90% { top: 100%; opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+.back-credit-message {
+  position: absolute;
+
+  bottom: 100%;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  white-space: nowrap;
+
+  background: #5fae5f;
+
+  color: #f4fbf4;
+
+  font-family: -apple-system, sans-serif;
+
+  font-size: 9.5px;
+  font-weight: bold;
+
+  padding: 4px 12px;
+
+  border-radius: 20px;
+
+  margin-bottom: 8px;
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.back-credit-message.showing {
+  opacity: 1;
+
+  transform: translateX(-50%) translateY(-4px);
 }
 
 
@@ -1808,19 +2274,43 @@ LARGE COVER
   -webkit-line-clamp: 6;
 }
 
+.empty-reservation-mark-large {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+}
+
+.empty-reservation-mark-large .empty-reservation-svg {
+  width: 65%;
+
+  height: auto;
+}
+
 
 /* =========================================================
 BACK CONTENT
 ========================================================= */
 
 .back-content {
+  position: relative;
+
+  z-index: 2;
+
   height: 100%;
 
   overflow-y: auto;
 
   -webkit-overflow-scrolling: touch;
 
-  padding: 24px;
+  padding: 20px;
+
+  background:
+    linear-gradient(145deg, #4a3a1a, #221a0c);
+
+  background-attachment: local;
 }
 
 .back-content h2 {
@@ -1851,6 +2341,12 @@ BACK CONTENT
 .movie-info-section {
 
   margin-top: 18px;
+
+}
+
+.back-cast-section .movie-info-section {
+
+  margin-top: 0;
 
 }
 
@@ -2712,9 +3208,22 @@ body.theme-arcade .action-filter.active {
 
 }
 
-body.theme-arcade .genre-category-row {
+@media (min-width: 600px) {
 
-  padding: 10px 0;
+  body.theme-arcade .genre-category-row {
+
+    overflow: visible;
+  }
+
+}
+
+@media (max-width: 599px) {
+
+  body.theme-arcade .genre-category-row {
+
+    padding: 10px 0;
+  }
+
 }
 
 @media (max-width: 599px) {
@@ -2925,11 +3434,35 @@ already being on the site a while shows it already lit
 rather than restarting the wait.
 ========================================================= */
 
+.coin-slot-anchor {
+  display: none;
+}
+
+body.theme-arcade .coin-slot-anchor {
+
+  display: inline-block;
+
+  position: relative;
+
+  width: 26px;
+
+  height: 1px;
+
+  flex-shrink: 0;
+}
+
 .coin-slot-button {
   display: none;
 }
 
 body.theme-arcade .coin-slot-button {
+
+  position: absolute;
+
+  top: 44%;
+  left: 0;
+
+  transform: translateY(-50%);
 
   display: inline-flex;
 
@@ -3019,6 +3552,250 @@ body.theme-arcade .coin-slot-button.lit {
   pointer-events: none;
 }
 
+/*
+ * Pi Easter egg button — quiet by design, matching the
+ * coin slot / marquee bulb pattern of things that reward
+ * noticing rather than announcing themselves.
+ */
+
+#pi-easter-egg {
+  position: fixed;
+
+  bottom: 14px;
+  right: 14px;
+
+  z-index: 150;
+
+  width: 26px;
+  height: 26px;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(255, 255, 255, 0.25);
+
+  background: transparent;
+
+  color: rgba(255, 255, 255, 0.3);
+
+  font-size: 14px;
+
+  font-family: Georgia, serif;
+
+  cursor: pointer;
+
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+#pi-easter-egg:hover {
+  color: rgba(255, 255, 255, 0.7);
+
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+#matrix-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 201;
+
+  background: #000;
+
+  pointer-events: none;
+
+  overflow: hidden;
+
+  opacity: 0;
+
+  transition: opacity 0.6s ease;
+}
+
+#matrix-overlay.active {
+
+  opacity: 0.88;
+}
+
+/*
+ * Rewind effect — deliberately bigger and longer than the
+ * old modal-specific version, since that one was found too
+ * subtle. Full-screen, dark backdrop, a large pulsing
+ * rewind icon and label. Triggered by JS when a filter
+ * resets back to "all" (see triggerRewindEffect).
+ */
+
+#rewind-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 210;
+
+  background: rgba(2, 13, 39, 0.85);
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  pointer-events: none;
+
+  opacity: 0;
+
+  transition: opacity 0.5s ease;
+}
+
+/*
+ * Scrambled VHS-static layer — scanlines that jitter
+ * rapidly in position/opacity, layered behind the icon and
+ * text. Only animates while .active, so it costs nothing
+ * at rest.
+ */
+
+#rewind-overlay::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.18) 0px,
+      rgba(255, 255, 255, 0.18) 2px,
+      transparent 2px,
+      transparent 5px
+    );
+}
+
+#rewind-overlay.active::before {
+
+  animation: rewind-static-jitter 0.15s steps(2, end) infinite;
+}
+
+@keyframes rewind-static-jitter {
+
+  0% { transform: translateY(0); opacity: 0.7; }
+  50% { transform: translateY(-6px); opacity: 1; }
+  100% { transform: translateY(3px); opacity: 0.8; }
+}
+
+#rewind-overlay.active {
+
+  opacity: 1;
+
+  animation: rewind-overlay-hold 1.6s ease;
+}
+
+@keyframes rewind-overlay-hold {
+
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.rewind-icon {
+  font-size: 90px;
+
+  color: var(--gold);
+
+  text-shadow:
+    0 0 20px rgba(251, 205, 54, 0.8),
+    0 0 40px rgba(251, 205, 54, 0.5);
+
+  animation: rewind-icon-pulse 0.8s ease-in-out infinite;
+}
+
+@keyframes rewind-icon-pulse {
+
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+.rewind-text {
+  font-family: 'VT323', monospace;
+
+  font-size: 28px;
+
+  letter-spacing: 6px;
+
+  color: var(--gold);
+
+  text-shadow:
+    0 0 12px rgba(251, 205, 54, 0.7);
+}
+
+/*
+ * Arcade variant — cyan/magenta instead of gold, matching
+ * arcade's own palette rather than classic's warm tones.
+ */
+
+body.theme-arcade #rewind-overlay {
+
+  background: rgba(5, 3, 10, 0.9);
+}
+
+body.theme-arcade #rewind-overlay::before {
+
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 47, 209, 0.22) 0px,
+      rgba(255, 47, 209, 0.22) 2px,
+      transparent 2px,
+      transparent 5px
+    );
+}
+
+body.theme-arcade .rewind-icon {
+
+  color: #00fff2;
+
+  text-shadow:
+    0 0 20px rgba(0, 255, 242, 0.8),
+    0 0 40px rgba(0, 255, 242, 0.5);
+}
+
+body.theme-arcade .rewind-text {
+
+  color: #00fff2;
+
+  text-shadow:
+    0 0 12px rgba(0, 255, 242, 0.7);
+}
+
+.matrix-column {
+  position: absolute;
+
+  top: -100px;
+
+  width: 20px;
+
+  color: #2ee62e;
+
+  font-family: monospace;
+
+  font-size: 16px;
+
+  line-height: 20px;
+
+  text-shadow: 0 0 6px rgba(46, 230, 46, 0.8);
+
+  white-space: pre;
+
+  animation: matrix-fall linear infinite;
+}
+
+@keyframes matrix-fall {
+  0% { transform: translateY(-100px); }
+  100% { transform: translateY(110vh); }
+}
+
 #coin-flicker-overlay.active {
 
   animation: coin-flicker-flash 0.9s steps(1, end);
@@ -3060,6 +3837,11 @@ invisible — sitting on black instead.
 
 body.theme-arcade .movie-back {
 
+  color: #f5f5f5;
+}
+
+body.theme-arcade .back-content {
+
   background:
     linear-gradient(
       135deg,
@@ -3067,7 +3849,12 @@ body.theme-arcade .movie-back {
       #05030a
     );
 
-  color: #f5f5f5;
+  background-attachment: local;
+}
+
+body.theme-arcade .back-texture {
+
+  display: none;
 }
 
 body.theme-arcade .back-content h2 {
@@ -3234,6 +4021,20 @@ body.theme-arcade .marquee-bulb {
   20% { opacity: 0.95; }
   100% { opacity: 0; }
 
+}
+
+/*
+ * The marquee's pop/reset timers run regardless of theme
+ * (same pattern the coin slot uses), but arcade has no
+ * marquee at all — without this, the flash would still fire
+ * on its own schedule with no visible bulbs to justify it,
+ * looking like a random, unrelated flash to arcade users.
+ */
+
+body.theme-arcade #marquee-pop-flash.active,
+body.theme-arcade #marquee-pop-flash.light-on {
+
+  animation: none;
 }
 
 
