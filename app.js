@@ -2253,7 +2253,7 @@ container.style.margin =
   */
 
 let nowShowingChance =
-1;
+0.35;
 
 let nowShowingFrameActive =
 false;
