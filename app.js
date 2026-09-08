@@ -134,6 +134,236 @@ animated: "hide",
 reservation: "all"
 };
 
+/*
+
+* Fast & Furious rush Easter egg state — a Set (not a
+* Fast & Furious rush Easter egg state — fires on the
+* first movie closed that features one of the trigger
+* actors (see openMovieFromCard). fastFuriousTriggerFired
+* is set true the moment a qualifying movie opens;
+* fastFuriousRushTriggered ensures the rush itself only
+* plays once per session even if more qualifying movies
+* get opened afterward.
+  */
+
+let fastFuriousTriggerFired =
+false;
+
+let fastFuriousRushTriggered =
+false;
+
+/*
+
+* When true, getFilteredMovies() returns ONLY the franchise
+* regardless of activeFilters — this is what makes the rush
+* result persist correctly through opening and closing
+* other movies afterward, since finishCloseMovie() calls
+* the normal renderMovies() -> getFilteredMovies() path.
+* Reset to false by any real filter interaction (see the
+* filter/genre/reservation/search/staff-picks handlers),
+* since touching an actual filter is the natural signal
+* that the person wants to leave this view.
+  */
+
+let fastFuriousRushActive =
+false;
+
+/*
+
+* Same pattern as fastFuriousRushActive above — without
+* this, the Sandra Bullock view reverted the instant you
+* opened and closed any other movie, since the original
+* version bypassed activeFilters with a one-time direct
+* grid rewrite that nothing downstream knew about.
+  */
+
+let sandraBullockModeActive =
+false;
+
+/*
+
+* Declared here (well before the initial page-load render
+* call further down) rather than right after renderMovies()
+* — that was the actual bug: renderMovies() references
+* stickyNoteMessages internally, and the very first render
+* on page load happens before a later const declaration
+* would have executed, throwing a ReferenceError that
+* silently killed the function mid-way through — after
+* cards were added, but before scheduleShelfUpdate() ever
+* ran. That's why shelves specifically went missing while
+* movies still showed.
+  */
+
+/*
+
+* Keyed to the exact genre values the dropdown uses. A
+* movie whose genre doesn't match any key (or has none)
+* falls back to stickyNoteFallbackMessages instead.
+  */
+
+const stickyNoteMessagesByGenre =
+{
+action:
+[
+"Buckle up for this one.",
+"Big, loud, and fun.",
+"Popcorn-throwing good time."
+],
+classic:
+[
+"A certified classic.",
+"They don't make them like this anymore.",
+"Timeless pick."
+],
+comedy:
+[
+"Great popcorn movie.",
+"Good for a laugh.",
+"Perfect for a light night."
+],
+drama:
+[
+"Total tearjerker. Bring tissues.",
+"Have the tissues ready.",
+"An emotional one."
+],
+horror:
+[
+"Don't watch alone.",
+"Keep the lights on for this one.",
+"Not for the faint of heart."
+],
+thriller:
+[
+"Edge-of-your-seat stuff.",
+"Hard to look away from this one.",
+"Twisty and tense."
+]
+};
+
+const stickyNoteFallbackMessages =
+[
+"Rewatch-worthy. Every time.",
+"Underrated. Give it a shot.",
+"Better than you'd expect.",
+"Perfect for a rainy day."
+];
+
+function attachStickyNote(
+card,
+text
+) {
+
+const note =
+document.createElement(
+"div"
+);
+
+note.className =
+"sticky-note";
+
+note.textContent =
+text;
+
+card.appendChild(
+note
+);
+
+}
+
+let stickyNoteChosenTitle =
+null;
+
+let stickyNoteChosenMessage =
+null;
+
+/*
+
+* Sentinel (not null/undefined) so the very first render
+* always counts as "the genre changed" and triggers a pick,
+* regardless of activeFilters.genre's actual starting value.
+  */
+
+let stickyNoteLastGenre =
+"__UNSET__";
+
+/*
+
+* Re-picks only when the Genre filter has actually changed
+* since the last pick — other filters (Type, Media,
+* Category, Reservation, Search, Staff Picks) leave the
+* current choice alone. Lands on roughly the 3rd row of
+* whatever the current genre-filtered view looks like,
+* using that specific movie's own genre to pick a fitting
+* message rather than a generic one.
+  */
+
+function pickStickyNoteForCurrentView(
+filteredMovies
+) {
+
+const eligibleMovies =
+filteredMovies.filter(
+m =>
+m.type === "movie"
+);
+
+if (eligibleMovies.length === 0) {
+
+stickyNoteChosenTitle =
+null;
+
+return;
+
+}
+
+const gridColumnValue =
+getComputedStyle(
+movieGrid
+).gridTemplateColumns;
+
+const columnCount =
+gridColumnValue
+.split(" ")
+.filter(Boolean).length ||
+1;
+
+const firstThreeRowsCount =
+Math.min(
+columnCount * 3,
+eligibleMovies.length
+);
+
+const randomIndex =
+Math.floor(
+Math.random() *
+firstThreeRowsCount
+);
+
+const chosenMovie =
+eligibleMovies[randomIndex];
+
+stickyNoteChosenTitle =
+chosenMovie.title;
+
+const genreKey =
+(chosenMovie.genre || "")
+.toLowerCase();
+
+const pool =
+stickyNoteMessagesByGenre[genreKey] ||
+stickyNoteFallbackMessages;
+
+stickyNoteChosenMessage =
+pool[
+Math.floor(
+Math.random() *
+pool.length
+)
+];
+
+}
+
 // =========================================================
 // OPENING / CLOSING STATE
 // =========================================================
@@ -706,16 +936,32 @@ panel.appendChild(
 people
 );
 
-const backContent =
+const backContentEl =
 document.querySelector(
 ".back-content"
 );
 
-if (backContent) {
+const barcodeArea =
+document.querySelector(
+".back-barcode-area"
+);
 
-backContent.appendChild(
+if (backContentEl) {
+
+if (barcodeArea) {
+
+backContentEl.insertBefore(
+panel,
+barcodeArea
+);
+
+} else {
+
+backContentEl.appendChild(
 panel
 );
+
+}
 
 }
 
@@ -1207,6 +1453,27 @@ localStorage.setItem(
 isArcade ? "arcade" : "default"
 );
 
+/*
+
+* Whichever theme we just switched INTO gets its timer
+* started fresh here — that's the whole point of this
+* change: the coin slot's reveal and the marquee's chase
+* used to just run in the background from page load
+* regardless of which theme was showing, so switching into
+* arcade could reveal an already-lit coin slot instead of a
+* fresh countdown. Each entry now starts clean.
+  */
+
+if (isArcade) {
+
+scheduleCoinReveal();
+
+} else {
+
+resetMarqueeForThemeEntry();
+
+}
+
 renderArcadeSideLighting();
 
 }
@@ -1376,6 +1643,10 @@ function renderMovies() {
 movieGrid.innerHTML =
 "";
 
+movieGrid.classList.remove(
+"single-card-centered"
+);
+
 let filteredMovies =
 getFilteredMovies();
 
@@ -1383,7 +1654,19 @@ getFilteredMovies();
 // RANDOM 16
 // =========================================================
 
-if (randomMode) {
+/*
+
+* Skipped entirely when a special view is active — randomMovies
+* was computed from the whole catalog before either mode
+* existed, so intersecting against it would silently corrupt
+* or empty out the F&F/Sandra Bullock result.
+  */
+
+if (
+randomMode &&
+!fastFuriousRushActive &&
+!sandraBullockModeActive
+) {
 
 filteredMovies =
 randomMovies.filter(
@@ -1455,6 +1738,26 @@ if (
 filteredMovies.length === 0
 ) {
 
+if (
+activeFilters.reservation !== "all"
+) {
+
+noResults.classList.add(
+"hidden"
+);
+
+movieGrid.classList.add(
+"single-card-centered"
+);
+
+renderEmptyReservationShelf();
+
+scheduleShelfUpdate();
+
+return;
+
+}
+
 noResults.classList.remove(
 "hidden"
 );
@@ -1486,6 +1789,66 @@ card
 
 }
 );
+
+// =========================================================
+// STICKY NOTE
+// =========================================================
+
+/*
+
+* Chosen ONCE per page load (see ensureStickyNoteChosen),
+* not re-randomized on every render — re-picking on every
+* filter change looked chaotic, like a different case had
+* the note each time you touched a filter. The same chosen
+* movie now only shows its note when that specific movie
+* happens to be visible under whatever filter is active.
+  */
+
+/*
+
+* Re-picks (movie + message + position) only when the
+* Genre filter has changed since the last pick — other
+* filter interactions leave the current choice alone and
+* just re-locate it if that same movie is still visible.
+  */
+
+if (
+activeFilters.genre !==
+stickyNoteLastGenre
+) {
+
+stickyNoteLastGenre =
+activeFilters.genre;
+
+pickStickyNoteForCurrentView(
+filteredMovies
+);
+
+}
+
+if (stickyNoteChosenTitle) {
+
+const matchingCard =
+Array.from(
+movieGrid.querySelectorAll(
+".movie-card:not(.empty-reservation-card)"
+)
+).find(
+card =>
+card.dataset.movieTitle ===
+stickyNoteChosenTitle
+);
+
+if (matchingCard) {
+
+attachStickyNote(
+matchingCard,
+stickyNoteChosenMessage
+);
+
+}
+
+}
 
 // =========================================================
 // SHELVES
@@ -1685,6 +2048,138 @@ scheduleShelfUpdate,
 // CREATE MOVIE CARD
 // =========================================================
 
+// =========================================================
+// EMPTY RESERVATION SHELF
+// =========================================================
+
+/*
+
+* Shown when a reservation filter matches zero movies — one
+* real, fully clickable card (not a special new visual
+* system) built from a fake movie object. Since it goes
+* through the exact same createMovieCard/openMovieFromCard/
+* populateMovie path as any real movie, it gets the flight
+* animation, the flip, the shelf integration — everything —
+* for free, with zero new interaction code to get right.
+  */
+
+function createEmptyReservationMovie() {
+
+return {
+
+title: "?",
+
+isEmptyReservationPlaceholder: true,
+
+type: "movie",
+
+genre: "",
+
+year: "",
+
+runtime: "",
+
+synopsis:
+"You don't have anything on hold right now. " +
+"Explore the collection below to find something " +
+"worth reserving!",
+
+cast: "",
+
+director: "",
+
+physical: [],
+
+digital: []
+
+};
+
+}
+
+function renderEmptyReservationShelf() {
+
+const placeholderMovie =
+createEmptyReservationMovie();
+
+const card =
+createMovieCard(
+placeholderMovie,
+0
+);
+
+card.classList.add(
+"empty-reservation-card"
+);
+
+const coverInner =
+card.querySelector(
+".movie-cover-inner"
+);
+
+const spine =
+card.querySelector(
+".case-spine-face"
+);
+
+const fallbackTitle =
+card.querySelector(
+".poster-fallback-title"
+);
+
+/*
+
+* Overrides the normal per-index palette color with a
+* neutral grey, and the normal small fallback-title
+* styling with a large centered "?" — both applied after
+* creation rather than needing createMovieCard itself to
+* know about this special case.
+  */
+
+if (coverInner) {
+
+coverInner.style.background =
+"linear-gradient(145deg, #5a5a5a, #2a2a2a)";
+
+}
+
+if (spine) {
+
+spine.style.background =
+"linear-gradient(to bottom, #4a4a4a, #1a1a1a)";
+
+}
+
+if (fallbackTitle) {
+
+fallbackTitle.textContent =
+"";
+
+fallbackTitle.classList.add(
+"empty-reservation-mark"
+);
+
+fallbackTitle.innerHTML =
+`<svg viewBox="0 0 100 150" class="empty-reservation-svg" aria-label="Question mark with a sad face">
+<path d="M22 40 Q18 10 50 10 Q82 10 82 40 Q82 62 58 68 Q50 70 50 86" fill="none" stroke="#b8b8b8" stroke-width="12" stroke-linecap="round"/>
+<circle cx="50" cy="120" r="19" fill="none" stroke="#b8b8b8" stroke-width="6"/>
+<circle cx="42" cy="114" r="2.5" fill="#b8b8b8"/>
+<circle cx="58" cy="114" r="2.5" fill="#b8b8b8"/>
+<path d="M40 130 Q50 119 60 130" fill="none" stroke="#b8b8b8" stroke-width="3.5" stroke-linecap="round"/>
+</svg>`;
+
+}
+
+attachStickyNote(
+card,
+"Nothing here yet - Maybe check out staff picks?"
+);
+
+movieGrid.appendChild(
+card
+);
+
+}
+
 function createMovieCard(
 movie,
 index
@@ -1702,6 +2197,10 @@ card.setAttribute(
 "tabindex",
 "0"
 );
+
+card.dataset.movieTitle =
+movie.title ||
+"";
 
 // =========================================================
 // COVER (SPINE + POSTER, FLAT 2D)
@@ -1931,6 +2430,37 @@ true;
 
 currentMovie =
 movie;
+
+/*
+
+* Fast & Furious rush trigger — fires on the first movie
+* opened featuring any of these actors, not specifically
+* on Fast & Furious titles. Case-insensitive substring
+* match against the cast field.
+  */
+
+const fastFuriousTriggerActors =
+[
+"vin diesel",
+"paul walker",
+"jason statham",
+"dwayne johnson"
+];
+
+if (
+movie.cast &&
+fastFuriousTriggerActors.some(
+actor =>
+movie.cast
+.toLowerCase()
+.includes(actor)
+)
+) {
+
+fastFuriousTriggerFired =
+true;
+
+}
 
 selectedCard =
 card;
@@ -2193,11 +2723,35 @@ main.style.transform =
 
 }
 
-const finalWidth =
+/*
+
+* finalWidth was previously only ever capped against
+* window.innerWidth, with finalHeight simply following at
+* a fixed 1.5x ratio — fine in portrait, where height is
+* plentiful, but in landscape on a phone the viewport can
+* be barely 375-430px tall while still allowing a width up
+* to 420px, producing a case up to 630px tall that badly
+* overflows the screen. Computing a width limit from BOTH
+* dimensions and taking whichever is smaller keeps the case
+* within the actual viewport either way, always preserving
+* the 2:3 aspect ratio.
+  */
+
+const maxWidthFromViewportWidth =
 Math.min(
 window.innerWidth *
 0.78,
 420
+);
+
+const maxWidthFromViewportHeight =
+(window.innerHeight * 0.78) /
+1.5;
+
+const finalWidth =
+Math.min(
+maxWidthFromViewportWidth,
+maxWidthFromViewportHeight
 );
 
 const finalHeight =
@@ -2323,14 +2877,119 @@ movie.director ||
 // LARGE COVER
 // =========================================================
 
+const rawIndex =
+movies.indexOf(movie);
+
+/*
+
+* movies.indexOf returns -1 for a movie that isn't in the
+* real array (like the empty-reservation placeholder) —
+* -1 % coverColors.length stays -1 in JavaScript (unlike
+* some other languages), and coverColors[-1] is undefined,
+* which crashes everything below that reads colors[0]/[1].
+* Falling back to a safe index here is what actually fixes
+* the "case disappears, nothing opens" bug.
+  */
+
 const colorIndex =
-movies.indexOf(movie) %
-coverColors.length;
+rawIndex >= 0
+? rawIndex % coverColors.length
+: 0;
 
 const colors =
 coverColors[
 colorIndex
 ];
+
+/*
+
+* Ties the back's accent bar to the SAME palette this
+* card's front cover already uses, so the back reads as
+* belonging to that specific movie rather than being
+* identical cream regardless of which one you're viewing.
+  */
+
+const movieBack =
+document.querySelector(
+".movie-back"
+);
+
+if (movieBack) {
+
+movieBack.style.setProperty(
+"--case-accent-start",
+colors[0]
+);
+
+movieBack.style.setProperty(
+"--case-accent-end",
+colors[1]
+);
+
+}
+
+/*
+
+* Back thumbnail — reuses the exact same poster URL the
+* front cover uses, so the back stays recognizable as this
+* specific movie. Hidden entirely for movies without a
+* poster rather than showing a broken image.
+  */
+
+const backThumb =
+document.getElementById(
+"modal-back-thumb"
+);
+
+const backThumbFloat =
+document.getElementById(
+"back-thumb-float"
+);
+
+if (backThumb && backThumbFloat) {
+
+if (movie.poster) {
+
+backThumb.style.backgroundImage =
+`url("${movie.poster}")`;
+
+backThumbFloat.style.display =
+"";
+
+} else {
+
+backThumbFloat.style.display =
+"none";
+
+}
+
+}
+
+/*
+
+* Barcode number — 0, the real release year, the real TMDB
+* id, 0. Falls back to a placeholder digit only if a movie
+* is genuinely missing that data, rather than showing
+* "undefined".
+  */
+
+const barcodeNumberEl =
+document.getElementById(
+"modal-barcode-number"
+);
+
+if (barcodeNumberEl) {
+
+const yearPart =
+movie.year || "0000";
+
+const idPart =
+movie.tmdbId || "0";
+
+barcodeNumberEl.textContent =
+`0 ${yearPart} ${idPart} 0`;
+
+}
 
 modalCover.innerHTML =
 "";
@@ -2399,8 +3058,27 @@ document.createElement(
 fallbackTitle.className =
 "poster-fallback-title poster-fallback-title-large";
 
+if (movie.isEmptyReservationPlaceholder) {
+
+fallbackTitle.classList.add(
+"empty-reservation-mark-large"
+);
+
+fallbackTitle.innerHTML =
+`<svg viewBox="0 0 100 150" class="empty-reservation-svg" aria-label="Question mark with a sad face">
+<path d="M22 40 Q18 10 50 10 Q82 10 82 40 Q82 62 58 68 Q50 70 50 86" fill="none" stroke="#b8b8b8" stroke-width="12" stroke-linecap="round"/>
+<circle cx="50" cy="120" r="19" fill="none" stroke="#b8b8b8" stroke-width="6"/>
+<circle cx="42" cy="114" r="2.5" fill="#b8b8b8"/>
+<circle cx="58" cy="114" r="2.5" fill="#b8b8b8"/>
+<path d="M40 130 Q50 119 60 130" fill="none" stroke="#b8b8b8" stroke-width="3.5" stroke-linecap="round"/>
+</svg>`;
+
+} else {
+
 fallbackTitle.textContent =
 movie.title;
+
+}
 
 modalCover.appendChild(
 fallbackTitle
@@ -2425,7 +3103,109 @@ Array.isArray(movie.digital)
 ? movie.digital
 : [];
 
-physical.forEach(
+/*
+
+* Movies Anywhere and Fandango are prioritized when
+* present, rather than just showing whichever 2 happen to
+* be listed first in the data. Case-insensitive match since
+* the actual data's capitalization isn't guaranteed.
+  */
+
+const digitalPriorityOrder =
+[
+"movies anywhere",
+"fandango"
+];
+
+const sortedDigital =
+[...digital].sort(
+(a, b) => {
+
+const aRank =
+digitalPriorityOrder.indexOf(
+(a || "").toLowerCase()
+);
+
+const bRank =
+digitalPriorityOrder.indexOf(
+(b || "").toLowerCase()
+);
+
+const aScore =
+aRank === -1
+? digitalPriorityOrder.length
+: aRank;
+
+const bScore =
+bRank === -1
+? digitalPriorityOrder.length
+: bRank;
+
+return aScore - bScore;
+
+}
+);
+
+/*
+
+* Physical shows only the single best version available,
+* prioritized 4K, then Blu-ray, then DVD — not every format
+* the movie happens to have. Case-insensitive, and matches
+* on a substring so "4K Ultra HD" or "Blu-ray Disc" style
+* labels still rank correctly.
+  */
+
+const physicalPriorityOrder =
+[
+"4k",
+"blu-ray",
+"bluray",
+"dvd"
+];
+
+function physicalRank(
+format
+) {
+
+const lower =
+(format || "")
+.toLowerCase();
+
+for (
+let i = 0;
+i < physicalPriorityOrder.length;
+i++
+) {
+
+if (
+lower.includes(
+physicalPriorityOrder[i]
+)
+) {
+
+return i;
+
+}
+
+}
+
+return physicalPriorityOrder.length;
+
+}
+
+const sortedPhysical =
+[...physical].sort(
+(a, b) =>
+physicalRank(a) -
+physicalRank(b)
+);
+
+const bestPhysical =
+sortedPhysical.length > 0
+? [sortedPhysical[0]]
+: [];
+
+bestPhysical.forEach(
 format => {
 
 const item =
@@ -2446,7 +3226,9 @@ item
 }
 );
 
-digital.forEach(
+sortedDigital
+.slice(0, 2)
+.forEach(
 service => {
 
 const item =
@@ -2493,11 +3275,198 @@ item
 // RESERVATIONS
 // =========================================================
 
+/*
+
+* The placeholder "movie" isn't a real reservable title —
+* Cast/Director/Formats/Reservations don't apply to it, so
+* they're hidden here. Just as important: the ELSE branch
+* explicitly restores them for real movies, since the modal
+* reuses these same DOM elements across every view rather
+* than recreating them — without this, viewing the
+* placeholder and then a real movie would leave a real
+* movie missing its cast/director/formats/reservations.
+  */
+
+const castSection =
+modalCast.closest(
+".movie-info-section"
+);
+
+const directorSection =
+modalDirector.closest(
+".movie-info-section"
+);
+
+const formatsSection =
+modalFormats.closest(
+".movie-info-section"
+);
+
+if (movie.isEmptyReservationPlaceholder) {
+
+if (castSection) {
+
+castSection.style.display =
+"none";
+
+}
+
+if (directorSection) {
+
+directorSection.style.display =
+"none";
+
+}
+
+if (formatsSection) {
+
+formatsSection.style.display =
+"none";
+
+}
+
+const existingPanel =
+document.getElementById(
+"reservation-panel"
+);
+
+if (existingPanel) {
+
+existingPanel.style.display =
+"none";
+
+}
+
+/*
+
+* Random preview posters — 4 real movies, so "explore the
+* collection below" actually has something below it to
+* point at.
+  */
+
+const collectionPreview =
+document.getElementById(
+"collection-preview"
+);
+
+if (collectionPreview) {
+
+collectionPreview.innerHTML =
+"";
+
+collectionPreview.style.display =
+"flex";
+
+const eligibleForPreview =
+movies.filter(
+m =>
+!m.isEmptyReservationPlaceholder
+);
+
+const shuffled =
+[...eligibleForPreview].sort(
+() =>
+Math.random() - 0.5
+);
+
+const previewMovies =
+shuffled.slice(0, 4);
+
+previewMovies.forEach(
+previewMovie => {
+
+const thumb =
+document.createElement(
+"div"
+);
+
+thumb.className =
+"preview-poster";
+
+if (previewMovie.poster) {
+
+thumb.style.backgroundImage =
+`url("${previewMovie.poster}")`;
+
+} else {
+
+const previewColors =
+coverColors[
+movies.indexOf(previewMovie) %
+coverColors.length
+];
+
+thumb.style.background =
+`linear-gradient(145deg, ${previewColors[0]}, ${previewColors[1]})`;
+
+}
+
+collectionPreview.appendChild(
+thumb
+);
+
+}
+);
+
+}
+
+} else {
+
+if (castSection) {
+
+castSection.style.display =
+"";
+
+}
+
+if (directorSection) {
+
+directorSection.style.display =
+"";
+
+}
+
+if (formatsSection) {
+
+formatsSection.style.display =
+"";
+
+}
+
+const existingPanel =
+document.getElementById(
+"reservation-panel"
+);
+
+if (existingPanel) {
+
+existingPanel.style.display =
+"";
+
+}
+
 createReservationPanel();
 
 updateReservationPanel(
 movie
 );
+
+const collectionPreview =
+document.getElementById(
+"collection-preview"
+);
+
+if (collectionPreview) {
+
+collectionPreview.innerHTML =
+"";
+
+collectionPreview.style.display =
+"none";
+
+}
+
+}
 
 }
 
@@ -2795,6 +3764,258 @@ false;
 
 renderMovies();
 
+if (
+fastFuriousTriggerFired &&
+!fastFuriousRushTriggered
+) {
+
+fastFuriousRushTriggered =
+true;
+
+triggerFastFuriousRush();
+
+}
+
+}
+
+/*
+
+* Fast & Furious rush — triggered once, after the second
+* distinct entry in the franchise has been opened this
+* session. Every other card exits fast, then the grid
+* re-renders filtered to just the franchise, with those
+* cards rushing back in. Bypasses the normal activeFilters
+* system on purpose (same reasoning as the Sandra Bullock
+* Easter egg) — this is a one-off surprise, not a real,
+* persistent filter state.
+  */
+
+function triggerFastFuriousRush() {
+
+const allCards =
+movieGrid.querySelectorAll(
+".movie-card"
+);
+
+allCards.forEach(
+card => {
+
+const title =
+(
+card.dataset.movieTitle ||
+""
+).toLowerCase();
+
+if (
+!title.startsWith(
+"fast & furious"
+)
+) {
+
+const distance =
+450 +
+Math.random() * 250;
+
+card.style.setProperty(
+"--rush-x",
+`${distance}px`
+);
+
+card.classList.add(
+"rush-exit"
+);
+
+}
+
+}
+);
+
+setTimeout(
+() => {
+
+fastFuriousRushActive =
+true;
+
+sandraBullockModeActive =
+false;
+
+renderMovies();
+
+const enteringCards =
+movieGrid.querySelectorAll(
+".movie-card"
+);
+
+/*
+
+* Staggered via animation-delay per card (not by adding
+* the class at different times) — this needs the cleanup
+* below to wait for the LAST card's delayed animation to
+* actually finish, since removing the class early cancels
+* an animation that hasn't started yet, even if its delay
+* just hasn't elapsed.
+  */
+
+enteringCards.forEach(
+(card, index) => {
+
+card.style.animationDelay =
+`${index * 80}ms`;
+
+card.classList.add(
+"rush-enter"
+);
+
+}
+);
+
+const totalStaggerTime =
+enteringCards.length * 80 +
+450;
+
+setTimeout(
+() => {
+
+enteringCards.forEach(
+card => {
+
+card.classList.remove(
+"rush-enter"
+);
+
+card.style.animationDelay =
+"";
+
+}
+);
+
+/*
+
+* Auto-revert — 3 seconds after the F&F cards finish
+* rushing in, they rush back off and the previous view
+* (whatever activeFilters already specifies — never
+* touched during the rush) rushes back in. Delay per
+* card is capped so a broad previous view (like "All
+* Movies," potentially hundreds of cards) doesn't
+* produce an absurdly long stagger.
+    */
+
+setTimeout(
+() => {
+
+const currentFFCards =
+movieGrid.querySelectorAll(
+".movie-card"
+);
+
+const exitDelayPerCard =
+currentFFCards.length > 0
+? Math.min(
+80,
+900 /
+currentFFCards.length
+)
+: 0;
+
+currentFFCards.forEach(
+(card, index) => {
+
+card.style.animationDelay =
+`${index * exitDelayPerCard}ms`;
+
+card.style.setProperty(
+"--rush-x",
+"-400px"
+);
+
+card.classList.add(
+"rush-exit"
+);
+
+}
+);
+
+const ffExitTotal =
+currentFFCards.length *
+exitDelayPerCard +
+450;
+
+setTimeout(
+() => {
+
+fastFuriousRushActive =
+false;
+
+renderMovies();
+
+const restoredCards =
+movieGrid.querySelectorAll(
+".movie-card"
+);
+
+const enterDelayPerCard =
+restoredCards.length > 0
+? Math.min(
+80,
+900 /
+restoredCards.length
+)
+: 0;
+
+restoredCards.forEach(
+(card, index) => {
+
+card.style.animationDelay =
+`${index * enterDelayPerCard}ms`;
+
+card.classList.add(
+"rush-enter"
+);
+
+}
+);
+
+const restoreTotal =
+restoredCards.length *
+enterDelayPerCard +
+450;
+
+setTimeout(
+() => {
+
+restoredCards.forEach(
+card => {
+
+card.classList.remove(
+"rush-enter"
+);
+
+card.style.animationDelay =
+"";
+
+}
+);
+
+},
+restoreTotal
+);
+
+},
+ffExitTotal
+);
+
+},
+3000
+);
+
+},
+totalStaggerTime
+);
+
+},
+500
+);
+
 }
 
 // =========================================================
@@ -2889,6 +4110,317 @@ flipMovie();
 );
 
 // =========================================================
+// PI EASTER EGG
+// =========================================================
+
+/*
+
+* Pi -> Matrix-style falling code -> Sandra Bullock movies
+* (a nod to The Net). Deliberately bypasses the normal
+* activeFilters system rather than adding a permanent
+* "actor filter" dimension to it — this is a one-off fun
+* surprise, not a real filter state, so the next normal
+* filter interaction correctly restores the real view.
+  */
+
+// =========================================================
+// REWIND EFFECT
+// =========================================================
+
+/*
+
+* Fires when a filter resets back to "all" — Type toggling
+* off, or Genre going back to All Genres. Guarded against
+* overlapping itself if triggered again mid-animation.
+  */
+
+let rewindEffectBusy =
+false;
+
+function triggerRewindEffect() {
+
+const rewindOverlay =
+document.getElementById(
+"rewind-overlay"
+);
+
+if (!rewindOverlay || rewindEffectBusy) {
+
+return;
+
+}
+
+rewindEffectBusy =
+true;
+
+rewindOverlay.classList.remove(
+"active"
+);
+
+void rewindOverlay.offsetWidth;
+
+rewindOverlay.classList.add(
+"active"
+);
+
+setTimeout(
+() => {
+
+rewindOverlay.classList.remove(
+"active"
+);
+
+rewindEffectBusy =
+false;
+
+},
+1600
+);
+
+}
+
+function triggerPiEasterEgg() {
+
+fastFuriousRushActive =
+false;
+
+const matrixOverlay =
+document.getElementById(
+"matrix-overlay"
+);
+
+if (!matrixOverlay) {
+
+return;
+
+}
+
+matrixOverlay.innerHTML =
+"";
+
+const columnWidth =
+22;
+
+const columnCount =
+Math.ceil(
+window.innerWidth /
+columnWidth
+);
+
+const chars =
+"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+for (
+let i = 0;
+i < columnCount;
+i++
+) {
+
+const column =
+document.createElement(
+"div"
+);
+
+column.className =
+"matrix-column";
+
+column.style.left =
+`${i * columnWidth}px`;
+
+let text =
+"";
+
+const charCount =
+20 +
+Math.floor(
+Math.random() * 15
+);
+
+for (
+let j = 0;
+j < charCount;
+j++
+) {
+
+text +=
+chars[
+Math.floor(
+Math.random() *
+chars.length
+)
+] + "\n";
+
+}
+
+column.textContent =
+text;
+
+const duration =
+1.2 +
+Math.random() * 1.5;
+
+const delay =
+Math.random() * 0.5;
+
+column.style.animationDuration =
+`${duration}s`;
+
+column.style.animationDelay =
+`${delay}s`;
+
+matrixOverlay.appendChild(
+column
+);
+
+}
+
+matrixOverlay.classList.add(
+"active"
+);
+
+setTimeout(
+() => {
+
+matrixOverlay.classList.remove(
+"active"
+);
+
+setTimeout(
+() => {
+
+matrixOverlay.innerHTML =
+"";
+
+},
+600
+);
+
+sandraBullockModeActive =
+true;
+
+renderMovies();
+
+},
+2800
+);
+
+}
+
+const piButton =
+document.getElementById(
+"pi-easter-egg"
+);
+
+if (piButton) {
+
+piButton.addEventListener(
+"click",
+triggerPiEasterEgg
+);
+
+}
+
+// =========================================================
+// BARCODE EASTER EGG
+// =========================================================
+
+/*
+
+* Attached once here, not inside populateMovie — the button
+* element itself is static in the HTML and never gets
+* recreated between movie views, so attaching this per-movie
+* would stack duplicate listeners and fire the effect
+* multiple times after viewing a few movies.
+  */
+
+const barcodeButton =
+document.getElementById(
+"modal-barcode-button"
+);
+
+const scanLine =
+document.getElementById(
+"modal-scan-line"
+);
+
+const creditMessage =
+document.getElementById(
+"modal-credit-message"
+);
+
+let barcodeBusy =
+false;
+
+if (barcodeButton) {
+
+barcodeButton.addEventListener(
+"click",
+event => {
+
+event.stopPropagation();
+
+if (barcodeBusy) {
+
+return;
+
+}
+
+barcodeBusy =
+true;
+
+if (scanLine) {
+
+scanLine.classList.remove(
+"scanning"
+);
+
+void scanLine.offsetWidth;
+
+scanLine.classList.add(
+"scanning"
+);
+
+}
+
+setTimeout(
+() => {
+
+if (creditMessage) {
+
+creditMessage.classList.add(
+"showing"
+);
+
+}
+
+},
+450
+);
+
+setTimeout(
+() => {
+
+if (creditMessage) {
+
+creditMessage.classList.remove(
+"showing"
+);
+
+}
+
+barcodeBusy =
+false;
+
+},
+1300
+);
+
+}
+);
+
+}
+
+// =========================================================
 // CLICK CASE TO FLIP
 // =========================================================
 
@@ -2903,6 +4435,9 @@ event.target.closest(
 ) ||
 event.target.closest(
 ".reservation-person"
+) ||
+event.target.closest(
+"#modal-barcode-button"
 )
 ) {
 
@@ -2995,6 +4530,12 @@ button.addEventListener(
 "click",
 () => {
 
+fastFuriousRushActive =
+false;
+
+sandraBullockModeActive =
+false;
+
 const group =
 button.dataset.filterGroup;
 
@@ -3021,6 +4562,8 @@ value
 
 activeFilters.type =
 "all";
+
+triggerRewindEffect();
 
 button.classList.remove(
 "active"
@@ -3214,6 +4757,12 @@ mediaFilterMobile.addEventListener(
 "change",
 event => {
 
+fastFuriousRushActive =
+false;
+
+sandraBullockModeActive =
+false;
+
 activeFilters.media =
 event.target.value;
 
@@ -3249,9 +4798,21 @@ genreFilter.addEventListener(
 "change",
 event => {
 
+fastFuriousRushActive =
+false;
+
+sandraBullockModeActive =
+false;
+
 activeFilters.genre =
 event.target.value ||
 null;
+
+if (event.target.value === "") {
+
+triggerRewindEffect();
+
+}
 
 genreFilter.classList.toggle(
 "active",
@@ -3366,6 +4927,32 @@ animatedButton.classList.add(
 // =========================================================
 
 function getFilteredMovies() {
+
+if (fastFuriousRushActive) {
+
+return movies.filter(
+m =>
+m.title &&
+m.title
+.toLowerCase()
+.startsWith(
+"fast & furious"
+)
+);
+
+}
+
+if (sandraBullockModeActive) {
+
+return movies.filter(
+m =>
+m.cast &&
+m.cast.includes(
+"Sandra Bullock"
+)
+);
+
+}
 
 return movies.filter(
 movie => {
@@ -3659,6 +5246,12 @@ if (randomButton) {
 randomButton.addEventListener(
 "click",
 () => {
+
+fastFuriousRushActive =
+false;
+
+sandraBullockModeActive =
+false;
 
 randomMode =
 !randomMode;
@@ -4121,12 +5714,46 @@ marqueeChaseTimeout
 marqueeChaseTimeout =
 setTimeout(
 startMarqueeChase,
-23000
+18000
 );
 
 }
 
+/*
+
+* Called both on initial page load (if classic is the active
+* theme) and every time you switch INTO classic theme — a
+* fresh entry always starts from "all lit" with a full
+* countdown, rather than picking up wherever a background
+* timer happened to be. Deliberately silent (no flash, no
+* random movie) unlike the manual reset button, since
+* switching themes isn't a click on that button.
+  */
+
+function resetMarqueeForThemeEntry() {
+
+clearInterval(
+marqueeChaseInterval
+);
+
+marqueePoppedOnce =
+false;
+
+buildMarqueeBulbs();
+
 scheduleMarqueeChase();
+
+}
+
+if (
+!document.body.classList.contains(
+"theme-arcade"
+)
+) {
+
+resetMarqueeForThemeEntry();
+
+}
 
 let marqueeResizeTimeout =
 null;
@@ -4158,6 +5785,53 @@ buildMarqueeBulbs();
 
 },
 150
+);
+
+}
+);
+
+// =========================================================
+// ORIENTATION CHANGE (LONGER SETTLE DELAY)
+// =========================================================
+
+/*
+
+* Separate from the regular resize handling above — mobile
+* Safari is known to fire "resize" mid-rotation, before the
+* viewport has actually finished settling into its new
+* dimensions, so code that measures element sizes right
+* then can grab transient, incorrect numbers (this is the
+* most likely explanation for the marquee/shelf occasionally
+* rendering wrong after a rotation). A longer delay here
+* gives the browser time to actually finish before anything
+* gets re-measured.
+  */
+
+let orientationSettleTimeout =
+null;
+
+window.addEventListener(
+"orientationchange",
+() => {
+
+clearTimeout(
+orientationSettleTimeout
+);
+
+orientationSettleTimeout =
+setTimeout(
+() => {
+
+scheduleShelfUpdate();
+
+if (!marqueePoppedOnce) {
+
+buildMarqueeBulbs();
+
+}
+
+},
+400
 );
 
 }
@@ -4283,15 +5957,40 @@ triggerMarqueeReset
 
 /*
 
-* Faint until 23 seconds on the site, regardless of theme
-* — so switching into arcade mode after already browsing
-* a while shows it already lit rather than restarting the
-* wait. Resets every fresh page load, same as everything
-* else on the site (no localStorage — this one's meant to
-* stay a small per-visit surprise, not something remembered
-* forever once found).
+* Faint until 18 seconds into being in arcade theme —
+* called both on initial load (if arcade is the active
+* theme) and every time you switch INTO arcade, always
+* starting a fresh countdown rather than a timer that's
+* been silently running since page load regardless of
+* which theme was showing.
   */
 
+let coinRevealTimeout =
+null;
+
+function scheduleCoinReveal() {
+
+clearTimeout(
+coinRevealTimeout
+);
+
+if (coinSlotButton) {
+
+coinSlotButton.classList.remove(
+"lit"
+);
+
+}
+
+if (coinSlotButtonMobile) {
+
+coinSlotButtonMobile.classList.remove(
+"lit"
+);
+
+}
+
+coinRevealTimeout =
 setTimeout(
 () => {
 
@@ -4312,8 +6011,163 @@ coinSlotButtonMobile.classList.add(
 }
 
 },
-23000
+18000
 );
+
+}
+
+if (
+document.body.classList.contains(
+"theme-arcade"
+)
+) {
+
+scheduleCoinReveal();
+
+}
+
+// =========================================================
+// FLAVOR TEXT
+// =========================================================
+
+/*
+
+* Special-date entries take priority over the generic
+* fallback — checked against today's real date every time
+* the site loads. To add more, just add another object to
+* this array; nothing else needs to change. month is 1-12
+* (not 0-11) to match how a person would actually write a
+* date.
+  */
+
+const specialDateFlavorText =
+[
+{ month: 1, day: 1, text: "Somewhere, Rocky's stepping into the ring against Apollo Creed today." },
+{ month: 1, day: 1, text: "And the rematch — Rocky vs. Apollo, round two, also today." },
+{ month: 1, day: 6, text: "Happy birthday to Sherlock Holmes." },
+{ month: 1, day: 12, text: "HAL 9000 goes online today. I'm sorry, Dave." },
+{ month: 1, day: 29, text: "The Truman Show just premiered." },
+{ month: 2, day: 2, text: "Phil Connors is about to relive this exact day. Again." },
+{ month: 2, day: 14, text: "Ghostbusters II predicted the world would end today. We're still here." },
+{ month: 3, day: 2, text: "First contact with extraterrestrials, according to Men in Black." },
+{ month: 3, day: 22, text: "The annual Purge begins tonight. Lock your doors." },
+{ month: 3, day: 24, text: "A brain, an athlete, a basket case, a princess, and a criminal walk into Saturday detention today." },
+{ month: 4, day: 8, text: "Rex Manning Day. Go rent something." },
+{ month: 4, day: 14, text: "T.S. and Brodie are having a rough day at the mall right about now." },
+{ month: 4, day: 14, text: "Jack's sketching Rose aboard the Titanic right now." },
+{ month: 4, day: 15, text: "Dante and Randal are opening the Quick Stop they shouldn't even be working today." },
+{ month: 4, day: 25, text: "Not too hot, not too cold. All you need is a light jacket." },
+{ month: 5, day: 12, text: "Kyle Reese just arrived in 1984 to protect Sarah Connor." },
+{ month: 5, day: 23, text: "Something big just attacked New York." },
+{ month: 6, day: 1, text: "The alien ship just appeared over Johannesburg." },
+{ month: 7, day: 2, text: "The aliens are arriving today, if this were Independence Day." },
+{ month: 7, day: 31, text: "The guys just landed in Vegas for Doug's bachelor party. This won't end well." },
+{ month: 7, day: 31, text: "Also Harry Potter's birthday — Hagrid's on his way with a letter." },
+{ month: 8, day: 4, text: "Skynet goes online today." },
+{ month: 8, day: 9, text: "Eviction notices going out to the aliens today." },
+{ month: 8, day: 23, text: "A massive earthquake just turned LA into an island." },
+{ month: 8, day: 29, text: "Judgment Day. Skynet just became self-aware." },
+{ month: 9, day: 2, text: "Marty just landed in the Old West." },
+{ month: 9, day: 12, text: "A hard day for Robert Neville." },
+{ month: 9, day: 25, text: "LA just recorded its last murder before the crime-free future, according to Demolition Man." },
+{ month: 10, day: 3, text: "It's October 3rd." },
+{ month: 10, day: 10, text: "In the movie's future, the Cubs just won the World Series today." },
+{ month: 10, day: 16, text: "The Robinson family just got lost in space." },
+{ month: 10, day: 18, text: "The Joker's robbing a bank today." },
+{ month: 10, day: 21, text: "Back to the Future Day — Marty, Doc, and Jennifer just landed in 2015." },
+{ month: 10, day: 27, text: "Marty's finally heading back to the present." },
+{ month: 10, day: 28, text: "Zuckerberg just launched Facemash." },
+{ month: 10, day: 31, text: "Cobra Kai's crashing the Halloween dance about now." },
+{ month: 11, day: 2, text: "E.T. is phoning home today." },
+{ month: 11, day: 5, text: "Marty just arrived in 1955." },
+{ month: 11, day: 5, text: "Remember, remember — V's blowing up the Old Bailey today." },
+{ month: 11, day: 12, text: "Lightning strike incoming — Marty's about to head back to 1985." },
+{ month: 12, day: 16, text: "A tense day for Creasy and The Voice." },
+{ month: 12, day: 24, text: "Yippee-ki-yay — the Nakatomi Plaza Christmas party is tonight." },
+{ month: 12, day: 25, text: "Rocky's fighting Ivan Drago in Moscow today. Merry Christmas." }
+];
+
+const genericFlavorText =
+[
+{ startHour: 5, endHour: 11, text: "Morning movie? No judgment here." },
+{ startHour: 11, endHour: 17, text: "Afternoon browsing — take your time." },
+{ startHour: 17, endHour: 22, text: "Prime time. What's the pick tonight?" },
+{ startHour: 22, endHour: 24, text: "Late one tonight — anything good playing?" },
+{ startHour: 0, endHour: 5, text: "Up late browsing? We won't tell." }
+];
+
+function renderFlavorText() {
+
+const flavorTextEl =
+document.getElementById(
+"flavor-text"
+);
+
+if (!flavorTextEl) {
+
+return;
+
+}
+
+const now =
+new Date();
+
+const currentMonth =
+now.getMonth() + 1;
+
+const currentDay =
+now.getDate();
+
+/*
+
+* filter (not find) — several dates now have more than one
+* matching movie, so this collects all of today's matches
+* and picks randomly among them rather than always favoring
+* whichever happens to be listed first in the array.
+  */
+
+const specialMatches =
+specialDateFlavorText.filter(
+entry =>
+entry.month === currentMonth &&
+entry.day === currentDay
+);
+
+if (specialMatches.length > 0) {
+
+const randomMatch =
+specialMatches[
+Math.floor(
+Math.random() *
+specialMatches.length
+)
+];
+
+flavorTextEl.textContent =
+randomMatch.text;
+
+return;
+
+}
+
+const currentHour =
+now.getHours();
+
+const genericMatch =
+genericFlavorText.find(
+entry =>
+currentHour >= entry.startHour &&
+currentHour < entry.endHour
+);
+
+flavorTextEl.textContent =
+genericMatch
+? genericMatch.text
+: "";
+
+}
+
+renderFlavorText();
 
 let coinSlotBusy =
 false;
@@ -4465,6 +6319,12 @@ if (searchInput) {
 searchInput.addEventListener(
 "input",
 event => {
+
+fastFuriousRushActive =
+false;
+
+sandraBullockModeActive =
+false;
 
 currentSearch =
 event.target.value.trim();
