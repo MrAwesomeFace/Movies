@@ -55,6 +55,7 @@
       </div>
     </div>
     <p id="movie-count">Loading collection...</p>
+    <p id="flavor-text" class="flavor-text"></p>
   </div>
 
 <div class="header-icon-buttons">
@@ -248,6 +249,8 @@ autocomplete="off"
       Staff Picks
     </button>
 
+    <span class="coin-slot-anchor">
+
     <button
       id="coin-slot-button"
       class="coin-slot-button"
@@ -259,6 +262,8 @@ autocomplete="off"
         <rect x="16.5" y="22" width="7" height="44" rx="3.5" fill="none" stroke="#ff1428" stroke-width="2"></rect>
       </svg>
     </button>
+
+    </span>
 
     <button
       id="marquee-reset-button"
@@ -443,6 +448,32 @@ autocomplete="off"
 
   <div id="marquee-pop-flash" aria-hidden="true"></div>
 
+  <!--
+    Pi Easter egg — bottom-right, always present. Click
+    triggers a brief Matrix-style overlay, then filters to
+    Sandra Bullock movies (a nod to The Net).
+  -->
+
+  <button
+    type="button"
+    id="pi-easter-egg"
+    aria-label="Pi symbol"
+  >π</button>
+
+  <div id="matrix-overlay" aria-hidden="true"></div>
+
+  <!--
+    Rewind effect — fires when a filter resets back to "all
+    movies" or "all genres", playing into the site's own
+    name: resetting filters is like rewinding back to the
+    full shelf.
+  -->
+
+  <div id="rewind-overlay" aria-hidden="true">
+    <div class="rewind-icon">◀◀</div>
+    <div class="rewind-text">REWINDING</div>
+  </div>
+
   <!-- =========================================================
        MOVIE DETAIL WINDOW
        ========================================================= -->
@@ -498,50 +529,88 @@ aria-label="Close"
 
       <div class="back-content">
 
-        <h2 id="modal-title"></h2>
+        <div class="back-texture"></div>
 
+        <div class="back-top-row">
 
-        <div class="movie-meta">
+          <div class="back-title-meta">
 
-          <span id="modal-year"></span>
+            <h2 id="modal-title"></h2>
 
-          <span>•</span>
+            <div class="movie-meta">
 
-          <span id="modal-runtime"></span>
+              <span id="modal-year"></span>
 
-          <span>•</span>
+              <span>•</span>
 
-          <span id="modal-genre"></span>
+              <span id="modal-runtime"></span>
 
-        </div>
+              <span>•</span>
 
+              <span id="modal-genre"></span>
 
-        <div class="movie-info-section">
+            </div>
 
-          <h3>About</h3>
+          </div>
 
-          <p id="modal-synopsis"></p>
+          <div class="back-thumb-float" id="back-thumb-float">
 
-        </div>
+            <div
+              class="back-thumb-image"
+              id="modal-back-thumb"
+            ></div>
 
-
-        <div class="movie-info-section">
-
-          <h3>Starring</h3>
-
-          <p id="modal-cast"></p>
-
-        </div>
-
-
-        <div class="movie-info-section">
-
-          <h3>Directed by</h3>
-
-          <p id="modal-director"></p>
+          </div>
 
         </div>
 
+        <p
+          id="modal-synopsis"
+          class="back-synopsis"
+        ></p>
+
+        <div class="back-badge-row">
+
+          <span class="back-feature-badge">Widescreen</span>
+
+          <span class="back-feature-badge">Bonus Features</span>
+
+          <span class="back-feature-badge">Deleted Scenes</span>
+
+        </div>
+
+        <div class="back-cast-section">
+
+          <div class="movie-info-section">
+
+            <h3 class="back-section-heading">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M12 12c2.5 0 4.5-2 4.5-4.5S14.5 3 12 3 7.5 5 7.5 7.5 9.5 12 12 12z"/>
+                <path d="M4 21c0-4 3.5-7 8-7s8 3 8 7"/>
+              </svg>
+              Starring
+            </h3>
+
+            <p id="modal-cast"></p>
+
+          </div>
+
+          <div class="movie-info-section">
+
+            <h3 class="back-section-heading">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="2" y="7" width="15" height="12" rx="2"/>
+                <path d="M17 10l5-3v10l-5-3"/>
+                <circle cx="9.5" cy="13" r="3"/>
+              </svg>
+              Directed by
+            </h3>
+
+            <p id="modal-director"></p>
+
+          </div>
+
+        </div>
 
         <div class="movie-info-section">
 
@@ -563,6 +632,46 @@ aria-label="Close"
           automatically and keeps it synchronized
           with the reservation API.
         -->
+
+        <div
+          id="collection-preview"
+          class="collection-preview"
+        ></div>
+
+
+        <div class="back-barcode-area">
+
+          <button
+            type="button"
+            class="back-barcode-clickable"
+            id="modal-barcode-button"
+            aria-label="Scan barcode"
+          >
+
+            <span
+              class="back-credit-message"
+              id="modal-credit-message"
+            >Free Credit Applied</span>
+
+            <span class="back-barcode-sticker">
+
+              <span
+                class="back-scan-line"
+                id="modal-scan-line"
+              ></span>
+
+              <span class="back-barcode-bars"></span>
+
+              <span
+                class="back-barcode-number"
+                id="modal-barcode-number"
+              ></span>
+
+            </span>
+
+          </button>
+
+        </div>
 
       </div>
 
