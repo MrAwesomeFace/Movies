@@ -1225,6 +1225,227 @@ body.theme-arcade #now-showing-frame {
 
 
 /* =========================================================
+ROM-COM HEART BADGE
+=========================================================
+A small pulsing heart on any card whose genre includes the
+"Rom-Com" tag — same substring match the genre filter itself
+uses, so there's nothing to keep in sync separately.
+========================================================= */
+
+.rom-com-heart-wrapper {
+  position: absolute;
+
+  top: 6px;
+  right: 6px;
+
+  width: 22px;
+  height: 22px;
+
+  z-index: 4;
+
+  pointer-events: none;
+}
+
+.rom-com-heart {
+  position: absolute;
+
+  inset: 0;
+
+  filter:
+    drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6));
+
+  animation:
+    rom-com-heart-pulse 1.6s ease-in-out infinite;
+}
+
+.rom-com-heart svg,
+.rom-com-heart-ripple svg {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+}
+
+.rom-com-heart path {
+  fill: #ff4d6d;
+
+  stroke: rgba(255, 255, 255, 0.55);
+
+  stroke-width: 1;
+}
+
+/*
+ * Defensive fallback — if a stale rect-based (pixel) heart
+ * ever ends up rendered outside arcade theme for any reason,
+ * this keeps it visibly pink instead of defaulting to SVG's
+ * built-in black, which against a dark card reads as "the
+ * heart disappeared" rather than just "wrong shape".
+ */
+
+.rom-com-heart rect {
+  fill: #ff4d6d;
+}
+
+@keyframes rom-com-heart-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.14);
+  }
+}
+
+/*
+ * Ripple echoes — two fainter hearts behind the main one,
+ * each scaling up and fading out on a staggered delay, so
+ * they read as two or three rings drifting outward rather
+ * than firing in unison.
+ */
+
+.rom-com-heart-ripple {
+  position: absolute;
+
+  inset: 0;
+
+  animation:
+    rom-com-heart-ripple 1.6s ease-out infinite;
+}
+
+.rom-com-heart-ripple path {
+  fill: none;
+
+  stroke: #ff4d6d;
+
+  stroke-width: 1.4;
+}
+
+.rom-com-heart-ripple rect {
+  fill: #ff4d6d;
+}
+
+@keyframes rom-com-heart-ripple {
+  0% {
+    transform: scale(1);
+
+    opacity: 0.55;
+  }
+
+  100% {
+    transform: scale(2.1);
+
+    opacity: 0;
+  }
+}
+
+body.theme-arcade .rom-com-heart path {
+  fill: #ff6ec7;
+
+  stroke: rgba(0, 255, 255, 0.5);
+}
+
+body.theme-arcade .rom-com-heart rect {
+  fill: #ff6ec7;
+}
+
+body.theme-arcade .rom-com-heart-ripple path,
+body.theme-arcade .rom-com-heart-ripple rect {
+  fill: #ff6ec7;
+
+  stroke: none;
+}
+
+body.theme-arcade .rom-com-heart-ripple {
+  opacity: 0.8;
+}
+
+
+/* =========================================================
+HEART FLOOD EASTER EGG (Rom-Com filter)
+=========================================================
+A brief flood of hearts drifting up the screen when the
+genre filter switches to Rom-Com — same "fire and clean up
+after itself" pattern as the glass shatter effect, all built
+and removed by JS (triggerHeartFlood in app.js), nothing
+left behind once it finishes.
+========================================================= */
+
+.heart-flood-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 250;
+
+  pointer-events: none;
+
+  overflow: hidden;
+}
+
+.heart-flood-particle {
+  position: absolute;
+
+  bottom: -40px;
+
+  opacity: 0;
+
+  animation-name: heart-flood-rise;
+
+  animation-timing-function: ease-in;
+
+  animation-fill-mode: forwards;
+}
+
+.heart-flood-particle svg {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+}
+
+.heart-flood-particle path {
+  fill: #ff4d6d;
+}
+
+.heart-flood-particle rect {
+  fill: #ff4d6d;
+}
+
+body.theme-arcade .heart-flood-particle path,
+body.theme-arcade .heart-flood-particle rect {
+  fill: #ff6ec7;
+}
+
+@keyframes heart-flood-rise {
+  0% {
+    transform:
+      translateY(0)
+      translateX(0)
+      rotate(0deg);
+
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  85% {
+    opacity: 1;
+  }
+
+  100% {
+    transform:
+      translateY(-105vh)
+      translateX(var(--drift, 0px))
+      rotate(var(--spin, 20deg));
+
+    opacity: 0;
+  }
+}
+
+
+/* =========================================================
 GLASS SHATTER EASTER EGG (Rocky / Creed / Stallone)
 ========================================================= */
 
