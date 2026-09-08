@@ -698,6 +698,8 @@ main {
 
   position: relative;
 
+  align-items: end;
+
   grid-template-columns:
     repeat(3, minmax(0, 1fr));
 
@@ -1094,6 +1096,295 @@ EMPTY RESERVATION SHELF
   width: 200px;
 
   max-width: 45%;
+}
+
+
+/* =========================================================
+NOW SHOWING FRAME
+=========================================================
+Wraps the OPENED movie modal, not the shelf — a domino-
+shaped frame sitting behind .modal-content, with a dot-
+matrix "NOW SHOWING" sign (bulbs forming the letters, not
+text) in a header strip above it, a divider row of bulbs
+below that, and a continuous bulb border around the whole
+outer edge. The frame is a separate, independently
+positioned element — it never flips; only the case inside
+modal-content does, since the frame has no relationship to
+the flip-container at all. Shown/hidden and positioned by
+JS (showNowShowingFrame / hideNowShowingFrame in app.js),
+since it needs to match modal-content's real rendered rect,
+which only exists once the open animation has settled.
+========================================================= */
+
+.now-showing-frame-hidden {
+  display: none;
+}
+
+#now-showing-frame {
+  position: fixed;
+
+  z-index: 0;
+
+  border-radius: 16px;
+
+  background:
+    linear-gradient(150deg, #0a1830, #050d1e);
+
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.7),
+    inset 0 0 0 1px rgba(251, 205, 54, 0.25),
+    0 0 20px rgba(251, 205, 54, 0.35);
+
+  opacity: 0;
+
+  transition:
+    opacity 0.35s ease;
+
+  pointer-events: none;
+}
+
+#now-showing-frame.visible {
+  opacity: 1;
+}
+
+body.theme-arcade #now-showing-frame {
+  display: none !important;
+}
+
+.ns-frame-header {
+  position: relative;
+
+  height: 54px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+.ns-frame-divider {
+  position: relative;
+
+  height: 20px;
+}
+
+.now-showing-bulb {
+  position: absolute;
+
+  border-radius: 50%;
+
+  background: #fff6d9;
+
+  animation:
+    now-showing-bulb-twinkle 2.4s ease-in-out infinite;
+
+  pointer-events: none;
+}
+
+.now-showing-bulb.perimeter {
+  width: 9px;
+  height: 9px;
+
+  box-shadow:
+    0 0 7px 3px #ffd24a,
+    0 0 15px 6px rgba(255, 210, 74, 0.9);
+}
+
+.now-showing-bulb.letter {
+  box-shadow:
+    0 0 6px 2.5px #ffd24a,
+    0 0 12px 4px rgba(255, 210, 74, 0.85);
+}
+
+.now-showing-bulb:nth-child(3n) {
+  animation-delay: 0.35s;
+}
+
+.now-showing-bulb:nth-child(4n) {
+  animation-delay: 0.8s;
+}
+
+.now-showing-bulb:nth-child(5n) {
+  animation-delay: 1.2s;
+}
+
+.now-showing-bulb:nth-child(7n) {
+  animation-delay: 1.6s;
+}
+
+@keyframes now-showing-bulb-twinkle {
+  0%, 100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.68;
+  }
+}
+
+
+/* =========================================================
+GLASS SHATTER EASTER EGG (Rocky / Creed / Stallone)
+========================================================= */
+
+
+/* =========================================================
+GLASS SHATTER EASTER EGG (Rocky / Creed / Stallone)
+========================================================= */
+
+/*
+ * Fired on click, before the card flies into the modal —
+ * a quick "punched" impact: the case shakes, a white flash
+ * bursts from the impact point, and cracked-glass lines
+ * spider outward. All three finish and clean themselves up
+ * well before the 900ms fly-to-modal transition ends, so
+ * they read as the moment of impact rather than fighting
+ * the zoom.
+ */
+
+.glass-shatter-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 40;
+
+  pointer-events: none;
+
+  overflow: visible;
+}
+
+.glass-shatter-overlay svg {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  opacity: 0;
+
+  animation:
+    shatterCrackFade 480ms ease-out forwards;
+}
+
+/*
+ * Once the impact animation finishes, the crack settles
+ * here permanently for the rest of the session — no
+ * animation, held at a lower opacity than the fresh flash
+ * so it reads as an old crack rather than a repeating
+ * flicker. Applied directly (no animation) when a card is
+ * rebuilt for a movie already cracked earlier in the
+ * session, so there's never a flash of "unbroken" glass.
+ */
+
+.glass-shatter-overlay.settled svg {
+  opacity: 0.55;
+
+  animation: none;
+}
+
+.glass-shatter-flash {
+  position: absolute;
+
+  inset: 0;
+
+  border-radius: 4px;
+
+  background:
+    radial-gradient(
+      circle at var(--impact-x, 50%) var(--impact-y, 50%),
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(255, 255, 255, 0.5) 18%,
+      rgba(255, 255, 255, 0) 55%
+    );
+
+  opacity: 0;
+
+  animation:
+    shatterFlash 350ms ease-out forwards;
+}
+
+@keyframes shatterFlash {
+  0% {
+    opacity: 0;
+  }
+
+  12% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes shatterCrackFade {
+  0% {
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 0.9;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes shatterPunch {
+  0% {
+    transform:
+      translate(0, 0)
+      scale(1)
+      rotate(0deg);
+  }
+
+  15% {
+    transform:
+      translate(-3px, 1px)
+      scale(0.96)
+      rotate(-1.2deg);
+  }
+
+  30% {
+    transform:
+      translate(3px, -2px)
+      scale(1.02)
+      rotate(1deg);
+  }
+
+  45% {
+    transform:
+      translate(-2px, 1px)
+      scale(0.99)
+      rotate(-0.6deg);
+  }
+
+  65% {
+    transform:
+      translate(1px, -1px)
+      scale(1.005)
+      rotate(0.3deg);
+  }
+
+  100% {
+    transform:
+      translate(0, 0)
+      scale(1)
+      rotate(0deg);
+  }
+}
+
+.movie-cover.punched {
+  animation:
+    shatterPunch 420ms ease-out;
 }
 
 
@@ -1801,8 +2092,6 @@ BACK
   flex-direction: column;
 
   gap: 12px;
-
-  margin-top: 20px;
 }
 
 .back-section-heading {
@@ -2305,12 +2594,73 @@ BACK CONTENT
 
   -webkit-overflow-scrolling: touch;
 
-  padding: 20px;
+  background:
+    var(--case-accent-end, #4b6cb7);
+}
+
+/*
+ * Three stacked bands — each is a plain rectangle that
+ * sizes to its own content (no fixed or min heights, no
+ * clip-path, no negative margins pulling bands over each
+ * other). Each band paints its own background across its
+ * own box, so there's no reliance on a parent scroll
+ * container's background trying to cover content it
+ * doesn't know the height of — that dependency was the
+ * root cause of the color cutting off partway through
+ * scrolled content.
+ */
+
+.back-band {
+  padding: 16px 18px;
+}
+
+.back-band-1 {
+  position: relative;
+
+  background: #362a12;
+
+  color: #f0e6c8;
+
+  padding-bottom: 42px;
+
+  clip-path:
+    polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 26px));
+}
+
+.back-band-2 {
+  position: relative;
+
+  z-index: 1;
+
+  margin-top: -16px;
+
+  padding-top: 46px;
+  padding-bottom: 42px;
 
   background:
-    linear-gradient(145deg, #4a3a1a, #221a0c);
+    var(--case-accent-start, #6b1414);
 
-  background-attachment: local;
+  color: #f5e8e0;
+
+  clip-path:
+    polygon(0 0, 100% 26px, 100% calc(100% - 26px), 0 100%);
+}
+
+.back-band-3 {
+  position: relative;
+
+  z-index: 2;
+
+  margin-top: -16px;
+
+  padding-top: 46px;
+
+  background: #362a12;
+
+  color: #f0e6c8;
+
+  clip-path:
+    polygon(0 0, 100% 26px, 100% 100%, 0 100%);
 }
 
 .back-content h2 {
@@ -2341,6 +2691,12 @@ BACK CONTENT
 .movie-info-section {
 
   margin-top: 18px;
+
+}
+
+.back-band > .movie-info-section:first-child {
+
+  margin-top: 0;
 
 }
 
@@ -3842,14 +4198,22 @@ body.theme-arcade .movie-back {
 
 body.theme-arcade .back-content {
 
-  background:
-    linear-gradient(
-      135deg,
-      #0a0a0d,
-      #05030a
-    );
+  background: #08080a;
+}
 
-  background-attachment: local;
+body.theme-arcade .back-band-1,
+body.theme-arcade .back-band-2,
+body.theme-arcade .back-band-3 {
+
+  background: #08080a;
+
+  color: #f5f5f5;
+
+  clip-path: none !important;
+
+  margin-top: 0 !important;
+
+  padding: 16px 18px !important;
 }
 
 body.theme-arcade .back-texture {
