@@ -154,6 +154,19 @@ false;
 
 /*
 
+* Glass shatter easter egg — tracks which movies have been
+* "punched" this session (keyed by getMovieId, the same
+* canonical ID reservations use), so the crack reappears on
+* that card any time it's redrawn — after a filter change,
+* a search, a re-sort — for the rest of the session, without
+* needing to persist anything to storage.
+  */
+
+const crackedMovieIds =
+new Set();
+
+/*
+
 * When true, getFilteredMovies() returns ONLY the franchise
 * regardless of activeFilters — this is what makes the rush
 * result persist correctly through opening and closing
@@ -194,61 +207,6 @@ false;
 * movies still showed.
   */
 
-/*
-
-* Keyed to the exact genre values the dropdown uses. A
-* movie whose genre doesn't match any key (or has none)
-* falls back to stickyNoteFallbackMessages instead.
-  */
-
-const stickyNoteMessagesByGenre =
-{
-action:
-[
-"Buckle up for this one.",
-"Big, loud, and fun.",
-"Popcorn-throwing good time."
-],
-classic:
-[
-"A certified classic.",
-"They don't make them like this anymore.",
-"Timeless pick."
-],
-comedy:
-[
-"Great popcorn movie.",
-"Good for a laugh.",
-"Perfect for a light night."
-],
-drama:
-[
-"Total tearjerker. Bring tissues.",
-"Have the tissues ready.",
-"An emotional one."
-],
-horror:
-[
-"Don't watch alone.",
-"Keep the lights on for this one.",
-"Not for the faint of heart."
-],
-thriller:
-[
-"Edge-of-your-seat stuff.",
-"Hard to look away from this one.",
-"Twisty and tense."
-]
-};
-
-const stickyNoteFallbackMessages =
-[
-"Rewatch-worthy. Every time.",
-"Underrated. Give it a shot.",
-"Better than you'd expect.",
-"Perfect for a rainy day."
-];
-
 function attachStickyNote(
 card,
 text
@@ -268,99 +226,6 @@ text;
 card.appendChild(
 note
 );
-
-}
-
-let stickyNoteChosenTitle =
-null;
-
-let stickyNoteChosenMessage =
-null;
-
-/*
-
-* Sentinel (not null/undefined) so the very first render
-* always counts as "the genre changed" and triggers a pick,
-* regardless of activeFilters.genre's actual starting value.
-  */
-
-let stickyNoteLastGenre =
-"__UNSET__";
-
-/*
-
-* Re-picks only when the Genre filter has actually changed
-* since the last pick — other filters (Type, Media,
-* Category, Reservation, Search, Staff Picks) leave the
-* current choice alone. Lands on roughly the 3rd row of
-* whatever the current genre-filtered view looks like,
-* using that specific movie's own genre to pick a fitting
-* message rather than a generic one.
-  */
-
-function pickStickyNoteForCurrentView(
-filteredMovies
-) {
-
-const eligibleMovies =
-filteredMovies.filter(
-m =>
-m.type === "movie"
-);
-
-if (eligibleMovies.length === 0) {
-
-stickyNoteChosenTitle =
-null;
-
-return;
-
-}
-
-const gridColumnValue =
-getComputedStyle(
-movieGrid
-).gridTemplateColumns;
-
-const columnCount =
-gridColumnValue
-.split(" ")
-.filter(Boolean).length ||
-1;
-
-const firstThreeRowsCount =
-Math.min(
-columnCount * 3,
-eligibleMovies.length
-);
-
-const randomIndex =
-Math.floor(
-Math.random() *
-firstThreeRowsCount
-);
-
-const chosenMovie =
-eligibleMovies[randomIndex];
-
-stickyNoteChosenTitle =
-chosenMovie.title;
-
-const genreKey =
-(chosenMovie.genre || "")
-.toLowerCase();
-
-const pool =
-stickyNoteMessagesByGenre[genreKey] ||
-stickyNoteFallbackMessages;
-
-stickyNoteChosenMessage =
-pool[
-Math.floor(
-Math.random() *
-pool.length
-)
-];
 
 }
 
@@ -936,9 +801,9 @@ panel.appendChild(
 people
 );
 
-const backContentEl =
+const backBand3 =
 document.querySelector(
-".back-content"
+".back-band-3"
 );
 
 const barcodeArea =
@@ -946,18 +811,18 @@ document.querySelector(
 ".back-barcode-area"
 );
 
-if (backContentEl) {
+if (backBand3) {
 
 if (barcodeArea) {
 
-backContentEl.insertBefore(
+backBand3.insertBefore(
 panel,
 barcodeArea
 );
 
 } else {
 
-backContentEl.appendChild(
+backBand3.appendChild(
 panel
 );
 
@@ -1791,66 +1656,6 @@ card
 );
 
 // =========================================================
-// STICKY NOTE
-// =========================================================
-
-/*
-
-* Chosen ONCE per page load (see ensureStickyNoteChosen),
-* not re-randomized on every render — re-picking on every
-* filter change looked chaotic, like a different case had
-* the note each time you touched a filter. The same chosen
-* movie now only shows its note when that specific movie
-* happens to be visible under whatever filter is active.
-  */
-
-/*
-
-* Re-picks (movie + message + position) only when the
-* Genre filter has changed since the last pick — other
-* filter interactions leave the current choice alone and
-* just re-locate it if that same movie is still visible.
-  */
-
-if (
-activeFilters.genre !==
-stickyNoteLastGenre
-) {
-
-stickyNoteLastGenre =
-activeFilters.genre;
-
-pickStickyNoteForCurrentView(
-filteredMovies
-);
-
-}
-
-if (stickyNoteChosenTitle) {
-
-const matchingCard =
-Array.from(
-movieGrid.querySelectorAll(
-".movie-card:not(.empty-reservation-card)"
-)
-).find(
-card =>
-card.dataset.movieTitle ===
-stickyNoteChosenTitle
-);
-
-if (matchingCard) {
-
-attachStickyNote(
-matchingCard,
-stickyNoteChosenMessage
-);
-
-}
-
-}
-
-// =========================================================
 // SHELVES
 // =========================================================
 
@@ -2180,6 +1985,422 @@ card
 
 }
 
+// =========================================================
+// NOW SHOWING SLOT
+// =========================================================
+
+/*
+
+* Places bulbs evenly around a container's outer perimeter
+* at a fixed spacing, computed from its real rendered size —
+* called after the element is in the DOM, not before, since
+* clientWidth/clientHeight are only meaningful once it's
+* actually laid out. Keeps density consistent across the
+* site's different responsive column counts, rather than a
+* fixed bulb count that would bunch up or thin out.
+  */
+
+function placePerimeterBulbs(
+container,
+spacing,
+inset
+) {
+
+const w =
+container.clientWidth;
+
+const h =
+container.clientHeight;
+
+const points =
+[];
+
+for (
+let x = inset;
+x <= w - inset;
+x += spacing
+) {
+
+points.push([x, inset]);
+points.push([x, h - inset]);
+
+}
+
+for (
+let y = inset + spacing;
+y < h - inset;
+y += spacing
+) {
+
+points.push([inset, y]);
+points.push([w - inset, y]);
+
+}
+
+for (const [x, y] of points) {
+
+const bulb =
+document.createElement(
+"div"
+);
+
+bulb.className =
+"now-showing-bulb perimeter";
+
+bulb.style.left =
+`${x - 4.5}px`;
+
+bulb.style.top =
+`${y - 4.5}px`;
+
+container.appendChild(
+bulb
+);
+
+}
+
+}
+
+function placeLineBulbs(
+container,
+spacing,
+inset
+) {
+
+const w =
+container.clientWidth;
+
+for (
+let x = inset;
+x <= w - inset;
+x += spacing
+) {
+
+const bulb =
+document.createElement(
+"div"
+);
+
+bulb.className =
+"now-showing-bulb perimeter";
+
+bulb.style.left =
+`${x - 4.5}px`;
+
+bulb.style.top =
+"6px";
+
+container.appendChild(
+bulb
+);
+
+}
+
+}
+
+/*
+
+* 5x7 dot-matrix bitmap font — covers only the letters
+* "NOW SHOWING" actually needs, not a full alphabet. Each
+* entry is 7 rows of a 5-bit row pattern, 1 = lit bulb.
+* Sized at 3px/1px gap specifically because that's the
+* largest size that was measured to actually fit the real
+* frame width without the final letter clipping into the
+* border bulbs — see the fit-testing this was built from.
+  */
+
+const NOW_SHOWING_FONT =
+{
+N: [0b10001, 0b11001, 0b11001, 0b10101, 0b10011, 0b10011, 0b10001],
+O: [0b01110, 0b10001, 0b10001, 0b10001, 0b10001, 0b10001, 0b01110],
+W: [0b10001, 0b10001, 0b10001, 0b10101, 0b10101, 0b10101, 0b01010],
+S: [0b01111, 0b10000, 0b10000, 0b01110, 0b00001, 0b00001, 0b11110],
+H: [0b10001, 0b10001, 0b10001, 0b11111, 0b10001, 0b10001, 0b10001],
+I: [0b11111, 0b00100, 0b00100, 0b00100, 0b00100, 0b00100, 0b11111],
+G: [0b01110, 0b10001, 0b10000, 0b10111, 0b10001, 0b10001, 0b01111],
+" ": [0, 0, 0, 0, 0, 0, 0]
+};
+
+function buildDotMatrix(
+container,
+text,
+dotSize,
+gap,
+verticalOffset
+) {
+
+let x =
+0;
+
+const yOffset =
+verticalOffset ||
+0;
+
+const letterWidth =
+5 * (dotSize + gap);
+
+const spaceWidth =
+letterWidth * 0.6;
+
+for (const ch of text) {
+
+const glyph =
+NOW_SHOWING_FONT[ch];
+
+if (!glyph) {
+
+x += spaceWidth;
+
+continue;
+
+}
+
+for (
+let row = 0;
+row < 7;
+row++
+) {
+
+for (
+let col = 0;
+col < 5;
+col++
+) {
+
+if ((glyph[row] >> (4 - col)) & 1) {
+
+const dot =
+document.createElement(
+"div"
+);
+
+dot.className =
+"now-showing-bulb letter";
+
+dot.style.width =
+`${dotSize}px`;
+
+dot.style.height =
+`${dotSize}px`;
+
+dot.style.left =
+`${x + col * (dotSize + gap)}px`;
+
+dot.style.top =
+`${yOffset + row * (dotSize + gap)}px`;
+
+container.appendChild(
+dot
+);
+
+}
+
+}
+
+}
+
+x +=
+letterWidth +
+spaceWidth * 0.5;
+
+}
+
+container.style.width =
+`${x}px`;
+
+container.style.margin =
+"0 auto";
+
+}
+
+/*
+
+* Set to 1 (100%) for testing per request — drop back down
+* to the real target rate (around 0.35) once it's confirmed
+* to look right across a range of real movies.
+  */
+
+let nowShowingChance =
+1;
+
+let nowShowingFrameActive =
+false;
+
+/*
+
+* Positions the frame around modal-content's REAL rendered
+* rect — only meaningful after the open animation has
+* settled, which is why this is called from the setTimeout
+* at the end of the open sequence rather than at click time.
+* A separate, independently positioned element behind
+* modal-content — never touches modal-content itself, so it
+* can't interfere with the flip, the resize logic, or the
+* close animation.
+  */
+
+function showNowShowingFrame() {
+
+const content =
+modal.querySelector(
+".modal-content"
+);
+
+const frame =
+document.getElementById(
+"now-showing-frame"
+);
+
+const header =
+document.getElementById(
+"ns-frame-header"
+);
+
+const divider =
+document.getElementById(
+"ns-frame-divider"
+);
+
+if (
+!content ||
+!frame ||
+!header ||
+!divider
+) {
+
+return;
+
+}
+
+const rect =
+content.getBoundingClientRect();
+
+const topExtra =
+86;
+
+const sideExtra =
+14;
+
+const bottomExtra =
+14;
+
+frame.style.left =
+`${rect.left - sideExtra}px`;
+
+frame.style.top =
+`${rect.top - topExtra}px`;
+
+frame.style.width =
+`${rect.width + sideExtra * 2}px`;
+
+frame.style.height =
+`${rect.height + topExtra + bottomExtra}px`;
+
+header.innerHTML =
+"";
+
+divider.innerHTML =
+"";
+
+Array.from(
+frame.querySelectorAll(
+".now-showing-bulb.perimeter"
+)
+).forEach(
+bulb => {
+
+if (
+bulb.parentElement === frame
+) {
+
+bulb.remove();
+
+}
+
+}
+);
+
+frame.classList.remove(
+"now-showing-frame-hidden"
+);
+
+nowShowingFrameActive =
+true;
+
+requestAnimationFrame(
+() => {
+
+buildDotMatrix(
+header,
+"NOW SHOWING",
+3,
+1,
+20
+);
+
+placeLineBulbs(
+divider,
+16,
+6
+);
+
+placePerimeterBulbs(
+frame,
+16,
+6
+);
+
+frame.classList.add(
+"visible"
+);
+
+}
+);
+
+}
+
+function hideNowShowingFrame() {
+
+if (!nowShowingFrameActive) {
+
+return;
+
+}
+
+nowShowingFrameActive =
+false;
+
+const frame =
+document.getElementById(
+"now-showing-frame"
+);
+
+if (!frame) {
+
+return;
+
+}
+
+frame.classList.remove(
+"visible"
+);
+
+setTimeout(
+() => {
+
+if (!nowShowingFrameActive) {
+
+frame.classList.add(
+"now-showing-frame-hidden"
+);
+
+}
+
+},
+350
+);
+
+}
+
 function createMovieCard(
 movie,
 index
@@ -2402,7 +2623,383 @@ card
 }
 );
 
+if (
+crackedMovieIds.has(
+getMovieId(
+movie
+)
+)
+) {
+
+renderPersistentCrack(
+card
+);
+
+}
+
 return card;
+
+}
+
+// =========================================================
+// GLASS SHATTER EASTER EGG (Rocky / Creed / Stallone)
+// =========================================================
+
+/*
+
+* Builds a randomized "punched glass" crack pattern as an
+* SVG string — a handful of jagged lines radiating outward
+* from an impact point (with occasional branch cracks off
+* the main lines), plus a few small translucent shard
+* triangles near the impact point itself. viewBox matches
+* the 2:3 poster aspect ratio. Random each time, so it
+* doesn't look identical on repeat triggers.
+  */
+
+function generateCrackSVG() {
+
+const width = 200;
+const height = 300;
+
+const centerX =
+width / 2 +
+(Math.random() * 30 - 15);
+
+const centerY =
+height / 2 +
+(Math.random() * 40 - 20);
+
+const numCracks =
+7 +
+Math.floor(
+Math.random() * 3
+);
+
+let paths =
+"";
+
+for (
+let i = 0;
+i < numCracks;
+i++
+) {
+
+const baseAngle =
+(i / numCracks) *
+Math.PI * 2 +
+(Math.random() * 0.3 - 0.15);
+
+const maxDist =
+90 +
+Math.random() * 70;
+
+const segments =
+3 +
+Math.floor(
+Math.random() * 2
+);
+
+let angle =
+baseAngle;
+
+let d =
+`M ${centerX.toFixed(1)} ${centerY.toFixed(1)} `;
+
+for (
+let s = 1;
+s <= segments;
+s++
+) {
+
+const dist =
+(maxDist / segments) * s;
+
+angle +=
+(Math.random() * 0.5 - 0.25);
+
+const jitterPerp =
+(Math.random() * 10 - 5);
+
+const nx =
+centerX +
+Math.cos(angle) * dist +
+Math.cos(angle + Math.PI / 2) * jitterPerp;
+
+const ny =
+centerY +
+Math.sin(angle) * dist +
+Math.sin(angle + Math.PI / 2) * jitterPerp;
+
+d +=
+`L ${nx.toFixed(1)} ${ny.toFixed(1)} `;
+
+}
+
+paths +=
+`<path d="${d}" stroke="rgba(255,255,255,0.85)" stroke-width="1.4" fill="none" stroke-linecap="round" />`;
+
+if (Math.random() < 0.6) {
+
+const branchStart =
+0.5 +
+Math.random() * 0.3;
+
+const bx =
+centerX +
+Math.cos(baseAngle) * maxDist * branchStart;
+
+const by =
+centerY +
+Math.sin(baseAngle) * maxDist * branchStart;
+
+const branchAngle =
+baseAngle +
+(Math.random() < 0.5 ? 1 : -1) *
+(0.4 + Math.random() * 0.5);
+
+const branchDist =
+15 +
+Math.random() * 20;
+
+const bx2 =
+bx +
+Math.cos(branchAngle) * branchDist;
+
+const by2 =
+by +
+Math.sin(branchAngle) * branchDist;
+
+paths +=
+`<path d="M ${bx.toFixed(1)} ${by.toFixed(1)} L ${bx2.toFixed(1)} ${by2.toFixed(1)}" stroke="rgba(255,255,255,0.6)" stroke-width="1" fill="none" stroke-linecap="round" />`;
+
+}
+
+}
+
+let shards =
+"";
+
+for (
+let i = 0;
+i < 5;
+i++
+) {
+
+const a1 =
+Math.random() * Math.PI * 2;
+
+const a2 =
+a1 +
+0.3 +
+Math.random() * 0.4;
+
+const r1 =
+4 +
+Math.random() * 6;
+
+const r2 =
+10 +
+Math.random() * 14;
+
+const x1 =
+centerX + Math.cos(a1) * r1;
+
+const y1 =
+centerY + Math.sin(a1) * r1;
+
+const x3 =
+centerX + Math.cos((a1 + a2) / 2) * r2 * 1.3;
+
+const y3 =
+centerY + Math.sin((a1 + a2) / 2) * r2 * 1.3;
+
+shards +=
+`<polygon points="${centerX.toFixed(1)},${centerY.toFixed(1)} ${x1.toFixed(1)},${y1.toFixed(1)} ${x3.toFixed(1)},${y3.toFixed(1)}" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.5)" stroke-width="0.6" />`;
+
+}
+
+const svg =
+`<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">${shards}${paths}</svg>`;
+
+return {
+svg,
+centerX,
+centerY,
+width,
+height
+};
+
+}
+
+/*
+
+* Punched-glass impact on a card — a quick shake, a white
+* flash bursting from the impact point, and cracks spidering
+* outward, all wrapping up in well under half a second so
+* they read as the moment of impact rather than lingering
+* into the fly-to-modal transition. Self-removing: nothing
+* is left behind in the DOM after it finishes.
+  */
+
+function triggerGlassShatter(
+card,
+movie
+) {
+
+const cover =
+card.querySelector(
+".movie-cover"
+) ||
+card.querySelector(
+".now-showing-poster-full"
+);
+
+if (!cover) {
+
+return;
+
+}
+
+if (movie) {
+
+crackedMovieIds.add(
+getMovieId(
+movie
+)
+);
+
+}
+
+const {
+svg,
+centerX,
+centerY,
+width,
+height
+} =
+generateCrackSVG();
+
+const impactXPercent =
+(centerX / width) * 100;
+
+const impactYPercent =
+(centerY / height) * 100;
+
+const overlay =
+document.createElement(
+"div"
+);
+
+overlay.className =
+"glass-shatter-overlay";
+
+overlay.innerHTML =
+svg;
+
+const flash =
+document.createElement(
+"div"
+);
+
+flash.className =
+"glass-shatter-flash";
+
+flash.style.setProperty(
+"--impact-x",
+`${impactXPercent}%`
+);
+
+flash.style.setProperty(
+"--impact-y",
+`${impactYPercent}%`
+);
+
+overlay.appendChild(
+flash
+);
+
+cover.appendChild(
+overlay
+);
+
+cover.classList.add(
+"punched"
+);
+
+setTimeout(
+() => {
+
+cover.classList.remove(
+"punched"
+);
+
+flash.remove();
+
+/*
+
+* Leave the crack SVG itself in place — settling it
+* into the same static, no-animation state that
+* renderPersistentCrack uses for a freshly-redrawn
+* card, so a live "just punched" card and a
+* just-rebuilt "already cracked" card end up looking
+* identical.
+    */
+
+overlay.classList.add(
+"settled"
+);
+
+},
+500
+);
+
+}
+
+/*
+
+* Applies a static (no flash, no shake) crack overlay to a
+* card that was already punched earlier this session — used
+* right after a card is built, before it's ever shown, so a
+* re-render never has a flash of "unbroken" glass.
+  */
+
+function renderPersistentCrack(
+card
+) {
+
+const cover =
+card.querySelector(
+".movie-cover"
+) ||
+card.querySelector(
+".now-showing-poster-full"
+);
+
+if (!cover) {
+
+return;
+
+}
+
+const {
+svg
+} =
+generateCrackSVG();
+
+const overlay =
+document.createElement(
+"div"
+);
+
+overlay.className =
+"glass-shatter-overlay settled";
+
+overlay.innerHTML =
+svg;
+
+cover.appendChild(
+overlay
+);
 
 }
 
@@ -2462,6 +3059,46 @@ true;
 
 }
 
+/*
+
+* Glass shatter easter egg — fires on Rocky or Creed
+* titles, or any movie featuring Sylvester Stallone in the
+* cast, whichever franchise it's from (Rambo, Expendables,
+* etc). Same case-insensitive substring pattern as the
+* Fast & Furious trigger above. Fires immediately on click,
+* on the card itself, before it flies into the modal.
+  */
+
+const rockyTitleTriggers =
+["rocky", "creed"];
+
+const isRockyOrCreedTitle =
+movie.title &&
+rockyTitleTriggers.some(
+word =>
+movie.title
+.toLowerCase()
+.includes(word)
+);
+
+const hasStallone =
+movie.cast &&
+movie.cast
+.toLowerCase()
+.includes("stallone");
+
+if (
+isRockyOrCreedTitle ||
+hasStallone
+) {
+
+triggerGlassShatter(
+card,
+movie
+);
+
+}
+
 selectedCard =
 card;
 
@@ -2482,6 +3119,9 @@ card;
 const cover =
 card.querySelector(
 ".movie-cover"
+) ||
+card.querySelector(
+".now-showing-poster-full"
 );
 
 const coverRect =
@@ -2816,6 +3456,15 @@ modal.style.pointerEvents =
 
 isOpening =
 false;
+
+if (
+Math.random() <
+nowShowingChance
+) {
+
+showNowShowingFrame();
+
+}
 
 },
 930
@@ -3488,6 +4137,8 @@ return;
 
 isClosing =
 true;
+
+hideNowShowingFrame();
 
 const content =
 modal.querySelector(
