@@ -485,6 +485,14 @@ autocomplete="off"
 
 <div class="modal-backdrop"></div>
 
+<div id="now-showing-frame" class="now-showing-frame-hidden">
+
+  <div class="ns-frame-header" id="ns-frame-header"></div>
+
+  <div class="ns-frame-divider" id="ns-frame-divider"></div>
+
+</div>
+
 <div class="modal-content">
 
 <button
@@ -531,133 +539,145 @@ aria-label="Close"
 
         <div class="back-texture"></div>
 
-        <div class="back-top-row">
+        <div class="back-band back-band-1">
 
-          <div class="back-title-meta">
+          <div class="back-top-row">
 
-            <h2 id="modal-title"></h2>
+            <div class="back-title-meta">
 
-            <div class="movie-meta">
+              <h2 id="modal-title"></h2>
 
-              <span id="modal-year"></span>
+              <div class="movie-meta">
 
-              <span>•</span>
+                <span id="modal-year"></span>
 
-              <span id="modal-runtime"></span>
+                <span>•</span>
 
-              <span>•</span>
+                <span id="modal-runtime"></span>
 
-              <span id="modal-genre"></span>
+                <span>•</span>
+
+                <span id="modal-genre"></span>
+
+              </div>
+
+            </div>
+
+            <div class="back-thumb-float" id="back-thumb-float">
+
+              <div
+                class="back-thumb-image"
+                id="modal-back-thumb"
+              ></div>
 
             </div>
 
           </div>
 
-          <div class="back-thumb-float" id="back-thumb-float">
+          <p
+            id="modal-synopsis"
+            class="back-synopsis"
+          ></p>
+
+          <div class="back-badge-row">
+
+            <span class="back-feature-badge">Widescreen</span>
+
+            <span class="back-feature-badge">Bonus Features</span>
+
+            <span class="back-feature-badge">Deleted Scenes</span>
+
+          </div>
+
+        </div>
+
+
+        <div class="back-band back-band-2">
+
+          <div class="back-cast-section">
+
+            <div class="movie-info-section">
+
+              <h3 class="back-section-heading">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M12 12c2.5 0 4.5-2 4.5-4.5S14.5 3 12 3 7.5 5 7.5 7.5 9.5 12 12 12z"/>
+                  <path d="M4 21c0-4 3.5-7 8-7s8 3 8 7"/>
+                </svg>
+                Starring
+              </h3>
+
+              <p id="modal-cast"></p>
+
+            </div>
+
+            <div class="movie-info-section">
+
+              <h3 class="back-section-heading">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="2" y="7" width="15" height="12" rx="2"/>
+                  <path d="M17 10l5-3v10l-5-3"/>
+                  <circle cx="9.5" cy="13" r="3"/>
+                </svg>
+                Directed by
+              </h3>
+
+              <p id="modal-director"></p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="back-band back-band-3">
+
+          <div class="movie-info-section">
+
+            <h3>Where to find it</h3>
 
             <div
-              class="back-thumb-image"
-              id="modal-back-thumb"
+              id="modal-formats"
+              class="format-list"
             ></div>
 
           </div>
 
-        </div>
 
-        <p
-          id="modal-synopsis"
-          class="back-synopsis"
-        ></p>
+          <!--
+            RESERVATIONS ARE CREATED BY app.js
 
-        <div class="back-badge-row">
-
-          <span class="back-feature-badge">Widescreen</span>
-
-          <span class="back-feature-badge">Bonus Features</span>
-
-          <span class="back-feature-badge">Deleted Scenes</span>
-
-        </div>
-
-        <div class="back-cast-section">
-
-          <div class="movie-info-section">
-
-            <h3 class="back-section-heading">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path d="M12 12c2.5 0 4.5-2 4.5-4.5S14.5 3 12 3 7.5 5 7.5 7.5 9.5 12 12 12z"/>
-                <path d="M4 21c0-4 3.5-7 8-7s8 3 8 7"/>
-              </svg>
-              Starring
-            </h3>
-
-            <p id="modal-cast"></p>
-
-          </div>
-
-          <div class="movie-info-section">
-
-            <h3 class="back-section-heading">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <rect x="2" y="7" width="15" height="12" rx="2"/>
-                <path d="M17 10l5-3v10l-5-3"/>
-                <circle cx="9.5" cy="13" r="3"/>
-              </svg>
-              Directed by
-            </h3>
-
-            <p id="modal-director"></p>
-
-          </div>
-
-        </div>
-
-        <div class="movie-info-section">
-
-          <h3>Where to find it</h3>
+            Do not add reservation HTML here.
+            app.js creates the reservation panel
+            automatically and keeps it synchronized
+            with the reservation API.
+          -->
 
           <div
-            id="modal-formats"
-            class="format-list"
+            id="collection-preview"
+            class="collection-preview"
           ></div>
 
-        </div>
 
+          <div class="back-barcode-area">
 
-        <!--
-          RESERVATIONS ARE CREATED BY app.js
-
-          Do not add reservation HTML here.
-          app.js creates the reservation panel
-          automatically and keeps it synchronized
-          with the reservation API.
-        -->
-
-        <div
-          id="collection-preview"
-          class="collection-preview"
-        ></div>
-
-
-        <div class="back-barcode-area">
-
-          <button
-            type="button"
-            class="back-barcode-clickable"
-            id="modal-barcode-button"
-            aria-label="Scan barcode"
-          >
-
-            <span
-              class="back-credit-message"
-              id="modal-credit-message"
-            >Free Credit Applied</span>
-
-            <span class="back-barcode-sticker">
+            <button
+              type="button"
+              class="back-barcode-clickable"
+              id="modal-barcode-button"
+              aria-label="Scan barcode"
+            >
 
               <span
-                class="back-scan-line"
-                id="modal-scan-line"
+                class="back-credit-message"
+                id="modal-credit-message"
+              >Free Credit Applied</span>
+
+              <span class="back-barcode-sticker">
+
+                <span
+                  class="back-scan-line"
+                  id="modal-scan-line"
               ></span>
 
               <span class="back-barcode-bars"></span>
@@ -672,6 +692,8 @@ aria-label="Close"
           </button>
 
         </div>
+
+      </div>
 
       </div>
 
