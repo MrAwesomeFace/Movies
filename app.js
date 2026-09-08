@@ -17,6 +17,24 @@ const RESERVATION_PEOPLE = [
 "Joey"
 ];
 
+/*
+
+* Two heart shapes, shared by the card badge, the ripple
+* echoes, and the filter flood — smooth for the default
+* theme, a blocky pixel-grid version for arcade. Built as
+* SVG rects on a 7x6 grid rather than a curved path, so it
+* actually reads as 8-bit rather than just a smaller heart.
+* Declared here, early, since createMovieCard needs it from
+* the very first renderMovies() call at page load — declared
+* any later would hit it before this line had run.
+  */
+
+const SMOOTH_HEART_SVG =
+`<svg viewBox="0 0 32 29" aria-hidden="true"><path d="M16 28.5C9 23.5 1 17.8 1 9.8 1 4.9 4.9 1 9.7 1c2.8 0 5.4 1.4 6.9 3.6C18.1 2.4 20.7 1 23.5 1 28.3 1 32.2 4.9 32.2 9.8 32.2 17.8 24.2 23.5 17.2 28.5z"/></svg>`;
+
+const PIXEL_HEART_SVG =
+`<svg viewBox="0 0 7 6" aria-hidden="true" shape-rendering="crispEdges"><rect x="1" y="0" width="1" height="1"/><rect x="2" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="0" y="1" width="1" height="1"/><rect x="1" y="1" width="1" height="1"/><rect x="2" y="1" width="1" height="1"/><rect x="3" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/><rect x="5" y="1" width="1" height="1"/><rect x="6" y="1" width="1" height="1"/><rect x="0" y="2" width="1" height="1"/><rect x="1" y="2" width="1" height="1"/><rect x="2" y="2" width="1" height="1"/><rect x="3" y="2" width="1" height="1"/><rect x="4" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/><rect x="6" y="2" width="1" height="1"/><rect x="1" y="3" width="1" height="1"/><rect x="2" y="3" width="1" height="1"/><rect x="3" y="3" width="1" height="1"/><rect x="4" y="3" width="1" height="1"/><rect x="5" y="3" width="1" height="1"/><rect x="2" y="4" width="1" height="1"/><rect x="3" y="4" width="1" height="1"/><rect x="4" y="4" width="1" height="1"/><rect x="3" y="5" width="1" height="1"/></svg>`;
+
 let reservations = [];
 
 // =========================================================
@@ -1317,6 +1335,20 @@ localStorage.setItem(
 "mrMoviesTheme",
 isArcade ? "arcade" : "default"
 );
+
+/*
+
+* Cards (and specifically the Rom-Com heart's shape —
+* smooth path in classic, blocky pixel grid in arcade) are
+* built once at render time based on whichever theme was
+* active then, and don't update on their own just because
+* the theme class changed. Without this, switching themes
+* left every already-rendered heart frozen as whichever
+* shape it was born with — a re-render rebuilds them
+* correctly for the theme actually showing now.
+  */
+
+renderMovies();
 
 /*
 
@@ -2633,6 +2665,108 @@ movie
 
 renderPersistentCrack(
 card
+);
+
+}
+
+/*
+
+* Rom-Com heart badge — matches by the same text-tag
+* pattern as the genre filter itself, so a movie shows
+* the heart exactly when it would also show up under the
+* Rom-Com filter, with nothing to keep in sync separately.
+  */
+
+const movieGenreText =
+(movie.genre || "")
+.toLowerCase();
+
+if (
+movieGenreText.includes(
+"rom-com"
+)
+) {
+
+const isArcadeTheme =
+document.body.classList.contains(
+"theme-arcade"
+);
+
+const heartSVG =
+isArcadeTheme ?
+PIXEL_HEART_SVG :
+SMOOTH_HEART_SVG;
+
+const wrapper =
+document.createElement(
+"div"
+);
+
+wrapper.className =
+"rom-com-heart-wrapper";
+
+const ripple1 =
+document.createElement(
+"div"
+);
+
+ripple1.className =
+"rom-com-heart-ripple";
+
+ripple1.innerHTML =
+heartSVG;
+
+ripple1.style.animationDelay =
+"0s";
+
+const ripple2 =
+document.createElement(
+"div"
+);
+
+ripple2.className =
+"rom-com-heart-ripple";
+
+ripple2.innerHTML =
+heartSVG;
+
+ripple2.style.animationDelay =
+"0.6s";
+
+const heartBadge =
+document.createElement(
+"div"
+);
+
+heartBadge.className =
+"rom-com-heart";
+
+heartBadge.innerHTML =
+heartSVG;
+
+wrapper.appendChild(
+ripple1
+);
+
+wrapper.appendChild(
+ripple2
+);
+
+wrapper.appendChild(
+heartBadge
+);
+
+/*
+
+* Appended to coverInner, NOT cover — coverInner is the
+* element the hover-lift transform actually targets, so
+* the heart needs to live inside it to lift together with
+* the poster rather than staying behind while the poster
+* rises above it.
+  */
+
+coverInner.appendChild(
+wrapper
 );
 
 }
@@ -4830,6 +4964,142 @@ false;
 
 }
 
+/*
+
+* Heart flood — fires once when the genre filter switches
+* to Rom-Com. Builds its own overlay and particles entirely
+* in JS (nothing pre-built in the HTML, same as the glass
+* shatter effect), and removes the whole overlay afterward —
+* nothing lingers in the DOM once it's done playing.
+  */
+
+let heartFloodBusy =
+false;
+
+function triggerHeartFlood() {
+
+if (heartFloodBusy) {
+
+return;
+
+}
+
+heartFloodBusy =
+true;
+
+const overlay =
+document.createElement(
+"div"
+);
+
+overlay.className =
+"heart-flood-overlay";
+
+const heartSVG =
+document.body.classList.contains(
+"theme-arcade"
+) ?
+PIXEL_HEART_SVG :
+SMOOTH_HEART_SVG;
+
+const particleCount =
+36;
+
+let maxFinish =
+0;
+
+for (
+let i = 0;
+i < particleCount;
+i++
+) {
+
+const particle =
+document.createElement(
+"div"
+);
+
+particle.className =
+"heart-flood-particle";
+
+particle.innerHTML =
+heartSVG;
+
+const size =
+14 +
+Math.random() * 20;
+
+const leftPercent =
+Math.random() * 100;
+
+const duration =
+2.6 +
+Math.random() * 2.2;
+
+const delay =
+Math.random() * 0.9;
+
+const drift =
+(Math.random() * 140 - 70);
+
+const spin =
+(Math.random() * 60 - 30);
+
+particle.style.width =
+`${size}px`;
+
+particle.style.height =
+`${size}px`;
+
+particle.style.left =
+`${leftPercent}%`;
+
+particle.style.setProperty(
+"--drift",
+`${drift}px`
+);
+
+particle.style.setProperty(
+"--spin",
+`${spin}deg`
+);
+
+particle.style.animationDuration =
+`${duration}s`;
+
+particle.style.animationDelay =
+`${delay}s`;
+
+maxFinish =
+Math.max(
+maxFinish,
+duration + delay
+);
+
+overlay.appendChild(
+particle
+);
+
+}
+
+document.body.appendChild(
+overlay
+);
+
+setTimeout(
+() => {
+
+overlay.remove();
+
+heartFloodBusy =
+false;
+
+},
+(maxFinish + 0.3) * 1000
+);
+
+}
+
 function triggerPiEasterEgg() {
 
 fastFuriousRushActive =
@@ -5462,6 +5732,12 @@ null;
 if (event.target.value === "") {
 
 triggerRewindEffect();
+
+}
+
+if (event.target.value === "rom-com") {
+
+triggerHeartFlood();
 
 }
 
