@@ -134,6 +134,75 @@ aria-label="Reset marquee lights"
   class="search-area hidden"
 >
 
+<div class="rated-filter-wrapper">
+
+  <button
+    type="button"
+    id="rated-filter-button"
+    class="rated-filter-button"
+    aria-expanded="false"
+    aria-haspopup="true"
+  >
+    Rated
+    <span
+      id="rated-filter-count"
+      class="rated-filter-count hidden"
+    ></span>
+  </button>
+
+  <div
+    id="rated-filter-popover"
+    class="rated-filter-popover hidden"
+  >
+
+    <label class="rated-filter-row">
+      <input type="checkbox" value="G" class="rated-filter-checkbox">
+      <span class="rated-filter-box"></span>
+      G
+    </label>
+
+    <label class="rated-filter-row">
+      <input type="checkbox" value="PG" class="rated-filter-checkbox">
+      <span class="rated-filter-box"></span>
+      PG
+    </label>
+
+    <label class="rated-filter-row">
+      <input type="checkbox" value="PG-13" class="rated-filter-checkbox">
+      <span class="rated-filter-box"></span>
+      PG-13
+    </label>
+
+    <label class="rated-filter-row">
+      <input type="checkbox" value="R" class="rated-filter-checkbox">
+      <span class="rated-filter-box"></span>
+      R
+    </label>
+
+    <label class="rated-filter-row">
+      <input type="checkbox" value="NC-17" class="rated-filter-checkbox">
+      <span class="rated-filter-box"></span>
+      NC-17
+    </label>
+
+    <label class="rated-filter-row">
+      <input type="checkbox" value="NR" class="rated-filter-checkbox">
+      <span class="rated-filter-box"></span>
+      NR
+    </label>
+
+    <div class="rated-filter-divider"></div>
+
+    <button
+      type="button"
+      id="rated-filter-clear"
+      class="rated-filter-clear"
+    >Clear ratings</button>
+
+  </div>
+
+</div>
+
 <input
 type="search"
 id="search-input"
@@ -569,6 +638,11 @@ aria-label="Close"
               <div
                 class="back-thumb-image"
                 id="modal-back-thumb"
+              ></div>
+
+              <div
+                id="modal-rated"
+                class="back-rated-badge"
               ></div>
 
             </div>
