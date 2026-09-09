@@ -2253,7 +2253,7 @@ container.style.margin =
   */
 
 let nowShowingChance =
-0.35;
+1;
 
 let nowShowingFrameActive =
 false;
@@ -4519,6 +4519,12 @@ savedScrollY
 // CLEAR OLD CARD
 // =========================================================
 
+const closedCard =
+selectedCard;
+
+const closedMovie =
+currentMovie;
+
 if (selectedCard) {
 
 selectedCard.classList.remove(
@@ -4543,11 +4549,42 @@ null;
 isClosing =
 false;
 
-// =========================================================
-// NOW REBUILD THE SHELF
-// =========================================================
+/*
 
-renderMovies();
+* The shelf used to do a full renderMovies() here on every
+* single close — rebuilding all ~900+ cards from scratch,
+* including every poster's background-image, even though
+* nothing about the shelf actually changed. Measured at
+* 50-60ms of pure JS on a fast desktop browser before even
+* counting the paint/decode work the browser does
+* afterward, which is almost certainly the real source of
+* the "delay then blink" on slower hardware like tablets.
+
+* The one thing that DOES sometimes need to show up
+* immediately is the glass-shatter crack, if this viewing
+* happened to trigger it (a Rocky/Stallone movie). That only
+* ever affects the ONE card just closed, so it's updated
+* directly instead of rebuilding everything else around it.
+  */
+
+if (
+closedCard &&
+closedMovie &&
+crackedMovieIds.has(
+getMovieId(
+closedMovie
+)
+) &&
+!closedCard.querySelector(
+".glass-shatter-overlay"
+)
+) {
+
+renderPersistentCrack(
+closedCard
+);
+
+}
 
 if (
 fastFuriousTriggerFired &&
