@@ -347,6 +347,60 @@ jobs:
 
 
           # =========================================================
+          # MPA / CONTENT RATING
+          #
+          # Movies and TV shows keep this on different endpoints
+          # with different shapes, so each media type is handled on
+          # its own. US certification specifically — other
+          # countries rate the same title differently. No US
+          # certification on file becomes "NR" (Not Rated) rather
+          # than blank, since that's a real, useful answer, not a
+          # missing one.
+          # =========================================================
+
+          mpa_rating = "NR"
+
+          if MEDIA_TYPE == "movie":
+
+              release_dates = tmdb_get(
+                  f"movie/{TMDB_ID}/release_dates"
+              )
+
+              for entry in release_dates.get("results", []):
+
+                  if entry.get("iso_3166_1") != "US":
+                      continue
+
+                  for release in entry.get("release_dates", []):
+
+                      cert = (release.get("certification") or "").strip()
+
+                      if cert:
+                          mpa_rating = cert
+                          break
+
+                  break
+
+          else:
+
+              content_ratings = tmdb_get(
+                  f"tv/{TMDB_ID}/content_ratings"
+              )
+
+              for entry in content_ratings.get("results", []):
+
+                  if entry.get("iso_3166_1") != "US":
+                      continue
+
+                  cert = (entry.get("rating") or "").strip()
+
+                  if cert:
+                      mpa_rating = cert
+
+                  break
+
+
+          # =========================================================
           # GENRES
           # =========================================================
 
@@ -494,6 +548,20 @@ jobs:
 
 
               # -----------------------------------------------------
+              # MPA rating — only if currently missing, same
+              # gap-filler rule the resync workflow uses. A run of
+              # this workflow against an existing entry shouldn't
+              # overwrite a rating that's already there.
+              # -----------------------------------------------------
+
+              if "rated" not in existing_movie:
+                  existing_movie["rated"] = mpa_rating
+
+              if not (existing_movie.get("tmdbTitle") or "").strip():
+                  existing_movie["tmdbTitle"] = tmdb_title
+
+
+              # -----------------------------------------------------
               # Categories / tags
               # -----------------------------------------------------
 
@@ -531,6 +599,7 @@ jobs:
               print(f"TMDB ID:    {TMDB_ID}")
               print(f"Type:       {MEDIA_TYPE}")
               print(f"Genre:      {existing_movie.get('genre', '')}")
+              print(f"Rated:      {existing_movie.get('rated', '')}")
               print(f"Physical:   {', '.join(physical) or 'none'}")
               print(f"Digital:    {', '.join(digital) or 'none'}")
               print(f"Categories: {', '.join(categories) or 'none'}")
@@ -544,12 +613,14 @@ jobs:
 
               movie = {
                   "title": normalized_title,
+                  "tmdbTitle": tmdb_title,
                   "type": MEDIA_TYPE,
                   "tmdbId": int(TMDB_ID),
                   "poster": poster,
                   "year": year,
                   "runtime": runtime,
                   "genre": " / ".join(genres),
+                  "rated": mpa_rating,
                   "director": ", ".join(directors),
                   "cast": ", ".join(cast),
                   "synopsis": data.get("overview", ""),
@@ -571,6 +642,7 @@ jobs:
               print(f"TMDB ID:    {TMDB_ID}")
               print(f"Type:       {MEDIA_TYPE}")
               print(f"Genre:      {movie['genre']}")
+              print(f"Rated:      {movie['rated']}")
               print(f"Physical:   {', '.join(selected_physical) or 'none'}")
               print(f"Digital:    {', '.join(selected_digital) or 'none'}")
               print(f"Categories: {', '.join(selected_categories) or 'none'}")
