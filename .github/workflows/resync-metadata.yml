@@ -1,0 +1,437 @@
+name: Resync Missing Metadata
+
+on:
+  workflow_dispatch:
+
+jobs:
+  resync-metadata:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Resync blank metadata from TMDB
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+
+        run: |
+          cat > resync_metadata.py <<'PYTHON'
+          import json
+          import os
+          import re
+          import time
+          import urllib.error
+          import urllib.request
+
+
+          # =========================================================
+          # SETUP
+          # =========================================================
+
+          API_KEY = os.environ["TMDB_API_KEY"]
+
+          # Small pause between requests — not strictly required by
+          # TMDB's current limits, but with ~330 requests in one run
+          # this costs under two minutes total and keeps things well
+          # inside safe territory.
+          REQUEST_DELAY_SECONDS = 0.3
+
+
+          def tmdb_get(path):
+              url = (
+                  f"https://api.themoviedb.org/3/{path}"
+                  f"?language=en-US"
+              )
+
+              request = urllib.request.Request(
+                  url,
+                  headers={
+                      "User-Agent": "BW-Movie-Collection",
+                      "Authorization": f"Bearer {API_KEY}",
+                      "accept": "application/json",
+                  }
+              )
+
+              with urllib.request.urlopen(request) as response:
+                  return json.load(response)
+
+
+          # =========================================================
+          # LOAD EXISTING MOVIES
+          # =========================================================
+
+          with open("movies.js", "r", encoding="utf-8") as f:
+              existing = f.read()
+
+          start = existing.find("[")
+          end = existing.rfind("]")
+
+          if start == -1 or end == -1:
+              raise SystemExit(
+                  "ERROR: Could not locate movies array in movies.js."
+              )
+
+          array_text = existing[start:end + 1]
+
+          array_text = re.sub(
+              r",(\s*[\}\]])",
+              r"\1",
+              array_text
+          )
+
+          try:
+              movies = json.loads(array_text)
+
+          except json.JSONDecodeError as e:
+              raise SystemExit(
+                  f"ERROR: Could not parse movies.js as JSON: {e}"
+              )
+
+
+          # =========================================================
+          # FIND ENTRIES MISSING CORE METADATA
+          #
+          # Blank genre alone isn't a reliable signal — a few
+          # entries already have a manually-added genre tag (like
+          # "Rom-Com") despite still being missing director, cast,
+          # and runtime from the original partial import. Checking
+          # all three catches those too, without needing to special
+          # case them.
+          # =========================================================
+
+          targets = [
+              movie for movie in movies
+              if movie.get("tmdbId")
+              and (
+                  not (movie.get("director") or "").strip()
+                  or not (movie.get("cast") or "").strip()
+                  or not (movie.get("runtime") or "").strip()
+                  or "rated" not in movie
+                  or not (movie.get("tmdbTitle") or "").strip()
+              )
+          ]
+
+          print(f"Found {len(targets)} entries missing director, cast, runtime, MPA rating, or tmdbTitle.")
+          print("")
+
+
+          # =========================================================
+          # RESYNC EACH ONE
+          #
+          # Only ever WRITES a field if it was blank beforehand (or,
+          # for "rated" — the MPA content rating, G/PG/PG-13/R/NC-17
+          # — if the key doesn't exist at all yet, since it's a
+          # brand new field across the whole catalog). title,
+          # poster, synopsis, categories, physical, and digital are
+          # never touched here, regardless of what TMDB returns —
+          # this is a gap-filler, not an overwrite. A genre field
+          # that already has SOME value (a manually added tag like
+          # "Rom-Com" on an otherwise-blank entry) gets TMDB's
+          # genres appended to it rather than replaced, so that tag
+          # is never lost. The credits endpoint is only called when
+          # director or cast is actually missing, and the release
+          # dates endpoint (for MPA rating) only when "rated" is
+          # missing — an entry needing only one of these doesn't
+          # pay for the others.
+          # =========================================================
+
+          updated_count = 0
+          skipped = []
+
+          for movie in targets:
+
+              tmdb_id = movie["tmdbId"]
+              title = movie.get("title", f"tmdbId {tmdb_id}")
+
+              is_tv = movie.get("type") == "tv"
+
+              media_path = "tv" if is_tv else "movie"
+
+              needs_credits = (
+                  not (movie.get("director") or "").strip()
+                  or not (movie.get("cast") or "").strip()
+              )
+
+              needs_rating = (
+                  "rated" not in movie
+              )
+
+              try:
+                  data = tmdb_get(f"{media_path}/{tmdb_id}")
+                  time.sleep(REQUEST_DELAY_SECONDS)
+
+                  if needs_credits:
+                      credits = tmdb_get(f"{media_path}/{tmdb_id}/credits")
+                      time.sleep(REQUEST_DELAY_SECONDS)
+
+                  else:
+                      credits = None
+
+                  if needs_rating:
+
+                      if is_tv:
+                          release_dates = tmdb_get(f"tv/{tmdb_id}/content_ratings")
+
+                      else:
+                          release_dates = tmdb_get(f"movie/{tmdb_id}/release_dates")
+
+                      time.sleep(REQUEST_DELAY_SECONDS)
+
+                  else:
+                      release_dates = None
+
+              except urllib.error.HTTPError as e:
+                  print(f"SKIPPED (HTTP {e.code}): {title} (tmdbId {tmdb_id})")
+                  skipped.append(title)
+                  continue
+
+              except Exception as e:
+                  print(f"SKIPPED (error: {e}): {title} (tmdbId {tmdb_id})")
+                  skipped.append(title)
+                  continue
+
+              changed_fields = []
+
+              # -----------------------------------------------------
+              # Genre — append if something's already there
+              # (e.g. a manually added Rom-Com tag), otherwise set.
+              # -----------------------------------------------------
+
+              tmdb_genres = [
+                  genre["name"]
+                  for genre in data.get("genres", [])
+                  if genre.get("name")
+              ]
+
+              if tmdb_genres:
+
+                  current_genre = (movie.get("genre") or "").strip()
+
+                  current_tokens = [
+                      token.strip()
+                      for token in current_genre.split("/")
+                      if token.strip()
+                  ]
+
+                  for genre_name in tmdb_genres:
+                      if genre_name not in current_tokens:
+                          current_tokens.append(genre_name)
+
+                  new_genre = " / ".join(current_tokens)
+
+                  if new_genre != current_genre:
+                      movie["genre"] = new_genre
+                      changed_fields.append("genre")
+
+              # -----------------------------------------------------
+              # Rated — the MPA content rating (G, PG, PG-13, R,
+              # NC-17), NOT a numeric review score. TMDB keeps this
+              # on a separate endpoint, broken out by country, since
+              # different countries certify the same movie
+              # differently. US certification is what's wanted here.
+              # A US entry with no certification recorded at all
+              # (common for older or smaller titles) becomes "NR" —
+              # Not Rated — rather than being left blank, since the
+              # absence of a rating is itself useful information for
+              # the site to show, not a fetch failure.
+              # -----------------------------------------------------
+
+              if needs_rating:
+
+                  us_certification = ""
+
+                  if is_tv:
+
+                      for entry in release_dates.get("results", []):
+
+                          if entry.get("iso_3166_1") != "US":
+                              continue
+
+                          us_certification = (entry.get("rating") or "").strip()
+                          break
+
+                  else:
+
+                      for entry in release_dates.get("results", []):
+
+                          if entry.get("iso_3166_1") != "US":
+
+                              continue
+
+                          for release in entry.get("release_dates", []):
+
+                              cert = (release.get("certification") or "").strip()
+
+                              if cert:
+                                  us_certification = cert
+                                  break
+
+                          break
+
+                  movie["rated"] = us_certification or "NR"
+                  changed_fields.append("rated")
+
+              # -----------------------------------------------------
+              # tmdbTitle — the site's search feature checks this
+              # alongside the display title, since title gets
+              # reordered for sorting ("The Matrix" -> "Matrix,
+              # The") while tmdbTitle keeps the natural phrasing
+              # someone would actually type.
+              # -----------------------------------------------------
+
+              if not (movie.get("tmdbTitle") or "").strip():
+
+                  original_title = (
+                      data.get("name") if is_tv
+                      else data.get("title")
+                  )
+
+                  if original_title:
+                      movie["tmdbTitle"] = original_title
+                      changed_fields.append("tmdbTitle")
+
+              # -----------------------------------------------------
+              # Director / cast — only if currently blank
+              # -----------------------------------------------------
+
+              if credits and not (movie.get("director") or "").strip():
+
+                  directors = [
+                      person["name"]
+                      for person in credits.get("crew", [])
+                      if person.get("job") == "Director"
+                  ]
+
+                  if directors:
+                      movie["director"] = ", ".join(directors)
+                      changed_fields.append("director")
+
+              if credits and not (movie.get("cast") or "").strip():
+
+                  cast = [
+                      person["name"]
+                      for person in credits.get("cast", [])[:6]
+                      if person.get("name")
+                  ]
+
+                  if cast:
+                      movie["cast"] = ", ".join(cast)
+                      changed_fields.append("cast")
+
+              # -----------------------------------------------------
+              # Runtime — only if currently blank. TV shows keep
+              # this as a list of per-episode runtimes rather than
+              # one movie-length number.
+              # -----------------------------------------------------
+
+              if not (movie.get("runtime") or "").strip():
+
+                  if is_tv:
+                      episode_runtimes = data.get("episode_run_time") or []
+                      runtime_value = episode_runtimes[0] if episode_runtimes else None
+
+                  else:
+                      runtime_value = data.get("runtime")
+
+                  if runtime_value:
+                      movie["runtime"] = f"{runtime_value}m"
+                      changed_fields.append("runtime")
+
+              # -----------------------------------------------------
+              # Year — only if currently blank. TV shows use
+              # first_air_date instead of release_date.
+              # -----------------------------------------------------
+
+              if not (movie.get("year") or "").strip():
+
+                  date_value = (
+                      data.get("first_air_date", "") if is_tv
+                      else data.get("release_date", "")
+                  )
+
+                  if date_value:
+                      movie["year"] = date_value[:4]
+                      changed_fields.append("year")
+
+              if changed_fields:
+                  updated_count += 1
+                  print(f"Updated ({', '.join(changed_fields)}): {title}")
+
+              else:
+                  print(f"No changes needed: {title}")
+
+
+          # =========================================================
+          # SUMMARY
+          # =========================================================
+
+          print("")
+          print("========================================")
+          print(f"Entries checked:  {len(targets)}")
+          print(f"Entries updated:  {updated_count}")
+          print(f"Entries skipped:  {len(skipped)}")
+
+          if skipped:
+              print("")
+              print("Skipped titles (TMDB fetch failed — check these by hand):")
+              for title in skipped:
+                  print(f"  - {title}")
+
+          print("========================================")
+
+
+          # =========================================================
+          # WRITE MOVIES.JS
+          #
+          # Every entry is written back, not just the ones that
+          # changed — same approach the Add Movie workflow already
+          # uses, so ordering and formatting stay consistent.
+          # =========================================================
+
+          new_array = json.dumps(
+              movies,
+              indent=2,
+              ensure_ascii=False
+          )
+
+          new_content = (
+              existing[:start]
+              + new_array
+              + existing[end + 1:]
+          )
+
+          with open("movies.js", "w", encoding="utf-8") as f:
+              f.write(new_content)
+
+          print("")
+          print("movies.js updated successfully.")
+
+
+          PYTHON
+
+          python resync_metadata.py
+
+      - name: Commit updated movies.js
+        run: |
+          git config user.name "BW Movie Catalog"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add movies.js
+
+          if git diff --cached --quiet; then
+            echo "No changes were made."
+            exit 0
+          fi
+
+          git commit -m "Resync blank genre/director/cast/runtime/rated from TMDB"
+          git push
