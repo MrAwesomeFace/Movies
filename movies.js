@@ -14,7 +14,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "007: Die Another Day",
@@ -31,7 +32,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "007: Quantum of Solace",
@@ -48,7 +50,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "007: Skyfall",
@@ -68,7 +71,8 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "007: Spectre",
@@ -87,7 +91,8 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "10 Things I Hate About You",
@@ -104,7 +109,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "101 Dalmatians",
@@ -124,7 +130,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "2001: A Space Odyssey",
@@ -133,16 +140,17 @@ const movies = [
     "tmdbId": 62,
     "poster": "https://image.tmdb.org/t/p/w500/ve72VxNqjGM69Uky4WTo2bK6rfq.jpg",
     "year": "1968",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "149m",
+    "genre": "Science Fiction / Mystery / Adventure",
+    "director": "Stanley Kubrick",
+    "cast": "Keir Dullea, Gary Lockwood, William Sylvester, Douglas Rain, Daniel Richter, Leonard Rossiter",
     "synopsis": "Humanity finds a mysterious object buried beneath the lunar surface and sets off to find its origins with the help of HAL 9000, the world's most advanced super computer.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "2016 World Series Champions: The Chicago Cubs",
@@ -161,7 +169,9 @@ const movies = [
     "digital": [],
     "categories": [
       "baseball"
-    ]
+    ],
+    "rated": "NR",
+    "tmdbTitle": "2016 World Series Champions: The Chicago Cubs"
   },
   {
     "title": "21",
@@ -178,7 +188,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "25th Hour",
@@ -195,7 +206,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "28 Days",
@@ -212,7 +224,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "300",
@@ -229,7 +242,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "300: Rise of an Empire",
@@ -238,16 +252,17 @@ const movies = [
     "tmdbId": 53182,
     "poster": "https://image.tmdb.org/t/p/w500/wYDdWN1McB1Sio4z1dPSkb40Z78.jpg",
     "year": "2014",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "102m",
+    "genre": "Action / Drama / War",
+    "director": "Noam Murro",
+    "cast": "Sullivan Stapleton, Eva Green, Lena Headey, Callan Mulvey, David Wenham, Rodrigo Santoro",
     "synopsis": "Greek general Themistocles attempts to unite all of Greece by leading the charge that will change the course of the war. Themistocles faces the massive invading Persian forces led by mortal-turned-god, Xerxes and Artemesia, the vengeful commander of the Persian navy.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "40 Days and 40 Nights",
@@ -263,7 +278,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "40 Days and 40 Nights"
   },
   {
     "title": "40-Year-Old Virgin, The",
@@ -280,7 +297,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "50 First Dates",
@@ -297,7 +315,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "500 Days of Summer",
@@ -313,7 +332,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "(500) Days of Summer"
   },
   {
     "title": "61*",
@@ -333,7 +354,8 @@ const movies = [
     "categories": [
       "baseball"
     ],
-    "tmdbTitle": "61*"
+    "tmdbTitle": "61*",
+    "rated": "R"
   },
   {
     "title": "8 Mile",
@@ -350,7 +372,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "A Bad Moms Christmas",
@@ -359,10 +382,10 @@ const movies = [
     "tmdbId": 431530,
     "poster": "https://image.tmdb.org/t/p/w500/gPNHolu7AGnrB7r5kvJRRTfwMFR.jpg",
     "year": "2017",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "104m",
+    "genre": "Comedy",
+    "director": "Scott Moore, Jon Lucas",
+    "cast": "Mila Kunis, Kristen Bell, Kathryn Hahn, Christine Baranski, Susan Sarandon, Cheryl Hines",
     "synopsis": "Amy, Kiki and Carla – three under-appreciated and over-burdened women – rebel against the challenges and expectations of the Super Bowl for mothers: Christmas. And if creating a more perfect holiday for their families wasn’t hard enough, they have to do all of that while hosting and entertaining their own mothers.",
     "physical": [],
     "digital": [
@@ -371,7 +394,8 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "A Christmas Story",
@@ -393,7 +417,9 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "A Christmas Story"
   },
   {
     "title": "A Clockwork Orange",
@@ -402,16 +428,17 @@ const movies = [
     "tmdbId": 185,
     "poster": "https://image.tmdb.org/t/p/w500/4sHeTAp65WrSSuc05nRBKddhBxO.jpg",
     "year": "1971",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "137m",
+    "genre": "Science Fiction / Crime",
+    "director": "Stanley Kubrick",
+    "cast": "Malcolm McDowell, Patrick Magee, Carl Duering, Michael Bates, Warren Clarke, James Marcus",
     "synopsis": "In a near-future Britain, young Alexander DeLarge and his pals get their kicks beating and raping anyone they please. When not destroying the lives of others, Alex swoons to the music of Beethoven. The state, eager to crack down on juvenile crime, gives an incarcerated Alex the option to undergo an invasive procedure that'll rob him of all personal agency. In a time when conscience is a commodity, can Alex change his tune?",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "NC-17"
   },
   {
     "title": "A Few Good Men",
@@ -428,7 +455,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "A Goofy Movie",
@@ -448,7 +476,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "A Guy Thing",
@@ -465,7 +494,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "A History of Violence",
@@ -482,7 +512,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "A Knight's Tale",
@@ -491,10 +522,10 @@ const movies = [
     "tmdbId": 9476,
     "poster": "https://image.tmdb.org/t/p/w500/srb1XnrlDZHcdpjBKqUu4qAzxKU.jpg",
     "year": "2001",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "133m",
+    "genre": "Adventure / Drama / Romance / Action",
+    "director": "Brian Helgeland",
+    "cast": "Heath Ledger, Rufus Sewell, Shannyn Sossamon, Paul Bettany, Laura Fraser, Mark Addy",
     "synopsis": "William Thatcher, a knight's peasant apprentice, gets a chance at glory when the knight dies suddenly mid-tournament. Posing as a knight himself, William won't stop until he's crowned tournament champion—assuming matters of the heart don't get in the way.",
     "physical": [
       "DVD"
@@ -502,7 +533,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "A League of Their Own",
@@ -524,7 +556,9 @@ const movies = [
     ],
     "categories": [
       "baseball"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "A League of Their Own"
   },
   {
     "title": "A Man Apart",
@@ -540,7 +574,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "A Man Apart"
   },
   {
     "title": "A Merry Friggin' Christmas",
@@ -549,10 +585,10 @@ const movies = [
     "tmdbId": 286532,
     "poster": "https://image.tmdb.org/t/p/w500/yiBwooPaWWPI0Q3B8XqvY6AJn3L.jpg",
     "year": "2014",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "82m",
+    "genre": "Comedy",
+    "director": "Tristram Shapeero",
+    "cast": "Joel McHale, Lauren Graham, Clark Duke, Oliver Platt, Wendi McLendon-Covey, Tim Heidecker",
     "synopsis": "Boyd Mitchler and his family must spend Christmas with his estranged family of misfits. Upon realizing that he left all his son's gifts at home, he hits the road with his dad in an attempt to make the 8-hour round trip before sunrise.",
     "physical": [],
     "digital": [
@@ -560,7 +596,8 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "A Star Is Born",
@@ -580,7 +617,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "A Very Harold & Kumar Christmas",
@@ -604,7 +642,8 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "A Very Nutty Christmas",
@@ -613,10 +652,10 @@ const movies = [
     "tmdbId": 550651,
     "poster": "https://image.tmdb.org/t/p/w500/dZsYTYA4YvZ727UbfXGshqwmygk.jpg",
     "year": "2018",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "80m",
+    "genre": "TV Movie / Family",
+    "director": "Colin Theys",
+    "cast": "Melissa Joan Hart, Barry Watson, Marissa Jaret Winokur, Conchata Ferrell, Rizwan Manji, Richard Riehle",
     "synopsis": "Hard-working bakery owner Kate Holiday, has more cookie orders than she has time to fill this holiday season, and when her boyfriend suddenly breaks up with her, any shred of Christmas joy she was hanging onto, immediately disappears. After Kate hangs the last ornament on the tree and goes to bed, she awakens the next morning to a little bit of Christmas magic. She gets the surprise of her life when Chip, a handsome soldier who may or may not be the Nutcracker Prince from Tchaikovsky’s “The Nutcracker,” appears in her living room.",
     "physical": [],
     "digital": [
@@ -624,7 +663,8 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "NR"
   },
   {
     "title": "A-Team, The",
@@ -644,7 +684,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Abraham Lincoln: Vampire Hunter",
@@ -664,7 +705,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Accountant 2, The",
@@ -682,7 +724,9 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "The Accountant²"
   },
   {
     "title": "Accountant, The",
@@ -703,7 +747,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Ace Ventura: Pet Detective",
@@ -719,7 +764,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "Ace Ventura: Pet Detective"
   },
   {
     "title": "Ace Ventura: When Nature Calls",
@@ -735,7 +782,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "Ace Ventura: When Nature Calls"
   },
   {
     "title": "Across the Universe",
@@ -755,7 +804,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Addams Family Values",
@@ -764,15 +814,16 @@ const movies = [
     "tmdbId": 2758,
     "poster": "https://image.tmdb.org/t/p/w500/sdxT2VjVSx9DRicwnuECUdBHeE7.jpg",
     "year": "1993",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "94m",
+    "genre": "Comedy / Family / Fantasy",
+    "director": "Barry Sonnenfeld",
+    "cast": "Anjelica Huston, Raúl Juliá, Christopher Lloyd, Joan Cusack, Christina Ricci, Carol Kane",
     "synopsis": "Siblings Wednesday and Pugsley Addams will stop at nothing to get rid of Pubert, the new baby boy adored by parents Gomez and Morticia. Things go from bad to worse when the new \"black widow\" nanny, Debbie Jellinsky, launches her plan to add Fester to her collection of dead husbands.",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Addams Family, The",
@@ -789,7 +840,8 @@ const movies = [
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Airheads",
@@ -806,7 +858,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Aladdin",
@@ -815,7 +868,7 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/ykUEbfpkf8d0w49pHh0AD2KrT52.jpg",
     "year": "2019",
     "runtime": "127m",
-    "genre": "Adventure / Fantasy / Romance",
+    "genre": "Adventure / Fantasy / Romance / Family",
     "director": "Guy Ritchie",
     "cast": "Will Smith, Mena Massoud, Naomi Scott, Marwan Kenzari, Navid Negahban, Nasim Pedrad",
     "synopsis": "A kindhearted street urchin named Aladdin embarks on a magical adventure after finding a lamp that releases a wisecracking genie while a power-hungry Grand Vizier vies for the same lamp that has the power to make their deepest wishes come true.",
@@ -827,7 +880,8 @@ const movies = [
       "Movies Anywhere"
     ],
     "categories": [],
-    "tmdbTitle": "Aladdin"
+    "tmdbTitle": "Aladdin",
+    "rated": "PG"
   },
   {
     "title": "Aladdin",
@@ -847,7 +901,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Aladdin and the King of Thieves",
@@ -856,10 +911,10 @@ const movies = [
     "tmdbId": 11238,
     "poster": "https://image.tmdb.org/t/p/w500/kTH7qEyvdDYMoQraQZm3LFKCge3.jpg",
     "year": "1996",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "81m",
+    "genre": "Adventure / Animation / Family",
+    "director": "Tad Stones",
+    "cast": "Scott Weinger, Robin Williams, Linda Larkin, John Rhys-Davies, Gilbert Gottfried, Jerry Orbach",
     "synopsis": "Legendary secrets are revealed as Aladdin and his friends—Jasmine, Abu, Carpet and, of course, the always entertaining Genie—face all sorts of terrifying threats and make some exciting last-minute escapes pursuing the King Of Thieves and his villainous crew.",
     "physical": [],
     "digital": [
@@ -868,7 +923,8 @@ const movies = [
     ],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Aladdin: The Return of Jafar",
@@ -877,10 +933,10 @@ const movies = [
     "tmdbId": 15969,
     "poster": "https://image.tmdb.org/t/p/w500/7SC793qtORB6YL4mu0F5o3hfjDQ.jpg",
     "year": "1994",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "69m",
+    "genre": "Family / Adventure / Animation / Romance",
+    "director": "Tad Stones, Alan Zaslove, Toby Shelton",
+    "cast": "Scott Weinger, Linda Larkin, Jonathan Freeman, Gilbert Gottfried, Dan Castellaneta, Frank Welker",
     "synopsis": "The evil Jafar escapes from the magic lamp as an all-powerful genie, ready to plot his revenge against Aladdin. From battling elusive villains atop winged horses, to dodging flames inside an exploding lava pit, it's up to Aladdin - with Princess Jasmine and the outrageously funny Genie by his side - to save the kingdom once and for all.",
     "physical": [],
     "digital": [
@@ -889,7 +945,8 @@ const movies = [
     ],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "All About Steve",
@@ -905,7 +962,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "All About Steve"
   },
   {
     "title": "All Dogs Go to Heaven",
@@ -915,7 +974,7 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/nmWh1NglDinfkHD9zCNqGWyhl7Q.jpg",
     "year": "1989",
     "runtime": "84m",
-    "genre": "Drama / Animation / Family",
+    "genre": "Drama / Animation / Family / Comedy / Fantasy",
     "director": "Don Bluth",
     "cast": "Burt Reynolds, Dom DeLuise, Judith Barsi, Vic Tayback, Melba Moore, Ken Page",
     "synopsis": "When a casino-owning dog named Charlie is murdered by his rival Carface, he finds himself in Heaven. Wanting to get back at his killer, he cons his way back to the living with the warning that doing so damns him to Hell. Once back, he teams with his old partner, Itchy, to prep his retaliation. He stumbles upon an orphan girl who can talk to the animals, thus allowing him to get the inside info on the races to ensure his wins to finance his plans. However, all the while, he is still haunted by nightmares of what's waiting for him on the other side unless he can prove that he is worthy of Heaven again.",
@@ -925,7 +984,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "All Dogs Go to Heaven 2",
@@ -935,7 +995,7 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/kNmIJILOW9qF2F1Z0qOXkadaS50.jpg",
     "year": "1996",
     "runtime": "82m",
-    "genre": "Romance / Animation / Family",
+    "genre": "Romance / Animation / Family / Adventure / Fantasy",
     "director": "Larry Leker",
     "cast": "Charlie Sheen, Dom DeLuise, Adam Wylie, Sheena Easton, Ernest Borgnine, George Hearn",
     "synopsis": "Charlie and Itchy return to Earth to find Gabriel's Horn, but along the way meet up with a young boy named David, who ran away from home.",
@@ -945,7 +1005,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Almost Famous",
@@ -963,7 +1024,8 @@ const movies = [
       "DVD",
       "Blu-ray"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Along Came a Spider",
@@ -980,7 +1042,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Along Came Polly",
@@ -997,7 +1060,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Amazing Spider-Man 2, The",
@@ -1014,7 +1078,8 @@ const movies = [
     "physical": [
       "Blu-ray + DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Amazing Spider-Man, The",
@@ -1034,7 +1099,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "America's Sweethearts",
@@ -1050,7 +1116,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "America's Sweethearts"
   },
   {
     "title": "American History X",
@@ -1067,7 +1135,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "American Outlaws",
@@ -1083,7 +1152,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "American Outlaws"
   },
   {
     "title": "American Pie 2",
@@ -1100,7 +1171,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "American President, The",
@@ -1109,10 +1181,10 @@ const movies = [
     "tmdbId": 9087,
     "poster": "https://image.tmdb.org/t/p/w500/yObOAYFIHXHkFPQ3jhgkN2ezaD.jpg",
     "year": "1995",
-    "runtime": "",
-    "genre": "Rom-Com",
-    "director": "",
-    "cast": "",
+    "runtime": "113m",
+    "genre": "Rom-Com / Drama / Romance",
+    "director": "Rob Reiner",
+    "cast": "Michael Douglas, Annette Bening, Martin Sheen, Michael J. Fox, Anna Deavere Smith, Samantha Mathis",
     "synopsis": "Widowed U.S. president Andrew Shepherd, one of the world's most powerful men, can have anything he wants -- and what he covets most is Sydney Ellen Wade, a Washington lobbyist. But Shepherd's attempts at courting her spark wild rumors and decimate his approval ratings.",
     "physical": [
       "DVD"
@@ -1120,7 +1192,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "American Wedding",
@@ -1137,7 +1210,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "American, The",
@@ -1153,7 +1227,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "The American"
   },
   {
     "title": "An American Tail",
@@ -1173,7 +1249,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "An American Tail: Fievel Goes West",
@@ -1193,7 +1270,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "An Evening with Kevin Smith",
@@ -1209,7 +1287,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "NR",
+    "tmdbTitle": "An Evening with Kevin Smith"
   },
   {
     "title": "An Evening with Kevin Smith 2: Evening Harder",
@@ -1225,7 +1305,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "NR",
+    "tmdbTitle": "An Evening with Kevin Smith 2: Evening Harder"
   },
   {
     "title": "Angels & Demons",
@@ -1243,7 +1325,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "categories": []
+    "categories": [],
+    "rated": "PG-13"
   },
   {
     "title": "Anger Management",
@@ -1260,7 +1343,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Animal House",
@@ -1276,7 +1360,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Animal House"
   },
   {
     "title": "Anna",
@@ -1285,16 +1371,17 @@ const movies = [
     "tmdbId": 484641,
     "poster": "https://image.tmdb.org/t/p/w500/2U0oAVAE0lDRhNmJPPYhDW9kQ8t.jpg",
     "year": "2019",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "119m",
+    "genre": "Action / Adventure / Thriller",
+    "director": "Luc Besson",
+    "cast": "Sasha Luss, Helen Mirren, Luke Evans, Cillian Murphy, Lera Abova, Alexander Petrov",
     "synopsis": "Beneath Anna Poliatova's striking beauty lies a secret that will unleash her indelible strength and skill to become one of the world's most feared government assassins.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Annie",
@@ -1312,7 +1399,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Antitrust",
@@ -1329,7 +1417,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Any Given Sunday",
@@ -1346,7 +1435,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Anyone but You",
@@ -1355,10 +1445,10 @@ const movies = [
     "tmdbId": 1072790,
     "poster": "https://image.tmdb.org/t/p/w500/5qHoazZiaLe7oFBok7XlUhg96f2.jpg",
     "year": "2023",
-    "runtime": "",
-    "genre": "Rom-Com",
-    "director": "",
-    "cast": "",
+    "runtime": "103m",
+    "genre": "Rom-Com / Romance / Comedy",
+    "director": "Will Gluck",
+    "cast": "Sydney Sweeney, Glen Powell, Mia Artemis, Nat Buchanan, GaTa, Alexandra Shipp",
     "synopsis": "After an amazing first date, Bea and Ben’s fiery attraction turns ice cold — until they find themselves unexpectedly reunited at a destination wedding in Australia. So they do what any two mature adults would do: pretend to be a couple.",
     "physical": [
       "Blu-ray"
@@ -1366,7 +1456,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Aquaman",
@@ -1385,7 +1476,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Aquaman"
   },
   {
     "title": "Aristocats, The",
@@ -1405,7 +1498,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Armageddon",
@@ -1422,7 +1516,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Arthur Christmas",
@@ -1444,7 +1539,8 @@ const movies = [
       "animated",
       "christmas",
       "baseball"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Assassins",
@@ -1462,7 +1558,8 @@ const movies = [
       "Blu-ray",
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Avengers, The",
@@ -1478,7 +1575,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "The Avengers"
   },
   {
     "title": "Avenging Angelo",
@@ -1495,7 +1594,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Away from Her",
@@ -1504,15 +1604,16 @@ const movies = [
     "tmdbId": 1919,
     "poster": "https://image.tmdb.org/t/p/w500/oyPE6i9sylR1UhTPFmniOHcQpKb.jpg",
     "year": "2007",
-    "runtime": "",
-    "genre": "Rom-Com",
-    "director": "",
-    "cast": "",
+    "runtime": "110m",
+    "genre": "Rom-Com / Drama / Romance",
+    "director": "Sarah Polley",
+    "cast": "Gordon Pinsent, Julie Christie, Michael Murphy, Olympia Dukakis, Kristen Thomson, Wendy Crewson",
     "synopsis": "Fiona and Grant have been married for nearly 50 years. They have to face the fact that Fiona’s absent-mindedness is a symptom of Alzheimer’s disease. She must go to a specialized nursing home, where she slowly forgets Grant and turns her affection to Aubrey, another patient in the home.",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Baby Mama",
@@ -1529,7 +1630,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Back to the Future",
@@ -1545,7 +1647,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG",
+    "tmdbTitle": "Back to the Future"
   },
   {
     "title": "Back to the Future Part II",
@@ -1561,7 +1665,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG",
+    "tmdbTitle": "Back to the Future Part II"
   },
   {
     "title": "Back to the Future Part III",
@@ -1577,7 +1683,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG",
+    "tmdbTitle": "Back to the Future Part III"
   },
   {
     "title": "Backdraft",
@@ -1594,7 +1702,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Bad Boys",
@@ -1610,7 +1719,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Bad Boys"
   },
   {
     "title": "Bad Boys II",
@@ -1627,7 +1738,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Bad Boys: Ride or Die",
@@ -1636,16 +1748,17 @@ const movies = [
     "tmdbId": 573435,
     "poster": "https://image.tmdb.org/t/p/w500/oGythE98MYleE6mZlGs5oBGkux1.jpg",
     "year": "2024",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "116m",
+    "genre": "Action / Comedy / Crime",
+    "director": "Adil El Arbi, Bilall Fallah",
+    "cast": "Will Smith, Martin Lawrence, Vanessa Hudgens, Alexander Ludwig, Paola Nuñez, Eric Dane",
     "synopsis": "After their late former Captain is framed, Lowrey and Burnett try to clear his name, only to end up on the run themselves.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Bad Santa",
@@ -1664,7 +1777,9 @@ const movies = [
     "digital": [],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "Bad Santa"
   },
   {
     "title": "Bad Santa 2",
@@ -1673,10 +1788,10 @@ const movies = [
     "tmdbId": 338964,
     "poster": "https://image.tmdb.org/t/p/w500/xmsEwpA2fSq6IO3sfKrLuIPLHSc.jpg",
     "year": "2016",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "92m",
+    "genre": "Comedy / Crime / Mystery",
+    "director": "Mark Waters",
+    "cast": "Billy Bob Thornton, Kathy Bates, Tony Cox, Christina Hendricks, Brett Kelly, Ryan Hansen",
     "synopsis": "Fueled by cheap whiskey, greed and hatred, Willie Soke teams up with his angry little sidekick, Marcus, to knock off a Chicago charity on Christmas Eve. Along for the ride is chubby and cheery Thurman Merman, a 250-pound ray of sunshine who brings out Willie's sliver of humanity. Issues arise when the pair are joined by Willie's horror story of a mother, who raises the bar for the gang's ambitions, while somehow lowering the standards of criminal behavior.",
     "physical": [],
     "digital": [
@@ -1684,7 +1799,8 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Bad Times at the El Royale",
@@ -1693,17 +1809,18 @@ const movies = [
     "tmdbId": 446021,
     "poster": "https://image.tmdb.org/t/p/w500/qExufIc4Rw0e4xdVZlhMdmEDGES.jpg",
     "year": "2018",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "141m",
+    "genre": "Thriller / Mystery / Crime / Drama",
+    "director": "Drew Goddard",
+    "cast": "Jeff Bridges, Cynthia Erivo, Lewis Pullman, Dakota Johnson, Cailee Spaeny, Jon Hamm",
     "synopsis": "Lake Tahoe, 1969. Seven strangers, each one with a secret to bury, meet at El Royale, a decadent motel with a dark past. In the course of a fateful night, everyone will have one last shot at redemption.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
     ],
-    "categories": []
+    "categories": [],
+    "rated": "R"
   },
   {
     "title": "Ballerina",
@@ -1722,7 +1839,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "Ballerina"
   },
   {
     "title": "Bandits",
@@ -1739,7 +1858,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Bang the Drum Slowly",
@@ -1758,7 +1878,9 @@ const movies = [
     "digital": [],
     "categories": [
       "baseball"
-    ]
+    ],
+    "rated": "NR",
+    "tmdbTitle": "Bang the Drum Slowly"
   },
   {
     "title": "Barbie",
@@ -1767,16 +1889,17 @@ const movies = [
     "tmdbId": 346698,
     "poster": "https://image.tmdb.org/t/p/w500/iuFNMS8U5cb6xfzi51Dbkovj7vM.jpg",
     "year": "2023",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "114m",
+    "genre": "Comedy / Adventure / Fantasy",
+    "director": "Greta Gerwig",
+    "cast": "Margot Robbie, Ryan Gosling, America Ferrera, Ariana Greenblatt, Issa Rae, Kate McKinnon",
     "synopsis": "Barbie and Ken are having the time of their lives in the colorful and seemingly perfect world of Barbie Land. However, when they get a chance to go to the real world, they soon discover the joys and perils of living among humans.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Barry Lyndon",
@@ -1785,16 +1908,17 @@ const movies = [
     "tmdbId": 3175,
     "poster": "https://image.tmdb.org/t/p/w500/znfLskGQnXYB2xcOGM9eInRHPAV.jpg",
     "year": "1975",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "188m",
+    "genre": "Drama / History",
+    "director": "Stanley Kubrick",
+    "cast": "Ryan O'Neal, Marisa Berenson, Patrick Magee, Hardy Krüger, Steven Berkoff, Gay Hamilton",
     "synopsis": "An Irish rogue uses his cunning and wit to work his way up the social classes of 18th century England, transforming himself from the humble Redmond Barry into the noble Barry Lyndon.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Basic Instinct",
@@ -1803,15 +1927,16 @@ const movies = [
     "tmdbId": 402,
     "poster": "https://image.tmdb.org/t/p/w500/76Ts0yoHk8kVQj9MMnoMixhRWoh.jpg",
     "year": "1992",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "128m",
+    "genre": "Thriller / Mystery",
+    "director": "Paul Verhoeven",
+    "cast": "Michael Douglas, Sharon Stone, George Dzundza, Jeanne Tripplehorn, Denis Arndt, Leilani Sarelle",
     "synopsis": "Catherine, a novelist with an insatiable sexual appetite, becomes a prime suspect when her boyfriend is brutally murdered -- a crime she had described in her latest story.",
     "physical": [],
     "digital": [
       "Prime"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Basic Instinct 2",
@@ -1827,7 +1952,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Basic Instinct 2"
   },
   {
     "title": "Batman & Mr. Freeze: SubZero",
@@ -1836,10 +1963,10 @@ const movies = [
     "tmdbId": 15805,
     "poster": "https://image.tmdb.org/t/p/w500/kjjz8mVNrwNUa9uz8IMnqS79rxj.jpg",
     "year": "1998",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "67m",
+    "genre": "Animation / Action / Crime",
+    "director": "Boyd Kirkland",
+    "cast": "Kevin Conroy, Michael Ansara, Loren Lester, Mary Kay Bergman, Robert Costanzo, Mari Devon",
     "synopsis": "When Mr. Freeze kidnaps Barbara Gordon, as an involuntary organ donor to save his dying wife, Batman and Robin must find her before the operation can begin.",
     "physical": [],
     "digital": [
@@ -1848,7 +1975,8 @@ const movies = [
     ],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "NR"
   },
   {
     "title": "Batman Begins",
@@ -1868,7 +1996,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Batman Forever",
@@ -1885,7 +2014,8 @@ const movies = [
     "physical": [
       "Blu-ray"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Batman v Superman: Dawn of Justice",
@@ -1906,7 +2036,8 @@ const movies = [
       "Fandango",
       "Movies Anywhere",
       "Prime"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Batman, The",
@@ -1926,7 +2057,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "The Batman"
   },
   {
     "title": "Batman: Mask of the Phantasm",
@@ -1935,10 +2068,10 @@ const movies = [
     "tmdbId": 14919,
     "poster": "https://image.tmdb.org/t/p/w500/hT4ehUteagUrhUOHAtmYiY7mp5l.jpg",
     "year": "1993",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "76m",
+    "genre": "Animation / Crime / Mystery",
+    "director": "Bruce Timm, Eric Radomski",
+    "cast": "Kevin Conroy, Dana Delany, Hart Bochner, Stacy Keach, Abe Vigoda, Dick Miller",
     "synopsis": "Andrea Beaumont leaves her father to return to Gotham, rekindling an old romance with Bruce Wayne. At the same time, a mysterious figure begins to hunt down Gotham's criminals, wrongly implicating Batman in the murders. Now on the run from the law, Batman must find and stop the culprit, while also navigating his relationship with Andrea.",
     "physical": [],
     "digital": [
@@ -1947,7 +2080,8 @@ const movies = [
     ],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Batman: The Animated Series",
@@ -1966,7 +2100,9 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "TV-PG",
+    "tmdbTitle": "Batman: The Animated Series"
   },
   {
     "title": "Baywatch",
@@ -1985,7 +2121,8 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Be Cool",
@@ -2002,7 +2139,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Beauty and the Beast",
@@ -2012,7 +2150,7 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/hUJ0UvQ5tgE2Z9WpfuduVSdiCiU.jpg",
     "year": "1991",
     "runtime": "84m",
-    "genre": "Romance / Family / Animation",
+    "genre": "Romance / Family / Animation / Fantasy",
     "director": "Gary Trousdale",
     "cast": "Paige O'Hara, Robby Benson, Richard White, Jerry Orbach, David Ogden Stiers, Angela Lansbury",
     "synopsis": "Follow the adventures of Belle, a bright young woman who finds herself in the castle of a prince who's been turned into a mysterious beast. With the help of the castle's enchanted staff, Belle soon learns the most important lesson of all -- that true beauty comes from within.",
@@ -2022,7 +2160,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Beauty and the Beast",
@@ -2043,7 +2182,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Because I Said So",
@@ -2060,7 +2200,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Bedazzled",
@@ -2077,7 +2218,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Bedknobs and Broomsticks",
@@ -2094,7 +2236,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "G"
   },
   {
     "title": "Beekeeper, The",
@@ -2103,7 +2246,7 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/A7EByudX0eOzlkQ2FIbogzyazm2.jpg",
     "year": "2024",
     "runtime": "106m",
-    "genre": "Action / Crime / Thriller",
+    "genre": "Action / Crime / Thriller / Adventure",
     "director": "David Ayer",
     "cast": "Jason Statham, Emmy Raver-Lampman, Josh Hutcherson, Jeremy Irons, Bobby Naderi, David Witts",
     "synopsis": "One man's campaign for vengeance takes on national stakes after he is revealed to be a former operative of a powerful and clandestine organization known as Beekeepers.",
@@ -2112,7 +2255,9 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "The Beekeeper"
   },
   {
     "title": "Begin Again",
@@ -2132,7 +2277,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Behind Enemy Lines",
@@ -2141,16 +2287,17 @@ const movies = [
     "tmdbId": 8007,
     "poster": "https://image.tmdb.org/t/p/w500/fZReMWU3zszvaktDUqOoWCzHssZ.jpg",
     "year": "2001",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "106m",
+    "genre": "Action / Drama / Thriller / War",
+    "director": "John Moore",
+    "cast": "Owen Wilson, Gene Hackman, Gabriel Macht, Olek Krupa, Vladimir Mashkov, Marko Igonda",
     "synopsis": "While flying a routine reconnaissance mission over Bosnia, fighter pilot Lt. Chris Burnett photographs something he wasn't supposed to see and gets shot down behind enemy lines, where he must outrun an army led by a ruthless Serbian general. With time running out and a deadly tracker on his trail, Burnett's commanding officer, Admiral Reigart, decides to risk his career and launch a renegade rescue mission to save his life.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Being John Malkovich",
@@ -2159,16 +2306,17 @@ const movies = [
     "tmdbId": 492,
     "poster": "https://image.tmdb.org/t/p/w500/31FGQu3OnwdmS4COquENe0vMZc0.jpg",
     "year": "1999",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "113m",
+    "genre": "Comedy / Drama / Fantasy",
+    "director": "Spike Jonze",
+    "cast": "John Cusack, Cameron Diaz, John Malkovich, Catherine Keener, Orson Bean, Mary Kay Place",
     "synopsis": "One day at work, unsuccessful puppeteer Craig finds a portal into the head of actor John Malkovich. The portal soon becomes a passion for anybody who enters its mad and controlling world of overtaking another human body.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Benchwarmers, The",
@@ -2188,7 +2336,8 @@ const movies = [
     "categories": [
       "baseball"
     ],
-    "tmdbTitle": "The Benchwarmers"
+    "tmdbTitle": "The Benchwarmers",
+    "rated": "PG-13"
   },
   {
     "title": "Best Christmas Pageant Ever, The",
@@ -2210,7 +2359,9 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "The Best Christmas Pageant Ever"
   },
   {
     "title": "Big Daddy",
@@ -2227,7 +2378,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Big Hero 6",
@@ -2236,10 +2388,10 @@ const movies = [
     "tmdbId": 177572,
     "poster": "https://image.tmdb.org/t/p/w500/2mxS4wUimwlLmI1xp6QW6NSU361.jpg",
     "year": "2014",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "102m",
+    "genre": "Adventure / Family / Animation / Action / Comedy",
+    "director": "Chris Williams, Don Hall",
+    "cast": "Scott Adsit, Ryan Potter, Daniel Henney, T.J. Miller, Jamie Chung, Damon Wayans Jr.",
     "synopsis": "A special bond develops between plus-sized inflatable robot Baymax, and prodigy Hiro Hamada, who team up with a group of friends to form a band of high-tech heroes.",
     "physical": [],
     "digital": [
@@ -2248,7 +2400,8 @@ const movies = [
     ],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Big Trouble in Little China",
@@ -2257,16 +2410,17 @@ const movies = [
     "tmdbId": 6978,
     "poster": "https://image.tmdb.org/t/p/w500/gI2Qs1yTTj3NcESJyttCkbmJ4k9.jpg",
     "year": "1986",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "100m",
+    "genre": "Action / Adventure / Comedy / Fantasy",
+    "director": "John Carpenter",
+    "cast": "Kurt Russell, Kim Cattrall, Dennis Dun, James Hong, Victor Wong, Kate Burton",
     "synopsis": "Truck driver Jack Burton gets embroiled in a supernatural battle when his best friend Wang Chi's green-eyed fiancée is kidnapped by henchmen of the sorcerer Lo Pan, who must marry a girl with green eyes in order to return to the human realm.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Bill & Ted Face the Music",
@@ -2275,15 +2429,16 @@ const movies = [
     "tmdbId": 501979,
     "poster": "https://image.tmdb.org/t/p/w500/4V2nTPfeB59TcqJcUfQ9ziTi7VN.jpg",
     "year": "2020",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "92m",
+    "genre": "Comedy / Science Fiction / Adventure / Music",
+    "director": "Dean Parisot",
+    "cast": "Keanu Reeves, Alex Winter, Kristen Schaal, Samara Weaving, Jack Haven, William Sadler",
     "synopsis": "Yet to fulfill their rock and roll destiny, the stakes are higher than ever for the now middle-aged Bill and Ted who set out on a new adventure when a visitor from the future warns them that only their song can save life as we know it.",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Bill & Ted's Bogus Journey",
@@ -2292,15 +2447,16 @@ const movies = [
     "tmdbId": 1649,
     "poster": "https://image.tmdb.org/t/p/w500/tldtDfLnPFOtTWp758EmIP2Hbz5.jpg",
     "year": "1991",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "93m",
+    "genre": "Adventure / Comedy / Science Fiction",
+    "director": "Peter Hewitt",
+    "cast": "Keanu Reeves, Alex Winter, William Sadler, Joss Ackland, Pam Grier, George Carlin",
     "synopsis": "Amiable slackers Bill and Ted are once again roped into a fantastical adventure when De Nomolos, a villain from the future, sends evil robot duplicates of the two lads to terminate and replace them. The robot doubles actually succeed in killing Bill and Ted, but the two are determined to escape the afterlife, challenging the Grim Reaper to a series of games in order to return to the land of the living.",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Bill & Ted's Excellent Adventure",
@@ -2309,15 +2465,16 @@ const movies = [
     "tmdbId": 1648,
     "poster": "https://image.tmdb.org/t/p/w500/tV25lGWGWGEqUe3U0xjQTBgilSx.jpg",
     "year": "1989",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "90m",
+    "genre": "Adventure / Comedy / Science Fiction",
+    "director": "Stephen Herek",
+    "cast": "Keanu Reeves, Alex Winter, George Carlin, Terry Camilleri, Dan Shor, Tony Steedman",
     "synopsis": "Two rock-'n-rolling teens, on the verge of failing their class, set out on a quest to make the ultimate school history report after being presented with a time machine.",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Billy Madison",
@@ -2334,7 +2491,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Birds of Prey",
@@ -2354,7 +2512,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Blade",
@@ -2370,7 +2529,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Blade"
   },
   {
     "title": "Blade Runner 2049",
@@ -2379,16 +2540,17 @@ const movies = [
     "tmdbId": 335984,
     "poster": "https://image.tmdb.org/t/p/w500/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg",
     "year": "2017",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "164m",
+    "genre": "Science Fiction / Drama",
+    "director": "Denis Villeneuve",
+    "cast": "Ryan Gosling, Harrison Ford, Ana de Armas, Dave Bautista, Robin Wright, Sylvia Hoeks",
     "synopsis": "Thirty years after the events of the first film, a new blade runner, LAPD Officer K, unearths a long-buried secret that has the potential to plunge what's left of society into chaos. K's discovery leads him on a quest to find Rick Deckard, a former LAPD blade runner who has been missing for 30 years.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Blade: Trinity",
@@ -2404,7 +2566,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Blade: Trinity"
   },
   {
     "title": "Blades of Glory",
@@ -2421,7 +2585,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Blind Side, The",
@@ -2438,7 +2603,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Blood Diamond",
@@ -2455,7 +2621,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Bloodsport",
@@ -2472,7 +2639,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Blow",
@@ -2489,7 +2657,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "Blow"
+    "tmdbTitle": "Blow",
+    "rated": "R"
   },
   {
     "title": "Bodyguard, The",
@@ -2509,7 +2678,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Boiler Room",
@@ -2526,7 +2696,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Bolt",
@@ -2546,7 +2717,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Boogie Nights",
@@ -2555,16 +2727,17 @@ const movies = [
     "tmdbId": 4995,
     "poster": "https://image.tmdb.org/t/p/w500/2hVSN9yOfoI8EUTqcVW6zCIyQ1G.jpg",
     "year": "1997",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "156m",
+    "genre": "Drama / Comedy",
+    "director": "Paul Thomas Anderson",
+    "cast": "Mark Wahlberg, Burt Reynolds, Julianne Moore, John C. Reilly, Heather Graham, Don Cheadle",
     "synopsis": "In 1977, an idealistic porn producer and his promising protege try to catch up with the end of an era before their never-ending party collides with cold, hard reality.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Bourne Identity, The",
@@ -2584,7 +2757,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Bourne Legacy, The",
@@ -2604,7 +2778,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Bourne Supremacy, The",
@@ -2624,7 +2799,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Bourne Ultimatum, The",
@@ -2644,7 +2820,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Brave",
@@ -2667,7 +2844,8 @@ const movies = [
     ],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Braveheart",
@@ -2683,7 +2861,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Braveheart"
   },
   {
     "title": "Breach",
@@ -2700,7 +2880,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "Breach"
+    "tmdbTitle": "Breach",
+    "rated": "PG-13"
   },
   {
     "title": "Break-Up, The",
@@ -2716,7 +2897,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "The Break-Up"
   },
   {
     "title": "Breakfast Club, The",
@@ -2733,7 +2916,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Brewster's Millions",
@@ -2750,7 +2934,9 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "categories": []
+    "categories": [],
+    "rated": "PG",
+    "tmdbTitle": "Brewster's Millions"
   },
   {
     "title": "Bride Wars",
@@ -2766,7 +2952,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG",
+    "tmdbTitle": "Bride Wars"
   },
   {
     "title": "Bring It On",
@@ -2783,7 +2971,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Broken Arrow",
@@ -2800,7 +2989,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Bruce Almighty",
@@ -2817,7 +3007,8 @@ const movies = [
     "physical": [
       "Blu-ray"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Bull Durham",
@@ -2837,7 +3028,8 @@ const movies = [
     "categories": [
       "baseball"
     ],
-    "tmdbTitle": "Bull Durham"
+    "tmdbTitle": "Bull Durham",
+    "rated": "R"
   },
   {
     "title": "Bullet to the Head",
@@ -2858,7 +3050,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Burbs, The",
@@ -2875,7 +3068,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "Cable Guy, The",
@@ -2892,7 +3086,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Can't Hardly Wait",
@@ -2909,7 +3104,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Canadian Bacon",
@@ -2926,7 +3122,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "Captain America: Civil War",
@@ -2943,7 +3140,8 @@ const movies = [
     "physical": [
       "Blu-ray"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Captain America: The First Avenger",
@@ -2960,7 +3158,8 @@ const movies = [
     "physical": [
       "Blu-ray"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Captain America: The Winter Soldier",
@@ -2977,7 +3176,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Cars",
@@ -2997,7 +3197,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Cat in the Hat, The",
@@ -3007,14 +3208,15 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/uYYLz67e5xEQMsY858VSSCDsLU6.jpg",
     "year": "2003",
     "runtime": "82m",
-    "genre": "Fantasy / Adventure / Family",
+    "genre": "Fantasy / Adventure / Family / Comedy",
     "director": "Bo Welch",
     "cast": "Mike Myers, Dakota Fanning, Spencer Breslin, Kelly Preston, Alec Baldwin, Amy Hill",
     "synopsis": "During a rainy day, and while their mother is out, Conrad and Sally, and their pet fish, are visited by the mischievous Cat in the Hat. Fun soon turns to mayhem, and the siblings must figure out how to rid themselves of the maniacal Cat.",
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "Catch Me If You Can",
@@ -3023,15 +3225,16 @@ const movies = [
     "tmdbId": 640,
     "poster": "https://image.tmdb.org/t/p/w500/ctjEj2xM32OvBXCq8zAdK3ZrsAj.jpg",
     "year": "2002",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "141m",
+    "genre": "Drama / Crime",
+    "director": "Steven Spielberg",
+    "cast": "Leonardo DiCaprio, Tom Hanks, Christopher Walken, Martin Sheen, Nathalie Baye, Amy Adams",
     "synopsis": "A true story about Frank Abagnale Jr. who, before his 19th birthday, successfully conned millions of dollars worth of checks as a Pan Am pilot, doctor, and legal prosecutor. An FBI agent makes it his mission to put him behind bars. But Frank not only eludes capture, he revels in the pursuit.",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Cell, The",
@@ -3047,7 +3250,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "The Cell"
   },
   {
     "title": "Charlie's Angels",
@@ -3065,7 +3270,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "categories": []
+    "categories": [],
+    "rated": "PG-13"
   },
   {
     "title": "Chasing Amy",
@@ -3082,7 +3288,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Chicago",
@@ -3091,15 +3298,16 @@ const movies = [
     "tmdbId": 1574,
     "poster": "https://image.tmdb.org/t/p/w500/3ED8cWCXY9zkx77Sd0N5qMbsdDP.jpg",
     "year": "2002",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "113m",
+    "genre": "Comedy / Crime / Drama",
+    "director": "Rob Marshall",
+    "cast": "Renée Zellweger, Catherine Zeta-Jones, Richard Gere, Queen Latifah, Ekaterina Chtchelkanova, John C. Reilly",
     "synopsis": "Murderesses Velma Kelly and Roxie Hart find themselves on death row together and fight for the fame that will keep them from the gallows in 1920s Chicago.",
     "physical": [],
     "digital": [
       "Prime"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Chicago Cubs 2016 World Series Collector's Edition",
@@ -3118,7 +3326,9 @@ const movies = [
     "digital": [],
     "categories": [
       "baseball"
-    ]
+    ],
+    "rated": "NR",
+    "tmdbTitle": "Chicago Cubs 2016 World Series Collector's Edition"
   },
   {
     "title": "Chicago Cubs: Legends, Great Games & Collector's Edition, The",
@@ -3158,7 +3368,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Chitty Chitty Bang Bang",
@@ -3175,7 +3386,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "Chitty Chitty Bang Bang"
+    "tmdbTitle": "Chitty Chitty Bang Bang",
+    "rated": "G"
   },
   {
     "title": "Christmas in Connecticut",
@@ -3184,10 +3396,10 @@ const movies = [
     "tmdbId": 13669,
     "poster": "https://image.tmdb.org/t/p/w500/oH1hM9wOZZflPZ5smKqWXvLXcyX.jpg",
     "year": "1945",
-    "runtime": "",
-    "genre": "Rom-Com",
-    "director": "",
-    "cast": "",
+    "runtime": "102m",
+    "genre": "Rom-Com / Comedy / Romance",
+    "director": "Peter Godfrey",
+    "cast": "Barbara Stanwyck, Dennis Morgan, Sydney Greenstreet, Reginald Gardiner, S.Z. Sakall, Robert Shayne",
     "synopsis": "While recovering in a hospital, war hero Jefferson Jones grows familiar with the \"Diary of a Housewife\" column written by Elizabeth Lane. Jeff's nurse arranges with Elizabeth's publisher, Alexander Yardley, for Jeff to spend the holiday at Elizabeth's bucolic Connecticut farm with her husband and child. But the column is a sham, so Elizabeth and her editor, Dudley Beecham, in fear of losing their jobs, hasten to set up the single, childless and entirely  nondomestic Elizabeth on a country farm.",
     "physical": [],
     "digital": [
@@ -3196,7 +3408,8 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "NR"
   },
   {
     "title": "Christmas with the Kranks",
@@ -3219,7 +3432,8 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Chronicles of Riddick, The",
@@ -3236,7 +3450,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Cinderella",
@@ -3256,7 +3471,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Cinderella",
@@ -3274,7 +3490,9 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "Cinderella"
   },
   {
     "title": "Cinderella II",
@@ -3294,7 +3512,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Cinderella III",
@@ -3314,7 +3533,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Clerks",
@@ -3331,7 +3551,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Clerks II",
@@ -3348,7 +3569,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Clerks III",
@@ -3357,15 +3579,16 @@ const movies = [
     "tmdbId": 635891,
     "poster": "https://image.tmdb.org/t/p/w500/apzIqZIQLc8fNx5nbbcSSfPFtax.jpg",
     "year": "2022",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "100m",
+    "genre": "Comedy / Drama",
+    "director": "Kevin Smith",
+    "cast": "Brian O'Halloran, Jeff Anderson, Rosario Dawson, Jason Mewes, Kevin Smith, Marilyn Ghigliotti",
     "synopsis": "After narrowly surviving a massive heart attack, Randal enlists his old friend Dante to help him make a movie immortalizing their youthful days at the little convenience store that started it all.",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Click",
@@ -3382,7 +3605,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Cliffhanger",
@@ -3399,7 +3623,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Clue",
@@ -3408,15 +3633,16 @@ const movies = [
     "tmdbId": 15196,
     "poster": "https://image.tmdb.org/t/p/w500/aRxbYOYHS8T73nzR8hsLousoplR.jpg",
     "year": "1985",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "94m",
+    "genre": "Comedy / Crime / Mystery",
+    "director": "Jonathan Lynn",
+    "cast": "Tim Curry, Eileen Brennan, Madeline Kahn, Christopher Lloyd, Michael McKean, Martin Mull",
     "synopsis": "Clue finds six colorful dinner guests gathered at the mansion of their host, Mr. Boddy -- who turns up dead after his secret is exposed: He was blackmailing all of them. With the killer among them, the guests and Boddy's chatty butler must suss out the culprit before the body count rises.",
     "physical": [],
     "digital": [
       "Prime"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Clueless",
@@ -3433,7 +3659,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Cobra",
@@ -3449,7 +3676,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Cobra"
   },
   {
     "title": "Cocktail",
@@ -3466,7 +3695,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Cold Pursuit",
@@ -3475,16 +3705,17 @@ const movies = [
     "tmdbId": 438650,
     "poster": "https://image.tmdb.org/t/p/w500/5RILVnOchQyL1LbcVzmabipdJfc.jpg",
     "year": "2019",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "119m",
+    "genre": "Crime / Action / Drama",
+    "director": "Hans Petter Moland",
+    "cast": "Liam Neeson, Tom Bateman, Tom Jackson, Laura Dern, Nicholas Holmes, Emmy Rossum",
     "synopsis": "The quiet family life of Nels Coxman, a snowplow driver, is upended after his son's murder. Nels begins a vengeful hunt for Viking, the drug lord he holds responsible for the killing, eliminating Viking's associates one by one. As Nels draws closer to Viking, his actions bring even more unexpected and violent consequences, as he proves that revenge is all in the execution.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Collateral",
@@ -3501,7 +3732,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Coming to America",
@@ -3518,7 +3750,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Commando",
@@ -3535,7 +3768,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Conan the Barbarian",
@@ -3544,16 +3778,17 @@ const movies = [
     "tmdbId": 9387,
     "poster": "https://image.tmdb.org/t/p/w500/qw2A587Ee61IwcSOLNFRhuOACZZ.jpg",
     "year": "1982",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "130m",
+    "genre": "Adventure / Fantasy / Action",
+    "director": "John Milius",
+    "cast": "Arnold Schwarzenegger, James Earl Jones, Sandahl Bergman, Ben Davidson, Cassandra Gava, Gerry Lopez",
     "synopsis": "A horde of rampaging warriors massacre the parents of young Conan and enslave the young child for years on The Wheel of Pain. As the sole survivor of the childhood massacre, Conan is released from slavery and taught the ancient arts of fighting. Transforming himself into a killing machine, Conan travels into the wilderness to seek vengeance on Thulsa Doom, the man responsible for killing his family. In the wilderness, Conan takes up with the thieves Valeria and Subotai. The group comes upon King Osric, who wants the trio of warriors to help rescue his daughter who has joined Doom in the hills.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Confidence",
@@ -3570,7 +3805,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Conversation, The",
@@ -3579,15 +3815,16 @@ const movies = [
     "tmdbId": 592,
     "poster": "https://image.tmdb.org/t/p/w500/dHqVBwcv1SGymOpUueRoKzcmdes.jpg",
     "year": "1974",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "115m",
+    "genre": "Crime / Drama / Mystery",
+    "director": "Francis Ford Coppola",
+    "cast": "Gene Hackman, John Cazale, Allen Garfield, Frederic Forrest, Cindy Williams, Michael Higgins",
     "synopsis": "A paranoid, secretive surveillance expert has a crisis of conscience when he suspects that the couple he is spying on will be murdered.",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Cougar Town - Complete First Season",
@@ -3604,7 +3841,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Cougar Town - Season 2",
@@ -3622,7 +3860,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Count of Monte Cristo, The",
@@ -3638,7 +3877,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "The Count of Monte Cristo"
   },
   {
     "title": "Couples Retreat",
@@ -3655,7 +3896,8 @@ const movies = [
     "physical": [
       "Blu-ray"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Cowboys & Aliens",
@@ -3664,16 +3906,17 @@ const movies = [
     "tmdbId": 49849,
     "poster": "https://image.tmdb.org/t/p/w500/9uZsGCP4rvOHVGCpMpYq5gNCuNI.jpg",
     "year": "2011",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "119m",
+    "genre": "Action / Science Fiction / Thriller / Western",
+    "director": "Jon Favreau",
+    "cast": "Daniel Craig, Harrison Ford, Olivia Wilde, Sam Rockwell, Adam Beach, Paul Dano",
     "synopsis": "A stranger stumbles into the desert town of Absolution with no memory of his past and a futuristic shackle around his wrist. With the help of mysterious beauty Ella and the iron-fisted Colonel Dolarhyde, he finds himself leading an unlikely posse of cowboys, outlaws, and Apache warriors against a common enemy from beyond this world in an epic showdown for survival.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Crank",
@@ -3690,7 +3933,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Crazy, Stupid, Love.",
@@ -3699,16 +3943,17 @@ const movies = [
     "tmdbId": 50646,
     "poster": "https://image.tmdb.org/t/p/w500/p4RafgAPk558muOjnBMHhMArjS2.jpg",
     "year": "2011",
-    "runtime": "",
-    "genre": "Rom-Com",
-    "director": "",
-    "cast": "",
+    "runtime": "118m",
+    "genre": "Rom-Com / Comedy / Drama / Romance",
+    "director": "Glenn Ficarra, John Requa",
+    "cast": "Steve Carell, Ryan Gosling, Julianne Moore, Emma Stone, Lio Tipton, Jonah Bobo",
     "synopsis": "Cal Weaver is living the American dream. He has a good job, a beautiful house, great children and a beautiful wife, named Emily. Cal's seemingly perfect life unravels, however, when he learns that Emily has been unfaithful and wants a divorce. Over 40 and suddenly single, Cal is adrift in the fickle world of dating. Enter, Jacob Palmer, a self-styled player who takes Cal under his wing and teaches him how to be a hit with the ladies.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Creed",
@@ -3728,7 +3973,8 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Creed II",
@@ -3748,7 +3994,8 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Creed III",
@@ -3768,7 +4015,8 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Cross My Heart",
@@ -3785,7 +4033,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "D1: The Mighty Ducks",
@@ -3802,7 +4051,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "D2: The Mighty Ducks",
@@ -3819,7 +4069,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "D3: The Mighty Ducks",
@@ -3836,7 +4087,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "Da Vinci Code, The",
@@ -3853,7 +4105,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Dangerous Minds",
@@ -3869,7 +4122,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Dangerous Minds"
   },
   {
     "title": "Daredevil",
@@ -3886,7 +4141,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Daredevil: Director's Cut",
@@ -3902,7 +4158,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "NR",
+    "tmdbTitle": "Giving the Devil His Due: The Making of the 'Daredevil' Director's Cut"
   },
   {
     "title": "Dark City",
@@ -3918,7 +4176,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Dark City"
   },
   {
     "title": "Dark Knight Rises, The",
@@ -3938,7 +4198,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Dark Knight, The",
@@ -3958,7 +4219,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Dawn of the Planet of the Apes",
@@ -3977,7 +4239,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Dawn of the Planet of the Apes"
   },
   {
     "title": "Day After Tomorrow, The",
@@ -3994,7 +4258,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Daylight",
@@ -4003,16 +4268,17 @@ const movies = [
     "tmdbId": 11228,
     "poster": "https://image.tmdb.org/t/p/w500/bRWNxtm3q0QvIIM52uQqRIEvpl2.jpg",
     "year": "1996",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "115m",
+    "genre": "Action / Adventure / Thriller",
+    "director": "Rob Cohen",
+    "cast": "Sylvester Stallone, Amy Brenneman, Viggo Mortensen, Stan Shaw, Barry Newman, Dan Hedaya",
     "synopsis": "A group of armed robbers fleeing the police head for the New Jersey Tunnel and run right into trucks transporting toxic waste. The spectacular explosion that follows results in both ends of the tunnel collapsing and the handful of people who survived the explosion are now in peril. Kit Latura is the only man with the skill and knowledge to lead the band of survivors out of the tunnel before the structure collapses.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Dead Man on Campus",
@@ -4029,7 +4295,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Deadpool",
@@ -4049,7 +4316,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Dear Santa",
@@ -4058,10 +4326,10 @@ const movies = [
     "tmdbId": 1097870,
     "poster": "https://image.tmdb.org/t/p/w500/fRbDHbGBXg6kwQYr3CRYeKPJW5q.jpg",
     "year": "2024",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "108m",
+    "genre": "Comedy / Fantasy",
+    "director": "Bobby Farrelly",
+    "cast": "Jack Black, Robert Timothy Smith, Keegan-Michael Key, Brianne Howey, Hayes MacArthur, P.J. Byrne",
     "synopsis": "Likeable 6th grader Liam writes to Santa asking him to prove that he's real. But Liam is dyslexic and accidentally sends his letter to Satan instead, who shows up at Liam's house, excited to have his first fanboy letter and wanting a little of Liam's soul.",
     "physical": [],
     "digital": [
@@ -4069,7 +4337,8 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Death Becomes Her",
@@ -4078,16 +4347,17 @@ const movies = [
     "tmdbId": 9374,
     "poster": "https://image.tmdb.org/t/p/w500/kkWxyyyWFK5KNk9WVwQuGEC9H9H.jpg",
     "year": "1992",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "104m",
+    "genre": "Comedy / Fantasy / Horror",
+    "director": "Robert Zemeckis",
+    "cast": "Meryl Streep, Goldie Hawn, Bruce Willis, Isabella Rossellini, Ian Ogilvy, Adam Storke",
     "synopsis": "Madeline is married to Ernest, who was once her arch-rival Helen's fiancé. After recovering from a mental breakdown, Helen vows to kill Madeline and steal back Ernest. Unfortunately for everyone, the introduction of a magic potion causes things to be a great deal more complicated than a mere murder plot.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Death Race",
@@ -4104,7 +4374,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Death Race 2",
@@ -4113,16 +4384,17 @@ const movies = [
     "tmdbId": 51620,
     "poster": "https://image.tmdb.org/t/p/w500/80mBFNVvak2bA9TJN1MD0yM7Lfi.jpg",
     "year": "2010",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "100m",
+    "genre": "Action / Thriller / Science Fiction",
+    "director": "Roel Reiné",
+    "cast": "Luke Goss, Lauren Cohan, Sean Bean, Danny Trejo, Ving Rhames, Tanit Phoenix",
     "synopsis": "In the world's most dangerous prison, a new game is born: Death Race. The rules of this adrenaline-fueled blood sport are simple, drive or die. When repentant convict Carl Lucas discovers there's a price on his head, his only hope is to survive a twisted race against an army of hardened criminals and tricked-out cars.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Death Race 2000",
@@ -4138,7 +4410,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Death Race 2000"
   },
   {
     "title": "Death Race 2050",
@@ -4147,16 +4421,17 @@ const movies = [
     "tmdbId": 401544,
     "poster": "https://image.tmdb.org/t/p/w500/5mI8yqZZBlZpvd0aT5YXbR8oEvT.jpg",
     "year": "2017",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "93m",
+    "genre": "Action / Comedy / Science Fiction",
+    "director": "G.J. Echternkamp",
+    "cast": "Manu Bennett, Malcolm McDowell, Marci Miller, Burt Grinstead, Folake Olowofoyeku, Anessa Ramsey",
     "synopsis": "The year 2050 the planet has become overpopulated, to help control population the government develops a race. The Death Race. Annually competitors race across the country scoring points for killing people with their vehicles.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Death to Smoochy",
@@ -4172,7 +4447,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Death to Smoochy"
   },
   {
     "title": "Deck the Halls",
@@ -4192,7 +4469,8 @@ const movies = [
     "digital": [],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Definitely, Maybe",
@@ -4209,7 +4487,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Demolition Man",
@@ -4228,7 +4507,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "Demolition Man"
   },
   {
     "title": "Den of Thieves",
@@ -4244,7 +4525,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Den of Thieves"
   },
   {
     "title": "Departed, The",
@@ -4261,7 +4544,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Derailed",
@@ -4278,7 +4562,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Descendants",
@@ -4294,7 +4579,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "G",
+    "tmdbTitle": "Descendants"
   },
   {
     "title": "Descendants 2",
@@ -4310,7 +4597,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "G",
+    "tmdbTitle": "Descendants 2"
   },
   {
     "title": "Descendants 3",
@@ -4326,7 +4615,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG",
+    "tmdbTitle": "Descendants 3"
   },
   {
     "title": "Desperado",
@@ -4343,7 +4634,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Devil Wears Prada, The",
@@ -4363,7 +4655,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Devil's Advocate, The",
@@ -4379,7 +4672,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "The Devil's Advocate"
   },
   {
     "title": "Dexter - Season 1",
@@ -4397,7 +4692,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "season": 1
+    "season": 1,
+    "rated": "TV-MA"
   },
   {
     "title": "Dexter - Season 2",
@@ -4415,7 +4711,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-MA"
   },
   {
     "title": "Dexter - Season 3",
@@ -4433,7 +4730,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-MA"
   },
   {
     "title": "Dexter - Season 4",
@@ -4451,7 +4749,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-MA"
   },
   {
     "title": "Dexter - Season 5",
@@ -4469,7 +4768,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-MA"
   },
   {
     "title": "Dexter - Season 6",
@@ -4487,7 +4787,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-MA"
   },
   {
     "title": "Dick Tracy",
@@ -4504,7 +4805,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "Dickie Roberts: Former Child Star",
@@ -4521,7 +4823,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "Dickie Roberts: Former Child Star"
+    "tmdbTitle": "Dickie Roberts: Former Child Star",
+    "rated": "PG-13"
   },
   {
     "title": "Die Hard",
@@ -4537,7 +4840,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Die Hard"
   },
   {
     "title": "Die Hard 2",
@@ -4554,7 +4859,9 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "categories": []
+    "categories": [],
+    "rated": "R",
+    "tmdbTitle": "Die Hard 2"
   },
   {
     "title": "Die Hard 4: Live Free or Die Hard",
@@ -4570,7 +4877,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "Live Free or Die Hard"
   },
   {
     "title": "Die Hard 5: A Good Day to Die Hard",
@@ -4589,7 +4898,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "A Good Day to Die Hard"
   },
   {
     "title": "Die Hard with a Vengeance",
@@ -4605,7 +4916,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Die Hard: With a Vengeance"
   },
   {
     "title": "Dirty Dancing",
@@ -4621,7 +4934,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "Dirty Dancing"
   },
   {
     "title": "Dirty Work",
@@ -4638,7 +4953,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Divergent Saga: Allegiant",
@@ -4656,7 +4972,9 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Allegiant"
   },
   {
     "title": "Divergent Saga: Divergent",
@@ -4675,7 +4993,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Divergent"
   },
   {
     "title": "Divergent Saga: Insurgent",
@@ -4693,7 +5013,9 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Insurgent"
   },
   {
     "title": "Doc Hollywood",
@@ -4711,7 +5033,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "categories": []
+    "categories": [],
+    "rated": "PG-13"
   },
   {
     "title": "DodgeBall: A True Underdog Story",
@@ -4728,7 +5051,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Dogma",
@@ -4737,10 +5061,10 @@ const movies = [
     "tmdbId": 1832,
     "poster": "https://image.tmdb.org/t/p/w500/oxhHl2YokTqcP44QK5tiTgjgLgk.jpg",
     "year": "1999",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "130m",
+    "genre": "Fantasy / Comedy / Adventure",
+    "director": "Kevin Smith",
+    "cast": "Ben Affleck, Matt Damon, Linda Fiorentino, Salma Hayek Pinault, Jason Lee, Jason Mewes",
     "synopsis": "An abortion clinic worker with a special heritage is called upon to save the existence of humanity from being negated by two renegade angels trying to exploit a loophole and re-enter Heaven.",
     "physical": [
       "DVD"
@@ -4749,7 +5073,8 @@ const movies = [
       "Fandango",
       "Movies Anywhere"
     ],
-    "categories": []
+    "categories": [],
+    "rated": "R"
   },
   {
     "title": "Don't Say a Word",
@@ -4766,7 +5091,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "Don't Say a Word"
+    "tmdbTitle": "Don't Say a Word",
+    "rated": "R"
   },
   {
     "title": "Donnie Brasco",
@@ -4783,7 +5109,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Double Jeopardy",
@@ -4800,7 +5127,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Down in the Valley",
@@ -4817,7 +5145,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Dreamgirls",
@@ -4834,7 +5163,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Dredd",
@@ -4853,7 +5183,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "Dredd"
   },
   {
     "title": "Driven",
@@ -4869,7 +5201,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "Driven"
   },
   {
     "title": "Dude, Where's My Car?",
@@ -4885,7 +5219,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "Dude, Where's My Car?"
   },
   {
     "title": "Due Date",
@@ -4901,7 +5237,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Due Date"
   },
   {
     "title": "Dukes of Hazzard, The",
@@ -4918,7 +5256,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "The Dukes of Hazzard"
+    "tmdbTitle": "The Dukes of Hazzard",
+    "rated": "PG-13"
   },
   {
     "title": "Dumb and Dumber",
@@ -4936,7 +5275,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "categories": []
+    "categories": [],
+    "rated": "PG-13"
   },
   {
     "title": "Dumb and Dumber To",
@@ -4955,7 +5295,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Dumb and Dumber To"
   },
   {
     "title": "Dumbo",
@@ -4975,7 +5317,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Dungeons & Dragons: Honor Among Thieves",
@@ -4984,15 +5327,16 @@ const movies = [
     "tmdbId": 493529,
     "poster": "https://image.tmdb.org/t/p/w500/v7UF7ypAqjsFZFdjksjQ7IUpXdn.jpg",
     "year": "2023",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "134m",
+    "genre": "Adventure / Fantasy / Comedy",
+    "director": "John Francis Daley, Jonathan Goldstein",
+    "cast": "Chris Pine, Michelle Rodriguez, Justice Smith, Sophia Lillis, Hugh Grant, Regé-Jean Page",
     "synopsis": "A charming thief and a band of unlikely adventurers undertake an epic heist to retrieve a lost relic, but things go dangerously awry when they run afoul of the wrong people.",
     "physical": [],
     "digital": [
       "Prime"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Dutch",
@@ -5009,7 +5353,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Easy A",
@@ -5018,16 +5363,17 @@ const movies = [
     "tmdbId": 37735,
     "poster": "https://image.tmdb.org/t/p/w500/v5f1qO6NJnxWgONgkYg21TW39DT.jpg",
     "year": "2010",
-    "runtime": "",
-    "genre": "Rom-Com",
-    "director": "",
-    "cast": "",
+    "runtime": "93m",
+    "genre": "Rom-Com / Comedy",
+    "director": "Will Gluck",
+    "cast": "Emma Stone, Penn Badgley, Amanda Bynes, Dan Byrd, Thomas Haden Church, Patricia Clarkson",
     "synopsis": "Olive, an average high school student, sees her below-the-radar existence turn around overnight once she decides to use the school's gossip grapevine to advance her social standing. Now her classmates are turning against her and the school board is becoming concerned, including her favorite teacher and the distracted guidance counselor. With the support of her hilariously idiosyncratic parents and a little help from a long-time crush, Olive attempts to take on her notorious new identity and crush the rumor mill once and for all.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Ed",
@@ -5047,7 +5393,8 @@ const movies = [
     "digital": [],
     "categories": [
       "baseball"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Edward Scissorhands",
@@ -5064,7 +5411,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Eight Men Out",
@@ -5084,7 +5432,8 @@ const movies = [
     "categories": [
       "baseball"
     ],
-    "tmdbTitle": "Eight Men Out"
+    "tmdbTitle": "Eight Men Out",
+    "rated": "PG"
   },
   {
     "title": "Elf",
@@ -5107,7 +5456,8 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Emperor's New Groove, The",
@@ -5127,7 +5477,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Empire Records",
@@ -5144,7 +5495,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Enchanted",
@@ -5154,14 +5506,15 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/8KCNzCArLlvLdQoHx6npua2VSVc.jpg",
     "year": "2007",
     "runtime": "107m",
-    "genre": "Comedy / Family / Fantasy",
+    "genre": "Comedy / Family / Fantasy / Romance",
     "director": "Kevin Lima",
     "cast": "Amy Adams, Patrick Dempsey, James Marsden, Timothy Spall, Idina Menzel, Rachel Covey",
     "synopsis": "The beautiful princess Giselle is banished by an evil queen from her magical, musical animated land and finds herself in the gritty reality of the streets of modern-day Manhattan. Shocked by this strange new environment that doesn't operate on a \"happily ever after\" basis, Giselle is now adrift in a chaotic world badly in need of enchantment. But when Giselle begins to fall in love with a charmingly flawed divorce lawyer who has come to her aid - even though she is already promised to a perfect fairy tale prince back home - she has to wonder: Can a storybook view of romance survive in the real world?",
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "Ender's Game",
@@ -5180,7 +5533,8 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Enemy of the State",
@@ -5197,7 +5551,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Eraser",
@@ -5206,10 +5561,10 @@ const movies = [
     "tmdbId": 9268,
     "poster": "https://image.tmdb.org/t/p/w500/uu2gBpFElDfxTI6BI9bT4pZ4kvw.jpg",
     "year": "1996",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "115m",
+    "genre": "Action / Mystery / Thriller",
+    "director": "Chuck Russell",
+    "cast": "Arnold Schwarzenegger, James Caan, Vanessa Williams, James Coburn, Robert Pastorelli, James Cromwell",
     "synopsis": "John \"The Eraser\" Kruger is the top gun in the US Marshall Witness Protection Program; he protects witnesses by erasing their pasts. His latest assignment is whistle-blower Dr. Lee Cullen, who has evidence that her employer, a major arms corporation, is entangled in a conspiracy involving a high-tech railgun, but there is danger lurking closer to home for Kruger, from within his own department.",
     "physical": [
       "DVD"
@@ -5217,7 +5572,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Erin Brockovich",
@@ -5233,7 +5589,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Erin Brockovich"
   },
   {
     "title": "Escape Plan",
@@ -5242,16 +5600,17 @@ const movies = [
     "tmdbId": 107846,
     "poster": "https://image.tmdb.org/t/p/w500/qOZPLflxDqKogu9v9hYw3lolxGs.jpg",
     "year": "2013",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "115m",
+    "genre": "Action / Thriller",
+    "director": "Mikael Håfström",
+    "cast": "Sylvester Stallone, Arnold Schwarzenegger, Jim Caviezel, 50 Cent, Sam Neill, Vinnie Jones",
     "synopsis": "Ray Breslin is the world's foremost authority on structural security. After analyzing every high security prison and learning a vast array of survival skills so he can design escape-proof prisons, his skills are put to the test. He's framed and incarcerated in a master prison he designed himself. He needs to escape and find the person who put him behind bars.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Eternal Sunshine of the Spotless Mind",
@@ -5268,7 +5627,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "EuroTrip",
@@ -5285,7 +5645,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "EverAfter",
@@ -5301,7 +5662,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "EverAfter"
   },
   {
     "title": "Everybody Loves Raymond - Complete Eighth Season",
@@ -5310,7 +5673,7 @@ const movies = [
     "tmdbId": 2140,
     "poster": "https://image.tmdb.org/t/p/w500/s3sjUypScIq4e3P334YXpPb9IOr.jpg",
     "year": "2003",
-    "runtime": "",
+    "runtime": "30m",
     "genre": "Comedy",
     "director": "",
     "cast": "Ray Romano, Patricia Heaton, Brad Garrett, Madylin Sweeten, Sawyer Sweeten, Sullivan Sweeten",
@@ -5318,7 +5681,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-PG"
   },
   {
     "title": "Everybody Loves Raymond - Complete Fifth Season",
@@ -5327,7 +5691,7 @@ const movies = [
     "tmdbId": 2140,
     "poster": "https://image.tmdb.org/t/p/w500/mhqtta09NN7WQ27Qf7azOcG6X5D.jpg",
     "year": "2000",
-    "runtime": "",
+    "runtime": "30m",
     "genre": "Comedy",
     "director": "",
     "cast": "Ray Romano, Patricia Heaton, Brad Garrett, Madylin Sweeten, Sawyer Sweeten, Sullivan Sweeten",
@@ -5335,7 +5699,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-PG"
   },
   {
     "title": "Everybody Loves Raymond - Complete Fourth Season",
@@ -5344,7 +5709,7 @@ const movies = [
     "tmdbId": 2140,
     "poster": "https://image.tmdb.org/t/p/w500/99Qp69ACeeIZSePx57XWonV0lf2.jpg",
     "year": "1999",
-    "runtime": "",
+    "runtime": "30m",
     "genre": "Comedy",
     "director": "",
     "cast": "Ray Romano, Patricia Heaton, Brad Garrett, Madylin Sweeten, Sawyer Sweeten, Sullivan Sweeten",
@@ -5352,7 +5717,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-PG"
   },
   {
     "title": "Everybody Loves Raymond - Complete Ninth Season",
@@ -5361,7 +5727,7 @@ const movies = [
     "tmdbId": 2140,
     "poster": "https://image.tmdb.org/t/p/w500/8ZHuts9gxsMbpwsHaSj54V6jHdh.jpg",
     "year": "2004",
-    "runtime": "",
+    "runtime": "30m",
     "genre": "Comedy",
     "director": "",
     "cast": "Ray Romano, Patricia Heaton, Brad Garrett, Madylin Sweeten, Sawyer Sweeten, Sullivan Sweeten",
@@ -5369,7 +5735,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-PG"
   },
   {
     "title": "Everybody Loves Raymond - Complete Second Season",
@@ -5378,7 +5745,7 @@ const movies = [
     "tmdbId": 2140,
     "poster": "https://image.tmdb.org/t/p/w500/n0jp73vC7F8NoLB4rWlzp06ebaj.jpg",
     "year": "1997",
-    "runtime": "",
+    "runtime": "30m",
     "genre": "Comedy",
     "director": "",
     "cast": "Ray Romano, Patricia Heaton, Brad Garrett, Madylin Sweeten, Sawyer Sweeten, Sullivan Sweeten",
@@ -5386,7 +5753,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-PG"
   },
   {
     "title": "Everybody Loves Raymond - Complete Seventh Season",
@@ -5395,7 +5763,7 @@ const movies = [
     "tmdbId": 2140,
     "poster": "https://image.tmdb.org/t/p/w500/wlUMe3mqL24Oi9wLAYrlIB6RYGh.jpg",
     "year": "2002",
-    "runtime": "",
+    "runtime": "30m",
     "genre": "Comedy",
     "director": "",
     "cast": "Ray Romano, Patricia Heaton, Brad Garrett, Madylin Sweeten, Sawyer Sweeten, Sullivan Sweeten",
@@ -5403,7 +5771,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-PG"
   },
   {
     "title": "Everybody Loves Raymond - Complete Sixth Season",
@@ -5412,7 +5781,7 @@ const movies = [
     "tmdbId": 2140,
     "poster": "https://image.tmdb.org/t/p/w500/A5CjkIPiVnSmzqZCM4V5TKpQn4a.jpg",
     "year": "2001",
-    "runtime": "",
+    "runtime": "30m",
     "genre": "Comedy",
     "director": "",
     "cast": "Ray Romano, Patricia Heaton, Brad Garrett, Madylin Sweeten, Sawyer Sweeten, Sullivan Sweeten",
@@ -5420,7 +5789,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-PG"
   },
   {
     "title": "Everybody Loves Raymond - Complete Third Season",
@@ -5429,7 +5799,7 @@ const movies = [
     "tmdbId": 2140,
     "poster": "https://image.tmdb.org/t/p/w500/bWj5T3hb6gTXOJhr4xl9Kxjsqh0.jpg",
     "year": "1998",
-    "runtime": "",
+    "runtime": "30m",
     "genre": "Comedy",
     "director": "",
     "cast": "Ray Romano, Patricia Heaton, Brad Garrett, Madylin Sweeten, Sawyer Sweeten, Sullivan Sweeten",
@@ -5437,7 +5807,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-PG"
   },
   {
     "title": "Everybody Loves Raymond - Season 1",
@@ -5455,7 +5826,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "season": 1
+    "season": 1,
+    "rated": "TV-PG"
   },
   {
     "title": "Everyone's Hero",
@@ -5476,7 +5848,8 @@ const movies = [
     "categories": [
       "baseball",
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Ex, The",
@@ -5493,7 +5866,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Expendables 2, The",
@@ -5513,7 +5887,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Expendables 3, The",
@@ -5522,16 +5897,17 @@ const movies = [
     "tmdbId": 138103,
     "poster": "https://image.tmdb.org/t/p/w500/utS5euWHlEdKBNnEFwjpZ2oGuhF.jpg",
     "year": "2014",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "126m",
+    "genre": "Action / Adventure / Thriller",
+    "director": "Patrick Hughes",
+    "cast": "Sylvester Stallone, Jason Statham, Harrison Ford, Arnold Schwarzenegger, Mel Gibson, Wesley Snipes",
     "synopsis": "Barney, Christmas and the rest of the team comes face-to-face with Conrad Stonebanks, who years ago co-founded The Expendables with Barney. Stonebanks subsequently became a ruthless arms trader and someone who Barney was forced to kill… or so he thought. Stonebanks, who eluded death once before, now is making it his mission to end The Expendables -- but Barney has other plans. Barney decides that he has to fight old blood with new blood, and brings in a new era of Expendables team members, recruiting individuals who are younger, faster and more tech-savvy. The latest mission becomes a clash of classic old-school style versus high-tech expertise in the Expendables’ most personal battle yet.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Expendables, The",
@@ -5551,7 +5927,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Eye See You",
@@ -5568,7 +5945,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "D-Tox"
+    "tmdbTitle": "D-Tox",
+    "rated": "R"
   },
   {
     "title": "Eyes Wide Shut",
@@ -5577,16 +5955,17 @@ const movies = [
     "tmdbId": 345,
     "poster": "https://image.tmdb.org/t/p/w500/knEIz1eNGl5MQDbrEAVWA7iRqF9.jpg",
     "year": "1999",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "159m",
+    "genre": "Drama / Thriller / Mystery",
+    "director": "Stanley Kubrick",
+    "cast": "Tom Cruise, Nicole Kidman, Sydney Pollack, Marie Richardson, Rade Šerbedžija, Todd Field",
     "synopsis": "After Dr. Bill Harford's wife, Alice, admits to having sexual fantasies about a man she met, Bill becomes obsessed with having a sexual encounter. He discovers an underground sexual group and attends one of their meetings -- and quickly discovers that he is in over his head.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "F1",
@@ -5606,7 +5985,8 @@ const movies = [
     ],
     "digital": [
       "Apple"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Failure to Launch",
@@ -5623,7 +6003,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Fall Guy, The",
@@ -5632,16 +6013,17 @@ const movies = [
     "tmdbId": 746036,
     "poster": "https://image.tmdb.org/t/p/w500/e7olqFmzcIX5c23kX4zSmLPJi8c.jpg",
     "year": "2024",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "127m",
+    "genre": "Action / Comedy / Romance",
+    "director": "David Leitch",
+    "cast": "Ryan Gosling, Emily Blunt, Aaron Taylor-Johnson, Hannah Waddingham, Teresa Palmer, Stephanie Hsu",
     "synopsis": "Fresh off an almost career-ending accident, stuntman Colt Seavers has to track down a missing movie star, solve a conspiracy and try to win back the love of his life while still doing his day job.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Falling Down",
@@ -5658,7 +6040,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Family Guy - Volume One: Seasons 1 & 2",
@@ -5678,7 +6061,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "TV-14"
   },
   {
     "title": "Family Guy Presents Stewie Griffin: The Untold Story",
@@ -5698,7 +6082,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "NR"
   },
   {
     "title": "Family Man, The",
@@ -5718,7 +6103,8 @@ const movies = [
     "digital": [],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Family Plot",
@@ -5727,16 +6113,17 @@ const movies = [
     "tmdbId": 5854,
     "poster": "https://image.tmdb.org/t/p/w500/oQ9QbyBuIM2uYaheSKjs2x1xIQV.jpg",
     "year": "1976",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "120m",
+    "genre": "Comedy / Crime / Thriller",
+    "director": "Alfred Hitchcock",
+    "cast": "Barbara Harris, Bruce Dern, Karen Black, William Devane, Ed Lauter, Cathleen Nesbitt",
     "synopsis": "Spiritualist Blanche Tyler and her cab-driving boyfriend encounter a pair of serial kidnappers while trailing a missing heir in California.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "NR"
   },
   {
     "title": "Family Stone, The",
@@ -5756,7 +6143,8 @@ const movies = [
     "digital": [],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Fan, The",
@@ -5776,7 +6164,8 @@ const movies = [
     "tmdbTitle": "The Fan",
     "categories": [
       "baseball"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Fantasia",
@@ -5796,7 +6185,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Fantasia 2000",
@@ -5816,7 +6206,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Fantastic Beasts and Where to Find Them",
@@ -5825,16 +6216,17 @@ const movies = [
     "tmdbId": 259316,
     "poster": "https://image.tmdb.org/t/p/w500/fLsaFKExQt05yqjoAvKsmOMYvJR.jpg",
     "year": "2016",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "133m",
+    "genre": "Fantasy / Adventure",
+    "director": "David Yates",
+    "cast": "Eddie Redmayne, Katherine Waterston, Dan Fogler, Alison Sudol, Colin Farrell, Jon Voight",
     "synopsis": "In 1926, Newt Scamander arrives at the Magical Congress of the United States of America with a magically expanded briefcase, which houses a number of dangerous creatures and their habitats. When the creatures escape from the briefcase, it sends the American wizarding authorities after Newt, and threatens to strain even further the state of magical and non-magical relations.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Fantastic Beasts: The Crimes of Grindelwald",
@@ -5843,16 +6235,17 @@ const movies = [
     "tmdbId": 338952,
     "poster": "https://image.tmdb.org/t/p/w500/fMMrl8fD9gRCFJvsx0SuFwkEOop.jpg",
     "year": "2018",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "134m",
+    "genre": "Fantasy / Adventure",
+    "director": "David Yates",
+    "cast": "Eddie Redmayne, Katherine Waterston, Dan Fogler, Alison Sudol, Johnny Depp, Jude Law",
     "synopsis": "Gellert Grindelwald has escaped imprisonment and has begun gathering followers to his cause—elevating wizards above all non-magical beings. The only one capable of putting a stop to him is the wizard he once called his closest friend, Albus Dumbledore. However, Dumbledore will need to seek help from the wizard who had thwarted Grindelwald once before, his former student Newt Scamander, who agrees to help, unaware of the dangers that lie ahead. Lines are drawn as love and loyalty are tested, even among the truest friends and family, in an increasingly divided wizarding world.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Fast & Furious: Fast 1",
@@ -5868,7 +6261,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "The Fast and the Furious"
   },
   {
     "title": "Fast & Furious: Fast 10",
@@ -5887,7 +6282,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Fast X"
   },
   {
     "title": "Fast & Furious: Fast 4",
@@ -5905,7 +6302,8 @@ const movies = [
       "Blu-ray",
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Fast & Furious: Fast 5",
@@ -5926,7 +6324,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Fast & Furious: Fast 6",
@@ -5947,7 +6346,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Fast & Furious: Fast 7",
@@ -5968,7 +6368,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Fast & Furious: Fast 8",
@@ -5989,7 +6390,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Fast & Furious: Fast 9",
@@ -6010,7 +6412,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Fast & Furious: Hobbs & Shaw",
@@ -6019,16 +6422,17 @@ const movies = [
     "tmdbId": 384018,
     "poster": "https://image.tmdb.org/t/p/w500/qRyy2UmjC5ur9bDi3kpNNRCc5nc.jpg",
     "year": "2019",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "137m",
+    "genre": "Action / Adventure / Comedy",
+    "director": "David Leitch",
+    "cast": "Dwayne Johnson, Jason Statham, Idris Elba, Vanessa Kirby, Helen Mirren, Eiza González",
     "synopsis": "Ever since US Diplomatic Security Service Agent Hobbs and lawless outcast Shaw first faced off, they just have traded smack talk and body blows. But when cyber-genetically enhanced anarchist Brixton's ruthless actions threaten the future of humanity, they join forces to defeat him.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Father Goose",
@@ -6037,15 +6441,16 @@ const movies = [
     "tmdbId": 30295,
     "poster": "https://image.tmdb.org/t/p/w500/Tp4vSQef0qsI78M90SsZZLJzPE.jpg",
     "year": "1964",
-    "runtime": "",
-    "genre": "Rom-Com",
-    "director": "",
-    "cast": "",
+    "runtime": "118m",
+    "genre": "Rom-Com / Adventure / Comedy / Romance",
+    "director": "Ralph Nelson",
+    "cast": "Cary Grant, Leslie Caron, Trevor Howard, Jack Good, Sharyl Locke, Pip Sparke",
     "synopsis": "During World War II, South Sea beachcomber Walter Eckland is persuaded to spy on planes passing over his island. He gets more than he bargained for as schoolteacher Catherine Frenau arrives on the run from the Japanese with her pupils in tow!",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "NR"
   },
   {
     "title": "Feeling Minnesota",
@@ -6055,14 +6460,15 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/fCJ5eUZw6mGS53spQxGUu7rzFm1.jpg",
     "year": "1996",
     "runtime": "99m",
-    "genre": "Comedy / Drama / Thriller",
+    "genre": "Comedy / Drama / Thriller / Crime / Romance",
     "director": "Steven Baigelman",
     "cast": "Keanu Reeves, Cameron Diaz, Vincent D'Onofrio, Delroy Lindo, Dan Aykroyd, Courtney Love",
     "synopsis": "Sam Clayton's marriage to ex-stripper Freddie comes about when she's strong-armed into the match by Red, a club proprietor who once did her a favor. But Freddie falls in love with Jjaks, Sam's brother, and the pair tries to escape the situation together. It isn't long before both Sam and Red catch up with them, resulting in threats against the two of them -- although tension also starts to build between Sam and Red.",
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Ferris Bueller's Day Off",
@@ -6079,7 +6485,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Fever Pitch",
@@ -6099,7 +6506,8 @@ const movies = [
     "digital": [],
     "categories": [
       "baseball"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Field of Dreams",
@@ -6122,7 +6530,8 @@ const movies = [
     "categories": [
       "baseball"
     ],
-    "tmdbTitle": "Field of Dreams"
+    "tmdbTitle": "Field of Dreams",
+    "rated": "PG"
   },
   {
     "title": "Fifth Element, The",
@@ -6138,7 +6547,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "The Fifth Element"
   },
   {
     "title": "Fight Club",
@@ -6157,7 +6568,8 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Fighter, The",
@@ -6173,7 +6585,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "The Fighter"
   },
   {
     "title": "Final Destination",
@@ -6192,7 +6606,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "Final Destination"
   },
   {
     "title": "Final Destination 2",
@@ -6211,7 +6627,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "Final Destination 2"
   },
   {
     "title": "Final Destination 3",
@@ -6220,16 +6638,17 @@ const movies = [
     "tmdbId": 9286,
     "poster": "https://image.tmdb.org/t/p/w500/p7ARuNKUGPGvkBiDtIDvAzYzonX.jpg",
     "year": "2006",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "92m",
+    "genre": "Horror / Mystery",
+    "director": "James Wong",
+    "cast": "Mary Elizabeth Winstead, Ryan Merriman, Kris Lemche, Alexz Johnson, Sam Easton, Jesse Moss",
     "synopsis": "High school senior Wendy's premonition of a deadly rollercoaster ride saves her life and a lucky few, but not from death itself — which seeks out those who escaped their fate.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Final Destination 4",
@@ -6238,15 +6657,16 @@ const movies = [
     "tmdbId": 19912,
     "poster": "https://image.tmdb.org/t/p/w500/5vxXrr1MqGsT4NNeRITpfDnl4Rq.jpg",
     "year": "2009",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "82m",
+    "genre": "Horror / Mystery",
+    "director": "David R. Ellis",
+    "cast": "Bobby Campo, Shantel VanSanten, Nick Zano, Haley Webb, Mykelti Williamson, Krista Allen",
     "synopsis": "A horrifying premonition saves a young man and his friends from death during a racetrack accident but terrible fates await them nonetheless.",
     "physical": [],
     "digital": [
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Final Destination 5",
@@ -6255,16 +6675,17 @@ const movies = [
     "tmdbId": 55779,
     "poster": "https://image.tmdb.org/t/p/w500/Akx1Po4ZLetOWfYJhQf75tbhTtK.jpg",
     "year": "2011",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "91m",
+    "genre": "Horror / Mystery",
+    "director": "Steven Quale",
+    "cast": "Nicholas D'Agosto, Emma Bell, Miles Fisher, Ellen Wroe, Jacqueline MacInnes Wood, P.J. Byrne",
     "synopsis": "Death is just as omnipresent as ever, and is unleashed after one man’s premonition saves a group of coworkers from a terrifying suspension bridge collapse. But this group of unsuspecting souls was never supposed to survive, and, in a terrifying race against time, the ill-fated group frantically tries to discover a way to escape Death’s sinister agenda.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Finding Nemo",
@@ -6284,7 +6705,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Finding Neverland",
@@ -6300,7 +6722,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG",
+    "tmdbTitle": "Finding Neverland"
   },
   {
     "title": "Firewall",
@@ -6317,7 +6741,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Flash, The",
@@ -6337,7 +6762,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Flashdance",
@@ -6353,7 +6779,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Flashdance"
   },
   {
     "title": "Fool's Gold",
@@ -6370,7 +6798,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "For Love of the Game",
@@ -6379,10 +6808,10 @@ const movies = [
     "tmdbId": 10390,
     "poster": "https://image.tmdb.org/t/p/w500/vkeKxoSXE1qMArcFNTNBBH8TjKZ.jpg",
     "year": "1999",
-    "runtime": "",
-    "genre": "Rom-Com",
-    "director": "",
-    "cast": "",
+    "runtime": "138m",
+    "genre": "Rom-Com / Drama / Romance",
+    "director": "Sam Raimi",
+    "cast": "Kevin Costner, Kelly Preston, John C. Reilly, Jena Malone, Brian Cox, J.K. Simmons",
     "synopsis": "A baseball legend almost finished with his distinguished career at the age of forty has one last chance to prove who he is, what he is capable of, and win the heart of the woman he has loved for the past four years.",
     "physical": [
       "DVD"
@@ -6393,7 +6822,8 @@ const movies = [
     ],
     "categories": [
       "baseball"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "For Love or Money",
@@ -6410,7 +6840,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "Forgetting Sarah Marshall",
@@ -6427,7 +6858,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Four Brothers",
@@ -6444,7 +6876,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Four Christmases",
@@ -6464,7 +6897,8 @@ const movies = [
     "digital": [],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Fox and the Hound, The",
@@ -6484,7 +6918,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Fred Claus",
@@ -6504,7 +6939,8 @@ const movies = [
     "digital": [],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Frequency",
@@ -6521,7 +6957,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Friends - Complete Eighth Season",
@@ -6538,7 +6975,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Friends - Complete Fifth Season",
@@ -6555,7 +6993,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Friends - Complete First Season",
@@ -6572,7 +7011,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Friends - Complete Fourth Season",
@@ -6589,7 +7029,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Friends - Complete Ninth Season",
@@ -6606,7 +7047,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Friends - Complete Second Season",
@@ -6623,7 +7065,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Friends - Complete Seventh Season",
@@ -6640,7 +7083,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Friends - Complete Sixth Season",
@@ -6657,7 +7101,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Friends - Complete Tenth Season",
@@ -6674,7 +7119,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Friends - Complete Third Season",
@@ -6691,7 +7137,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Friends with Benefits",
@@ -6700,10 +7147,10 @@ const movies = [
     "tmdbId": 50544,
     "poster": "https://image.tmdb.org/t/p/w500/nKhhDFCdzxeJ3GUunQ570LDpUkz.jpg",
     "year": "2011",
-    "runtime": "",
-    "genre": "Rom-Com",
-    "director": "",
-    "cast": "",
+    "runtime": "109m",
+    "genre": "Rom-Com / Romance / Comedy",
+    "director": "Will Gluck",
+    "cast": "Justin Timberlake, Mila Kunis, Jenna Elfman, Patricia Clarkson, Woody Harrelson, Richard Jenkins",
     "synopsis": "Dylan is done with relationships. Jamie decides to stop buying into the Hollywood clichés of true love. When the two become friends they decide to try something new and take advantage of their mutual attraction - but without any emotional attachment.",
     "physical": [
       "DVD"
@@ -6712,7 +7159,8 @@ const movies = [
       "Fandango",
       "Movies Anywhere"
     ],
-    "categories": []
+    "categories": [],
+    "rated": "R"
   },
   {
     "title": "Frosty Returns",
@@ -6732,7 +7180,9 @@ const movies = [
     "categories": [
       "christmas",
       "animated"
-    ]
+    ],
+    "rated": "G",
+    "tmdbTitle": "Frosty Returns"
   },
   {
     "title": "Frosty the Snowman",
@@ -6753,7 +7203,8 @@ const movies = [
       "animated",
       "christmas"
     ],
-    "tmdbTitle": "Frosty the Snowman"
+    "tmdbTitle": "Frosty the Snowman",
+    "rated": "NR"
   },
   {
     "title": "Frozen",
@@ -6776,7 +7227,8 @@ const movies = [
     ],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Fugitive, The",
@@ -6785,16 +7237,17 @@ const movies = [
     "tmdbId": 5503,
     "poster": "https://image.tmdb.org/t/p/w500/b3rEtLKyOnF89mcK75GXDXdmOEf.jpg",
     "year": "1993",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "131m",
+    "genre": "Action / Thriller / Drama",
+    "director": "Andrew Davis",
+    "cast": "Harrison Ford, Tommy Lee Jones, Joe Pantoliano, Jeroen Krabbé, Daniel Roebuck, L. Scott Caldwell",
     "synopsis": "Wrongfully convicted of murdering his wife and sentenced to death, Richard Kimble escapes from the law in an attempt to find the real killer and clear his name.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Full Metal Jacket",
@@ -6803,16 +7256,17 @@ const movies = [
     "tmdbId": 600,
     "poster": "https://image.tmdb.org/t/p/w500/kMKyx1k8hWWscYFnPbnxxN4Eqo4.jpg",
     "year": "1987",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "117m",
+    "genre": "Drama / War",
+    "director": "Stanley Kubrick",
+    "cast": "Matthew Modine, Adam Baldwin, Vincent D'Onofrio, R. Lee Ermey, Dorian Harewood, Kevyn Major Howard",
     "synopsis": "A pragmatic U.S. Marine observes the dehumanizing effects the U.S.-Vietnam War has on his fellow recruits from their brutal boot camp training to the bloody street fighting in Hue.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Fun with Dick and Jane",
@@ -6829,7 +7283,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "G.I. Joe: Retaliation",
@@ -6847,7 +7302,9 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "G.I. Joe: Retaliation"
   },
   {
     "title": "G.I. Joe: The Rise of Cobra",
@@ -6863,7 +7320,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "G.I. Joe: The Rise of Cobra"
   },
   {
     "title": "Game Night",
@@ -6880,7 +7339,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Gamer",
@@ -6897,7 +7357,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Garfield: The Movie",
@@ -6914,7 +7375,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "Gentlemen, The",
@@ -6930,7 +7392,9 @@ const movies = [
     "physical": [
       "Blu-ray"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "The Gentlemen"
   },
   {
     "title": "Get Shorty",
@@ -6948,7 +7412,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "categories": []
+    "categories": [],
+    "rated": "R"
   },
   {
     "title": "Get Smart",
@@ -6965,7 +7430,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Ghost",
@@ -6974,15 +7440,16 @@ const movies = [
     "tmdbId": 251,
     "poster": "https://image.tmdb.org/t/p/w500/w9RaPHov8oM5cnzeE27isnFMsvS.jpg",
     "year": "1990",
-    "runtime": "",
-    "genre": "Rom-Com",
-    "director": "",
-    "cast": "",
+    "runtime": "127m",
+    "genre": "Rom-Com / Fantasy / Romance / Thriller",
+    "director": "Jerry Zucker",
+    "cast": "Patrick Swayze, Demi Moore, Whoopi Goldberg, Tony Goldwyn, Vincent Schiavelli, Rick Aviles",
     "synopsis": "After a young man is murdered, his spirit stays behind to warn his lover of impending danger, with the help of a reluctant psychic.",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Ghost Town",
@@ -6999,7 +7466,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Ghostbusters",
@@ -7018,7 +7486,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Prime"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "Ghostbusters"
   },
   {
     "title": "Ghostbusters",
@@ -7035,7 +7505,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Ghostbusters"
   },
   {
     "title": "Ghostbusters II",
@@ -7051,7 +7523,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG",
+    "tmdbTitle": "Ghostbusters II"
   },
   {
     "title": "Ghostbusters: Afterlife",
@@ -7060,16 +7534,17 @@ const movies = [
     "tmdbId": 425909,
     "poster": "https://image.tmdb.org/t/p/w500/sg4xJaufDiQl7caFEskBtQXfD4x.jpg",
     "year": "2021",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "124m",
+    "genre": "Fantasy / Comedy / Adventure",
+    "director": "Jason Reitman",
+    "cast": "Mckenna Grace, Finn Wolfhard, Carrie Coon, Paul Rudd, Logan Kim, Celeste O'Connor",
     "synopsis": "When single mom Callie and her two kids Trevor and Phoebe arrive in a small Oklahoma town, they begin to discover their connection to the original Ghostbusters and the secret legacy their grandfather left behind.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Gift, The",
@@ -7079,14 +7554,15 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/nQdBE1P0r4ZrgGqy5EX8sL2kXG6.jpg",
     "year": "2000",
     "runtime": "112m",
-    "genre": "Horror / Drama / Thriller",
+    "genre": "Horror / Drama / Thriller / Mystery",
     "director": "Sam Raimi",
     "cast": "Cate Blanchett, Giovanni Ribisi, Keanu Reeves, Katie Holmes, Greg Kinnear, Hilary Swank",
     "synopsis": "Annie Wilson, young widow and mother of three, makes her living foretelling others' futures⁠—though her own has become cloudier than even she can see. Threatened by a client's violent husband and plagued by visions of a missing local woman, Annie finds herself pulled into a thicket of lies and deception in which her extraordinary gift may ultimately get her killed.",
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Girl with the Dragon Tattoo, The",
@@ -7106,7 +7582,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Gladiator",
@@ -7125,7 +7602,8 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Gladiator II",
@@ -7134,15 +7612,16 @@ const movies = [
     "tmdbId": 558449,
     "poster": "https://image.tmdb.org/t/p/w500/2cxhvwyEwRlysAmRH4iodkvo0z5.jpg",
     "year": "2024",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "148m",
+    "genre": "Action / Adventure / Drama",
+    "director": "Ridley Scott",
+    "cast": "Paul Mescal, Denzel Washington, Pedro Pascal, Connie Nielsen, Joseph Quinn, Fred Hechinger",
     "synopsis": "Years after witnessing the death of the revered hero Maximus at the hands of his uncle, Lucius is forced to enter the Colosseum after his home is conquered by the tyrannical Emperors who now lead Rome with an iron fist. With rage in his heart and the future of the Empire at stake, Lucius must look to his past to find strength and honor to return the glory of Rome to its people.",
     "physical": [],
     "digital": [
       "Prime"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Glass House, The",
@@ -7159,7 +7638,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Go",
@@ -7175,7 +7655,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Go"
   },
   {
     "title": "Gone in Sixty Seconds",
@@ -7192,7 +7674,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Good Will Hunting",
@@ -7209,7 +7692,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Goonies, The",
@@ -7226,7 +7710,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "Grass Is Greener, The",
@@ -7235,15 +7720,16 @@ const movies = [
     "tmdbId": 25767,
     "poster": "https://image.tmdb.org/t/p/w500/3peOV81MRImLDX8bnGUHOJSB0lN.jpg",
     "year": "1960",
-    "runtime": "",
-    "genre": "Rom-Com",
-    "director": "",
-    "cast": "",
+    "runtime": "104m",
+    "genre": "Rom-Com / Comedy / Romance",
+    "director": "Stanley Donen",
+    "cast": "Cary Grant, Deborah Kerr, Robert Mitchum, Jean Simmons, Moray Watson, Joan Benham",
     "synopsis": "Victor and Hillary are down on their luck to the point that they allow tourists to take guided tours of their castle. But Charles Delacro, a millionaire oil tycoon, visits, and takes a liking to more than the house. Soon, Hattie Durant gets involved and they have a good old fashioned love triangle.",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "NR"
   },
   {
     "title": "Great Outdoors, The",
@@ -7252,16 +7738,17 @@ const movies = [
     "tmdbId": 2617,
     "poster": "https://image.tmdb.org/t/p/w500/zxIoPZiqKOxrWvieumpxA6bOgkt.jpg",
     "year": "1988",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "91m",
+    "genre": "Comedy",
+    "director": "Howard Deutch",
+    "cast": "Dan Aykroyd, John Candy, Stephanie Faracy, Annette Bening, Chris Young, Lucy Deakins",
     "synopsis": "It's vacation time for outdoorsy Chicago man Chet Ripley, along with his wife, Connie, and their two kids, Buck and Ben. But a serene weekend of fishing at a Wisconsin lakeside cabin gets crashed by Connie's obnoxious brother-in-law, Roman Craig, his wife, Kate, and the couple's two daughters. As the excursion wears on, the Ripleys find themselves at odds with the stuffy Craig family.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Greatest Showman, The",
@@ -7281,7 +7768,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Greedy",
@@ -7298,7 +7786,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "Greedy"
+    "tmdbTitle": "Greedy",
+    "rated": "PG-13"
   },
   {
     "title": "Green Street Hooligans",
@@ -7315,7 +7804,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Grinch, The",
@@ -7339,7 +7829,8 @@ const movies = [
     "categories": [
       "animated",
       "christmas"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Grosse Pointe Blank",
@@ -7349,14 +7840,15 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/7lQ0MSNQqBTYpXTTZL82u1n95Z3.jpg",
     "year": "1997",
     "runtime": "107m",
-    "genre": "Action / Comedy / Thriller",
+    "genre": "Action / Comedy / Thriller / Romance",
     "director": "George Armitage",
     "cast": "John Cusack, Minnie Driver, Dan Aykroyd, Joan Cusack, Alan Arkin, Hank Azaria",
     "synopsis": "Hitman Martin Blank becomes a moving target after he rebuffs a fellow assassin's invitation to form a union. On the advice of his quirky assistant and neurotic psychiatrist, Martin begrudgingly heads out to Grosse Pointe, Michigan for his ten-year high school reunion, where he soon comes across the woman he jilted on prom night.",
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Groundhog Day",
@@ -7365,16 +7857,17 @@ const movies = [
     "tmdbId": 137,
     "poster": "https://image.tmdb.org/t/p/w500/gCgt1WARPZaXnq523ySQEUKinCs.jpg",
     "year": "1993",
-    "runtime": "",
-    "genre": "Rom-Com",
-    "director": "",
-    "cast": "",
+    "runtime": "101m",
+    "genre": "Rom-Com / Romance / Fantasy / Comedy",
+    "director": "Harold Ramis",
+    "cast": "Bill Murray, Andie MacDowell, Chris Elliott, Stephen Tobolowsky, Brian Doyle-Murray, Marita Geraghty",
     "synopsis": "A cynical TV weatherman, along with his idealistic producer and his sardonic cameraman, is sent to report on Groundhog Day in the small town of Punxsutawney, where he finds himself repeating the same day over and over.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Grown Ups",
@@ -7392,7 +7885,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "categories": []
+    "categories": [],
+    "rated": "PG-13"
   },
   {
     "title": "Grown Ups 2",
@@ -7413,7 +7907,8 @@ const movies = [
       "Fandango",
       "Movies Anywhere"
     ],
-    "categories": []
+    "categories": [],
+    "rated": "PG-13"
   },
   {
     "title": "Grudge Match",
@@ -7433,7 +7928,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Guardians of the Galaxy",
@@ -7451,7 +7947,8 @@ const movies = [
       "Blu-ray"
     ],
     "digital": [],
-    "categories": []
+    "categories": [],
+    "rated": "PG-13"
   },
   {
     "title": "Guardians of the Galaxy Vol. 2",
@@ -7471,7 +7968,9 @@ const movies = [
       "Fandango",
       "Movies Anywhere"
     ],
-    "categories": []
+    "categories": [],
+    "rated": "PG-13",
+    "tmdbTitle": "Guardians of the Galaxy Vol. 2"
   },
   {
     "title": "Hangmen",
@@ -7489,7 +7988,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "special": "Sandra Bullock movie"
+    "special": "Sandra Bullock movie",
+    "rated": "NR"
   },
   {
     "title": "Hangover Part II, The",
@@ -7509,7 +8009,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Hangover Part III, The",
@@ -7518,16 +8019,17 @@ const movies = [
     "tmdbId": 109439,
     "poster": "https://image.tmdb.org/t/p/w500/vtxuPWkdllLNLVyGjKYa267ntuH.jpg",
     "year": "2013",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "100m",
+    "genre": "Comedy",
+    "director": "Todd Phillips",
+    "cast": "Bradley Cooper, Ed Helms, Zach Galifianakis, Justin Bartha, Ken Jeong, John Goodman",
     "synopsis": "This time, there's no wedding. No bachelor party. What could go wrong, right? But when the Wolfpack hits the road, all bets are off.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Hangover, The",
@@ -7544,7 +8046,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Hannibal",
@@ -7561,7 +8064,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Hardball",
@@ -7580,7 +8084,9 @@ const movies = [
     "digital": [],
     "categories": [
       "baseball"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Hardball"
   },
   {
     "title": "Harold & Kumar Go to White Castle",
@@ -7596,7 +8102,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Harold & Kumar Go to White Castle"
   },
   {
     "title": "Harry Potter and the Chamber of Secrets",
@@ -7615,7 +8123,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "Harry Potter and the Chamber of Secrets"
   },
   {
     "title": "Harry Potter and the Deathly Hallows: Part 1",
@@ -7634,7 +8144,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Harry Potter and the Deathly Hallows: Part 1"
   },
   {
     "title": "Harry Potter and the Deathly Hallows: Part 2",
@@ -7653,7 +8165,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Harry Potter and the Deathly Hallows: Part 2"
   },
   {
     "title": "Harry Potter and the Goblet of Fire",
@@ -7672,7 +8186,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Harry Potter and the Goblet of Fire"
   },
   {
     "title": "Harry Potter and the Half-Blood Prince",
@@ -7691,7 +8207,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "Harry Potter and the Half-Blood Prince"
   },
   {
     "title": "Harry Potter and the Order of the Phoenix",
@@ -7710,7 +8228,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Harry Potter and the Order of the Phoenix"
   },
   {
     "title": "Harry Potter and the Philosopher's Stone",
@@ -7729,7 +8249,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "Harry Potter and the Philosopher's Stone"
   },
   {
     "title": "Harry Potter and the Prisoner of Azkaban",
@@ -7748,7 +8270,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "Harry Potter and the Prisoner of Azkaban"
   },
   {
     "title": "Haul Out the Holly",
@@ -7757,10 +8281,10 @@ const movies = [
     "tmdbId": 1028556,
     "poster": "https://image.tmdb.org/t/p/w500/naX9S52wyTpUJPR80FIWhgxzufb.jpg",
     "year": "2022",
-    "runtime": "",
-    "genre": "Rom-Com",
-    "director": "",
-    "cast": "",
+    "runtime": "84m",
+    "genre": "Rom-Com / TV Movie / Comedy / Drama / Romance",
+    "director": "Maclain Nelson",
+    "cast": "Lacey Chabert, Wes Brown, Peter Jacobson, Melissa Peterman, Stephen Tobolowsky, Walter Platz",
     "synopsis": "Emily arrives home, hoping to visit her parents, only to discover that they are leaving on a trip of their own. As she stays at their house for the holidays, their HOA is determined to get Emily to participate in the neighborhood’s many Christmas festivities.",
     "physical": [],
     "digital": [
@@ -7768,7 +8292,8 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Haul Out the Holly: Lit Up",
@@ -7777,10 +8302,10 @@ const movies = [
     "tmdbId": 1154268,
     "poster": "https://image.tmdb.org/t/p/w500/wDkGpq2lSd988vOdbcnfQU74lZS.jpg",
     "year": "2023",
-    "runtime": "",
-    "genre": "Rom-Com",
-    "director": "",
-    "cast": "",
+    "runtime": "84m",
+    "genre": "Rom-Com / TV Movie / Comedy / Romance",
+    "director": "Maclain Nelson",
+    "cast": "Lacey Chabert, Wes Brown, Ellen Travolta, Melissa Peterman, Stephen Tobolowsky, Seth Morris",
     "synopsis": "As the holidays approach, Emily and Jared are looking forward to celebrating the holidays together again, this time as a couple. Emily, now embracing Evergreen Lane’s uniquely festive spirit, is ready to work with Jared, Ned, Mary Louise and Pamela to make this year’s Christmas celebrations the best yet – even if being the HOA president’s girlfriend doesn’t stop those dreaded decorating citations. When a house on the block goes up for sale, it causes quite a stir with residents.",
     "physical": [],
     "digital": [
@@ -7788,7 +8313,8 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Heartbreakers",
@@ -7805,7 +8331,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Heat, The",
@@ -7825,7 +8352,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Heist",
@@ -7835,14 +8363,15 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/xrwwSXFeW35wYsnobreXbGxHwUC.jpg",
     "year": "2001",
     "runtime": "107m",
-    "genre": "Action / Crime / Drama",
+    "genre": "Action / Crime / Drama / Thriller",
     "director": "David Mamet",
     "cast": "Gene Hackman, Danny DeVito, Delroy Lindo, Sam Rockwell, Rebecca Pidgeon, Ricky Jay",
     "synopsis": "Joe Moore has a job he loves. He's a thief. His job goes sour when he gets caught on security camera tape. His fence, Bergman, reneges on the money he's owed, and his wife may be betraying him with the fence's young lieutenant. Moore and his partner, Bobby Blane, and their utility man, Pinky Pincus, find themselves broke, betrayed, and blackmailed. Moore is forced to commit his crew to do one last big job.",
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Hello Again Everybody: The Harry Caray Story",
@@ -7861,7 +8390,9 @@ const movies = [
     "digital": [],
     "categories": [
       "baseball"
-    ]
+    ],
+    "rated": "NR",
+    "tmdbTitle": "Hello Again Everybody: The Harry Caray Story"
   },
   {
     "title": "Hercules",
@@ -7881,7 +8412,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Heroes - Season 1",
@@ -7899,7 +8431,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "season": 1
+    "season": 1,
+    "rated": "TV-14"
   },
   {
     "title": "Heroes - Season 2",
@@ -7917,7 +8450,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Heroes - Season 3",
@@ -7935,7 +8469,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "High Fidelity",
@@ -7945,14 +8480,15 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/e2LZGB62GMhv3Fo8tDZjY87I81a.jpg",
     "year": "2000",
     "runtime": "113m",
-    "genre": "Drama / Comedy / Romance",
+    "genre": "Drama / Comedy / Romance / Music",
     "director": "Stephen Frears",
     "cast": "John Cusack, Iben Hjejle, Todd Louiso, Jack Black, Lisa Bonet, Catherine Zeta-Jones",
     "synopsis": "After his long-time girlfriend dumps him, a thirty-year-old record store owner seeks to understand why he is unlucky in love while recounting his \"top five breakups of all time\".",
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "History of the World: Part I",
@@ -7961,16 +8497,17 @@ const movies = [
     "tmdbId": 10156,
     "poster": "https://image.tmdb.org/t/p/w500/1bMaEfI76yrGjCSDquCippAFIDI.jpg",
     "year": "1981",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "92m",
+    "genre": "Comedy",
+    "director": "Mel Brooks",
+    "cast": "Mel Brooks, Dom DeLuise, Madeline Kahn, Harvey Korman, Cloris Leachman, Ron Carey",
     "synopsis": "An uproarious version of history that proves nothing is sacred – not even the Roman Empire, the French Revolution and the Spanish Inquisition.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Hitch",
@@ -7987,7 +8524,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Hitman",
@@ -8003,7 +8541,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Hitman"
   },
   {
     "title": "Holdovers, The",
@@ -8025,7 +8565,9 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "The Holdovers"
   },
   {
     "title": "Holiday, The",
@@ -8048,7 +8590,8 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Home Alone",
@@ -8068,7 +8611,8 @@ const movies = [
     "digital": [],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Home Alone 2: Lost in New York",
@@ -8088,7 +8632,8 @@ const movies = [
     "digital": [],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Home Alone 3",
@@ -8108,7 +8653,8 @@ const movies = [
     "digital": [],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Home Alone 4",
@@ -8127,7 +8673,9 @@ const movies = [
     "digital": [],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "Home Alone 4"
   },
   {
     "title": "Home for the Holidays",
@@ -8136,10 +8684,10 @@ const movies = [
     "tmdbId": 9089,
     "poster": "https://image.tmdb.org/t/p/w500/3zqlKdOttWyExzopVxglz50Vjxq.jpg",
     "year": "1995",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "103m",
+    "genre": "Comedy / Drama / Romance",
+    "director": "Jodie Foster",
+    "cast": "Holly Hunter, Robert Downey Jr., Anne Bancroft, Charles Durning, Dylan McDermott, Geraldine Chaplin",
     "synopsis": "After losing her job, making out with her soon-to-be former boss, and finding out that her daughter plans to spend Thanksgiving with her boyfriend, Claudia Larson faces spending the holiday with her unhinged family.",
     "physical": [],
     "digital": [
@@ -8147,7 +8695,8 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Home Improvement - Season 1",
@@ -8165,7 +8714,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "season": 1
+    "season": 1,
+    "rated": "TV-PG"
   },
   {
     "title": "Home Improvement - Season 2",
@@ -8183,7 +8733,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-PG"
   },
   {
     "title": "Hook",
@@ -8192,10 +8743,10 @@ const movies = [
     "tmdbId": 879,
     "poster": "https://image.tmdb.org/t/p/w500/a6rB1lGXoGms7gWxRfJneQmAjNV.jpg",
     "year": "1991",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "142m",
+    "genre": "Adventure / Fantasy / Comedy / Family",
+    "director": "Steven Spielberg",
+    "cast": "Dustin Hoffman, Robin Williams, Julia Roberts, Bob Hoskins, Maggie Smith, Caroline Goodall",
     "synopsis": "The boy who wasn't supposed to grow up—Peter Pan—does just that, becoming a soulless corporate lawyer whose workaholism could cost him his wife and kids. During his trip to see Granny Wendy in London, the vengeful Capt. Hook kidnaps Peter's kids and forces Peter to return to Neverland.",
     "physical": [
       "DVD"
@@ -8203,7 +8754,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Hop",
@@ -8222,7 +8774,9 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "Hop"
   },
   {
     "title": "Horrible Bosses",
@@ -8241,7 +8795,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "Horrible Bosses"
   },
   {
     "title": "Horton Hears a Who!",
@@ -8261,7 +8817,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Hot Rod",
@@ -8278,7 +8835,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Hot Shots!",
@@ -8295,7 +8853,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Hot Shots! Part Deux",
@@ -8312,7 +8871,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "House - Complete Eighth Season",
@@ -8321,7 +8881,7 @@ const movies = [
     "tmdbId": 1408,
     "poster": "https://image.tmdb.org/t/p/w500/tYDeOATjEGDIpyoEaYTrVHH3aj9.jpg",
     "year": "2011",
-    "runtime": "",
+    "runtime": "44m",
     "genre": "Drama",
     "director": "",
     "cast": "Hugh Laurie, Robert Sean Leonard, Omar Epps, Jesse Spencer, Odette Annable, Peter Jacobson",
@@ -8329,7 +8889,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "House - Complete Fifth Season",
@@ -8338,7 +8899,7 @@ const movies = [
     "tmdbId": 1408,
     "poster": "https://image.tmdb.org/t/p/w500/kb5AW0CzjvxqcGQD66jLYlqIPXW.jpg",
     "year": "2008",
-    "runtime": "",
+    "runtime": "44m",
     "genre": "Drama",
     "director": "",
     "cast": "Hugh Laurie, Robert Sean Leonard, Omar Epps, Jesse Spencer, Odette Annable, Peter Jacobson",
@@ -8346,7 +8907,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "House - Complete Fourth Season",
@@ -8355,7 +8917,7 @@ const movies = [
     "tmdbId": 1408,
     "poster": "https://image.tmdb.org/t/p/w500/CryJFbwif5U1VViZ5EkmeomD3q.jpg",
     "year": "2007",
-    "runtime": "",
+    "runtime": "44m",
     "genre": "Drama",
     "director": "",
     "cast": "Hugh Laurie, Robert Sean Leonard, Omar Epps, Jesse Spencer, Odette Annable, Peter Jacobson",
@@ -8363,7 +8925,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "House - Complete Second Season",
@@ -8372,7 +8935,7 @@ const movies = [
     "tmdbId": 1408,
     "poster": "https://image.tmdb.org/t/p/w500/j2LxTsMhXYqfi4k9Vome8kQc26U.jpg",
     "year": "2005",
-    "runtime": "",
+    "runtime": "44m",
     "genre": "Drama",
     "director": "",
     "cast": "Hugh Laurie, Robert Sean Leonard, Omar Epps, Jesse Spencer, Odette Annable, Peter Jacobson",
@@ -8380,7 +8943,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "House - Complete Seventh Season",
@@ -8389,7 +8953,7 @@ const movies = [
     "tmdbId": 1408,
     "poster": "https://image.tmdb.org/t/p/w500/x62Ii2v8fZer0jhpT4w9ngdUE4j.jpg",
     "year": "2010",
-    "runtime": "",
+    "runtime": "44m",
     "genre": "Drama",
     "director": "",
     "cast": "Hugh Laurie, Robert Sean Leonard, Omar Epps, Jesse Spencer, Odette Annable, Peter Jacobson",
@@ -8397,7 +8961,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "House - Complete Sixth Season",
@@ -8406,7 +8971,7 @@ const movies = [
     "tmdbId": 1408,
     "poster": "https://image.tmdb.org/t/p/w500/hhcJGHhq2xMUCp2sGRrw523M7Zx.jpg",
     "year": "2009",
-    "runtime": "",
+    "runtime": "44m",
     "genre": "Drama",
     "director": "",
     "cast": "Hugh Laurie, Robert Sean Leonard, Omar Epps, Jesse Spencer, Odette Annable, Peter Jacobson",
@@ -8414,7 +8979,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "House - Complete Third Season",
@@ -8423,7 +8989,7 @@ const movies = [
     "tmdbId": 1408,
     "poster": "https://image.tmdb.org/t/p/w500/muuLevUfVbpq87lWljfZ8HLga6b.jpg",
     "year": "2006",
-    "runtime": "",
+    "runtime": "44m",
     "genre": "Drama",
     "director": "",
     "cast": "Hugh Laurie, Robert Sean Leonard, Omar Epps, Jesse Spencer, Odette Annable, Peter Jacobson",
@@ -8431,7 +8997,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "House - Season 1",
@@ -8449,7 +9016,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "season": 1
+    "season": 1,
+    "rated": "TV-14"
   },
   {
     "title": "Houseboat",
@@ -8458,15 +9026,16 @@ const movies = [
     "tmdbId": 1377,
     "poster": "https://image.tmdb.org/t/p/w500/nfaOBiZktPHOV0f3DTqTftgTo3B.jpg",
     "year": "1958",
-    "runtime": "",
-    "genre": "Rom-Com",
-    "director": "",
-    "cast": "",
+    "runtime": "110m",
+    "genre": "Rom-Com / Comedy / Romance",
+    "director": "Melville Shavelson",
+    "cast": "Cary Grant, Sophia Loren, Martha Hyer, Harry Guardino, Eduardo Ciannelli, Murray Hamilton",
     "synopsis": "An Italian socialite on the run signs on as housekeeper for a widower with three children.",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "NR"
   },
   {
     "title": "Housemaid, The",
@@ -8475,16 +9044,17 @@ const movies = [
     "tmdbId": 1368166,
     "poster": "https://image.tmdb.org/t/p/w500/cWsBscZzwu5brg9YjNkGewRUvJX.jpg",
     "year": "2025",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "131m",
+    "genre": "Mystery / Thriller",
+    "director": "Paul Feig",
+    "cast": "Sydney Sweeney, Amanda Seyfried, Brandon Sklenar, Michele Morrone, Indiana Elle, Sarah Cooper",
     "synopsis": "Trying to escape her past, Millie Calloway accepts a job as a live-in housemaid for the wealthy Nina and Andrew Winchester. But what begins as a dream job quickly unravels into something far more dangerous—a sexy, seductive game of secrets, scandal, and power.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "How I Met Your Mother - Season 1",
@@ -8502,7 +9072,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "How I Met Your Mother - Season 2",
@@ -8520,7 +9091,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "How I Met Your Mother - Season 3",
@@ -8538,7 +9110,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "How I Met Your Mother - Season 4",
@@ -8556,7 +9129,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "How I Met Your Mother - Season 5",
@@ -8574,7 +9148,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "How I Met Your Mother - Season 6",
@@ -8592,7 +9167,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "How the Grinch Stole Christmas",
@@ -8615,7 +9191,8 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "How the Grinch Stole Christmas!",
@@ -8639,7 +9216,9 @@ const movies = [
     "categories": [
       "christmas",
       "animated"
-    ]
+    ],
+    "rated": "G",
+    "tmdbTitle": "How the Grinch Stole Christmas!"
   },
   {
     "title": "How to Lose a Guy in 10 Days",
@@ -8656,7 +9235,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "How to Train Your Dragon",
@@ -8666,7 +9246,7 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/ygGmAO60t8GyqUo9xYeYxSZAR3b.jpg",
     "year": "2010",
     "runtime": "98m",
-    "genre": "Fantasy / Adventure / Animation",
+    "genre": "Fantasy / Adventure / Animation / Family",
     "director": "Chris Sanders",
     "cast": "Jay Baruchel, Gerard Butler, Craig Ferguson, America Ferrera, Jonah Hill, Christopher Mintz-Plasse",
     "synopsis": "As the son of a Viking leader on the cusp of manhood, shy Hiccup Horrendous Haddock III faces a rite of passage: he must kill a dragon to prove his warrior mettle. But after downing a feared dragon, he realizes that he no longer wants to destroy it, and instead befriends the beast – which he names Toothless – much to the chagrin of his warrior father.",
@@ -8674,7 +9254,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "How to Train Your Dragon 2",
@@ -8683,17 +9264,18 @@ const movies = [
     "tmdbId": 82702,
     "poster": "https://image.tmdb.org/t/p/w500/d13Uj86LdbDLrfDoHR5aDOFYyJC.jpg",
     "year": "2014",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "102m",
+    "genre": "Fantasy / Action / Adventure / Animation / Family",
+    "director": "Dean DeBlois",
+    "cast": "Jay Baruchel, Cate Blanchett, Gerard Butler, Craig Ferguson, America Ferrera, Jonah Hill",
     "synopsis": "Five years after uniting the dragons and Vikings of Berk, Hiccup and Toothless soar beyond their homeland, charting the vast unknown. During one of their adventures, the pair discover a secret cave that houses hundreds of wild dragons -- and a mysterious dragon rider with a startling connection to Hiccup. And as the ruthless dragon conqueror Drago Bludvist rises to seize control of both dragons and people alike, Hiccup must step into his role as a true leader and, alongside his friends and Toothless, protect Berk from a devastating war.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
     ],
-    "categories": []
+    "categories": [],
+    "rated": "PG"
   },
   {
     "title": "Hudson Hawk",
@@ -8710,7 +9292,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Hugo",
@@ -8727,7 +9310,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "Hunchback of Notre Dame, The",
@@ -8747,7 +9331,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Hunger Games, The",
@@ -8767,7 +9352,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Hunger Games: Catching Fire, The",
@@ -8786,7 +9372,8 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Hunger Games: Mockingjay - Part 1, The",
@@ -8805,7 +9392,8 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Hunger Games: Mockingjay - Part 2, The",
@@ -8825,7 +9413,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Hunger Games: The Ballad of Songbirds & Snakes, The",
@@ -8834,16 +9423,17 @@ const movies = [
     "tmdbId": 695721,
     "poster": "https://image.tmdb.org/t/p/w500/mBaXZ95R2OxueZhvQbcEWy2DqyO.jpg",
     "year": "2023",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "157m",
+    "genre": "Science Fiction / Action",
+    "director": "Francis Lawrence",
+    "cast": "Tom Blyth, Rachel Zegler, Peter Dinklage, Jason Schwartzman, Hunter Schafer, Josh Rivera",
     "synopsis": "64 years before he becomes the tyrannical president of Panem, Coriolanus Snow sees a chance for a change in fortunes when he mentors Lucy Gray Baird, the female tribute from District 12.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Hush",
@@ -8860,7 +9450,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "Hush"
+    "tmdbTitle": "Hush",
+    "rated": "PG-13"
   },
   {
     "title": "I Know What You Did Last Summer",
@@ -8876,7 +9467,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "I Know What You Did Last Summer"
   },
   {
     "title": "I Love You, Man",
@@ -8893,7 +9486,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "I Now Pronounce You Chuck & Larry",
@@ -8909,7 +9503,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "I Now Pronounce You Chuck & Larry"
   },
   {
     "title": "I, Robot",
@@ -8925,7 +9521,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "I, Robot"
   },
   {
     "title": "Ice Age",
@@ -8948,7 +9546,8 @@ const movies = [
     ],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Ice Age: Dawn of the Dinosaurs",
@@ -8968,7 +9567,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Ice Age: The Meltdown",
@@ -8988,7 +9588,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Identity",
@@ -9006,7 +9607,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "categories": []
+    "categories": [],
+    "rated": "R"
   },
   {
     "title": "Idiocracy",
@@ -9015,16 +9617,17 @@ const movies = [
     "tmdbId": 7512,
     "poster": "https://image.tmdb.org/t/p/w500/6cTHBq49ApwsJaRr3ojlY1cmiXk.jpg",
     "year": "2006",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "85m",
+    "genre": "Comedy / Science Fiction / Adventure / Thriller",
+    "director": "Mike Judge",
+    "cast": "Luke Wilson, Maya Rudolph, Dax Shepard, Terry Crews, Anthony 'Citric' Campos, David Herman",
     "synopsis": "To test its top-secret Human Hibernation Project, the Pentagon picks the most average European-Americans it can find - an Army private and a prostitute - and sends them to the year 2505 after a series of freak events. But when they arrive, they find a civilization so dumbed-down that they're the smartest people around.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Illusionist, The",
@@ -9041,7 +9644,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "In Bruges",
@@ -9061,7 +9665,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "In Her Shoes",
@@ -9078,7 +9683,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "In Her Shoes"
+    "tmdbTitle": "In Her Shoes",
+    "rated": "PG-13"
   },
   {
     "title": "In the Grey",
@@ -9087,16 +9693,17 @@ const movies = [
     "tmdbId": 1122573,
     "poster": "https://image.tmdb.org/t/p/w500/dQgIcW6Th08kMRf2HBoYWoFE6OD.jpg",
     "year": "2026",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "97m",
+    "genre": "Action / Thriller",
+    "director": "Guy Ritchie",
+    "cast": "Henry Cavill, Jake Gyllenhaal, Eiza González, Carlos Bardem, Michael Vu, Fisher Stevens",
     "synopsis": "A covert team of elite operatives are living in the shadows. When a ruthless despot steals a billion-dollar fortune, they're sent to take it back—an impossible heist that erupts into a deadly game of strategy, deception and survival.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Inception",
@@ -9116,7 +9723,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Incredible Burt Wonderstone, The",
@@ -9136,7 +9744,9 @@ const movies = [
       "Fandango",
       "Movies Anywhere",
       "Prime"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "The Incredible Burt Wonderstone"
   },
   {
     "title": "Incredible Hulk, The",
@@ -9153,7 +9763,8 @@ const movies = [
     "physical": [
       "Blu-ray"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Incredibles, The",
@@ -9173,7 +9784,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Independence Day",
@@ -9190,7 +9802,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Indian Summer",
@@ -9208,7 +9821,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Indiana Jones and the Kingdom of the Crystal Skull",
@@ -9225,7 +9839,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Indiana Jones and the Last Crusade",
@@ -9242,7 +9857,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Indiana Jones and the Raiders of the Lost Ark",
@@ -9259,7 +9875,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "Indiana Jones and the Temple of Doom",
@@ -9276,7 +9893,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "Indiscreet",
@@ -9285,15 +9903,16 @@ const movies = [
     "tmdbId": 22874,
     "poster": "https://image.tmdb.org/t/p/w500/sv4ao2ceHx2Ii1I2SsAmCqr7k6K.jpg",
     "year": "1958",
-    "runtime": "",
-    "genre": "Rom-Com",
-    "director": "",
-    "cast": "",
+    "runtime": "100m",
+    "genre": "Rom-Com / Comedy / Romance",
+    "director": "Stanley Donen",
+    "cast": "Cary Grant, Ingrid Bergman, Cecil Parker, Phyllis Calvert, David Kossoff, Megs Jenkins",
     "synopsis": "Anna Kalman is an accomplished actress who has given up hope of finding the man of her dreams. While talking about this subject with her sister, in walks Philip Adams and she realizes that this is the charming, smart, and handsome man she has been waiting for.",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "NR"
   },
   {
     "title": "Inside Man",
@@ -9309,7 +9928,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Inside Man"
   },
   {
     "title": "Inside Out",
@@ -9332,7 +9953,8 @@ const movies = [
     ],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Invention of Lying, The",
@@ -9349,7 +9971,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "The Invention of Lying"
+    "tmdbTitle": "The Invention of Lying",
+    "rated": "PG-13"
   },
   {
     "title": "Iron Man",
@@ -9366,7 +9989,8 @@ const movies = [
     "physical": [
       "Blu-ray"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Iron Man 2",
@@ -9383,7 +10007,8 @@ const movies = [
     "physical": [
       "Blu-ray"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Iron Man 3",
@@ -9403,7 +10028,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Is This Thing On?",
@@ -9412,16 +10038,17 @@ const movies = [
     "tmdbId": 1140498,
     "poster": "https://image.tmdb.org/t/p/w500/YD6QzcokTMe3EViM0hLbNCxf4y.jpg",
     "year": "2025",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "121m",
+    "genre": "Comedy / Drama / Romance",
+    "director": "Bradley Cooper",
+    "cast": "Will Arnett, Laura Dern, Andra Day, Bradley Cooper, Christine Ebersole, Ciarán Hinds",
     "synopsis": "As their marriage quietly unravels, Alex faces middle age and an impending divorce, seeking new purpose in the New York comedy scene while Tess confronts the sacrifices she made for their family—forcing them to navigate co-parenting, identity, and whether love can take a new form.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "It Happens Every Spring",
@@ -9430,10 +10057,10 @@ const movies = [
     "tmdbId": 88288,
     "poster": "https://image.tmdb.org/t/p/w500/18mVDAvnpVmKYgsfFe15mALF0iI.jpg",
     "year": "1949",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "87m",
+    "genre": "Comedy",
+    "director": "Lloyd Bacon",
+    "cast": "Ray Milland, Jean Peters, Paul Douglas, Ed Begley, Ted de Corsia, Ray Collins",
     "synopsis": "A scientist discovers a formula that makes a baseball which is repelled by wood. He promptly sets out to exploit his discovery.",
     "physical": [],
     "digital": [
@@ -9442,7 +10069,8 @@ const movies = [
     ],
     "categories": [
       "baseball"
-    ]
+    ],
+    "rated": "NR"
   },
   {
     "title": "It's a Wonderful Life",
@@ -9461,7 +10089,9 @@ const movies = [
     "digital": [],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "It's a Wonderful Life"
   },
   {
     "title": "Italian Job, The",
@@ -9470,15 +10100,16 @@ const movies = [
     "tmdbId": 9654,
     "poster": "https://image.tmdb.org/t/p/w500/eSkjK4kctyrWpFhxl35GPvSs6tI.jpg",
     "year": "2003",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "110m",
+    "genre": "Action / Crime",
+    "director": "F. Gary Gray",
+    "cast": "Mark Wahlberg, Charlize Theron, Edward Norton, Seth Green, Jason Statham, Yasiin Bey",
     "synopsis": "Charlie Croker pulled off the crime of a lifetime. The one thing that he didn't plan on was being double-crossed. Along with a drop-dead gorgeous safecracker, Croker and his team take off to re-steal the loot and end up in a pulse-pounding, pedal-to-the-metal chase that careens up, down, above and below the streets of Los Angeles.",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Jackal, The",
@@ -9495,7 +10126,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Jason Bourne",
@@ -9504,16 +10136,17 @@ const movies = [
     "tmdbId": 324668,
     "poster": "https://image.tmdb.org/t/p/w500/xA7N41glw17MBQtcWSm2eBlBRuG.jpg",
     "year": "2016",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "123m",
+    "genre": "Action / Adventure / Thriller",
+    "director": "Paul Greengrass",
+    "cast": "Matt Damon, Tommy Lee Jones, Alicia Vikander, Vincent Cassel, Julia Stiles, Riz Ahmed",
     "synopsis": "The most dangerous former operative of the CIA is drawn out of hiding to uncover hidden truths about his past.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Jay and Silent Bob Strike Back",
@@ -9530,7 +10163,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Jerry Maguire",
@@ -9550,7 +10184,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Jersey Girl",
@@ -9567,7 +10202,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Jingle All the Way",
@@ -9589,7 +10225,9 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "Jingle All the Way"
   },
   {
     "title": "John Wick",
@@ -9609,7 +10247,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "John Wick: Chapter 2",
@@ -9630,7 +10269,8 @@ const movies = [
       "Fandango",
       "Movies Anywhere",
       "Prime"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "John Wick: Chapter 3 - Parabellum",
@@ -9649,7 +10289,8 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "John Wick: Chapter 4",
@@ -9667,7 +10308,9 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "John Wick: Chapter 4"
   },
   {
     "title": "Johnny Dangerously",
@@ -9684,7 +10327,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "Johnny Dangerously"
+    "tmdbTitle": "Johnny Dangerously",
+    "rated": "PG-13"
   },
   {
     "title": "Judge Dredd",
@@ -9700,7 +10344,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Judge Dredd"
   },
   {
     "title": "Jumanji: The Next Level",
@@ -9719,7 +10365,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Jumanji: The Next Level"
   },
   {
     "title": "Jumanji: Welcome to the Jungle",
@@ -9738,7 +10386,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Jumanji: Welcome to the Jungle"
   },
   {
     "title": "Jungle Book, The",
@@ -9758,7 +10408,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Juno",
@@ -9775,7 +10426,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Jurassic Park",
@@ -9796,7 +10448,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Jurassic Park III",
@@ -9815,7 +10468,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Jurassic Park III"
   },
   {
     "title": "Jurassic Park: The Lost World",
@@ -9834,7 +10489,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "The Lost World: Jurassic Park"
   },
   {
     "title": "Jurassic World",
@@ -9855,7 +10512,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Jurassic World Dominion",
@@ -9874,7 +10532,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Jurassic World Dominion"
   },
   {
     "title": "Jurassic World: Fallen Kingdom",
@@ -9895,7 +10555,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Just Go with It",
@@ -9912,7 +10573,8 @@ const movies = [
     "physical": [
       "Blu-ray + DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Just One of the Guys",
@@ -9921,16 +10583,17 @@ const movies = [
     "tmdbId": 24548,
     "poster": "https://image.tmdb.org/t/p/w500/7ffvsRv8ueYYK0H3zocmNRPd8yN.jpg",
     "year": "1985",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "100m",
+    "genre": "Comedy / Romance",
+    "director": "Lisa Gottlieb",
+    "cast": "Joyce Hyser, Clayton Rohner, Billy Jayne, William Zabka, Toni Hudson, Leigh McCloskey",
     "synopsis": "When Terry Griffith loses her high school's writing competition, she's convinced that it's because she's a girl. So Terry decides to change high schools and pose as a boy to prove her point. Her brother, Buddy, helps her pass as a guy so well that she is soon making friends with the boys at school, including the attractive Rick, who becomes her new best friend. But her gender-swapping makes things difficult when she falls in love with him.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Justice League",
@@ -9950,7 +10613,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Justified - Complete First Season",
@@ -9967,7 +10631,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-MA"
   },
   {
     "title": "Justified - Complete Second Season",
@@ -9984,7 +10649,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-MA"
   },
   {
     "title": "Karate Kid Part II, The",
@@ -9994,14 +10660,15 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/k0OwgRR6PNu7h3SiqpCbRdZWNaG.jpg",
     "year": "1986",
     "runtime": "113m",
-    "genre": "Adventure / Drama / Action",
+    "genre": "Adventure / Drama / Action / Romance / Family",
     "director": "John G. Avildsen",
     "cast": "Ralph Macchio, Pat Morita, Danny Kamekona, Nobu McCarthy, Yuji Okumoto, Tamlyn Tomita",
     "synopsis": "Summoned by his dying father, Miyagi returns to his homeland of Okinawa, with Daniel, after a 40-year exile. There he must confront Yukie, the love of his youth, and Sato, his former best friend turned vengeful rival. Sato is bent on a fight to the death, even if it means the destruction of their village. Daniel finds his own love in Yukia's niece, Kumiko, and his own enemy in Sato's nephew, the vicious Chozen. Now, far away from the tournaments, cheering crowds and safety of home, Daniel will face his greatest challenge ever when the cost of honor is life itself.",
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "Karate Kid Part III, The",
@@ -10011,14 +10678,15 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/lVZ3r0iDwGejlCvFEvXGzhQB9ds.jpg",
     "year": "1989",
     "runtime": "112m",
-    "genre": "Action / Family / Drama",
+    "genre": "Action / Family / Drama / Adventure",
     "director": "John G. Avildsen",
     "cast": "Ralph Macchio, Pat Morita, Robyn Lively, Thomas Ian Griffith, Martin Kove, Sean Kanan",
     "synopsis": "Despondent over the closing of his karate school, Cobra Kai teacher John Kreese joins a ruthless businessman and martial artist to get revenge on Daniel and Mr. Miyagi.",
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "Karate Kid, The",
@@ -10035,7 +10703,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "Keeping the Faith",
@@ -10052,7 +10721,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Kick-Ass",
@@ -10072,7 +10742,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Kick-Ass 2",
@@ -10092,7 +10763,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Kickboxer",
@@ -10109,7 +10781,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "Kickboxer"
+    "tmdbTitle": "Kickboxer",
+    "rated": "R"
   },
   {
     "title": "Kill Bill: The Whole Bloody Affair",
@@ -10118,15 +10791,16 @@ const movies = [
     "tmdbId": 414419,
     "poster": "https://image.tmdb.org/t/p/w500/nSOJfWJCdVFZQwXQA7RXn7FIIiY.jpg",
     "year": "2011",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "254m",
+    "genre": "Action / Crime / Drama / Thriller",
+    "director": "Quentin Tarantino",
+    "cast": "Uma Thurman, Lucy Liu, Vivica A. Fox, Michael Madsen, Daryl Hannah, David Carradine",
     "synopsis": "A former assassin, known simply as The Bride, wakes from a coma four years after her jealous ex-lover Bill attempts to murder her on her wedding day. Fueled by an insatiable desire for revenge, she vows to get even with every person who contributed to the loss of her unborn child, her entire wedding party, and four years of her life.  After devising a hit list, The Bride sets off on her quest, enduring unspeakable injury and unscrupulous enemies.",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "NR"
   },
   {
     "title": "Kill Bill: Volume 1",
@@ -10143,7 +10817,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Kill Bill: Volume 2",
@@ -10160,7 +10835,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Kingpin",
@@ -10177,7 +10853,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Kingsman: The Secret Service",
@@ -10196,7 +10873,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "Kingsman: The Secret Service"
   },
   {
     "title": "Kiss Kiss Bang Bang",
@@ -10212,7 +10891,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Kiss Kiss Bang Bang"
   },
   {
     "title": "Kiss the Girls",
@@ -10228,7 +10909,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Kiss the Girls"
   },
   {
     "title": "Knight and Day",
@@ -10247,7 +10930,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Knight and Day"
   },
   {
     "title": "Knives Out",
@@ -10256,16 +10941,17 @@ const movies = [
     "tmdbId": 546554,
     "poster": "https://image.tmdb.org/t/p/w500/pThyQovXQrw2m0s9x82twj48Jq4.jpg",
     "year": "2019",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "131m",
+    "genre": "Comedy / Crime / Mystery",
+    "director": "Rian Johnson",
+    "cast": "Daniel Craig, Chris Evans, Ana de Armas, Jamie Lee Curtis, Michael Shannon, Don Johnson",
     "synopsis": "When renowned crime novelist Harlan Thrombey is found dead at his estate just after his 85th birthday, the inquisitive and debonair Detective Benoit Blanc is mysteriously enlisted to investigate. From Harlan's dysfunctional family to his devoted staff, Blanc sifts through a web of red herrings and self-serving lies to uncover the truth behind Harlan's untimely death.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Knocked Up",
@@ -10282,7 +10968,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Kuffs",
@@ -10291,16 +10978,17 @@ const movies = [
     "tmdbId": 14603,
     "poster": "https://image.tmdb.org/t/p/w500/mF0eKbtnPxMVTPiLeKquUziMW06.jpg",
     "year": "1992",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "102m",
+    "genre": "Action / Comedy / Crime",
+    "director": "Bruce A. Evans",
+    "cast": "Christian Slater, Milla Jovovich, Tony Goldwyn, Bruce Boxleitner, Troy Evans, George De La Pena",
     "synopsis": "George Kuffs didn't finish high-school, just lost his job, and his college-age girlfriend is pregnant. To top it off, George's brother Brad is killed and George inherits Brad's \"patrol special\" privatized police district and all the problems that come with it.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Kung Fu Panda",
@@ -10309,10 +10997,10 @@ const movies = [
     "tmdbId": 9502,
     "poster": "https://image.tmdb.org/t/p/w500/wWt4JYXTg5Wr3xBW2phBrMKgp3x.jpg",
     "year": "2008",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "90m",
+    "genre": "Action / Animation / Comedy / Family",
+    "director": "Mark Osborne, John Stevenson",
+    "cast": "Jack Black, Dustin Hoffman, Angelina Jolie, Ian McShane, Seth Rogen, Lucy Liu",
     "synopsis": "Chosen by prophecy but doubted by all, Po is an unlikely choice for the mystical title of the Dragon Warrior—a clumsy panda thrust into the world of kung fu as a deadly enemy threatens the Valley of Peace. Under reluctant guidance by Master Shifu and the Furious Five, Po must embrace who he is to unlock the power that no scroll can teach.",
     "physical": [],
     "digital": [
@@ -10321,7 +11009,8 @@ const movies = [
     ],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "La Femme Nikita - Complete First Season",
@@ -10338,7 +11027,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "NR"
   },
   {
     "title": "La Femme Nikita - Season 2",
@@ -10356,7 +11046,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "NR"
   },
   {
     "title": "La Femme Nikita - Season 3",
@@ -10374,7 +11065,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "NR"
   },
   {
     "title": "La La Land",
@@ -10383,16 +11075,17 @@ const movies = [
     "tmdbId": 313369,
     "poster": "https://image.tmdb.org/t/p/w500/uDO8zWDhfWwoFdKS4fzkUJt0Rf0.jpg",
     "year": "2016",
-    "runtime": "",
-    "genre": "Rom-Com",
-    "director": "",
-    "cast": "",
+    "runtime": "129m",
+    "genre": "Rom-Com / Comedy / Drama / Romance",
+    "director": "Damien Chazelle",
+    "cast": "Ryan Gosling, Emma Stone, John Legend, Rosemarie DeWitt, Finn Wittrock, Callie Hernandez",
     "synopsis": "Mia, an aspiring actress, serves lattes to movie stars in between auditions and Sebastian, a jazz musician, scrapes by playing cocktail party gigs in dingy bars, but as success mounts they are faced with decisions that begin to fray the fragile fabric of their love affair, and the dreams they worked so hard to maintain in each other threaten to rip them apart.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Lady and the Tramp",
@@ -10412,7 +11105,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Lake House, The",
@@ -10429,7 +11123,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "Last Holiday",
@@ -10451,7 +11146,8 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Last Samurai, The",
@@ -10468,7 +11164,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Last Stand, The",
@@ -10485,7 +11182,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Law Abiding Citizen",
@@ -10501,7 +11199,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Law Abiding Citizen"
   },
   {
     "title": "Laws of Attraction",
@@ -10518,7 +11218,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Lean On Me",
@@ -10527,16 +11228,17 @@ const movies = [
     "tmdbId": 14621,
     "poster": "https://image.tmdb.org/t/p/w500/7xOyz2NlaoqZ6xIjJh0Goptm0tP.jpg",
     "year": "1989",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "108m",
+    "genre": "Drama",
+    "director": "John G. Avildsen",
+    "cast": "Morgan Freeman, Beverly Todd, Robert Guillaume, Ethan Phillips, Lynne Thigpen, Michael Beach",
     "synopsis": "When principal Joe Clark takes over decaying Eastside High School, he's faced with students wearing gang colors and graffiti-covered walls. Determined to do anything he must to turn the school around, he expels suspected drug dealers, padlocks doors and demands effort and results from students, staff and parents. Autocratic to a fault, this real-life educator put it all on the line.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Leaves of Grass",
@@ -10553,7 +11255,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Legends of the Fall",
@@ -10572,7 +11275,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "Legends of the Fall"
   },
   {
     "title": "Lego Batman Movie, The",
@@ -10594,7 +11299,9 @@ const movies = [
     ],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "The Lego Batman Movie"
   },
   {
     "title": "Lego Movie 2: The Second Part, The",
@@ -10616,7 +11323,9 @@ const movies = [
     ],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "The Lego Movie 2: The Second Part"
   },
   {
     "title": "Lego Movie, The",
@@ -10638,7 +11347,9 @@ const movies = [
     ],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "The Lego Movie"
   },
   {
     "title": "Lego Ninjago Movie, The",
@@ -10647,10 +11358,10 @@ const movies = [
     "tmdbId": 274862,
     "poster": "https://image.tmdb.org/t/p/w500/vUo0pNXGhp2ffTJxiStWt6fHL7F.jpg",
     "year": "2017",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "101m",
+    "genre": "Action / Adventure / Animation / Comedy / Family",
+    "director": "Charlie Bean, Bob Logan, Paul Fisher",
+    "cast": "Dave Franco, Justin Theroux, Fred Armisen, Abbi Jacobson, Olivia Munn, Kumail Nanjiani",
     "synopsis": "Six young ninjas are tasked with defending their island home of Ninjago. By night, they’re gifted warriors using their skill and awesome fleet of vehicles to fight villains and monsters. By day, they’re ordinary teens struggling against their greatest enemy....high school.",
     "physical": [],
     "digital": [
@@ -10659,7 +11370,8 @@ const movies = [
     ],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Lethal Weapon",
@@ -10675,7 +11387,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Lethal Weapon"
   },
   {
     "title": "Lethal Weapon 2",
@@ -10691,7 +11405,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Lethal Weapon 2"
   },
   {
     "title": "Lethal Weapon 3",
@@ -10707,7 +11423,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Lethal Weapon 3"
   },
   {
     "title": "Lethal Weapon 4",
@@ -10724,7 +11442,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Liar Liar",
@@ -10741,7 +11460,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "License to Wed",
@@ -10758,7 +11478,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Life as We Know It",
@@ -10776,7 +11497,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "categories": []
+    "categories": [],
+    "rated": "PG-13"
   },
   {
     "title": "Lilo & Stitch",
@@ -10786,7 +11508,7 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/cFuLvQJPoZpuruAtN3rVnMmLIH8.jpg",
     "year": "2002",
     "runtime": "85m",
-    "genre": "Animation / Family / Comedy",
+    "genre": "Animation / Family / Comedy / Science Fiction",
     "director": "Dean DeBlois",
     "cast": "Daveigh Chase, Chris Sanders, Tia Carrere, David Ogden Stiers, Kevin McDonald, Ving Rhames",
     "synopsis": "As Stitch, a runaway genetic experiment from a faraway planet, wreaks havoc on the Hawaiian Islands, he becomes the mischievous adopted alien \"puppy\" of an independent little girl named Lilo and learns about loyalty, friendship, and ʻohana, the Hawaiian tradition of family.",
@@ -10796,7 +11518,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Limitless",
@@ -10813,7 +11536,8 @@ const movies = [
     "physical": [
       "Blu-ray"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Lion King, The",
@@ -10833,7 +11557,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Little Big League",
@@ -10842,10 +11567,10 @@ const movies = [
     "tmdbId": 31504,
     "poster": "https://image.tmdb.org/t/p/w500/ps0GapKs4vuV38XX6VUbTZm8QS6.jpg",
     "year": "1994",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "119m",
+    "genre": "Comedy / Family",
+    "director": "Andrew Scheinman",
+    "cast": "Luke Edwards, Timothy Busfield, John Ashton, Ashley Crow, Kevin Dunn, Billy L. Sullivan",
     "synopsis": "When the owner of the Minnesota Twins passes away, he bequeaths the team to his preteen grandson. The newly minted head honcho quickly appoints himself manager, causing unrest in an organization that struggles to take orders from a 12-year-old.",
     "physical": [],
     "digital": [
@@ -10854,7 +11579,8 @@ const movies = [
     ],
     "categories": [
       "baseball"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Little Mermaid II: Return to the Sea, The",
@@ -10864,7 +11590,7 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/k3UHxvYv8ZgWLL0lM45f979OSo7.jpg",
     "year": "2000",
     "runtime": "75m",
-    "genre": "Animation / Adventure / Family",
+    "genre": "Animation / Adventure / Family / Comedy",
     "director": "Jim Kammerud",
     "cast": "Jodi Benson, Samuel E. Wright, Tara Strong, Pat Carroll, Buddy Hackett, Kenneth Mars",
     "synopsis": "Set several years after the first film, Ariel and Prince Eric are happily married with a daughter, Melody. In order to protect Melody from the Sea Witch, Morgana, they have not told her about her mermaid heritage. Melody is curious and ventures into the sea, where she meets new friends. But will she become a pawn in Morgana's quest to take control of the ocean from King Triton?",
@@ -10874,7 +11600,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Little Mermaid, The",
@@ -10894,7 +11621,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Little Mermaid: Ariel's Beginning",
@@ -10914,7 +11642,8 @@ const movies = [
     "digital": [],
     "categories": [
       "Animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Little Shop of Horrors",
@@ -10923,16 +11652,17 @@ const movies = [
     "tmdbId": 10776,
     "poster": "https://image.tmdb.org/t/p/w500/iKkbN17OmFosaW6asCNZTTsyvpu.jpg",
     "year": "1986",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "94m",
+    "genre": "Horror / Comedy",
+    "director": "Frank Oz",
+    "cast": "Rick Moranis, Ellen Greene, Vincent Gardenia, Levi Stubbs, Steve Martin, Tichina Arnold",
     "synopsis": "Seymour Krelborn is a nerdy orphan working at Mushnik's; a flower shop in urban Skid Row. He harbors a crush on fellow co-worker, Audrey Fulquard, and is berated by Mr. Mushnik daily. One day, Seymour finds a very mysterious unidentified plant which he calls Audrey II. The plant seems to have a craving for blood and soon begins to sing for it’s supper.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Little Women",
@@ -10941,16 +11671,17 @@ const movies = [
     "tmdbId": 331482,
     "poster": "https://image.tmdb.org/t/p/w500/yn5ihODtZ7ofn8pDYfxCmxh8AXI.jpg",
     "year": "2019",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "135m",
+    "genre": "Drama / Romance",
+    "director": "Greta Gerwig",
+    "cast": "Saoirse Ronan, Emma Watson, Florence Pugh, Eliza Scanlen, Laura Dern, Timothée Chalamet",
     "synopsis": "Four sisters come of age in America in the aftermath of the Civil War.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Lock, Stock and Two Smoking Barrels",
@@ -10967,7 +11698,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Lolita",
@@ -10976,16 +11708,17 @@ const movies = [
     "tmdbId": 9769,
     "poster": "https://image.tmdb.org/t/p/w500/9INcC14WZjCMKGE360VXmklCLdZ.jpg",
     "year": "1997",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "137m",
+    "genre": "Drama",
+    "director": "Adrian Lyne",
+    "cast": "Jeremy Irons, Dominique Swain, Melanie Griffith, Frank Langella, Suzanne Shepherd, Keith Reddin",
     "synopsis": "Humbert Humbert is a middle-aged British novelist who is both appalled by and attracted to the vulgarity of American culture. When he comes to stay at the boarding house run by Charlotte Haze, he soon becomes obsessed with Lolita, the woman's teenaged daughter.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "London Has Fallen",
@@ -10994,16 +11727,17 @@ const movies = [
     "tmdbId": 267860,
     "poster": "https://image.tmdb.org/t/p/w500/iEbLkYzyiUdOKNK4WNBFyGH7r2Y.jpg",
     "year": "2016",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "99m",
+    "genre": "Action / Adventure / Thriller",
+    "director": "Babak Najafi",
+    "cast": "Gerard Butler, Aaron Eckhart, Angela Bassett, Morgan Freeman, Melissa Leo, Robert Forster",
     "synopsis": "In London for the Prime Minister's funeral, Mike Banning discovers a plot to assassinate all the attending world leaders.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Long Kiss Goodnight, The",
@@ -11013,14 +11747,15 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/yREdXX5lMFUKhTvb0ofI7mzUHlR.jpg",
     "year": "1996",
     "runtime": "121m",
-    "genre": "Crime / Action / Mystery",
+    "genre": "Crime / Action / Mystery / Thriller",
     "director": "Renny Harlin",
     "cast": "Geena Davis, Samuel L. Jackson, Patrick Malahide, Craig Bierko, Brian Cox, Sharon Washington",
     "synopsis": "Samantha Caine is a small-town schoolteacher and mom with no memory of her life before washing up on a beach eight years ago. After a car accident and a violent home invasion trigger flashes of her past, she discovers she used to be a deadly CIA assassin. Teaming up with a wisecracking private investigator, Samantha must return to her old ways to take down the people who tried to erase her.",
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Longest Yard, The",
@@ -11037,7 +11772,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Lorax, The",
@@ -11060,7 +11796,8 @@ const movies = [
     ],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Love & Basketball",
@@ -11077,7 +11814,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Love Actually",
@@ -11100,7 +11838,8 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Love Potion No. 9",
@@ -11116,7 +11855,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "Love Potion No. 9"
   },
   {
     "title": "Love the Coopers",
@@ -11138,7 +11879,9 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Love the Coopers"
   },
   {
     "title": "Lucky # Slevin",
@@ -11155,7 +11898,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "MacGruber",
@@ -11164,16 +11908,17 @@ const movies = [
     "tmdbId": 37931,
     "poster": "https://image.tmdb.org/t/p/w500/9cO8JD7aaQzI4q8lBS8MYXH8LrJ.jpg",
     "year": "2010",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "90m",
+    "genre": "Action / Comedy",
+    "director": "Jorma Taccone",
+    "cast": "Will Forte, Kristen Wiig, Ryan Phillippe, Powers Boothe, Maya Rudolph, Christopher Irvine",
     "synopsis": "Ex-special operative MacGruber is called back into action to take down his archenemy, Dieter Von Cunth, who's in possession of a nuclear warhead and bent on destroying Washington, DC.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Mad Max: Fury Road",
@@ -11182,16 +11927,17 @@ const movies = [
     "tmdbId": 76341,
     "poster": "https://image.tmdb.org/t/p/w500/ulcAi4dKpAjHwYGS08vNyx9H6I9.jpg",
     "year": "2015",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "121m",
+    "genre": "Action / Adventure / Science Fiction",
+    "director": "George Miller",
+    "cast": "Tom Hardy, Charlize Theron, Nicholas Hoult, Hugh Keays-Byrne, Josh Helman, Nathan Jones",
     "synopsis": "An apocalyptic story set in the furthest reaches of our planet, in a stark desert landscape where humanity is broken, and most everyone is crazed fighting for the necessities of life. Within this world exist two rebels on the run who just might be able to restore order.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Madagascar: Escape 2 Africa",
@@ -11201,14 +11947,15 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/agRbLOHgN46TQO4YdKR462iR7To.jpg",
     "year": "2008",
     "runtime": "89m",
-    "genre": "Adventure / Animation / Comedy",
+    "genre": "Adventure / Animation / Comedy / Family",
     "director": "Eric Darnell",
     "cast": "Ben Stiller, Chris Rock, David Schwimmer, Jada Pinkett Smith, Sacha Baron Cohen, Cedric the Entertainer",
     "synopsis": "Alex, Marty, and other zoo animals find a way to escape from Madagascar when the penguins reassemble a wrecked airplane. The precariously repaired craft stays airborne just long enough to make it to the African continent. There the New Yorkers encounter members of their own species for the first time. Africa proves to be a wild place, but Alex and company wonder if it is better than their Central Park home.",
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "Maggie",
@@ -11227,7 +11974,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Maggie"
   },
   {
     "title": "Magnolia",
@@ -11236,17 +11985,18 @@ const movies = [
     "tmdbId": 334,
     "poster": "https://image.tmdb.org/t/p/w500/tpfC325Jk6S38VTe5dDWjWtoyxr.jpg",
     "year": "1999",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "189m",
+    "genre": "Drama",
+    "director": "Paul Thomas Anderson",
+    "cast": "Tom Cruise, Philip Baker Hall, Philip Seymour Hoffman, Julianne Moore, William H. Macy, John C. Reilly",
     "synopsis": "On one random day in the San Fernando Valley, a dying father, a young wife, a male caretaker, a famous lost son, a police officer in love, a boy genius, an ex-boy genius, a game show host and an estranged daughter will each become part of a dazzling multiplicity of plots, but one story.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere",
       "Prime"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Major League",
@@ -11268,7 +12018,8 @@ const movies = [
     "categories": [
       "baseball"
     ],
-    "tmdbTitle": "Major League"
+    "tmdbTitle": "Major League",
+    "rated": "R"
   },
   {
     "title": "Major League II",
@@ -11288,7 +12039,8 @@ const movies = [
     "categories": [
       "baseball"
     ],
-    "tmdbTitle": "Major League II"
+    "tmdbTitle": "Major League II",
+    "rated": "PG"
   },
   {
     "title": "Major League: Back to the Minors",
@@ -11307,7 +12059,9 @@ const movies = [
     "digital": [],
     "categories": [
       "baseball"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Major League: Back to the Minors"
   },
   {
     "title": "Maleficent",
@@ -11326,7 +12080,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "Maleficent"
   },
   {
     "title": "Man of Steel",
@@ -11346,7 +12102,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Man on the Moon",
@@ -11363,7 +12120,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Man Who Invented Christmas, The",
@@ -11372,10 +12130,10 @@ const movies = [
     "tmdbId": 450322,
     "poster": "https://image.tmdb.org/t/p/w500/qRkzRue5rTzB6PESXBJCKqROOXC.jpg",
     "year": "2017",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "105m",
+    "genre": "Drama / History / Comedy / Family",
+    "director": "Bharat Nalluri",
+    "cast": "Dan Stevens, Christopher Plummer, Jonathan Pryce, Justin Edwards, Morfydd Clark, Donald Sumpter",
     "synopsis": "In 1843, despite the fact that Dickens is a successful writer, the failure of his latest book puts his career at a crossroads, until the moment when, struggling with inspiration and confronting reality with his childhood memories, a new character is born in the depths of his troubled mind; an old, lonely, embittered man, so vivid, so human, that a whole world grows around him, a story so inspiring that changed the meaning of Christmas forever.",
     "physical": [],
     "digital": [
@@ -11384,7 +12142,8 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Mary Poppins",
@@ -11393,16 +12152,17 @@ const movies = [
     "tmdbId": 433,
     "poster": "https://image.tmdb.org/t/p/w500/o4Wsby4ydIXhWmtmfvb451D5Np1.jpg",
     "year": "1964",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "139m",
+    "genre": "Comedy / Family / Fantasy",
+    "director": "Robert Stevenson",
+    "cast": "Julie Andrews, Dick Van Dyke, David Tomlinson, Glynis Johns, Hermione Baddeley, Karen Dotrice",
     "synopsis": "In turn of the century London, a magical nanny employs music and adventure to help two neglected children become closer to their father.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Mask of Zorro, The",
@@ -11420,7 +12180,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Mask, The",
@@ -11430,14 +12191,15 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/jPC2eYub74zwf2tPGVtzSlBW6Oy.jpg",
     "year": "1994",
     "runtime": "101m",
-    "genre": "Comedy / Fantasy / Crime",
+    "genre": "Comedy / Fantasy / Crime / Romance",
     "director": "Chuck Russell",
     "cast": "Jim Carrey, Peter Riegert, Peter Greene, Amy Yasbeck, Richard Jeni, Orestes Matacena",
     "synopsis": "Timid bank clerk Stanley Ipkiss discovers a magical mask infused with the spirit of the Norse god Loki. Donning it transforms him into an unrestrained, green-faced, cartoon-like wild man. While the mask grants him the confidence to woo a local singer, it also makes him the target of a ruthless mobster.",
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Matador, The",
@@ -11454,7 +12216,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Matchstick Men",
@@ -11474,7 +12237,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Matilda",
@@ -11490,7 +12254,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG",
+    "tmdbTitle": "Matilda"
   },
   {
     "title": "Matrix Reloaded, The",
@@ -11507,7 +12273,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Matrix Revolutions, The",
@@ -11524,7 +12291,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Matrix, The",
@@ -11544,7 +12312,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Maverick",
@@ -11560,7 +12329,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG",
+    "tmdbTitle": "Maverick"
   },
   {
     "title": "Maze Runner, The",
@@ -11569,16 +12340,17 @@ const movies = [
     "tmdbId": 198663,
     "poster": "https://image.tmdb.org/t/p/w500/ode14q7WtDugFDp78fo9lCsmay9.jpg",
     "year": "2014",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "113m",
+    "genre": "Action / Mystery / Science Fiction / Thriller",
+    "director": "Wes Ball",
+    "cast": "Dylan O'Brien, Kaya Scodelario, Thomas Brodie-Sangster, Ki Hong Lee, Will Poulter, Aml Ameen",
     "synopsis": "A teenager with no memory of his past finds himself among a group of boys living in a walled enclosure surrounded by a massive, ever-changing maze. As he struggles to adapt to their rules and society, he begins to uncover clues that may lead to escape and the truth behind their confinement.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Maze Runner: The Death Cure",
@@ -11587,16 +12359,17 @@ const movies = [
     "tmdbId": 336843,
     "poster": "https://image.tmdb.org/t/p/w500/s8K0US4tUEoOrQ1LDh0eppuwGDx.jpg",
     "year": "2018",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "143m",
+    "genre": "Science Fiction / Action / Adventure / Thriller",
+    "director": "Wes Ball",
+    "cast": "Dylan O'Brien, Kaya Scodelario, Thomas Brodie-Sangster, Ki Hong Lee, Dexter Darden, Rosa Salazar",
     "synopsis": "Thomas leads his group of escaped Gladers on their final and most dangerous mission yet. To save their friends, they must break into the legendary Last City, a WCKD-controlled labyrinth that may turn out to be the deadliest maze of all. Anyone who makes it out alive will get answers to the questions the Gladers have been asking since they first arrived in the maze.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Maze Runner: The Scorch Trials",
@@ -11605,16 +12378,17 @@ const movies = [
     "tmdbId": 294254,
     "poster": "https://image.tmdb.org/t/p/w500/mYw7ZyejqSCPFlrT2jHZOESZDU3.jpg",
     "year": "2015",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "131m",
+    "genre": "Science Fiction / Action / Thriller / Adventure",
+    "director": "Wes Ball",
+    "cast": "Dylan O'Brien, Kaya Scodelario, Thomas Brodie-Sangster, Giancarlo Esposito, Ki Hong Lee, Dexter Darden",
     "synopsis": "Thomas and his fellow Gladers face their greatest challenge yet: searching for clues about the mysterious and powerful organization known as WCKD. Their journey takes them to the Scorch, a desolate landscape filled with unimaginable obstacles. Teaming up with resistance fighters, the Gladers take on WCKD’s vastly superior forces and uncover its shocking plans for them all.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "McLintock!",
@@ -11631,7 +12405,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "McLintock!"
+    "tmdbTitle": "McLintock!",
+    "rated": "NR"
   },
   {
     "title": "Me, Myself & Irene",
@@ -11647,7 +12422,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Me, Myself & Irene"
   },
   {
     "title": "Mechanic, The",
@@ -11667,7 +12444,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Mechanic: Resurrection",
@@ -11676,15 +12454,16 @@ const movies = [
     "tmdbId": 278924,
     "poster": "https://image.tmdb.org/t/p/w500/bG3Q6EFcngpPn7uPuQTzTuq9DgV.jpg",
     "year": "2016",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "99m",
+    "genre": "Action / Crime / Thriller / Adventure",
+    "director": "Dennis Gansel",
+    "cast": "Jason Statham, Jessica Alba, Tommy Lee Jones, Michelle Yeoh, Sam Hazeldine, John Cenatiempo",
     "synopsis": "Arthur Bishop thought he had put his murderous past behind him when his most formidable foe kidnaps the love of his life. Now he is forced to travel the globe to complete three impossible assassinations, and do what he does best, make them look like accidents.",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Meet Joe Black",
@@ -11701,7 +12480,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Meet the Fockers",
@@ -11718,7 +12498,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Meet the Parents",
@@ -11735,7 +12516,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Meg 2: The Trench",
@@ -11754,7 +12536,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Meg 2: The Trench"
   },
   {
     "title": "Meg, The",
@@ -11773,7 +12557,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "The Meg"
   },
   {
     "title": "Memento",
@@ -11790,7 +12576,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Men in Black",
@@ -11800,14 +12587,15 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/uLOmOF5IzWoyrgIF5MfUnh5pa1X.jpg",
     "year": "1997",
     "runtime": "98m",
-    "genre": "Action / Adventure / Comedy",
+    "genre": "Action / Adventure / Comedy / Science Fiction",
     "director": "Barry Sonnenfeld",
     "cast": "Tommy Lee Jones, Will Smith, Linda Fiorentino, Vincent D'Onofrio, Rip Torn, Tony Shalhoub",
     "synopsis": "After a police chase with an otherworldly being, a New York City cop is recruited as an agent in a top-secret organization established to monitor and police alien activity on Earth: the Men in Black. Agent K and new recruit Agent J find themselves in the middle of a deadly plot by an intergalactic terrorist who has arrived on Earth to assassinate two ambassadors from opposing galaxies.",
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Men in Black 3",
@@ -11824,7 +12612,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Men in Black II",
@@ -11841,7 +12630,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Mercury Rising",
@@ -11851,14 +12641,15 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/60AAso6I2TzQCy2SjqtzPni8csA.jpg",
     "year": "1998",
     "runtime": "111m",
-    "genre": "Action / Crime / Drama",
+    "genre": "Action / Crime / Drama / Thriller",
     "director": "Harold Becker",
     "cast": "Bruce Willis, Alec Baldwin, Miko Hughes, Chi McBride, Kim Dickens, Robert Stanton",
     "synopsis": "Renegade FBI agent Art Jeffries protects a nine-year-old autistic boy who has cracked the government's new \"unbreakable\" code.",
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Mesmerized",
@@ -11876,7 +12667,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "special": "Jodie Foster movie"
+    "special": "Jodie Foster movie",
+    "rated": "PG"
   },
   {
     "title": "Michael",
@@ -11893,7 +12685,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "Mickey's Christmas Carol",
@@ -11914,7 +12707,8 @@ const movies = [
     "categories": [
       "animated",
       "christmas"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Mickey's Magical Christmas: Snowed in at the House of Mouse",
@@ -11923,10 +12717,10 @@ const movies = [
     "tmdbId": 21448,
     "poster": "https://image.tmdb.org/t/p/w500/9T9KGsdnzIzPDFF0gvdGTtp8Mvw.jpg",
     "year": "2001",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "61m",
+    "genre": "Animation / Family / Comedy",
+    "director": "Bobs Gannaway, Burny Mattinson, Tony Craig, Jack Hannah",
+    "cast": "Wayne Allwine, Tony Anselmo, Bill Farmer, Russi Taylor, Tress MacNeille, Corey Burton",
     "synopsis": "When a huge snowstorm leaves everyone stranded, Mickey and all of his guests at the House of Mouse, including Pooh, Belle, Snow White, Cinderella, Ariel and many more of his old and new friends, break out the cookies and hot chocolate to help Donald mend his tattered Christmas spirit.",
     "physical": [],
     "digital": [
@@ -11936,7 +12730,8 @@ const movies = [
     "categories": [
       "animated",
       "christmas"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Mickey's Once Upon a Christmas",
@@ -11957,7 +12752,8 @@ const movies = [
     "categories": [
       "animated",
       "christmas"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Midnight Run",
@@ -11966,16 +12762,17 @@ const movies = [
     "tmdbId": 9013,
     "poster": "https://image.tmdb.org/t/p/w500/yx0touyDQ9enWDsFgS4MbBwCSNd.jpg",
     "year": "1988",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "126m",
+    "genre": "Comedy / Crime / Thriller",
+    "director": "Martin Brest",
+    "cast": "Robert De Niro, Charles Grodin, Yaphet Kotto, John Ashton, Dennis Farina, Joe Pantoliano",
     "synopsis": "A bounty hunter pursues a former Mafia accountant who is also being chased by a rival bounty hunter, the F.B.I., and his old mob boss after jumping bail.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Mike and Dave Need Wedding Dates",
@@ -11994,7 +12791,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "Mike and Dave Need Wedding Dates"
   },
   {
     "title": "Ministry of Ungentlemanly Warfare, The",
@@ -12003,16 +12802,17 @@ const movies = [
     "tmdbId": 799583,
     "poster": "https://image.tmdb.org/t/p/w500/8aF0iAKH9MJMYAZdi0Slg77RYa2.jpg",
     "year": "2024",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "120m",
+    "genre": "Action / Comedy / War / Adventure",
+    "director": "Guy Ritchie",
+    "cast": "Henry Cavill, Eiza González, Alan Ritchson, Henry Golding, Cary Elwes, Alex Pettyfer",
     "synopsis": "During World War II, the British Army assigns a group of competent soldiers to carry out a mission against the Nazi forces behind enemy lines... A true story about a secret British WWII organization — the Special Operations Executive. Founded by Winston Churchill, their irregular warfare against the Germans helped to change the course of the war, and gave birth to modern black operations.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Minority Report",
@@ -12031,7 +12831,8 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Miracle on 34th Street",
@@ -12040,10 +12841,10 @@ const movies = [
     "tmdbId": 10510,
     "poster": "https://image.tmdb.org/t/p/w500/iUTPKkljdEjPlcPPYgbUz7APnHu.jpg",
     "year": "1994",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "114m",
+    "genre": "Fantasy / Drama / Family",
+    "director": "Les Mayfield",
+    "cast": "Mara Wilson, Richard Attenborough, Dylan McDermott, Elizabeth Perkins, J.T. Walsh, James Remar",
     "synopsis": "Six-year-old Susan Walker has doubts about childhood's most enduring miracle—Santa Claus. Her mother told her the secret about Santa a long time ago, but, after meeting a special department store Santa who's convinced he's the real thing, Susan is given the most precious gift of all—something to believe in.",
     "physical": [],
     "digital": [
@@ -12052,7 +12853,8 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Miss Congeniality",
@@ -12068,7 +12870,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "Miss Congeniality"
   },
   {
     "title": "Mission: Impossible",
@@ -12085,7 +12889,8 @@ const movies = [
     "physical": [
       "Blu-ray"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Mission: Impossible - Ghost Protocol",
@@ -12104,7 +12909,8 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Mission: Impossible 2",
@@ -12121,7 +12927,8 @@ const movies = [
     "physical": [
       "Blu-ray"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Mission: Impossible III",
@@ -12139,7 +12946,8 @@ const movies = [
       "Blu-ray",
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Mod Squad, The",
@@ -12149,14 +12957,15 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/7c20VEblNKkDiBuA6bE6kbeHqHa.jpg",
     "year": "1999",
     "runtime": "92m",
-    "genre": "Action / Mystery / Thriller",
+    "genre": "Action / Mystery / Thriller / Drama",
     "director": "Scott Silver",
     "cast": "Claire Danes, Giovanni Ribisi, Omar Epps, Dennis Farina, Josh Brolin, Steve Harris",
     "synopsis": "Three youthful delinquents escape conviction for their crimes by teaming with the LAPD.",
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Moneyball",
@@ -12178,7 +12987,9 @@ const movies = [
     ],
     "categories": [
       "baseball"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Moneyball"
   },
   {
     "title": "Monster Squad, The",
@@ -12195,7 +13006,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Monsters University",
@@ -12205,7 +13017,7 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/y7thwJ7z5Bplv6vwl6RI0yteaDD.jpg",
     "year": "2013",
     "runtime": "104m",
-    "genre": "Animation / Family / Comedy",
+    "genre": "Animation / Family / Comedy / Fantasy",
     "director": "Dan Scanlon",
     "cast": "Billy Crystal, John Goodman, Steve Buscemi, Helen Mirren, Peter Sohn, Joel Murray",
     "synopsis": "A look at the relationship between Mike and Sulley during their days at Monsters University — when they weren't necessarily the best of friends.",
@@ -12215,7 +13027,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Monsters, Inc.",
@@ -12237,7 +13050,8 @@ const movies = [
     ],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Mortal Kombat",
@@ -12257,7 +13071,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "Mortal Kombat"
   },
   {
     "title": "Mr. & Mrs. Smith",
@@ -12273,7 +13089,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "Mr. & Mrs. Smith"
   },
   {
     "title": "Mr. 3000",
@@ -12293,7 +13111,8 @@ const movies = [
     "digital": [],
     "categories": [
       "baseball"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Mr. Baseball",
@@ -12313,7 +13132,8 @@ const movies = [
     "digital": [],
     "categories": [
       "baseball"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Mr. Deeds",
@@ -12330,7 +13150,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Mr. Destiny",
@@ -12348,7 +13169,8 @@ const movies = [
     ],
     "digital": [],
     "tmdbTitle": "Mr. Destiny",
-    "categories": []
+    "categories": [],
+    "rated": "PG-13"
   },
   {
     "title": "Mr. Right",
@@ -12368,7 +13190,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Mr. Wonderful",
@@ -12385,7 +13208,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Mulan",
@@ -12405,7 +13229,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Mummy Returns, The",
@@ -12425,7 +13250,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "The Mummy Returns"
   },
   {
     "title": "Mummy, The",
@@ -12445,7 +13272,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "The Mummy"
   },
   {
     "title": "Mummy: Tomb of the Dragon Emperor, The",
@@ -12465,7 +13294,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "The Mummy: Tomb of the Dragon Emperor"
   },
   {
     "title": "Murder by Numbers",
@@ -12482,7 +13313,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Murder on the Orient Express",
@@ -12491,16 +13323,17 @@ const movies = [
     "tmdbId": 392044,
     "poster": "https://image.tmdb.org/t/p/w500/7GtdJU6iAg6fjQu3E3zta3bIAQh.jpg",
     "year": "2017",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "114m",
+    "genre": "Mystery / Drama / Crime",
+    "director": "Kenneth Branagh",
+    "cast": "Kenneth Branagh, Tom Bateman, Michelle Pfeiffer, Johnny Depp, Josh Gad, Willem Dafoe",
     "synopsis": "Genius Belgian detective Hercule Poirot investigates the murder of an American tycoon aboard the Orient Express train.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Music and Lyrics",
@@ -12517,7 +13350,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "My Bloody Valentine",
@@ -12533,7 +13367,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "My Bloody Valentine"
   },
   {
     "title": "My Cousin Vinny",
@@ -12550,7 +13386,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Naked Gun, The",
@@ -12559,15 +13396,16 @@ const movies = [
     "tmdbId": 1035259,
     "poster": "https://image.tmdb.org/t/p/w500/rwla9vqzrKVVKVKiOuROTIXGsxj.jpg",
     "year": "2025",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "85m",
+    "genre": "Comedy / Crime / Action",
+    "director": "Akiva Schaffer",
+    "cast": "Liam Neeson, Pamela Anderson, Paul Walter Hauser, Danny Huston, CCH Pounder, Kevin Durand",
     "synopsis": "Only one man has the particular set of skills... to lead Police Squad and save the world: Lt. Frank Drebin Jr. Following in his father's footsteps, he must solve a murder case to prevent Police Squad from closure.",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Naked Gun: From the Files of Police Squad!, The",
@@ -12583,7 +13421,9 @@ const movies = [
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "The Naked Gun: From the Files of Police Squad!"
   },
   {
     "title": "National Lampoon's Christmas Vacation",
@@ -12606,7 +13446,8 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "National Lampoon's European Vacation",
@@ -12623,7 +13464,9 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "categories": []
+    "categories": [],
+    "rated": "PG-13",
+    "tmdbTitle": "National Lampoon's European Vacation"
   },
   {
     "title": "National Lampoon's Loaded Weapon 1",
@@ -12640,7 +13483,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "National Lampoon's Loaded Weapon 1"
+    "tmdbTitle": "National Lampoon's Loaded Weapon 1",
+    "rated": "PG-13"
   },
   {
     "title": "National Lampoon's Vacation",
@@ -12656,7 +13500,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "National Lampoon's Vacation"
   },
   {
     "title": "National Lampoon's Van Wilder",
@@ -12672,7 +13518,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "National Lampoon's Van Wilder"
   },
   {
     "title": "National Lampoon's Vegas Vacation",
@@ -12689,7 +13537,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "National Treasure",
@@ -12705,7 +13554,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG",
+    "tmdbTitle": "National Treasure"
   },
   {
     "title": "National Treasure: Book of Secrets",
@@ -12721,7 +13572,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG",
+    "tmdbTitle": "National Treasure: Book of Secrets"
   },
   {
     "title": "Natural, The",
@@ -12744,7 +13597,8 @@ const movies = [
     "categories": [
       "baseball"
     ],
-    "tmdbTitle": "The Natural"
+    "tmdbTitle": "The Natural",
+    "rated": "PG"
   },
   {
     "title": "Negotiator, The",
@@ -12761,7 +13615,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Nerve",
@@ -12770,16 +13625,17 @@ const movies = [
     "tmdbId": 328387,
     "poster": "https://image.tmdb.org/t/p/w500/qmSpHC0CSNyNll9WhlwWYuwoQ28.jpg",
     "year": "2016",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "96m",
+    "genre": "Mystery / Adventure / Crime",
+    "director": "Henry Joost, Ariel Schulman",
+    "cast": "Emma Roberts, Dave Franco, Emily Meade, Miles Heizer, Juliette Lewis, Kimiko Glenn",
     "synopsis": "Industrious high school senior Vee Delmonico has had it with living life on the sidelines. When pressured by friends to join the popular online game Nerve, Vee decides to sign up for just one dare in what seems like harmless fun. But as she finds herself caught up in the thrill of the adrenaline-fueled competition partnered with a mysterious stranger, the game begins to take a sinister turn with increasingly dangerous acts, leading her into a high stakes finale that will determine her entire future.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Never Been Kissed",
@@ -12788,16 +13644,17 @@ const movies = [
     "tmdbId": 11355,
     "poster": "https://image.tmdb.org/t/p/w500/6BngDhDNfbBjhVFWDT2yMve32vi.jpg",
     "year": "1999",
-    "runtime": "",
-    "genre": "Rom-Com",
-    "director": "",
-    "cast": "",
+    "runtime": "107m",
+    "genre": "Rom-Com / Romance / Comedy / Drama",
+    "director": "Raja Gosnell",
+    "cast": "Drew Barrymore, David Arquette, Molly Shannon, Michael Vartan, Jessica Alba, John C. Reilly",
     "synopsis": "Josie Geller, a baby-faced junior copywriter at the Chicago Sun-Times, must pose as a student at her former high school to research contemporary teenage culture. With the help of her brother, Rob, Josie infiltrates the inner circle of the most popular clique on campus. But she hits a major snag in her investigation -- not to mention her own failed love life -- when she falls for her dreamy English teacher, Sam Coulson.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Next Karate Kid, The",
@@ -12807,14 +13664,15 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/wI3gCi9w1cuUJCiwhviAy46we9Q.jpg",
     "year": "1994",
     "runtime": "107m",
-    "genre": "Action / Drama / Family",
+    "genre": "Action / Drama / Family / Adventure",
     "director": "Christopher Cain",
     "cast": "Pat Morita, Hilary Swank, Michael Ironside, Constance Towers, Chris Conrad, Arsenio Trinidad",
     "synopsis": "Mr. Miyagi decides to take Julie, a troubled teenager, under his wing after he learns that she blames herself for her parents' demise and struggles to adjust with her grandmother and fellow pupils.",
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "Nice Guys, The",
@@ -12823,16 +13681,17 @@ const movies = [
     "tmdbId": 290250,
     "poster": "https://image.tmdb.org/t/p/w500/clq4So9spa9cXk3MZy2iMdqkxP2.jpg",
     "year": "2016",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "116m",
+    "genre": "Comedy / Crime / Action",
+    "director": "Shane Black",
+    "cast": "Russell Crowe, Ryan Gosling, Angourie Rice, Matt Bomer, Margaret Qualley, Yaya DaCosta",
     "synopsis": "A private eye investigates the apparent suicide of a fading porn star in 1970s Los Angeles and uncovers a conspiracy.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Night Before, The",
@@ -12855,7 +13714,8 @@ const movies = [
     "categories": [
       "christmas"
     ],
-    "tmdbTitle": "The Night Before"
+    "tmdbTitle": "The Night Before",
+    "rated": "R"
   },
   {
     "title": "Ninja",
@@ -12871,7 +13731,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Ninja"
   },
   {
     "title": "Ninja Assassin",
@@ -12887,7 +13749,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Ninja Assassin"
   },
   {
     "title": "No Hard Feelings",
@@ -12896,16 +13760,17 @@ const movies = [
     "tmdbId": 884605,
     "poster": "https://image.tmdb.org/t/p/w500/gD72DhJ7NbfxvtxGiAzLaa0xaoj.jpg",
     "year": "2023",
-    "runtime": "",
-    "genre": "Rom-Com",
-    "director": "",
-    "cast": "",
+    "runtime": "103m",
+    "genre": "Rom-Com / Comedy / Romance",
+    "director": "Gene Stupnitsky",
+    "cast": "Jennifer Lawrence, Andrew Barth Feldman, Laura Benanti, Natalie Morales, Matthew Broderick, Scott MacArthur",
     "synopsis": "On the brink of losing her childhood home, Maddie discovers an intriguing job listing: wealthy helicopter parents looking for someone to “date” their introverted 19-year-old son, Percy, before he leaves for college. To her surprise, Maddie soon discovers the awkward Percy is no sure thing.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "No Strings Attached",
@@ -12922,7 +13787,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Notting Hill",
@@ -12938,7 +13804,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "Notting Hill"
   },
   {
     "title": "Now You See Me",
@@ -12958,7 +13826,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Now You See Me 2",
@@ -12978,7 +13847,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Now You See Me, Now You Don't",
@@ -12998,7 +13868,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Number 23, The",
@@ -13014,7 +13885,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "The Number 23"
   },
   {
     "title": "O",
@@ -13030,7 +13903,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "O"
   },
   {
     "title": "Object of My Affection, The",
@@ -13047,7 +13922,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "The Object of My Affection"
+    "tmdbTitle": "The Object of My Affection",
+    "rated": "R"
   },
   {
     "title": "Ocean's 8",
@@ -13067,7 +13943,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Ocean's Eleven",
@@ -13088,7 +13965,8 @@ const movies = [
       "Fandango",
       "Movies Anywhere",
       "Prime"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Ocean's Thirteen",
@@ -13108,7 +13986,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Ocean's Twelve",
@@ -13128,7 +14007,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Office - Season 1, The",
@@ -13146,7 +14026,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "season": 1
+    "season": 1,
+    "rated": "TV-14"
   },
   {
     "title": "Office - Season 2, The",
@@ -13164,7 +14045,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Office - Season 3, The",
@@ -13182,7 +14064,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Office - Season 4, The",
@@ -13200,7 +14083,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Office Christmas Party",
@@ -13222,7 +14106,8 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Office Space",
@@ -13239,7 +14124,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Oliver & Company",
@@ -13259,7 +14145,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Open Season",
@@ -13279,7 +14166,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "TV-PG"
   },
   {
     "title": "Open Season 2",
@@ -13299,7 +14187,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Operation Fortune: Ruse de Guerre",
@@ -13308,17 +14197,18 @@ const movies = [
     "tmdbId": 739405,
     "poster": "https://image.tmdb.org/t/p/w500/uo7vWfQUlVwueYTDRicXOJa8Oow.jpg",
     "year": "2023",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "114m",
+    "genre": "Action / Comedy / Thriller / Adventure",
+    "director": "Guy Ritchie",
+    "cast": "Jason Statham, Aubrey Plaza, Cary Elwes, Hugh Grant, Josh Hartnett, Bugzy Malone",
     "synopsis": "Special agent Orson Fortune and his team of operatives recruit one of Hollywood's biggest movie stars to help them on an undercover mission when the sale of a deadly new weapons technology threatens to disrupt the world order.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
     ],
-    "categories": []
+    "categories": [],
+    "rated": "R"
   },
   {
     "title": "Operation Petticoat",
@@ -13327,15 +14217,16 @@ const movies = [
     "tmdbId": 9660,
     "poster": "https://image.tmdb.org/t/p/w500/pIsm8JvpFZidVxKexv5UgoCjwpZ.jpg",
     "year": "1959",
-    "runtime": "",
-    "genre": "Rom-Com",
-    "director": "",
-    "cast": "",
+    "runtime": "124m",
+    "genre": "Rom-Com / Comedy / War / Romance",
+    "director": "Blake Edwards",
+    "cast": "Cary Grant, Tony Curtis, Joan O'Brien, Dina Merrill, Gene Evans, Dick Sargent",
     "synopsis": "A World War II submarine commander finds himself stuck with a damaged sub, a con-man executive officer, and a group of army nurses.",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Opportunity Knocks",
@@ -13352,7 +14243,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Other Guys, The",
@@ -13369,7 +14261,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Our Idiot Brother",
@@ -13386,7 +14279,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "Our Idiot Brother"
+    "tmdbTitle": "Our Idiot Brother",
+    "rated": "R"
   },
   {
     "title": "Out of Sight",
@@ -13395,16 +14289,17 @@ const movies = [
     "tmdbId": 1389,
     "poster": "https://image.tmdb.org/t/p/w500/v49q7AMR3pB4M762woWB1NYMCLF.jpg",
     "year": "1998",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "123m",
+    "genre": "Romance / Comedy / Crime",
+    "director": "Steven Soderbergh",
+    "cast": "George Clooney, Jennifer Lopez, Ving Rhames, Don Cheadle, Steve Zahn, Dennis Farina",
     "synopsis": "Meet Jack Foley, a smooth criminal who bends the law and is determined to make one last heist. Karen Sisco is a federal marshal who chooses all the right moves … and all the wrong guys. Now they're willing to risk it all to find out if there's more between them than just the law.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Overboard",
@@ -13421,7 +14316,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "Pan",
@@ -13440,7 +14336,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "Pan"
   },
   {
     "title": "Parks and Recreation - The Complete Series",
@@ -13457,7 +14355,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Passenger 57",
@@ -13466,16 +14365,17 @@ const movies = [
     "tmdbId": 10538,
     "poster": "https://image.tmdb.org/t/p/w500/4VBN8pQxGHjeZWcNv1V1xSw0OKC.jpg",
     "year": "1992",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "84m",
+    "genre": "Action / Adventure / Thriller",
+    "director": "Kevin Hooks",
+    "cast": "Wesley Snipes, Bruce Payne, Tom Sizemore, Alex Datcher, Bruce Greenwood, Robert Hooks",
     "synopsis": "Airline security specialist John Cutter, finally returning to the job after his wife's death, finds himself stuck on a flight being hijacked by notorious terrorist Charles Rane. Unfortunately for the terrorists, they're also stuck with him.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Paul Blart: Mall Cop",
@@ -13492,7 +14392,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "PCU",
@@ -13508,7 +14409,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "PCU"
   },
   {
     "title": "Peter Pan",
@@ -13525,7 +14428,8 @@ const movies = [
     "physical": [
       "Blu-ray"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "Phone Booth",
@@ -13542,7 +14446,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Picture Perfect",
@@ -13559,7 +14464,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "Picture Perfect"
+    "tmdbTitle": "Picture Perfect",
+    "rated": "PG-13"
   },
   {
     "title": "Pirates of the Caribbean: At World's End",
@@ -13577,7 +14483,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "categories": []
+    "categories": [],
+    "rated": "PG-13"
   },
   {
     "title": "Pirates of the Caribbean: Dead Man's Chest",
@@ -13595,7 +14502,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "categories": []
+    "categories": [],
+    "rated": "PG-13"
   },
   {
     "title": "Pirates of the Caribbean: The Curse of the Black Pearl",
@@ -13613,7 +14521,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "categories": []
+    "categories": [],
+    "rated": "PG-13"
   },
   {
     "title": "Pitch Black",
@@ -13630,7 +14539,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Pitch Perfect",
@@ -13650,7 +14560,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Pitch Perfect 2",
@@ -13670,7 +14581,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Pitch Perfect 3",
@@ -13690,7 +14602,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Pixie Hollow Games",
@@ -13710,7 +14623,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Plane",
@@ -13719,16 +14633,17 @@ const movies = [
     "tmdbId": 646389,
     "poster": "https://image.tmdb.org/t/p/w500/oJRsTQR47pyjSJCZYpOfbycpNBR.jpg",
     "year": "2023",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "107m",
+    "genre": "Action / Adventure / Thriller",
+    "director": "Jean-François Richet",
+    "cast": "Gerard Butler, Mike Colter, Tony Goldwyn, Yoson An, Evan Dane Taylor, Paul Ben-Victor",
     "synopsis": "After a heroic job of successfully landing his storm-damaged aircraft in a war zone, a fearless pilot finds himself between the agendas of multiple militias planning to take the plane and its passengers hostage.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Planes, Trains and Automobiles",
@@ -13747,7 +14662,8 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Pocahontas",
@@ -13767,7 +14683,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Point Break",
@@ -13784,7 +14701,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Point of No Return",
@@ -13801,7 +14719,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Polar Express, The",
@@ -13825,7 +14744,8 @@ const movies = [
     "categories": [
       "animated",
       "christmas"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Prestige, The",
@@ -13842,7 +14762,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Pretty Woman",
@@ -13859,7 +14780,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Pride and Glory",
@@ -13876,7 +14798,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Pride of the Yankees",
@@ -13896,7 +14819,8 @@ const movies = [
     "categories": [
       "baseball"
     ],
-    "tmdbTitle": "The Pride of the Yankees"
+    "tmdbTitle": "The Pride of the Yankees",
+    "rated": "NR"
   },
   {
     "title": "Primal Fear",
@@ -13913,7 +14837,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Princess and the Frog, The",
@@ -13933,7 +14858,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Producers, The",
@@ -13942,16 +14868,17 @@ const movies = [
     "tmdbId": 30197,
     "poster": "https://image.tmdb.org/t/p/w500/9qCIkNWGuRj5lMyeOXwJs8z9nRz.jpg",
     "year": "1968",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "89m",
+    "genre": "Comedy",
+    "director": "Mel Brooks",
+    "cast": "Zero Mostel, Gene Wilder, Dick Shawn, Kenneth Mars, Estelle Winwood, Christopher Hewett",
     "synopsis": "A conniving Broadway producer and his meek accountant plan to profit from charming wealthy old biddies to invest in an overbudget production, and then put on a sure-fire disaster, so nobody will ask for their money back — and what's more disastrous than a tasteless musical celebrating Adolf Hitler.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Program, The",
@@ -13968,7 +14895,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "The Program"
+    "tmdbTitle": "The Program",
+    "rated": "R"
   },
   {
     "title": "Proposal, The",
@@ -13985,7 +14913,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Psycho",
@@ -13994,15 +14923,16 @@ const movies = [
     "tmdbId": 539,
     "poster": "https://image.tmdb.org/t/p/w500/yz4QVqPx3h1hD1DfqqQkCq3rmxW.jpg",
     "year": "1960",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "109m",
+    "genre": "Horror / Thriller / Mystery",
+    "director": "Alfred Hitchcock",
+    "cast": "Anthony Perkins, Janet Leigh, Vera Miles, John Gavin, Martin Balsam, John McIntire",
     "synopsis": "When larcenous real estate clerk Marion Crane goes on the lam with a wad of cash and hopes of starting a new life, she ends up at the notorious Bates Motel, where manager Norman Bates cares for his housebound mother.",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Puffs",
@@ -14020,7 +14950,8 @@ const movies = [
     "digital": [
       "Prime"
     ],
-    "categories": []
+    "categories": [],
+    "rated": "NR"
   },
   {
     "title": "Pump Up the Volume",
@@ -14037,7 +14968,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Punisher, The",
@@ -14054,7 +14986,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Rambo",
@@ -14074,7 +15007,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Rambo III",
@@ -14091,7 +15025,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Rambo: First Blood",
@@ -14113,7 +15048,8 @@ const movies = [
       "Fandango",
       "Movies Anywhere",
       "Prime"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Rambo: First Blood Part II",
@@ -14130,7 +15066,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Rango",
@@ -14139,10 +15076,10 @@ const movies = [
     "tmdbId": 44896,
     "poster": "https://image.tmdb.org/t/p/w500/A5MP1guV8pbruieG0tnpPIbaJtt.jpg",
     "year": "2011",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "107m",
+    "genre": "Animation / Comedy / Family / Western / Adventure",
+    "director": "Gore Verbinski",
+    "cast": "Johnny Depp, Isla Fisher, Ned Beatty, Bill Nighy, Abigail Breslin, Alfred Molina",
     "synopsis": "When Rango, a lost family pet, accidentally winds up in the gritty, gun-slinging Western town of Dirt, the theater-loving lizard suddenly finds himself the newly appointed sheriff. Welcomed as the last hope the town has been waiting for, Rango is forced to play his new role to the hilt and uncover the truth behind a looming water crisis—before his act catches up with him.",
     "physical": [],
     "digital": [
@@ -14150,7 +15087,8 @@ const movies = [
     ],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Ratatouille",
@@ -14170,7 +15108,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Ready Player One",
@@ -14179,10 +15118,10 @@ const movies = [
     "tmdbId": 333339,
     "poster": "https://image.tmdb.org/t/p/w500/pU1ULUq8D3iRxl1fdX2lZIzdHuI.jpg",
     "year": "2018",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "140m",
+    "genre": "Adventure / Action / Science Fiction",
+    "director": "Steven Spielberg",
+    "cast": "Tye Sheridan, Olivia Cooke, Ben Mendelsohn, Lena Waithe, T.J. Miller, Simon Pegg",
     "synopsis": "When the creator of a popular video game system dies, a virtual contest is created to compete for his fortune.",
     "physical": [
       "DVD"
@@ -14190,7 +15129,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Real Steel",
@@ -14206,7 +15146,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "Real Steel"
   },
   {
     "title": "Recruit, The",
@@ -14223,7 +15165,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "The Recruit"
+    "tmdbTitle": "The Recruit",
+    "rated": "PG-13"
   },
   {
     "title": "Red",
@@ -14240,7 +15183,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Red Dragon",
@@ -14257,7 +15201,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "Red Dragon"
+    "tmdbTitle": "Red Dragon",
+    "rated": "R"
   },
   {
     "title": "Red Eye",
@@ -14274,7 +15219,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "Red Eye"
+    "tmdbTitle": "Red Eye",
+    "rated": "PG-13"
   },
   {
     "title": "Ref, The",
@@ -14291,7 +15237,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "The Ref"
+    "tmdbTitle": "The Ref",
+    "rated": "R"
   },
   {
     "title": "Reign Over Me",
@@ -14308,7 +15255,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Replacements, The",
@@ -14324,7 +15272,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "The Replacements"
   },
   {
     "title": "Reservoir Dogs",
@@ -14341,7 +15291,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Return to Never Land",
@@ -14362,7 +15313,9 @@ const movies = [
     ],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G",
+    "tmdbTitle": "Return to Never Land"
   },
   {
     "title": "Riddick",
@@ -14382,7 +15335,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Rio Bravo",
@@ -14398,7 +15352,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "NR",
+    "tmdbTitle": "Rio Bravo"
   },
   {
     "title": "Rise of the Planet of the Apes",
@@ -14417,7 +15373,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Rise of the Planet of the Apes"
   },
   {
     "title": "Road House",
@@ -14434,7 +15392,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "Road House"
+    "tmdbTitle": "Road House",
+    "rated": "R"
   },
   {
     "title": "Road Trip",
@@ -14451,7 +15410,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Robin Hood",
@@ -14471,7 +15431,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Robin Hood: Prince of Thieves",
@@ -14488,7 +15449,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Robots",
@@ -14498,7 +15460,7 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/fnKCh67l2DDG9NxxIlk9IpsXQ99.jpg",
     "year": "2005",
     "runtime": "90m",
-    "genre": "Animation / Comedy / Family",
+    "genre": "Animation / Comedy / Family / Science Fiction",
     "director": "Chris Wedge",
     "cast": "Ewan McGregor, Halle Berry, Greg Kinnear, Mel Brooks, Drew Carey, Amanda Bynes",
     "synopsis": "Rodney Copperbottom is a young robot inventor who dreams of making the world a better place, until the evil Ratchet takes over Bigweld Industries. Now, Rodney's dreams – and those of his friends – are in danger of becoming obsolete.",
@@ -14508,7 +15470,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Rock of Ages",
@@ -14528,7 +15491,9 @@ const movies = [
       "Fandango",
       "Movies Anywhere"
     ],
-    "categories": []
+    "categories": [],
+    "rated": "PG-13",
+    "tmdbTitle": "Rock of Ages"
   },
   {
     "title": "Rock Star",
@@ -14544,7 +15509,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Rock Star"
   },
   {
     "title": "Rocky",
@@ -14553,15 +15520,16 @@ const movies = [
     "tmdbId": 1366,
     "poster": "https://image.tmdb.org/t/p/w500/xSI0dbKLDETwhiVUy6hGE8KXUln.jpg",
     "year": "1976",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "120m",
+    "genre": "Drama",
+    "director": "John G. Avildsen",
+    "cast": "Sylvester Stallone, Talia Shire, Burt Young, Carl Weathers, Burgess Meredith, Thayer David",
     "synopsis": "Rocky Balboa is a Philadelphia club fighter who seems to be going nowhere. But when a stroke of fate puts him in the ring with a world heavyweight champion, Rocky knows that it's his one shot at the big time — a once-in-a-lifetime opportunity to go the distance and come out a winner!",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Rocky Balboa",
@@ -14571,7 +15539,7 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/byBlJvZwCqgtIwrZNv0pyE974jC.jpg",
     "year": "2006",
     "runtime": "102m",
-    "genre": "Drama",
+    "genre": "Drama / Family / Action",
     "director": "Sylvester Stallone",
     "cast": "Sylvester Stallone, Burt Young, Antonio Tarver, Geraldine Hughes, Milo Ventimiglia, Tony Burton",
     "synopsis": "When he loses a highly publicized virtual boxing match to ex-champ Rocky Balboa, reigning heavyweight titleholder Mason Dixon retaliates by challenging the Italian Stallion to a 10-round exhibition bout. To the surprise of his son and friends, Rocky agrees to come out of retirement and face an opponent who's faster, stronger and thirty years his junior. Rocky takes on Dixon in what will become the greatest fight in boxing history!",
@@ -14581,7 +15549,8 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Rocky II",
@@ -14590,15 +15559,16 @@ const movies = [
     "tmdbId": 1367,
     "poster": "https://image.tmdb.org/t/p/w500/nMaiiu0CzT77U4JZkUYV7KqdAjK.jpg",
     "year": "1979",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "119m",
+    "genre": "Drama / Action",
+    "director": "Sylvester Stallone",
+    "cast": "Sylvester Stallone, Talia Shire, Burt Young, Carl Weathers, Burgess Meredith, Tony Burton",
     "synopsis": "After Rocky goes the distance with champ Apollo Creed, both try to put the fight behind them and move on. Rocky settles down with Adrian but can't put his life together outside the ring, while Creed seeks a rematch to restore his reputation. Soon enough, the \"Master of Disaster\" and the \"Italian Stallion\" are set on a collision course for a climactic battle that is brutal and unforgettable.",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Rocky III",
@@ -14607,15 +15577,16 @@ const movies = [
     "tmdbId": 1371,
     "poster": "https://image.tmdb.org/t/p/w500/uqw16i2kmwVqkJHzjzbDU4xZ0Pl.jpg",
     "year": "1982",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "100m",
+    "genre": "Drama / Action",
+    "director": "Sylvester Stallone",
+    "cast": "Sylvester Stallone, Talia Shire, Burt Young, Carl Weathers, Mr. T, Burgess Meredith",
     "synopsis": "Following Rocky Balboa's intense battle with his most powerful adversary yet – the ferocious Clubber Lang – Rocky joins forces with former rival Apollo Creed in an effort to get back his fighting spirit.",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Rocky IV",
@@ -14624,15 +15595,16 @@ const movies = [
     "tmdbId": 1374,
     "poster": "https://image.tmdb.org/t/p/w500/2MHUit4H6OK5adcOjnCN6suCKOl.jpg",
     "year": "1985",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "91m",
+    "genre": "Drama / Action",
+    "director": "Sylvester Stallone",
+    "cast": "Sylvester Stallone, Dolph Lundgren, Carl Weathers, Talia Shire, Burt Young, Brigitte Nielsen",
     "synopsis": "Rocky Balboa holds the world heavyweight championship, but a new challenger has stepped forward: Drago, a six-foot-four, 261-pound fighter who has the backing of the Soviet Union. This time, Rocky's training regimen takes him to Siberia, where he prepares for a globally televised match in the heart of Moscow. But nothing can truly prepare him for what he's about to face – a fight to the finish, in which he must defend not only himself, but also the honor of his country!",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Rocky V",
@@ -14641,15 +15613,16 @@ const movies = [
     "tmdbId": 1375,
     "poster": "https://image.tmdb.org/t/p/w500/tevHaVxtrMTaUi8f3YjLWYSSY8A.jpg",
     "year": "1990",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "104m",
+    "genre": "Drama / Action",
+    "director": "John G. Avildsen",
+    "cast": "Sylvester Stallone, Talia Shire, Burt Young, Richard Gant, Tommy Morrison, Sage Stallone",
     "synopsis": "A lifetime of taking shots has ended Rocky’s career, and a crooked accountant has left him broke. Inspired by the memory of his trainer, however, Rocky finds glory in training and takes on an up-and-coming boxer.",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Role Models",
@@ -14665,7 +15638,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Role Models"
   },
   {
     "title": "Rookie of the Year",
@@ -14684,7 +15659,9 @@ const movies = [
     "digital": [],
     "categories": [
       "baseball"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "Rookie of the Year"
   },
   {
     "title": "Rounders",
@@ -14702,7 +15679,9 @@ const movies = [
     ],
     "digital": [
       "Prime"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "Rounders"
   },
   {
     "title": "Rudolph the Red-Nosed Reindeer",
@@ -14711,7 +15690,7 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/xjAElUhXuc7zFJPj3qUHjcySNsE.jpg",
     "year": "1964",
     "runtime": "52m",
-    "genre": "Animation / Family / Adventure",
+    "genre": "Animation / Family / Adventure / Fantasy",
     "director": "Larry Roemer",
     "cast": "Burl Ives, Billie Mae Richards, Larry D. Mann, Paul Soles, Stan Francis, Alfie Scopp",
     "synopsis": "Sam the snowman tells us the story of a young red-nosed reindeer who, after being ousted from the reindeer games because of his glowing nose, teams up with Hermey, an elf who wants to be a dentist, and Yukon Cornelius, the prospector. They run into the Abominable Snowman and find a whole island of misfit toys. Rudolph vows to see if he can get Santa to help the toys, and he goes back to the North Pole on Christmas Eve. But Santa's sleigh is fogged in. But when Santa looks over Rudolph, he gets a very bright idea...",
@@ -14723,7 +15702,8 @@ const movies = [
       "animated",
       "christmas"
     ],
-    "tmdbTitle": "Rudolph the Red-Nosed Reindeer"
+    "tmdbTitle": "Rudolph the Red-Nosed Reindeer",
+    "rated": "G"
   },
   {
     "title": "Rudy",
@@ -14742,7 +15722,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "Rudy"
   },
   {
     "title": "Runaway Bride",
@@ -14759,7 +15741,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "Runaway Bride"
+    "tmdbTitle": "Runaway Bride",
+    "rated": "PG"
   },
   {
     "title": "Runaway Jury",
@@ -14775,7 +15758,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "Runaway Jury"
   },
   {
     "title": "Rundown, The",
@@ -14785,14 +15770,15 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/cwNeP2fz0vqNhmKIcSgLD0xc6g2.jpg",
     "year": "2003",
     "runtime": "104m",
-    "genre": "Adventure / Action / Comedy",
+    "genre": "Adventure / Action / Comedy / Thriller",
     "director": "Peter Berg",
     "cast": "Dwayne Johnson, Seann William Scott, Rosario Dawson, Christopher Walken, Ewen Bremner, Jon Gries",
     "synopsis": "When Travis, the mouthy son of a criminal, disappears in the Amazon in search of a treasured artifact, his father sends in Beck, who becomes Travis's rival for the affections of Mariana, a mysterious Brazilian woman. With his steely disposition, Beck is a man of few words -- but it takes him all the discipline he can muster to work with Travis to nab a tyrant who's after the same treasure.",
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Running Man, The",
@@ -14809,7 +15795,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "S.W.A.T.",
@@ -14826,7 +15813,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Salt",
@@ -14843,7 +15831,8 @@ const movies = [
     "physical": [
       "Blu-ray"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Sandlot, The",
@@ -14862,7 +15851,9 @@ const movies = [
     "digital": [],
     "categories": [
       "baseball"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "The Sandlot"
   },
   {
     "title": "Santa Clause 2, The",
@@ -14882,7 +15873,8 @@ const movies = [
     "digital": [],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Santa Clause 3, The",
@@ -14902,7 +15894,8 @@ const movies = [
     "digital": [],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Santa Clause, The",
@@ -14922,7 +15915,8 @@ const movies = [
     "digital": [],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Save the Last Dance",
@@ -14939,7 +15933,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Saved by the Bell - The Complete Collection",
@@ -14956,7 +15951,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-G"
   },
   {
     "title": "Saw",
@@ -14972,7 +15968,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Saw"
   },
   {
     "title": "Saw II",
@@ -14988,7 +15986,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Saw II"
   },
   {
     "title": "Saw III",
@@ -15004,7 +16004,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Saw III"
   },
   {
     "title": "Saw IV",
@@ -15020,7 +16022,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Saw IV"
   },
   {
     "title": "Scarface",
@@ -15036,7 +16040,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Scarface"
   },
   {
     "title": "Schindler's List",
@@ -15045,16 +16051,17 @@ const movies = [
     "tmdbId": 424,
     "poster": "https://image.tmdb.org/t/p/w500/sF1U4EUQS8YHUYjNl3pMGNIQyr0.jpg",
     "year": "1993",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "195m",
+    "genre": "Drama / History / War",
+    "director": "Steven Spielberg",
+    "cast": "Liam Neeson, Ben Kingsley, Ralph Fiennes, Caroline Goodall, Jonathan Sagall, Embeth Davidtz",
     "synopsis": "The true story of how businessman Oskar Schindler saved over a thousand Jewish lives from the Nazis while they worked as slaves in his factory during World War II.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "School for Scoundrels",
@@ -15071,7 +16078,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Score, The",
@@ -15080,17 +16088,18 @@ const movies = [
     "tmdbId": 11371,
     "poster": "https://image.tmdb.org/t/p/w500/fsb4m9XW59mei8GKznvI3lLzcfp.jpg",
     "year": "2001",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "124m",
+    "genre": "Action / Crime / Thriller / Mystery / Drama",
+    "director": "Frank Oz",
+    "cast": "Robert De Niro, Edward Norton, Marlon Brando, Angela Bassett, Gary Farmer, Jamie Harrold",
     "synopsis": "An aging thief hopes to retire and live off his ill-gotten wealth when a young kid convinces him into doing one last heist.",
     "physical": [
       "DVD"
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Scorpion King, The",
@@ -15106,7 +16115,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "The Scorpion King"
   },
   {
     "title": "Scout, The",
@@ -15126,7 +16137,8 @@ const movies = [
     "categories": [
       "baseball"
     ],
-    "tmdbTitle": "The Scout"
+    "tmdbTitle": "The Scout",
+    "rated": "PG-13"
   },
   {
     "title": "Scream",
@@ -15143,7 +16155,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Scream 2",
@@ -15160,7 +16173,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Scream 3",
@@ -15178,7 +16192,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "categories": []
+    "categories": [],
+    "rated": "R"
   },
   {
     "title": "Scream 4",
@@ -15195,7 +16210,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Scrooged",
@@ -15214,7 +16230,9 @@ const movies = [
     "digital": [],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Scrooged"
   },
   {
     "title": "Scrubs - Complete Eighth Season",
@@ -15231,7 +16249,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Scrubs - Complete Fifth Season",
@@ -15248,7 +16267,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Scrubs - Complete First Season",
@@ -15265,7 +16285,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Scrubs - Complete Fourth Season",
@@ -15282,7 +16303,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Scrubs - Complete Ninth Season",
@@ -15299,7 +16321,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Scrubs - Complete Second Season",
@@ -15316,7 +16339,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Scrubs - Complete Seventh Season",
@@ -15333,7 +16357,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Scrubs - Complete Sixth Season",
@@ -15350,7 +16375,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Scrubs - Complete Third Season",
@@ -15367,7 +16393,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Secret of NIMH, The",
@@ -15377,7 +16404,7 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/prNrnOKlkV9wl5Sl3zwHu1f3t2z.jpg",
     "year": "1982",
     "runtime": "83m",
-    "genre": "Adventure / Animation / Drama",
+    "genre": "Adventure / Animation / Drama / Family / Fantasy / Mystery / Science Fiction",
     "director": "Don Bluth",
     "cast": "Elizabeth Hartman, Derek Jacobi, Arthur Malet, Dom DeLuise, Hermione Baddeley, Shannen Doherty",
     "synopsis": "A widowed field mouse must move her family -- including an ailing son -- to escape a farmer's plow. Aided by a crow and a pack of superintelligent, escaped lab rats, the brave mother struggles to transplant her home to firmer ground.",
@@ -15387,7 +16414,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Secret of the Wings",
@@ -15397,7 +16425,7 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/aPudKEzwwmwc5lS8sdxvG3WX86t.jpg",
     "year": "2012",
     "runtime": "75m",
-    "genre": "Animation / Family / Fantasy",
+    "genre": "Animation / Family / Fantasy / Adventure",
     "director": "Peggy Holmes",
     "cast": "Mae Whitman, Lucy Hale, Timothy Dalton, Jeff Bennett, Lucy Liu, Raven-Symoné",
     "synopsis": "Tinkerbell wanders into the forbidden Winter woods and meets Periwinkle. Together they learn the secret of their wings and try to unite the warm fairies and the winter fairies to help Pixie Hollow.",
@@ -15407,7 +16435,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Secret Window",
@@ -15423,7 +16452,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "Secret Window"
   },
   {
     "title": "Serendipity",
@@ -15440,7 +16471,9 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "categories": []
+    "categories": [],
+    "rated": "PG-13",
+    "tmdbTitle": "Serendipity"
   },
   {
     "title": "Seven",
@@ -15457,7 +16490,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Sevendust Retrospect",
@@ -15473,7 +16507,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "NR",
+    "tmdbTitle": "Sevendust Retrospect"
   },
   {
     "title": "Shade",
@@ -15489,7 +16525,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Shade"
   },
   {
     "title": "Shark Tale",
@@ -15509,7 +16547,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Shawshank Redemption, The",
@@ -15526,7 +16565,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Shazam!",
@@ -15547,7 +16587,8 @@ const movies = [
       "Fandango",
       "Movies Anywhere",
       "Prime"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Shelter",
@@ -15556,16 +16597,17 @@ const movies = [
     "tmdbId": 1290821,
     "poster": "https://image.tmdb.org/t/p/w500/buPFnHZ3xQy6vZEHxbHgL1Pc6CR.jpg",
     "year": "2026",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "107m",
+    "genre": "Action / Crime / Thriller",
+    "director": "Ric Roman Waugh",
+    "cast": "Jason Statham, Bodhi Rae Breathnach, Naomi Ackie, Daniel Mays, Harriet Walter, Bill Nighy",
     "synopsis": "A man living in self-imposed exile on a remote island rescues a young girl from a violent storm, setting off a chain of events that forces him out of seclusion to protect her from enemies tied to his past.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Sherlock Holmes",
@@ -15581,7 +16623,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "Sherlock Holmes"
   },
   {
     "title": "Sherlock Holmes: A Game of Shadows",
@@ -15600,7 +16644,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Sherlock Holmes: A Game of Shadows"
   },
   {
     "title": "Shining, The",
@@ -15609,16 +16655,17 @@ const movies = [
     "tmdbId": 694,
     "poster": "https://image.tmdb.org/t/p/w500/uAR0AWqhQL1hQa69UDEbb2rE5Wx.jpg",
     "year": "1980",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "144m",
+    "genre": "Horror / Thriller",
+    "director": "Stanley Kubrick",
+    "cast": "Jack Nicholson, Shelley Duvall, Danny Lloyd, Scatman Crothers, Barry Nelson, Philip Stone",
     "synopsis": "Jack Torrance accepts a caretaker job at the Overlook Hotel, where he, along with his wife Wendy and their son Danny, must live isolated from the rest of the world for the winter. But they aren't prepared for the madness that lurks within.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Shoot 'Em Up",
@@ -15634,7 +16681,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Shoot 'Em Up"
   },
   {
     "title": "Shooter",
@@ -15651,7 +16700,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Showtime",
@@ -15668,7 +16718,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Shrek",
@@ -15688,7 +16739,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Shrek 2",
@@ -15708,7 +16760,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Sideways",
@@ -15725,7 +16778,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Siege, The",
@@ -15734,16 +16788,17 @@ const movies = [
     "tmdbId": 9882,
     "poster": "https://image.tmdb.org/t/p/w500/gbeeWu8rYaIYMyq9ayN1AepjNxP.jpg",
     "year": "1998",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "116m",
+    "genre": "Drama / Action / Thriller / Crime",
+    "director": "Edward Zwick",
+    "cast": "Denzel Washington, Annette Bening, Bruce Willis, Tony Shalhoub, Sami Bouajila, Aasif Mandvi",
     "synopsis": "The secret US abduction of a suspected terrorist from his Middle East homeland leads to a wave of terrorist attacks in New York.  An FBI senior agent and his team attempt to locate and decommission the enemy cells, but must also deal with an Army General gone rogue and a female CIA agent of uncertain loyalties.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Silence of the Lambs, The",
@@ -15760,7 +16815,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Simply Irresistible",
@@ -15777,7 +16833,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Simpsons - Complete Eighth Season, The",
@@ -15798,7 +16855,8 @@ const movies = [
     "categories": [
       "animated",
       "baseball"
-    ]
+    ],
+    "rated": "TV-14"
   },
   {
     "title": "Simpsons - Season 1, The",
@@ -15816,7 +16874,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Simpsons - Season 2, The",
@@ -15834,7 +16893,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Simpsons - Season 3, The",
@@ -15852,7 +16912,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Simpsons - Season 4, The",
@@ -15870,7 +16931,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Simpsons - Season 5, The",
@@ -15888,7 +16950,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Simpsons - Season 6, The",
@@ -15906,7 +16969,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Simpsons - Season 7, The",
@@ -15924,7 +16988,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-14"
   },
   {
     "title": "Simpsons Movie, The",
@@ -15941,7 +17006,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Sin City",
@@ -15957,7 +17023,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Sin City"
   },
   {
     "title": "Sing",
@@ -15980,7 +17048,8 @@ const movies = [
     ],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Singles",
@@ -15997,7 +17066,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Sixteen Candles",
@@ -16014,7 +17084,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "Sleeping Beauty",
@@ -16034,7 +17105,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Sleeping with the Enemy",
@@ -16051,7 +17123,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Snatch",
@@ -16068,7 +17141,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Sneakers",
@@ -16077,16 +17151,17 @@ const movies = [
     "tmdbId": 2322,
     "poster": "https://image.tmdb.org/t/p/w500/l2pIGwCvpZEpBuMb55YBl6A04Jv.jpg",
     "year": "1992",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "125m",
+    "genre": "Comedy / Crime / Drama",
+    "director": "Phil Alden Robinson",
+    "cast": "Robert Redford, Sidney Poitier, David Strathairn, Dan Aykroyd, River Phoenix, Ben Kingsley",
     "synopsis": "When shadowy U.S. intelligence agents blackmail a reformed computer hacker and his eccentric team of security experts into stealing a code-breaking 'black box' from a Soviet-funded genius, they uncover a bigger conspiracy. Now, he and his 'sneakers' must save themselves and the world economy by retrieving the box from their blackmailers.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Snow White and the Seven Dwarfs",
@@ -16106,7 +17181,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "So I Married an Axe Murderer",
@@ -16115,16 +17191,17 @@ const movies = [
     "tmdbId": 10442,
     "poster": "https://image.tmdb.org/t/p/w500/zQlpQDKDADKlgqfMs1E191ofDJU.jpg",
     "year": "1993",
-    "runtime": "",
-    "genre": "Rom-Com",
-    "director": "",
-    "cast": "",
+    "runtime": "93m",
+    "genre": "Rom-Com / Comedy / Crime / Romance",
+    "director": "Thomas Schlamme",
+    "cast": "Mike Myers, Nancy Travis, Anthony LaPaglia, Amanda Plummer, Brenda Fricker, Matt Doherty",
     "synopsis": "Just after a bad breakup, Charlie MacKenzie falls for lovely butcher Harriet Michaels and introduces her to his parents. But, as voracious consumers of sensational tabloids, his parents soon come to suspect that Harriet is actually a notorious serial killer -- \"Mrs. X\" -- wanted in connection with a string of bizarre honeymoon killings. Thinking his parents foolish, Charlie proposes to Harriet. But while on his honeymoon with her, he begins to fear they were right.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Something's Gotta Give",
@@ -16141,7 +17218,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Son in Law",
@@ -16150,10 +17228,10 @@ const movies = [
     "tmdbId": 13203,
     "poster": "https://image.tmdb.org/t/p/w500/gj4afHL9bMQ18opZzMp77tlPkAq.jpg",
     "year": "1993",
-    "runtime": "",
-    "genre": "Rom-Com",
-    "director": "",
-    "cast": "",
+    "runtime": "95m",
+    "genre": "Rom-Com / Comedy / Drama / Romance",
+    "director": "Steve Rash",
+    "cast": "Pauly Shore, Carla Gugino, Lane Smith, Tiffani-Amber Thiessen, Cindy Pickett, Mason Adams",
     "synopsis": "Country girl Rebecca has spent most of her life on a farm in South Dakota, and, when she goes away to college in Los Angeles, Rebecca immediately feels out of place in the daunting urban setting. She is befriended by a savvy party animal named Crawl, who convinces the ambivalent Rebecca to stay in the city. When Thanksgiving break rolls around, Rebecca, no longer an innocent farm girl, invites Crawl back to South Dakota, where he pretends to be her fiancé.",
     "physical": [
       "DVD"
@@ -16161,7 +17239,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Sonic the Hedgehog",
@@ -16179,7 +17258,9 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "Sonic the Hedgehog"
   },
   {
     "title": "Sonic the Hedgehog 2",
@@ -16197,7 +17278,9 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "Sonic the Hedgehog 2"
   },
   {
     "title": "Sonic the Hedgehog 3",
@@ -16215,7 +17298,9 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "Sonic the Hedgehog 3"
   },
   {
     "title": "Soul Survivors",
@@ -16224,15 +17309,16 @@ const movies = [
     "tmdbId": 14033,
     "poster": "https://image.tmdb.org/t/p/w500/uWmHhtuEgX7oI0FuWR2oD08HRHD.jpg",
     "year": "2001",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "84m",
+    "genre": "Horror / Mystery / Thriller",
+    "director": "Stephen Carpenter",
+    "cast": "Melissa Sagemiller, Wes Bentley, Casey Affleck, Eliza Dushku, Angela Featherstone, Luke Wilson",
     "synopsis": "A college freshman involved in a fatal car crash discovers she may not have survived after all when she becomes caught between the worlds of the living and the dead.",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Sound of Music, The",
@@ -16241,16 +17327,17 @@ const movies = [
     "tmdbId": 15121,
     "poster": "https://image.tmdb.org/t/p/w500/c6CrUZypAsBCaRWX0M3RVRDbhNS.jpg",
     "year": "1965",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "174m",
+    "genre": "Drama / Family / Music / Romance",
+    "director": "Robert Wise",
+    "cast": "Julie Andrews, Christopher Plummer, Eleanor Parker, Charmian Carr, Nicholas Hammond, Heather Menzies",
     "synopsis": "In the years before World War II, a tomboyish postulant at an Austrian abbey is hired as a governess in the home of a widowed naval captain with seven children and brings a new love of life and music into the home.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Space Jam",
@@ -16269,7 +17356,9 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "Space Jam"
   },
   {
     "title": "Specialist, The",
@@ -16285,7 +17374,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "The Specialist"
   },
   {
     "title": "Speed",
@@ -16304,7 +17395,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "Speed"
   },
   {
     "title": "Spider-Man",
@@ -16321,7 +17414,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Spider-Man 2",
@@ -16338,7 +17432,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Spider-Man 3",
@@ -16355,7 +17450,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Spider-Man: Homecoming",
@@ -16364,16 +17460,17 @@ const movies = [
     "tmdbId": 315635,
     "poster": "https://image.tmdb.org/t/p/w500/c24sv2weTHPsmDa7jEMN0m2P3RT.jpg",
     "year": "2017",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "133m",
+    "genre": "Action / Adventure / Science Fiction",
+    "director": "Jon Watts",
+    "cast": "Tom Holland, Michael Keaton, Robert Downey Jr., Marisa Tomei, Jon Favreau, Gwyneth Paltrow",
     "synopsis": "Following the events of Captain America: Civil War, Peter Parker, with the help of his mentor Tony Stark, tries to balance his life as an ordinary high school student in Queens, New York City, with fighting crime as his superhero alter ego Spider-Man as a new threat, the Vulture, emerges.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Spider-Man: Into the Spider-Verse",
@@ -16382,16 +17479,17 @@ const movies = [
     "tmdbId": 324857,
     "poster": "https://image.tmdb.org/t/p/w500/iiZZdoQBEYBv6id8su7ImL0oCbD.jpg",
     "year": "2018",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "117m",
+    "genre": "Animation / Action / Adventure / Science Fiction",
+    "director": "Bob Persichetti, Peter Ramsey, Rodney Rothman",
+    "cast": "Shameik Moore, Jake Johnson, Hailee Steinfeld, Mahershala Ali, Brian Tyree Henry, Lily Tomlin",
     "synopsis": "Struggling to find his place in the world while juggling school and family, Brooklyn teenager Miles Morales is unexpectedly bitten by a radioactive spider and develops unfathomable powers just like the one and only Spider-Man. While wrestling with the implications of his new abilities, Miles discovers a super collider created by the madman Wilson \"Kingpin\" Fisk, causing others from across the Spider-Verse to be inadvertently transported to his dimension.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Spider-Man: No Way Home",
@@ -16400,16 +17498,17 @@ const movies = [
     "tmdbId": 634649,
     "poster": "https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
     "year": "2021",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "148m",
+    "genre": "Action / Adventure / Science Fiction",
+    "director": "Jon Watts",
+    "cast": "Tom Holland, Zendaya, Benedict Cumberbatch, Jacob Batalon, Jon Favreau, Jamie Foxx",
     "synopsis": "Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes of being a super-hero. When he asks for help from Doctor Strange the stakes become even more dangerous, forcing him to discover what it truly means to be Spider-Man.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Splitting Heirs",
@@ -16426,7 +17525,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Spy",
@@ -16445,7 +17545,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "Spy"
   },
   {
     "title": "Spy Game",
@@ -16454,10 +17556,10 @@ const movies = [
     "tmdbId": 1535,
     "poster": "https://image.tmdb.org/t/p/w500/6y8M1rxjKofQCRKKe6xeV91K2Fc.jpg",
     "year": "2001",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "126m",
+    "genre": "Action / Crime / Thriller",
+    "director": "Tony Scott",
+    "cast": "Robert Redford, Brad Pitt, Catherine McCormack, Stephen Dillane, Larry Bryggman, Marianne Jean-Baptiste",
     "synopsis": "On the day of his retirement, a veteran CIA agent learns that his former protégé has been arrested in China, is sentenced to die the next morning in Beijing, and that the CIA is considering letting that happen to avoid an international scandal.",
     "physical": [
       "DVD"
@@ -16465,7 +17567,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Star Trek",
@@ -16482,7 +17585,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Star Trek Into Darkness",
@@ -16501,7 +17605,8 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Stealth",
@@ -16518,7 +17623,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Step Brothers",
@@ -16535,7 +17641,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Street Fighter",
@@ -16544,16 +17651,17 @@ const movies = [
     "tmdbId": 11667,
     "poster": "https://image.tmdb.org/t/p/w500/6yh95dD2Y6uWAlPfWCZZygBM1ec.jpg",
     "year": "1994",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "102m",
+    "genre": "Action / Comedy / Fantasy",
+    "director": "Steven E. de Souza",
+    "cast": "Jean-Claude Van Damme, Raúl Juliá, Kylie Minogue, Byron Mann, Damian Chapa, Ming-Na Wen",
     "synopsis": "Colonel Guile and various other martial arts heroes fight against the tyranny of dictator M. Bison and his cohorts.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Stuck on You",
@@ -16571,7 +17679,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "categories": []
+    "categories": [],
+    "rated": "PG-13"
   },
   {
     "title": "Sudden Death",
@@ -16580,16 +17689,17 @@ const movies = [
     "tmdbId": 9091,
     "poster": "https://image.tmdb.org/t/p/w500/4Snihptli0we9I4W5QfufOdHSeV.jpg",
     "year": "1995",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "111m",
+    "genre": "Action / Drama / Thriller / Crime",
+    "director": "Peter Hyams",
+    "cast": "Jean-Claude Van Damme, Powers Boothe, Raymond J. Barry, Whittni Wright, Ross Malinger, Dorian Harewood",
     "synopsis": "When a man's daughter is suddenly taken during a championship hockey game – with the captors demanding a billion dollars by game's end – he frantically sets a plan in motion to rescue her and abort an impending explosion before the final buzzer.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Suicide Kings",
@@ -16605,7 +17715,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Suicide Kings"
   },
   {
     "title": "Suicide Squad",
@@ -16625,7 +17737,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Sunset Boulevard",
@@ -16634,16 +17747,17 @@ const movies = [
     "tmdbId": 599,
     "poster": "https://image.tmdb.org/t/p/w500/zt8aQ6ksqK6p1AopC5zVTDS9pKT.jpg",
     "year": "1950",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "110m",
+    "genre": "Drama",
+    "director": "Billy Wilder",
+    "cast": "William Holden, Gloria Swanson, Erich von Stroheim, Nancy Olson, Fred Clark, Lloyd Gough",
     "synopsis": "A hack screenwriter writes a screenplay for a former silent film star who has faded into Hollywood obscurity.",
     "physical": [],
     "digital": [
       "Fandango"
     ],
-    "categories": []
+    "categories": [],
+    "rated": "NR"
   },
   {
     "title": "Super Mario Bros. Movie, The",
@@ -16652,10 +17766,10 @@ const movies = [
     "tmdbId": 502356,
     "poster": "https://image.tmdb.org/t/p/w500/qNBAXBIQlnOThrVvA6mA2B5ggV6.jpg",
     "year": "2023",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "93m",
+    "genre": "Family / Comedy / Adventure / Fantasy / Animation",
+    "director": "Aaron Horvath, Michael Jelenic",
+    "cast": "Chris Pratt, Anya Taylor-Joy, Charlie Day, Jack Black, Keegan-Michael Key, Seth Rogen",
     "synopsis": "While working underground to fix a water main, Brooklyn plumbers—and brothers—Mario and Luigi are transported down a mysterious pipe and wander into a magical new world. But when the brothers are separated, Mario embarks on an epic quest to find Luigi.",
     "physical": [],
     "digital": [
@@ -16664,7 +17778,8 @@ const movies = [
     ],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Super Troopers",
@@ -16681,7 +17796,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Surviving Christmas",
@@ -16700,7 +17816,9 @@ const movies = [
     "digital": [],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Surviving Christmas"
   },
   {
     "title": "Sweeney Todd: The Demon Barber of Fleet Street",
@@ -16718,7 +17836,9 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "Sweeney Todd: The Demon Barber of Fleet Street"
   },
   {
     "title": "Sweet Home Alabama",
@@ -16734,7 +17854,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "Sweet Home Alabama"
   },
   {
     "title": "Sweetest Thing, The",
@@ -16750,7 +17872,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "The Sweetest Thing"
   },
   {
     "title": "Swimfan",
@@ -16767,7 +17891,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "Swimfan"
+    "tmdbTitle": "Swimfan",
+    "rated": "PG-13"
   },
   {
     "title": "Swingers",
@@ -16784,7 +17909,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Sword in the Stone, The",
@@ -16804,7 +17930,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Take the Lead",
@@ -16820,7 +17947,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "Take the Lead"
   },
   {
     "title": "Taken",
@@ -16836,7 +17965,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "Taken"
   },
   {
     "title": "Talladega Nights: The Ballad of Ricky Bobby",
@@ -16852,7 +17983,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "Talladega Nights: The Ballad of Ricky Bobby"
   },
   {
     "title": "Tangled",
@@ -16872,7 +18005,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Tango & Cash",
@@ -16891,7 +18025,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "Tango & Cash"
   },
   {
     "title": "Tarzan",
@@ -16911,7 +18047,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Ted Lasso - The Richmond Way",
@@ -16928,7 +18065,8 @@ const movies = [
     "physical": [
       "Blu-ray"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-MA"
   },
   {
     "title": "Teen Witch",
@@ -16937,15 +18075,16 @@ const movies = [
     "tmdbId": 25199,
     "poster": "https://image.tmdb.org/t/p/w500/8UNA7PZ9gpoIgELB13bKCwOuICp.jpg",
     "year": "1989",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "94m",
+    "genre": "Comedy / Fantasy / Romance",
+    "director": "Dorian Walker",
+    "cast": "Robyn Lively, Dan Gauthier, Joshua John Miller, Caren Kaye, Dick Sargent, Lisa Fuller",
     "synopsis": "Louise is not very popular at her highschool. Then she learns that she's descended from the witches of Salem and has inherited their powers. At first she uses them to get back at the girls and teachers who teased her and to win the heart of the handsome footballer's captain. But soon she has doubts if it's right to 'cheat' her way to popularity.",
     "physical": [],
     "digital": [
       "Prime"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Teen Wolf",
@@ -16961,7 +18100,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG",
+    "tmdbTitle": "Teen Wolf"
   },
   {
     "title": "Teen Wolf Too",
@@ -16977,7 +18118,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG",
+    "tmdbTitle": "Teen Wolf Too"
   },
   {
     "title": "Teenage Mutant Ninja Turtles",
@@ -16987,14 +18130,15 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/shfAU6xIIEAEtsloIT3n9Fscz2E.jpg",
     "year": "1990",
     "runtime": "93m",
-    "genre": "Science Fiction / Action / Adventure",
+    "genre": "Science Fiction / Action / Adventure / Comedy / Family",
     "director": "Steve Barron",
     "cast": "Brian Tochi, Josh Pais, Corey Feldman, Robbie Rist, Judith Hoag, Elias Koteas",
     "synopsis": "A quartet of humanoid turtles, trained by their mentor in Ninjutsu, must learn to work together to face the menace of Shredder and the Foot Clan.",
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "Terminator 2: Judgment Day",
@@ -17010,7 +18154,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Terminator 2: Judgment Day"
   },
   {
     "title": "Terminator Salvation",
@@ -17026,7 +18172,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "Terminator Salvation"
   },
   {
     "title": "Terminator, The",
@@ -17042,7 +18190,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "The Terminator"
   },
   {
     "title": "Thank You for Smoking",
@@ -17058,7 +18208,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Thank You for Smoking"
   },
   {
     "title": "That Touch of Mink",
@@ -17067,15 +18219,16 @@ const movies = [
     "tmdbId": 12708,
     "poster": "https://image.tmdb.org/t/p/w500/eEG29x9cljGKL2GPmRK9IByyL9e.jpg",
     "year": "1962",
-    "runtime": "",
-    "genre": "Rom-Com",
-    "director": "",
-    "cast": "",
+    "runtime": "99m",
+    "genre": "Rom-Com / Comedy / Romance",
+    "director": "Delbert Mann",
+    "cast": "Cary Grant, Doris Day, Gig Young, Audrey Meadows, Alan Hewitt, John Astin",
     "synopsis": "Cathy Timberlake is en route to a job interview when a car transporting businessman Philip Shayne covers her in mud. He sends his assistant, Roger, to apologize, but upon meeting Cathy, Roger knows that she would be a suitable match for his boss. Despite their mutual attraction, Cathy and Philip want different things. Philip wants a fling, while Cathy wants a marriage. As they travel to exotic locales, their differing motivations are put to the test.",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "NR"
   },
   {
     "title": "That's My Boy",
@@ -17094,7 +18247,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "That's My Boy"
   },
   {
     "title": "Thelma & Louise",
@@ -17111,7 +18266,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "There's Something About Mary",
@@ -17128,7 +18284,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "This Old Cub",
@@ -17144,7 +18301,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "NR",
+    "tmdbTitle": "This Old Cub"
   },
   {
     "title": "Thor",
@@ -17162,7 +18321,8 @@ const movies = [
       "Blu-ray",
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Thor: The Dark World",
@@ -17181,7 +18341,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Thor: The Dark World"
   },
   {
     "title": "Three to Tango",
@@ -17198,7 +18360,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "Three to Tango"
+    "tmdbTitle": "Three to Tango",
+    "rated": "PG-13"
   },
   {
     "title": "Tick, The",
@@ -17215,7 +18378,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "TV-PG"
   },
   {
     "title": "To Catch a Thief",
@@ -17224,15 +18388,16 @@ const movies = [
     "tmdbId": 381,
     "poster": "https://image.tmdb.org/t/p/w500/cbMRkBGBgo3aLJK2M4MyicvkPLQ.jpg",
     "year": "1955",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "106m",
+    "genre": "Mystery / Romance / Thriller",
+    "director": "Alfred Hitchcock",
+    "cast": "Cary Grant, Grace Kelly, Jessie Royce Landis, John Williams, Charles Vanel, Brigitte Auber",
     "synopsis": "When a string of jewel robberies hits the French Riviera, suspicion falls on retired thief John “The Cat” Robie. To clear his name, he sets out to trap the copycat himself—entangling a wealthy widow and her beguiling daughter in a seductive game of pursuit, deception, and desire.",
     "physical": [],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Tombstone",
@@ -17248,7 +18413,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Tombstone"
   },
   {
     "title": "Tommy Boy",
@@ -17264,7 +18431,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "Tommy Boy"
   },
   {
     "title": "Top Gun",
@@ -17280,7 +18449,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG",
+    "tmdbTitle": "Top Gun"
   },
   {
     "title": "Top Gun: Maverick",
@@ -17298,7 +18469,9 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Top Gun: Maverick"
   },
   {
     "title": "Total Recall",
@@ -17318,7 +18491,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "Total Recall"
   },
   {
     "title": "Town, The",
@@ -17335,7 +18510,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Toy Story",
@@ -17355,7 +18531,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Toy Story 2",
@@ -17375,7 +18552,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Toy Story 3",
@@ -17395,7 +18573,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Toys",
@@ -17412,7 +18591,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "Toys"
+    "tmdbTitle": "Toys",
+    "rated": "PG-13"
   },
   {
     "title": "Trading Places",
@@ -17429,7 +18609,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Transformers",
@@ -17446,7 +18627,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Transformers",
@@ -17465,7 +18647,9 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "TV-Y7",
+    "tmdbTitle": "The Transformers"
   },
   {
     "title": "Transformers: Age of Extinction",
@@ -17484,7 +18668,8 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Transformers: Dark of the Moon",
@@ -17501,7 +18686,8 @@ const movies = [
     "physical": [
       "Blu-ray + DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Transformers: Revenge of the Fallen",
@@ -17518,7 +18704,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Transformers: The Last Knight",
@@ -17537,7 +18724,8 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Transporter",
@@ -17554,7 +18742,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Transporter 2",
@@ -17571,7 +18760,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Transporter 3",
@@ -17588,7 +18778,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Trapped in Paradise",
@@ -17608,7 +18799,8 @@ const movies = [
     "digital": [],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Trolls",
@@ -17631,7 +18823,8 @@ const movies = [
     ],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Tropic Thunder",
@@ -17648,7 +18841,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Trouble with the Curve",
@@ -17671,7 +18865,8 @@ const movies = [
     ],
     "categories": [
       "baseball"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Troy",
@@ -17681,14 +18876,15 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/a07wLy4ONfpsjnBqMwhlWTJTcm.jpg",
     "year": "2004",
     "runtime": "163m",
-    "genre": "War / Action / History",
+    "genre": "War / Action / History / Adventure",
     "director": "Wolfgang Petersen",
     "cast": "Brad Pitt, Orlando Bloom, Eric Bana, Brian Cox, Sean Bean, Brendan Gleeson",
     "synopsis": "In year 1250 B.C. during the late Bronze age, two emerging nations begin to clash. Paris, the Trojan prince, convinces Helen, Queen of Sparta, to leave her husband Menelaus, and sail with him back to Troy. After Menelaus finds out that his wife was taken by the Trojans, he asks his brother Agamemnon to help him get her back. Agamemnon sees this as an opportunity for power. They set off with 1,000 ships holding 50,000 Greeks to Troy.",
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "True Lies",
@@ -17707,7 +18903,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "True Lies"
   },
   {
     "title": "Truman Show, The",
@@ -17724,7 +18922,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "Twelve Monkeys",
@@ -17741,7 +18940,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Twilight",
@@ -17758,7 +18958,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Twilight Saga: Breaking Dawn - Part 1, The",
@@ -17777,7 +18978,8 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Twilight Saga: Breaking Dawn - Part 2, The",
@@ -17797,7 +18999,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Twilight Saga: Eclipse, The",
@@ -17814,7 +19017,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Twilight Saga: New Moon, The",
@@ -17831,7 +19035,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Twister",
@@ -17840,16 +19045,17 @@ const movies = [
     "tmdbId": 664,
     "poster": "https://image.tmdb.org/t/p/w500/d4ie3f6QTvNw40V770Uzo87SDZn.jpg",
     "year": "1996",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "113m",
+    "genre": "Action / Adventure / Drama",
+    "director": "Jan de Bont",
+    "cast": "Helen Hunt, Bill Paxton, Jami Gertz, Cary Elwes, Lois Smith, Philip Seymour Hoffman",
     "synopsis": "An unprecedented series of violent tornadoes is sweeping across Oklahoma. Tornado chasers, headed by Dr. Jo Harding, attempt to release a groundbreaking device that will allow them to track them and create a more advanced warning system. They are joined by Jo's soon to be ex-husband Bill, a former tornado chaser himself, and his girlfriend Melissa.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Twisters",
@@ -17858,16 +19064,17 @@ const movies = [
     "tmdbId": 718821,
     "poster": "https://image.tmdb.org/t/p/w500/pjnD08FlMAIXsfOLKQbvmO0f0MD.jpg",
     "year": "2024",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "123m",
+    "genre": "Action / Thriller",
+    "director": "Lee Isaac Chung",
+    "cast": "Daisy Edgar-Jones, Glen Powell, Anthony Ramos, Brandon Perea, Maura Tierney, Harry Hadden-Paton",
     "synopsis": "As storm season intensifies, the paths of former storm chaser Kate Carter and reckless social-media superstar Tyler Owens collide when terrifying phenomena never seen before are unleashed. The pair and their competing teams find themselves squarely in the paths of multiple storm systems converging over central Oklahoma in the fight of their lives.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Two Weeks Notice",
@@ -17884,7 +19091,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "UHF",
@@ -17901,7 +19109,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Unbearable Weight of Massive Talent, The",
@@ -17910,16 +19119,17 @@ const movies = [
     "tmdbId": 648579,
     "poster": "https://image.tmdb.org/t/p/w500/aqhLeieyTpTUKPOfZ3jzo2La0Mq.jpg",
     "year": "2022",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "107m",
+    "genre": "Action / Comedy / Crime",
+    "director": "Tom Gormican",
+    "cast": "Nicolas Cage, Pedro Pascal, Sharon Horgan, Ike Barinholtz, Alessandra Mastronardi, Jacob Scipio",
     "synopsis": "Creatively unfulfilled and facing financial ruin, Nick Cage must accept a $1 million offer to attend the birthday of a dangerous superfan. Things take a wildly unexpected turn when Cage is recruited by a CIA operative and forced to live up to his own legend, channeling his most iconic and beloved on-screen characters in order to save himself and his loved ones.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Uncle Buck",
@@ -17936,7 +19146,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG"
   },
   {
     "title": "Under Siege",
@@ -17953,7 +19164,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Under Siege 2: Dark Territory",
@@ -17970,7 +19182,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Under Suspicion",
@@ -17987,7 +19200,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "Under Suspicion"
+    "tmdbTitle": "Under Suspicion",
+    "rated": "R"
   },
   {
     "title": "Underworld",
@@ -18004,7 +19218,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Underworld: Awakening",
@@ -18023,7 +19238,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "Underworld: Awakening"
   },
   {
     "title": "Underworld: Evolution",
@@ -18040,7 +19257,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Underworld: Rise of the Lycans",
@@ -18057,7 +19275,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Up",
@@ -18077,7 +19296,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Usual Suspects, The",
@@ -18094,7 +19314,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "V for Vendetta",
@@ -18114,7 +19335,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Vacation",
@@ -18130,7 +19352,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "Vacation"
   },
   {
     "title": "Valentine's Day",
@@ -18139,16 +19363,17 @@ const movies = [
     "tmdbId": 32856,
     "poster": "https://image.tmdb.org/t/p/w500/qOTcfD2DdnOTmhH0r1TOE09VvNh.jpg",
     "year": "2010",
-    "runtime": "",
-    "genre": "Rom-Com",
-    "director": "",
-    "cast": "",
+    "runtime": "125m",
+    "genre": "Rom-Com / Comedy / Romance",
+    "director": "Garry Marshall",
+    "cast": "Jessica Alba, Kathy Bates, Jessica Biel, Bradley Cooper, Eric Dane, Patrick Dempsey",
     "synopsis": "Intertwining couples and singles in Los Angeles break-up and make-up based on the pressures and expectations of Valentine's Day.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Vanilla Sky",
@@ -18165,7 +19390,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Vantage Point",
@@ -18183,7 +19409,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "categories": []
+    "categories": [],
+    "rated": "PG-13"
   },
   {
     "title": "Varsity Blues",
@@ -18200,7 +19427,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Venom",
@@ -18209,16 +19437,17 @@ const movies = [
     "tmdbId": 335983,
     "poster": "https://image.tmdb.org/t/p/w500/2uNW4WbgBXL25BAbXGLnLqX71Sw.jpg",
     "year": "2018",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "112m",
+    "genre": "Science Fiction / Action",
+    "director": "Ruben Fleischer",
+    "cast": "Tom Hardy, Michelle Williams, Riz Ahmed, Scott Haze, Reid Scott, Jenny Slate",
     "synopsis": "Investigative journalist Eddie Brock attempts a comeback following a scandal, but accidentally becomes the host of Venom, a violent, super powerful alien symbiote. Soon, he must rely on his newfound powers to protect the world from a shadowy organization looking for a symbiote of their own.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Venom: Let There Be Carnage",
@@ -18227,16 +19456,17 @@ const movies = [
     "tmdbId": 580489,
     "poster": "https://image.tmdb.org/t/p/w500/pzKsRuKLFmYrW5Q0q8E8G78Tcgo.jpg",
     "year": "2021",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "97m",
+    "genre": "Science Fiction / Action / Adventure",
+    "director": "Andy Serkis",
+    "cast": "Tom Hardy, Woody Harrelson, Michelle Williams, Naomie Harris, Reid Scott, Stephen Graham",
     "synopsis": "After finding a host body in investigative reporter Eddie Brock, the alien symbiote must face a new enemy, Carnage, the alter ego of serial killer Cletus Kasady.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Vertigo",
@@ -18245,16 +19475,17 @@ const movies = [
     "tmdbId": 426,
     "poster": "https://image.tmdb.org/t/p/w500/15uOEfqBNTVtDUT7hGBVCka0rZz.jpg",
     "year": "1958",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "128m",
+    "genre": "Mystery / Romance / Thriller",
+    "director": "Alfred Hitchcock",
+    "cast": "James Stewart, Kim Novak, Barbara Bel Geddes, Tom Helmore, Henry Jones, Raymond Bailey",
     "synopsis": "A retired San Francisco detective suffering from acrophobia investigates the strange activities of an old friend's wife, all the while becoming dangerously obsessed with her.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Violent Night",
@@ -18276,7 +19507,9 @@ const movies = [
     ],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "Violent Night"
   },
   {
     "title": "Walk the Line",
@@ -18293,7 +19526,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Walking Tall",
@@ -18310,7 +19544,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Wall Street",
@@ -18327,7 +19562,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "War",
@@ -18344,7 +19580,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "War of the Roses, The",
@@ -18353,16 +19590,17 @@ const movies = [
     "tmdbId": 249,
     "poster": "https://image.tmdb.org/t/p/w500/9VWwYsuXhRImUtrJGvN6bYJB2He.jpg",
     "year": "1989",
-    "runtime": "",
-    "genre": "",
-    "director": "",
-    "cast": "",
+    "runtime": "116m",
+    "genre": "Comedy / Drama",
+    "director": "Danny DeVito",
+    "cast": "Michael Douglas, Kathleen Turner, Danny DeVito, Marianne Sägebrecht, Sean Astin, Heather Fairfield",
     "synopsis": "Barbara and Oliver Rose live happily as a married couple. When Barbara starts to wonder what life would be like without Oliver and likes what she sees, the two begin a campaign to force each other to leave their house, with their divorce lawyer D'Amato caught in the middle.",
     "physical": [],
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Warrior",
@@ -18381,7 +19619,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13",
+    "tmdbTitle": "Warrior"
   },
   {
     "title": "Watchmen",
@@ -18398,7 +19638,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Way of the Gun, The",
@@ -18414,7 +19655,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R",
+    "tmdbTitle": "The Way of the Gun"
   },
   {
     "title": "Wayne's World",
@@ -18433,7 +19676,8 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Wayne's World 2",
@@ -18452,7 +19696,8 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "We're the Millers",
@@ -18472,7 +19717,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "Wedding Crashers",
@@ -18489,7 +19735,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Wedding Singer, The",
@@ -18506,7 +19753,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Weird: The Al Yankovic Story",
@@ -18523,7 +19771,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "What Happens in Vegas",
@@ -18541,7 +19790,8 @@ const movies = [
     ],
     "digital": [],
     "categories": [],
-    "tmdbTitle": "What Happens in Vegas"
+    "tmdbTitle": "What Happens in Vegas",
+    "rated": "PG-13"
   },
   {
     "title": "What Happens Later",
@@ -18550,15 +19800,16 @@ const movies = [
     "tmdbId": 970948,
     "poster": "https://image.tmdb.org/t/p/w500/oSAdS03j8zbjv35gKdjrIL5snw1.jpg",
     "year": "2023",
-    "runtime": "",
-    "genre": "Rom-Com",
-    "director": "",
-    "cast": "",
+    "runtime": "104m",
+    "genre": "Rom-Com / Romance / Comedy",
+    "director": "Meg Ryan",
+    "cast": "Meg Ryan, David Duchovny, Rob Gilchrist, Will Reed, Patricia Rouse, Hal Liggett",
     "synopsis": "Two ex-lovers get snowed in at a regional airport overnight. Indefinitely delayed, Willa, a magical thinker, and Bill, a catastrophic one, find themselves just as attracted to and annoyed by one another as they did decades earlier. But as they unpack the riddle of their mutual past and compare their lives to the dreams they once shared, they begin to wonder if their reunion is mere coincidence, or something more enchanted.",
     "physical": [],
     "digital": [
       "Prime"
-    ]
+    ],
+    "rated": "R"
   },
   {
     "title": "What Lies Beneath",
@@ -18575,7 +19826,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "What Women Want",
@@ -18592,7 +19844,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "When a Man Loves a Woman",
@@ -18609,7 +19862,8 @@ const movies = [
       "DVD"
     ],
     "digital": [],
-    "tmdbTitle": "When a Man Loves a Woman"
+    "tmdbTitle": "When a Man Loves a Woman",
+    "rated": "R"
   },
   {
     "title": "Where the Heart Is",
@@ -18626,7 +19880,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "While You Were Sleeping",
@@ -18642,7 +19897,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG",
+    "tmdbTitle": "While You Were Sleeping"
   },
   {
     "title": "White Christmas",
@@ -18661,7 +19918,9 @@ const movies = [
     "digital": [],
     "categories": [
       "christmas"
-    ]
+    ],
+    "rated": "NR",
+    "tmdbTitle": "White Christmas"
   },
   {
     "title": "White Men Can't Jump",
@@ -18678,7 +19937,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Who Framed Roger Rabbit",
@@ -18697,7 +19957,9 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "Who Framed Roger Rabbit"
   },
   {
     "title": "Whole Nine Yards, The",
@@ -18714,7 +19976,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Whole Ten Yards, The",
@@ -18730,7 +19993,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "The Whole Ten Yards"
   },
   {
     "title": "Wicked",
@@ -18749,7 +20014,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "Wicked"
   },
   {
     "title": "Wicked: For Good",
@@ -18768,7 +20035,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "Wicked: For Good"
   },
   {
     "title": "Willy Wonka & the Chocolate Factory",
@@ -18788,7 +20057,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "G"
   },
   {
     "title": "Wonder Woman",
@@ -18808,7 +20078,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "Wonka",
@@ -18827,7 +20098,9 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG",
+    "tmdbTitle": "Wonka"
   },
   {
     "title": "Wrath of Man",
@@ -18845,7 +20118,9 @@ const movies = [
     ],
     "digital": [
       "Fandango"
-    ]
+    ],
+    "rated": "R",
+    "tmdbTitle": "Wrath of Man"
   },
   {
     "title": "Wreck-It Ralph",
@@ -18865,7 +20140,8 @@ const movies = [
     "digital": [],
     "categories": [
       "animated"
-    ]
+    ],
+    "rated": "PG"
   },
   {
     "title": "Wrestler, The",
@@ -18882,7 +20158,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "WWE WrestleMania X-Seven",
@@ -18899,7 +20176,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "WWE: From the Vault: Shawn Michaels",
@@ -18915,7 +20193,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "NR",
+    "tmdbTitle": "WWE: From the Vault: Shawn Michaels"
   },
   {
     "title": "X-Men",
@@ -18932,7 +20212,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "X-Men Origins: Wolverine",
@@ -18949,7 +20230,8 @@ const movies = [
     "physical": [
       "Blu-ray"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "X-Men: Days of Future Past",
@@ -18969,7 +20251,8 @@ const movies = [
     "digital": [
       "Fandango",
       "Movies Anywhere"
-    ]
+    ],
+    "rated": "PG-13"
   },
   {
     "title": "X-Men: First Class",
@@ -18986,7 +20269,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "X-Men: The Last Stand",
@@ -19003,7 +20287,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "X2: X-Men United",
@@ -19019,7 +20304,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13",
+    "tmdbTitle": "X2"
   },
   {
     "title": "xXx",
@@ -19029,14 +20316,15 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/xeEw3eLeSFmJgXZzmF2Efww0q3s.jpg",
     "year": "2002",
     "runtime": "124m",
-    "genre": "Action / Adventure / Thriller",
+    "genre": "Action / Adventure / Thriller / Crime / Drama",
     "director": "Rob Cohen",
     "cast": "Vin Diesel, Asia Argento, Marton Csokas, Samuel L. Jackson, Michael Roof, Richy Müller",
     "synopsis": "Xander Cage is your standard adrenaline junkie with no fear and a lousy attitude. When the US Government \"recruits\" him to go on a mission, he's not exactly thrilled. His mission: to gather information on an organization that may just be planning the destruction of the world, led by the nihilistic Yorgi.",
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Year Without a Santa Claus, The",
@@ -19056,7 +20344,9 @@ const movies = [
     "categories": [
       "christmas",
       "animated"
-    ]
+    ],
+    "rated": "G",
+    "tmdbTitle": "The Year Without a Santa Claus"
   },
   {
     "title": "Yes Man",
@@ -19073,7 +20363,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "You Don't Mess with the Zohan",
@@ -19090,7 +20381,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "You, Me and Dupree",
@@ -19107,7 +20399,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   },
   {
     "title": "Zack and Miri Make a Porno",
@@ -19124,7 +20417,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Zodiac",
@@ -19141,7 +20435,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Zombieland",
@@ -19158,7 +20453,8 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "R"
   },
   {
     "title": "Zoolander",
@@ -19175,6 +20471,7 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": []
+    "digital": [],
+    "rated": "PG-13"
   }
 ];
