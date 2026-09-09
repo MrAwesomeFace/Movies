@@ -1227,9 +1227,13 @@ body.theme-arcade #now-showing-frame {
 /* =========================================================
 ROM-COM HEART BADGE
 =========================================================
-A small pulsing heart on any card whose genre includes the
+A small static heart on any card whose genre includes the
 "Rom-Com" tag — same substring match the genre filter itself
-uses, so there's nothing to keep in sync separately.
+uses, so there's nothing to keep in sync separately. No
+animation (pulse/ripple were tried and dropped — persistent
+performance issues on tablet even after limiting animation
+to on-screen hearts only, so removed entirely rather than
+keep chasing it).
 ========================================================= */
 
 .rom-com-heart-wrapper {
@@ -1253,19 +1257,9 @@ uses, so there's nothing to keep in sync separately.
 
   filter:
     drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6));
-
-  animation:
-    rom-com-heart-pulse 1.6s ease-in-out infinite;
-
-  animation-play-state: paused;
 }
 
-.rom-com-heart-wrapper.in-view .rom-com-heart {
-  animation-play-state: running;
-}
-
-.rom-com-heart svg,
-.rom-com-heart-ripple svg {
+.rom-com-heart svg {
   width: 100%;
   height: 100%;
 
@@ -1292,64 +1286,6 @@ uses, so there's nothing to keep in sync separately.
   fill: #ff4d6d;
 }
 
-@keyframes rom-com-heart-pulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.14);
-  }
-}
-
-/*
- * Ripple echoes — two fainter hearts behind the main one,
- * each scaling up and fading out on a staggered delay, so
- * they read as two or three rings drifting outward rather
- * than firing in unison.
- */
-
-.rom-com-heart-ripple {
-  position: absolute;
-
-  inset: 0;
-
-  animation:
-    rom-com-heart-ripple 1.6s ease-out infinite;
-
-  animation-play-state: paused;
-}
-
-.rom-com-heart-wrapper.in-view .rom-com-heart-ripple {
-  animation-play-state: running;
-}
-
-.rom-com-heart-ripple path {
-  fill: none;
-
-  stroke: #ff4d6d;
-
-  stroke-width: 1.4;
-}
-
-.rom-com-heart-ripple rect {
-  fill: #ff4d6d;
-}
-
-@keyframes rom-com-heart-ripple {
-  0% {
-    transform: scale(1);
-
-    opacity: 0.55;
-  }
-
-  100% {
-    transform: scale(2.1);
-
-    opacity: 0;
-  }
-}
-
 body.theme-arcade .rom-com-heart path {
   fill: #ff6ec7;
 
@@ -1358,17 +1294,6 @@ body.theme-arcade .rom-com-heart path {
 
 body.theme-arcade .rom-com-heart rect {
   fill: #ff6ec7;
-}
-
-body.theme-arcade .rom-com-heart-ripple path,
-body.theme-arcade .rom-com-heart-ripple rect {
-  fill: #ff6ec7;
-
-  stroke: none;
-}
-
-body.theme-arcade .rom-com-heart-ripple {
-  opacity: 0.8;
 }
 
 
