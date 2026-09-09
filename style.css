@@ -1256,6 +1256,12 @@ uses, so there's nothing to keep in sync separately.
 
   animation:
     rom-com-heart-pulse 1.6s ease-in-out infinite;
+
+  animation-play-state: paused;
+}
+
+.rom-com-heart-wrapper.in-view .rom-com-heart {
+  animation-play-state: running;
 }
 
 .rom-com-heart svg,
@@ -1310,6 +1316,12 @@ uses, so there's nothing to keep in sync separately.
 
   animation:
     rom-com-heart-ripple 1.6s ease-out infinite;
+
+  animation-play-state: paused;
+}
+
+.rom-com-heart-wrapper.in-view .rom-com-heart-ripple {
+  animation-play-state: running;
 }
 
 .rom-com-heart-ripple path {
