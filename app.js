@@ -37,41 +37,6 @@ const PIXEL_HEART_SVG =
 
 let reservations = [];
 
-/*
-
-* Rom-Com hearts pulse and ripple continuously — with 100+
-* tagged movies on the shelf at once, that's 300+ animated
-* elements running all the time if left unconditional, most
-* of them scrolled off-screen and invisible anyway. This
-* keeps animation paused everywhere by default (see the CSS)
-* and only lets it run for whichever hearts are actually
-* within view right now. One shared observer for every heart
-* on the page, not one per card — creating dozens of separate
-* IntersectionObservers would just trade one performance
-* problem for another.
-  */
-
-const heartVisibilityObserver =
-new IntersectionObserver(
-entries => {
-
-entries.forEach(
-entry => {
-
-entry.target.classList.toggle(
-"in-view",
-entry.isIntersecting
-);
-
-}
-);
-
-},
-{
-rootMargin: "200px 0px"
-}
-);
-
 // =========================================================
 // ELEMENTS
 // =========================================================
@@ -2740,34 +2705,6 @@ document.createElement(
 wrapper.className =
 "rom-com-heart-wrapper";
 
-const ripple1 =
-document.createElement(
-"div"
-);
-
-ripple1.className =
-"rom-com-heart-ripple";
-
-ripple1.innerHTML =
-heartSVG;
-
-ripple1.style.animationDelay =
-"0s";
-
-const ripple2 =
-document.createElement(
-"div"
-);
-
-ripple2.className =
-"rom-com-heart-ripple";
-
-ripple2.innerHTML =
-heartSVG;
-
-ripple2.style.animationDelay =
-"0.6s";
-
 const heartBadge =
 document.createElement(
 "div"
@@ -2778,14 +2715,6 @@ heartBadge.className =
 
 heartBadge.innerHTML =
 heartSVG;
-
-wrapper.appendChild(
-ripple1
-);
-
-wrapper.appendChild(
-ripple2
-);
 
 wrapper.appendChild(
 heartBadge
@@ -2801,10 +2730,6 @@ heartBadge
   */
 
 coverInner.appendChild(
-wrapper
-);
-
-heartVisibilityObserver.observe(
 wrapper
 );
 
