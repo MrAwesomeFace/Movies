@@ -149,26 +149,9 @@ media: "all",
 genre: null,
 category: null,
 animated: "hide",
-reservation: "all"
+reservation: "all",
+rated: []
 };
-
-/*
-
-* Fast & Furious rush Easter egg state — a Set (not a
-* Fast & Furious rush Easter egg state — fires on the
-* first movie closed that features one of the trigger
-* actors (see openMovieFromCard). fastFuriousTriggerFired
-* is set true the moment a qualifying movie opens;
-* fastFuriousRushTriggered ensures the rush itself only
-* plays once per session even if more qualifying movies
-* get opened afterward.
-  */
-
-let fastFuriousTriggerFired =
-false;
-
-let fastFuriousRushTriggered =
-false;
 
 /*
 
@@ -185,27 +168,12 @@ new Set();
 
 /*
 
-* When true, getFilteredMovies() returns ONLY the franchise
-* regardless of activeFilters — this is what makes the rush
-* result persist correctly through opening and closing
-* other movies afterward, since finishCloseMovie() calls
-* the normal renderMovies() -> getFilteredMovies() path.
-* Reset to false by any real filter interaction (see the
-* filter/genre/reservation/search/staff-picks handlers),
-* since touching an actual filter is the natural signal
-* that the person wants to leave this view.
-  */
-
-let fastFuriousRushActive =
-false;
-
-/*
-
-* Same pattern as fastFuriousRushActive above — without
-* this, the Sandra Bullock view reverted the instant you
-* opened and closed any other movie, since the original
-* version bypassed activeFilters with a one-time direct
-* grid rewrite that nothing downstream knew about.
+* When true, getFilteredMovies() returns ONLY Sandra Bullock
+* movies regardless of activeFilters — without this, the
+* view reverted the instant you opened and closed any other
+* movie, since the original version bypassed activeFilters
+* with a one-time direct grid rewrite that nothing
+* downstream knew about.
   */
 
 let sandraBullockModeActive =
@@ -1554,14 +1522,13 @@ getFilteredMovies();
 /*
 
 * Skipped entirely when a special view is active — randomMovies
-* was computed from the whole catalog before either mode
+* was computed from the whole catalog before this mode
 * existed, so intersecting against it would silently corrupt
-* or empty out the F&F/Sandra Bullock result.
+* or empty out the Sandra Bullock result.
   */
 
 if (
 randomMode &&
-!fastFuriousRushActive &&
 !sandraBullockModeActive
 ) {
 
@@ -1605,7 +1572,8 @@ activeFilters.media !== "all" ||
 activeFilters.genre !== null ||
 activeFilters.category !== null ||
 activeFilters.animated !== "mixed" ||
-activeFilters.reservation !== "all";
+activeFilters.reservation !== "all" ||
+activeFilters.rated.length > 0;
 
 if (randomMode) {
 
@@ -2247,13 +2215,13 @@ container.style.margin =
 
 /*
 
-* Set to 1 (100%) for testing per request — drop back down
-* to the real target rate (around 0.35) once it's confirmed
-* to look right across a range of real movies.
+* Confirmed to look right across a range of real movies —
+* dropped down from the 100% testing rate to the real
+* target.
   */
 
 let nowShowingChance =
-1;
+0.35;
 
 let nowShowingFrameActive =
 false;
@@ -3128,43 +3096,12 @@ movie;
 
 /*
 
-* Fast & Furious rush trigger — fires on the first movie
-* opened featuring any of these actors, not specifically
-* on Fast & Furious titles. Case-insensitive substring
-* match against the cast field.
-  */
-
-const fastFuriousTriggerActors =
-[
-"vin diesel",
-"paul walker",
-"jason statham",
-"dwayne johnson"
-];
-
-if (
-movie.cast &&
-fastFuriousTriggerActors.some(
-actor =>
-movie.cast
-.toLowerCase()
-.includes(actor)
-)
-) {
-
-fastFuriousTriggerFired =
-true;
-
-}
-
-/*
-
 * Glass shatter easter egg — fires on Rocky or Creed
 * titles, or any movie featuring Sylvester Stallone in the
 * cast, whichever franchise it's from (Rambo, Expendables,
-* etc). Same case-insensitive substring pattern as the
-* Fast & Furious trigger above. Fires immediately on click,
-* on the card itself, before it flies into the modal.
+* etc). Case-insensitive substring match against the cast
+* field. Fires immediately on click, on the card itself,
+* before it flies into the modal.
   */
 
 const rockyTitleTriggers =
@@ -3564,6 +3501,34 @@ showNowShowingFrame();
 
 }
 
+/*
+
+* 80s laser sweep — arcade theme only, parallel to the
+* Now Showing frame being classic-theme-only, so each
+* theme gets its own distinct movie-open flourish rather
+* than sharing one. Year is stored as a string, so this
+* parses it rather than assuming a number.
+  */
+
+const movieYear =
+parseInt(
+movie.year,
+10
+);
+
+if (
+document.body.classList.contains(
+"theme-arcade"
+) &&
+!Number.isNaN(movieYear) &&
+movieYear >= 1980 &&
+movieYear <= 1989
+) {
+
+triggerLaserSweep();
+
+}
+
 },
 930
 );
@@ -3693,6 +3658,11 @@ document.getElementById(
 "back-thumb-float"
 );
 
+const backRatedBadge =
+document.getElementById(
+"modal-rated"
+);
+
 if (backThumb && backThumbFloat) {
 
 if (movie.poster) {
@@ -3709,6 +3679,24 @@ backThumbFloat.style.display =
 "none";
 
 }
+
+}
+
+/*
+
+* Rated badge — sits right under the thumbnail, only shown
+* when the movie actually has an MPA rating on file. Left
+* empty (not "NR") for movies that haven't been through the
+* resync yet, since an empty badge disappears entirely (see
+* the :empty rule in CSS) rather than showing a value that
+* was never actually confirmed.
+  */
+
+if (backRatedBadge) {
+
+backRatedBadge.textContent =
+movie.rated ||
+"";
 
 }
 
@@ -4550,301 +4538,7 @@ closedCard
 
 }
 
-if (
-fastFuriousTriggerFired &&
-!fastFuriousRushTriggered
-) {
-
-fastFuriousRushTriggered =
-true;
-
-triggerFastFuriousRush();
-
 }
-
-}
-
-/*
-
-* Fast & Furious rush — triggered once, after the second
-* distinct entry in the franchise has been opened this
-* session. Every other card exits fast, then the grid
-* re-renders filtered to just the franchise, with those
-* cards rushing back in. Bypasses the normal activeFilters
-* system on purpose (same reasoning as the Sandra Bullock
-* Easter egg) — this is a one-off surprise, not a real,
-* persistent filter state.
-  */
-
-function triggerFastFuriousRush() {
-
-const allCards =
-movieGrid.querySelectorAll(
-".movie-card"
-);
-
-allCards.forEach(
-card => {
-
-const title =
-(
-card.dataset.movieTitle ||
-""
-).toLowerCase();
-
-if (
-!title.startsWith(
-"fast & furious"
-)
-) {
-
-const distance =
-450 +
-Math.random() * 250;
-
-card.style.setProperty(
-"--rush-x",
-`${distance}px`
-);
-
-card.classList.add(
-"rush-exit"
-);
-
-}
-
-}
-);
-
-setTimeout(
-() => {
-
-fastFuriousRushActive =
-true;
-
-sandraBullockModeActive =
-false;
-
-renderMovies();
-
-const enteringCards =
-movieGrid.querySelectorAll(
-".movie-card"
-);
-
-/*
-
-* Staggered via animation-delay per card (not by adding
-* the class at different times) — this needs the cleanup
-* below to wait for the LAST card's delayed animation to
-* actually finish, since removing the class early cancels
-* an animation that hasn't started yet, even if its delay
-* just hasn't elapsed.
-  */
-
-enteringCards.forEach(
-(card, index) => {
-
-card.style.animationDelay =
-`${index * 80}ms`;
-
-card.classList.add(
-"rush-enter"
-);
-
-}
-);
-
-const totalStaggerTime =
-enteringCards.length * 80 +
-450;
-
-setTimeout(
-() => {
-
-enteringCards.forEach(
-card => {
-
-card.classList.remove(
-"rush-enter"
-);
-
-card.style.animationDelay =
-"";
-
-}
-);
-
-/*
-
-* Auto-revert — 3 seconds after the F&F cards finish
-* rushing in, they rush back off and the previous view
-* (whatever activeFilters already specifies — never
-* touched during the rush) rushes back in. Delay per
-* card is capped so a broad previous view (like "All
-* Movies," potentially hundreds of cards) doesn't
-* produce an absurdly long stagger.
-    */
-
-setTimeout(
-() => {
-
-const currentFFCards =
-movieGrid.querySelectorAll(
-".movie-card"
-);
-
-const exitDelayPerCard =
-currentFFCards.length > 0
-? Math.min(
-80,
-900 /
-currentFFCards.length
-)
-: 0;
-
-currentFFCards.forEach(
-(card, index) => {
-
-card.style.animationDelay =
-`${index * exitDelayPerCard}ms`;
-
-card.style.setProperty(
-"--rush-x",
-"-400px"
-);
-
-card.classList.add(
-"rush-exit"
-);
-
-}
-);
-
-const ffExitTotal =
-currentFFCards.length *
-exitDelayPerCard +
-450;
-
-setTimeout(
-() => {
-
-fastFuriousRushActive =
-false;
-
-renderMovies();
-
-const restoredCards =
-movieGrid.querySelectorAll(
-".movie-card"
-);
-
-const enterDelayPerCard =
-restoredCards.length > 0
-? Math.min(
-80,
-900 /
-restoredCards.length
-)
-: 0;
-
-restoredCards.forEach(
-(card, index) => {
-
-card.style.animationDelay =
-`${index * enterDelayPerCard}ms`;
-
-card.classList.add(
-"rush-enter"
-);
-
-}
-);
-
-const restoreTotal =
-restoredCards.length *
-enterDelayPerCard +
-450;
-
-setTimeout(
-() => {
-
-restoredCards.forEach(
-card => {
-
-card.classList.remove(
-"rush-enter"
-);
-
-card.style.animationDelay =
-"";
-
-}
-);
-
-},
-restoreTotal
-);
-
-},
-ffExitTotal
-);
-
-},
-3000
-);
-
-},
-totalStaggerTime
-);
-
-},
-500
-);
-
-}
-
-// =========================================================
-// CLOSE BUTTON
-// =========================================================
-
-modalClose.addEventListener(
-"click",
-closeMovie
-);
-
-// =========================================================
-// CLICK BACKDROP
-// =========================================================
-
-document.querySelector(
-".modal-backdrop"
-).addEventListener(
-"click",
-closeMovie
-);
-
-// =========================================================
-// ESCAPE KEY
-// =========================================================
-
-document.addEventListener(
-"keydown",
-event => {
-
-if (
-event.key === "Escape" &&
-currentMovie &&
-!isOpening &&
-!isClosing
-) {
-
-closeMovie();
-
-}
-
-}
-);
 
 // =========================================================
 // FLIP CASE
@@ -4891,6 +4585,48 @@ event => {
 event.stopPropagation();
 
 flipMovie();
+
+}
+);
+
+// =========================================================
+// CLOSE BUTTON
+// =========================================================
+
+modalClose.addEventListener(
+"click",
+closeMovie
+);
+
+// =========================================================
+// CLICK BACKDROP
+// =========================================================
+
+document.querySelector(
+".modal-backdrop"
+).addEventListener(
+"click",
+closeMovie
+);
+
+// =========================================================
+// ESCAPE KEY
+// =========================================================
+
+document.addEventListener(
+"keydown",
+event => {
+
+if (
+event.key === "Escape" &&
+currentMovie &&
+!isOpening &&
+!isClosing
+) {
+
+closeMovie();
+
+}
 
 }
 );
@@ -4961,6 +4697,142 @@ false;
 
 },
 1600
+);
+
+}
+
+/*
+
+* 80s laser sweep — fires once when a movie from the 1980s
+* is opened while in arcade theme. Builds its own overlay
+* and beams entirely in JS, same self-cleaning pattern as
+* every other easter egg here, and sits at a high enough
+* z-index (300, see CSS) to render on top of the already-
+* open movie modal, not just the shelf underneath it.
+  */
+
+const LASER_COLORS =
+[
+"#00fff2",
+"#ff2fd1"
+];
+
+let laserSweepBusy =
+false;
+
+function triggerLaserSweep() {
+
+if (laserSweepBusy) {
+
+return;
+
+}
+
+laserSweepBusy =
+true;
+
+const overlay =
+document.createElement(
+"div"
+);
+
+overlay.className =
+"laser-sweep-overlay";
+
+const beamCount =
+7;
+
+let maxFinish =
+0;
+
+for (
+let i = 0;
+i < beamCount;
+i++
+) {
+
+const beam =
+document.createElement(
+"div"
+);
+
+beam.className =
+"laser-beam";
+
+const color =
+LASER_COLORS[
+i % LASER_COLORS.length
+];
+
+const topPercent =
+8 +
+(i * (84 / (beamCount - 1)));
+
+const angle =
+(Math.random() * 16 - 8);
+
+const duration =
+0.5 +
+Math.random() * 0.35;
+
+const delay =
+i * 0.05 +
+Math.random() * 0.08;
+
+beam.style.top =
+`${topPercent}%`;
+
+beam.style.setProperty(
+"--laser-angle",
+`${angle}deg`
+);
+
+beam.style.background =
+`linear-gradient(
+90deg,
+transparent,
+${color} 15%,
+#ffffff 50%,
+${color} 85%,
+transparent
+)`;
+
+beam.style.boxShadow =
+`0 0 8px 2px ${color}, ` +
+`0 0 16px 4px ${color}`;
+
+beam.style.animationDuration =
+`${duration}s`;
+
+beam.style.animationDelay =
+`${delay}s`;
+
+maxFinish =
+Math.max(
+maxFinish,
+duration + delay
+);
+
+overlay.appendChild(
+beam
+);
+
+}
+
+document.body.appendChild(
+overlay
+);
+
+setTimeout(
+() => {
+
+overlay.remove();
+
+laserSweepBusy =
+false;
+
+},
+(maxFinish + 0.3) * 1000
 );
 
 }
@@ -5102,9 +4974,6 @@ false;
 }
 
 function triggerPiEasterEgg() {
-
-fastFuriousRushActive =
-false;
 
 const matrixOverlay =
 document.getElementById(
@@ -5452,9 +5321,6 @@ button.addEventListener(
 "click",
 () => {
 
-fastFuriousRushActive =
-false;
-
 sandraBullockModeActive =
 false;
 
@@ -5679,9 +5545,6 @@ mediaFilterMobile.addEventListener(
 "change",
 event => {
 
-fastFuriousRushActive =
-false;
-
 sandraBullockModeActive =
 false;
 
@@ -5719,9 +5582,6 @@ if (genreFilter) {
 genreFilter.addEventListener(
 "change",
 event => {
-
-fastFuriousRushActive =
-false;
 
 sandraBullockModeActive =
 false;
@@ -5856,20 +5716,6 @@ animatedButton.classList.add(
 
 function getFilteredMovies() {
 
-if (fastFuriousRushActive) {
-
-return movies.filter(
-m =>
-m.title &&
-m.title
-.toLowerCase()
-.startsWith(
-"fast & furious"
-)
-);
-
-}
-
 if (sandraBullockModeActive) {
 
 return movies.filter(
@@ -5992,6 +5838,34 @@ Array.isArray(movie.categories)
 if (
 !categories.includes(
 activeFilters.category
+)
+) {
+
+return false;
+
+}
+
+}
+
+// =====================================================
+// RATED
+// =====================================================
+
+/*
+
+* Multi-select — a movie passes if its rated value is
+* ANY of the checked ratings, not all of them. Works
+* whether or not any search text has been typed, and
+* combines with every other active filter, same as
+* Genre or Category — this never looks at currentSearch
+* at all.
+  */
+
+if (activeFilters.rated.length > 0) {
+
+if (
+!activeFilters.rated.includes(
+movie.rated
 )
 ) {
 
@@ -6174,9 +6048,6 @@ if (randomButton) {
 randomButton.addEventListener(
 "click",
 () => {
-
-fastFuriousRushActive =
-false;
 
 sandraBullockModeActive =
 false;
@@ -7012,21 +6883,22 @@ const specialDateFlavorText =
 const genericFlavorText =
 [
 { startHour: 5, endHour: 11, text: "Morning movie? No judgment here." },
- { startHour: 5, endHour: 11, text: "Morning movie? Feels like time for a comedy." },
- { startHour: 5, endHour: 11, text: "Morning movie? Maybe choose Fight Club." },
+{ startHour: 5, endHour: 11, text: "Morning movie? Feels like time for a comedy." },
+{ startHour: 5, endHour: 11, text: "Morning movie? Maybe choose Fight Club." },
 { startHour: 11, endHour: 17, text: "Afternoon browsing — take your time." },
- { startHour: 11, endHour: 17, text: "Afternoon browsing — hurry it up!" },
- { startHour: 11, endHour: 17, text: "Afternoon browsing — Feels like Fight Club o' clock." },
+{ startHour: 11, endHour: 17, text: "Afternoon browsing — hurry it up!" },
+{ startHour: 11, endHour: 17, text: "Afternoon browsing — Feels like Fight Club o' clock." },
 { startHour: 17, endHour: 22, text: "Prime time. What's the pick tonight?" },
- { startHour: 17, endHour: 22, text: "Prime time for an Action movie!" },
- { startHour: 17, endHour: 22, text: "Prime time. I have a suggestion but the first rule is I can't talk about it" },
+{ startHour: 17, endHour: 22, text: "Prime time for an Action movie!" },
+{ startHour: 17, endHour: 22, text: "Prime time. I have a suggestion but the first rule is I can't talk about it" },
 { startHour: 22, endHour: 24, text: "Late one tonight — maybe a baseball movie?" },
- { startHour: 22, endHour: 24, text: "Late one tonight — anything good playing?" },
- { startHour: 22, endHour: 24, text: "Late one tonight — Fight Club feels right." },
+{ startHour: 22, endHour: 24, text: "Late one tonight — anything good playing?" },
+{ startHour: 22, endHour: 24, text: "Late one tonight — Fight Club feels right." },
 { startHour: 0, endHour: 5, text: "Up late browsing? We won't tell." },
- { startHour: 0, endHour: 5, text: "Up late browsing? Just choose a Rom-Com already!" },
+{ startHour: 0, endHour: 5, text: "Up late browsing? Just choose a Rom-Com already!" },
 { startHour: 0, endHour: 5, text: "Insomnia leads to Tyler Durden which leads to Fight Club." }
 ];
+
 
 function renderFlavorText() {
 
@@ -7085,12 +6957,32 @@ return;
 const currentHour =
 now.getHours();
 
-const genericMatch =
-genericFlavorText.find(
+/*
+
+* filter (not find) — same reasoning as the special-date
+* lookup above. find() was the actual bug: it always
+* returns the FIRST entry matching the current hour range,
+* so adding more options per time-of-day had no visible
+* effect at all, no matter how many entries existed for
+* that bracket.
+  */
+
+const genericMatches =
+genericFlavorText.filter(
 entry =>
 currentHour >= entry.startHour &&
 currentHour < entry.endHour
 );
+
+const genericMatch =
+genericMatches.length > 0
+? genericMatches[
+Math.floor(
+Math.random() *
+genericMatches.length
+)
+]
+: null;
 
 flavorTextEl.textContent =
 genericMatch
@@ -7252,14 +7144,237 @@ searchInput.addEventListener(
 "input",
 event => {
 
-fastFuriousRushActive =
-false;
-
 sandraBullockModeActive =
 false;
 
 currentSearch =
 event.target.value.trim();
+
+if (randomMode) {
+
+generateRandomMovies();
+
+}
+
+renderMovies();
+
+}
+);
+
+}
+
+// =========================================================
+// RATED FILTER (popover in the search bar)
+// =========================================================
+
+/*
+
+* Entirely independent of search text — this only ever
+* touches activeFilters.rated, the same way Genre and
+* Category touch their own fields, so a rating filters the
+* shelf whether or not anything is typed in the search box.
+  */
+
+const ratedFilterButton =
+document.getElementById(
+"rated-filter-button"
+);
+
+const ratedFilterPopover =
+document.getElementById(
+"rated-filter-popover"
+);
+
+const ratedFilterCount =
+document.getElementById(
+"rated-filter-count"
+);
+
+const ratedFilterClear =
+document.getElementById(
+"rated-filter-clear"
+);
+
+const ratedFilterCheckboxes =
+document.querySelectorAll(
+".rated-filter-checkbox"
+);
+
+function updateRatedFilterUI() {
+
+const count =
+activeFilters.rated.length;
+
+if (ratedFilterCount) {
+
+ratedFilterCount.textContent =
+String(count);
+
+ratedFilterCount.classList.toggle(
+"hidden",
+count === 0
+);
+
+}
+
+if (ratedFilterButton) {
+
+ratedFilterButton.classList.toggle(
+"active",
+count > 0
+);
+
+}
+
+}
+
+function closeRatedFilterPopover() {
+
+if (!ratedFilterPopover) {
+
+return;
+
+}
+
+ratedFilterPopover.classList.add(
+"hidden"
+);
+
+if (ratedFilterButton) {
+
+ratedFilterButton.setAttribute(
+"aria-expanded",
+"false"
+);
+
+}
+
+}
+
+if (ratedFilterButton && ratedFilterPopover) {
+
+ratedFilterButton.addEventListener(
+"click",
+event => {
+
+event.stopPropagation();
+
+const isHidden =
+ratedFilterPopover.classList.contains(
+"hidden"
+);
+
+ratedFilterPopover.classList.toggle(
+"hidden",
+!isHidden
+);
+
+ratedFilterButton.setAttribute(
+"aria-expanded",
+isHidden ? "true" : "false"
+);
+
+}
+);
+
+/*
+
+* Closes on any click outside the button/popover pair —
+* checked on every document click rather than a one-off
+* listener per open, since the popover can open and close
+* many times across a session.
+  */
+
+document.addEventListener(
+"click",
+event => {
+
+if (
+!ratedFilterPopover.contains(
+event.target
+) &&
+!ratedFilterButton.contains(
+event.target
+)
+) {
+
+closeRatedFilterPopover();
+
+}
+
+}
+);
+
+}
+
+ratedFilterCheckboxes.forEach(
+checkbox => {
+
+checkbox.addEventListener(
+"change",
+() => {
+
+if (checkbox.checked) {
+
+if (
+!activeFilters.rated.includes(
+checkbox.value
+)
+) {
+
+activeFilters.rated.push(
+checkbox.value
+);
+
+}
+
+} else {
+
+activeFilters.rated =
+activeFilters.rated.filter(
+value =>
+value !== checkbox.value
+);
+
+}
+
+updateRatedFilterUI();
+
+if (randomMode) {
+
+generateRandomMovies();
+
+}
+
+renderMovies();
+
+}
+);
+
+}
+);
+
+if (ratedFilterClear) {
+
+ratedFilterClear.addEventListener(
+"click",
+event => {
+
+event.stopPropagation();
+
+activeFilters.rated =
+[];
+
+ratedFilterCheckboxes.forEach(
+checkbox => {
+
+checkbox.checked =
+false;
+
+}
+);
+
+updateRatedFilterUI();
 
 if (randomMode) {
 
