@@ -12969,6 +12969,24 @@ const movies = [
     ]
   },
   {
+    "title": "Mission: Impossible - The Final Reckoning",
+    "tmdbTitle": "Mission: Impossible - The Final Reckoning",
+    "type": "movie",
+    "tmdbId": 575265,
+    "poster": "https://image.tmdb.org/t/p/w500/iKPsC9EFUafRP9SrUznI61getVP.jpg",
+    "year": "2025",
+    "runtime": "170m",
+    "genre": "Action / Thriller / Adventure",
+    "rated": "PG-13",
+    "director": "Christopher McQuarrie",
+    "cast": "Tom Cruise, Hayley Atwell, Ving Rhames, Simon Pegg, Esai Morales, Pom Klementieff",
+    "synopsis": "Ethan Hunt and team continue their search for the terrifying AI known as the Entity — which has infiltrated intelligence networks all over the globe — with the world's governments and a mysterious ghost from Hunt's past on their trail. Joined by new allies and armed with the means to shut the Entity down for good, Hunt is in a race against time to prevent the world as we know it from changing forever.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ]
+  },
+  {
     "title": "Mission: Impossible 2",
     "tmdbTitle": "Mission: Impossible II",
     "type": "movie",
