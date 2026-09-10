@@ -79,7 +79,7 @@ const BIRTHDAY_LIST =
 [
 { month: 10, day: 24, name: "Joey" },
 { month: 11, day: 2, name: "Angie" },
-{ month: 7, day: 19, name: "Bryon" }
+{ month: 9, day: 10, name: "Bryon" }
 ];
 
 const BIRTHDAY_CONFETTI_COLORS =
@@ -3264,11 +3264,32 @@ movie.title
 .toLowerCase()
 .includes("fast & furious");
 
+/*
+
+* Covers the wider Batman/DC universe, not just titles with
+* "batman" literally in them — The Dark Knight movies,
+* Justice League, and Suicide Squad don't contain the word
+* "batman" at all, so each needed its own explicit check.
+* "dark knight" as a substring catches both The Dark Knight
+* and The Dark Knight Rises with one check.
+  */
+
 const isBatman =
 movie.title &&
+(
 movie.title
 .toLowerCase()
-.includes("batman");
+.includes("batman") ||
+movie.title
+.toLowerCase()
+.includes("dark knight") ||
+movie.title
+.toLowerCase()
+.includes("justice league") ||
+movie.title
+.toLowerCase()
+.includes("suicide squad")
+);
 
 /*
 
