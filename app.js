@@ -5145,6 +5145,14 @@ document.createElement(
 overlay.className =
 "birthday-overlay";
 
+const bannerStrip =
+document.createElement(
+"div"
+);
+
+bannerStrip.className =
+"birthday-banner-strip";
+
 const banner =
 document.createElement(
 "div"
@@ -5153,21 +5161,55 @@ document.createElement(
 banner.className =
 "birthday-banner";
 
+const bannerText =
+`Happy Birthday ${name}!`;
+
+/*
+
+* Font-size computed from the actual text length now, not a
+* fixed viewport ratio — the banner is a single no-wrap line
+* stretching the full screen width now, so a longer name
+* needs a smaller size to still fit, and a short one can run
+* bigger. 0.62 is an estimated average character width ratio
+* for Bangers, a fairly condensed display font.
+  */
+
+const bannerFontSize =
+Math.min(
+90,
+(window.innerWidth * 0.86) /
+(bannerText.length * 0.62)
+);
+
 banner.style.fontSize =
-`${Math.min(
-64,
-window.innerWidth * 0.09
-)}px`;
+`${bannerFontSize}px`;
 
 banner.textContent =
-`Happy Birthday ${name}!`;
+bannerText;
+
+/*
+
+* The strip had left/right/top set but no height at all,
+* which collapsed it to 0px tall — completely invisible
+* despite otherwise-correct positioning, opacity, and
+* background. Sized here off the text's own font-size so it
+* always reads as a proper ribbon behind the banner, not a
+* fixed guess that might run too short or too tall.
+  */
+
+bannerStrip.style.height =
+`${bannerFontSize * 1.5}px`;
+
+overlay.appendChild(
+bannerStrip
+);
 
 overlay.appendChild(
 banner
 );
 
 const balloonCount =
-10;
+18;
 
 for (
 let i = 0;
@@ -5189,8 +5231,8 @@ i % BIRTHDAY_CONFETTI_COLORS.length
 ];
 
 const size =
-44 +
-Math.random() * 30;
+58 +
+Math.random() * 40;
 
 balloon.style.width =
 `${size}px`;
@@ -5232,7 +5274,7 @@ balloon
 }
 
 const confettiCount =
-50;
+110;
 
 for (
 let i = 0;
@@ -5257,8 +5299,8 @@ BIRTHDAY_CONFETTI_COLORS.length
 ];
 
 const width =
-6 +
-Math.random() * 6;
+8 +
+Math.random() * 8;
 
 piece.style.width =
 `${width}px`;
@@ -5285,6 +5327,65 @@ piece.style.animationDelay =
 
 overlay.appendChild(
 piece
+);
+
+}
+
+const streamerCount =
+16;
+
+for (
+let i = 0;
+i < streamerCount;
+i++
+) {
+
+const streamer =
+document.createElement(
+"div"
+);
+
+streamer.className =
+"birthday-streamer";
+
+const color =
+BIRTHDAY_CONFETTI_COLORS[
+i % BIRTHDAY_CONFETTI_COLORS.length
+];
+
+const width =
+7 +
+Math.random() * 5;
+
+const height =
+60 +
+Math.random() * 50;
+
+streamer.style.width =
+`${width}px`;
+
+streamer.style.height =
+`${height}px`;
+
+streamer.style.background =
+color;
+
+streamer.style.left =
+`${Math.random() * 100}%`;
+
+streamer.style.setProperty(
+"--sway",
+`${30 + Math.random() * 40}px`
+);
+
+streamer.style.animationDuration =
+`${3.4 + Math.random() * 2}s`;
+
+streamer.style.animationDelay =
+`${Math.random() * 1.6}s`;
+
+overlay.appendChild(
+streamer
 );
 
 }
