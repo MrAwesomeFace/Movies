@@ -66,6 +66,32 @@ const BATMAN_WORD_LIST =
 { text: "CLANK!", color: "#ff4d6d" }
 ];
 
+/*
+
+* Birthday celebration dates — month is 1-12 (not 0-11) to
+* match how a person would actually write a date, same
+* convention as specialDateFlavorText further down. To add
+* someone, just add another entry here; nothing else needs
+* to change.
+  */
+
+const BIRTHDAY_LIST =
+[
+{ month: 10, day: 24, name: "Joey" },
+{ month: 11, day: 2, name: "Angie" },
+{ month: 7, day: 19, name: "Bryon" }
+];
+
+const BIRTHDAY_CONFETTI_COLORS =
+[
+"#fff200",
+"#ff4d6d",
+"#4dd9ff",
+"#7cff4d",
+"#ff9d2f",
+"#ff2fd1"
+];
+
 let reservations = [];
 
 // =========================================================
@@ -1529,6 +1555,63 @@ renderMovies();
 loadReservations();
 
 renderArcadeSideLighting();
+
+/*
+
+* Birthday celebration — checked once here at page load
+* against today's real date. sessionStorage (not a plain
+* variable) so it stays "already shown" across a page
+* refresh within the same browser session, but shows again
+* in a fresh session if it's still that date — matches
+* "each time the site is opened that day, but just the one
+* time" rather than only ever once forever.
+  */
+
+(function checkBirthdayOnLoad() {
+
+const now =
+new Date();
+
+const todayMonth =
+now.getMonth() + 1;
+
+const todayDay =
+now.getDate();
+
+const match =
+BIRTHDAY_LIST.find(
+entry =>
+entry.month === todayMonth &&
+entry.day === todayDay
+);
+
+if (!match) {
+
+return;
+
+}
+
+const alreadyShown =
+sessionStorage.getItem(
+"birthdayShown"
+);
+
+if (alreadyShown === String(todayMonth) + "-" + String(todayDay)) {
+
+return;
+
+}
+
+sessionStorage.setItem(
+"birthdayShown",
+`${todayMonth}-${todayDay}`
+);
+
+triggerBirthdayCelebration(
+match.name
+);
+
+})();
 
 // =========================================================
 // RENDER MOVIES
@@ -3207,6 +3290,23 @@ movie.title
 .includes("fantastic beasts")
 );
 
+/*
+
+* Catalog uses "Mission: Impossible" with a colon - matching
+* on "mission" and "impossible" both present, rather than
+* the exact punctuation, so this stays correct even if a
+* future entry is titled slightly differently.
+  */
+
+const isMissionImpossible =
+movie.title &&
+movie.title
+.toLowerCase()
+.includes("mission") &&
+movie.title
+.toLowerCase()
+.includes("impossible");
+
 selectedCard =
 card;
 
@@ -3546,6 +3646,28 @@ height: finalHeight
 
 }
 
+/*
+
+* Mission Impossible self-destruct — same reasoning as the
+* Harry Potter envelope above, needs both the start and end
+* rects to grow in sync with the real case.
+  */
+
+if (isMissionImpossible) {
+
+triggerSelfDestruct(
+movie,
+savedCardRect,
+{
+left: finalLeft,
+top: finalTop,
+width: finalWidth,
+height: finalHeight
+}
+);
+
+}
+
 content.style.transition =
 "left 0.9s cubic-bezier(0.16, 1, 0.3, 1), " +
 "top 0.9s cubic-bezier(0.16, 1, 0.3, 1), " +
@@ -3591,16 +3713,18 @@ content.style.transform =
 /*
 
 * Controls/interactivity normally become available once the
-* 0.9s flight settles (930ms). For Harry Potter movies, this
-* waits for the envelope's full sequence instead
-* (HP_ENVELOPE_SEQUENCE_DURATION, ~4.9s) — otherwise someone
-* could tap the flip button or close the movie while the
-* envelope is still visually covering the case underneath.
+* 0.9s flight settles (930ms). For Harry Potter and Mission
+* Impossible movies, this waits for that franchise's full
+* sequence instead — otherwise someone could tap the flip
+* button or close the movie while the envelope/package is
+* still visually covering the case underneath.
   */
 
 const openSettleDelay =
 isHarryPotter
 ? HP_ENVELOPE_SEQUENCE_DURATION
+: isMissionImpossible
+? MI_SELF_DESTRUCT_SEQUENCE_DURATION
 : 930;
 
 setTimeout(
@@ -4446,11 +4570,10 @@ content.style.boxShadow =
 /*
 
 * Fast & Furious burnout — spins the opposite direction
-* while shrinking back to the shelf, with a couple of small
-* smoke puffs at the case's current position for a "peeling
-* out" feel. Title is checked against currentMovie here
-* since that's still set at this point in the close flow —
-* it isn't cleared until finishCloseMovie further down.
+* while shrinking back to the shelf. Title is checked
+* against currentMovie here since that's still set at this
+* point in the close flow — it isn't cleared until
+* finishCloseMovie further down.
   */
 
 const closingIsFastFurious =
@@ -4464,10 +4587,6 @@ if (closingIsFastFurious) {
 
 content.style.transform =
 "rotate(-720deg)";
-
-triggerBurnoutSmoke(
-content
-);
 
 }
 
@@ -4891,6 +5010,321 @@ false;
 
 /*
 
+* TV color bars — classic SMPTE-style vertical bars, fired
+* when switching to the TV type filter. Colors match the
+* real broadcast test pattern order (white, yellow, cyan,
+* green, magenta, red, blue). Guarded the same way as the
+* rewind effect, against overlapping itself if triggered
+* again mid-animation.
+  */
+
+const TV_COLOR_BARS =
+[
+"#c0c0c0",
+"#c0c000",
+"#00c0c0",
+"#00c000",
+"#c000c0",
+"#c00000",
+"#0000c0"
+];
+
+let colorBarsBusy =
+false;
+
+function triggerColorBars() {
+
+if (colorBarsBusy) {
+
+return;
+
+}
+
+colorBarsBusy =
+true;
+
+const overlay =
+document.createElement(
+"div"
+);
+
+overlay.className =
+"tv-color-bars-overlay";
+
+TV_COLOR_BARS.forEach(
+color => {
+
+const bar =
+document.createElement(
+"div"
+);
+
+bar.className =
+"tv-color-bar";
+
+bar.style.background =
+color;
+
+overlay.appendChild(
+bar
+);
+
+}
+);
+
+const staticOverlay =
+document.createElement(
+"div"
+);
+
+staticOverlay.className =
+"tv-color-bars-static";
+
+overlay.appendChild(
+staticOverlay
+);
+
+document.body.appendChild(
+overlay
+);
+
+setTimeout(
+() => {
+
+overlay.remove();
+
+colorBarsBusy =
+false;
+
+},
+1800
+);
+
+}
+
+/*
+
+* Birthday celebration — fires once per session on specific
+* dates (see BIRTHDAY_LIST and BIRTHDAY_CONFETTI_COLORS
+* above), checked and triggered from the page-load
+* INITIALIZE block further down. Dismissable by clicking
+* anywhere, or auto-fades on its own after several seconds
+* either way.
+  */
+
+function triggerBirthdayCelebration(
+name
+) {
+
+const overlay =
+document.createElement(
+"div"
+);
+
+overlay.className =
+"birthday-overlay";
+
+const banner =
+document.createElement(
+"div"
+);
+
+banner.className =
+"birthday-banner";
+
+banner.style.fontSize =
+`${Math.min(
+64,
+window.innerWidth * 0.09
+)}px`;
+
+banner.textContent =
+`Happy Birthday ${name}!`;
+
+overlay.appendChild(
+banner
+);
+
+const balloonCount =
+10;
+
+for (
+let i = 0;
+i < balloonCount;
+i++
+) {
+
+const balloon =
+document.createElement(
+"div"
+);
+
+balloon.className =
+"birthday-balloon";
+
+const color =
+BIRTHDAY_CONFETTI_COLORS[
+i % BIRTHDAY_CONFETTI_COLORS.length
+];
+
+const size =
+44 +
+Math.random() * 30;
+
+balloon.style.width =
+`${size}px`;
+
+balloon.style.height =
+`${size * 1.2}px`;
+
+balloon.style.left =
+`${5 + (i / balloonCount) * 90 + (Math.random() * 6 - 3)}%`;
+
+balloon.style.background =
+`radial-gradient(circle at 35% 30%, ${color}, ${color}dd 70%)`;
+
+balloon.style.setProperty(
+"--rise",
+`${-(115 + Math.random() * 15)}vh`
+);
+
+balloon.style.setProperty(
+"--drift",
+`${Math.random() * 80 - 40}px`
+);
+
+balloon.style.setProperty(
+"--wobble",
+`${Math.random() * 16 - 8}deg`
+);
+
+balloon.style.animationDuration =
+`${5 + Math.random() * 2.5}s`;
+
+balloon.style.animationDelay =
+`${Math.random() * 1.2}s`;
+
+overlay.appendChild(
+balloon
+);
+
+}
+
+const confettiCount =
+50;
+
+for (
+let i = 0;
+i < confettiCount;
+i++
+) {
+
+const piece =
+document.createElement(
+"div"
+);
+
+piece.className =
+"birthday-confetti";
+
+const color =
+BIRTHDAY_CONFETTI_COLORS[
+Math.floor(
+Math.random() *
+BIRTHDAY_CONFETTI_COLORS.length
+)
+];
+
+const width =
+6 +
+Math.random() * 6;
+
+piece.style.width =
+`${width}px`;
+
+piece.style.height =
+`${width * 0.4}px`;
+
+piece.style.background =
+color;
+
+piece.style.left =
+`${Math.random() * 100}%`;
+
+piece.style.setProperty(
+"--spin",
+`${360 * (2 + Math.random() * 2)}deg`
+);
+
+piece.style.animationDuration =
+`${2.6 + Math.random() * 1.8}s`;
+
+piece.style.animationDelay =
+`${Math.random() * 1.5}s`;
+
+overlay.appendChild(
+piece
+);
+
+}
+
+document.body.appendChild(
+overlay
+);
+
+requestAnimationFrame(
+() => {
+
+overlay.classList.add(
+"visible"
+);
+
+}
+);
+
+let dismissed =
+false;
+
+function dismiss() {
+
+if (dismissed) {
+
+return;
+
+}
+
+dismissed =
+true;
+
+overlay.classList.remove(
+"visible"
+);
+
+setTimeout(
+() => {
+
+overlay.remove();
+
+},
+600
+);
+
+}
+
+overlay.addEventListener(
+"click",
+dismiss
+);
+
+setTimeout(
+dismiss,
+8000
+);
+
+}
+
+/*
+
 * 80s laser sweep — fires once when a movie from the 1980s
 * is opened while in arcade theme. Builds its own overlay
 * and beams entirely in JS, same self-cleaning pattern as
@@ -5157,77 +5591,6 @@ overlay.innerHTML =
 },
 2600
 );
-
-}
-
-/*
-
-* Burnout smoke — a couple of small puffs at the case's
-* current on-screen position right as the close burnout
-* starts. Appended to document.body (not the burst overlay,
-* since the modal itself is about to start animating away)
-* and self-removing after their own short animation.
-  */
-
-function triggerBurnoutSmoke(
-content
-) {
-
-const rect =
-content.getBoundingClientRect();
-
-const centerX =
-rect.left +
-rect.width / 2;
-
-const centerY =
-rect.top +
-rect.height / 2;
-
-for (
-let i = 0;
-i < 8;
-i++
-) {
-
-const puff =
-document.createElement(
-"div"
-);
-
-puff.className =
-"burnout-smoke";
-
-puff.style.left =
-`${centerX}px`;
-
-puff.style.top =
-`${centerY}px`;
-
-puff.style.setProperty(
-"--sx",
-`${Math.random() * 140 - 70}px`
-);
-
-puff.style.setProperty(
-"--sy",
-`${Math.random() * 50 + 10}px`
-);
-
-document.body.appendChild(
-puff
-);
-
-setTimeout(
-() => {
-
-puff.remove();
-
-},
-1150
-);
-
-}
 
 }
 
@@ -5699,6 +6062,367 @@ false;
 
 },
 5600
+);
+
+}
+
+/*
+
+* Mission Impossible self-destruct — covers the case with a
+* brown-paper-and-twine package while the real case flies/
+* grows into the modal normally underneath (same pattern as
+* the Harry Potter envelope). Paper and twine grow with it
+* immediately; the stamp label and message text stay hidden
+* until growth settles, since fixed-pixel text visibly
+* reflowing inside a still-growing container is exactly the
+* bug already found and fixed on the Harry Potter title.
+  */
+
+const MI_SELF_DESTRUCT_SEQUENCE_DURATION =
+4000;
+
+function triggerSelfDestruct(
+movie,
+startRect,
+endRect
+) {
+
+const scene =
+document.createElement(
+"div"
+);
+
+scene.className =
+"sd-scene";
+
+scene.style.left =
+`${startRect.left}px`;
+
+scene.style.top =
+`${startRect.top}px`;
+
+scene.style.width =
+`${startRect.width}px`;
+
+scene.style.height =
+`${startRect.height}px`;
+
+scene.style.transition =
+"left 0.9s cubic-bezier(0.16, 1, 0.3, 1), " +
+"top 0.9s cubic-bezier(0.16, 1, 0.3, 1), " +
+"width 0.9s cubic-bezier(0.16, 1, 0.3, 1), " +
+"height 0.9s cubic-bezier(0.16, 1, 0.3, 1)";
+
+const wrap =
+document.createElement(
+"div"
+);
+
+wrap.className =
+"sd-wrap";
+
+const twineV =
+document.createElement(
+"div"
+);
+
+twineV.className =
+"sd-twine sd-twine-vertical";
+
+const twineWidth =
+Math.max(
+6,
+endRect.width * 0.042
+);
+
+twineV.style.width =
+`${twineWidth}px`;
+
+twineV.style.marginLeft =
+`${-twineWidth / 2}px`;
+
+const twineH =
+document.createElement(
+"div"
+);
+
+twineH.className =
+"sd-twine sd-twine-horizontal";
+
+twineH.style.height =
+`${twineWidth}px`;
+
+twineH.style.marginTop =
+`${-twineWidth / 2}px`;
+
+const knot =
+document.createElement(
+"div"
+);
+
+knot.className =
+"sd-twine-knot";
+
+const knotSize =
+endRect.width * 0.108;
+
+knot.style.width =
+`${knotSize}px`;
+
+knot.style.height =
+`${knotSize * 0.85}px`;
+
+knot.style.marginLeft =
+`${-knotSize / 2}px`;
+
+knot.style.marginTop =
+`${-knotSize * 0.425}px`;
+
+const label =
+document.createElement(
+"div"
+);
+
+label.className =
+"sd-label";
+
+label.style.fontSize =
+`${endRect.width * 0.054}px`;
+
+label.style.padding =
+`${endRect.width * 0.02}px ${endRect.width * 0.03}px`;
+
+label.style.maxWidth =
+"36%";
+
+label.innerHTML =
+"CLASSIFIED<br>IMF EYES ONLY";
+
+wrap.appendChild(
+twineV
+);
+
+wrap.appendChild(
+twineH
+);
+
+wrap.appendChild(
+knot
+);
+
+wrap.appendChild(
+label
+);
+
+const message =
+document.createElement(
+"div"
+);
+
+message.className =
+"sd-message";
+
+const messageText =
+document.createElement(
+"div"
+);
+
+messageText.className =
+"sd-message-text";
+
+messageText.style.fontSize =
+`${Math.min(
+32,
+endRect.width * 0.065
+)}px`;
+
+messageText.innerHTML =
+"THIS MESSAGE<br>WILL SELF-DESTRUCT<br>IN 3 SECONDS";
+
+message.appendChild(
+messageText
+);
+
+const flash =
+document.createElement(
+"div"
+);
+
+flash.className =
+"sd-explosion-flash";
+
+const shardsContainer =
+document.createElement(
+"div"
+);
+
+const shardSize =
+Math.max(
+6,
+endRect.width * 0.03
+);
+
+const shardCount =
+20;
+
+for (
+let i = 0;
+i < shardCount;
+i++
+) {
+
+const shard =
+document.createElement(
+"div"
+);
+
+shard.className =
+"sd-explosion-shard";
+
+shard.style.width =
+`${shardSize}px`;
+
+shard.style.height =
+`${shardSize}px`;
+
+const angle =
+(i / shardCount) *
+Math.PI * 2 +
+(Math.random() * 0.3 - 0.15);
+
+const dist =
+endRect.width * 0.7 +
+Math.random() *
+endRect.width * 0.5;
+
+shard.style.setProperty(
+"--ex",
+`${Math.cos(angle) * dist}px`
+);
+
+shard.style.setProperty(
+"--ey",
+`${Math.sin(angle) * dist}px`
+);
+
+shard.style.setProperty(
+"--erot",
+`${Math.random() * 360 - 180}deg`
+);
+
+shard.style.animationDelay =
+`${Math.random() * 0.1}s`;
+
+shardsContainer.appendChild(
+shard
+);
+
+}
+
+scene.appendChild(
+wrap
+);
+
+scene.appendChild(
+flash
+);
+
+scene.appendChild(
+shardsContainer
+);
+
+scene.appendChild(
+message
+);
+
+document.body.appendChild(
+scene
+);
+
+requestAnimationFrame(
+() => {
+
+scene.style.left =
+`${endRect.left}px`;
+
+scene.style.top =
+`${endRect.top}px`;
+
+scene.style.width =
+`${endRect.width}px`;
+
+scene.style.height =
+`${endRect.height}px`;
+
+}
+);
+
+setTimeout(
+() => {
+
+label.classList.add(
+"visible"
+);
+
+},
+900
+);
+
+setTimeout(
+() => {
+
+messageText.classList.add(
+"visible"
+);
+
+},
+1100
+);
+
+setTimeout(
+() => {
+
+messageText.classList.add(
+"pulsing"
+);
+
+},
+1900
+);
+
+setTimeout(
+() => {
+
+scene.classList.add(
+"exploding"
+);
+
+messageText.classList.remove(
+"visible"
+);
+
+},
+2900
+);
+
+setTimeout(
+() => {
+
+wrap.classList.add(
+"destroyed"
+);
+
+},
+3300
+);
+
+setTimeout(
+() => {
+
+scene.remove();
+
+},
+MI_SELF_DESTRUCT_SEQUENCE_DURATION
 );
 
 }
@@ -6487,6 +7211,19 @@ button.classList.remove(
 
 activeFilters.type =
 value;
+
+/*
+
+* Only fires switching TO tv, not away from it or on a
+* toggle-off (that's the branch above, which goes to
+* "all" and triggers the rewind effect instead).
+  */
+
+if (value === "tv") {
+
+triggerColorBars();
+
+}
 
 document
 .querySelectorAll(
