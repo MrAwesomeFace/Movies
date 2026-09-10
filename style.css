@@ -1593,6 +1593,41 @@ pattern as the other easter eggs here.
   opacity: 1;
 }
 
+.birthday-banner-strip {
+  position: absolute;
+
+  left: -4%;
+  right: -4%;
+
+  top: 50%;
+
+  transform: translateY(-50%) scaleX(0.3);
+
+  opacity: 0;
+
+  z-index: 1;
+
+  background:
+    linear-gradient(180deg, #d4453a 0%, #a01f1f 100%);
+
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.5);
+
+  clip-path:
+    polygon(
+      0% 0%, 97% 0%, 100% 50%, 97% 100%,
+      0% 100%, 3% 50%
+    );
+
+  transition: transform 0.6s cubic-bezier(0.2, 1.2, 0.3, 1), opacity 0.4s ease;
+}
+
+.birthday-overlay.visible .birthday-banner-strip {
+  transform: translateY(-50%) scaleX(1);
+
+  opacity: 1;
+}
+
 .birthday-banner {
   position: relative;
 
@@ -1612,17 +1647,19 @@ pattern as the other easter eggs here.
     4px 4px 0 #6b1414,
     0 0 40px rgba(255, 242, 0, 0.5);
 
-  transform: scale(0.7) rotate(-3deg);
+  transform: scale(0.7);
 
   opacity: 0;
 
-  transition: transform 0.6s cubic-bezier(0.2, 1.4, 0.4, 1), opacity 0.5s ease;
+  transition: transform 0.6s 0.15s cubic-bezier(0.2, 1.4, 0.4, 1), opacity 0.5s 0.15s ease;
 
-  padding: 0 5%;
+  padding: 0 6%;
+
+  white-space: nowrap;
 }
 
 .birthday-overlay.visible .birthday-banner {
-  transform: scale(1) rotate(-3deg);
+  transform: scale(1);
 
   opacity: 1;
 }
@@ -1709,6 +1746,64 @@ pattern as the other easter eggs here.
     transform: translateY(115vh) rotate(var(--spin, 360deg));
 
     opacity: 0.9;
+  }
+}
+
+.birthday-streamer {
+  position: absolute;
+
+  top: -8%;
+
+  z-index: 1;
+
+  border-radius: 3px;
+
+  animation-name: birthday-streamer-fall;
+
+  animation-timing-function: ease-in-out;
+
+  animation-fill-mode: forwards;
+}
+
+@keyframes birthday-streamer-fall {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+
+    opacity: 0;
+  }
+
+  8% {
+    opacity: 0.95;
+  }
+
+  25% {
+    transform:
+      translateY(26vh)
+      translateX(var(--sway, 40px))
+      rotate(18deg);
+  }
+
+  50% {
+    transform:
+      translateY(56vh)
+      translateX(calc(var(--sway, 40px) * -1))
+      rotate(-18deg);
+  }
+
+  75% {
+    transform:
+      translateY(86vh)
+      translateX(var(--sway, 40px))
+      rotate(18deg);
+  }
+
+  100% {
+    transform:
+      translateY(118vh)
+      translateX(0)
+      rotate(0deg);
+
+    opacity: 0.85;
   }
 }
 
