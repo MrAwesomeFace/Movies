@@ -35,6 +35,37 @@ const SMOOTH_HEART_SVG =
 const PIXEL_HEART_SVG =
 `<svg viewBox="0 0 7 6" aria-hidden="true" shape-rendering="crispEdges"><rect x="1" y="0" width="1" height="1"/><rect x="2" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="0" y="1" width="1" height="1"/><rect x="1" y="1" width="1" height="1"/><rect x="2" y="1" width="1" height="1"/><rect x="3" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/><rect x="5" y="1" width="1" height="1"/><rect x="6" y="1" width="1" height="1"/><rect x="0" y="2" width="1" height="1"/><rect x="1" y="2" width="1" height="1"/><rect x="2" y="2" width="1" height="1"/><rect x="3" y="2" width="1" height="1"/><rect x="4" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/><rect x="6" y="2" width="1" height="1"/><rect x="1" y="3" width="1" height="1"/><rect x="2" y="3" width="1" height="1"/><rect x="3" y="3" width="1" height="1"/><rect x="4" y="3" width="1" height="1"/><rect x="5" y="3" width="1" height="1"/><rect x="2" y="4" width="1" height="1"/><rect x="3" y="4" width="1" height="1"/><rect x="4" y="4" width="1" height="1"/><rect x="3" y="5" width="1" height="1"/></svg>`;
 
+
+const BAT_SIGNAL_POLYGON_POINTS =
+"1,217 17,167 52,119 101,78 168,41 234,17 208,82 207,105 214,125 230,143 255,157 311,162 351,150 374,124 386,0 415,45 477,45 506,0 517,120 526,137 540,149 574,161 616,162 645,154 671,135 685,109 685,85 659,17 755,56 827,106 856,137 878,172 889,203 893,240 882,290 852,339 813,377 752,416 764,374 760,346 740,320 706,305 660,312 619,343 608,324 589,311 567,309 538,317 510,333 483,357 459,390 446,419 433,389 414,362 388,337 353,316 326,309 301,312 283,326 274,343 235,313 214,306 187,305 155,318 133,345 129,378 140,416 76,374 32,328 6,277";
+
+/*
+
+* 15-word comic-pop list for the Batman easter egg — all
+* caps, all with exclamation points, each its own color so
+* consecutive pops (or two on screen at once) stay visually
+* distinct from each other.
+  */
+
+const BATMAN_WORD_LIST =
+[
+{ text: "KAPOW!", color: "#4dd9ff" },
+{ text: "POW!", color: "#ff4d6d" },
+{ text: "BAM!", color: "#fff200" },
+{ text: "BANG!", color: "#ff9d2f" },
+{ text: "BIFF!", color: "#7cff4d" },
+{ text: "BOFF!", color: "#ff2fd1" },
+{ text: "BONK!", color: "#fff200" },
+{ text: "OOOFF!", color: "#4dd9ff" },
+{ text: "THWACK!", color: "#ff4d6d" },
+{ text: "ZAP!", color: "#7cff4d" },
+{ text: "ZAM!", color: "#ff9d2f" },
+{ text: "KLONK!", color: "#ff2fd1" },
+{ text: "WHACK!", color: "#fff200" },
+{ text: "CRASH!", color: "#4dd9ff" },
+{ text: "CLANK!", color: "#ff4d6d" }
+];
+
 let reservations = [];
 
 // =========================================================
@@ -3134,6 +3165,48 @@ movie
 
 }
 
+/*
+
+* Franchise easter egg triggers — Fast & Furious gets a
+* spin on open/close plus a family-burst, Batman gets the
+* signal sweep plus comic word pops. Both are simple title
+* substring checks, computed once here and reused at every
+* point in the open/close flow that needs to know which
+* (if either) applies to this movie.
+  */
+
+const isFastFurious =
+movie.title &&
+movie.title
+.toLowerCase()
+.includes("fast & furious");
+
+const isBatman =
+movie.title &&
+movie.title
+.toLowerCase()
+.includes("batman");
+
+/*
+
+* Covers the whole Wizarding World, not just the mainline
+* Harry Potter titles — Fantastic Beasts gets the same
+* envelope treatment. Variable name stays isHarryPotter
+* rather than renaming everywhere it's referenced, but the
+* check itself is broader now.
+  */
+
+const isHarryPotter =
+movie.title &&
+(
+movie.title
+.toLowerCase()
+.includes("harry potter") ||
+movie.title
+.toLowerCase()
+.includes("fantastic beasts")
+);
+
 selectedCard =
 card;
 
@@ -3448,12 +3521,38 @@ finalHeight
 ) / 2
 );
 
+/*
+
+* Harry Potter envelope — triggered right here rather than
+* in the post-open setTimeout like the other franchise
+* effects, since it needs both the flight's start rect
+* (savedCardRect, already captured earlier) and its end
+* rect (finalLeft/Top/Width/Height, just computed above) to
+* grow in sync with the real case underneath.
+  */
+
+if (isHarryPotter) {
+
+triggerHarryPotterEnvelope(
+movie,
+savedCardRect,
+{
+left: finalLeft,
+top: finalTop,
+width: finalWidth,
+height: finalHeight
+}
+);
+
+}
+
 content.style.transition =
 "left 0.9s cubic-bezier(0.16, 1, 0.3, 1), " +
 "top 0.9s cubic-bezier(0.16, 1, 0.3, 1), " +
 "width 0.9s cubic-bezier(0.16, 1, 0.3, 1), " +
 "height 0.9s cubic-bezier(0.16, 1, 0.3, 1), " +
-"box-shadow 0.65s ease";
+"box-shadow 0.65s ease, " +
+"transform 0.7s cubic-bezier(0.12, 0.75, 0.3, 1)";
 
 content.style.left =
 `${finalLeft}px`;
@@ -3469,6 +3568,40 @@ content.style.height =
 
 content.style.boxShadow =
 "0 25px 45px rgba(0,0,0,.65)";
+
+/*
+
+* Fast & Furious spin — 3 full rotations, layered onto the
+* same flight transition above via its own 0.7s duration
+* (see the transform line just above) rather than slowing
+* down the whole flight to match. Was pushed as fast as
+* 0.3s earlier and walked back — too fast to actually read
+* as a spin at that speed. Settles back at a visually-
+* identical 0deg (1080 is a multiple of 360) before the
+* longer 0.9s position/size flight finishes.
+  */
+
+if (isFastFurious) {
+
+content.style.transform =
+"rotate(1080deg)";
+
+}
+
+/*
+
+* Controls/interactivity normally become available once the
+* 0.9s flight settles (930ms). For Harry Potter movies, this
+* waits for the envelope's full sequence instead
+* (HP_ENVELOPE_SEQUENCE_DURATION, ~4.9s) — otherwise someone
+* could tap the flip button or close the movie while the
+* envelope is still visually covering the case underneath.
+  */
+
+const openSettleDelay =
+isHarryPotter
+? HP_ENVELOPE_SEQUENCE_DURATION
+: 930;
 
 setTimeout(
 () => {
@@ -3529,8 +3662,34 @@ triggerLaserSweep();
 
 }
 
+/*
+
+* Fast & Furious family burst — fires alongside the spin
+* already applied earlier in this same open sequence (see
+* the transform on content.style.transition above). isFastFurious
+* was computed once near the top of openMovieFromCard.
+  */
+
+if (isFastFurious) {
+
+triggerFamilyBurst();
+
+}
+
+/*
+
+* Batman signal — beam + oval + word pops. isBatman was
+* computed once near the top of openMovieFromCard.
+  */
+
+if (isBatman) {
+
+triggerBatSignal();
+
+}
+
 },
-930
+openSettleDelay
 );
 
 }
@@ -4266,7 +4425,8 @@ content.style.transition =
 "top 0.55s cubic-bezier(0.4, 0, 0.8, 0.2), " +
 "width 0.55s cubic-bezier(0.4, 0, 0.8, 0.2), " +
 "height 0.55s cubic-bezier(0.4, 0, 0.8, 0.2), " +
-"box-shadow 0.45s ease";
+"box-shadow 0.45s ease, " +
+"transform 0.5s cubic-bezier(0.4, 0, 0.6, 1)";
 
 content.style.left =
 `${targetRect.left}px`;
@@ -4282,6 +4442,34 @@ content.style.height =
 
 content.style.boxShadow =
 "0 6px 12px rgba(0,0,0,.35)";
+
+/*
+
+* Fast & Furious burnout — spins the opposite direction
+* while shrinking back to the shelf, with a couple of small
+* smoke puffs at the case's current position for a "peeling
+* out" feel. Title is checked against currentMovie here
+* since that's still set at this point in the close flow —
+* it isn't cleared until finishCloseMovie further down.
+  */
+
+const closingIsFastFurious =
+currentMovie &&
+currentMovie.title &&
+currentMovie.title
+.toLowerCase()
+.includes("fast & furious");
+
+if (closingIsFastFurious) {
+
+content.style.transform =
+"rotate(-720deg)";
+
+triggerBurnoutSmoke(
+content
+);
+
+}
 
 setTimeout(
 () => {
@@ -4833,6 +5021,944 @@ false;
 
 },
 (maxFinish + 0.3) * 1000
+);
+
+}
+
+/*
+
+* Family burst — radial burst of "FAMILY" tags shooting
+* outward from behind the case, when a Fast & Furious movie
+* finishes opening. Positioned at modal-content's actual
+* center (measured after the flight settles) rather than a
+* fixed screen point, so it's correctly centered whatever
+* size the case ended up at on this particular viewport.
+  */
+
+function triggerFamilyBurst() {
+
+const overlay =
+document.getElementById(
+"family-burst-overlay"
+);
+
+const content =
+modal.querySelector(
+".modal-content"
+);
+
+if (!overlay || !content) {
+
+return;
+
+}
+
+overlay.innerHTML =
+"";
+
+const rect =
+content.getBoundingClientRect();
+
+const centerX =
+rect.left +
+rect.width / 2;
+
+const centerY =
+rect.top +
+rect.height / 2;
+
+const count =
+12;
+
+for (
+let i = 0;
+i < count;
+i++
+) {
+
+const tag =
+document.createElement(
+"div"
+);
+
+tag.className =
+"family-tag";
+
+tag.textContent =
+"FAMILY";
+
+const angle =
+(i / count) *
+Math.PI * 2 +
+(Math.random() * 0.3 - 0.15);
+
+/*
+
+* The case itself can be up to ~420x630px at full modal
+* size, so tags were previously staying almost entirely
+* behind it (max travel was only 210px, well inside the
+* case's own half-height of ~315px). Pushed out much
+* further so they clearly emerge past the case's edges
+* in every direction, not just get hidden behind it.
+  */
+
+const dist =
+320 +
+Math.random() * 180;
+
+const bx =
+Math.cos(angle) * dist;
+
+const by =
+Math.sin(angle) * dist;
+
+tag.style.left =
+`${centerX}px`;
+
+tag.style.top =
+`${centerY}px`;
+
+tag.style.setProperty(
+"--bx",
+`${bx}px`
+);
+
+tag.style.setProperty(
+"--by",
+`${by}px`
+);
+
+tag.style.setProperty(
+"--bspin",
+`${Math.random() * 360 - 180}deg`
+);
+
+tag.style.animationDuration =
+`${1.6 + Math.random() * 0.6}s`;
+
+tag.style.animationDelay =
+`${Math.random() * 0.25}s`;
+
+tag.style.fontSize =
+`${26 + Math.random() * 14}px`;
+
+overlay.appendChild(
+tag
+);
+
+}
+
+setTimeout(
+() => {
+
+overlay.innerHTML =
+"";
+
+},
+2600
+);
+
+}
+
+/*
+
+* Burnout smoke — a couple of small puffs at the case's
+* current on-screen position right as the close burnout
+* starts. Appended to document.body (not the burst overlay,
+* since the modal itself is about to start animating away)
+* and self-removing after their own short animation.
+  */
+
+function triggerBurnoutSmoke(
+content
+) {
+
+const rect =
+content.getBoundingClientRect();
+
+const centerX =
+rect.left +
+rect.width / 2;
+
+const centerY =
+rect.top +
+rect.height / 2;
+
+for (
+let i = 0;
+i < 8;
+i++
+) {
+
+const puff =
+document.createElement(
+"div"
+);
+
+puff.className =
+"burnout-smoke";
+
+puff.style.left =
+`${centerX}px`;
+
+puff.style.top =
+`${centerY}px`;
+
+puff.style.setProperty(
+"--sx",
+`${Math.random() * 140 - 70}px`
+);
+
+puff.style.setProperty(
+"--sy",
+`${Math.random() * 50 + 10}px`
+);
+
+document.body.appendChild(
+puff
+);
+
+setTimeout(
+() => {
+
+puff.remove();
+
+},
+1150
+);
+
+}
+
+}
+
+/*
+
+* One comic word pop at a specific screen position — shared
+* by the Batman sequence, which places 2-3 of these at
+* random scattered points rather than always dead center.
+  */
+
+function triggerComicWordPop(
+x,
+y
+) {
+
+const word =
+BATMAN_WORD_LIST[
+Math.floor(
+Math.random() *
+BATMAN_WORD_LIST.length
+)
+];
+
+const wrap =
+document.createElement(
+"div"
+);
+
+wrap.className =
+"comic-pop-wrap";
+
+wrap.style.left =
+`${x}px`;
+
+wrap.style.top =
+`${y}px`;
+
+wrap.style.setProperty(
+"--word-rot",
+`${Math.random() * 16 - 8}deg`
+);
+
+const burstSvg =
+`<svg class="comic-burst-svg" viewBox="0 0 260 170">
+<polygon points="130,5 145,35 175,15 172,50 210,40 190,68 230,75 192,90 218,115 178,105 170,140 145,115 130,165 115,115 90,140 82,105 42,115 68,90 30,75 70,68 50,40 88,50 85,15 115,35"
+fill="#000"/>
+<polygon points="130,15 142,40 168,23 165,52 198,44 181,66 214,72 183,85 205,106 172,97 165,127 143,106 130,150 117,106 95,127 88,97 55,106 77,85 46,72 79,66 62,44 95,52 92,23 118,40"
+fill="${word.color}"/>
+</svg>`;
+
+wrap.innerHTML =
+burstSvg +
+`<div class="comic-word-text" style="--word-color:${word.color}">${word.text}</div>`;
+
+document.body.appendChild(
+wrap
+);
+
+setTimeout(
+() => {
+
+wrap.remove();
+
+},
+1800
+);
+
+}
+
+let batSignalBusy =
+false;
+
+/*
+
+* Bat-signal — fires when a Batman movie finishes opening.
+* A beam sweeps in from the bottom-left corner of the screen
+* to the oval in the upper-right (positioned to roughly
+* align with where the case ends up), then 2-3 random comic
+* words pop at scattered points around the screen. Beam and
+* oval render behind the case (see bat-signal-overlay's
+* z-index); the word pops sit above everything (z-index 6,
+* see CSS) since they're meant to be seen clearly regardless
+* of what's under them.
+  */
+
+function triggerBatSignal() {
+
+if (batSignalBusy) {
+
+return;
+
+}
+
+batSignalBusy =
+true;
+
+const overlay =
+document.getElementById(
+"bat-signal-overlay"
+);
+
+if (!overlay) {
+
+batSignalBusy =
+false;
+
+return;
+
+}
+
+overlay.innerHTML =
+"";
+
+const vw =
+window.innerWidth;
+
+const vh =
+window.innerHeight;
+
+/*
+
+* Oval sits in the upper-right, roughly where the case
+* itself ends up horizontally — not hardcoded, so it stays
+* sensible across different viewport sizes rather than
+* just assuming desktop dimensions.
+  */
+
+const ovalWidth =
+Math.min(
+190,
+vw * 0.24
+);
+
+const ovalHeight =
+ovalWidth *
+(98 / 150);
+
+const ovalRight =
+Math.max(
+24,
+vw * 0.08
+);
+
+const ovalTop =
+Math.max(
+20,
+vh * 0.05
+);
+
+const ovalCenterX =
+vw - ovalRight - ovalWidth / 2;
+
+const ovalCenterY =
+ovalTop + ovalHeight / 2;
+
+/*
+
+* Beam source sits at the bottom-left corner of the
+* viewport — a narrow point there, widening as it travels
+* up to the oval, same visual logic as a real spotlight
+* rather than the short corner-only cone from the first
+* pass at this.
+  */
+
+const sourceX =
+vw * 0.02;
+
+const sourceY =
+vh * 0.98;
+
+const dx =
+ovalCenterX - sourceX;
+
+const dy =
+ovalCenterY - sourceY;
+
+const length =
+Math.sqrt(
+dx * dx +
+dy * dy
+);
+
+const perpX =
+-dy / length;
+
+const perpY =
+dx / length;
+
+const sourceHalfWidth =
+6;
+
+const targetHalfWidth =
+ovalWidth * 0.4;
+
+const p1x =
+sourceX +
+perpX * sourceHalfWidth;
+
+const p1y =
+sourceY +
+perpY * sourceHalfWidth;
+
+const p2x =
+sourceX -
+perpX * sourceHalfWidth;
+
+const p2y =
+sourceY -
+perpY * sourceHalfWidth;
+
+const p3x =
+ovalCenterX -
+perpX * targetHalfWidth;
+
+const p3y =
+ovalCenterY -
+perpY * targetHalfWidth;
+
+const p4x =
+ovalCenterX +
+perpX * targetHalfWidth;
+
+const p4y =
+ovalCenterY +
+perpY * targetHalfWidth;
+
+const beamSvg =
+document.createElement(
+"div"
+);
+
+beamSvg.className =
+"bat-beam-svg";
+
+beamSvg.innerHTML =
+`<svg width="${vw}" height="${vh}" viewBox="0 0 ${vw} ${vh}">
+<polygon points="${p1x},${p1y} ${p2x},${p2y} ${p3x},${p3y} ${p4x},${p4y}"
+fill="rgba(255,219,122,0.18)"/>
+</svg>`;
+
+overlay.appendChild(
+beamSvg
+);
+
+const oval =
+document.createElement(
+"div"
+);
+
+oval.className =
+"bat-oval";
+
+oval.style.width =
+`${ovalWidth}px`;
+
+oval.style.height =
+`${ovalHeight}px`;
+
+oval.style.left =
+`${ovalCenterX - ovalWidth / 2}px`;
+
+oval.style.top =
+`${ovalCenterY - ovalHeight / 2}px`;
+
+oval.style.transform =
+"rotate(20deg)";
+
+oval.innerHTML =
+`<svg viewBox="0 0 894 420"><polygon points="${BAT_SIGNAL_POLYGON_POINTS}"/></svg>`;
+
+overlay.appendChild(
+oval
+);
+
+/*
+
+* 2-3 random word pops — explicitly kept out of the case's
+* own footprint now, not just scattered in a wide central
+* zone that happened to overlap it. Measures the case's
+* real position (it's already settled into its final size
+* by this point) and picks a spot in whichever margin - left
+* of the case or right of it - actually has room, rather
+* than just picking a random point and hoping it misses.
+  */
+
+const popCount =
+2 +
+Math.floor(
+Math.random() * 2
+);
+
+const caseContent =
+modal.querySelector(
+".modal-content"
+);
+
+const caseRect =
+caseContent
+? caseContent.getBoundingClientRect()
+: null;
+
+const leftMargin =
+caseRect
+? caseRect.left
+: vw * 0.5;
+
+const rightMarginStart =
+caseRect
+? caseRect.right
+: vw * 0.5;
+
+const rightMarginWidth =
+vw - rightMarginStart;
+
+const edgePad =
+30;
+
+const wordHalfWidth =
+220;
+
+/*
+
+* Rather than a fixed threshold that skips a side entirely
+* (which on many real viewport widths would skip BOTH sides,
+* since 220px half-width plus padding needs ~490px of clear
+* margin, more than many screens actually have next to a
+* centered case), each side gets a SCALE FACTOR instead —
+* shrink the word just enough to fit whatever margin
+* actually exists, rather than never showing it or letting
+* it overlap the case.
+  */
+
+function marginScale(
+marginWidth
+) {
+
+const available =
+marginWidth -
+edgePad * 2;
+
+if (available <= 0) {
+
+return 0;
+
+}
+
+return Math.min(
+1,
+available /
+(wordHalfWidth * 2)
+);
+
+}
+
+const leftScale =
+marginScale(
+leftMargin
+);
+
+const rightScale =
+marginScale(
+rightMarginWidth
+);
+
+const usableLeft =
+leftScale > 0.3;
+
+const usableRight =
+rightScale > 0.3;
+
+for (
+let i = 0;
+i < popCount;
+i++
+) {
+
+let side =
+null;
+
+if (usableLeft && usableRight) {
+
+side =
+Math.random() < 0.5
+? "left"
+: "right";
+
+} else if (usableLeft) {
+
+side =
+"left";
+
+} else if (usableRight) {
+
+side =
+"right";
+
+}
+
+if (!side) {
+
+continue;
+
+}
+
+const scale =
+side === "left"
+? leftScale
+: rightScale;
+
+const scaledHalfWidth =
+wordHalfWidth *
+scale;
+
+const popX =
+side === "left"
+? Math.min(
+leftMargin - edgePad - scaledHalfWidth,
+edgePad + scaledHalfWidth +
+Math.random() *
+Math.max(
+1,
+leftMargin -
+edgePad * 2 -
+scaledHalfWidth * 2
+)
+)
+: rightMarginStart +
+edgePad +
+scaledHalfWidth +
+Math.random() *
+Math.max(
+1,
+rightMarginWidth -
+edgePad * 2 -
+scaledHalfWidth * 2
+);
+
+const popY =
+vh * 0.2 +
+Math.random() *
+(vh * 0.55);
+
+setTimeout(
+() => {
+
+triggerComicWordPop(
+popX,
+popY,
+scale
+);
+
+},
+1000 +
+i * 700 +
+Math.random() * 400
+
+);
+
+}
+
+setTimeout(
+() => {
+
+overlay.innerHTML =
+"";
+
+batSignalBusy =
+false;
+
+},
+5600
+);
+
+}
+
+/*
+
+* Harry Potter envelope — covers the case with an envelope
+* overlay while the real case flies/grows into the modal
+* normally underneath (untouched, same as it always does),
+* then plays through front (title) -> flip -> back (wax
+* seal) -> open (flap lifts, seal breaks) -> fades away,
+* revealing the real case that's already sitting there.
+* Unlike the mockup version, this never fakes its own case —
+* the real one is right underneath the whole time, so fading
+* the envelope away is all that's needed to "reveal" it.
+  */
+
+const HP_ENVELOPE_SEQUENCE_DURATION =
+5400;
+
+function triggerHarryPotterEnvelope(
+movie,
+startRect,
+endRect
+) {
+
+const scene =
+document.createElement(
+"div"
+);
+
+scene.className =
+"hp-envelope-scene";
+
+scene.style.left =
+`${startRect.left}px`;
+
+scene.style.top =
+`${startRect.top}px`;
+
+scene.style.width =
+`${startRect.width}px`;
+
+scene.style.height =
+`${startRect.height}px`;
+
+scene.style.transition =
+"left 0.9s cubic-bezier(0.16, 1, 0.3, 1), " +
+"top 0.9s cubic-bezier(0.16, 1, 0.3, 1), " +
+"width 0.9s cubic-bezier(0.16, 1, 0.3, 1), " +
+"height 0.9s cubic-bezier(0.16, 1, 0.3, 1)";
+
+const visual =
+document.createElement(
+"div"
+);
+
+visual.className =
+"hp-envelope-visual";
+
+const flipper =
+document.createElement(
+"div"
+);
+
+flipper.className =
+"hp-envelope-flipper";
+
+const front =
+document.createElement(
+"div"
+);
+
+front.className =
+"hp-envelope-face front";
+
+const frontTitle =
+document.createElement(
+"div"
+);
+
+frontTitle.className =
+"hp-envelope-front-title";
+
+/*
+
+* Font-size was set as "14%" originally, which is wrong —
+* CSS font-size percentages scale relative to the PARENT's
+* font-size (inherited from body, ~16px), not the element's
+* own dimensions, so this rendered as a barely-visible ~2px.
+* Calculated as actual pixels from the envelope's real final
+* width instead, matching the proportion that read well in
+* the standalone mockup (roughly 9% of width there).
+  */
+
+frontTitle.style.fontSize =
+`${endRect.width * 0.09}px`;
+
+frontTitle.textContent =
+movie.title;
+
+front.appendChild(
+frontTitle
+);
+
+const back =
+document.createElement(
+"div"
+);
+
+back.className =
+"hp-envelope-face back";
+
+const foldLines =
+document.createElement(
+"div"
+);
+
+foldLines.className =
+"hp-envelope-fold-lines";
+
+const waxSeal =
+document.createElement(
+"div"
+);
+
+waxSeal.className =
+"hp-envelope-wax-seal";
+
+waxSeal.innerHTML =
+`<span class="hp-envelope-wax-seal-emblem" style="font-size: ${endRect.width * 0.055}px;">H</span>`;
+
+const flap =
+document.createElement(
+"div"
+);
+
+flap.className =
+"hp-envelope-flap";
+
+back.appendChild(
+foldLines
+);
+
+back.appendChild(
+waxSeal
+);
+
+back.appendChild(
+flap
+);
+
+flipper.appendChild(
+front
+);
+
+flipper.appendChild(
+back
+);
+
+visual.appendChild(
+flipper
+);
+
+scene.appendChild(
+visual
+);
+
+document.body.appendChild(
+scene
+);
+
+/*
+
+* Grow from the card's starting rect to the same final
+* rect the real modal-content is growing to, on the same
+* 0.9s timeline — reused rather than recalculated, so this
+* can never drift out of sync with where the real case
+* actually ends up.
+  */
+
+requestAnimationFrame(
+() => {
+
+scene.style.left =
+`${endRect.left}px`;
+
+scene.style.top =
+`${endRect.top}px`;
+
+scene.style.width =
+`${endRect.width}px`;
+
+scene.style.height =
+`${endRect.height}px`;
+
+}
+);
+
+/*
+
+* Title only fades in once growth has actually settled
+* (900ms, matching the growth transition above) — showing
+* it from the start meant a fixed-pixel font size (correct
+* for the final size) visibly reflowed inside the still-
+* growing container the whole time, which read as glitchy
+* rather than intentional.
+  */
+
+setTimeout(
+() => {
+
+frontTitle.classList.add(
+"visible"
+);
+
+},
+900
+);
+
+setTimeout(
+() => {
+
+flipper.classList.add(
+"flipped"
+);
+
+},
+1900
+);
+
+setTimeout(
+() => {
+
+flipper.classList.add(
+"opened"
+);
+
+},
+3400
+);
+
+setTimeout(
+() => {
+
+visual.classList.add(
+"fading"
+);
+
+},
+4800
+);
+
+setTimeout(
+() => {
+
+scene.remove();
+
+},
+HP_ENVELOPE_SEQUENCE_DURATION
 );
 
 }
