@@ -79,7 +79,7 @@ const BIRTHDAY_LIST =
 [
 { month: 10, day: 24, name: "Joey" },
 { month: 11, day: 2, name: "Angie" },
-{ month: 9, day: 10, name: "Bryon" }
+{ month: 7, day: 19, name: "Bryon" }
 ];
 
 const BIRTHDAY_CONFETTI_COLORS =
