@@ -12875,7 +12875,7 @@ const movies = [
     "tmdbTitle": "Miss Congeniality"
   },
   {
-    "title": "Mission: Impossible",
+    "title": "Mission Impossible",
     "tmdbTitle": "Mission: Impossible",
     "type": "movie",
     "tmdbId": 954,
@@ -12895,7 +12895,7 @@ const movies = [
     "rated": "PG-13"
   },
   {
-    "title": "Mission: Impossible - Dead Reckoning Part One",
+    "title": "Mission Impossible - Dead Reckoning Part One",
     "tmdbTitle": "Mission: Impossible - Dead Reckoning Part One",
     "type": "movie",
     "tmdbId": 575264,
@@ -12913,7 +12913,7 @@ const movies = [
     ]
   },
   {
-    "title": "Mission: Impossible - Fallout",
+    "title": "Mission Impossible - Fallout",
     "tmdbTitle": "Mission: Impossible - Fallout",
     "type": "movie",
     "tmdbId": 353081,
@@ -12931,7 +12931,7 @@ const movies = [
     ]
   },
   {
-    "title": "Mission: Impossible - Ghost Protocol",
+    "title": "Mission Impossible - Ghost Protocol",
     "tmdbTitle": "Mission: Impossible - Ghost Protocol",
     "type": "movie",
     "tmdbId": 56292,
@@ -12951,7 +12951,7 @@ const movies = [
     "rated": "PG-13"
   },
   {
-    "title": "Mission: Impossible - Rogue Nation",
+    "title": "Mission Impossible - Rogue Nation",
     "tmdbTitle": "Mission: Impossible - Rogue Nation",
     "type": "movie",
     "tmdbId": 177677,
@@ -12969,7 +12969,7 @@ const movies = [
     ]
   },
   {
-    "title": "Mission: Impossible - The Final Reckoning",
+    "title": "Mission Impossible - The Final Reckoning",
     "tmdbTitle": "Mission: Impossible - The Final Reckoning",
     "type": "movie",
     "tmdbId": 575265,
@@ -12987,7 +12987,7 @@ const movies = [
     ]
   },
   {
-    "title": "Mission: Impossible 2",
+    "title": "Mission Impossible 2",
     "tmdbTitle": "Mission: Impossible II",
     "type": "movie",
     "tmdbId": 955,
@@ -13007,7 +13007,7 @@ const movies = [
     "rated": "PG-13"
   },
   {
-    "title": "Mission: Impossible III",
+    "title": "Mission Impossible III",
     "tmdbTitle": "Mission: Impossible III",
     "type": "movie",
     "tmdbId": 956,
