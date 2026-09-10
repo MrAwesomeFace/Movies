@@ -12895,6 +12895,24 @@ const movies = [
     "rated": "PG-13"
   },
   {
+    "title": "Mission: Impossible - Fallout",
+    "tmdbTitle": "Mission: Impossible - Fallout",
+    "type": "movie",
+    "tmdbId": 353081,
+    "poster": "https://image.tmdb.org/t/p/w500/AkJQpZp9WoNdj7pLYSj1L0RcMMN.jpg",
+    "year": "2018",
+    "runtime": "147m",
+    "genre": "Action / Adventure",
+    "rated": "PG-13",
+    "director": "Christopher McQuarrie",
+    "cast": "Tom Cruise, Henry Cavill, Ving Rhames, Simon Pegg, Rebecca Ferguson, Sean Harris",
+    "synopsis": "When an IMF mission ends badly, the world is faced with dire consequences. As Ethan Hunt takes it upon himself to fulfill his original briefing, the CIA begin to question his loyalty and his motives. The IMF team find themselves in a race against time, hunted by assassins while trying to prevent a global catastrophe.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ]
+  },
+  {
     "title": "Mission: Impossible - Ghost Protocol",
     "tmdbTitle": "Mission: Impossible - Ghost Protocol",
     "type": "movie",
