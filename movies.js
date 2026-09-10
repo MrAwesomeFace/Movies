@@ -12950,7 +12950,9 @@ const movies = [
       "Blu-ray",
       "DVD"
     ],
-    "digital": [],
+    "digital": [
+      "Fandango"
+    ],
     "rated": "PG-13"
   },
   {
