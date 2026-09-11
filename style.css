@@ -263,10 +263,20 @@ SEARCH
   display: none;
 }
 
+.search-input-wrapper {
+  position: relative;
+
+  flex: 1;
+
+  display: flex;
+}
+
 #search-input {
   flex: 1;
 
-  padding: 12px 14px;
+  width: 100%;
+
+  padding: 12px 40px 12px 14px;
 
   border:
     1px solid var(--gold-dark);
@@ -286,6 +296,58 @@ SEARCH
 
   box-shadow:
     0 0 0 3px rgba(251, 205, 54, 0.15);
+}
+
+/*
+ * type="search" inputs already show a native clear "x" in
+ * some browsers once there's text - hidden here so it never
+ * doubles up with the custom button below, which needs to
+ * exist anyway for browsers that don't show a native one at
+ * all (this was the actual gap being asked for).
+ */
+
+#search-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.search-clear-button {
+  position: absolute;
+
+  right: 6px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  width: 28px;
+  height: 28px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: rgba(251, 205, 54, 0.12);
+
+  color: var(--gold);
+
+  font-size: 20px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+.search-clear-button.hidden {
+  display: none;
+}
+
+.search-clear-button:hover {
+  background: rgba(251, 205, 54, 0.22);
 }
 
 
@@ -1877,6 +1939,580 @@ as the other easter eggs here.
 
 
 /* =========================================================
+GENRE FILTER EASTER EGGS
+=========================================================
+Six effects tied to genre dropdown selection. Classic is a
+toggle (applies while selected, reverts on switch-away,
+pairing naturally with the existing rewind effect that
+already fires when returning to "All Genres"). The other
+five (Action, Comedy, Drama, Horror, Thriller) are one-shot
+effects, same pattern as Christmas/Baseball.
+========================================================= */
+
+body.classic-mode {
+  filter: grayscale(1) contrast(1.1);
+
+  transition: filter 0.6s ease;
+}
+
+.bullet-hole {
+  position: fixed;
+
+  width: 46px;
+  height: 46px;
+
+  z-index: 65;
+
+  opacity: 0;
+
+  transform: scale(0.3);
+
+  transition: opacity 0.15s ease, transform 0.15s cubic-bezier(0.3, 1.5, 0.4, 1);
+
+  pointer-events: none;
+}
+
+.bullet-hole.visible {
+  opacity: 1;
+
+  transform: scale(1);
+}
+
+.haha-pop {
+  position: fixed;
+
+  z-index: 65;
+
+  font-family: 'Bangers', cursive;
+
+  color: #fff200;
+
+  -webkit-text-stroke: 2px #6b1414;
+
+  text-shadow: 3px 3px 0 #6b1414;
+
+  pointer-events: none;
+}
+
+.teardrop-particle {
+  position: fixed;
+
+  top: -30px;
+
+  border-radius: 0 50% 50% 50%;
+
+  transform: rotate(45deg);
+
+  background: linear-gradient(135deg, rgba(200, 230, 255, 0.95), rgba(140, 190, 240, 0.75));
+
+  box-shadow: 0 0 4px rgba(180, 220, 255, 0.5);
+
+  z-index: 65;
+
+  opacity: 0;
+
+  animation-name: teardrop-fall;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.7, 1);
+  animation-fill-mode: forwards;
+
+  pointer-events: none;
+}
+
+@keyframes teardrop-fall {
+  0% {
+    transform: translateY(0) rotate(45deg);
+
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 0.95;
+  }
+
+  85% {
+    opacity: 0.9;
+  }
+
+  100% {
+    transform: translateY(var(--fall-distance)) rotate(45deg);
+
+    opacity: 0;
+  }
+}
+
+.slash-svg-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 65;
+
+  pointer-events: none;
+}
+
+.slash-path-line {
+  stroke: #0a0605;
+
+  stroke-width: 7;
+
+  fill: none;
+
+  stroke-linecap: round;
+}
+
+.slash-drip-particle {
+  position: fixed;
+
+  top: 0;
+
+  width: 6px;
+
+  background: linear-gradient(180deg, #8a0000, #4a0000);
+
+  border-radius: 0 0 6px 6px;
+
+  z-index: 65;
+
+  opacity: 0;
+
+  height: 0;
+
+  transition: height 1.4s ease-out, opacity 0.3s ease;
+
+  pointer-events: none;
+}
+
+.slash-drip-particle.visible {
+  opacity: 0.9;
+}
+
+.thriller-darken-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.82);
+
+  z-index: 65;
+
+  opacity: 0;
+
+  transition: opacity 0.5s ease;
+
+  pointer-events: none;
+}
+
+.thriller-darken-overlay.visible {
+  opacity: 1;
+}
+
+.thriller-beam-overlay {
+  position: fixed;
+
+  top: 0;
+
+  height: 100%;
+
+  background: radial-gradient(ellipse at center, rgba(255, 244, 214, 0.55) 0%, rgba(255, 244, 214, 0.15) 55%, transparent 75%);
+
+  z-index: 66;
+
+  mix-blend-mode: screen;
+
+  pointer-events: none;
+
+  transition: left 2.4s linear;
+}
+
+.thriller-pulse-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 64;
+
+  box-shadow: inset 0 0 160px 30px rgba(180, 0, 0, 0);
+
+  animation: thriller-heartbeat 1.6s ease-in-out infinite;
+
+  pointer-events: none;
+}
+
+@keyframes thriller-heartbeat {
+  0%, 100% {
+    box-shadow: inset 0 0 160px 30px rgba(180, 0, 0, 0);
+  }
+
+  50% {
+    box-shadow: inset 0 0 160px 30px rgba(180, 0, 0, 0.25);
+  }
+}
+
+
+/* =========================================================
+CHRISTMAS LIGHTS EASTER EGG
+=========================================================
+Fires when the Christmas category filter is selected — 8
+strands of C9-style bulbs, spread across the full screen
+height with a natural bowing sag, each bulb twinkling
+independently, for a few seconds. Built and removed entirely
+by JS (triggerChristmasLights in app.js).
+========================================================= */
+
+.christmas-lights-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 65;
+
+  pointer-events: none;
+
+  overflow: hidden;
+
+  opacity: 0;
+
+  transition: opacity 0.5s ease;
+}
+
+.christmas-lights-overlay.visible {
+  opacity: 1;
+}
+
+.christmas-bulb {
+  position: absolute;
+
+  border-radius: 50%;
+
+  transform: translate(-50%, -50%);
+}
+
+.christmas-bulb-glow {
+  position: absolute;
+
+  inset: -60%;
+
+  border-radius: 50%;
+
+  filter: blur(4px);
+
+  opacity: 0.6;
+}
+
+@keyframes christmas-bulb-twinkle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+
+/* =========================================================
+BASEBALL SCOREBOARD EASTER EGG
+=========================================================
+Fires when the Baseball category filter is selected —
+Wrigley-style manual scoreboard pops in showing the Cubs
+blowing out the Brewers, holds briefly, then fades out. Same
+pop-in mechanic already used for the Batman word pops. Built
+and removed entirely by JS (triggerBaseballScoreboard in
+app.js). Fireworks bursts also fire alongside it - each a
+radial burst of particles that expand outward then droop
+and fade, like real firework sparks falling.
+========================================================= */
+
+.firework-burst {
+  position: fixed;
+
+  z-index: 65;
+
+  pointer-events: none;
+}
+
+.firework-particle {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  border-radius: 50%;
+
+  opacity: 0;
+
+  animation-name: firework-particle-anim;
+  animation-timing-function: cubic-bezier(0.15, 0.6, 0.3, 1);
+  animation-fill-mode: forwards;
+}
+
+@keyframes firework-particle-anim {
+  0% {
+    transform: translate(-50%, -50%) translate(0, 0) scale(1);
+
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 1;
+  }
+
+  100% {
+    transform:
+      translate(-50%, -50%)
+      translate(var(--fx), calc(var(--fy) + 40px))
+      scale(0.3);
+
+    opacity: 0;
+  }
+}
+
+.baseball-scoreboard-wrap {
+  position: fixed;
+
+  top: 50%;
+  left: 50%;
+
+  z-index: 65;
+
+  transform: translate(-50%, -50%) scale(0.7) rotate(-2deg);
+
+  opacity: 0;
+
+  transition: transform 0.5s cubic-bezier(0.2,1.4,0.4,1), opacity 0.4s ease;
+
+  pointer-events: none;
+}
+
+.baseball-scoreboard-wrap.visible {
+  transform: translate(-50%, -50%) scale(1) rotate(-2deg);
+
+  opacity: 1;
+}
+
+.baseball-scoreboard {
+  background: #0d3b23;
+
+  border: 8px solid #062416;
+
+  border-radius: 5px;
+
+  box-shadow:
+    0 26px 65px rgba(0, 0, 0, 0.6),
+    inset 0 0 52px rgba(0, 0, 0, 0.4);
+
+  padding: 18px;
+
+  font-family: 'Oswald', sans-serif;
+}
+
+.sb-header-row, .sb-row {
+  display: grid;
+
+  grid-template-columns: 96px repeat(9, 39px) 13px 39px 39px 39px;
+
+  gap: 4px;
+
+  margin-bottom: 4px;
+}
+
+.sb-header-cell {
+  color: #c8d8c8;
+
+  font-size: 14px;
+
+  text-align: center;
+
+  font-weight: 500;
+
+  letter-spacing: 0.5px;
+}
+
+.sb-team-label {
+  color: #eee8d5;
+
+  font-size: 20px;
+
+  font-weight: 700;
+
+  display: flex;
+
+  align-items: center;
+
+  letter-spacing: 1px;
+}
+
+.sb-cell {
+  background: #16150f;
+
+  border-radius: 3px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  height: 44px;
+}
+
+.sb-cell-value {
+  color: #f5efd8;
+
+  font-size: 26px;
+
+  font-weight: 700;
+
+  font-family: 'Oswald', sans-serif;
+}
+
+.sb-cell.rhe {
+  background: #2a1010;
+}
+
+.sb-cell.rhe .sb-cell-value {
+  color: #ffd23f;
+}
+
+
+/* =========================================================
+JAMES BOND GUN-BARREL EASTER EGG
+=========================================================
+Fires when a Bond movie opens (title starts with "007") — a
+full-screen gun-barrel takeover: rifled spiral barrel with a
+spinning film reel tracking in, winds down and centers, a
+red flash "shot" fires with blood drips, then the barrel iris
+opens to reveal the real movie modal underneath (growing
+normally the whole time, same as every other franchise
+effect here). z-index 65 to clear the modal's own z-index
+(50), same reasoning as the other overlays that sit above it.
+========================================================= */
+
+.bond-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 65;
+
+  pointer-events: none;
+
+  overflow: hidden;
+  background: #000;
+}
+
+.bond-black-mask {
+  position: absolute;
+
+  inset: 0;
+
+  background: #000;
+
+  transition: opacity 0.8s ease;
+}
+
+.bond-black-mask.fading {
+  opacity: 0;
+}
+
+.bond-scope {
+  position: absolute;
+
+  border-radius: 50%;
+
+  overflow: hidden;
+
+  transition: left 1.8s linear, top 1.8s linear, transform 0.8s cubic-bezier(0.4,0,0.2,1), opacity 0.8s ease;
+}
+
+.bond-scope.fading {
+  opacity: 0;
+}
+
+.bond-rifling {
+  position: absolute;
+
+  inset: 0;
+}
+
+.bond-reel {
+  position: absolute;
+
+  animation-name: bond-reel-spin;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.25));
+}
+
+@keyframes bond-reel-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.bond-ring {
+  position: absolute;
+
+  border-radius: 50%;
+
+  box-shadow: inset 0 0 30px 10px rgba(0,0,0,0.9);
+
+  transition: opacity 0.8s ease;
+}
+
+.bond-ring.fading {
+  opacity: 0;
+}
+
+.bond-flash {
+  position: absolute;
+
+  inset: 0;
+
+  background: radial-gradient(circle, #ff2b1a 0%, #a10000 70%, #4a0000 100%);
+
+  opacity: 0;
+
+  transition: opacity 0.15s ease;
+
+  z-index: 2;
+}
+
+.bond-flash.visible {
+  opacity: 1;
+
+  transition: opacity 0.15s ease;
+}
+
+.bond-flash.fading-out {
+  opacity: 0;
+
+  transition: opacity 0.6s ease;
+}
+
+.bond-drip {
+  position: absolute;
+
+  top: 0;
+
+  background: linear-gradient(180deg, #8a0000, #500000);
+
+  border-radius: 0 0 8px 8px;
+
+  z-index: 3;
+
+  opacity: 0;
+
+  height: 0;
+
+  transition: height 1.5s ease-out, opacity 0.3s ease;
+}
+
+.bond-drip.visible {
+  opacity: 0.9;
+}
+
+
+/* =========================================================
 MISSION IMPOSSIBLE SELF-DESTRUCT EASTER EGG
 =========================================================
 Fires when a Mission Impossible movie opens — a brown-paper-
@@ -2230,6 +2866,7 @@ same reasoning as the comic-pop-wrap z-index fix.
   height: 100%;
 
   transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
 
   transition: transform 0.7s cubic-bezier(0.4, 0.1, 0.2, 1);
 }
@@ -2245,7 +2882,18 @@ same reasoning as the comic-pop-wrap z-index fix.
 
   border-radius: 4px;
 
+  /*
+   * -webkit- prefix is required, not optional, for mobile
+   * Safari to actually respect this — without it, the
+   * "hidden" face's content (including its text) can still
+   * render mirrored/backwards during the flip, which is
+   * exactly the bug this was causing on mobile. The other
+   * two backface-visibility uses in this file already have
+   * both forms; this one was missing the prefix.
+   */
+
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 
   background:
     linear-gradient(135deg, #d9b878 0%, #c9a35f 45%, #b89250 100%);
@@ -5198,6 +5846,18 @@ body.theme-arcade #search-input:focus {
   box-shadow:
     0 0 5px 1px rgba(0, 255, 242, 0.8),
     0 0 14px 3px rgba(0, 255, 242, 0.5);
+}
+
+body.theme-arcade .search-clear-button {
+
+  color: #00fff2;
+
+  background: rgba(0, 255, 242, 0.1);
+}
+
+body.theme-arcade .search-clear-button:hover {
+
+  background: rgba(0, 255, 242, 0.2);
 }
 
 body.theme-arcade .rated-filter-button {
