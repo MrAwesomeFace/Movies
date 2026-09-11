@@ -113,6 +113,9 @@ document.getElementById("search-area");
 const searchInput =
 document.getElementById("search-input");
 
+const searchClearButton =
+document.getElementById("search-clear-button");
+
 const filters =
 document.querySelectorAll(".filter");
 
@@ -221,6 +224,20 @@ rated: []
   */
 
 const crackedMovieIds =
+new Set();
+
+/*
+
+* Rom-Com hearts — hidden by default now, same "reveal once,
+* persist for the session" pattern as crackedMovieIds above.
+* Starts empty; populated the first time the Rom-Com genre
+* filter is selected (see the genre filter handler), at
+* which point every rom-com movie's heart becomes visible
+* and stays that way for the rest of the session, even after
+* switching to a different filter.
+  */
+
+const heartsRevealedMovieIds =
 new Set();
 
 /*
@@ -2334,8 +2351,20 @@ container.style.margin =
 * target.
   */
 
+/*
+
+* Set to 0 for now — reported as showing up far more than
+* the 35% rate would suggest. Investigated this (checked for
+* leftover test values, reviewed the show/hide reset logic,
+* ran statistical tests opening dozens of movies including
+* specifically Batman/Harry Potter titles) and never found a
+* bug or a rate above the expected ~35%, but turning it off
+* rather than leave something that feels broken. Safe to
+* raise this back up whenever it's worth revisiting.
+  */
+
 let nowShowingChance =
-0.35;
+0;
 
 let nowShowingFrameActive =
 false;
@@ -2766,6 +2795,11 @@ const movieGenreText =
 if (
 movieGenreText.includes(
 "rom-com"
+) &&
+heartsRevealedMovieIds.has(
+getMovieId(
+movie
+)
 )
 ) {
 
@@ -3268,10 +3302,10 @@ movie.title
 
 * Covers the wider Batman/DC universe, not just titles with
 * "batman" literally in them — The Dark Knight movies,
-* Justice League, and Suicide Squad don't contain the word
-* "batman" at all, so each needed its own explicit check.
-* "dark knight" as a substring catches both The Dark Knight
-* and The Dark Knight Rises with one check.
+* Justice League, Suicide Squad, and The Flash don't contain
+* the word "batman" at all, so each needed its own explicit
+* check. "dark knight" as a substring catches both The Dark
+* Knight and The Dark Knight Rises with one check.
   */
 
 const isBatman =
@@ -3288,7 +3322,10 @@ movie.title
 .includes("justice league") ||
 movie.title
 .toLowerCase()
-.includes("suicide squad")
+.includes("suicide squad") ||
+movie.title
+.toLowerCase()
+.includes("the flash")
 );
 
 /*
@@ -3327,6 +3364,22 @@ movie.title
 movie.title
 .toLowerCase()
 .includes("impossible");
+
+/*
+
+* James Bond movies in the catalog are titled starting with
+* "007" (e.g. "007 Skyfall") - checking startsWith rather
+* than includes, since "007" appearing anywhere in a title
+* is a much more specific signal at the start than it would
+* be as a general substring.
+  */
+
+const isBond =
+movie.title &&
+movie.title
+.trim()
+.toLowerCase()
+.startsWith("007");
 
 selectedCard =
 card;
@@ -3689,6 +3742,20 @@ height: finalHeight
 
 }
 
+/*
+
+* James Bond gun-barrel — unlike Harry Potter/Mission
+* Impossible, this is a full-screen takeover rather than a
+* wrapper that grows with the case, so it doesn't need the
+* start/end rects those two use.
+  */
+
+if (isBond) {
+
+triggerBondGunBarrel();
+
+}
+
 content.style.transition =
 "left 0.9s cubic-bezier(0.16, 1, 0.3, 1), " +
 "top 0.9s cubic-bezier(0.16, 1, 0.3, 1), " +
@@ -3734,11 +3801,12 @@ content.style.transform =
 /*
 
 * Controls/interactivity normally become available once the
-* 0.9s flight settles (930ms). For Harry Potter and Mission
-* Impossible movies, this waits for that franchise's full
-* sequence instead — otherwise someone could tap the flip
-* button or close the movie while the envelope/package is
-* still visually covering the case underneath.
+* 0.9s flight settles (930ms). For Harry Potter, Mission
+* Impossible, and Bond movies, this waits for that
+* franchise's full sequence instead — otherwise someone
+* could tap the flip button or close the movie while the
+* envelope/package/gun-barrel is still visually covering the
+* case underneath.
   */
 
 const openSettleDelay =
@@ -3746,6 +3814,8 @@ isHarryPotter
 ? HP_ENVELOPE_SEQUENCE_DURATION
 : isMissionImpossible
 ? MI_SELF_DESTRUCT_SEQUENCE_DURATION
+: isBond
+? BOND_SEQUENCE_DURATION
 : 930;
 
 setTimeout(
@@ -5125,6 +5195,1493 @@ false;
 
 /*
 
+* Christmas lights — fires when the Christmas category
+* filter is selected. 8 strands spread across the full
+* screen height, each following a natural sag curve rather
+* than a straight line, C9 bulbs in the classic 4-color
+* rotation twinkling independently.
+  */
+
+const CHRISTMAS_BULB_COLORS =
+[
+{ fill: "#ff3b30", glow: "rgba(255,59,48,0.7)" },
+{ fill: "#34c759", glow: "rgba(52,199,89,0.7)" },
+{ fill: "#3399ff", glow: "rgba(51,153,255,0.7)" },
+{ fill: "#ffcc00", glow: "rgba(255,204,0,0.7)" }
+];
+
+function christmasSpiralPoint(
+cx,
+cy,
+angleDeg,
+radius
+) {
+
+const rad =
+angleDeg * Math.PI / 180;
+
+return {
+x: cx + radius * Math.cos(rad),
+y: cy + radius * Math.sin(rad)
+};
+
+}
+
+function buildChristmasStrand(
+svg,
+overlay,
+vw,
+y0,
+y1,
+sagAmount,
+bulbCount,
+colorOffset
+) {
+
+const x0 = -20;
+const x1 = vw + 20;
+const cx = vw / 2;
+const cy = Math.min(y0, y1) + sagAmount;
+
+const path =
+document.createElementNS(
+"http://www.w3.org/2000/svg",
+"path"
+);
+
+const d =
+`M ${x0} ${y0} Q ${cx} ${cy} ${x1} ${y1}`;
+
+path.setAttribute("d", d);
+path.setAttribute("stroke", "#2a2a2a");
+path.setAttribute("stroke-width", "2");
+path.setAttribute("fill", "none");
+
+svg.appendChild(
+path
+);
+
+function quadPoint(t) {
+
+const mt = 1 - t;
+
+return {
+x: mt * mt * x0 + 2 * mt * t * cx + t * t * x1,
+y: mt * mt * y0 + 2 * mt * t * cy + t * t * y1
+};
+
+}
+
+for (
+let i = 0;
+i < bulbCount;
+i++
+) {
+
+const t = (i + 0.5) / bulbCount;
+const pt = quadPoint(t);
+const color = CHRISTMAS_BULB_COLORS[(i + colorOffset) % CHRISTMAS_BULB_COLORS.length];
+
+const bulb =
+document.createElement(
+"div"
+);
+
+bulb.className =
+"christmas-bulb";
+
+const size =
+16 + Math.random() * 4;
+
+bulb.style.width =
+`${size}px`;
+
+bulb.style.height =
+`${size * 1.3}px`;
+
+bulb.style.left =
+`${pt.x}px`;
+
+bulb.style.top =
+`${pt.y + 6}px`;
+
+bulb.style.background =
+`radial-gradient(circle at 35% 30%, #fff, ${color.fill} 60%, ${color.fill} 100%)`;
+
+bulb.style.boxShadow =
+`0 0 8px 2px ${color.glow}`;
+
+bulb.style.zIndex =
+"2";
+
+bulb.style.animation =
+`christmas-bulb-twinkle ${1.4 + Math.random() * 1.6}s ease-in-out infinite`;
+
+bulb.style.animationDelay =
+`${Math.random() * 2}s`;
+
+const glow =
+document.createElement(
+"div"
+);
+
+glow.className =
+"christmas-bulb-glow";
+
+glow.style.background =
+`radial-gradient(circle, ${color.glow}, transparent 70%)`;
+
+bulb.appendChild(
+glow
+);
+
+overlay.appendChild(
+bulb
+);
+
+}
+
+}
+
+let christmasLightsBusy =
+false;
+
+function triggerChristmasLights() {
+
+if (christmasLightsBusy) {
+
+return;
+
+}
+
+christmasLightsBusy =
+true;
+
+const overlay =
+document.createElement(
+"div"
+);
+
+overlay.className =
+"christmas-lights-overlay";
+
+const vw =
+window.innerWidth;
+
+const vh =
+window.innerHeight;
+
+const svg =
+document.createElementNS(
+"http://www.w3.org/2000/svg",
+"svg"
+);
+
+svg.setAttribute(
+"width",
+"100%"
+);
+
+svg.setAttribute(
+"height",
+"100%"
+);
+
+svg.style.position =
+"absolute";
+
+svg.style.inset =
+"0";
+
+svg.style.zIndex =
+"1";
+
+overlay.appendChild(
+svg
+);
+
+/*
+
+* 8 strands spread proportionally across the full viewport
+* height, each with varied sag/bulb count for a naturally
+* messy look rather than identical repeated rows.
+  */
+
+const rows =
+[
+[0.02, 0.05, 0.05, 13, 0],
+[0.07, 0.04, 0.06, 12, 2],
+[0.12, 0.16, 0.06, 13, 1],
+[0.20, 0.16, 0.06, 12, 3],
+[0.23, 0.28, 0.065, 14, 0],
+[0.32, 0.27, 0.06, 12, 2],
+[0.35, 0.41, 0.065, 13, 1],
+[0.46, 0.41, 0.06, 12, 3]
+];
+
+rows.forEach(
+row => {
+
+buildChristmasStrand(
+svg,
+overlay,
+vw,
+row[0] * vh,
+row[1] * vh,
+row[2] * vh,
+row[3],
+row[4]
+);
+
+}
+);
+
+document.body.appendChild(
+overlay
+);
+
+requestAnimationFrame(
+() => {
+
+overlay.classList.add(
+"visible"
+);
+
+}
+);
+
+setTimeout(
+() => {
+
+overlay.classList.remove(
+"visible"
+);
+
+setTimeout(
+() => {
+
+overlay.remove();
+
+christmasLightsBusy =
+false;
+
+},
+600
+);
+
+},
+4000
+);
+
+}
+
+/*
+
+* Baseball scoreboard — fires when the Baseball category
+* filter is selected. Wrigley-style manual scoreboard,
+* Cubs blowing out the Brewers, same pop-in/pop-out
+* mechanic as the Batman word pops.
+  */
+
+const BASEBALL_MIL_INNINGS =
+[0, 0, 0, 0, 1, 0, 0, 0, 0];
+
+const BASEBALL_MIL_RHE =
+[1, 4, 2];
+
+const BASEBALL_CHC_INNINGS =
+[2, 0, 3, 0, 4, 0, 1, 2, "X"];
+
+const BASEBALL_CHC_RHE =
+[12, 15, 0];
+
+let baseballScoreboardBusy =
+false;
+
+function buildScoreboardRow(
+row,
+innings,
+rhe
+) {
+
+innings.forEach(
+val => {
+
+const cell =
+document.createElement(
+"div"
+);
+
+cell.className =
+"sb-cell";
+
+cell.innerHTML =
+`<div class="sb-cell-value">${val}</div>`;
+
+row.appendChild(
+cell
+);
+
+}
+);
+
+const spacer =
+document.createElement(
+"div"
+);
+
+row.appendChild(
+spacer
+);
+
+rhe.forEach(
+val => {
+
+const cell =
+document.createElement(
+"div"
+);
+
+cell.className =
+"sb-cell rhe";
+
+cell.innerHTML =
+`<div class="sb-cell-value">${val}</div>`;
+
+row.appendChild(
+cell
+);
+
+}
+);
+
+}
+
+/*
+
+* One firework burst at a specific screen position - a
+* radial spray of small colored particles that expand
+* outward, droop slightly (gravity), and fade. Shared helper
+* so the baseball scoreboard can fire a few of these at
+* staggered times/positions.
+  */
+
+const FIREWORK_COLORS =
+[
+"#ffd23f",
+"#ff4d6d",
+"#4dd9ff",
+"#7cff4d",
+"#ff9d2f",
+"#ff2fd1",
+"#ffffff"
+];
+
+function triggerFireworkBurst(
+x,
+y
+) {
+
+const burst =
+document.createElement(
+"div"
+);
+
+burst.className =
+"firework-burst";
+
+burst.style.left =
+`${x}px`;
+
+burst.style.top =
+`${y}px`;
+
+const color =
+FIREWORK_COLORS[
+Math.floor(
+Math.random() *
+FIREWORK_COLORS.length
+)
+];
+
+const particleCount =
+26;
+
+for (
+let i = 0;
+i < particleCount;
+i++
+) {
+
+const particle =
+document.createElement(
+"div"
+);
+
+particle.className =
+"firework-particle";
+
+const size =
+4 + Math.random() * 3;
+
+particle.style.width =
+`${size}px`;
+
+particle.style.height =
+`${size}px`;
+
+particle.style.background =
+color;
+
+particle.style.boxShadow =
+`0 0 6px 1px ${color}`;
+
+const angle =
+(i / particleCount) *
+Math.PI * 2 +
+(Math.random() * 0.2 - 0.1);
+
+const dist =
+60 + Math.random() * 70;
+
+particle.style.setProperty(
+"--fx",
+`${Math.cos(angle) * dist}px`
+);
+
+particle.style.setProperty(
+"--fy",
+`${Math.sin(angle) * dist}px`
+);
+
+particle.style.animationDuration =
+`${0.9 + Math.random() * 0.4}s`;
+
+burst.appendChild(
+particle
+);
+
+}
+
+document.body.appendChild(
+burst
+);
+
+setTimeout(
+() => {
+
+burst.remove();
+
+},
+1400
+);
+
+}
+
+function triggerBaseballScoreboard() {
+
+if (baseballScoreboardBusy) {
+
+return;
+
+}
+
+baseballScoreboardBusy =
+true;
+
+const wrap =
+document.createElement(
+"div"
+);
+
+wrap.className =
+"baseball-scoreboard-wrap";
+
+const board =
+document.createElement(
+"div"
+);
+
+board.className =
+"baseball-scoreboard";
+
+const headerRow =
+document.createElement(
+"div"
+);
+
+headerRow.className =
+"sb-header-row";
+
+headerRow.innerHTML =
+`<div class="sb-header-cell"></div>
+<div class="sb-header-cell">1</div>
+<div class="sb-header-cell">2</div>
+<div class="sb-header-cell">3</div>
+<div class="sb-header-cell">4</div>
+<div class="sb-header-cell">5</div>
+<div class="sb-header-cell">6</div>
+<div class="sb-header-cell">7</div>
+<div class="sb-header-cell">8</div>
+<div class="sb-header-cell">9</div>
+<div class="sb-header-cell"></div>
+<div class="sb-header-cell">R</div>
+<div class="sb-header-cell">H</div>
+<div class="sb-header-cell">E</div>`;
+
+board.appendChild(
+headerRow
+);
+
+const milRow =
+document.createElement(
+"div"
+);
+
+milRow.className =
+"sb-row";
+
+milRow.innerHTML =
+`<div class="sb-team-label">MIL</div>`;
+
+buildScoreboardRow(
+milRow,
+BASEBALL_MIL_INNINGS,
+BASEBALL_MIL_RHE
+);
+
+board.appendChild(
+milRow
+);
+
+const divider =
+document.createElement(
+"div"
+);
+
+divider.style.height =
+"8px";
+
+board.appendChild(
+divider
+);
+
+const chcRow =
+document.createElement(
+"div"
+);
+
+chcRow.className =
+"sb-row";
+
+chcRow.innerHTML =
+`<div class="sb-team-label">CHC</div>`;
+
+buildScoreboardRow(
+chcRow,
+BASEBALL_CHC_INNINGS,
+BASEBALL_CHC_RHE
+);
+
+board.appendChild(
+chcRow
+);
+
+wrap.appendChild(
+board
+);
+
+document.body.appendChild(
+wrap
+);
+
+requestAnimationFrame(
+() => {
+
+wrap.classList.add(
+"visible"
+);
+
+}
+);
+
+/*
+
+* A few fireworks bursts at random positions around the
+* screen, staggered so they don't all pop at once - kept out
+* of the center third both horizontally and vertically so
+* they don't land on top of the scoreboard itself.
+  */
+
+const vw =
+window.innerWidth;
+
+const vh =
+window.innerHeight;
+
+const fireworkCount =
+4;
+
+for (
+let i = 0;
+i < fireworkCount;
+i++
+) {
+
+let fx;
+let fy;
+
+do {
+
+fx = vw * 0.1 + Math.random() * vw * 0.8;
+fy = vh * 0.1 + Math.random() * vh * 0.75;
+
+} while (
+fx > vw * 0.32 &&
+fx < vw * 0.68 &&
+fy > vh * 0.3 &&
+fy < vh * 0.7
+);
+
+setTimeout(
+() => {
+
+triggerFireworkBurst(
+fx,
+fy
+);
+
+},
+200 + i * 450 + Math.random() * 250
+);
+
+}
+
+setTimeout(
+() => {
+
+wrap.classList.remove(
+"visible"
+);
+
+setTimeout(
+() => {
+
+wrap.remove();
+
+baseballScoreboardBusy =
+false;
+
+},
+500
+);
+
+},
+3000
+);
+
+}
+
+/*
+
+* Action — bullet holes with radiating cracks, reusing the
+* same "sudden impact mark" concept as the glass-shatter
+* effect. No flash/glow, just the hole itself.
+  */
+
+function makeBulletHoleSVG() {
+
+return `<svg viewBox="0 0 100 100" width="100%" height="100%">
+<circle cx="50" cy="50" r="16" fill="#1a1512"/>
+<circle cx="50" cy="50" r="16" fill="none" stroke="#3a2f28" stroke-width="3"/>
+<path d="M50,34 L30,5 M50,34 L14,18 M66,38 L95,8 M68,50 L98,46 M62,64 L84,94 M42,66 L22,96 M34,50 L4,58" stroke="#2a221d" stroke-width="2.5" fill="none" opacity="0.8"/>
+</svg>`;
+
+}
+
+let actionBulletsBusy =
+false;
+
+function triggerActionBullets() {
+
+if (actionBulletsBusy) {
+
+return;
+
+}
+
+actionBulletsBusy =
+true;
+
+const vw =
+window.innerWidth;
+
+const vh =
+window.innerHeight;
+
+const holes =
+[];
+
+/*
+
+* Phase 1 - scatter: random positions across the screen,
+* same as before, staggered at a moderate pace.
+  */
+
+const scatterCount =
+10;
+
+for (
+let i = 0;
+i < scatterCount;
+i++
+) {
+
+const hole =
+document.createElement(
+"div"
+);
+
+hole.className =
+"bullet-hole";
+
+hole.style.left =
+`${20 + Math.random() * (vw - 60)}px`;
+
+hole.style.top =
+`${20 + Math.random() * (vh - 60)}px`;
+
+hole.innerHTML =
+makeBulletHoleSVG();
+
+document.body.appendChild(
+hole
+);
+
+holes.push(
+hole
+);
+
+setTimeout(
+() => {
+
+hole.classList.add(
+"visible"
+);
+
+},
+150 + i * 180
+);
+
+}
+
+/*
+
+* Phase 2 - chain: a fast diagonal strafing line of holes,
+* starting once the scatter phase finishes, each with a
+* little perpendicular jitter so it doesn't look like a
+* perfectly straight ruled line.
+  */
+
+const chainCount =
+14;
+
+const chainStartDelay =
+150 + scatterCount * 180 + 300;
+
+const chainStartX =
+vw * (0.05 + Math.random() * 0.15);
+
+const chainStartY =
+vh * (0.15 + Math.random() * 0.15);
+
+const chainEndX =
+vw * (0.8 + Math.random() * 0.15);
+
+const chainEndY =
+vh * (0.75 + Math.random() * 0.15);
+
+for (
+let i = 0;
+i < chainCount;
+i++
+) {
+
+const t =
+i / (chainCount - 1);
+
+const baseX =
+chainStartX + (chainEndX - chainStartX) * t;
+
+const baseY =
+chainStartY + (chainEndY - chainStartY) * t;
+
+const jitterX =
+(Math.random() - 0.5) * vw * 0.05;
+
+const jitterY =
+(Math.random() - 0.5) * vh * 0.05;
+
+const hole =
+document.createElement(
+"div"
+);
+
+hole.className =
+"bullet-hole";
+
+hole.style.left =
+`${baseX + jitterX}px`;
+
+hole.style.top =
+`${baseY + jitterY}px`;
+
+hole.innerHTML =
+makeBulletHoleSVG();
+
+document.body.appendChild(
+hole
+);
+
+holes.push(
+hole
+);
+
+setTimeout(
+() => {
+
+hole.classList.add(
+"visible"
+);
+
+},
+chainStartDelay + i * 70
+);
+
+}
+
+setTimeout(
+() => {
+
+holes.forEach(
+h => h.remove()
+);
+
+actionBulletsBusy =
+false;
+
+},
+chainStartDelay + chainCount * 70 + 800
+);
+
+}
+
+/*
+
+* Comedy — "Ha!" texts that genuinely bounce around the
+* screen (DVD-logo style), reusing the Batman comic-word
+* styling.
+  */
+
+const COMEDY_WORDS =
+["Ha!", "Ha ha!", "Ha!", "Haha!", "Ha!", "Ha ha ha!", "Ha!", "Haha!", "Ha ha!", "Ha!", "Hahaha!"];
+
+let comedyHahaBusy =
+false;
+
+function triggerComedyHaha() {
+
+if (comedyHahaBusy) {
+
+return;
+
+}
+
+comedyHahaBusy =
+true;
+
+const vw =
+window.innerWidth;
+
+const vh =
+window.innerHeight;
+
+const activeEls =
+[];
+
+const timers =
+[];
+
+COMEDY_WORDS.forEach(
+word => {
+
+const el =
+document.createElement(
+"div"
+);
+
+el.className =
+"haha-pop";
+
+el.style.fontSize =
+`${Math.min(30, vw * 0.04)}px`;
+
+el.textContent =
+word;
+
+let x =
+40 + Math.random() * (vw - 160);
+
+let y =
+40 + Math.random() * (vh - 140);
+
+let vx =
+(2.5 + Math.random() * 1.5) *
+(Math.random() < 0.5 ? 1 : -1);
+
+let vy =
+(2 + Math.random() * 1.5) *
+(Math.random() < 0.5 ? 1 : -1);
+
+el.style.left =
+`${x}px`;
+
+el.style.top =
+`${y}px`;
+
+el.style.opacity =
+"1";
+
+document.body.appendChild(
+el
+);
+
+activeEls.push(
+el
+);
+
+let frame =
+0;
+
+const maxFrames =
+160;
+
+const interval =
+setInterval(
+() => {
+
+frame++;
+
+x += vx;
+y += vy;
+
+const w =
+el.offsetWidth;
+
+const h =
+el.offsetHeight;
+
+if (x <= 0 || x + w >= vw) {
+
+vx *= -1;
+
+x = Math.max(
+0,
+Math.min(x, vw - w)
+);
+
+}
+
+if (y <= 0 || y + h >= vh) {
+
+vy *= -1;
+
+y = Math.max(
+0,
+Math.min(y, vh - h)
+);
+
+}
+
+el.style.left =
+`${x}px`;
+
+el.style.top =
+`${y}px`;
+
+if (frame > maxFrames - 30) {
+
+el.style.opacity =
+`${Math.max(0, (maxFrames - frame) / 30)}`;
+
+}
+
+if (frame >= maxFrames) {
+
+clearInterval(
+interval
+);
+
+el.remove();
+
+}
+
+},
+16
+);
+
+timers.push(
+interval
+);
+
+}
+);
+
+setTimeout(
+() => {
+
+timers.forEach(
+t => clearInterval(t)
+);
+
+activeEls.forEach(
+e => e.remove()
+);
+
+comedyHahaBusy =
+false;
+
+},
+3000
+);
+
+}
+
+/*
+
+* Drama — many small teardrop particles falling like rain,
+* point-up/bulb-down orientation (confirmed correct via
+* isolated testing after an earlier version had it backwards).
+  */
+
+let dramaTearsBusy =
+false;
+
+function triggerDramaTears() {
+
+if (dramaTearsBusy) {
+
+return;
+
+}
+
+dramaTearsBusy =
+true;
+
+const vh =
+window.innerHeight;
+
+const count =
+22;
+
+const drops =
+[];
+
+for (
+let i = 0;
+i < count;
+i++
+) {
+
+const drop =
+document.createElement(
+"div"
+);
+
+drop.className =
+"teardrop-particle";
+
+const size =
+7 + Math.random() * 6;
+
+drop.style.width =
+`${size}px`;
+
+drop.style.height =
+`${size * 1.3}px`;
+
+/*
+
+* Was a flat random spread across the full width (read as
+* generic rain, not tears). Now concentrated around two
+* "eye" zones at 35% and 65% width, each with a modest
+* spread of its own, so it reads as falling from two eyes
+* rather than scattered evenly across the screen.
+  */
+
+const eyeZones =
+[35, 65];
+
+const zoneCenter =
+eyeZones[
+Math.floor(
+Math.random() * eyeZones.length
+)
+];
+
+const zoneOffset =
+(Math.random() - 0.5) * 12;
+
+drop.style.left =
+`${zoneCenter + zoneOffset}%`;
+
+drop.style.setProperty(
+"--fall-distance",
+`${vh + 60}px`
+);
+
+drop.style.animationDuration =
+`${3.2 + Math.random() * 1.6}s`;
+
+drop.style.animationDelay =
+`${Math.random() * 1.8}s`;
+
+document.body.appendChild(
+drop
+);
+
+drops.push(
+drop
+);
+
+}
+
+setTimeout(
+() => {
+
+drops.forEach(
+d => d.remove()
+);
+
+dramaTearsBusy =
+false;
+
+},
+6800
+);
+
+}
+
+/*
+
+* Horror — a slash draws itself across the screen fast, then
+* blood drips fall from points measured directly off the
+* actual slash path (getPointAtLength), not hardcoded
+* guesses - confirmed accurate to sub-pixel precision across
+* multiple viewport sizes.
+  */
+
+let horrorSlashBusy =
+false;
+
+function triggerHorrorSlash() {
+
+if (horrorSlashBusy) {
+
+return;
+
+}
+
+horrorSlashBusy =
+true;
+
+const vw =
+window.innerWidth;
+
+const vh =
+window.innerHeight;
+
+const overlay =
+document.createElement(
+"div"
+);
+
+overlay.className =
+"slash-svg-overlay";
+
+const x0 =
+vw * 0.08;
+
+const y0 =
+vh * 0.12;
+
+const x1 =
+vw * 0.92;
+
+const y1 =
+vh * 0.82;
+
+const midX =
+vw * 0.5;
+
+const midY =
+(y0 + y1) / 2 + vh * 0.08;
+
+const d =
+`M ${x0},${y0} Q ${midX},${midY} ${x1},${y1}`;
+
+overlay.innerHTML =
+`<svg width="${vw}" height="${vh}" viewBox="0 0 ${vw} ${vh}">
+<path id="horror-slash-path" class="slash-path-line" d="${d}"
+style="stroke-dasharray: 2000; stroke-dashoffset: 2000; animation: horror-slash-draw 0.35s cubic-bezier(0.6,0,0.4,1) forwards;"/>
+</svg>`;
+
+const styleTag =
+document.createElement(
+"style"
+);
+
+styleTag.textContent =
+`@keyframes horror-slash-draw { to { stroke-dashoffset: 0; } }`;
+
+document.head.appendChild(
+styleTag
+);
+
+document.body.appendChild(
+overlay
+);
+
+const drips =
+[];
+
+setTimeout(
+() => {
+
+const path =
+document.getElementById(
+"horror-slash-path"
+);
+
+const pathLength =
+path.getTotalLength();
+
+const svgEl =
+overlay.querySelector(
+"svg"
+);
+
+const svgRect =
+svgEl.getBoundingClientRect();
+
+const scaleX =
+svgRect.width / vw;
+
+const scaleY =
+svgRect.height / vh;
+
+const fractions =
+[0.18, 0.4, 0.58, 0.78];
+
+fractions.forEach(
+(frac, i) => {
+
+const pt =
+path.getPointAtLength(
+pathLength * frac
+);
+
+const drip =
+document.createElement(
+"div"
+);
+
+drip.className =
+"slash-drip-particle";
+
+drip.style.left =
+`${svgRect.left + pt.x * scaleX}px`;
+
+drip.style.top =
+`${svgRect.top + pt.y * scaleY}px`;
+
+document.body.appendChild(
+drip
+);
+
+drips.push(
+drip
+);
+
+setTimeout(
+() => {
+
+drip.classList.add(
+"visible"
+);
+
+drip.style.height =
+`${50 + Math.random() * 70}px`;
+
+},
+i * 150
+);
+
+}
+);
+
+},
+350
+);
+
+setTimeout(
+() => {
+
+overlay.remove();
+
+styleTag.remove();
+
+drips.forEach(
+d => d.remove()
+);
+
+horrorSlashBusy =
+false;
+
+},
+2600
+);
+
+}
+
+/*
+
+* Thriller — screen darkens, a flashlight-style beam sweeps
+* across once, with a faint red heartbeat pulse underneath.
+  */
+
+let thrillerFlashlightBusy =
+false;
+
+function triggerThrillerFlashlight() {
+
+if (thrillerFlashlightBusy) {
+
+return;
+
+}
+
+thrillerFlashlightBusy =
+true;
+
+const vw =
+window.innerWidth;
+
+const darken =
+document.createElement(
+"div"
+);
+
+darken.className =
+"thriller-darken-overlay";
+
+document.body.appendChild(
+darken
+);
+
+const pulse =
+document.createElement(
+"div"
+);
+
+pulse.className =
+"thriller-pulse-overlay";
+
+document.body.appendChild(
+pulse
+);
+
+const beam =
+document.createElement(
+"div"
+);
+
+beam.className =
+"thriller-beam-overlay";
+
+const beamWidth =
+Math.max(
+120,
+vw * 0.18
+);
+
+beam.style.width =
+`${beamWidth}px`;
+
+beam.style.left =
+`${-beamWidth - 40}px`;
+
+beam.style.transition =
+"none";
+
+document.body.appendChild(
+beam
+);
+
+requestAnimationFrame(
+() => {
+
+darken.classList.add(
+"visible"
+);
+
+}
+);
+
+setTimeout(
+() => {
+
+beam.style.transition =
+"left 2.4s linear";
+
+beam.style.left =
+`${vw + beamWidth}px`;
+
+},
+300
+);
+
+setTimeout(
+() => {
+
+darken.classList.remove(
+"visible"
+);
+
+},
+3400
+);
+
+setTimeout(
+() => {
+
+darken.remove();
+
+pulse.remove();
+
+beam.remove();
+
+thrillerFlashlightBusy =
+false;
+
+},
+4000
+);
+
+}
+
+/*
+
 * Birthday celebration — fires once per session on specific
 * dates (see BIRTHDAY_LIST and BIRTHDAY_CONFETTI_COLORS
 * above), checked and triggered from the page-load
@@ -5752,11 +7309,35 @@ wrap.style.top =
 
 wrap.style.setProperty(
 "--word-rot",
-`${Math.random() * 16 - 8}deg`
+`${Math.random() * 40 - 20}deg`
 );
 
+/*
+
+* Responsive sizing — the CSS defaults (440x290 burst,
+* 64px text) were fixed pixel values that never shrank,
+* guaranteed to overflow a narrow phone screen regardless
+* of where the pop was positioned. Scales down against the
+* actual viewport width instead, capped at the original
+* size so it never looks oversized on a wide screen either.
+  */
+
+const burstWidth =
+Math.min(
+440,
+window.innerWidth * 0.85
+);
+
+const burstHeight =
+burstWidth *
+(290 / 440);
+
+const fontSize =
+burstWidth *
+(64 / 440);
+
 const burstSvg =
-`<svg class="comic-burst-svg" viewBox="0 0 260 170">
+`<svg class="comic-burst-svg" viewBox="0 0 260 170" style="width:${burstWidth}px; height:${burstHeight}px;">
 <polygon points="130,5 145,35 175,15 172,50 210,40 190,68 230,75 192,90 218,115 178,105 170,140 145,115 130,165 115,115 90,140 82,105 42,115 68,90 30,75 70,68 50,40 88,50 85,15 115,35"
 fill="#000"/>
 <polygon points="130,15 142,40 168,23 165,52 198,44 181,66 214,72 183,85 205,106 172,97 165,127 143,106 130,150 117,106 95,127 88,97 55,106 77,85 46,72 79,66 62,44 95,52 92,23 118,40"
@@ -5765,7 +7346,7 @@ fill="${word.color}"/>
 
 wrap.innerHTML =
 burstSvg +
-`<div class="comic-word-text" style="--word-color:${word.color}">${word.text}</div>`;
+`<div class="comic-word-text" style="--word-color:${word.color}; font-size:${fontSize}px;">${word.text}</div>`;
 
 document.body.appendChild(
 wrap
@@ -5989,13 +7570,16 @@ oval
 
 /*
 
-* 2-3 random word pops — explicitly kept out of the case's
-* own footprint now, not just scattered in a wide central
-* zone that happened to overlap it. Measures the case's
-* real position (it's already settled into its final size
-* by this point) and picks a spot in whichever margin - left
-* of the case or right of it - actually has room, rather
-* than just picking a random point and hoping it misses.
+* 2-3 random word pops, positioned on top of the case
+* itself rather than hunting for clear margin space beside
+* it. The previous version tried to find empty margin to the
+* left/right of the case, but on mobile the case can take up
+* nearly the full screen width, leaving no usable margin at
+* all — every pop silently got skipped. Positioning on the
+* case works at any viewport size, and each pop's own size
+* is now computed responsively (see triggerComicWordPop)
+* instead of relying on a scale parameter that was being
+* passed in but never actually used.
   */
 
 const popCount =
@@ -6012,76 +7596,12 @@ modal.querySelector(
 const caseRect =
 caseContent
 ? caseContent.getBoundingClientRect()
-: null;
-
-const leftMargin =
-caseRect
-? caseRect.left
-: vw * 0.5;
-
-const rightMarginStart =
-caseRect
-? caseRect.right
-: vw * 0.5;
-
-const rightMarginWidth =
-vw - rightMarginStart;
-
-const edgePad =
-30;
-
-const wordHalfWidth =
-220;
-
-/*
-
-* Rather than a fixed threshold that skips a side entirely
-* (which on many real viewport widths would skip BOTH sides,
-* since 220px half-width plus padding needs ~490px of clear
-* margin, more than many screens actually have next to a
-* centered case), each side gets a SCALE FACTOR instead —
-* shrink the word just enough to fit whatever margin
-* actually exists, rather than never showing it or letting
-* it overlap the case.
-  */
-
-function marginScale(
-marginWidth
-) {
-
-const available =
-marginWidth -
-edgePad * 2;
-
-if (available <= 0) {
-
-return 0;
-
-}
-
-return Math.min(
-1,
-available /
-(wordHalfWidth * 2)
-);
-
-}
-
-const leftScale =
-marginScale(
-leftMargin
-);
-
-const rightScale =
-marginScale(
-rightMarginWidth
-);
-
-const usableLeft =
-leftScale > 0.3;
-
-const usableRight =
-rightScale > 0.3;
+: {
+left: vw * 0.25,
+top: vh * 0.15,
+width: vw * 0.5,
+height: vh * 0.7
+};
 
 for (
 let i = 0;
@@ -6089,79 +7609,70 @@ i < popCount;
 i++
 ) {
 
-let side =
-null;
+/*
 
-if (usableLeft && usableRight) {
+* Clamped against the same responsive size formula
+* triggerComicWordPop uses, so a word placed near the case's
+* own edge can't have its own half-width/height push it past
+* the viewport edge — the actual cause of the rare 1px
+* overflow seen in testing, since the random position was
+* only ever checked against the case's bounds, never the
+* word's own size on top of that.
+  */
 
-side =
-Math.random() < 0.5
-? "left"
-: "right";
+const popBurstWidth =
+Math.min(
+440,
+vw * 0.85
+);
 
-} else if (usableLeft) {
+const popBurstHeight =
+popBurstWidth *
+(290 / 440);
 
-side =
-"left";
+const popHalfWidth =
+popBurstWidth / 2;
 
-} else if (usableRight) {
+const popHalfHeight =
+popBurstHeight / 2;
 
-side =
-"right";
+/*
 
-}
-
-if (!side) {
-
-continue;
-
-}
-
-const scale =
-side === "left"
-? leftScale
-: rightScale;
-
-const scaledHalfWidth =
-wordHalfWidth *
-scale;
+* Was 0.2-0.8 (both axes) - kept every pop tightly centered
+* within the case, never near an edge and never bleeding
+* off it at all. Widened to -0.33 to 1.33, so the pop's
+* center can land anywhere across the full case and bleed
+* up to roughly a third of the case's own size past any
+* edge — the viewport clamp above still guarantees it never
+* runs off the actual screen regardless.
+  */
 
 const popX =
-side === "left"
-? Math.min(
-leftMargin - edgePad - scaledHalfWidth,
-edgePad + scaledHalfWidth +
-Math.random() *
+Math.min(
 Math.max(
-1,
-leftMargin -
-edgePad * 2 -
-scaledHalfWidth * 2
-)
-)
-: rightMarginStart +
-edgePad +
-scaledHalfWidth +
-Math.random() *
-Math.max(
-1,
-rightMarginWidth -
-edgePad * 2 -
-scaledHalfWidth * 2
+caseRect.left +
+caseRect.width * (-0.33 + Math.random() * 1.66),
+popHalfWidth + 8
+),
+vw - popHalfWidth - 8
 );
 
 const popY =
-vh * 0.2 +
-Math.random() *
-(vh * 0.55);
+Math.min(
+Math.max(
+caseRect.top +
+caseRect.height * (-0.33 + Math.random() * 1.66),
+popHalfHeight + 8
+),
+vh - popHalfHeight - 8
+);
 
 setTimeout(
 () => {
 
 triggerComicWordPop(
 popX,
-popY,
-scale
+popY
 );
 
 },
@@ -6184,6 +7695,568 @@ false;
 
 },
 5600
+);
+
+}
+
+/*
+
+* James Bond gun-barrel — full-screen takeover (unlike the
+* Harry Potter envelope or Mission Impossible package, this
+* doesn't grow from the card, it's a cinematic full-screen
+* sequence that plays while the real modal grows normally
+* underneath, then fades away to reveal it). Sizing is
+* computed from viewport dimensions rather than the fixed
+* pixel values the mockup used, so this scales correctly on
+* any screen instead of assuming one size.
+  */
+
+const BOND_SEQUENCE_DURATION =
+5300;
+
+function spiralPoint(
+cx,
+cy,
+angleDeg,
+radius
+) {
+
+const rad =
+angleDeg * Math.PI / 180;
+
+return {
+x: cx + radius * Math.cos(rad),
+y: cy + radius * Math.sin(rad)
+};
+
+}
+
+function buildRiflingBandPoints(
+cx,
+cy,
+startAngle,
+sweepDeg,
+outerR,
+innerR,
+steps,
+bandWidthDeg
+) {
+
+const outerEdge = [];
+const innerEdge = [];
+
+for (
+let i = 0;
+i <= steps;
+i++
+) {
+
+const t = i / steps;
+const angle = startAngle + sweepDeg * t;
+const radius = outerR + (innerR - outerR) * t;
+outerEdge.push(spiralPoint(cx, cy, angle, radius));
+
+}
+
+for (
+let i = steps;
+i >= 0;
+i--
+) {
+
+const t = i / steps;
+const angle = startAngle + sweepDeg * t + bandWidthDeg;
+const radius = outerR + (innerR - outerR) * t;
+innerEdge.push(spiralPoint(cx, cy, angle, radius));
+
+}
+
+const points = outerEdge.concat(innerEdge);
+
+return points.map(
+p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`
+).join(' ');
+
+}
+
+function buildBondRiflingSVG(
+scopeSize
+) {
+
+const cx = scopeSize / 2;
+const cy = scopeSize / 2;
+const bandCount = 4;
+const sweep = 300;
+const outerR = cx + 25;
+const innerR = scopeSize * 0.223;
+const centerHoleR = scopeSize * 0.246;
+
+let svg =
+`<svg width="${scopeSize}" height="${scopeSize}" viewBox="0 0 ${scopeSize} ${scopeSize}" style="position:absolute; inset:0;">`;
+
+svg += `<defs>`;
+svg += `<radialGradient id="bond-band-grad" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${cy}" r="${cx}">
+          <stop offset="0%" stop-color="#3a3a3a"/>
+          <stop offset="55%" stop-color="#b8b8b8"/>
+          <stop offset="100%" stop-color="#e8e8e8"/>
+        </radialGradient>`;
+svg += `<radialGradient id="bond-groove-grad" gradientUnits="userSpaceOnUse" cx="${cx}" cy="${cy}" r="${cx}">
+          <stop offset="0%" stop-color="#000"/>
+          <stop offset="100%" stop-color="#151515"/>
+        </radialGradient>`;
+svg += `</defs>`;
+
+svg += `<clipPath id="bond-rifling-clip"><circle cx="${cx}" cy="${cy}" r="${cx}"/></clipPath>`;
+
+svg += `<mask id="bond-center-hole-mask">
+          <rect x="0" y="0" width="${scopeSize}" height="${scopeSize}" fill="#fff"/>
+          <circle cx="${cx}" cy="${cy}" r="${centerHoleR}" fill="#000"/>
+        </mask>`;
+
+svg += `<g clip-path="url(#bond-rifling-clip)" mask="url(#bond-center-hole-mask)">`;
+
+for (
+let i = 0;
+i < bandCount;
+i++
+) {
+
+const startAngle = (360 / bandCount) * i;
+
+const bandPoints =
+buildRiflingBandPoints(
+cx, cy, startAngle, sweep, outerR, innerR, 30, 65
+);
+
+svg += `<polygon points="${bandPoints}" fill="url(#bond-band-grad)"/>`;
+
+const highlightPoints = [];
+
+for (
+let s = 0;
+s <= 30;
+s++
+) {
+
+const t = s / 30;
+const angle = startAngle + sweep * t;
+const radius = outerR + (innerR - outerR) * t;
+highlightPoints.push(spiralPoint(cx, cy, angle, radius));
+
+}
+
+const highlightPath =
+highlightPoints.map(
+p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`
+).join(' ');
+
+svg += `<polyline points="${highlightPath}" fill="none" stroke="rgba(255,255,255,0.65)" stroke-width="2"/>`;
+
+const groovePoints =
+buildRiflingBandPoints(
+cx, cy, startAngle + 65, sweep, outerR, innerR, 30, 25
+);
+
+svg += `<polygon points="${groovePoints}" fill="url(#bond-groove-grad)"/>`;
+
+}
+
+svg += `</g></svg>`;
+
+return svg;
+
+}
+
+function triggerBondGunBarrel() {
+
+const overlay =
+document.createElement(
+"div"
+);
+
+overlay.className =
+"bond-overlay";
+
+const blackMask =
+document.createElement(
+"div"
+);
+
+blackMask.className =
+"bond-black-mask";
+
+overlay.appendChild(
+blackMask
+);
+
+const vw =
+window.innerWidth;
+
+const vh =
+window.innerHeight;
+
+const scopeSize =
+Math.min(
+340,
+vw * 0.42,
+vh * 0.55
+);
+
+const scope =
+document.createElement(
+"div"
+);
+
+scope.className =
+"bond-scope";
+
+scope.style.width =
+`${scopeSize}px`;
+
+scope.style.height =
+`${scopeSize}px`;
+
+const startLeft =
+vw * 0.15;
+
+const startTop =
+vh * 0.5;
+
+scope.style.left =
+`${startLeft}px`;
+
+scope.style.top =
+`${startTop}px`;
+
+scope.style.transform =
+"translate(-50%, -50%) scale(1)";
+
+const rifling =
+document.createElement(
+"div"
+);
+
+rifling.className =
+"bond-rifling";
+
+rifling.innerHTML =
+buildBondRiflingSVG(
+scopeSize
+);
+
+scope.appendChild(
+rifling
+);
+
+const reelSize =
+scopeSize * 0.385;
+
+const reel =
+document.createElement(
+"div"
+);
+
+reel.className =
+"bond-reel";
+
+reel.style.width =
+`${reelSize}px`;
+
+reel.style.height =
+`${reelSize}px`;
+
+reel.style.bottom =
+`${scopeSize * 0.346}px`;
+
+reel.style.left =
+`${-reelSize * 0.3}px`;
+
+reel.style.animationDuration =
+"2.3s";
+
+const reelMaskId =
+`bond-reel-mask-${Date.now()}`;
+
+reel.innerHTML =
+`<svg viewBox="0 0 100 100" width="100%" height="100%">
+<defs>
+<mask id="${reelMaskId}">
+<circle cx="50" cy="50" r="46" fill="#fff"/>
+<circle cx="50" cy="18" r="10" fill="#000"/>
+<circle cx="76" cy="34" r="10" fill="#000"/>
+<circle cx="76" cy="66" r="10" fill="#000"/>
+<circle cx="50" cy="82" r="10" fill="#000"/>
+<circle cx="24" cy="66" r="10" fill="#000"/>
+<circle cx="24" cy="34" r="10" fill="#000"/>
+<circle cx="50" cy="50" r="9" fill="#000"/>
+</mask>
+</defs>
+<circle cx="50" cy="50" r="46" fill="#4a4a4a" stroke="#1a1a1a" stroke-width="2" mask="url(#${reelMaskId})"/>
+<circle cx="50" cy="50" r="46" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+</svg>`;
+
+scope.appendChild(
+reel
+);
+
+overlay.appendChild(
+scope
+);
+
+const ring =
+document.createElement(
+"div"
+);
+
+ring.className =
+"bond-ring";
+
+ring.style.width =
+`${scopeSize + 20}px`;
+
+ring.style.height =
+`${scopeSize + 20}px`;
+
+ring.style.left =
+`${startLeft}px`;
+
+ring.style.top =
+`${startTop}px`;
+
+ring.style.transform =
+"translate(-50%, -50%)";
+
+ring.style.transition =
+"left 1.8s linear, top 1.8s linear, opacity 0.8s ease";
+
+overlay.appendChild(
+ring
+);
+
+const flash =
+document.createElement(
+"div"
+);
+
+flash.className =
+"bond-flash";
+
+overlay.appendChild(
+flash
+);
+
+const dripCount =
+4;
+
+const drips = [];
+
+for (
+let i = 0;
+i < dripCount;
+i++
+) {
+
+const drip =
+document.createElement(
+"div"
+);
+
+drip.className =
+"bond-drip";
+
+const dripWidth =
+Math.max(
+6,
+vw * 0.012
+);
+
+drip.style.width =
+`${dripWidth}px`;
+
+drip.style.left =
+`${44 + i * 4}%`;
+
+overlay.appendChild(
+drip
+);
+
+drips.push(
+drip
+);
+
+}
+
+document.body.appendChild(
+overlay
+);
+
+requestAnimationFrame(
+() => {
+
+scope.style.left =
+"50%";
+
+scope.style.top =
+"50%";
+
+ring.style.left =
+"50%";
+
+ring.style.top =
+"50%";
+
+}
+);
+
+/*
+
+* Reel winding down - freezes current spin angle (read off
+* the live computed transform, so there's no jump), coasts
+* forward a bit further, then rolls back and settles,
+* recentering horizontally within the scope at the same
+* time.
+  */
+
+setTimeout(
+() => {
+
+const computedStyle =
+window.getComputedStyle(
+reel
+);
+
+const matrix =
+computedStyle.transform;
+
+let currentAngle = 0;
+
+if (matrix && matrix !== "none") {
+
+const values =
+matrix.split("(")[1].split(")")[0].split(",");
+
+const a = parseFloat(values[0]);
+const b = parseFloat(values[1]);
+
+currentAngle =
+Math.atan2(b, a) * (180 / Math.PI);
+
+}
+
+reel.style.animation =
+"none";
+
+reel.style.transform =
+`rotate(${currentAngle}deg)`;
+
+reel.style.transition =
+"left 0.6s cubic-bezier(0.3,0.1,0.2,1)";
+
+reel.style.left =
+`${(scopeSize - reelSize) / 2}px`;
+
+void reel.offsetWidth;
+
+const keyframeName =
+`bond-reel-wind-down-${Date.now()}`;
+
+const styleTag =
+document.createElement(
+"style"
+);
+
+styleTag.textContent =
+`@keyframes ${keyframeName} {
+0% { transform: rotate(${currentAngle}deg); }
+42% { transform: rotate(${currentAngle + 35}deg); }
+68% { transform: rotate(${currentAngle + 35 - 6}deg); }
+100% { transform: rotate(${currentAngle + 35 - 14}deg); }
+}`;
+
+document.head.appendChild(
+styleTag
+);
+
+reel.style.animation =
+`${keyframeName} 1.15s cubic-bezier(0.33,0.1,0.3,1) forwards`;
+
+},
+1900
+);
+
+setTimeout(
+() => {
+
+flash.classList.add(
+"visible"
+);
+
+},
+3080
+);
+
+setTimeout(
+() => {
+
+flash.classList.remove(
+"visible"
+);
+
+flash.classList.add(
+"fading-out"
+);
+
+const dripHeights =
+[
+scopeSize * 0.55,
+scopeSize * 0.4,
+scopeSize * 0.5,
+scopeSize * 0.34
+];
+
+drips.forEach(
+(drip, i) => {
+
+drip.classList.add(
+"visible"
+);
+
+drip.style.height =
+`${dripHeights[i]}px`;
+
+}
+);
+
+},
+3280
+);
+
+setTimeout(
+() => {
+
+scope.classList.add(
+"fading"
+);
+
+blackMask.classList.add(
+"fading"
+);
+
+ring.classList.add(
+"fading"
+);
+
+},
+5000
+);
+
+setTimeout(
+() => {
+
+overlay.remove();
+
+},
+BOND_SEQUENCE_DURATION
 );
 
 }
@@ -7417,6 +9490,25 @@ button.classList.remove(
 activeFilters.category =
 value;
 
+/*
+
+* Fires only when switching TO these specific categories,
+* not on toggle-off (that's the branch above) or when
+* switching between other category filters.
+  */
+
+if (value === "christmas") {
+
+triggerChristmasLights();
+
+}
+
+if (value === "baseball") {
+
+triggerBaseballScoreboard();
+
+}
+
 document
 .querySelectorAll(
 '[data-filter-group="category"]'
@@ -7581,9 +9673,87 @@ triggerRewindEffect();
 
 }
 
+/*
+
+* Classic is a toggle, not a one-shot effect - grayscale
+* applies whenever "classic" is the selected value and is
+* removed for anything else, including switching back to
+* "All Genres" (which also fires the rewind effect above,
+* so the two play together - color visibly rewinding back
+* into the shelf).
+  */
+
+document.body.classList.toggle(
+"classic-mode",
+event.target.value === "classic"
+);
+
+if (event.target.value === "action") {
+
+triggerActionBullets();
+
+}
+
+if (event.target.value === "comedy") {
+
+triggerComedyHaha();
+
+}
+
+if (event.target.value === "drama") {
+
+triggerDramaTears();
+
+}
+
+if (event.target.value === "horror") {
+
+triggerHorrorSlash();
+
+}
+
+if (event.target.value === "thriller") {
+
+triggerThrillerFlashlight();
+
+}
+
 if (event.target.value === "rom-com") {
 
 triggerHeartFlood();
+
+/*
+
+* Reveals every rom-com movie's heart at once, not just
+* the ones currently visible under other active filters —
+* visiting the Rom-Com filter should permanently unlock
+* the badge for the whole category, not just whatever
+* happened to be on screen at that moment.
+  */
+
+movies.forEach(
+candidateMovie => {
+
+const candidateGenre =
+(candidateMovie.genre || "")
+.toLowerCase();
+
+if (
+candidateGenre.includes(
+"rom-com"
+)
+) {
+
+heartsRevealedMovieIds.add(
+getMovieId(
+candidateMovie
+)
+);
+
+}
+
+}
+);
 
 }
 
@@ -9135,6 +11305,15 @@ false;
 currentSearch =
 event.target.value.trim();
 
+if (searchClearButton) {
+
+searchClearButton.classList.toggle(
+"hidden",
+currentSearch === ""
+);
+
+}
+
 if (randomMode) {
 
 generateRandomMovies();
@@ -9142,6 +11321,40 @@ generateRandomMovies();
 }
 
 renderMovies();
+
+}
+);
+
+}
+
+if (searchClearButton) {
+
+searchClearButton.addEventListener(
+"click",
+() => {
+
+searchInput.value =
+"";
+
+sandraBullockModeActive =
+false;
+
+currentSearch =
+"";
+
+searchClearButton.classList.add(
+"hidden"
+);
+
+if (randomMode) {
+
+generateRandomMovies();
+
+}
+
+renderMovies();
+
+searchInput.focus();
 
 }
 );
