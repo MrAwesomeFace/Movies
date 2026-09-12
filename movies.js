@@ -2993,6 +2993,158 @@ const movies = [
     "rated": "R"
   },
   {
+    "title": "Brooklyn Nine-Nine - Complete Eighth Season",
+    "tmdbTitle": "Brooklyn Nine-Nine",
+    "type": "tv",
+    "tmdbId": 48891,
+    "poster": "https://image.tmdb.org/t/p/w500/8PmhuCEB9W3Cc5ZDJunnV1m68IZ.jpg",
+    "year": "2021",
+    "runtime": "",
+    "genre": "Comedy / Crime",
+    "rated": "TV-14",
+    "director": "",
+    "cast": "Andy Samberg, Melissa Fumero, Terry Crews, Joe Lo Truglio, Stephanie Beatriz, Andre Braugher",
+    "synopsis": "A single-camera ensemble comedy following the lives of an eclectic group of detectives in a New York precinct, including one slacker who is forced to shape up when he gets a new boss.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ],
+    "season": 8
+  },
+  {
+    "title": "Brooklyn Nine-Nine - Complete Fifth Season",
+    "tmdbTitle": "Brooklyn Nine-Nine",
+    "type": "tv",
+    "tmdbId": 48891,
+    "poster": "https://image.tmdb.org/t/p/w500/dWOF2pJBNfunspM7PpVG6O9LWj3.jpg",
+    "year": "2017",
+    "runtime": "",
+    "genre": "Comedy / Crime",
+    "rated": "TV-14",
+    "director": "",
+    "cast": "Andy Samberg, Melissa Fumero, Terry Crews, Joe Lo Truglio, Stephanie Beatriz, Andre Braugher",
+    "synopsis": "A single-camera ensemble comedy following the lives of an eclectic group of detectives in a New York precinct, including one slacker who is forced to shape up when he gets a new boss.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ],
+    "season": 5
+  },
+  {
+    "title": "Brooklyn Nine-Nine - Complete First Season",
+    "tmdbTitle": "Brooklyn Nine-Nine",
+    "type": "tv",
+    "tmdbId": 48891,
+    "poster": "https://image.tmdb.org/t/p/w500/9hL8os3A3pGpdvQtt029zj2pURy.jpg",
+    "year": "2013",
+    "runtime": "",
+    "genre": "Comedy / Crime",
+    "rated": "TV-14",
+    "director": "",
+    "cast": "Andy Samberg, Melissa Fumero, Terry Crews, Joe Lo Truglio, Stephanie Beatriz, Andre Braugher",
+    "synopsis": "A single-camera ensemble comedy following the lives of an eclectic group of detectives in a New York precinct, including one slacker who is forced to shape up when he gets a new boss.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ],
+    "season": 1
+  },
+  {
+    "title": "Brooklyn Nine-Nine - Complete Fourth Season",
+    "tmdbTitle": "Brooklyn Nine-Nine",
+    "type": "tv",
+    "tmdbId": 48891,
+    "poster": "https://image.tmdb.org/t/p/w500/6fsr582nvms8E4ag3jb3oHL76en.jpg",
+    "year": "2016",
+    "runtime": "",
+    "genre": "Comedy / Crime",
+    "rated": "TV-14",
+    "director": "",
+    "cast": "Andy Samberg, Melissa Fumero, Terry Crews, Joe Lo Truglio, Stephanie Beatriz, Andre Braugher",
+    "synopsis": "A single-camera ensemble comedy following the lives of an eclectic group of detectives in a New York precinct, including one slacker who is forced to shape up when he gets a new boss.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ],
+    "season": 4
+  },
+  {
+    "title": "Brooklyn Nine-Nine - Complete Second Season",
+    "tmdbTitle": "Brooklyn Nine-Nine",
+    "type": "tv",
+    "tmdbId": 48891,
+    "poster": "https://image.tmdb.org/t/p/w500/lvST5TSkJqN4yyhDy5IgyoBDize.jpg",
+    "year": "2014",
+    "runtime": "",
+    "genre": "Comedy / Crime",
+    "rated": "TV-14",
+    "director": "",
+    "cast": "Andy Samberg, Melissa Fumero, Terry Crews, Joe Lo Truglio, Stephanie Beatriz, Andre Braugher",
+    "synopsis": "A single-camera ensemble comedy following the lives of an eclectic group of detectives in a New York precinct, including one slacker who is forced to shape up when he gets a new boss.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ],
+    "season": 2
+  },
+  {
+    "title": "Brooklyn Nine-Nine - Complete Seventh Season",
+    "tmdbTitle": "Brooklyn Nine-Nine",
+    "type": "tv",
+    "tmdbId": 48891,
+    "poster": "https://image.tmdb.org/t/p/w500/kJUpn3xnymCbdxInyZVGFW5vGYR.jpg",
+    "year": "2020",
+    "runtime": "",
+    "genre": "Comedy / Crime",
+    "rated": "TV-14",
+    "director": "",
+    "cast": "Andy Samberg, Melissa Fumero, Terry Crews, Joe Lo Truglio, Stephanie Beatriz, Andre Braugher",
+    "synopsis": "A single-camera ensemble comedy following the lives of an eclectic group of detectives in a New York precinct, including one slacker who is forced to shape up when he gets a new boss.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ],
+    "season": 7
+  },
+  {
+    "title": "Brooklyn Nine-Nine - Complete Sixth Season",
+    "tmdbTitle": "Brooklyn Nine-Nine",
+    "type": "tv",
+    "tmdbId": 48891,
+    "poster": "https://image.tmdb.org/t/p/w500/xa9xA4Ieju9cyVkfJ47n1hnbHWB.jpg",
+    "year": "2019",
+    "runtime": "",
+    "genre": "Comedy / Crime",
+    "rated": "TV-14",
+    "director": "",
+    "cast": "Andy Samberg, Melissa Fumero, Terry Crews, Joe Lo Truglio, Stephanie Beatriz, Andre Braugher",
+    "synopsis": "A single-camera ensemble comedy following the lives of an eclectic group of detectives in a New York precinct, including one slacker who is forced to shape up when he gets a new boss.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ],
+    "season": 6
+  },
+  {
+    "title": "Brooklyn Nine-Nine - Complete Third Season",
+    "tmdbTitle": "Brooklyn Nine-Nine",
+    "type": "tv",
+    "tmdbId": 48891,
+    "poster": "https://image.tmdb.org/t/p/w500/nqlpXFbyCGzeBaDVC2E6PO5itCw.jpg",
+    "year": "2015",
+    "runtime": "",
+    "genre": "Comedy / Crime",
+    "rated": "TV-14",
+    "director": "",
+    "cast": "Andy Samberg, Melissa Fumero, Terry Crews, Joe Lo Truglio, Stephanie Beatriz, Andre Braugher",
+    "synopsis": "A single-camera ensemble comedy following the lives of an eclectic group of detectives in a New York precinct, including one slacker who is forced to shape up when he gets a new boss.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ],
+    "season": 3
+  },
+  {
     "title": "Bruce Almighty",
     "tmdbTitle": "Bruce Almighty",
     "type": "movie",
