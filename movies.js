@@ -11446,6 +11446,101 @@ const movies = [
     "rated": "R"
   },
   {
+    "title": "Leverage - Complete Fifth Season",
+    "tmdbTitle": "Leverage",
+    "type": "tv",
+    "tmdbId": 7482,
+    "poster": "https://image.tmdb.org/t/p/w500/wgLwiAjv7IdmUAPddG6hSFVO2D1.jpg",
+    "year": "2012",
+    "runtime": "42m",
+    "genre": "Drama / Comedy / Action & Adventure / Crime",
+    "rated": "TV-14",
+    "director": "",
+    "cast": "Timothy Hutton, Gina Bellman, Christian Kane, Beth Riesgraf, Aldis Hodge",
+    "synopsis": "A five-person team comprised of a thief, a grifter, a hacker, and a retrieval specialist, led by former insurance investigator Nathan Ford, use their skills to fight corporate and governmental injustices inflicted on ordinary citizens.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ],
+    "season": 5
+  },
+  {
+    "title": "Leverage - Complete First Season",
+    "tmdbTitle": "Leverage",
+    "type": "tv",
+    "tmdbId": 7482,
+    "poster": "https://image.tmdb.org/t/p/w500/s3458Os7x2Ux2DoZ6pwkWWNIgjs.jpg",
+    "year": "2008",
+    "runtime": "42m",
+    "genre": "Drama / Comedy / Action & Adventure / Crime",
+    "rated": "TV-14",
+    "director": "",
+    "cast": "Timothy Hutton, Gina Bellman, Christian Kane, Beth Riesgraf, Aldis Hodge",
+    "synopsis": "A five-person team comprised of a thief, a grifter, a hacker, and a retrieval specialist, led by former insurance investigator Nathan Ford, use their skills to fight corporate and governmental injustices inflicted on ordinary citizens.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ],
+    "season": 1
+  },
+  {
+    "title": "Leverage - Complete Fourth Season",
+    "tmdbTitle": "Leverage",
+    "type": "tv",
+    "tmdbId": 7482,
+    "poster": "https://image.tmdb.org/t/p/w500/fLDBK2R974mUAibM0SwZDnQaqFZ.jpg",
+    "year": "2011",
+    "runtime": "42m",
+    "genre": "Drama / Comedy / Action & Adventure / Crime",
+    "rated": "TV-14",
+    "director": "",
+    "cast": "Timothy Hutton, Gina Bellman, Christian Kane, Beth Riesgraf, Aldis Hodge",
+    "synopsis": "A five-person team comprised of a thief, a grifter, a hacker, and a retrieval specialist, led by former insurance investigator Nathan Ford, use their skills to fight corporate and governmental injustices inflicted on ordinary citizens.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ],
+    "season": 4
+  },
+  {
+    "title": "Leverage - Complete Second Season",
+    "tmdbTitle": "Leverage",
+    "type": "tv",
+    "tmdbId": 7482,
+    "poster": "https://image.tmdb.org/t/p/w500/es3U92JQvFZsCfyAne3hGaX6jmk.jpg",
+    "year": "2009",
+    "runtime": "42m",
+    "genre": "Drama / Comedy / Action & Adventure / Crime",
+    "rated": "TV-14",
+    "director": "",
+    "cast": "Timothy Hutton, Gina Bellman, Christian Kane, Beth Riesgraf, Aldis Hodge",
+    "synopsis": "A five-person team comprised of a thief, a grifter, a hacker, and a retrieval specialist, led by former insurance investigator Nathan Ford, use their skills to fight corporate and governmental injustices inflicted on ordinary citizens.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ],
+    "season": 2
+  },
+  {
+    "title": "Leverage - Complete Third Season",
+    "tmdbTitle": "Leverage",
+    "type": "tv",
+    "tmdbId": 7482,
+    "poster": "https://image.tmdb.org/t/p/w500/uLryUh30GId8f96xRaRFId84PUO.jpg",
+    "year": "2010",
+    "runtime": "42m",
+    "genre": "Drama / Comedy / Action & Adventure / Crime",
+    "rated": "TV-14",
+    "director": "",
+    "cast": "Timothy Hutton, Gina Bellman, Christian Kane, Beth Riesgraf, Aldis Hodge",
+    "synopsis": "A five-person team comprised of a thief, a grifter, a hacker, and a retrieval specialist, led by former insurance investigator Nathan Ford, use their skills to fight corporate and governmental injustices inflicted on ordinary citizens.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ],
+    "season": 3
+  },
+  {
     "title": "Liar Liar",
     "tmdbTitle": "Liar Liar",
     "type": "movie",
