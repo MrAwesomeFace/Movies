@@ -18376,6 +18376,63 @@ const movies = [
     "rated": "G"
   },
   {
+    "title": "Ted Lasso - Complete First Season",
+    "tmdbTitle": "Ted Lasso",
+    "type": "tv",
+    "tmdbId": 97546,
+    "poster": "https://image.tmdb.org/t/p/w500/oX7QdfiQEbyvIvpKgJHRCgbrLdK.jpg",
+    "year": "2020",
+    "runtime": "",
+    "genre": "Drama / Comedy",
+    "rated": "TV-MA",
+    "director": "",
+    "cast": "Jason Sudeikis, Hannah Waddingham, Jeremy Swift, Brett Goldstein, Brendan Hunt, Juno Temple",
+    "synopsis": "Ted Lasso, an American football coach, moves to England when he's hired to manage a soccer team—despite having no experience. With cynical players and a doubtful town, will he get them to see the Ted Lasso Way?",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ],
+    "season": 1
+  },
+  {
+    "title": "Ted Lasso - Complete Second Season",
+    "tmdbTitle": "Ted Lasso",
+    "type": "tv",
+    "tmdbId": 97546,
+    "poster": "https://image.tmdb.org/t/p/w500/a3tL7vRFN63zE8IrpjLHtheAcBM.jpg",
+    "year": "2021",
+    "runtime": "",
+    "genre": "Drama / Comedy",
+    "rated": "TV-MA",
+    "director": "",
+    "cast": "Jason Sudeikis, Hannah Waddingham, Jeremy Swift, Brett Goldstein, Brendan Hunt, Juno Temple",
+    "synopsis": "Ted Lasso, an American football coach, moves to England when he's hired to manage a soccer team—despite having no experience. With cynical players and a doubtful town, will he get them to see the Ted Lasso Way?",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ],
+    "season": 2
+  },
+  {
+    "title": "Ted Lasso - Complete Third Season",
+    "tmdbTitle": "Ted Lasso",
+    "type": "tv",
+    "tmdbId": 97546,
+    "poster": "https://image.tmdb.org/t/p/w500/7NS4VYNTm2J1XQk5OVUwImbV4vZ.jpg",
+    "year": "2023",
+    "runtime": "",
+    "genre": "Drama / Comedy",
+    "rated": "TV-MA",
+    "director": "",
+    "cast": "Jason Sudeikis, Hannah Waddingham, Jeremy Swift, Brett Goldstein, Brendan Hunt, Juno Temple",
+    "synopsis": "Ted Lasso, an American football coach, moves to England when he's hired to manage a soccer team—despite having no experience. With cynical players and a doubtful town, will he get them to see the Ted Lasso Way?",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ],
+    "season": 3
+  },
+  {
     "title": "Ted Lasso - The Richmond Way",
     "tmdbTitle": "Ted Lasso",
     "type": "tv",
