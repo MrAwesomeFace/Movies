@@ -1949,11 +1949,46 @@ five (Action, Comedy, Drama, Horror, Thriller) are one-shot
 effects, same pattern as Christmas/Baseball.
 ========================================================= */
 
-body.classic-mode {
-  filter: grayscale(1) contrast(1.1);
+/*
 
-  transition: filter 0.6s ease;
+* Classic runs a one-time 10s animation evolving from black-
+* and-white through a loose history of film color - sepia/
+* hand-tinted, then an early, limited-range Technicolor-ish
+* stage, settling on full normal color - rather than staying
+* grayscale the whole time. animation-fill-mode:forwards
+* holds it at full color once the animation ends, rather
+* than looping back to black-and-white. Re-selecting Classic
+* after switching away restarts fresh from black-and-white,
+* since the class transitions from absent to present again.
+  */
+
+body.classic-mode {
+  animation: classic-color-evolution 10s ease-in-out forwards;
 }
+
+@keyframes classic-color-evolution {
+
+  0% {
+    filter: grayscale(1) sepia(0) saturate(1) hue-rotate(0deg) contrast(1.15);
+  }
+
+  20% {
+    filter: grayscale(0.9) sepia(0.35) saturate(1) hue-rotate(0deg) contrast(1.1);
+  }
+
+  45% {
+    filter: grayscale(0.55) sepia(0.2) saturate(0.65) hue-rotate(-8deg) contrast(1.05);
+  }
+
+  70% {
+    filter: grayscale(0.22) sepia(0.05) saturate(0.85) hue-rotate(-2deg) contrast(1.02);
+  }
+
+  100% {
+    filter: grayscale(0) sepia(0) saturate(1) hue-rotate(0deg) contrast(1);
+  }
+}
+
 
 .bullet-hole {
   position: fixed;
@@ -3311,6 +3346,136 @@ which only ever plays over the shelf.
 
     opacity: 0;
   }
+}
+
+
+/* =========================================================
+SPARKLE ARC EASTER EGG (Animated: Only)
+=========================================================
+A bright point travels along a semicircular arc across the
+screen when the Animated filter is switched to "Only",
+continuously dropping small twinkling sparkle particles
+behind it that flare then fade. Fires once and cleans up
+after itself, same pattern as the other easter eggs here.
+========================================================= */
+
+.sparkle-head {
+  position: fixed;
+
+  width: 14px;
+  height: 14px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(circle, #fff 0%, #fff2c4 40%, rgba(255, 242, 196, 0) 75%);
+
+  box-shadow:
+    0 0 12px 4px rgba(255, 242, 196, 0.9),
+    0 0 24px 8px rgba(255, 220, 130, 0.5);
+
+  z-index: 65;
+
+  pointer-events: none;
+}
+
+.sparkle-dust {
+  position: fixed;
+
+  border-radius: 50%;
+
+  background: #fff8dc;
+
+  opacity: 0;
+
+  z-index: 65;
+
+  pointer-events: none;
+
+  animation-name: sparkle-twinkle-fade;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+
+@keyframes sparkle-twinkle-fade {
+  0% {
+    opacity: 0;
+
+    transform: scale(0.3);
+  }
+
+  15% {
+    opacity: 1;
+
+    transform: scale(1.2);
+  }
+
+  30% {
+    opacity: 0.7;
+
+    transform: scale(0.8);
+  }
+
+  100% {
+    opacity: 0;
+
+    transform: scale(0.2);
+  }
+}
+
+
+/* =========================================================
+IRIS CLOSE EASTER EGG (closing a movie)
+=========================================================
+Fires when a movie is closed — a classic iris-wipe: a
+circular window shrinks down around the case as it flies
+back to the shelf, closing to a point around a concentric
+ring pattern with "That's all, Folks!" in the center, then
+re-opens the same way it closed (mirrored animation, not an
+instant snap) to reveal the shelf again. Built as fresh CSS/
+SVG, not any specific reference file. Radius is animated via
+JS (triggerIrisClose in app.js) rather than CSS transitions,
+since an SVG mask's circle radius needs real per-frame
+control that a CSS transition on a shrinking element
+(box-shadow-spread trick) can't give a true see-through
+hole with rings around it.
+========================================================= */
+
+.iris-close-svg {
+  position: fixed;
+
+  z-index: 65;
+
+  pointer-events: none;
+}
+
+.iris-close-text {
+  position: fixed;
+
+  transform: translate(-50%, -50%) scale(0.5);
+
+  color: #fff;
+
+  font-family: 'Kaushan Script', cursive;
+
+  opacity: 0;
+
+  z-index: 66;
+
+  pointer-events: none;
+
+  white-space: nowrap;
+
+  text-shadow:
+    2px 2px 4px rgba(0, 0, 0, 0.7);
+
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.iris-close-text.visible {
+  opacity: 1;
+
+  transform: translate(-50%, -50%) scale(1);
 }
 
 
