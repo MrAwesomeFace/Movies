@@ -17,6 +17,12 @@ on:
           - movie
           - tv
 
+      season_number:
+        description: "TV only: seasons to add - 'all', a list like '1,3,5', a range like '1-8', or a mix like '1-3,5,7-8'. Leave blank for movies, or to add/update a TV show's overall entry without a specific season."
+        required: false
+        default: ""
+        type: string
+
       physical_dvd:
         description: "Physical: DVD"
         required: true
@@ -111,6 +117,7 @@ jobs:
           TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
           TMDB_ID: ${{ inputs.tmdb_id }}
           MEDIA_TYPE: ${{ inputs.media_type }}
+          SEASON_NUMBER: ${{ inputs.season_number }}
 
           PHYSICAL_DVD: ${{ inputs.physical_dvd }}
           PHYSICAL_BLURAY: ${{ inputs.physical_bluray }}
@@ -145,12 +152,82 @@ jobs:
           API_KEY = os.environ["TMDB_API_KEY"]
           TMDB_ID = os.environ["TMDB_ID"].strip()
           MEDIA_TYPE = os.environ["MEDIA_TYPE"].strip().lower()
+          SEASON_NUMBER_RAW = os.environ.get("SEASON_NUMBER", "").strip()
 
           if MEDIA_TYPE not in ("movie", "tv"):
               raise SystemExit("ERROR: media_type must be movie or tv")
 
           if not TMDB_ID.isdigit():
               raise SystemExit("ERROR: TMDB ID must be a number")
+
+          if SEASON_NUMBER_RAW and MEDIA_TYPE != "tv":
+              raise SystemExit(
+                  "ERROR: season input only applies when media_type is tv"
+              )
+
+
+          # =========================================================
+          # PARSE THE SEASONS INPUT
+          #
+          # Accepts: blank (no season / movies), a single number
+          # ("8"), a comma list ("1,3,5"), a range ("1-8"), a mix
+          # of both ("1-3,5,7-8"), or the word "all" (resolved
+          # later, once the show's number_of_seasons is known from
+          # TMDB - "all" can't be expanded until then).
+          # =========================================================
+
+          def parse_season_spec(spec):
+              numbers = set()
+
+              for part in spec.split(","):
+                  part = part.strip()
+
+                  if not part:
+                      continue
+
+                  if "-" in part:
+                      bounds = part.split("-")
+
+                      if len(bounds) != 2 or not all(
+                          b.strip().isdigit() for b in bounds
+                      ):
+                          raise SystemExit(
+                              f"ERROR: invalid season range '{part}'"
+                          )
+
+                      low, high = int(bounds[0]), int(bounds[1])
+
+                      if low > high:
+                          low, high = high, low
+
+                      for n in range(low, high + 1):
+                          numbers.add(n)
+
+                  elif part.isdigit():
+                      numbers.add(int(part))
+
+                  else:
+                      raise SystemExit(
+                          f"ERROR: invalid season value '{part}'"
+                      )
+
+              return sorted(numbers)
+
+
+          SEASONS_IS_ALL = (
+              SEASON_NUMBER_RAW.strip().lower() == "all"
+          )
+
+          if SEASON_NUMBER_RAW and not SEASONS_IS_ALL:
+              SEASON_LIST = parse_season_spec(SEASON_NUMBER_RAW)
+
+              if not SEASON_LIST:
+                  raise SystemExit(
+                      "ERROR: no valid season numbers found in input"
+                  )
+
+          else:
+              SEASON_LIST = None
 
 
           # =========================================================
@@ -274,14 +351,68 @@ jobs:
 
 
           # =========================================================
-          # FETCH TMDB DATA
+          # FETCH SHOW-LEVEL TMDB DATA
+          #
+          # Fetched once and shared across every season in this
+          # run - title, credits, rating, and genres don't change
+          # per season, so there's no reason to re-fetch them in
+          # a loop.
           # =========================================================
 
           data = tmdb_get(f"{MEDIA_TYPE}/{TMDB_ID}")
 
 
           # =========================================================
-          # BASIC INFORMATION
+          # RESOLVE "all" INTO AN ACTUAL SEASON LIST
+          #
+          # Can't expand "all" until now, since it depends on
+          # TMDB's own number_of_seasons for this show.
+          # =========================================================
+
+          if SEASONS_IS_ALL:
+
+              total_seasons = data.get("number_of_seasons")
+
+              if not total_seasons:
+                  raise SystemExit(
+                      "ERROR: TMDB didn't report a season count "
+                      "for this show, so 'all' can't be resolved."
+                  )
+
+              SEASON_LIST = list(range(1, total_seasons + 1))
+
+
+          # SEASONS_TO_PROCESS drives the loop below - either the
+          # resolved season list, or a single [None] pass for
+          # movies and season-less TV adds.
+
+          SEASONS_TO_PROCESS = (
+              SEASON_LIST if SEASON_LIST is not None else [None]
+          )
+
+
+          # =========================================================
+          # SEASON ORDINAL (for the title, e.g. "Complete Eighth
+          # Season") - only needed up to a reasonable number of
+          # seasons; falls back to "N" for anything past that so
+          # this never errors out on a long-running show.
+          # =========================================================
+
+          SEASON_ORDINALS = {
+              1: "First", 2: "Second", 3: "Third", 4: "Fourth",
+              5: "Fifth", 6: "Sixth", 7: "Seventh", 8: "Eighth",
+              9: "Ninth", 10: "Tenth", 11: "Eleventh", 12: "Twelfth",
+              13: "Thirteenth", 14: "Fourteenth", 15: "Fifteenth",
+              16: "Sixteenth", 17: "Seventeenth", 18: "Eighteenth",
+              19: "Nineteenth", 20: "Twentieth",
+          }
+
+          def season_ordinal(n):
+              return SEASON_ORDINALS.get(n, str(n))
+
+
+          # =========================================================
+          # BASIC INFORMATION (show-level)
           # =========================================================
 
           if MEDIA_TYPE == "movie":
@@ -291,8 +422,8 @@ jobs:
 
           else:
               tmdb_title = data.get("name", "")
-              year = data.get("first_air_date", "")[:4]
               runtime_value = None
+              year = data.get("first_air_date", "")[:4]
 
           if not tmdb_title:
               raise SystemExit("ERROR: TMDB returned no title")
@@ -312,7 +443,8 @@ jobs:
           #
           # "The Godfather" -> "Godfather, The"
           #
-          # tmdbTitle remains the original TMDB title.
+          # tmdbTitle remains the original TMDB title. Season
+          # suffix is appended per-season inside the loop below.
           # =========================================================
 
           def normalize_title(title):
@@ -322,11 +454,8 @@ jobs:
               return title
 
 
-          normalized_title = normalize_title(tmdb_title)
-
-
           # =========================================================
-          # FETCH CREDITS
+          # FETCH CREDITS (show-level, shared across seasons)
           # =========================================================
 
           credits = tmdb_get(
@@ -347,7 +476,7 @@ jobs:
 
 
           # =========================================================
-          # MPA / CONTENT RATING
+          # MPA / CONTENT RATING (show-level, shared across seasons)
           #
           # Movies and TV shows keep this on different endpoints
           # with different shapes, so each media type is handled on
@@ -401,7 +530,7 @@ jobs:
 
 
           # =========================================================
-          # GENRES
+          # GENRES (show-level, shared across seasons)
           # =========================================================
 
           genres = [
@@ -415,22 +544,7 @@ jobs:
 
 
           # =========================================================
-          # POSTER
-          # =========================================================
-
-          poster_path = data.get("poster_path")
-
-          poster = ""
-
-          if poster_path:
-              poster = (
-                  "https://image.tmdb.org/t/p/w500"
-                  + poster_path
-              )
-
-
-          # =========================================================
-          # LOAD EXISTING MOVIES
+          # LOAD EXISTING MOVIES (once, before the season loop)
           # =========================================================
 
           with open("movies.js", "r", encoding="utf-8") as f:
@@ -463,189 +577,248 @@ jobs:
 
 
           # =========================================================
-          # FIND EXISTING TMDB ID
+          # PROCESS EACH SEASON
+          #
+          # SEASONS_TO_PROCESS is [None] for a movie or a
+          # season-less TV add (one pass), or a list of season
+          # numbers for a multi-season TV run (one pass per
+          # season, each producing its own separate catalog entry
+          # or updating its own existing one).
           # =========================================================
 
-          existing_index = None
+          run_summary = []
 
-          for index, movie in enumerate(movies):
-              if str(movie.get("tmdbId")) == str(TMDB_ID):
-                  existing_index = index
-                  break
+          for SEASON_NUMBER in SEASONS_TO_PROCESS:
 
+              season_data = None
 
-          # =========================================================
-          # UPDATE EXISTING ENTRY
-          # =========================================================
-
-          if existing_index is not None:
-
-              existing_movie = movies[existing_index]
-
-              existing_type = existing_movie.get("type")
-
-              if existing_type and existing_type != MEDIA_TYPE:
-                  raise SystemExit(
-                      f"STOP: TMDB ID {TMDB_ID} already exists as "
-                      f"type '{existing_type}', but this run specified "
-                      f"'{MEDIA_TYPE}'. Nothing was changed."
+              if SEASON_NUMBER is not None:
+                  season_data = tmdb_get(
+                      f"tv/{TMDB_ID}/season/{SEASON_NUMBER}"
                   )
 
-              # -----------------------------------------------------
-              # Physical
-              # -----------------------------------------------------
+              # Per-season year for TV; movies already have theirs
+              # set above and never enter this branch differently.
 
-              physical = existing_movie.get("physical", [])
+              if MEDIA_TYPE == "tv":
 
-              if not isinstance(physical, list):
-                  physical = [physical] if physical else []
+                  if season_data is not None:
+                      season_year = (season_data.get("air_date") or "")[:4]
 
-              for fmt in selected_physical:
-                  if fmt not in physical:
-                      physical.append(fmt)
+                  else:
+                      season_year = data.get("first_air_date", "")[:4]
 
-              existing_movie["physical"] = physical
+              else:
+                  season_year = year
 
 
-              # -----------------------------------------------------
-              # Digital
-              # -----------------------------------------------------
+              normalized_title = normalize_title(tmdb_title)
 
-              digital = existing_movie.get("digital", [])
-
-              if not isinstance(digital, list):
-                  digital = [digital] if digital else []
-
-              for service in selected_digital:
-                  if service not in digital:
-                      digital.append(service)
-
-              existing_movie["digital"] = digital
+              if SEASON_NUMBER is not None:
+                  normalized_title = (
+                      f"{normalized_title} - Complete "
+                      f"{season_ordinal(SEASON_NUMBER)} Season"
+                  )
 
 
               # -----------------------------------------------------
-              # Rom-Com genre
-              #
-              # Appended as a genre TOKEN on the existing genre
-              # string, same as every other genre already there —
-              # never overwrites or reorders what TMDB (or a prior
-              # run) already put in that field.
+              # Poster - season-specific when available, falling
+              # back to the show's own poster otherwise.
               # -----------------------------------------------------
 
-              if rom_com_selected:
+              poster_path = data.get("poster_path")
 
-                  current_genre = existing_movie.get("genre", "") or ""
+              if season_data is not None and season_data.get("poster_path"):
+                  poster_path = season_data.get("poster_path")
 
-                  current_tokens = [
-                      token.strip()
-                      for token in current_genre.split("/")
-                      if token.strip()
-                  ]
+              poster = ""
 
-                  if "Rom-Com" not in current_tokens:
-                      current_tokens.append("Rom-Com")
-                      existing_movie["genre"] = " / ".join(current_tokens)
+              if poster_path:
+                  poster = (
+                      "https://image.tmdb.org/t/p/w500"
+                      + poster_path
+                  )
 
 
               # -----------------------------------------------------
-              # MPA rating — only if currently missing, same
-              # gap-filler rule the resync workflow uses. A run of
-              # this workflow against an existing entry shouldn't
-              # overwrite a rating that's already there.
+              # Find existing entry for THIS season specifically.
+              # Movies match on tmdbId alone. TV shows match on
+              # tmdbId AND season, so each season gets its own
+              # entry instead of the second one silently
+              # overwriting the first just because they share a
+              # tmdbId. A TV show added without a season number
+              # matches only against other season-less entries for
+              # that same tmdbId.
               # -----------------------------------------------------
 
-              if "rated" not in existing_movie:
-                  existing_movie["rated"] = mpa_rating
+              existing_index = None
 
-              if not (existing_movie.get("tmdbTitle") or "").strip():
-                  existing_movie["tmdbTitle"] = tmdb_title
+              for index, movie in enumerate(movies):
 
+                  if str(movie.get("tmdbId")) != str(TMDB_ID):
+                      continue
 
-              # -----------------------------------------------------
-              # Categories / tags
-              # -----------------------------------------------------
+                  existing_season = movie.get("season")
 
-              categories = existing_movie.get("categories", [])
+                  if SEASON_NUMBER is not None:
 
-              if not isinstance(categories, list):
-                  categories = [categories] if categories else []
+                      if existing_season == SEASON_NUMBER:
+                          existing_index = index
+                          break
 
-              for category in selected_categories:
-                  if category not in categories:
-                      categories.append(category)
+                  else:
 
-              if categories:
-                  existing_movie["categories"] = categories
-
-              elif "categories" in existing_movie:
-                  del existing_movie["categories"]
+                      if existing_season is None:
+                          existing_index = index
+                          break
 
 
               # -----------------------------------------------------
-              # Remove legacy animated field if it exists.
-              # Animation is now a category/tag.
+              # UPDATE EXISTING ENTRY
               # -----------------------------------------------------
 
-              if "animated" in existing_movie:
-                  del existing_movie["animated"]
+              if existing_index is not None:
+
+                  existing_movie = movies[existing_index]
+
+                  existing_type = existing_movie.get("type")
+
+                  if existing_type and existing_type != MEDIA_TYPE:
+                      raise SystemExit(
+                          f"STOP: TMDB ID {TMDB_ID} already exists as "
+                          f"type '{existing_type}', but this run specified "
+                          f"'{MEDIA_TYPE}'. Nothing was changed."
+                      )
+
+                  physical = existing_movie.get("physical", [])
+
+                  if not isinstance(physical, list):
+                      physical = [physical] if physical else []
+
+                  for fmt in selected_physical:
+                      if fmt not in physical:
+                          physical.append(fmt)
+
+                  existing_movie["physical"] = physical
 
 
-              print("")
-              print("========================================")
-              print("EXISTING MOVIE UPDATED")
-              print("========================================")
-              print(f"Title:      {existing_movie.get('title', normalized_title)}")
-              print(f"TMDB Title: {existing_movie.get('tmdbTitle', tmdb_title)}")
-              print(f"TMDB ID:    {TMDB_ID}")
-              print(f"Type:       {MEDIA_TYPE}")
-              print(f"Genre:      {existing_movie.get('genre', '')}")
-              print(f"Rated:      {existing_movie.get('rated', '')}")
-              print(f"Physical:   {', '.join(physical) or 'none'}")
-              print(f"Digital:    {', '.join(digital) or 'none'}")
-              print(f"Categories: {', '.join(categories) or 'none'}")
+                  digital = existing_movie.get("digital", [])
+
+                  if not isinstance(digital, list):
+                      digital = [digital] if digital else []
+
+                  for service in selected_digital:
+                      if service not in digital:
+                          digital.append(service)
+
+                  existing_movie["digital"] = digital
+
+
+                  if rom_com_selected:
+
+                      current_genre = existing_movie.get("genre", "") or ""
+
+                      current_tokens = [
+                          token.strip()
+                          for token in current_genre.split("/")
+                          if token.strip()
+                      ]
+
+                      if "Rom-Com" not in current_tokens:
+                          current_tokens.append("Rom-Com")
+                          existing_movie["genre"] = " / ".join(current_tokens)
+
+
+                  if "rated" not in existing_movie:
+                      existing_movie["rated"] = mpa_rating
+
+                  if not (existing_movie.get("tmdbTitle") or "").strip():
+                      existing_movie["tmdbTitle"] = tmdb_title
+
+
+                  categories = existing_movie.get("categories", [])
+
+                  if not isinstance(categories, list):
+                      categories = [categories] if categories else []
+
+                  for category in selected_categories:
+                      if category not in categories:
+                          categories.append(category)
+
+                  if categories:
+                      existing_movie["categories"] = categories
+
+                  elif "categories" in existing_movie:
+                      del existing_movie["categories"]
+
+
+                  if "animated" in existing_movie:
+                      del existing_movie["animated"]
+
+
+                  run_summary.append(
+                      "UPDATED  | "
+                      f"{existing_movie.get('title', normalized_title)} | "
+                      f"season={existing_movie.get('season', 'n/a')} | "
+                      f"physical={', '.join(physical) or 'none'} | "
+                      f"digital={', '.join(digital) or 'none'}"
+                  )
+
+
+              # -----------------------------------------------------
+              # ADD BRAND-NEW ENTRY
+              # -----------------------------------------------------
+
+              else:
+
+                  movie = {
+                      "title": normalized_title,
+                      "tmdbTitle": tmdb_title,
+                      "type": MEDIA_TYPE,
+                      "tmdbId": int(TMDB_ID),
+                      "poster": poster,
+                      "year": season_year,
+                      "runtime": runtime,
+                      "genre": " / ".join(genres),
+                      "rated": mpa_rating,
+                      "director": ", ".join(directors),
+                      "cast": ", ".join(cast),
+                      "synopsis": data.get("overview", ""),
+                      "physical": selected_physical,
+                      "digital": selected_digital,
+                  }
+
+                  if SEASON_NUMBER is not None:
+                      movie["season"] = SEASON_NUMBER
+
+                  if selected_categories:
+                      movie["categories"] = selected_categories
+
+                  movies.append(movie)
+
+                  run_summary.append(
+                      "ADDED    | "
+                      f"{normalized_title} | "
+                      f"season={SEASON_NUMBER if SEASON_NUMBER is not None else 'n/a'} | "
+                      f"physical={', '.join(selected_physical) or 'none'} | "
+                      f"digital={', '.join(selected_digital) or 'none'}"
+                  )
 
 
           # =========================================================
-          # ADD BRAND-NEW ENTRY
+          # SUMMARY OF EVERYTHING THIS RUN TOUCHED
           # =========================================================
 
-          else:
+          print("")
+          print("========================================")
+          print(f"PROCESSED {len(SEASONS_TO_PROCESS)} ENTRY/ENTRIES")
+          print("========================================")
+          print(f"TMDB ID:    {TMDB_ID}")
+          print(f"Type:       {MEDIA_TYPE}")
 
-              movie = {
-                  "title": normalized_title,
-                  "tmdbTitle": tmdb_title,
-                  "type": MEDIA_TYPE,
-                  "tmdbId": int(TMDB_ID),
-                  "poster": poster,
-                  "year": year,
-                  "runtime": runtime,
-                  "genre": " / ".join(genres),
-                  "rated": mpa_rating,
-                  "director": ", ".join(directors),
-                  "cast": ", ".join(cast),
-                  "synopsis": data.get("overview", ""),
-                  "physical": selected_physical,
-                  "digital": selected_digital,
-              }
+          for line in run_summary:
+              print(line)
 
-              if selected_categories:
-                  movie["categories"] = selected_categories
-
-              movies.append(movie)
-
-              print("")
-              print("========================================")
-              print("NEW MOVIE ADDED")
-              print("========================================")
-              print(f"Title:      {normalized_title}")
-              print(f"TMDB Title: {tmdb_title}")
-              print(f"TMDB ID:    {TMDB_ID}")
-              print(f"Type:       {MEDIA_TYPE}")
-              print(f"Genre:      {movie['genre']}")
-              print(f"Rated:      {movie['rated']}")
-              print(f"Physical:   {', '.join(selected_physical) or 'none'}")
-              print(f"Digital:    {', '.join(selected_digital) or 'none'}")
-              print(f"Categories: {', '.join(selected_categories) or 'none'}")
 
 
           # =========================================================
