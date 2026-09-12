@@ -5990,7 +5990,7 @@ const holes =
   */
 
 const scatterCount =
-10;
+18;
 
 for (
 let i = 0;
@@ -6031,7 +6031,7 @@ hole.classList.add(
 );
 
 },
-150 + i * 180
+150 + i * 120
 );
 
 }
@@ -6048,7 +6048,7 @@ const chainCount =
 14;
 
 const chainStartDelay =
-150 + scatterCount * 180 + 300;
+150 + scatterCount * 120 + 300;
 
 const chainStartX =
 vw * (0.05 + Math.random() * 0.15);
@@ -6542,7 +6542,7 @@ const scaleY =
 svgRect.height / vh;
 
 const fractions =
-[0.18, 0.4, 0.58, 0.78];
+[0.08, 0.24, 0.31, 0.5, 0.66, 0.84];
 
 fractions.forEach(
 (frac, i) => {
