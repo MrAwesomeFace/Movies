@@ -6,7 +6,7 @@ Main visual design
 */
 
 :root {
-  --background: #020D27;
+  --background: #041D58;
   --surface: #1b1b1b;
   --surface-light: #252525;
   --text: #f5f5f5;
@@ -1963,7 +1963,7 @@ effects, same pattern as Christmas/Baseball.
   */
 
 body.classic-mode {
-  animation: classic-color-evolution 10s ease-in-out forwards;
+  animation: classic-color-evolution 20s ease-in-out forwards;
 }
 
 @keyframes classic-color-evolution {
@@ -2100,11 +2100,11 @@ body.classic-mode {
 
   top: 0;
 
-  width: 6px;
+  width: 12px;
 
   background: linear-gradient(180deg, #8a0000, #4a0000);
 
-  border-radius: 0 0 6px 6px;
+  border-radius: 0 0 12px 12px;
 
   z-index: 65;
 
