@@ -10532,24 +10532,13 @@ bulb.classList.remove(
 )
 );
 
-const flashOverlay =
-document.getElementById(
-"marquee-pop-flash"
-);
+/*
 
-if (flashOverlay) {
-
-flashOverlay.classList.remove(
-"active"
-);
-
-void flashOverlay.offsetWidth;
-
-flashOverlay.classList.add(
-"active"
-);
-
-}
+* The strobing "active" flash used to fire right here, on
+* burn-out. Moved to triggerMarqueeReset() instead, timed
+* to land just before the random movie opens - see the
+* comment there for why.
+  */
 
 /*
 
