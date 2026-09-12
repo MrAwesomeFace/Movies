@@ -4605,6 +4605,28 @@ modal.querySelector(
 ".modal-content"
 );
 
+/*
+
+* "That's all, Folks!" only plays while Animated: Only is
+* the active filter - otherwise the movie just closes
+* normally, same as it always did before this effect
+* existed.
+  */
+
+const irisActive =
+activeFilters.animated === "only";
+
+if (irisActive) {
+
+const caseRectForIris =
+content.getBoundingClientRect();
+
+triggerIrisClose(
+caseRectForIris
+);
+
+}
+
 const targetRect =
 savedCardRect;
 
@@ -4628,6 +4650,41 @@ controls.style.opacity =
 
 controls.style.pointerEvents =
 "none";
+
+}
+
+/*
+
+* When the iris is active, the actual fly-back is delayed
+* until it has fully closed (1000ms - see triggerIrisClose/
+* animateIrisRadius), and the case itself is made invisible
+* for the duration of that hidden transit (opacity:0, reset
+* by finishCloseMovie below) rather than trying to size the
+* iris overlay to cover the whole travel path — that made
+* the overlay bigger than just the case, which wasn't the
+* ask. Since the case is genuinely invisible during the
+* move, it doesn't matter where on screen it travels;
+* nothing can peek out. The iris re-opens on the case's
+* original (small) rect once the case has already quietly
+* settled onto the shelf underneath.
+*
+* When the iris isn't active, none of this applies - the
+* fly-back starts immediately with no delay and the case
+* stays visible the whole time, exactly as before.
+  */
+
+const flyBackDelay =
+irisActive
+? 1000
+: 0;
+
+setTimeout(
+() => {
+
+if (irisActive) {
+
+content.style.opacity =
+"0";
 
 }
 
@@ -4688,6 +4745,10 @@ finishCloseMovie();
 
 },
 580
+);
+
+},
+flyBackDelay
 );
 
 }
@@ -8884,6 +8945,479 @@ HP_ENVELOPE_SEQUENCE_DURATION
 
 /*
 
+* Sparkle arc — fires when the Animated filter switches to
+* "Only". A bright point traces a semicircular arc across
+* the screen, continuously dropping small sparkle particles
+* behind it that flare then fade.
+  */
+
+let sparkleArcBusy =
+false;
+
+function sparkleArcPoint(
+t,
+stageW,
+stageH
+) {
+
+const startX =
+stageW * 0.05;
+
+const endX =
+stageW * 0.95;
+
+const peakY =
+stageH * 0.12;
+
+const baseY =
+stageH * 0.55;
+
+const x =
+startX + (endX - startX) * t;
+
+const y =
+baseY - (baseY - peakY) * Math.sin(t * Math.PI);
+
+return {
+x: x,
+y: y
+};
+
+}
+
+function triggerSparkleArc() {
+
+if (sparkleArcBusy) {
+
+return;
+
+}
+
+sparkleArcBusy =
+true;
+
+const stageW =
+window.innerWidth;
+
+const stageH =
+window.innerHeight;
+
+const head =
+document.createElement(
+"div"
+);
+
+head.className =
+"sparkle-head";
+
+document.body.appendChild(
+head
+);
+
+const duration =
+2800;
+
+const startTime =
+performance.now();
+
+let lastDustTime =
+0;
+
+const activeDust =
+[];
+
+function frame(
+now
+) {
+
+const elapsed =
+now - startTime;
+
+const t =
+Math.min(
+1,
+elapsed / duration
+);
+
+const pos =
+sparkleArcPoint(
+t,
+stageW,
+stageH
+);
+
+head.style.left =
+`${pos.x - 7}px`;
+
+head.style.top =
+`${pos.y - 7}px`;
+
+if (
+elapsed - lastDustTime > 35 &&
+t < 1
+) {
+
+lastDustTime =
+elapsed;
+
+const dust =
+document.createElement(
+"div"
+);
+
+dust.className =
+"sparkle-dust";
+
+const size =
+3 + Math.random() * 4;
+
+dust.style.width =
+`${size}px`;
+
+dust.style.height =
+`${size}px`;
+
+dust.style.left =
+`${pos.x + (Math.random() * 10 - 5) - size / 2}px`;
+
+dust.style.top =
+`${pos.y + (Math.random() * 10 - 5) - size / 2}px`;
+
+dust.style.animationDuration =
+`${0.6 + Math.random() * 0.5}s`;
+
+document.body.appendChild(
+dust
+);
+
+activeDust.push(
+dust
+);
+
+setTimeout(
+() => {
+
+dust.remove();
+
+},
+1200
+);
+
+}
+
+if (t < 1) {
+
+requestAnimationFrame(
+frame
+);
+
+} else {
+
+setTimeout(
+() => {
+
+head.remove();
+
+},
+300
+);
+
+setTimeout(
+() => {
+
+activeDust.forEach(
+d => d.remove()
+);
+
+sparkleArcBusy =
+false;
+
+},
+1300
+);
+
+}
+
+}
+
+requestAnimationFrame(
+frame
+);
+
+}
+
+/*
+
+* Iris close — fires when a movie is closed, playing
+* alongside the existing fly-back-to-shelf animation. A
+* circular window shrinks around the case (revealing a
+* concentric ring pattern, matching the classic iris-wipe
+* technique — built fresh here, not any specific reference
+* image), closes to a point around "That's all, Folks!",
+* then re-opens using the exact same animation mirrored
+* (same easing function, start/end swapped) rather than
+* snapping instantly back open.
+  */
+
+function animateIrisRadius(
+circleEl,
+fromR,
+toR,
+duration,
+onDone
+) {
+
+const startTime =
+performance.now();
+
+function frame(
+now
+) {
+
+const elapsed =
+now - startTime;
+
+const t =
+Math.min(
+1,
+elapsed / duration
+);
+
+const eased =
+t < 1
+? 1 - Math.pow(1 - t, 3)
+: 1;
+
+const radius =
+fromR + (toR - fromR) * eased;
+
+circleEl.setAttribute(
+"r",
+radius
+);
+
+if (t < 1) {
+
+requestAnimationFrame(
+frame
+);
+
+} else if (onDone) {
+
+onDone();
+
+}
+
+}
+
+requestAnimationFrame(
+frame
+);
+
+}
+
+let irisCloseBusy =
+false;
+
+function triggerIrisClose(
+caseRect
+) {
+
+if (irisCloseBusy) {
+
+return;
+
+}
+
+irisCloseBusy =
+true;
+
+/*
+
+* Scoped to the case's own rect, not the full viewport -
+* the SVG only covers the area the case currently occupies,
+* and the starting radius only needs to reach the case's
+* own corners, not the whole screen's.
+  */
+
+const areaLeft =
+caseRect.left;
+
+const areaTop =
+caseRect.top;
+
+const areaWidth =
+caseRect.width;
+
+const areaHeight =
+caseRect.height;
+
+const fullRadius =
+Math.sqrt(
+areaWidth * areaWidth +
+areaHeight * areaHeight
+) / 2 + 10;
+
+const maskId =
+`iris-window-mask-${Date.now()}`;
+
+const gradId =
+`iris-ring-grad-${Date.now()}`;
+
+const circleId =
+`iris-window-hole-${Date.now()}`;
+
+const svg =
+document.createElement(
+"div"
+);
+
+svg.className =
+"iris-close-svg";
+
+svg.style.left =
+`${areaLeft}px`;
+
+svg.style.top =
+`${areaTop}px`;
+
+svg.style.width =
+`${areaWidth}px`;
+
+svg.style.height =
+`${areaHeight}px`;
+
+svg.innerHTML =
+`<svg width="${areaWidth}" height="${areaHeight}" viewBox="0 0 ${areaWidth} ${areaHeight}" preserveAspectRatio="xMidYMid slice">
+<defs>
+<radialGradient id="${gradId}" cx="50%" cy="50%" r="50%">
+<stop offset="0%" stop-color="#8a0000"/>
+<stop offset="15%" stop-color="#c81e1e"/>
+<stop offset="30%" stop-color="#5a0000"/>
+<stop offset="45%" stop-color="#c81e1e"/>
+<stop offset="60%" stop-color="#5a0000"/>
+<stop offset="75%" stop-color="#c81e1e"/>
+<stop offset="90%" stop-color="#3a0000"/>
+<stop offset="100%" stop-color="#000"/>
+</radialGradient>
+<mask id="${maskId}">
+<rect x="0" y="0" width="${areaWidth}" height="${areaHeight}" fill="#fff"/>
+<circle id="${circleId}" cx="${areaWidth / 2}" cy="${areaHeight / 2}" r="${fullRadius}" fill="#000"/>
+</mask>
+</defs>
+<rect x="0" y="0" width="${areaWidth}" height="${areaHeight}" fill="url(#${gradId})" mask="url(#${maskId})"/>
+</svg>`;
+
+document.body.appendChild(
+svg
+);
+
+const text =
+document.createElement(
+"div"
+);
+
+text.className =
+"iris-close-text";
+
+text.textContent =
+"That's all, Folks!";
+
+/*
+
+* Positioned and sized relative to the case's own center
+* and width, not the viewport's — this is what actually
+* fixes the text never appearing where expected: it's no
+* longer assuming the case sits at the screen's center.
+  */
+
+text.style.left =
+`${areaLeft + areaWidth / 2}px`;
+
+text.style.top =
+`${areaTop + areaHeight / 2}px`;
+
+text.style.fontSize =
+`${Math.min(48, Math.max(14, areaWidth * 0.11))}px`;
+
+document.body.appendChild(
+text
+);
+
+const circleEl =
+document.getElementById(
+circleId
+);
+
+circleEl.setAttribute(
+"r",
+fullRadius
+);
+
+animateIrisRadius(
+circleEl,
+fullRadius,
+0,
+1000
+);
+
+setTimeout(
+() => {
+
+text.classList.add(
+"visible"
+);
+
+},
+750
+);
+
+setTimeout(
+() => {
+
+text.classList.remove(
+"visible"
+);
+
+},
+2200
+);
+
+/*
+
+* Re-open mirrors the close exactly — same function, same
+* duration, same easing, only the start/end radii are
+* swapped. Not an instant snap back to fully open.
+  */
+
+setTimeout(
+() => {
+
+animateIrisRadius(
+circleEl,
+0,
+fullRadius,
+1000,
+() => {
+
+svg.remove();
+
+text.remove();
+
+irisCloseBusy =
+false;
+
+}
+);
+
+},
+2800
+);
+
+}
+
+/*
+
 * Heart flood — fires once when the genre filter switches
 * to Rom-Com. Builds its own overlay and particles entirely
 * in JS (nothing pre-built in the HTML, same as the glass
@@ -9556,6 +10090,18 @@ activeFilters.animated =
 }
 
 updateAnimatedButton();
+
+/*
+
+* Sparkle arc fires only when switching TO "only" — not on
+* "hide" or "mixed".
+  */
+
+if (activeFilters.animated === "only") {
+
+triggerSparkleArc();
+
+}
 
 }
 
