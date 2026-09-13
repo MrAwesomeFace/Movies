@@ -15206,6 +15206,24 @@ const movies = [
     "rated": "G"
   },
   {
+    "title": "Practical Magic",
+    "tmdbTitle": "Practical Magic",
+    "type": "movie",
+    "tmdbId": 6435,
+    "poster": "https://image.tmdb.org/t/p/w500/AwmToSgf2IL3aHv0QRVsR5KvChv.jpg",
+    "year": "1998",
+    "runtime": "104m",
+    "genre": "Romance / Fantasy / Comedy",
+    "rated": "PG-13",
+    "director": "Griffin Dunne",
+    "cast": "Sandra Bullock, Nicole Kidman, Stockard Channing, Dianne Wiest, Goran Višnjić, Aidan Quinn",
+    "synopsis": "Sally and Gillian Owens, born into a magical family, have mostly avoided witchcraft themselves. But when Gillian's vicious boyfriend, Jimmy Angelov, dies unexpectedly, the Owens sisters give themselves a crash course in hard magic. With policeman Gary Hallet growing suspicious, the girls struggle to resurrect Angelov -- and unwittingly inject his corpse with an evil spirit that threatens to end their family line.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ]
+  },
+  {
     "title": "Prestige, The",
     "tmdbTitle": "The Prestige",
     "type": "movie",
