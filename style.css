@@ -3425,6 +3425,34 @@ after itself, same pattern as the other easter eggs here.
 
 
 /* =========================================================
+STATHAM SKID MARKS EASTER EGG (search "statham")
+=========================================================
+Fires when the search box matches "statham" — two tire
+tracks tear across the screen along a randomized curved
+path, each built from many small discrete tread pieces (a
+chevron plus two side ticks per piece, with a lighter halo
+behind each for contrast against the dark background) that
+reveal progressively along the path, timed by position, so
+it reads as something actually driving through rather than
+the whole pattern appearing at once. Built and removed
+entirely by JS (triggerStathamSkids in app.js).
+========================================================= */
+
+.statham-skid-svg {
+  position: fixed;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  z-index: 65;
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
 IRIS CLOSE EASTER EGG (closing a movie)
 =========================================================
 Fires when a movie is closed — a classic iris-wipe: a
