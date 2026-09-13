@@ -3425,6 +3425,197 @@ after itself, same pattern as the other easter eggs here.
 
 
 /* =========================================================
+CLAPPERBOARD EASTER EGG (Movies type filter)
+=========================================================
+Fires when the Movies type filter is selected — a full-
+screen clapperboard scales in with the striped top stick
+held open, a random movie title from the real catalog plus a
+random scene/take number chalked onto the board, then the
+stick slams shut fast with a quick white flash for impact,
+holds a beat, reopens, and fades away to reveal the shelf.
+Built and removed entirely by JS (triggerClapperboard in
+app.js).
+========================================================= */
+
+.clap-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, 0);
+
+  opacity: 0;
+
+  transition: opacity 0.35s ease, background 0.35s ease;
+
+  z-index: 65;
+
+  pointer-events: none;
+}
+
+.clap-overlay.visible {
+  opacity: 1;
+
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.clapboard {
+  position: relative;
+
+  width: min(420px, 80vw);
+
+  transform: scale(0.7);
+
+  transition: transform 0.4s cubic-bezier(0.2, 1.3, 0.4, 1);
+}
+
+.clap-overlay.visible .clapboard {
+  transform: scale(1);
+}
+
+.clap-stick {
+  position: relative;
+
+  height: 13%;
+
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      #f5f5f5 0px, #f5f5f5 22px,
+      #111 22px, #111 44px
+    );
+
+  border: 3px solid #000;
+
+  border-radius: 4px 4px 0 0;
+
+  transform-origin: left bottom;
+
+  transform: rotate(-22deg) translateY(-4px);
+
+  box-shadow:
+    0 -4px 10px rgba(0, 0, 0, 0.4);
+
+  z-index: 2;
+}
+
+.clap-stick.shut {
+  transition: transform 0.09s cubic-bezier(0.7, 0, 0.85, 1);
+
+  transform: rotate(0deg) translateY(0);
+}
+
+.clap-stick.reopen {
+  transition: transform 0.5s cubic-bezier(0.2, 1.4, 0.3, 1);
+
+  transform: rotate(-22deg) translateY(-4px);
+}
+
+.clap-board-body {
+  background: #161616;
+
+  border: 3px solid #000;
+
+  border-radius: 0 0 6px 6px;
+
+  padding: 18px 20px 22px;
+
+  position: relative;
+}
+
+.clap-line {
+  display: flex;
+
+  gap: 8px;
+
+  color: #f5f5f5;
+
+  font-family: 'Caveat', cursive;
+
+  font-size: clamp(18px, 4.5vw, 26px);
+
+  margin-bottom: 6px;
+
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.25);
+
+  padding-bottom: 4px;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+.clap-line .label {
+  opacity: 0.65;
+
+  font-size: 0.8em;
+
+  flex-shrink: 0;
+}
+
+.clap-flash {
+  position: absolute;
+
+  inset: 0;
+
+  background: #fff;
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  z-index: 20;
+}
+
+.clap-flash.hit {
+  animation: clap-flash-hit 0.18s ease-out;
+}
+
+@keyframes clap-flash-hit {
+  0% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+
+/* =========================================================
+MISC JUNK DRAWER EASTER EGG (Misc type filter)
+=========================================================
+Fires when the Misc type filter is selected — real movie
+cards on the shelf visibly swap positions (a genuine shuffle,
+not a shake-and-return), while junk-drawer items (keys,
+scissors, paperclip, pencil, pen, pushpin) get tossed onto
+the screen with real arc physics, landing and settling before
+fading. Built and removed entirely by JS (triggerJunkDrawer
+in app.js).
+========================================================= */
+
+.junk-drawer-item {
+  position: fixed;
+
+  z-index: 65;
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  filter:
+    drop-shadow(3px 4px 4px rgba(0, 0, 0, 0.55));
+}
+
+
+/* =========================================================
 STATHAM SKID MARKS EASTER EGG (search "statham")
 =========================================================
 Fires when the search box matches "statham" — two tire
