@@ -5539,22 +5539,153 @@ false;
 /*
 
 * Baseball scoreboard — fires when the Baseball category
-* filter is selected. Wrigley-style manual scoreboard,
-* Cubs blowing out the Brewers, same pop-in/pop-out
-* mechanic as the Batman word pops.
+* filter is selected. Wrigley-style manual scoreboard, Cubs
+* vs Brewers. Every number is freshly randomized each time
+* this fires, with one constraint enforced: the Cubs' total
+* runs always exceeds Milwaukee's. The 9th inning follows
+* real baseball logic — if the Cubs are already ahead after
+* 8 innings, they don't bat (shown as "X"), same as a real
+* home team that doesn't need to.
   */
 
-const BASEBALL_MIL_INNINGS =
-[0, 0, 0, 0, 1, 0, 0, 0, 0];
+function randomInt(
+min,
+max
+) {
 
-const BASEBALL_MIL_RHE =
-[1, 4, 2];
+return (
+Math.floor(
+Math.random() * (max - min + 1)
+) + min
+);
 
-const BASEBALL_CHC_INNINGS =
-[2, 0, 3, 0, 4, 0, 1, 2, "X"];
+}
 
-const BASEBALL_CHC_RHE =
-[12, 15, 0];
+function generateBaseballScore() {
+
+/*
+
+* Milwaukee bats all 9 innings regardless of outcome (visiting
+* team). Most innings score nothing - occasional small runs,
+* matching how an actual low-scoring game reads.
+  */
+
+const milInnings =
+[];
+
+for (
+let i = 0;
+i < 9;
+i++
+) {
+
+milInnings.push(
+Math.random() < 0.28
+? randomInt(1, 3)
+: 0
+);
+
+}
+
+const milRuns =
+milInnings.reduce(
+(sum, val) => sum + val,
+0
+);
+
+/*
+
+* Cubs' first 8 innings, same random pattern.
+  */
+
+const chcInnings =
+[];
+
+for (
+let i = 0;
+i < 8;
+i++
+) {
+
+chcInnings.push(
+Math.random() < 0.32
+? randomInt(1, 4)
+: 0
+);
+
+}
+
+const chcRunningTotal =
+chcInnings.reduce(
+(sum, val) => sum + val,
+0
+);
+
+/*
+
+* 9th inning - if already ahead after 8, they don't bat
+* (real baseball logic, shown as "X"). Otherwise, force
+* enough runs to guarantee the final total exceeds
+* Milwaukee's, with a little random extra on top so it
+* doesn't always land on the bare minimum.
+  */
+
+let chcRuns;
+
+if (chcRunningTotal > milRuns) {
+
+chcInnings.push(
+"X"
+);
+
+chcRuns =
+chcRunningTotal;
+
+} else {
+
+const minNeeded =
+milRuns - chcRunningTotal + 1;
+
+const ninthInning =
+minNeeded + randomInt(0, 2);
+
+chcInnings.push(
+ninthInning
+);
+
+chcRuns =
+chcRunningTotal + ninthInning;
+
+}
+
+/*
+
+* Hits track loosely with runs (can't have fewer hits than
+* runs in this simplified model) plus some extra baserunners
+* that didn't come around to score. Errors are small and
+* independent of runs entirely.
+  */
+
+const milHits =
+milRuns + randomInt(2, 7);
+
+const milErrors =
+randomInt(0, 3);
+
+const chcHits =
+chcRuns + randomInt(2, 7);
+
+const chcErrors =
+randomInt(0, 3);
+
+return {
+milInnings: milInnings,
+milRHE: [milRuns, milHits, milErrors],
+chcInnings: chcInnings,
+chcRHE: [chcRuns, chcHits, chcErrors]
+};
+
+}
 
 let baseballScoreboardBusy =
 false;
@@ -5750,6 +5881,9 @@ return;
 baseballScoreboardBusy =
 true;
 
+const gameScore =
+generateBaseballScore();
+
 const wrap =
 document.createElement(
 "div"
@@ -5807,8 +5941,8 @@ milRow.innerHTML =
 
 buildScoreboardRow(
 milRow,
-BASEBALL_MIL_INNINGS,
-BASEBALL_MIL_RHE
+gameScore.milInnings,
+gameScore.milRHE
 );
 
 board.appendChild(
@@ -5840,8 +5974,8 @@ chcRow.innerHTML =
 
 buildScoreboardRow(
 chcRow,
-BASEBALL_CHC_INNINGS,
-BASEBALL_CHC_RHE
+gameScore.chcInnings,
+gameScore.chcRHE
 );
 
 board.appendChild(
@@ -9216,6 +9350,446 @@ frame
 
 }
 
+/*
+
+* Statham skid marks — fires when the search box matches
+* "statham". Two tire tracks tear across the screen along a
+* randomized curved path (different every time), each built
+* from small discrete tread pieces rather than a continuous
+* shape - a chevron plus two side ticks per piece, with a
+* lighter halo behind each for contrast, revealed
+* progressively along the path so it reads as something
+* actually driving through.
+  */
+
+let stathamSkidsBusy =
+false;
+
+let stathamSkidsFired =
+false;
+
+function buildStathamTreadMarks(
+guidePath,
+group,
+trackWidth,
+totalDrawDuration
+) {
+
+const totalLength =
+guidePath.getTotalLength();
+
+const half =
+trackWidth / 2;
+
+const stampWidth =
+half * 0.4 * 2 + 6;
+
+const spacing =
+stampWidth * 1.368;
+
+const steps =
+Math.floor(
+totalLength / spacing
+);
+
+group.innerHTML =
+"";
+
+for (
+let i = 0;
+i <= steps;
+i++
+) {
+
+const dist =
+i * spacing;
+
+const pt =
+guidePath.getPointAtLength(
+dist
+);
+
+const ptAhead =
+guidePath.getPointAtLength(
+Math.min(totalLength, dist + 2)
+);
+
+const angle =
+Math.atan2(
+ptAhead.y - pt.y,
+ptAhead.x - pt.x
+) * 180 / Math.PI;
+
+const progress =
+dist / totalLength;
+
+let fade =
+1;
+
+if (progress > 0.65) {
+
+fade =
+Math.max(
+0,
+1 - (progress - 0.65) / 0.35
+);
+
+}
+
+if (fade <= 0.02) {
+
+continue;
+
+}
+
+const el =
+document.createElementNS(
+"http://www.w3.org/2000/svg",
+"g"
+);
+
+el.setAttribute(
+"transform",
+`translate(${pt.x},${pt.y}) rotate(${angle})`
+);
+
+el.setAttribute(
+"data-final-opacity",
+fade.toFixed(2)
+);
+
+el.style.opacity =
+"0";
+
+el.style.transition =
+"opacity 0.12s linear";
+
+const chevronHalo =
+document.createElementNS(
+"http://www.w3.org/2000/svg",
+"path"
+);
+
+chevronHalo.setAttribute(
+"d",
+`M ${-half * 0.42},-10 L 0,3 L ${half * 0.42},-10`
+);
+
+chevronHalo.setAttribute(
+"stroke",
+"#6b7688"
+);
+
+chevronHalo.setAttribute(
+"stroke-width",
+7.5
+);
+
+chevronHalo.setAttribute(
+"fill",
+"none"
+);
+
+chevronHalo.setAttribute(
+"stroke-linecap",
+"round"
+);
+
+chevronHalo.setAttribute(
+"opacity",
+"0.4"
+);
+
+el.appendChild(
+chevronHalo
+);
+
+[-1, 1].forEach(
+side => {
+
+const tickHalo =
+document.createElementNS(
+"http://www.w3.org/2000/svg",
+"rect"
+);
+
+tickHalo.setAttribute(
+"x",
+-6
+);
+
+tickHalo.setAttribute(
+"y",
+side * half - 6
+);
+
+tickHalo.setAttribute(
+"width",
+12
+);
+
+tickHalo.setAttribute(
+"height",
+12
+);
+
+tickHalo.setAttribute(
+"fill",
+"#6b7688"
+);
+
+tickHalo.setAttribute(
+"opacity",
+"0.4"
+);
+
+tickHalo.setAttribute(
+"rx",
+2
+);
+
+el.appendChild(
+tickHalo
+);
+
+}
+);
+
+const chevron =
+document.createElementNS(
+"http://www.w3.org/2000/svg",
+"path"
+);
+
+chevron.setAttribute(
+"d",
+`M ${-half * 0.4},-10 L 0,3 L ${half * 0.4},-10`
+);
+
+chevron.setAttribute(
+"stroke",
+"#000"
+);
+
+chevron.setAttribute(
+"stroke-width",
+5
+);
+
+chevron.setAttribute(
+"fill",
+"none"
+);
+
+chevron.setAttribute(
+"stroke-linecap",
+"round"
+);
+
+el.appendChild(
+chevron
+);
+
+[-1, 1].forEach(
+side => {
+
+const tick =
+document.createElementNS(
+"http://www.w3.org/2000/svg",
+"rect"
+);
+
+tick.setAttribute(
+"x",
+-5
+);
+
+tick.setAttribute(
+"y",
+side * half - 4.5
+);
+
+tick.setAttribute(
+"width",
+10
+);
+
+tick.setAttribute(
+"height",
+9
+);
+
+tick.setAttribute(
+"fill",
+"#000"
+);
+
+tick.setAttribute(
+"rx",
+1.5
+);
+
+el.appendChild(
+tick
+);
+
+}
+);
+
+group.appendChild(
+el
+);
+
+const revealDelay =
+(dist / totalLength) * totalDrawDuration;
+
+setTimeout(
+() => {
+
+el.style.opacity =
+el.getAttribute(
+"data-final-opacity"
+);
+
+},
+revealDelay
+);
+
+}
+
+}
+
+function triggerStathamSkids() {
+
+if (stathamSkidsBusy) {
+
+return;
+
+}
+
+stathamSkidsBusy =
+true;
+
+const vw =
+window.innerWidth;
+
+const vh =
+window.innerHeight;
+
+/*
+
+* Randomized path each time - a curved sweep from one side
+* of the screen to the other, starting/ending points and
+* the curve's peak all randomized within reasonable bounds
+* so it never looks identical twice.
+  */
+
+const startX =
+-vw * 0.05;
+
+const endX =
+vw * 1.05;
+
+const startY =
+vh * (0.25 + Math.random() * 0.4);
+
+const endY =
+vh * (0.15 + Math.random() * 0.4);
+
+const midX =
+vw * (0.35 + Math.random() * 0.3);
+
+const midY =
+vh * (0.15 + Math.random() * 0.5);
+
+const trackGap =
+Math.max(
+50,
+vh * 0.09
+);
+
+const filterId =
+`statham-roughen-${Date.now()}`;
+
+const svg =
+document.createElement(
+"div"
+);
+
+svg.className =
+"statham-skid-svg";
+
+svg.innerHTML =
+`<svg width="${vw}" height="${vh}" viewBox="0 0 ${vw} ${vh}">
+<defs>
+<filter id="${filterId}" x="-30%" y="-30%" width="160%" height="160%">
+<feTurbulence type="fractalNoise" baseFrequency="0.06 0.3" numOctaves="2" seed="7" result="noise"/>
+<feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G"/>
+</filter>
+</defs>
+<path id="statham-guide-1" d="M ${startX},${startY} Q ${midX},${midY} ${endX},${endY}" fill="none" stroke="none"/>
+<path id="statham-guide-2" d="M ${startX},${startY + trackGap} Q ${midX},${midY + trackGap} ${endX},${endY + trackGap}" fill="none" stroke="none"/>
+<g id="statham-tread-1" filter="url(#${filterId})"></g>
+<g id="statham-tread-2" filter="url(#${filterId})"></g>
+</svg>`;
+
+document.body.appendChild(
+svg
+);
+
+const guide1 =
+svg.querySelector(
+"#statham-guide-1"
+);
+
+const guide2 =
+svg.querySelector(
+"#statham-guide-2"
+);
+
+const tread1 =
+svg.querySelector(
+"#statham-tread-1"
+);
+
+const tread2 =
+svg.querySelector(
+"#statham-tread-2"
+);
+
+const drawDuration =
+1100;
+
+buildStathamTreadMarks(
+guide1,
+tread1,
+44,
+drawDuration
+);
+
+buildStathamTreadMarks(
+guide2,
+tread2,
+44,
+drawDuration
+);
+
+setTimeout(
+() => {
+
+svg.remove();
+
+stathamSkidsBusy =
+false;
+
+},
+drawDuration + 2500
+);
+
+}
+
+
+
 let irisCloseBusy =
 false;
 
@@ -11839,6 +12413,36 @@ false;
 
 currentSearch =
 event.target.value.trim();
+
+/*
+
+* Fires once when the search text starts matching "statham"
+* - not on every keystroke while it continues to match. The
+* fired flag resets as soon as the search no longer matches,
+* so clearing and re-typing it fires it again.
+  */
+
+const stathamMatches =
+currentSearch
+.toLowerCase()
+.includes("statham");
+
+if (
+stathamMatches &&
+!stathamSkidsFired
+) {
+
+stathamSkidsFired =
+true;
+
+triggerStathamSkids();
+
+} else if (!stathamMatches) {
+
+stathamSkidsFired =
+false;
+
+}
 
 if (searchClearButton) {
 
