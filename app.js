@@ -5256,6 +5256,518 @@ false;
 
 /*
 
+* Misc junk drawer — fires when the Misc type filter is
+* selected. Real movie cards on the shelf visibly swap to
+* each other's positions (a genuine shuffle via transform,
+* not a shake-and-return - the underlying grid/sort order
+* never actually changes, just the visual position during the
+* effect), hold there briefly, then settle back. At the same
+* time, junk-drawer items (keys, scissors, paperclip, pencil,
+* pen, pushpin) are tossed onto the screen with real arc
+* physics - launched with velocity, pulled down by gravity,
+* tumbling while airborne, landing flat with a stop-rotation
+* settle, holding, then fading.
+  */
+
+const JUNK_DRAWER_ICONS =
+["🔑", "✂️", "📎", "✏️", "🖊️", "📌"];
+
+function shuffleJunkArray(
+arr
+) {
+
+const a =
+[...arr];
+
+for (
+let i = a.length - 1;
+i > 0;
+i--
+) {
+
+const j =
+Math.floor(
+Math.random() * (i + 1)
+);
+
+[a[i], a[j]] =
+[a[j], a[i]];
+
+}
+
+return a;
+
+}
+
+let junkDrawerBusy =
+false;
+
+function triggerJunkDrawer() {
+
+if (junkDrawerBusy) {
+
+return;
+
+}
+
+const cards =
+Array.from(
+movieGrid.querySelectorAll(
+".movie-card"
+)
+);
+
+if (cards.length < 2) {
+
+return;
+
+}
+
+junkDrawerBusy =
+true;
+
+/*
+
+* Real rearrangement: capture each card's actual on-screen
+* position, shuffle the assignment of which card goes to
+* which slot, and transform each card by the offset needed
+* to reach its new slot - a genuine swap, not a jiggle.
+  */
+
+const positions =
+cards.map(
+c => c.getBoundingClientRect()
+);
+
+const shuffledOrder =
+shuffleJunkArray(
+cards.map(
+(_, i) => i
+)
+);
+
+cards.forEach(
+card => {
+
+card.style.transition =
+"none";
+
+card.style.transform =
+"translate(0,0) rotate(0deg)";
+
+}
+);
+
+void movieGrid.offsetWidth;
+
+cards.forEach(
+(card, i) => {
+
+const targetIndex =
+shuffledOrder[i];
+
+const dx =
+positions[targetIndex].left -
+positions[i].left;
+
+const dy =
+positions[targetIndex].top -
+positions[i].top;
+
+const rot =
+Math.random() * 10 - 5;
+
+card.style.transition =
+"transform 1.1s cubic-bezier(0.5, 0, 0.3, 1)";
+
+card.style.transform =
+`translate(${dx}px, ${dy}px) rotate(${rot}deg)`;
+
+}
+);
+
+setTimeout(
+() => {
+
+cards.forEach(
+card => {
+
+card.style.transition =
+"transform 1.1s cubic-bezier(0.4, 0, 0.2, 1)";
+
+card.style.transform =
+"translate(0,0) rotate(0deg)";
+
+}
+);
+
+setTimeout(
+() => {
+
+cards.forEach(
+card => {
+
+card.style.transition =
+"";
+
+card.style.transform =
+"";
+
+}
+);
+
+junkDrawerBusy =
+false;
+
+},
+1150
+);
+
+},
+2300
+);
+
+/*
+
+* Junk items - real toss physics. Each launches from a
+* random point with an initial velocity, gravity pulls it
+* down, it tumbles while airborne, then on landing it stops
+* rotating and settles flat, holds, then fades.
+  */
+
+const vw =
+window.innerWidth;
+
+const vh =
+window.innerHeight;
+
+const itemCount =
+6;
+
+const order =
+shuffleJunkArray(
+JUNK_DRAWER_ICONS
+);
+
+for (
+let i = 0;
+i < itemCount;
+i++
+) {
+
+const item =
+document.createElement(
+"div"
+);
+
+item.className =
+"junk-drawer-item";
+
+item.textContent =
+order[i];
+
+const fontSize =
+Math.max(
+30,
+Math.min(
+60,
+vw * 0.055
+)
+) + Math.random() * 12;
+
+item.style.fontSize =
+`${fontSize}px`;
+
+document.body.appendChild(
+item
+);
+
+const startX =
+vw * 0.15 + Math.random() * vw * 0.7;
+
+const startY =
+-60 - Math.random() * 40;
+
+const landX =
+startX + (Math.random() * 160 - 80);
+
+const landY =
+vh * 0.35 + Math.random() * vh * 0.5;
+
+const vx =
+(landX - startX) / 55;
+
+const gravity =
+0.055 + Math.random() * 0.015;
+
+const vy =
+((landY - startY) - 0.5 * gravity * 55 * 55) / 55 -
+gravity * 55 * -0.3;
+
+let rot =
+Math.random() * 360;
+
+const rotSpeed =
+Math.random() * 14 - 7;
+
+const delay =
+Math.random() * 400;
+
+setTimeout(
+() => {
+
+item.style.opacity =
+"1";
+
+let frame =
+0;
+
+let landed =
+false;
+
+let landFrame =
+0;
+
+function step() {
+
+frame++;
+
+if (!landed) {
+
+const t =
+frame;
+
+const x =
+startX + vx * t;
+
+const y =
+startY + vy * t + 0.5 * gravity * t * t;
+
+rot +=
+rotSpeed;
+
+if (y >= landY) {
+
+landed =
+true;
+
+landFrame =
+frame;
+
+item.style.left =
+`${x}px`;
+
+item.style.top =
+`${landY}px`;
+
+item.style.transform =
+`rotate(${Math.round(rot / 90) * 90}deg)`;
+
+item.style.transition =
+"transform 0.15s ease-out";
+
+} else {
+
+item.style.left =
+`${x}px`;
+
+item.style.top =
+`${y}px`;
+
+item.style.transform =
+`rotate(${rot}deg)`;
+
+}
+
+}
+
+if (!landed || frame - landFrame < 90) {
+
+requestAnimationFrame(
+step
+);
+
+} else {
+
+item.style.transition =
+"opacity 0.4s ease";
+
+item.style.opacity =
+"0";
+
+setTimeout(
+() => item.remove(),
+450
+);
+
+}
+
+}
+
+requestAnimationFrame(
+step
+);
+
+},
+delay
+);
+
+}
+
+}
+
+/*
+
+* Clapperboard — fires when the Movies type filter is
+* selected. A full-screen clapperboard scales in with the
+* striped top stick held open, a random real movie title
+* plus a random scene/take number chalked onto the board,
+* then the stick slams shut fast with a quick white flash,
+* holds a beat, reopens, and fades away.
+  */
+
+let clapperboardBusy =
+false;
+
+function triggerClapperboard() {
+
+if (clapperboardBusy) {
+
+return;
+
+}
+
+const eligibleMovies =
+movies.filter(
+m => !m.isEmptyReservationPlaceholder
+);
+
+if (eligibleMovies.length === 0) {
+
+return;
+
+}
+
+clapperboardBusy =
+true;
+
+const randomMovie =
+eligibleMovies[
+Math.floor(
+Math.random() * eligibleMovies.length
+)
+];
+
+const scene =
+Math.floor(
+Math.random() * 40
+) + 1;
+
+const take =
+Math.floor(
+Math.random() * 6
+) + 1;
+
+const overlay =
+document.createElement(
+"div"
+);
+
+overlay.className =
+"clap-overlay";
+
+overlay.innerHTML =
+`<div class="clapboard">
+<div class="clap-stick"></div>
+<div class="clap-board-body">
+<div class="clap-line"><span class="label">PROD</span> <span>${randomMovie.title}</span></div>
+<div class="clap-line"><span class="label">SCENE</span> <span>${scene}</span></div>
+<div class="clap-line"><span class="label">TAKE</span> <span>${take}</span></div>
+</div>
+<div class="clap-flash"></div>
+</div>`;
+
+document.body.appendChild(
+overlay
+);
+
+const stick =
+overlay.querySelector(
+".clap-stick"
+);
+
+const flash =
+overlay.querySelector(
+".clap-flash"
+);
+
+requestAnimationFrame(
+() => {
+
+overlay.classList.add(
+"visible"
+);
+
+}
+);
+
+setTimeout(
+() => {
+
+stick.classList.add(
+"shut"
+);
+
+flash.classList.add(
+"hit"
+);
+
+},
+900
+);
+
+setTimeout(
+() => {
+
+stick.classList.remove(
+"shut"
+);
+
+stick.classList.add(
+"reopen"
+);
+
+},
+1700
+);
+
+setTimeout(
+() => {
+
+overlay.classList.remove(
+"visible"
+);
+
+},
+2600
+);
+
+setTimeout(
+() => {
+
+overlay.remove();
+
+clapperboardBusy =
+false;
+
+},
+3000
+);
+
+}
+
+/*
+
 * Christmas lights — fires when the Christmas category
 * filter is selected. 8 strands spread across the full
 * screen height, each following a natural sag curve rather
@@ -9704,8 +10216,8 @@ vh * (0.15 + Math.random() * 0.5);
 
 const trackGap =
 Math.max(
-50,
-vh * 0.09
+90,
+vh * 0.18
 );
 
 const filterId =
@@ -10525,6 +11037,45 @@ value;
 if (value === "tv") {
 
 triggerColorBars();
+
+}
+
+if (value === "movie") {
+
+/*
+
+* Deferred one frame, same reasoning as Misc below -
+* renderMovies() doesn't run until the end of this same
+* click handler.
+  */
+
+requestAnimationFrame(
+() => {
+
+triggerClapperboard();
+
+}
+);
+
+}
+
+if (value === "misc") {
+
+/*
+
+* Deferred one frame - renderMovies() (which rebuilds the
+* grid to show Misc-type cards) doesn't run until the very
+* end of this same click handler, so calling this
+* immediately would grab the stale pre-filter card set.
+  */
+
+requestAnimationFrame(
+() => {
+
+triggerJunkDrawer();
+
+}
+);
 
 }
 
