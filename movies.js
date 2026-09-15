@@ -6725,6 +6725,25 @@ const movies = [
     "tmdbTitle": "The Fifth Element"
   },
   {
+    "title": "Fifty Shades of Grey",
+    "tmdbTitle": "Fifty Shades of Grey",
+    "type": "movie",
+    "tmdbId": 216015,
+    "poster": "https://image.tmdb.org/t/p/w500/63kGofUkt1Mx0SIL4XI4Z5AoSgt.jpg",
+    "year": "2015",
+    "runtime": "125m",
+    "genre": "Drama / Romance / Thriller",
+    "rated": "R",
+    "director": "Sam Taylor-Johnson",
+    "cast": "Dakota Johnson, Jamie Dornan, Jennifer Ehle, Eloise Mumford, Victor Rasuk, Luke Grimes",
+    "synopsis": "When college senior Anastasia Steele steps in for her sick roommate to interview prominent businessman Christian Grey for their campus paper, little does she realize the path her life will take. Christian, as enigmatic as he is rich and powerful, finds himself strangely drawn to Ana, and she to him. Though sexually inexperienced, Ana plunges headlong into an affair -- and learns that Christian's true sexual proclivities push the boundaries of pain and pleasure.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Fight Club",
     "tmdbTitle": "Fight Club",
     "type": "movie",
