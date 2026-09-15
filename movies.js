@@ -12353,6 +12353,25 @@ const movies = [
     "tmdbTitle": "Maleficent"
   },
   {
+    "title": "Mamma Mia! Here We Go Again",
+    "tmdbTitle": "Mamma Mia! Here We Go Again",
+    "type": "movie",
+    "tmdbId": 458423,
+    "poster": "https://image.tmdb.org/t/p/w500/aWicerX4Y7n7tUwRAVHsVcBBpj2.jpg",
+    "year": "2018",
+    "runtime": "114m",
+    "genre": "Comedy / Romance",
+    "rated": "PG-13",
+    "director": "Ol Parker",
+    "cast": "Amanda Seyfried, Lily James, Pierce Brosnan, Colin Firth, Stellan Skarsgård, Christine Baranski",
+    "synopsis": "Five years after meeting her three fathers, Sophie Sheridan prepares to open her mother’s hotel. In 1979, young Donna Sheridan meets the men who each could be Sophie’s biological father.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Man of Steel",
     "tmdbTitle": "Man of Steel",
     "type": "movie",
