@@ -6725,6 +6725,25 @@ const movies = [
     "tmdbTitle": "The Fifth Element"
   },
   {
+    "title": "Fifty Shades Darker",
+    "tmdbTitle": "Fifty Shades Darker",
+    "type": "movie",
+    "tmdbId": 341174,
+    "poster": "https://image.tmdb.org/t/p/w500/w3qa274gvca9t8pkUoG8nfQgTU3.jpg",
+    "year": "2017",
+    "runtime": "118m",
+    "genre": "Drama / Romance",
+    "rated": "R",
+    "director": "James Foley",
+    "cast": "Dakota Johnson, Jamie Dornan, Eric Johnson, Eloise Mumford, Bella Heathcote, Rita Ora",
+    "synopsis": "When a wounded Christian Grey tries to entice a cautious Ana Steele back into his life, she demands a new arrangement before she will give him another chance. As the two begin to build trust and find stability, shadowy figures from Christian’s past start to circle the couple, determined to destroy their hopes for a future together.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Fifty Shades of Grey",
     "tmdbTitle": "Fifty Shades of Grey",
     "type": "movie",
