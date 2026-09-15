@@ -12410,6 +12410,25 @@ const movies = [
     "tmdbTitle": "Maleficent"
   },
   {
+    "title": "Mamma Mia!",
+    "tmdbTitle": "Mamma Mia!",
+    "type": "movie",
+    "tmdbId": 11631,
+    "poster": "https://image.tmdb.org/t/p/w500/xYLiCWmAMHJubx5jNZ7HuXKjAbV.jpg",
+    "year": "2008",
+    "runtime": "108m",
+    "genre": "Comedy / Romance",
+    "rated": "PG-13",
+    "director": "Phyllida Lloyd",
+    "cast": "Amanda Seyfried, Meryl Streep, Pierce Brosnan, Colin Firth, Stellan Skarsgård, Christine Baranski",
+    "synopsis": "A spirited young bride-to-be living with her single mother on a small Greek island secretly invites three of her mother's ex-boyfriends in hope of finding her biological father to walk her down the aisle.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Mamma Mia! Here We Go Again",
     "tmdbTitle": "Mamma Mia! Here We Go Again",
     "type": "movie",
