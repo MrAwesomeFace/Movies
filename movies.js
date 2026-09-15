@@ -1761,6 +1761,25 @@ const movies = [
     "rated": "R"
   },
   {
+    "title": "Bad Moms",
+    "tmdbTitle": "Bad Moms",
+    "type": "movie",
+    "tmdbId": 376659,
+    "poster": "https://image.tmdb.org/t/p/w500/u9q10ljhkLj0tNCjlVqe3DCjoU4.jpg",
+    "year": "2016",
+    "runtime": "100m",
+    "genre": "Comedy",
+    "rated": "R",
+    "director": "Scott Moore, Jon Lucas",
+    "cast": "Mila Kunis, Kristen Bell, Kathryn Hahn, Christina Applegate, Jada Pinkett Smith, Jay Hernandez",
+    "synopsis": "When three overworked and under-appreciated moms are pushed beyond their limits, they ditch their conventional responsibilities for a jolt of long overdue freedom, fun, and comedic self-indulgence.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Bad Santa",
     "type": "movie",
     "tmdbId": 10147,
