@@ -329,6 +329,14 @@ aria-label="Clear search"
       Staff Picks
     </button>
 
+    <button
+      id="tournament-button"
+      class="filter action-filter"
+      type="button"
+    >
+      Tournament
+    </button>
+
     <span class="coin-slot-anchor">
 
     <button
@@ -497,11 +505,12 @@ aria-label="Clear search"
   >
 
     <h2 class="wishlist-add-heading">
-      Add something to your wishlist
+      Add something you don't own yet
     </h2>
 
     <p class="wishlist-add-subtext">
-      Search and add it here as a reminder to watch someday.
+      Search TMDB and add it here as a reminder to buy or
+      rent - it won't touch your real collection.
     </p>
 
     <div class="wishlist-add-controls">
@@ -623,6 +632,33 @@ aria-label="Clear search"
     <div class="rewind-text">REWINDING</div>
   </div>
 
+  <!--
+    TOURNAMENT OVERLAY
+
+    Fully built and populated by app.js (openTournamentHub and
+    friends) - this is just the fixed-position shell it renders
+    into. Three views live inside it (hub, quick-16 tree,
+    round-list), only one visible at a time via JS-toggled
+    classes.
+  -->
+
+  <div id="tournament-overlay" class="tournament-overlay hidden">
+
+    <div class="tournament-panel">
+
+      <button
+        type="button"
+        id="tournament-close"
+        class="tournament-close"
+        aria-label="Close tournament"
+      >×</button>
+
+      <div id="tournament-content"></div>
+
+    </div>
+
+  </div>
+
   <!-- =========================================================
        MOVIE DETAIL WINDOW
        ========================================================= -->
@@ -693,6 +729,25 @@ aria-label="Close"
         <div class="back-texture"></div>
 
         <div class="back-band back-band-1">
+
+          <div
+            id="case-back-tabs"
+            class="case-back-tabs"
+          >
+
+            <button
+              type="button"
+              class="case-back-tab active"
+              data-tab="info"
+            >Info</button>
+
+            <button
+              type="button"
+              class="case-back-tab"
+              data-tab="history"
+            >History</button>
+
+          </div>
 
           <div class="back-top-row">
 
@@ -850,6 +905,21 @@ aria-label="Close"
           </button>
 
         </div>
+
+        <!--
+          TOURNAMENT HISTORY PANEL
+
+          Hidden by default (see .case-back-tabs above) -
+          toggled alongside the three back-band divs by
+          app.js, and populated on demand the first time
+          someone actually clicks the History tab for this
+          movie, rather than fetched for every modal open.
+        -->
+
+        <div
+          id="modal-history-panel"
+          class="modal-history-panel hidden"
+        ></div>
 
       </div>
 
