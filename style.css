@@ -1814,11 +1814,17 @@ CASE BACK - INFO / HISTORY TABS
 ========================================================= */
 
 .case-back-tabs {
+  position: relative;
+
+  z-index: 6;
+
   display: flex;
 
   gap: 8px;
 
-  margin-bottom: 12px;
+  padding: 14px 18px 0;
+
+  background: var(--case-accent-end, #4b6cb7);
 }
 
 .case-back-tab {
