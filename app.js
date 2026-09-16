@@ -32,6 +32,44 @@ let wishlist =
 
 /*
 
+* Tournament state. GENRE_TOURNAMENT_CATEGORIES mirrors the
+* genre filter's own option values exactly, so pool selection
+* (getTournamentGenrePool) can reuse the same matching rules
+* getFilteredMovies() already uses for each one - including
+* "classic" being a computed year rule, not a text tag.
+* tournamentChampions/tournamentEverWonIds are the belt/crown
+* data, loaded once via loadTournamentChampions() and re-
+* loaded any time a tournament completes.
+  */
+
+const GENRE_TOURNAMENT_CATEGORIES =
+[
+"action",
+"classic",
+"comedy",
+"drama",
+"horror",
+"rom-com",
+"thriller"
+];
+
+let tournamentChampions =
+[];
+
+let tournamentEverWonIds =
+new Set();
+
+let activeTournamentCategory =
+null;
+
+let quickSixteenBracket =
+null;
+
+let tournamentHistoryCache =
+{};
+
+/*
+
 * Two heart shapes, shared by the card badge, the ripple
 * echoes, and the filter flood — smooth for the default
 * theme, a blocky pixel-grid version for arcade. Built as
@@ -732,6 +770,69 @@ error
 );
 
 wishlist = [];
+
+}
+
+}
+
+// =========================================================
+// LOAD TOURNAMENT CHAMPIONS
+// =========================================================
+
+async function loadTournamentChampions() {
+
+try {
+
+const response =
+await fetch(
+`${RESERVATIONS_API}/current-champions`,
+{
+method: "GET",
+cache: "no-store"
+}
+);
+
+if (!response.ok) {
+
+throw new Error(
+`Champions server returned ${response.status}`
+);
+
+}
+
+const data =
+await response.json();
+
+tournamentChampions =
+Array.isArray(data.champions)
+? data.champions
+: [];
+
+tournamentEverWonIds =
+new Set(
+Array.isArray(data.everWonMovieIds)
+? data.everWonMovieIds.map(
+id => String(id)
+)
+: []
+);
+
+if (!currentMovie) {
+
+renderMovies();
+
+}
+
+} catch (error) {
+
+console.error(
+"Could not load tournament champions:",
+error
+);
+
+tournamentChampions = [];
+
+tournamentEverWonIds = new Set();
 
 }
 
@@ -1762,6 +1863,8 @@ loadReservations();
 
 loadWishlist();
 
+loadTournamentChampions();
+
 renderArcadeSideLighting();
 
 /*
@@ -2784,6 +2887,38 @@ frame.classList.add(
 
 }
 
+/*
+
+* Builds the belt markup shared by shelf cards and anywhere
+* else a belt might show up later - stepped gold or silver
+* blocks (variant set by the caller via the belt-gold/belt-
+* silver class) narrowing toward a bigger center plate. A
+* null category means the full-collection belt (trophy emoji
+* plate); any other value is a genre name, shown as short
+* uppercase text on the plate instead.
+  */
+
+function buildChampionshipBeltHTML(
+genreCategory
+) {
+
+const plateContent =
+genreCategory
+? `<span class="belt-label" style="font-size:8px">${genreCategory.toUpperCase()}</span>`
+: `<span class="belt-label" style="font-size:15px">🏆</span>`;
+
+return (
+`<div class="belt-block" style="width:7px;height:7px;border-radius:2px"></div>` +
+`<div class="belt-block" style="width:11px;height:10px;border-radius:2px"></div>` +
+`<div class="belt-block" style="width:14px;height:13px;border-radius:2px"></div>` +
+`<div class="belt-plate belt-block" style="width:34px;height:22px;border-radius:4px">${plateContent}</div>` +
+`<div class="belt-block" style="width:14px;height:13px;border-radius:2px"></div>` +
+`<div class="belt-block" style="width:11px;height:10px;border-radius:2px"></div>` +
+`<div class="belt-block" style="width:7px;height:7px;border-radius:2px"></div>`
+);
+
+}
+
 function createMovieCard(
 movie,
 index
@@ -3087,6 +3222,90 @@ heartBadge
 
 coverInner.appendChild(
 wrapper
+);
+
+}
+
+/*
+
+* Championship belt + crown - checked against the two caches
+* loadTournamentChampions() fills at page load. Full-collection
+* outranks a genre belt if a movie somehow holds both (only
+* one fits on a poster this size); the crown is independent of
+* either and just means "has won at least once, ever."
+  */
+
+const cardMovieId =
+getMovieId(
+movie
+);
+
+const fullChampEntry =
+tournamentChampions.find(
+entry =>
+String(entry.movie_id) ===
+String(cardMovieId) &&
+entry.category === "full"
+);
+
+const genreChampEntry =
+tournamentChampions.find(
+entry =>
+String(entry.movie_id) ===
+String(cardMovieId) &&
+entry.category !== "full"
+);
+
+const champEntry =
+fullChampEntry ||
+genreChampEntry;
+
+if (champEntry) {
+
+const belt =
+document.createElement(
+"div"
+);
+
+belt.className =
+`championship-belt ${
+champEntry === fullChampEntry
+? "belt-gold"
+: "belt-silver"
+}`;
+
+belt.innerHTML =
+buildChampionshipBeltHTML(
+champEntry === fullChampEntry
+? null
+: champEntry.category
+);
+
+coverInner.appendChild(
+belt
+);
+
+}
+
+if (
+tournamentEverWonIds.has(
+String(cardMovieId)
+)
+) {
+
+const crown =
+document.createElement(
+"div"
+);
+
+crown.className =
+"tournament-crown-badge";
+
+crown.textContent =
+"👑";
+
+coverInner.appendChild(
+crown
 );
 
 }
@@ -4228,6 +4447,33 @@ flipContainer.classList.remove(
 
 flipButton.textContent =
 "Flip case";
+
+/*
+
+* Reset the case back to the Info tab every time a new movie
+* opens - without this, flipping to History on one movie and
+* then opening a different one would silently carry that
+* view over, showing stale (or the wrong movie's) history.
+  */
+
+resetCaseBackToInfoTab();
+
+const caseBackTabs =
+document.getElementById(
+"case-back-tabs"
+);
+
+if (caseBackTabs) {
+
+caseBackTabs.style.display =
+(
+movie.isEmptyReservationPlaceholder ||
+movie.isWishlistItem
+)
+? "none"
+: "";
+
+}
 
 modalTitle.textContent =
 movie.title;
@@ -11237,6 +11483,343 @@ triggerPiEasterEgg
 }
 
 // =========================================================
+// CASE BACK - INFO / HISTORY TABS
+// =========================================================
+
+/*
+
+* Attached once here (static DOM, same reasoning as the
+* barcode button below) rather than per-movie. Toggling
+* between tabs just shows/hides the three normal back-band
+* divs versus the history panel - the history panel's actual
+* content is fetched lazily, once per movie per modal session
+* (see loadTournamentHistoryForMovie), not on every tab click.
+  */
+
+function resetCaseBackToInfoTab() {
+
+const tabs =
+document.querySelectorAll(
+".case-back-tab"
+);
+
+tabs.forEach(
+tab =>
+tab.classList.toggle(
+"active",
+tab.dataset.tab === "info"
+)
+);
+
+document
+.querySelectorAll(
+".back-band-1, .back-band-2, .back-band-3"
+)
+.forEach(
+band => {
+
+band.style.display =
+"";
+
+}
+);
+
+const historyPanel =
+document.getElementById(
+"modal-history-panel"
+);
+
+if (historyPanel) {
+
+historyPanel.classList.add(
+"hidden"
+);
+
+}
+
+}
+
+async function loadTournamentHistoryForMovie(
+movie
+) {
+
+const movieId =
+getMovieId(
+movie
+);
+
+const historyPanel =
+document.getElementById(
+"modal-history-panel"
+);
+
+if (!historyPanel) {
+
+return;
+
+}
+
+if (tournamentHistoryCache[movieId]) {
+
+renderTournamentHistoryPanel(
+tournamentHistoryCache[movieId]
+);
+
+return;
+
+}
+
+historyPanel.innerHTML =
+`<p class="history-empty">Loading...</p>`;
+
+try {
+
+const response =
+await fetch(
+`${RESERVATIONS_API}/movies/${encodeURIComponent(
+movieId
+)}/tournament-history`
+);
+
+if (!response.ok) {
+
+throw new Error(
+`Server returned ${response.status}`
+);
+
+}
+
+const data =
+await response.json();
+
+tournamentHistoryCache[movieId] =
+data;
+
+if (
+currentMovie &&
+String(
+getMovieId(
+currentMovie
+)
+) === String(movieId)
+) {
+
+renderTournamentHistoryPanel(
+data
+);
+
+}
+
+} catch (error) {
+
+console.error(
+"Could not load tournament history:",
+error
+);
+
+historyPanel.innerHTML =
+`<p class="history-empty">Couldn't load tournament history.</p>`;
+
+}
+
+}
+
+const HISTORY_RESULT_LABELS =
+{
+champion: "🏆 Won the",
+runner_up: "Runner-up in the",
+third_place: "Took third place in the",
+eliminated: "Knocked out"
+};
+
+function renderTournamentHistoryPanel(
+data
+) {
+
+const historyPanel =
+document.getElementById(
+"modal-history-panel"
+);
+
+if (!historyPanel) {
+
+return;
+
+}
+
+const stats =
+data.stats ||
+{
+total_championships: 0,
+has_ever_won: 0
+};
+
+const history =
+Array.isArray(data.history)
+? data.history
+: [];
+
+let html =
+`<div class="history-stat-row">` +
+`<div class="history-stat"><span class="hs-value">${stats.total_championships}</span><span class="hs-label">Tournaments won</span></div>` +
+`</div>`;
+
+if (history.length === 0) {
+
+html +=
+`<p class="history-empty">No tournament history yet.</p>`;
+
+} else {
+
+html +=
+`<div class="history-entry-list">`;
+
+history.forEach(
+entry => {
+
+const label =
+HISTORY_RESULT_LABELS[entry.result] ||
+entry.result;
+
+let line =
+"";
+
+if (entry.result === "champion") {
+
+line =
+`${label} ${entry.category === "full" ? "Full Collection" : entry.category} tournament`;
+
+} else if (entry.result === "eliminated") {
+
+line =
+`${label} in round ${entry.round} of the ${entry.category === "full" ? "Full Collection" : entry.category} tournament` +
+(
+entry.beaten_by_title
+? ` by ${entry.beaten_by_title}`
+: ""
+);
+
+} else {
+
+line =
+`${label} ${entry.category === "full" ? "Full Collection" : entry.category} tournament`;
+
+}
+
+html +=
+`<div class="history-entry result-${entry.result}">${line}</div>`;
+
+}
+);
+
+html +=
+`</div>`;
+
+}
+
+historyPanel.innerHTML =
+html;
+
+}
+
+document
+.querySelectorAll(
+".case-back-tab"
+)
+.forEach(
+tab => {
+
+tab.addEventListener(
+"click",
+event => {
+
+event.stopPropagation();
+
+if (!currentMovie) {
+
+return;
+
+}
+
+const view =
+tab.dataset.tab;
+
+document
+.querySelectorAll(
+".case-back-tab"
+)
+.forEach(
+otherTab =>
+otherTab.classList.toggle(
+"active",
+otherTab === tab
+)
+);
+
+const historyPanel =
+document.getElementById(
+"modal-history-panel"
+);
+
+if (view === "history") {
+
+document
+.querySelectorAll(
+".back-band-1, .back-band-2, .back-band-3"
+)
+.forEach(
+band => {
+
+band.style.display =
+"none";
+
+}
+);
+
+if (historyPanel) {
+
+historyPanel.classList.remove(
+"hidden"
+);
+
+}
+
+loadTournamentHistoryForMovie(
+currentMovie
+);
+
+} else {
+
+document
+.querySelectorAll(
+".back-band-1, .back-band-2, .back-band-3"
+)
+.forEach(
+band => {
+
+band.style.display =
+"";
+
+}
+);
+
+if (historyPanel) {
+
+historyPanel.classList.add(
+"hidden"
+);
+
+}
+
+}
+
+}
+);
+
+}
+);
+
+// =========================================================
 // BARCODE EASTER EGG
 // =========================================================
 
@@ -14424,5 +15007,1499 @@ if (modal) {
       passive: false
     }
   );
+
+}
+
+// =========================================================
+// TOURNAMENT FEATURE
+// =========================================================
+
+/*
+
+* Shared helpers. shuffleArray reuses the same Fisher-Yates
+* the junk-drawer easter egg already has (array-agnostic,
+* nothing junk-drawer-specific about it) rather than writing
+* a second copy. entrant() builds the {movie_id,title} shape
+* every tournament payload/UI piece expects from a real movie
+* object.
+  */
+
+function shuffleArray(
+arr
+) {
+
+return shuffleJunkArray(
+arr
+);
+
+}
+
+function largestPowerOfTwoLE(
+n
+) {
+
+let power =
+1;
+
+while (power * 2 <= n) {
+
+power *= 2;
+
+}
+
+return power;
+
+}
+
+function entrant(
+movie
+) {
+
+/*
+ * poster travels along in the entrant object for Quick 16's
+ * benefit (pure client-side, so it's free to carry) - the
+ * Worker just ignores this extra field on genre/full payloads,
+ * since round-list posters are resolved separately via
+ * posterForMovieId() against the local catalog instead.
+ */
+
+return {
+movie_id: getMovieId(movie),
+title: movie.title,
+poster: movie.poster || ""
+};
+
+}
+
+function getTournamentEligibleMovies() {
+
+/*
+
+* Tournaments are movies-only - TV entries and Misc-type
+* items never enter a bracket, even though they're normal
+* citizens everywhere else on the shelf.
+  */
+
+return movies.filter(
+movie =>
+movie.type === "movie"
+);
+
+}
+
+function getTournamentGenrePool(
+genreValue
+) {
+
+return getTournamentEligibleMovies().filter(
+movie => {
+
+if (genreValue === "classic") {
+
+const movieYear =
+parseInt(
+movie.year,
+10
+);
+
+return (
+!Number.isNaN(movieYear) &&
+movieYear < 1980
+);
+
+}
+
+const movieGenre =
+(movie.genre || "")
+.toLowerCase();
+
+return movieGenre.includes(
+genreValue.toLowerCase()
+);
+
+}
+);
+
+}
+
+function categoryDisplayName(
+category
+) {
+
+if (category === "full") {
+
+return "Full Collection";
+
+}
+
+if (category === "rom-com") {
+
+return "Rom-Com";
+
+}
+
+return (
+category.charAt(0).toUpperCase() +
+category.slice(1)
+);
+
+}
+
+function posterForMovieId(
+movieId
+) {
+
+const match =
+movies.find(
+m =>
+String(
+getMovieId(m)
+) === String(movieId)
+);
+
+return (
+match && match.poster
+? match.poster
+: ""
+);
+
+}
+
+
+// =========================================================
+// BRACKET PAYLOAD BUILDERS
+// =========================================================
+
+function buildGenreTournamentPayload(
+genreValue
+) {
+
+const pool =
+getTournamentGenrePool(
+genreValue
+);
+
+const size =
+largestPowerOfTwoLE(
+pool.length
+);
+
+if (size < 2) {
+
+return null;
+
+}
+
+const drawn =
+shuffleArray(
+pool
+).slice(
+0,
+size
+);
+
+const round1 =
+[];
+
+for (
+let i = 0;
+i < drawn.length;
+i += 2
+) {
+
+round1.push({
+a: entrant(drawn[i]),
+b: entrant(drawn[i + 1])
+});
+
+}
+
+return {
+category: genreValue,
+round1
+};
+
+}
+
+/*
+
+* Full collection includes EVERY owned movie, trimmed down to
+* the nearest power of 2 via a play-in round rather than a
+* capped pool. excess = how many movies don't fit into a clean
+* power-of-2 field; each play-in matchup removes exactly one,
+* so playInCount (movies IN the play-in round) = excess * 2.
+* Of the remaining byes, the first `excess` of them each pair
+* with a play-in-winner placeholder (never two placeholders
+* together - the Worker can't resolve that), and the rest pair
+* up among themselves normally.
+  */
+
+function buildFullCollectionPayload() {
+
+const shuffled =
+shuffleArray(
+getTournamentEligibleMovies()
+);
+
+const total =
+shuffled.length;
+
+const target =
+largestPowerOfTwoLE(
+total
+);
+
+if (target < 2) {
+
+return null;
+
+}
+
+const excess =
+total - target;
+
+if (excess === 0) {
+
+const round1 =
+[];
+
+for (
+let i = 0;
+i < shuffled.length;
+i += 2
+) {
+
+round1.push({
+a: entrant(shuffled[i]),
+b: entrant(shuffled[i + 1])
+});
+
+}
+
+return {
+category: "full",
+round1
+};
+
+}
+
+const playInCount =
+excess * 2;
+
+const playInMovies =
+shuffled.slice(
+0,
+playInCount
+);
+
+const byes =
+shuffled.slice(
+playInCount
+);
+
+const playIn =
+[];
+
+for (
+let i = 0;
+i < playInMovies.length;
+i += 2
+) {
+
+playIn.push({
+a: entrant(playInMovies[i]),
+b: entrant(playInMovies[i + 1])
+});
+
+}
+
+const mixedByes =
+byes.slice(
+0,
+excess
+);
+
+const pureByes =
+byes.slice(
+excess
+);
+
+const round1 =
+[];
+
+mixedByes.forEach(
+(bye, i) => {
+
+round1.push({
+a: entrant(bye),
+b: { pendingFromPlayIn: i }
+});
+
+}
+);
+
+for (
+let i = 0;
+i < pureByes.length;
+i += 2
+) {
+
+round1.push({
+a: entrant(pureByes[i]),
+b: entrant(pureByes[i + 1])
+});
+
+}
+
+return {
+category: "full",
+playIn,
+round1
+};
+
+}
+
+
+// =========================================================
+// OVERLAY OPEN / CLOSE
+// =========================================================
+
+function openTournamentHub() {
+
+const overlay =
+document.getElementById(
+"tournament-overlay"
+);
+
+if (!overlay) {
+
+return;
+
+}
+
+overlay.classList.remove(
+"hidden"
+);
+
+requestAnimationFrame(
+() => {
+
+overlay.classList.add(
+"visible"
+);
+
+}
+);
+
+renderTournamentHub();
+
+}
+
+function closeTournamentOverlay() {
+
+const overlay =
+document.getElementById(
+"tournament-overlay"
+);
+
+if (!overlay) {
+
+return;
+
+}
+
+overlay.classList.remove(
+"visible"
+);
+
+setTimeout(
+() => {
+
+overlay.classList.add(
+"hidden"
+);
+
+},
+300
+);
+
+}
+
+function wireTournamentBackLink() {
+
+const link =
+document.getElementById(
+"tournament-back-to-hub"
+);
+
+if (link) {
+
+link.addEventListener(
+"click",
+() => {
+
+renderTournamentHub();
+
+}
+);
+
+}
+
+}
+
+
+// =========================================================
+// HUB
+// =========================================================
+
+async function fetchCurrentTournament(
+category
+) {
+
+try {
+
+const response =
+await fetch(
+`${RESERVATIONS_API}/tournaments/current` +
+`?category=${encodeURIComponent(category)}`
+);
+
+if (!response.ok) {
+
+throw new Error(
+`Server returned ${response.status}`
+);
+
+}
+
+return await response.json();
+
+} catch (error) {
+
+console.error(
+"Could not fetch tournament:",
+error
+);
+
+return null;
+
+}
+
+}
+
+async function renderTournamentHub() {
+
+const content =
+document.getElementById(
+"tournament-content"
+);
+
+if (!content) {
+
+return;
+
+}
+
+content.innerHTML =
+`<h2 class="tournament-heading">Movie tournament</h2>` +
+`<p class="tournament-subtext">Loading...</p>`;
+
+const categories =
+["full", ...GENRE_TOURNAMENT_CATEGORIES];
+
+const statuses =
+await Promise.all(
+categories.map(
+category =>
+fetchCurrentTournament(
+category
+)
+)
+);
+
+let html =
+`<h2 class="tournament-heading">Movie tournament</h2>` +
+`<p class="tournament-subtext">A quick random bracket for one sitting, or a longer one that remembers where you left off.</p>` +
+`<div class="tournament-category-grid">`;
+
+html +=
+`<button type="button" class="tournament-category-card" data-quick16="1">` +
+`<strong>Quick 16</strong>` +
+`<span class="tc-count">Random 16, one sitting</span>` +
+`</button>`;
+
+categories.forEach(
+(category, i) => {
+
+const status =
+statuses[i];
+
+const inProgress =
+status && status.tournament;
+
+const poolSize =
+category === "full"
+? getTournamentEligibleMovies().length
+: getTournamentGenrePool(category).length;
+
+html +=
+`<button type="button" class="tournament-category-card" data-category="${category}">` +
+`<strong>${categoryDisplayName(category)}</strong>` +
+`<span class="tc-count">${poolSize} in the pool</span>` +
+(
+inProgress
+? `<span class="tc-status">Resume in progress</span>`
+: ""
+) +
+`</button>`;
+
+}
+);
+
+html +=
+`</div>`;
+
+content.innerHTML =
+html;
+
+content
+.querySelectorAll(
+"[data-quick16]"
+)
+.forEach(
+button => {
+
+button.addEventListener(
+"click",
+() => {
+
+startQuickSixteen();
+
+}
+);
+
+}
+);
+
+content
+.querySelectorAll(
+"[data-category]"
+)
+.forEach(
+button => {
+
+button.addEventListener(
+"click",
+() => {
+
+openCategoryTournament(
+button.dataset.category
+);
+
+}
+);
+
+}
+);
+
+}
+
+async function openCategoryTournament(
+category
+) {
+
+const content =
+document.getElementById(
+"tournament-content"
+);
+
+if (!content) {
+
+return;
+
+}
+
+content.innerHTML =
+`<button type="button" class="tournament-back-link" id="tournament-back-to-hub">&larr; Back</button>` +
+`<p class="tournament-subtext">Loading...</p>`;
+
+wireTournamentBackLink();
+
+let current =
+await fetchCurrentTournament(
+category
+);
+
+if (!current || !current.tournament) {
+
+const payload =
+category === "full"
+? buildFullCollectionPayload()
+: buildGenreTournamentPayload(category);
+
+if (!payload) {
+
+content.innerHTML =
+`<button type="button" class="tournament-back-link" id="tournament-back-to-hub">&larr; Back</button>` +
+`<p class="tournament-subtext">Not enough movies in this category yet for a bracket.</p>`;
+
+wireTournamentBackLink();
+
+return;
+
+}
+
+await fetch(
+`${RESERVATIONS_API}/tournaments`,
+{
+method: "POST",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify(payload)
+}
+);
+
+current =
+await fetchCurrentTournament(
+category
+);
+
+}
+
+activeTournamentCategory =
+category;
+
+renderRoundList(
+current
+);
+
+}
+
+
+// =========================================================
+// ROUND-LIST VIEW (GENRE / FULL COLLECTION)
+// =========================================================
+
+function roundLabel(
+round,
+totalRounds
+) {
+
+if (round === 0) {
+
+return "Play-in round";
+
+}
+
+const matchupCount =
+Math.pow(
+2,
+totalRounds - round
+);
+
+if (matchupCount === 1) {
+
+return "Championship round";
+
+}
+
+if (matchupCount === 2) {
+
+return "Semifinals";
+
+}
+
+if (matchupCount === 4) {
+
+return "Quarterfinals";
+
+}
+
+return `Round of ${matchupCount * 2}`;
+
+}
+
+function renderRoundList(
+current
+) {
+
+const content =
+document.getElementById(
+"tournament-content"
+);
+
+if (!content || !current || !current.tournament) {
+
+return;
+
+}
+
+const tournament =
+current.tournament;
+
+const round =
+current.round;
+
+const matchups =
+current.matchups || [];
+
+if (matchups.length === 0) {
+
+content.innerHTML =
+`<button type="button" class="tournament-back-link" id="tournament-back-to-hub">&larr; Back</button>` +
+`<p class="tournament-subtext">Nothing ready to play right now.</p>`;
+
+wireTournamentBackLink();
+
+return;
+
+}
+
+const label =
+roundLabel(
+round,
+tournament.total_rounds
+);
+
+let html =
+`<button type="button" class="tournament-back-link" id="tournament-back-to-hub">&larr; Back</button>` +
+`<h2 class="tournament-heading">${categoryDisplayName(tournament.category)}</h2>` +
+`<div class="tournament-round-label">${label}</div>` +
+`<div class="tournament-round-progress">${matchups.length} matchup${matchups.length === 1 ? "" : "s"} to decide</div>` +
+`<div class="tournament-matchup-list">`;
+
+matchups.forEach(
+matchup => {
+
+if (matchup.is_third_place_match) {
+
+html +=
+`<div class="tournament-round-label" style="font-size:14px;margin:2px 0">3rd place match</div>`;
+
+}
+
+html +=
+`<div class="tournament-matchup-row" data-matchup-id="${matchup.id}">` +
+`<div class="tournament-matchup-side side-a" data-side="a">` +
+`<div class="tournament-matchup-poster" style="background-image:url('${posterForMovieId(matchup.movie_id_a)}')"></div>` +
+`<div class="tournament-matchup-title">${matchup.movie_title_a}</div>` +
+`</div>` +
+`<div class="tournament-vs">VS</div>` +
+`<div class="tournament-matchup-side side-b" data-side="b">` +
+`<div class="tournament-matchup-poster" style="background-image:url('${posterForMovieId(matchup.movie_id_b)}')"></div>` +
+`<div class="tournament-matchup-title">${matchup.movie_title_b}</div>` +
+`</div>` +
+`</div>`;
+
+}
+);
+
+html +=
+`</div>`;
+
+content.innerHTML =
+html;
+
+wireTournamentBackLink();
+
+content
+.querySelectorAll(
+".tournament-matchup-side"
+)
+.forEach(
+sideEl => {
+
+sideEl.addEventListener(
+"click",
+() => {
+
+const row =
+sideEl.closest(
+".tournament-matchup-row"
+);
+
+const matchupId =
+row.dataset.matchupId;
+
+const side =
+sideEl.dataset.side;
+
+const matchup =
+matchups.find(
+m =>
+String(m.id) === String(matchupId)
+);
+
+if (!matchup) {
+
+return;
+
+}
+
+const winnerId =
+side === "a"
+? matchup.movie_id_a
+: matchup.movie_id_b;
+
+pickRoundListWinner(
+tournament,
+matchupId,
+winnerId
+);
+
+}
+);
+
+}
+);
+
+}
+
+async function pickRoundListWinner(
+tournament,
+matchupId,
+winnerMovieId
+) {
+
+try {
+
+const response =
+await fetch(
+`${RESERVATIONS_API}/tournaments/${tournament.id}/pick`,
+{
+method: "POST",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+matchup_id: matchupId,
+winner_movie_id: winnerMovieId
+})
+}
+);
+
+const data =
+await response.json();
+
+if (!response.ok) {
+
+throw new Error(
+data.error || "Server error"
+);
+
+}
+
+if (data.tournament_complete) {
+
+const winnerMovie =
+movies.find(
+m =>
+String(
+getMovieId(m)
+) === String(winnerMovieId)
+);
+
+const winnerTitle =
+winnerMovie
+? winnerMovie.title
+: "Champion";
+
+const winnerPoster =
+winnerMovie
+? winnerMovie.poster
+: "";
+
+await loadTournamentChampions();
+
+renderMovies();
+
+showTournamentCelebration(
+winnerTitle,
+winnerPoster,
+() => {
+
+renderTournamentHub();
+
+}
+);
+
+return;
+
+}
+
+const refreshed =
+await fetchCurrentTournament(
+tournament.category
+);
+
+renderRoundList(
+refreshed
+);
+
+} catch (error) {
+
+console.error(
+"Could not submit pick:",
+error
+);
+
+alert(
+"That pick couldn't be saved. Please try again."
+);
+
+}
+
+}
+
+
+// =========================================================
+// QUICK 16 (IN-MEMORY, NO PERSISTENCE, NO BELT)
+// =========================================================
+
+function startQuickSixteen() {
+
+const pool =
+shuffleArray(
+getTournamentEligibleMovies()
+).slice(
+0,
+16
+);
+
+if (pool.length < 16) {
+
+const content =
+document.getElementById(
+"tournament-content"
+);
+
+if (content) {
+
+content.innerHTML =
+`<button type="button" class="tournament-back-link" id="tournament-back-to-hub">&larr; Back</button>` +
+`<p class="tournament-subtext">Need at least 16 owned movies for a Quick 16.</p>`;
+
+wireTournamentBackLink();
+
+}
+
+return;
+
+}
+
+const round1 =
+[];
+
+for (
+let i = 0;
+i < 16;
+i += 2
+) {
+
+round1.push({
+a: entrant(pool[i]),
+b: entrant(pool[i + 1]),
+winner: null
+});
+
+}
+
+quickSixteenBracket =
+{
+rounds: [
+round1,
+[0, 1, 2, 3].map(
+() => ({ a: null, b: null, winner: null })
+),
+[0, 1].map(
+() => ({ a: null, b: null, winner: null })
+),
+[{ a: null, b: null, winner: null }]
+],
+champion: null
+};
+
+renderQuickSixteen();
+
+}
+
+function renderBracketMatchupSlots(
+matchup,
+roundIndex,
+matchupIndex
+) {
+
+let html =
+`<div style="display:flex;flex-direction:column;gap:2px">`;
+
+["a", "b"].forEach(
+side => {
+
+const sideEntrant =
+matchup[side];
+
+const isWinner =
+matchup.winner &&
+sideEntrant &&
+String(matchup.winner.movie_id) ===
+String(sideEntrant.movie_id);
+
+const pickable =
+matchup.a &&
+matchup.b &&
+!matchup.winner;
+
+let classes =
+"bracket-slot";
+
+if (!sideEntrant) {
+
+classes += " tbd";
+
+}
+
+if (pickable) {
+
+classes += " pickable";
+
+}
+
+if (isWinner) {
+
+classes += " winner";
+
+}
+
+const label =
+sideEntrant
+? sideEntrant.title
+: "TBD";
+
+const posterHtml =
+sideEntrant && sideEntrant.poster
+? `<div class="bracket-slot-poster" style="background-image:url('${sideEntrant.poster}')"></div>`
+: "";
+
+html +=
+`<div class="${classes}" data-round="${roundIndex}" data-matchup="${matchupIndex}" data-side="${side}">` +
+posterHtml +
+`<span class="bracket-slot-title">${label}</span>` +
+`</div>`;
+
+}
+);
+
+html +=
+`</div>`;
+
+return html;
+
+}
+
+function renderQuickSixteen() {
+
+const content =
+document.getElementById(
+"tournament-content"
+);
+
+if (!content || !quickSixteenBracket) {
+
+return;
+
+}
+
+let html =
+`<button type="button" class="tournament-back-link" id="tournament-back-to-hub">&larr; Back</button>` +
+`<h2 class="tournament-heading">Quick 16</h2>` +
+`<p class="tournament-subtext">Just for fun - this run isn't saved and doesn't earn a belt.</p>` +
+`<div class="bracket-tree">`;
+
+quickSixteenBracket.rounds.forEach(
+(round, roundIndex) => {
+
+html +=
+`<div class="bracket-round-column">`;
+
+round.forEach(
+(matchup, matchupIndex) => {
+
+html +=
+renderBracketMatchupSlots(
+matchup,
+roundIndex,
+matchupIndex
+);
+
+}
+);
+
+html +=
+`</div>`;
+
+}
+);
+
+html +=
+`<div class="bracket-round-column">` +
+`<div class="bracket-champion-slot">🏆<br>${quickSixteenBracket.champion ? quickSixteenBracket.champion.title : "?"}</div>` +
+`</div>`;
+
+html +=
+`</div>`;
+
+content.innerHTML =
+html;
+
+wireTournamentBackLink();
+
+content
+.querySelectorAll(
+".bracket-slot.pickable"
+)
+.forEach(
+slotEl => {
+
+slotEl.addEventListener(
+"click",
+() => {
+
+pickQuickSixteenWinner(
+parseInt(slotEl.dataset.round, 10),
+parseInt(slotEl.dataset.matchup, 10),
+slotEl.dataset.side
+);
+
+}
+);
+
+}
+);
+
+}
+
+function pickQuickSixteenWinner(
+roundIndex,
+matchupIndex,
+side
+) {
+
+const matchup =
+quickSixteenBracket.rounds[roundIndex][matchupIndex];
+
+if (!matchup.a || !matchup.b || matchup.winner) {
+
+return;
+
+}
+
+const winnerEntrant =
+matchup[side];
+
+matchup.winner =
+winnerEntrant;
+
+if (roundIndex === 3) {
+
+quickSixteenBracket.champion =
+winnerEntrant;
+
+renderQuickSixteen();
+
+showTournamentCelebration(
+winnerEntrant.title,
+winnerEntrant.poster,
+() => {
+
+renderTournamentHub();
+
+}
+);
+
+return;
+
+}
+
+const nextRound =
+quickSixteenBracket.rounds[roundIndex + 1];
+
+const nextMatchupIndex =
+Math.floor(matchupIndex / 2);
+
+const nextSide =
+matchupIndex % 2 === 0
+? "a"
+: "b";
+
+nextRound[nextMatchupIndex][nextSide] =
+winnerEntrant;
+
+renderQuickSixteen();
+
+}
+
+
+// =========================================================
+// CHAMPION CELEBRATION
+//
+// A single poster bounces DVD-logo style around the screen
+// (same bounce mechanic as the Comedy genre's "Ha!" pop),
+// leaving a copy of itself behind at every step - dim ones
+// forming a mostly-obscured trail, brighter ones at periodic
+// checkpoints along the path. Nothing is removed early;
+// everything fades out together once the run ends.
+// =========================================================
+
+function showTournamentCelebration(
+title,
+posterUrl,
+onDone
+) {
+
+const overlay =
+document.createElement(
+"div"
+);
+
+overlay.className =
+"tournament-celebration-overlay";
+
+document.body.appendChild(
+overlay
+);
+
+const vw =
+window.innerWidth;
+
+const vh =
+window.innerHeight;
+
+const posterWidth =
+90;
+
+const posterHeight =
+135;
+
+let x =
+40 + Math.random() * Math.max(40, vw - posterWidth - 80);
+
+let y =
+40 + Math.random() * Math.max(40, vh - posterHeight - 80);
+
+let vx =
+(3 + Math.random() * 1.5) *
+(Math.random() < 0.5 ? 1 : -1);
+
+let vy =
+(2.5 + Math.random() * 1.5) *
+(Math.random() < 0.5 ? 1 : -1);
+
+let frame =
+0;
+
+/*
+ * ~480 frames at 16ms each is a good long run (roughly 7-8
+ * seconds) - long enough to actually watch it bounce around
+ * and build up a real trail before it fades.
+ */
+
+const maxFrames =
+480;
+
+const trailCopies =
+[];
+
+function spawnCopy(
+opacity,
+zIndex
+) {
+
+const copy =
+document.createElement(
+"div"
+);
+
+copy.className =
+"tournament-celebration-poster";
+
+if (posterUrl) {
+
+copy.style.backgroundImage =
+`url("${posterUrl}")`;
+
+}
+
+copy.style.left =
+`${x}px`;
+
+copy.style.top =
+`${y}px`;
+
+copy.style.opacity =
+String(opacity);
+
+copy.style.zIndex =
+String(zIndex);
+
+overlay.appendChild(
+copy
+);
+
+trailCopies.push(
+copy
+);
+
+}
+
+const interval =
+setInterval(
+() => {
+
+frame++;
+
+x += vx;
+y += vy;
+
+if (x <= 0 || x + posterWidth >= vw) {
+
+vx *= -1;
+
+x = Math.max(
+0,
+Math.min(x, vw - posterWidth)
+);
+
+}
+
+if (y <= 0 || y + posterHeight >= vh) {
+
+vy *= -1;
+
+y = Math.max(
+0,
+Math.min(y, vh - posterHeight)
+);
+
+}
+
+/*
+ * Every step leaves a faint copy; every 4th step also
+ * leaves a brighter "checkpoint" copy, giving the trail a
+ * pulsing rhythm instead of a flat, even smear.
+ */
+
+spawnCopy(
+0.16,
+1
+);
+
+if (frame % 4 === 0) {
+
+spawnCopy(
+0.85,
+2
+);
+
+}
+
+if (frame >= maxFrames) {
+
+clearInterval(
+interval
+);
+
+trailCopies.forEach(
+copy => {
+
+copy.style.opacity =
+"0";
+
+}
+);
+
+setTimeout(
+() => {
+
+overlay.remove();
+
+if (onDone) {
+
+onDone();
+
+}
+
+},
+800
+);
+
+}
+
+},
+16
+);
+
+}
+
+
+// =========================================================
+// TOURNAMENT BUTTON / OVERLAY WIRING
+// =========================================================
+
+const tournamentButton =
+document.getElementById(
+"tournament-button"
+);
+
+if (tournamentButton) {
+
+tournamentButton.addEventListener(
+"click",
+() => {
+
+openTournamentHub();
+
+}
+);
+
+}
+
+const tournamentCloseButton =
+document.getElementById(
+"tournament-close"
+);
+
+if (tournamentCloseButton) {
+
+tournamentCloseButton.addEventListener(
+"click",
+() => {
+
+closeTournamentOverlay();
+
+}
+);
+
+}
+
+const tournamentOverlayEl =
+document.getElementById(
+"tournament-overlay"
+);
+
+if (tournamentOverlayEl) {
+
+tournamentOverlayEl.addEventListener(
+"click",
+event => {
+
+if (event.target === tournamentOverlayEl) {
+
+closeTournamentOverlay();
+
+}
+
+}
+);
 
 }
