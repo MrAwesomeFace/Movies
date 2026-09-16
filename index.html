@@ -505,11 +505,12 @@ aria-label="Clear search"
   >
 
     <h2 class="wishlist-add-heading">
-      Add something to our wishlist
+      Add something you don't own yet
     </h2>
 
     <p class="wishlist-add-subtext">
-      Search and add it here as a reminder to watch.
+      Search TMDB and add it here as a reminder to buy or
+      rent - it won't touch your real collection.
     </p>
 
     <div class="wishlist-add-controls">
@@ -727,26 +728,34 @@ aria-label="Close"
 
         <div class="back-texture"></div>
 
+        <!--
+          Deliberately OUTSIDE the three back-bands below -
+          switching to History hides all three bands (see the
+          case-back-tab click handler in app.js), and these
+          tabs need to stay visible/clickable the whole time
+          so there's always a way back to Info.
+        -->
+
+        <div
+          id="case-back-tabs"
+          class="case-back-tabs"
+        >
+
+          <button
+            type="button"
+            class="case-back-tab active"
+            data-tab="info"
+          >Info</button>
+
+          <button
+            type="button"
+            class="case-back-tab"
+            data-tab="history"
+          >History</button>
+
+        </div>
+
         <div class="back-band back-band-1">
-
-          <div
-            id="case-back-tabs"
-            class="case-back-tabs"
-          >
-
-            <button
-              type="button"
-              class="case-back-tab active"
-              data-tab="info"
-            >Info</button>
-
-            <button
-              type="button"
-              class="case-back-tab"
-              data-tab="history"
-            >History</button>
-
-          </div>
 
           <div class="back-top-row">
 
