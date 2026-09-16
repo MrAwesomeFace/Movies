@@ -12196,6 +12196,46 @@ row.appendChild(
 info
 );
 
+/*
+
+* Checked against the real catalog (already loaded from
+* movies.js) before anything hits the Worker at all - if
+* you already own it, there's no point letting the click
+* happen just to clean it up after. Matches on tmdbId, the
+* same field getMovieId() and the wishlist table both key
+* off of.
+  */
+
+const alreadyOwned =
+movies.some(
+ownedMovie =>
+String(ownedMovie.tmdbId) ===
+String(result.tmdb_id)
+);
+
+if (alreadyOwned) {
+
+row.classList.add(
+"wishlist-result-owned"
+);
+
+const ownedNote =
+document.createElement(
+"div"
+);
+
+ownedNote.className =
+"wishlist-result-year";
+
+ownedNote.textContent =
+"Already in your collection";
+
+info.appendChild(
+ownedNote
+);
+
+}
+
 const addButton =
 document.createElement(
 "button"
@@ -12206,6 +12246,16 @@ addButton.type =
 
 addButton.className =
 "wishlist-result-add-button";
+
+if (alreadyOwned) {
+
+addButton.textContent =
+"Already Owned";
+
+addButton.disabled =
+true;
+
+} else {
 
 addButton.textContent =
 "Add";
@@ -12221,6 +12271,8 @@ addButton
 
 }
 );
+
+}
 
 row.appendChild(
 addButton
@@ -12239,6 +12291,40 @@ async function addToWishlist(
 result,
 addButton
 ) {
+
+/*
+
+* Backstop for the check already done when the result row
+* was built - guards against the rare case where movies.js
+* changed (a background reload, a re-render) in the moment
+* between the results rendering and this click landing.
+  */
+
+const alreadyOwned =
+movies.some(
+ownedMovie =>
+String(ownedMovie.tmdbId) ===
+String(result.tmdb_id)
+);
+
+if (alreadyOwned) {
+
+addButton.disabled =
+true;
+
+addButton.textContent =
+"Already Owned";
+
+if (wishlistAddStatus) {
+
+wishlistAddStatus.textContent =
+`"${result.title}" is already in your collection.`;
+
+}
+
+return;
+
+}
 
 addButton.disabled =
 true;
