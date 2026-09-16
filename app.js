@@ -19,6 +19,19 @@ const RESERVATION_PEOPLE = [
 
 /*
 
+* Wishlist - titles that aren't owned yet, fetched via TMDB
+* through the same Worker as reservations, stored in its own
+* D1 table (never movies.js). Kept in this one array and
+* re-rendered through renderMovies() same as everything else
+* - see loadWishlist(), wishlistItemToMovie(), and
+* createOutOfStockCard() further down.
+  */
+
+let wishlist =
+[];
+
+/*
+
 * Two heart shapes, shared by the card badge, the ripple
 * echoes, and the filter flood — smooth for the default
 * theme, a blocky pixel-grid version for arcade. Built as
@@ -166,6 +179,18 @@ document.getElementById("random-button");
 
 const reservationFilter =
 document.getElementById("reservation-filter");
+
+const wishlistAddPanel =
+document.getElementById("wishlist-add-panel");
+
+const wishlistSearchInput =
+document.getElementById("wishlist-search-input");
+
+const wishlistSearchResults =
+document.getElementById("wishlist-search-results");
+
+const wishlistAddStatus =
+document.getElementById("wishlist-add-status");
 
 const genreFilter =
 document.getElementById("genre-filter");
@@ -505,6 +530,45 @@ String(movieId)
 }
 
 // =========================================================
+// WISHLIST ITEM -> MOVIE-SHAPED OBJECT
+// =========================================================
+
+/*
+
+* Converts a raw wishlist row from the Worker (snake_case,
+* matching the D1 columns) into the same field shape a real
+* movies.js entry has, so it can flow through
+* createMovieCard/openMovieFromCard/populateMovie unchanged.
+* isWishlistItem is the one flag those functions check to
+* know this didn't come from movies[] - see the FORMATS
+* section of populateMovie for where that matters.
+  */
+
+function wishlistItemToMovie(item) {
+
+return {
+
+title: item.title,
+tmdbTitle: item.tmdb_title,
+type: item.media_type,
+tmdbId: item.tmdb_id,
+poster: item.poster,
+year: item.year,
+runtime: item.runtime,
+genre: item.genre,
+rated: item.rated,
+director: item.director,
+cast: item.cast,
+synopsis: item.synopsis,
+physical: [],
+digital: [],
+isWishlistItem: true
+
+};
+
+}
+
+// =========================================================
 // UPDATE RESERVATION COUNTS IN THE DROPDOWN
 // =========================================================
 
@@ -616,6 +680,58 @@ error
 reservations = [];
 
 updateReservationCounts();
+
+}
+
+}
+
+// =========================================================
+// LOAD WISHLIST
+// =========================================================
+
+async function loadWishlist() {
+
+try {
+
+const response =
+await fetch(
+`${RESERVATIONS_API}/wishlist`,
+{
+method: "GET",
+cache: "no-store"
+}
+);
+
+if (!response.ok) {
+
+throw new Error(
+`Wishlist server returned ${response.status}`
+);
+
+}
+
+const data =
+await response.json();
+
+wishlist =
+Array.isArray(data)
+? data
+: [];
+
+if (!currentMovie) {
+
+renderMovies();
+
+}
+
+} catch (error) {
+
+console.error(
+"Could not load wishlist:",
+error
+);
+
+wishlist = [];
 
 }
 
@@ -787,6 +903,79 @@ error
 
 alert(
 "The reservation could not be removed. Please try again."
+);
+
+}
+
+}
+
+// =========================================================
+// REMOVE FROM WISHLIST
+// =========================================================
+
+/*
+
+* Closes the modal first (rather than trying to leave it
+* open on a card that's about to disappear from the DOM)
+* then removes locally and re-renders — same pattern as
+* removeReservation just above, but there's no per-id row to
+* target here, just the one wishlist entry for this tmdbId.
+  */
+
+async function removeFromWishlist(
+tmdbId,
+title
+) {
+
+const confirmed =
+confirm(
+`Remove "${title}" from the wishlist?`
+);
+
+if (!confirmed) {
+return;
+}
+
+try {
+
+const response =
+await fetch(
+`${RESERVATIONS_API}/wishlist/${encodeURIComponent(
+tmdbId
+)}`,
+{
+method: "DELETE"
+}
+);
+
+if (!response.ok) {
+
+throw new Error(
+`Server returned ${response.status}`
+);
+
+}
+
+wishlist =
+wishlist.filter(
+item =>
+String(item.tmdb_id) !==
+String(tmdbId)
+);
+
+closeMovie();
+
+renderMovies();
+
+} catch (error) {
+
+console.error(
+"Could not remove wishlist item:",
+error
+);
+
+alert(
+"This could not be removed from the wishlist. Please try again."
 );
 
 }
@@ -1571,6 +1760,8 @@ renderMovies();
 
 loadReservations();
 
+loadWishlist();
+
 renderArcadeSideLighting();
 
 /*
@@ -1646,6 +1837,31 @@ movieGrid.classList.remove(
 let filteredMovies =
 getFilteredMovies();
 
+toggleWishlistAddPanel();
+
+// =========================================================
+// WISHLIST (OUT OF STOCK) ITEMS
+//
+// Only ever computed for the "Out of Stock" view or a
+// specific person's reservation view — never for "all
+// movies", staff picks, or Sandra Bullock mode, since
+// wishlist items are only supposed to appear inside a
+// reservation-scoped view (see getFilteredWishlist).
+// =========================================================
+
+let filteredWishlist =
+[];
+
+if (
+!randomMode &&
+!sandraBullockModeActive
+) {
+
+filteredWishlist =
+getFilteredWishlist();
+
+}
+
 // =========================================================
 // RANDOM 16
 // =========================================================
@@ -1712,12 +1928,19 @@ movieCount.textContent =
 `${filteredMovies.length} Staff Picks`;
 
 } else if (
+activeFilters.reservation === "Out of Stock"
+) {
+
+movieCount.textContent =
+`${filteredWishlist.length} out of stock`;
+
+} else if (
 currentSearch ||
 filtersAreActive
 ) {
 
 movieCount.textContent =
-`${filteredMovies.length} of ${movies.length} titles`;
+`${filteredMovies.length + filteredWishlist.length} of ${movies.length} titles`;
 
 } else {
 
@@ -1731,7 +1954,8 @@ movieCount.textContent =
 // =========================================================
 
 if (
-filteredMovies.length === 0
+filteredMovies.length === 0 &&
+filteredWishlist.length === 0
 ) {
 
 if (
@@ -1777,6 +2001,22 @@ const card =
 createMovieCard(
 movie,
 index
+);
+
+movieGrid.appendChild(
+card
+);
+
+}
+);
+
+filteredWishlist.forEach(
+(item, index) => {
+
+const card =
+createOutOfStockCard(
+item,
+filteredMovies.length + index
 );
 
 movieGrid.appendChild(
@@ -2847,6 +3087,67 @@ heartBadge
 
 coverInner.appendChild(
 wrapper
+);
+
+}
+
+return card;
+
+}
+
+// =========================================================
+// CREATE OUT-OF-STOCK (WISHLIST) CARD
+// =========================================================
+
+/*
+
+* Reuses createMovieCard entirely (same poster/spine/click/
+* keyboard/reservation-ribbon logic) rather than duplicating
+* any of it - a wishlist item is a movie in every way that
+* matters to the card, it just gets the desaturated look and
+* the banner added on top afterward.
+  */
+
+function createOutOfStockCard(
+item,
+index
+) {
+
+const movieObj =
+wishlistItemToMovie(
+item
+);
+
+const card =
+createMovieCard(
+movieObj,
+index
+);
+
+card.classList.add(
+"out-of-stock-card"
+);
+
+const coverInner =
+card.querySelector(
+".movie-cover-inner"
+);
+
+if (coverInner) {
+
+const banner =
+document.createElement(
+"div"
+);
+
+banner.className =
+"out-of-stock-banner";
+
+banner.innerHTML =
+`<span>Out of Stock</span>`;
+
+coverInner.appendChild(
+banner
 );
 
 }
@@ -4380,6 +4681,69 @@ item
 
 }
 
+/*
+
+* Out-of-stock (wishlist) items don't have real formats at
+* all — replaces whatever the block above just built
+* ("No format information added yet.") with an honest note
+* plus a way to take it off the list, rather than leaving a
+* message that implies this is just an unlogged owned movie.
+  */
+
+if (movie.isWishlistItem) {
+
+modalFormats.innerHTML =
+"";
+
+const note =
+document.createElement(
+"div"
+);
+
+note.className =
+"out-of-stock-back-note";
+
+note.textContent =
+"You don't own this — added as a reminder to buy or rent it.";
+
+modalFormats.appendChild(
+note
+);
+
+const removeButton =
+document.createElement(
+"button"
+);
+
+removeButton.type =
+"button";
+
+removeButton.className =
+"wishlist-remove-button";
+
+removeButton.textContent =
+"Remove from wishlist";
+
+removeButton.addEventListener(
+"click",
+event => {
+
+event.stopPropagation();
+
+removeFromWishlist(
+movie.tmdbId,
+movie.title
+);
+
+}
+);
+
+modalFormats.appendChild(
+removeButton
+);
+
+}
+
 // =========================================================
 // RESERVATIONS
 // =========================================================
@@ -5270,7 +5634,7 @@ false;
   */
 
 const JUNK_DRAWER_ICONS =
-["🔑", "✂️", "📎", "✏️", "🖊️", "📌"];
+["🔑", "🗝️", "✂️", "📎", "🖇️", "✏️", "🖊️", "📌", "🔋", "🧷", "🪙", "🧵", "🔗", "🧲", "🔩", "🪛", "📏", "🔨"];
 
 function shuffleJunkArray(
 arr
@@ -5442,12 +5806,7 @@ const vh =
 window.innerHeight;
 
 const itemCount =
-6;
-
-const order =
-shuffleJunkArray(
-JUNK_DRAWER_ICONS
-);
+54;
 
 for (
 let i = 0;
@@ -5463,17 +5822,32 @@ document.createElement(
 item.className =
 "junk-drawer-item";
 
+/*
+
+* Simple random pick per item rather than a single
+* up-front shuffle - with 3x as many items as icon
+* types now, a one-time permutation can't cover every
+* slot anyway, so there's no benefit to keeping the
+* old "one of each, no repeats" shuffle order over just
+* picking freely for each item.
+  */
+
 item.textContent =
-order[i];
+JUNK_DRAWER_ICONS[
+Math.floor(
+Math.random() *
+JUNK_DRAWER_ICONS.length
+)
+];
 
 const fontSize =
 Math.max(
-30,
+18,
 Math.min(
-60,
-vw * 0.055
+34,
+vw * 0.032
 )
-) + Math.random() * 12;
+) + Math.random() * 8;
 
 item.style.fontSize =
 `${fontSize}px`;
@@ -5482,17 +5856,32 @@ document.body.appendChild(
 item
 );
 
+/*
+
+* Spread across the FULL screen width/height now, not just
+* the middle band - was 15%-85% horizontally and landing
+* only in the 35%-85% vertical band, which kept everything
+* clustered toward the center. Items can now start and land
+* almost anywhere on screen, edge to edge.
+  */
+
 const startX =
-vw * 0.15 + Math.random() * vw * 0.7;
+vw * 0.02 + Math.random() * vw * 0.96;
 
 const startY =
--60 - Math.random() * 40;
+-60 - Math.random() * 60;
 
 const landX =
-startX + (Math.random() * 160 - 80);
+Math.min(
+vw * 0.98,
+Math.max(
+vw * 0.02,
+startX + (Math.random() * 300 - 150)
+)
+);
 
 const landY =
-vh * 0.35 + Math.random() * vh * 0.5;
+vh * 0.08 + Math.random() * vh * 0.84;
 
 const vx =
 (landX - startX) / 55;
@@ -10171,6 +10560,77 @@ revealDelay
 
 }
 
+/*
+
+* Waits for the search dropdown to close before actually
+* firing the skid marks - they draw across roughly the top
+* two-thirds of the screen, which the open search bar/
+* dropdown sits right on top of and visually swallows.
+* Re-checks every 200ms and fires the moment search closes,
+* but never waits more than 3s total (checked against
+* currentSearch directly, since the search box being open
+* that whole time is the common case) - a capped wait, not
+* an indefinite one, so the effect never silently fails to
+* play if the person just leaves search open. Re-confirms
+* the search text still matches "statham" right before
+* firing, in case it was cleared during the wait.
+  */
+
+function scheduleStathamSkids() {
+
+const maxWaitMs =
+3000;
+
+const checkEveryMs =
+200;
+
+let waitedMs =
+0;
+
+function attemptFire() {
+
+const stillMatches =
+currentSearch
+.toLowerCase()
+.includes("statham");
+
+if (!stillMatches) {
+
+return;
+
+}
+
+const searchClosed =
+!searchArea ||
+searchArea.classList.contains(
+"hidden"
+);
+
+if (
+searchClosed ||
+waitedMs >= maxWaitMs
+) {
+
+triggerStathamSkids();
+
+return;
+
+}
+
+waitedMs +=
+checkEveryMs;
+
+setTimeout(
+attemptFire,
+checkEveryMs
+);
+
+}
+
+attemptFire();
+
+}
+
 function triggerStathamSkids() {
 
 if (stathamSkidsBusy) {
@@ -11478,6 +11938,402 @@ renderMovies();
 }
 
 // =========================================================
+// WISHLIST SEARCH / ADD PANEL
+// =========================================================
+
+let wishlistSearchMediaType =
+"movie";
+
+let wishlistSearchDebounce =
+null;
+
+let wishlistSearchRequestId =
+0;
+
+/*
+
+* Media-type toggle (Movie/TV) - swaps which TMDB endpoint
+* the search hits. Re-runs the current search immediately on
+* switch, rather than waiting for another keystroke, so the
+* results actually reflect the toggle right away.
+  */
+
+document
+.querySelectorAll(
+".wishlist-media-button"
+)
+.forEach(
+button => {
+
+button.addEventListener(
+"click",
+() => {
+
+wishlistSearchMediaType =
+button.dataset.mediaType;
+
+document
+.querySelectorAll(
+".wishlist-media-button"
+)
+.forEach(
+otherButton =>
+otherButton.classList.toggle(
+"active",
+otherButton ===
+button
+)
+);
+
+runWishlistSearch();
+
+}
+);
+
+}
+);
+
+function clearWishlistSearchResults() {
+
+if (wishlistSearchResults) {
+
+wishlistSearchResults.innerHTML =
+"";
+
+}
+
+}
+
+/*
+
+* Debounced (300ms) so a search fires once someone pauses
+* typing, not on every keystroke - same reasoning as any
+* other live-search box, just against an external API this
+* time instead of the local catalog.
+  */
+
+if (wishlistSearchInput) {
+
+wishlistSearchInput.addEventListener(
+"input",
+() => {
+
+clearTimeout(
+wishlistSearchDebounce
+);
+
+wishlistSearchDebounce =
+setTimeout(
+runWishlistSearch,
+300
+);
+
+}
+);
+
+}
+
+async function runWishlistSearch() {
+
+const query =
+wishlistSearchInput
+? wishlistSearchInput.value.trim()
+: "";
+
+if (!query) {
+
+clearWishlistSearchResults();
+
+return;
+
+}
+
+/*
+
+* Each call gets its own id, and only the MOST RECENT one is
+* allowed to render - if an earlier, slower request comes
+* back after a newer one already has, its (now-stale) results
+* are silently dropped instead of flashing onto the screen
+* out of order.
+  */
+
+const requestId =
+++wishlistSearchRequestId;
+
+try {
+
+const response =
+await fetch(
+`${RESERVATIONS_API}/tmdb-search` +
+`?query=${encodeURIComponent(query)}` +
+`&media_type=${wishlistSearchMediaType}`
+);
+
+if (!response.ok) {
+
+throw new Error(
+`Search server returned ${response.status}`
+);
+
+}
+
+const results =
+await response.json();
+
+if (requestId !== wishlistSearchRequestId) {
+
+return;
+
+}
+
+renderWishlistSearchResults(
+Array.isArray(results)
+? results
+: []
+);
+
+} catch (error) {
+
+console.error(
+"Wishlist search failed:",
+error
+);
+
+if (requestId === wishlistSearchRequestId) {
+
+clearWishlistSearchResults();
+
+}
+
+}
+
+}
+
+function renderWishlistSearchResults(
+results
+) {
+
+if (!wishlistSearchResults) {
+
+return;
+
+}
+
+wishlistSearchResults.innerHTML =
+"";
+
+results.forEach(
+result => {
+
+const row =
+document.createElement(
+"div"
+);
+
+row.className =
+"wishlist-result-row";
+
+const poster =
+document.createElement(
+"div"
+);
+
+poster.className =
+"wishlist-result-poster";
+
+if (result.poster) {
+
+poster.style.backgroundImage =
+`url("${result.poster}")`;
+
+}
+
+row.appendChild(
+poster
+);
+
+const info =
+document.createElement(
+"div"
+);
+
+info.className =
+"wishlist-result-info";
+
+const title =
+document.createElement(
+"div"
+);
+
+title.className =
+"wishlist-result-title";
+
+title.textContent =
+result.title ||
+"Untitled";
+
+info.appendChild(
+title
+);
+
+const year =
+document.createElement(
+"div"
+);
+
+year.className =
+"wishlist-result-year";
+
+year.textContent =
+result.year ||
+"";
+
+info.appendChild(
+year
+);
+
+row.appendChild(
+info
+);
+
+const addButton =
+document.createElement(
+"button"
+);
+
+addButton.type =
+"button";
+
+addButton.className =
+"wishlist-result-add-button";
+
+addButton.textContent =
+"Add";
+
+addButton.addEventListener(
+"click",
+() => {
+
+addToWishlist(
+result,
+addButton
+);
+
+}
+);
+
+row.appendChild(
+addButton
+);
+
+wishlistSearchResults.appendChild(
+row
+);
+
+}
+);
+
+}
+
+async function addToWishlist(
+result,
+addButton
+) {
+
+addButton.disabled =
+true;
+
+addButton.textContent =
+"Adding...";
+
+if (wishlistAddStatus) {
+
+wishlistAddStatus.textContent =
+"";
+
+}
+
+try {
+
+const response =
+await fetch(
+`${RESERVATIONS_API}/wishlist`,
+{
+method: "POST",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+tmdb_id: result.tmdb_id,
+media_type: result.media_type
+})
+}
+);
+
+const data =
+await response.json();
+
+if (!response.ok) {
+
+throw new Error(
+data.error ||
+`Server returned ${response.status}`
+);
+
+}
+
+if (
+!data.already_on_wishlist &&
+data.entry
+) {
+
+wishlist.push(
+data.entry
+);
+
+}
+
+addButton.textContent =
+data.already_on_wishlist
+? "Already added"
+: "Added ✓";
+
+if (wishlistAddStatus) {
+
+wishlistAddStatus.textContent =
+data.already_on_wishlist
+? `"${result.title}" is already on the wishlist.`
+: `"${result.title}" was added to the wishlist.`;
+
+}
+
+renderMovies();
+
+} catch (error) {
+
+console.error(
+"Could not add to wishlist:",
+error
+);
+
+addButton.disabled =
+false;
+
+addButton.textContent =
+"Add";
+
+if (wishlistAddStatus) {
+
+wishlistAddStatus.textContent =
+"Couldn't add that — please try again.";
+
+}
+
+}
+
+}
+
+// =========================================================
 // UPDATE ANIMATED BUTTON
 // =========================================================
 
@@ -11533,6 +12389,136 @@ animatedButton.classList.add(
 );
 
 }
+
+}
+
+// =========================================================
+// WISHLIST ADD PANEL VISIBILITY
+// =========================================================
+
+function toggleWishlistAddPanel() {
+
+if (!wishlistAddPanel) {
+
+return;
+
+}
+
+wishlistAddPanel.classList.toggle(
+"hidden",
+activeFilters.reservation !== "Out of Stock"
+);
+
+}
+
+// =========================================================
+// GET CURRENT FILTERED WISHLIST
+// =========================================================
+
+/*
+
+* Wishlist items only ever surface inside a reservation-
+* scoped view — the "Out of Stock" view itself (everything
+* on the list), or a specific person's view (only what that
+* person has reserved). Every other view, including "All
+* Movies", returns nothing here — wishlist items are never
+* meant to show up in the general shelf.
+  */
+
+function getFilteredWishlist() {
+
+const isOutOfStockView =
+activeFilters.reservation === "Out of Stock";
+
+const isPersonView =
+RESERVATION_PEOPLE.includes(
+activeFilters.reservation
+);
+
+if (
+!isOutOfStockView &&
+!isPersonView
+) {
+
+return [];
+
+}
+
+let items =
+wishlist;
+
+if (isPersonView) {
+
+items =
+items.filter(
+item => {
+
+const movieObj =
+wishlistItemToMovie(
+item
+);
+
+return getMovieReservations(
+movieObj
+).some(
+reservation =>
+reservation.reserved_for ===
+activeFilters.reservation
+);
+
+}
+);
+
+}
+
+if (currentSearch) {
+
+const searchText =
+currentSearch.toLowerCase();
+
+items =
+items.filter(
+item => {
+
+const searchableText = [
+
+item.title,
+item.tmdb_title,
+item.year,
+item.genre,
+item.director,
+item.cast,
+item.synopsis
+
+]
+.filter(
+value =>
+value !== null &&
+value !== undefined
+)
+.join(" ")
+.toLowerCase();
+
+return searchableText.includes(
+searchText
+);
+
+}
+);
+
+}
+
+return [...items].sort(
+(a, b) =>
+(a.title || "").localeCompare(
+b.title || "",
+undefined,
+{
+sensitivity:
+"base"
+}
+)
+);
 
 }
 
@@ -12986,7 +13972,7 @@ stathamMatches &&
 stathamSkidsFired =
 true;
 
-triggerStathamSkids();
+scheduleStathamSkids();
 
 } else if (!stathamMatches) {
 
