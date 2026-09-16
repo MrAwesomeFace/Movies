@@ -462,6 +462,7 @@ aria-label="Clear search"
     <option value="Bryon">Bryon</option>
     <option value="Angie">Angie</option>
     <option value="Joey">Joey</option>
+    <option value="Out of Stock">Out of Stock</option>
   </select>
 
 </div>
@@ -481,6 +482,72 @@ aria-label="Clear search"
 
 <section class="collection-section">
 
+  <!--
+    WISHLIST ADD PANEL
+
+    Only ever shown when the reservation filter is set to
+    "Out of Stock" (see toggleWishlistAddPanel in app.js) -
+    hidden by default here so it never flashes visible on a
+    normal page load before JS has run.
+  -->
+
+  <div
+    id="wishlist-add-panel"
+    class="wishlist-add-panel hidden"
+  >
+
+    <h2 class="wishlist-add-heading">
+      Add something to your wishlist
+    </h2>
+
+    <p class="wishlist-add-subtext">
+      Search and add it here as a reminder to watch someday.
+    </p>
+
+    <div class="wishlist-add-controls">
+
+      <div
+        class="wishlist-media-toggle"
+        role="group"
+        aria-label="Search movies or TV shows"
+      >
+
+        <button
+          type="button"
+          class="wishlist-media-button active"
+          data-media-type="movie"
+        >Movie</button>
+
+        <button
+          type="button"
+          class="wishlist-media-button"
+          data-media-type="tv"
+        >TV</button>
+
+      </div>
+
+      <input
+        type="search"
+        id="wishlist-search-input"
+        class="wishlist-search-input"
+        placeholder="Search for a title..."
+        autocomplete="off"
+      >
+
+    </div>
+
+    <div
+      id="wishlist-search-results"
+      class="wishlist-search-results"
+    ></div>
+
+    <p
+      id="wishlist-add-status"
+      class="wishlist-add-status"
+    ></p>
+
+  </div>
+
   <div
     id="movie-grid"
     class="movie-grid"
@@ -493,6 +560,7 @@ aria-label="Clear search"
     class="no-results hidden"
   >
     <p>No movies found.</p>
+
   </div>
 
 </section>
