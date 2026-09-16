@@ -935,6 +935,337 @@ SPECIAL FILTERS
 
 
 /* =========================================================
+WISHLIST ADD PANEL
+=========================================================
+Only ever shown above the shelf while the reservation
+filter is set to "Out of Stock" (see toggleWishlistAddPanel
+in app.js) - hidden the rest of the time via the .hidden
+class already on it in the HTML.
+========================================================= */
+
+.wishlist-add-panel {
+  margin: 0 0 26px;
+
+  padding: 18px 20px 20px;
+
+  border: 1px solid var(--gold-dark);
+
+  border-radius: 14px;
+
+  background: rgba(251, 205, 54, 0.06);
+}
+
+.wishlist-add-panel.hidden {
+  display: none;
+}
+
+.wishlist-add-heading {
+  margin: 0 0 4px;
+
+  color: var(--gold);
+
+  font-family: 'VT323', monospace;
+
+  font-size: 26px;
+
+  font-weight: 400;
+}
+
+.wishlist-add-subtext {
+  margin: 0 0 14px;
+
+  color: #b9c6e5;
+
+  font-size: 12.5px;
+
+  line-height: 1.4;
+}
+
+.wishlist-add-controls {
+  display: flex;
+
+  gap: 8px;
+
+  flex-wrap: wrap;
+}
+
+.wishlist-media-toggle {
+  display: flex;
+
+  flex-shrink: 0;
+
+  border: 1px solid var(--gold-dark);
+
+  border-radius: 999px;
+
+  overflow: hidden;
+}
+
+.wishlist-media-button {
+  padding: 10px 16px;
+
+  border: 0;
+
+  background: transparent;
+
+  color: var(--text);
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.wishlist-media-button.active {
+  background: var(--gold);
+
+  color: #111111;
+}
+
+.wishlist-search-input {
+  flex: 1;
+
+  min-width: 180px;
+
+  padding: 10px 14px;
+
+  border: 1px solid var(--gold-dark);
+
+  border-radius: 999px;
+
+  outline: none;
+
+  background: var(--surface);
+  color: var(--text);
+
+  font-size: 15px;
+}
+
+.wishlist-search-input:focus {
+  border-color: var(--gold);
+
+  box-shadow:
+    0 0 0 3px rgba(251, 205, 54, 0.15);
+}
+
+.wishlist-search-results {
+  margin-top: 14px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+.wishlist-search-results:empty {
+  margin-top: 0;
+}
+
+.wishlist-result-row {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 8px 10px;
+
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.wishlist-result-poster {
+  width: 40px;
+  height: 60px;
+
+  flex-shrink: 0;
+
+  border-radius: 4px;
+
+  background-size: cover;
+  background-position: center;
+
+  background-color: #333;
+}
+
+.wishlist-result-info {
+  flex: 1;
+
+  min-width: 0;
+}
+
+.wishlist-result-title {
+  font-size: 14px;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+.wishlist-result-year {
+  color: var(--muted);
+
+  font-size: 12px;
+}
+
+.wishlist-result-add-button {
+  flex-shrink: 0;
+
+  padding: 7px 14px;
+
+  border: 1px solid var(--gold);
+
+  border-radius: 999px;
+
+  background: transparent;
+
+  color: var(--gold);
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.wishlist-result-add-button:hover {
+  background: rgba(251, 205, 54, 0.15);
+}
+
+.wishlist-result-add-button:disabled {
+  opacity: 0.5;
+
+  cursor: default;
+}
+
+.wishlist-add-status {
+  margin: 10px 0 0;
+
+  min-height: 14px;
+
+  color: var(--gold);
+
+  font-size: 12.5px;
+}
+
+.wishlist-add-status:empty {
+  display: none;
+}
+
+
+/* =========================================================
+OUT OF STOCK CARDS
+=========================================================
+A wishlist entry rendered on the shelf - same movie-card
+markup as an owned movie, just desaturated and carrying a
+straight police-tape-style banner across the poster. Only
+ever created inside the "Out of Stock" or a per-person
+reservation view (see renderMovies in app.js) - never in
+the general grid.
+========================================================= */
+
+.out-of-stock-card .movie-cover-inner {
+  filter:
+    grayscale(0.85)
+    brightness(0.55);
+}
+
+.out-of-stock-card .case-spine-face {
+  filter:
+    grayscale(0.85)
+    brightness(0.55);
+}
+
+.out-of-stock-banner {
+  position: absolute;
+
+  left: -8%;
+  right: -8%;
+
+  top: 38%;
+
+  padding: 5px 0;
+
+  background:
+    repeating-linear-gradient(
+      45deg,
+      #f5c400 0px, #f5c400 12px,
+      #111 12px, #111 24px
+    );
+
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.6);
+
+  z-index: 4;
+
+  pointer-events: none;
+
+  text-align: center;
+}
+
+.out-of-stock-banner span {
+  display: inline-block;
+
+  padding: 1px 8px;
+
+  background: #111;
+
+  color: #f5c400;
+
+  font-family: 'VT323', monospace;
+
+  font-size: 13px;
+
+  font-weight: 400;
+
+  letter-spacing: 2px;
+
+  text-transform: uppercase;
+}
+
+.out-of-stock-back-note {
+  padding: 10px 12px;
+
+  border-radius: 8px;
+
+  background: rgba(0, 0, 0, 0.15);
+
+  font-size: 13px;
+
+  font-style: italic;
+
+  color: #ddd;
+}
+
+.wishlist-remove-button {
+  margin-top: 10px;
+
+  padding: 7px 13px;
+
+  border: 1px solid rgba(255, 255, 255, 0.3);
+
+  border-radius: 999px;
+
+  background: transparent;
+
+  color: #ddd;
+
+  font-size: 12px;
+
+  cursor: pointer;
+}
+
+.wishlist-remove-button:hover {
+  border-color: #ff6b6b;
+
+  color: #ff6b6b;
+}
+
+
+/* =========================================================
 MAIN COLLECTION
 ========================================================= */
 
