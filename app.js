@@ -11738,7 +11738,7 @@ line =
 } else if (entry.result === "eliminated") {
 
 line =
-`${label} in round ${entry.round} of the ${entry.category === "full" ? "Full Collection" : entry.category} tournament` +
+`${label} in the ${roundLabel(entry.round, entry.total_rounds)} of the ${entry.category === "full" ? "Full Collection" : entry.category} tournament` +
 (
 entry.beaten_by_title
 ? ` by ${entry.beaten_by_title}`
@@ -15776,6 +15776,15 @@ current
 // ROUND-LIST VIEW (GENRE / FULL COLLECTION)
 // =========================================================
 
+/*
+
+* Named by how many entrants were remaining AT THE START of
+* that round, matching real tournament-bracket terminology
+* instead of a raw round number - used both for the round-
+* list screen's heading and for phrasing history entries
+* ("Knocked out in the Sweet Sixteen...").
+  */
+
 function roundLabel(
 round,
 totalRounds
@@ -15783,35 +15792,41 @@ totalRounds
 
 if (round === 0) {
 
-return "Play-in round";
+return "Play-In Round";
 
 }
 
-const matchupCount =
+const entrants =
 Math.pow(
 2,
-totalRounds - round
+totalRounds - round + 1
 );
 
-if (matchupCount === 1) {
+if (entrants === 2) {
 
-return "Championship round";
-
-}
-
-if (matchupCount === 2) {
-
-return "Semifinals";
+return "Championship";
 
 }
 
-if (matchupCount === 4) {
+if (entrants === 4) {
 
-return "Quarterfinals";
+return "Final Four";
 
 }
 
-return `Round of ${matchupCount * 2}`;
+if (entrants === 8) {
+
+return "Great Eight";
+
+}
+
+if (entrants === 16) {
+
+return "Sweet Sixteen";
+
+}
+
+return `Field of ${entrants}`;
 
 }
 
