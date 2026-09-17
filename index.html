@@ -925,22 +925,24 @@ aria-label="Close"
 
         </div>
 
+        </div>
+
         <!--
           TOURNAMENT HISTORY PANEL
 
-          Hidden by default (see .case-back-tabs above) -
-          toggled alongside the three back-band divs by
-          app.js, and populated on demand the first time
-          someone actually clicks the History tab for this
-          movie, rather than fetched for every modal open.
+          A genuine sibling of the three back-band divs above
+          (all direct children of .back-content) - NOT nested
+          inside back-band-3, which is what it turned out to
+          be before this fix: hidden by default, toggled
+          alongside the three back-band divs by app.js, and
+          populated on demand the first time someone actually
+          clicks the History tab for this movie.
         -->
 
         <div
           id="modal-history-panel"
           class="modal-history-panel hidden"
         ></div>
-
-      </div>
 
       </div>
 
