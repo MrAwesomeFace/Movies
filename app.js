@@ -2922,7 +2922,7 @@ const plateContent =
 crownSvg +
 (
 genreCategory
-? `<span class="belt-label" style="font-size:9px">${genreCategory.toUpperCase()}</span>`
+? `<span class="belt-label" style="font-size:8px">${genreCategory.toUpperCase()}</span>`
 : `<span class="belt-label" style="font-size:16px">🏆</span>`
 );
 
@@ -2930,7 +2930,7 @@ return (
 `<div class="belt-block" style="width:7px;height:7px;border-radius:2px"></div>` +
 `<div class="belt-block" style="width:11px;height:10px;border-radius:2px"></div>` +
 `<div class="belt-block" style="width:14px;height:13px;border-radius:2px"></div>` +
-`<div class="belt-plate belt-block" style="width:46px;height:32px;border-radius:5px">${plateContent}</div>` +
+`<div class="belt-plate belt-block" style="width:46px;height:38px">${plateContent}</div>` +
 `<div class="belt-block" style="width:14px;height:13px;border-radius:2px"></div>` +
 `<div class="belt-block" style="width:11px;height:10px;border-radius:2px"></div>` +
 `<div class="belt-block" style="width:7px;height:7px;border-radius:2px"></div>`
