@@ -70,6 +70,21 @@ let tournamentHistoryCache =
 
 /*
 
+* Bracket busters - timestamps each matchup was first rendered
+* on screen, keyed by matchup id. Session-only (in-memory, not
+* persisted) - a matchup left pending across a page reload
+* starts its clock over on the new session, rather than trying
+* to survive a closed tab, which would need the server to know
+* about "first seen" too. Set once per matchup id and never
+* overwritten, so skipping a matchup to decide others first
+* doesn't reset its clock.
+  */
+
+let tournamentMatchupFirstSeenAt =
+{};
+
+/*
+
 * Two heart shapes, shared by the card badge, the ripple
 * echoes, and the filter flood — smooth for the default
 * theme, a blocky pixel-grid version for arcade. Built as
@@ -11678,6 +11693,35 @@ third_place: "Took third place in the",
 eliminated: "Knocked out"
 };
 
+function formatDeliberationTime(
+ms
+) {
+
+if (!ms || ms < 0) {
+
+return "no time at all";
+
+}
+
+const totalSeconds =
+Math.round(ms / 1000);
+
+const minutes =
+Math.floor(totalSeconds / 60);
+
+const seconds =
+totalSeconds % 60;
+
+if (minutes === 0) {
+
+return `${seconds}s`;
+
+}
+
+return `${minutes}m ${seconds}s`;
+
+}
+
 function renderTournamentHistoryPanel(
 data
 ) {
@@ -11744,6 +11788,11 @@ entry.beaten_by_title
 ? ` by ${entry.beaten_by_title}`
 : ""
 );
+
+} else if (entry.result === "bracket_buster") {
+
+line =
+`⏱️ Bracket buster — took ${formatDeliberationTime(entry.deliberation_ms)} to get past ${entry.beaten_by_title || "a tough opponent"} in the ${roundLabel(entry.round, entry.total_rounds)}`;
 
 } else {
 
@@ -15609,8 +15658,8 @@ let html =
 
 html +=
 `<button type="button" class="tournament-category-card" data-quick16="1">` +
-`<strong>Quick 16</strong>` +
-`<span class="tc-count">Random 16, one sitting</span>` +
+`<strong>Staff Picks Showdown</strong>` +
+`<span class="tc-count">Same 16, tournament style</span>` +
 `</button>`;
 
 categories.forEach(
@@ -15637,10 +15686,21 @@ poolSize > cap
 ? ` (${cap} drawn per run)`
 : "";
 
+const champEntry =
+tournamentChampions.find(
+entry =>
+entry.category === category
+);
+
 html +=
 `<button type="button" class="tournament-category-card" data-category="${category}">` +
 `<strong>${categoryDisplayName(category)}</strong>` +
 `<span class="tc-count">${poolSize} in the pool${cappedNote}</span>` +
+(
+champEntry
+? `<span class="tc-champion">👑 ${champEntry.movie_title}</span>`
+: ""
+) +
 (
 inProgress
 ? `<span class="tc-status">Resume in progress</span>`
@@ -15866,6 +15926,27 @@ return;
 
 }
 
+/*
+
+* Bracket busters - record the FIRST time each matchup is
+* seen, never overwritten on a later render, so re-fetching
+* the same still-pending round (after picking a different
+* matchup in it, for example) doesn't restart its clock.
+  */
+
+matchups.forEach(
+matchup => {
+
+if (!tournamentMatchupFirstSeenAt[matchup.id]) {
+
+tournamentMatchupFirstSeenAt[matchup.id] =
+Date.now();
+
+}
+
+}
+);
+
 const label =
 roundLabel(
 round,
@@ -15974,6 +16055,14 @@ winnerMovieId
 
 try {
 
+const firstSeenAt =
+tournamentMatchupFirstSeenAt[matchupId];
+
+const deliberationMs =
+firstSeenAt
+? Date.now() - firstSeenAt
+: null;
+
 const response =
 await fetch(
 `${RESERVATIONS_API}/tournaments/${tournament.id}/pick`,
@@ -15984,7 +16073,8 @@ headers: {
 },
 body: JSON.stringify({
 matchup_id: matchupId,
-winner_movie_id: winnerMovieId
+winner_movie_id: winnerMovieId,
+deliberation_ms: deliberationMs
 })
 }
 );
@@ -16112,7 +16202,7 @@ if (content) {
 
 content.innerHTML =
 `<button type="button" class="tournament-back-link" id="tournament-back-to-hub">&larr; Back</button>` +
-`<p class="tournament-subtext">Need at least 16 owned movies for a Quick 16.</p>`;
+`<p class="tournament-subtext">Need at least 16 owned movies for a Staff Picks Showdown.</p>`;
 
 wireTournamentBackLink();
 
@@ -16246,7 +16336,7 @@ return;
 
 let html =
 `<button type="button" class="tournament-back-link" id="tournament-back-to-hub">&larr; Back</button>` +
-`<h2 class="tournament-heading">Quick 16</h2>` +
+`<h2 class="tournament-heading">Staff Picks Showdown</h2>` +
 `<p class="tournament-subtext">Just for fun - this run isn't saved and doesn't earn a belt.</p>` +
 `<div class="bracket-tree">`;
 
@@ -16577,6 +16667,297 @@ onDone();
 
 
 // =========================================================
+// VCR INTRO ("MOVIE TOURNAMENT TAKEOVER")
+//
+// Plays once before the tournament hub itself appears - black
+// flash, static, two close-together tracking bars rolling
+// slowly down the screen, then an on-screen PLAY icon with a
+// running tape counter alongside a two-tier title (small
+// "NOW PLAYING" over a big poster-style "MOVIE TOURNAMENT
+// TAKEOVER"), holds, then everything fades together and
+// hands off to onDone (openTournamentHub). Self-cleaning -
+// removes its own overlay once the fade-out finishes.
+// =========================================================
+
+function triggerVcrIntro(
+onDone
+) {
+
+const overlay =
+document.createElement(
+"div"
+);
+
+overlay.className =
+"vcr-intro-overlay";
+
+const flash =
+document.createElement(
+"div"
+);
+
+flash.className =
+"vcr-intro-flash";
+
+overlay.appendChild(
+flash
+);
+
+const staticLayer =
+document.createElement(
+"div"
+);
+
+staticLayer.className =
+"vcr-intro-static";
+
+overlay.appendChild(
+staticLayer
+);
+
+const track1 =
+document.createElement(
+"div"
+);
+
+track1.className =
+"vcr-intro-track";
+
+track1.style.height =
+"22px";
+
+track1.style.background =
+"rgba(255, 255, 255, 0.4)";
+
+track1.style.top =
+"-90px";
+
+overlay.appendChild(
+track1
+);
+
+const track2 =
+document.createElement(
+"div"
+);
+
+track2.className =
+"vcr-intro-track";
+
+track2.style.height =
+"14px";
+
+track2.style.background =
+"rgba(255, 255, 255, 0.28)";
+
+track2.style.top =
+"-60px";
+
+overlay.appendChild(
+track2
+);
+
+const vcrDisplay =
+document.createElement(
+"div"
+);
+
+vcrDisplay.className =
+"vcr-intro-display";
+
+vcrDisplay.innerHTML =
+`<div class="vcr-intro-play-icon"></div>` +
+`<div class="vcr-intro-counter">0:00:00</div>`;
+
+overlay.appendChild(
+vcrDisplay
+);
+
+const counterEl =
+vcrDisplay.querySelector(
+".vcr-intro-counter"
+);
+
+const titleEl =
+document.createElement(
+"div"
+);
+
+titleEl.className =
+"vcr-intro-title";
+
+titleEl.innerHTML =
+`<div class="vcr-intro-subtitle">NOW PLAYING</div>` +
+`<div class="vcr-intro-main-title">MOVIE<br>TOURNAMENT<br>TAKEOVER</div>`;
+
+overlay.appendChild(
+titleEl
+);
+
+document.body.appendChild(
+overlay
+);
+
+const vh =
+window.innerHeight;
+
+requestAnimationFrame(
+() => {
+
+flash.style.transition =
+"opacity 0.1s";
+
+flash.style.opacity =
+"1";
+
+}
+);
+
+setTimeout(
+() => {
+
+staticLayer.style.transition =
+"opacity 0.15s";
+
+staticLayer.style.opacity =
+"0.85";
+
+},
+150
+);
+
+setTimeout(
+() => {
+
+track1.style.transition =
+"top 1.6s linear, opacity 0.15s";
+
+track2.style.transition =
+"top 1.6s linear, opacity 0.15s";
+
+track1.style.opacity =
+"1";
+
+track2.style.opacity =
+"1";
+
+track1.style.top =
+`${vh + 90}px`;
+
+track2.style.top =
+`${vh + 120}px`;
+
+},
+400
+);
+
+setTimeout(
+() => {
+
+track1.style.opacity =
+"0";
+
+track2.style.opacity =
+"0";
+
+},
+2050
+);
+
+let counterInterval =
+null;
+
+setTimeout(
+() => {
+
+staticLayer.style.opacity =
+"0.3";
+
+vcrDisplay.style.transition =
+"opacity 0.3s";
+
+vcrDisplay.style.opacity =
+"1";
+
+titleEl.style.transition =
+"opacity 0.3s";
+
+titleEl.style.opacity =
+"1";
+
+let seconds =
+0;
+
+counterInterval =
+setInterval(
+() => {
+
+seconds++;
+
+counterEl.textContent =
+`0:00:${String(seconds).padStart(2, "0")}`;
+
+},
+1000
+);
+
+},
+2200
+);
+
+setTimeout(
+() => {
+
+clearInterval(
+counterInterval
+);
+
+staticLayer.style.transition =
+"opacity 0.5s";
+
+vcrDisplay.style.transition =
+"opacity 0.5s";
+
+titleEl.style.transition =
+"opacity 0.5s";
+
+flash.style.transition =
+"opacity 0.5s";
+
+staticLayer.style.opacity =
+"0";
+
+vcrDisplay.style.opacity =
+"0";
+
+titleEl.style.opacity =
+"0";
+
+flash.style.opacity =
+"0";
+
+if (onDone) {
+
+onDone();
+
+}
+
+setTimeout(
+() => {
+
+overlay.remove();
+
+},
+550
+);
+
+},
+5200
+);
+
+}
+
+// =========================================================
 // TOURNAMENT BUTTON / OVERLAY WIRING
 // =========================================================
 
@@ -16591,7 +16972,9 @@ tournamentButton.addEventListener(
 "click",
 () => {
 
-openTournamentHub();
+triggerVcrIntro(
+openTournamentHub
+);
 
 }
 );
