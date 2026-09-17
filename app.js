@@ -16668,6 +16668,182 @@ text: `🎬 Franchise showdown: of every ${franchiseName} entry, ${best.movie_ti
 
 }
 
+/*
+
+* Actor/director showdown - scans every decided matchup for a
+* shared cast member or director between the two sides, using
+* the cast/director fields already sitting in movies.js (the
+* Worker only ever sees titles/ids, never has this info).
+* Random pick among ties, same as everything else in this
+* pool - and the two types are independent, so a run can
+* surface neither, one, or both.
+  */
+
+function computeCastCrewShowdownFacts(
+allMatchups
+) {
+
+const actorCandidates =
+[];
+
+const directorCandidates =
+[];
+
+(allMatchups || []).forEach(
+matchup => {
+
+if (!matchup.winner_movie_id) {
+
+return;
+
+}
+
+const movieA =
+movies.find(
+m =>
+String(
+getMovieId(m)
+) === String(matchup.movie_id_a)
+);
+
+const movieB =
+movies.find(
+m =>
+String(
+getMovieId(m)
+) === String(matchup.movie_id_b)
+);
+
+if (!movieA || !movieB) {
+
+return;
+
+}
+
+const isAWinner =
+String(matchup.winner_movie_id) ===
+String(matchup.movie_id_a);
+
+const winnerTitle =
+isAWinner
+? matchup.movie_title_a
+: matchup.movie_title_b;
+
+const loserTitle =
+isAWinner
+? matchup.movie_title_b
+: matchup.movie_title_a;
+
+function namesFrom(
+field
+) {
+
+return (field || "")
+.split(",")
+.map(
+name =>
+name.trim()
+)
+.filter(
+Boolean
+);
+
+}
+
+const castA =
+namesFrom(
+movieA.cast
+);
+
+const castB =
+namesFrom(
+movieB.cast
+);
+
+const sharedActor =
+castA.find(
+name =>
+castB.includes(name)
+);
+
+if (sharedActor) {
+
+actorCandidates.push({
+name: sharedActor,
+winnerTitle,
+loserTitle
+});
+
+}
+
+const directorA =
+namesFrom(
+movieA.director
+);
+
+const directorB =
+namesFrom(
+movieB.director
+);
+
+const sharedDirector =
+directorA.find(
+name =>
+directorB.includes(name)
+);
+
+if (sharedDirector) {
+
+directorCandidates.push({
+name: sharedDirector,
+winnerTitle,
+loserTitle
+});
+
+}
+
+}
+);
+
+const facts =
+[];
+
+if (actorCandidates.length > 0) {
+
+const pick =
+actorCandidates[
+Math.floor(
+Math.random() * actorCandidates.length
+)
+];
+
+facts.push({
+type: "actor_showdown",
+text: `🎭 Actor showdown: ${pick.name} went head-to-head with themself — ${pick.winnerTitle} beat ${pick.loserTitle}`
+});
+
+}
+
+if (directorCandidates.length > 0) {
+
+const pick =
+directorCandidates[
+Math.floor(
+Math.random() * directorCandidates.length
+)
+];
+
+facts.push({
+type: "director_showdown",
+text: `🎬 Director showdown: ${pick.name} faced off against themself — ${pick.winnerTitle} beat ${pick.loserTitle}`
+});
+
+}
+
+return facts;
+
+}
+
 function buildResultsPodiumSlotHTML(
 finisher,
 label,
@@ -16761,8 +16937,13 @@ computeFranchiseShowdownFact(
 summary.participants || []
 );
 
+const castCrewFacts =
+computeCastCrewShowdownFacts(
+summary.all_matchups || []
+);
+
 const allFacts =
-[...(summary.fun_facts || [])];
+[...(summary.fun_facts || []), ...castCrewFacts];
 
 if (franchiseFact) {
 
@@ -16799,7 +16980,7 @@ buildResultsPodiumSlotHTML(podium.third_place, "🥉 3rd", "tier-bronze") +
 buildResultsStatBoxHTML(
 "Fastest defeat",
 summary.fastest_defeat
-? `${summary.fastest_defeat.loser.title}<br><span class="results-highlight">${formatDeliberationTime(summary.fastest_defeat.deliberation_ms)}</span>`
+? `${summary.fastest_defeat.winner.title} d.<br>${summary.fastest_defeat.loser.title} — <span class="results-highlight">${formatDeliberationTime(summary.fastest_defeat.deliberation_ms)}</span>`
 : "—"
 ) +
 buildResultsStatBoxHTML(
@@ -16811,7 +16992,7 @@ summary.overall_time_ms
 buildResultsStatBoxHTML(
 "Longest battle",
 summary.longest_battle
-? `${summary.longest_battle.winner.title} vs<br>${summary.longest_battle.loser.title} — <span class="results-highlight">${formatDeliberationTime(summary.longest_battle.deliberation_ms)}</span>`
+? `${summary.longest_battle.winner.title} d.<br>${summary.longest_battle.loser.title} — <span class="results-highlight">${formatDeliberationTime(summary.longest_battle.deliberation_ms)}</span>`
 : "—"
 ) +
 `</div>`;
