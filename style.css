@@ -1866,6 +1866,10 @@ CASE BACK - INFO / HISTORY TABS
 }
 
 .modal-history-panel {
+  position: relative;
+
+  z-index: 1;
+
   min-height: 100%;
 
   padding: 16px 18px 20px;
@@ -1876,6 +1880,20 @@ CASE BACK - INFO / HISTORY TABS
       var(--case-accent-start, #6b1414),
       var(--case-accent-end, #4b6cb7)
     );
+
+  /*
+   * Forces this onto its own compositing layer. Content
+   * injected via innerHTML AFTER this element already exists
+   * inside a 3D-transformed ancestor (the card flip uses real
+   * transform-style:preserve-3d + backface-visibility:hidden)
+   * can otherwise sit correctly in the DOM/CSSOM - matching
+   * computed styles, right z-index, non-empty innerHTML - and
+   * still never actually get painted by the GPU compositor
+   * until something forces a fresh layer. translateZ(0) is the
+   * standard nudge for that class of bug.
+   */
+
+  transform: translateZ(0);
 }
 
 .modal-history-panel.hidden {
