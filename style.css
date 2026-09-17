@@ -1787,6 +1787,14 @@ corner so it never collides with the rom-com heart.
   justify-content: center;
 
   line-height: 1;
+
+  border-radius: 50% !important;
+
+  border-width: 3px !important;
+
+  border-style: double !important;
+
+  box-sizing: border-box;
 }
 
 .championship-belt.belt-gold .belt-plate {
