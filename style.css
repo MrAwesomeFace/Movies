@@ -311,6 +311,11 @@ SEARCH
   appearance: none;
 }
 
+#wishlist-search-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
 .search-clear-button {
   position: absolute;
 
@@ -1737,12 +1742,12 @@ corner so it never collides with the rom-com heart.
 .movie-cover-inner .championship-belt {
   position: absolute;
 
-  left: -22%;
-  right: -22%;
+  left: -30%;
+  right: -30%;
 
-  top: 36%;
+  top: 34%;
 
-  transform: rotate(-9deg);
+  transform: rotate(-16deg);
 
   display: flex;
 
@@ -1750,7 +1755,7 @@ corner so it never collides with the rom-com heart.
 
   justify-content: center;
 
-  gap: 3px;
+  gap: 4px;
 
   z-index: 4;
 
