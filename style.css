@@ -836,6 +836,10 @@ the right edge of the row.
   gap: 8px;
 }
 
+.tournament-icon-button {
+  flex-shrink: 0;
+}
+
 
 /* =========================================================
 SECOND ROW
@@ -1287,6 +1291,161 @@ the general grid.
 
 
 /* =========================================================
+VCR INTRO ("MOVIE TOURNAMENT TAKEOVER")
+=========================================================
+Plays once, full-screen, before the tournament hub itself
+appears - built and torn down entirely by JS
+(triggerVcrIntro in app.js), same self-cleaning pattern as
+every other one-off full-screen effect on this site. z-index
+300 to clear the tournament overlay's own 220.
+========================================================= */
+
+.vcr-intro-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 300;
+
+  background: #000;
+
+  overflow: hidden;
+
+  pointer-events: none;
+}
+
+.vcr-intro-flash {
+  position: absolute;
+
+  inset: 0;
+
+  background: #000;
+
+  opacity: 0;
+
+  z-index: 1;
+}
+
+.vcr-intro-static {
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    repeating-linear-gradient(
+      0deg,
+      #333 0px, #333 1px,
+      #000 1px, #000 2px
+    );
+
+  opacity: 0;
+
+  z-index: 2;
+}
+
+.vcr-intro-track {
+  position: absolute;
+
+  left: 0;
+  right: 0;
+
+  filter: blur(1px);
+
+  opacity: 0;
+
+  z-index: 3;
+}
+
+.vcr-intro-display {
+  position: absolute;
+
+  top: 16px;
+  left: 18px;
+
+  z-index: 5;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  opacity: 0;
+}
+
+.vcr-intro-play-icon {
+  width: 0;
+  height: 0;
+
+  border-top: 9px solid transparent;
+  border-bottom: 9px solid transparent;
+  border-left: 14px solid #39ff6a;
+
+  filter: drop-shadow(0 0 4px #39ff6a);
+}
+
+.vcr-intro-counter {
+  font-family: 'VT323', monospace;
+
+  color: #39ff6a;
+
+  font-size: 26px;
+
+  letter-spacing: 2px;
+
+  text-shadow: 0 0 6px #39ff6a;
+}
+
+.vcr-intro-title {
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-direction: column;
+
+  text-align: center;
+
+  padding: 0 20px;
+
+  opacity: 0;
+
+  z-index: 4;
+}
+
+.vcr-intro-subtitle {
+  font-family: 'VT323', monospace;
+
+  color: #fff;
+
+  font-size: 22px;
+
+  letter-spacing: 6px;
+}
+
+.vcr-intro-main-title {
+  font-family: 'Anton', sans-serif;
+
+  color: var(--gold);
+
+  font-size: clamp(32px, 8vw, 48px);
+
+  line-height: 1.15;
+
+  letter-spacing: 1px;
+
+  text-shadow: 3px 3px 0 #6b1414;
+
+  margin-top: 10px;
+}
+
+
+/* =========================================================
 TOURNAMENT OVERLAY
 =========================================================
 Full-screen shell (app.js builds everything inside
@@ -1455,6 +1614,22 @@ HUB - CATEGORY LIST
   font-size: 11.5px;
 
   color: var(--gold);
+}
+
+.tournament-category-card .tc-champion {
+  display: block;
+
+  margin-top: 4px;
+
+  font-size: 11.5px;
+
+  color: #f0e6c8;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
 }
 
 .tournament-category-card .tc-count {
@@ -1972,6 +2147,12 @@ CASE BACK - INFO / HISTORY TABS
   color: #c9b98a;
 
   font-style: italic;
+}
+
+.history-entry.result-bracket_buster {
+  color: var(--gold);
+
+  border: 1px solid rgba(251, 205, 54, 0.4);
 }
 
 .history-empty {
