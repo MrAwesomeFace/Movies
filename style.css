@@ -1866,7 +1866,16 @@ CASE BACK - INFO / HISTORY TABS
 }
 
 .modal-history-panel {
-  padding: 4px 2px 20px;
+  min-height: 100%;
+
+  padding: 16px 18px 20px;
+
+  background:
+    linear-gradient(
+      180deg,
+      var(--case-accent-start, #6b1414),
+      var(--case-accent-end, #4b6cb7)
+    );
 }
 
 .modal-history-panel.hidden {
