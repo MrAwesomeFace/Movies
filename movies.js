@@ -12009,6 +12009,24 @@ const movies = [
     "rated": "PG"
   },
   {
+    "title": "Lock Up",
+    "tmdbTitle": "Lock Up",
+    "type": "movie",
+    "tmdbId": 9972,
+    "poster": "https://image.tmdb.org/t/p/w500/WihoHaU9yvhhdoSqDAhiIlNN8g.jpg",
+    "year": "1989",
+    "runtime": "109m",
+    "genre": "Action / Crime / Drama / Thriller",
+    "rated": "R",
+    "director": "John Flynn",
+    "cast": "Sylvester Stallone, Donald Sutherland, John Amos, Sonny Landham, Tom Sizemore, Frank McRae",
+    "synopsis": "Frank Leone is nearing the end of his prison term for a relatively minor crime. Just before he is paroled, however, Warden Drumgoole takes charge. Drumgoole was assigned to a hell-hole prison after his administration was publicly humiliated by Leone, and has now arrived on the scene to ensure that Leone never sees the light of day.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ]
+  },
+  {
     "title": "Lock, Stock and Two Smoking Barrels",
     "tmdbTitle": "Lock, Stock and Two Smoking Barrels",
     "type": "movie",
