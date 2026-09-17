@@ -2895,23 +2895,42 @@ frame.classList.add(
 * silver class) narrowing toward a bigger center plate. A
 * null category means the full-collection belt (trophy emoji
 * plate); any other value is a genre name, shown as short
-* uppercase text on the plate instead.
+* uppercase text on the plate instead. A thin engraved-line
+* crown sits above the plate text either way - low-detail on
+* purpose, since anything more ornate turns to mush at this
+* size.
   */
 
 function buildChampionshipBeltHTML(
 genreCategory
 ) {
 
+const isGold =
+!genreCategory;
+
+const engraveColor =
+isGold
+? "#7a5c10"
+: "#5c5c5c";
+
+const crownSvg =
+`<svg viewBox="0 0 30 12" width="24" height="10" style="display:block;margin:0 auto 1px">` +
+`<polyline points="2,10 2,4 9,8 15,2 21,8 27,4 27,10" fill="none" stroke="${engraveColor}" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>` +
+`</svg>`;
+
 const plateContent =
+crownSvg +
+(
 genreCategory
-? `<span class="belt-label" style="font-size:8px">${genreCategory.toUpperCase()}</span>`
-: `<span class="belt-label" style="font-size:15px">🏆</span>`;
+? `<span class="belt-label" style="font-size:9px">${genreCategory.toUpperCase()}</span>`
+: `<span class="belt-label" style="font-size:16px">🏆</span>`
+);
 
 return (
 `<div class="belt-block" style="width:7px;height:7px;border-radius:2px"></div>` +
 `<div class="belt-block" style="width:11px;height:10px;border-radius:2px"></div>` +
 `<div class="belt-block" style="width:14px;height:13px;border-radius:2px"></div>` +
-`<div class="belt-plate belt-block" style="width:34px;height:22px;border-radius:4px">${plateContent}</div>` +
+`<div class="belt-plate belt-block" style="width:46px;height:32px;border-radius:5px">${plateContent}</div>` +
 `<div class="belt-block" style="width:14px;height:13px;border-radius:2px"></div>` +
 `<div class="belt-block" style="width:11px;height:10px;border-radius:2px"></div>` +
 `<div class="belt-block" style="width:7px;height:7px;border-radius:2px"></div>`
