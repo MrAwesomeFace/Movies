@@ -2914,7 +2914,7 @@ isGold
 : "#5c5c5c";
 
 const crownSvg =
-`<svg viewBox="0 0 30 12" width="24" height="10" style="display:block;margin:0 auto 1px">` +
+`<svg viewBox="0 0 30 12" width="28" height="12" style="display:block;margin:0 auto 2px">` +
 `<polyline points="2,10 2,4 9,8 15,2 21,8 27,4 27,10" fill="none" stroke="${engraveColor}" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>` +
 `</svg>`;
 
@@ -2922,18 +2922,18 @@ const plateContent =
 crownSvg +
 (
 genreCategory
-? `<span class="belt-label" style="font-size:8px">${genreCategory.toUpperCase()}</span>`
-: `<span class="belt-label" style="font-size:16px">🏆</span>`
+? `<span class="belt-label" style="font-size:9px">${genreCategory.toUpperCase()}</span>`
+: `<span class="belt-label" style="font-size:19px">🏆</span>`
 );
 
 return (
-`<div class="belt-block" style="width:7px;height:7px;border-radius:2px"></div>` +
-`<div class="belt-block" style="width:11px;height:10px;border-radius:2px"></div>` +
+`<div class="belt-block" style="width:9px;height:9px;border-radius:2px"></div>` +
 `<div class="belt-block" style="width:14px;height:13px;border-radius:2px"></div>` +
-`<div class="belt-plate belt-block" style="width:46px;height:38px">${plateContent}</div>` +
+`<div class="belt-block" style="width:18px;height:17px;border-radius:2px"></div>` +
+`<div class="belt-plate belt-block" style="width:58px;height:48px">${plateContent}</div>` +
+`<div class="belt-block" style="width:18px;height:17px;border-radius:2px"></div>` +
 `<div class="belt-block" style="width:14px;height:13px;border-radius:2px"></div>` +
-`<div class="belt-block" style="width:11px;height:10px;border-radius:2px"></div>` +
-`<div class="belt-block" style="width:7px;height:7px;border-radius:2px"></div>`
+`<div class="belt-block" style="width:9px;height:9px;border-radius:2px"></div>`
 );
 
 }
@@ -4196,17 +4196,32 @@ main.style.transform =
 * dimensions and taking whichever is smaller keeps the case
 * within the actual viewport either way, always preserving
 * the 2:3 aspect ratio.
+*
+* documentElement.clientWidth/Height rather than
+* window.innerWidth/Height here specifically - iOS Safari's
+* address bar can still be mid-collapse/expand when
+* window.innerHeight is read, especially right after heavy
+* interaction elsewhere on the page (like a tournament round),
+* giving a stale number that throws this centering off until
+* the page is reloaded. clientWidth/Height read the settled
+* layout viewport instead, which doesn't have that quirk.
   */
+
+const viewportWidth =
+document.documentElement.clientWidth;
+
+const viewportHeight =
+document.documentElement.clientHeight;
 
 const maxWidthFromViewportWidth =
 Math.min(
-window.innerWidth *
+viewportWidth *
 0.78,
 420
 );
 
 const maxWidthFromViewportHeight =
-(window.innerHeight * 0.78) /
+(viewportHeight * 0.78) /
 1.5;
 
 const finalWidth =
@@ -4221,7 +4236,7 @@ finalWidth *
 
 const finalLeft =
 (
-window.innerWidth -
+viewportWidth -
 finalWidth
 ) / 2;
 
@@ -4229,7 +4244,7 @@ const finalTop =
 Math.max(
 55,
 (
-window.innerHeight -
+viewportHeight -
 finalHeight
 ) / 2
 );
@@ -15284,30 +15299,31 @@ match && match.poster
 // BRACKET PAYLOAD BUILDERS
 // =========================================================
 
-function buildGenreTournamentPayload(
-genreValue
-) {
-
-const pool =
-getTournamentGenrePool(
-genreValue
-);
-
 /*
 
-* Capped at 128 - and even below that cap, largestPowerOfTwoLE
-* can still trim a pool that isn't already a power of 2 (a
-* 50-movie genre only fits 32). Either way, whenever the drawn
-* size ends up smaller than the real pool, the reigning
-* champion for this category (if there is one) is guaranteed a
-* spot instead of being left to chance like everyone else -
-* the rest of the field is still a genuine random draw.
+* Shared by every capped bracket type (every genre, and now
+* full collection too) - random draw up to `cap`, trimmed
+* further to the nearest power of 2 either way, with the
+* reigning champion for this category (if there is one)
+* guaranteed a spot whenever any trimming actually happens.
+* No play-in round needed here - that was full-collection's
+* old approach (every single movie included, trimmed via a
+* separate play-in round) and it made first-time setup create
+* 580+ matchup rows, which is genuinely slow. A capped draw is
+* both fast to set up and consistent with how every genre
+* bracket already works.
   */
+
+function buildCappedTournamentPayload(
+category,
+pool,
+cap
+) {
 
 const cappedPoolSize =
 Math.min(
 pool.length,
-128
+cap
 );
 
 const size =
@@ -15328,7 +15344,7 @@ if (size < pool.length) {
 const champEntry =
 tournamentChampions.find(
 entry =>
-entry.category === genreValue
+entry.category === category
 );
 
 const championMovie =
@@ -15400,147 +15416,31 @@ b: entrant(drawn[i + 1])
 }
 
 return {
-category: genreValue,
+category,
 round1
 };
 
 }
 
-/*
+function buildGenreTournamentPayload(
+genreValue
+) {
 
-* Full collection includes EVERY owned movie, trimmed down to
-* the nearest power of 2 via a play-in round rather than a
-* capped pool. excess = how many movies don't fit into a clean
-* power-of-2 field; each play-in matchup removes exactly one,
-* so playInCount (movies IN the play-in round) = excess * 2.
-* Of the remaining byes, the first `excess` of them each pair
-* with a play-in-winner placeholder (never two placeholders
-* together - the Worker can't resolve that), and the rest pair
-* up among themselves normally.
-  */
+return buildCappedTournamentPayload(
+genreValue,
+getTournamentGenrePool(genreValue),
+128
+);
+
+}
 
 function buildFullCollectionPayload() {
 
-const shuffled =
-shuffleArray(
-getTournamentEligibleMovies()
+return buildCappedTournamentPayload(
+"full",
+getTournamentEligibleMovies(),
+256
 );
-
-const total =
-shuffled.length;
-
-const target =
-largestPowerOfTwoLE(
-total
-);
-
-if (target < 2) {
-
-return null;
-
-}
-
-const excess =
-total - target;
-
-if (excess === 0) {
-
-const round1 =
-[];
-
-for (
-let i = 0;
-i < shuffled.length;
-i += 2
-) {
-
-round1.push({
-a: entrant(shuffled[i]),
-b: entrant(shuffled[i + 1])
-});
-
-}
-
-return {
-category: "full",
-round1
-};
-
-}
-
-const playInCount =
-excess * 2;
-
-const playInMovies =
-shuffled.slice(
-0,
-playInCount
-);
-
-const byes =
-shuffled.slice(
-playInCount
-);
-
-const playIn =
-[];
-
-for (
-let i = 0;
-i < playInMovies.length;
-i += 2
-) {
-
-playIn.push({
-a: entrant(playInMovies[i]),
-b: entrant(playInMovies[i + 1])
-});
-
-}
-
-const mixedByes =
-byes.slice(
-0,
-excess
-);
-
-const pureByes =
-byes.slice(
-excess
-);
-
-const round1 =
-[];
-
-mixedByes.forEach(
-(bye, i) => {
-
-round1.push({
-a: entrant(bye),
-b: { pendingFromPlayIn: i }
-});
-
-}
-);
-
-for (
-let i = 0;
-i < pureByes.length;
-i += 2
-) {
-
-round1.push({
-a: entrant(pureByes[i]),
-b: entrant(pureByes[i + 1])
-});
-
-}
-
-return {
-category: "full",
-playIn,
-round1
-};
 
 }
 
@@ -15727,10 +15627,14 @@ category === "full"
 ? getTournamentEligibleMovies().length
 : getTournamentGenrePool(category).length;
 
+const cap =
+category === "full"
+? 256
+: 128;
+
 const cappedNote =
-category !== "full" &&
-poolSize > 128
-? " (128 drawn per run)"
+poolSize > cap
+? ` (${cap} drawn per run)`
 : "";
 
 html +=
@@ -16083,25 +15987,49 @@ data.error || "Server error"
 
 if (data.tournament_complete) {
 
+await loadTournamentChampions();
+
+/*
+
+* Champion is whoever the Worker actually crowned for THIS
+* category - not necessarily whoever won the pick that
+* happened to be the one that finished the tournament. If
+* 3rd place gets decided AFTER the final, that pick is what
+* triggers tournament_complete, but its winner is the bronze
+* finisher, not the champion - looking it up fresh from
+* current_champions is correct regardless of which order the
+* final and 3rd-place match get decided in.
+  */
+
+const champEntry =
+tournamentChampions.find(
+entry =>
+entry.category === tournament.category
+);
+
 const winnerMovie =
-movies.find(
+champEntry
+? movies.find(
 m =>
 String(
 getMovieId(m)
-) === String(winnerMovieId)
-);
+) === String(champEntry.movie_id)
+)
+: null;
 
 const winnerTitle =
 winnerMovie
 ? winnerMovie.title
-: "Champion";
+: (
+champEntry
+? champEntry.movie_title
+: "Champion"
+);
 
 const winnerPoster =
 winnerMovie
 ? winnerMovie.poster
 : "";
-
-await loadTournamentChampions();
 
 renderMovies();
 
