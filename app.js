@@ -11556,6 +11556,18 @@ historyPanel.classList.add(
 
 }
 
+const backContentEl =
+document.querySelector(
+".back-content"
+);
+
+if (backContentEl) {
+
+backContentEl.scrollTop =
+0;
+
+}
+
 }
 
 async function loadTournamentHistoryForMovie(
@@ -11779,6 +11791,28 @@ const historyPanel =
 document.getElementById(
 "modal-history-panel"
 );
+
+/*
+
+* Reset scroll position on every switch, either direction -
+* without this, switching from a scrolled-down Info view to
+* the much shorter History view (or back) leaves the visitor
+* staring at blank space below wherever they'd scrolled to,
+* even though the new view's real content is sitting correctly
+* rendered just above their current scroll position.
+  */
+
+const backContentEl =
+document.querySelector(
+".back-content"
+);
+
+if (backContentEl) {
+
+backContentEl.scrollTop =
+0;
+
+}
 
 if (view === "history") {
 
@@ -12620,6 +12654,20 @@ wishlistSearchInput.addEventListener(
 "input",
 () => {
 
+const clearButton =
+document.getElementById(
+"wishlist-search-clear-button"
+);
+
+if (clearButton) {
+
+clearButton.classList.toggle(
+"hidden",
+wishlistSearchInput.value.trim() === ""
+);
+
+}
+
 clearTimeout(
 wishlistSearchDebounce
 );
@@ -12629,6 +12677,40 @@ setTimeout(
 runWishlistSearch,
 300
 );
+
+}
+);
+
+}
+
+const wishlistSearchClearButton =
+document.getElementById(
+"wishlist-search-clear-button"
+);
+
+if (wishlistSearchClearButton) {
+
+wishlistSearchClearButton.addEventListener(
+"click",
+() => {
+
+wishlistSearchInput.value =
+"";
+
+wishlistSearchClearButton.classList.add(
+"hidden"
+);
+
+clearWishlistSearchResults();
+
+if (wishlistAddStatus) {
+
+wishlistAddStatus.textContent =
+"";
+
+}
+
+wishlistSearchInput.focus();
 
 }
 );
@@ -15198,9 +15280,26 @@ getTournamentGenrePool(
 genreValue
 );
 
+/*
+
+* Capped at 128 - and even below that cap, largestPowerOfTwoLE
+* can still trim a pool that isn't already a power of 2 (a
+* 50-movie genre only fits 32). Either way, whenever the drawn
+* size ends up smaller than the real pool, the reigning
+* champion for this category (if there is one) is guaranteed a
+* spot instead of being left to chance like everyone else -
+* the rest of the field is still a genuine random draw.
+  */
+
+const cappedPoolSize =
+Math.min(
+pool.length,
+128
+);
+
 const size =
 largestPowerOfTwoLE(
-pool.length
+cappedPoolSize
 );
 
 if (size < 2) {
@@ -15209,13 +15308,67 @@ return null;
 
 }
 
-const drawn =
+let drawn;
+
+if (size < pool.length) {
+
+const champEntry =
+tournamentChampions.find(
+entry =>
+entry.category === genreValue
+);
+
+const championMovie =
+champEntry
+? pool.find(
+movie =>
+String(
+getMovieId(movie)
+) === String(champEntry.movie_id)
+)
+: null;
+
+if (championMovie) {
+
+const others =
+shuffleArray(
+pool.filter(
+movie =>
+movie !== championMovie
+)
+).slice(
+0,
+size - 1
+);
+
+drawn =
+shuffleArray(
+[championMovie, ...others]
+);
+
+} else {
+
+drawn =
 shuffleArray(
 pool
 ).slice(
 0,
 size
 );
+
+}
+
+} else {
+
+drawn =
+shuffleArray(
+pool
+).slice(
+0,
+size
+);
+
+}
 
 const round1 =
 [];
@@ -15561,10 +15714,16 @@ category === "full"
 ? getTournamentEligibleMovies().length
 : getTournamentGenrePool(category).length;
 
+const cappedNote =
+category !== "full" &&
+poolSize > 128
+? " (128 drawn per run)"
+: "";
+
 html +=
 `<button type="button" class="tournament-category-card" data-category="${category}">` +
 `<strong>${categoryDisplayName(category)}</strong>` +
-`<span class="tc-count">${poolSize} in the pool</span>` +
+`<span class="tc-count">${poolSize} in the pool${cappedNote}</span>` +
 (
 inProgress
 ? `<span class="tc-status">Resume in progress</span>`
