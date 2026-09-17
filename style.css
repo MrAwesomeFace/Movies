@@ -1022,12 +1022,24 @@ class already on it in the HTML.
   color: #111111;
 }
 
-.wishlist-search-input {
+.wishlist-search-input-wrapper {
+  position: relative;
+
   flex: 1;
 
   min-width: 180px;
 
-  padding: 10px 14px;
+  display: flex;
+}
+
+.wishlist-search-input {
+  flex: 1;
+
+  width: 100%;
+
+  min-width: 0;
+
+  padding: 10px 40px 10px 14px;
 
   border: 1px solid var(--gold-dark);
 
