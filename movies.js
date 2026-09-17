@@ -301,6 +301,25 @@ const movies = [
     "rated": "R"
   },
   {
+    "title": "4:30 Movie, The",
+    "tmdbTitle": "The 4:30 Movie",
+    "type": "movie",
+    "tmdbId": 1146556,
+    "poster": "https://image.tmdb.org/t/p/w500/u6VkCZExHhQ55N24exaqXQmsOL4.jpg",
+    "year": "2024",
+    "runtime": "88m",
+    "genre": "Comedy / Romance",
+    "rated": "R",
+    "director": "Kevin Smith",
+    "cast": "Siena Agudong, Austin Zajur, Nicholas Cirillo, Reed Northrup, Ken Jeong, Sam Richardson",
+    "synopsis": "In the summer of 1986, three sixteen year old friends spend their Saturdays sneaking into movies at the local multiplex. But when one of the guys also invites the girl of his dreams to see the latest comedy, each of the teens learn more about life and love.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Prime"
+    ]
+  },
+  {
     "title": "50 First Dates",
     "tmdbTitle": "50 First Dates",
     "type": "movie",
