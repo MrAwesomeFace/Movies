@@ -535,13 +535,24 @@ aria-label="Clear search"
 
       </div>
 
-      <input
-        type="search"
-        id="wishlist-search-input"
-        class="wishlist-search-input"
-        placeholder="Search for a title..."
-        autocomplete="off"
-      >
+      <div class="wishlist-search-input-wrapper">
+
+        <input
+          type="search"
+          id="wishlist-search-input"
+          class="wishlist-search-input"
+          placeholder="Search for a title..."
+          autocomplete="off"
+        >
+
+        <button
+          type="button"
+          id="wishlist-search-clear-button"
+          class="search-clear-button hidden"
+          aria-label="Clear search"
+        >&times;</button>
+
+      </div>
 
     </div>
 
