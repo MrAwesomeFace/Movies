@@ -11751,6 +11751,19 @@ html +=
 historyPanel.innerHTML =
 html;
 
+/*
+
+* Forces an immediate reflow/repaint right after injecting
+* content into an element that lives inside the card's 3D
+* flip transform - reading offsetHeight is a standard way to
+* force this synchronously. Belt-and-suspenders alongside the
+* transform:translateZ(0) compositing-layer fix in CSS, in
+* case one browser needs the nudge and another needs the
+* layer promotion.
+  */
+
+void historyPanel.offsetHeight;
+
 }
 
 document
