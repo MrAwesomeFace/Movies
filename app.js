@@ -16143,7 +16143,11 @@ winnerTitle,
 winnerPoster,
 () => {
 
-renderTournamentHub();
+renderTournamentResultsScreen(
+data.results_summary,
+tournament.category,
+tournament.total_rounds
+);
 
 }
 );
@@ -16474,6 +16478,386 @@ renderQuickSixteen();
 // checkpoints along the path. Nothing is removed early;
 // everything fades out together once the run ends.
 // =========================================================
+
+// =========================================================
+// TOURNAMENT RESULTS SCOREBOARD
+//
+// Shown right after the champion celebration finishes -
+// podium, three regular stats, and up to 3 randomly-picked
+// fun facts. Franchise Showdown is computed here client-side
+// (reusing the same franchise title-matching already used for
+// the Fast & Furious/Batman/Harry Potter/Mission Impossible/
+// Bond easter eggs) since the Worker doesn't need to know
+// about franchises at all - everything else comes straight
+// from results_summary.
+// =========================================================
+
+function detectFranchise(
+title
+) {
+
+if (!title) {
+
+return null;
+
+}
+
+const t =
+title.toLowerCase();
+
+if (
+["rocky", "creed"].some(
+word =>
+t.includes(word)
+)
+) {
+
+return "Rocky / Creed";
+
+}
+
+if (t.includes("fast & furious")) {
+
+return "Fast & Furious";
+
+}
+
+if (
+t.includes("batman") ||
+t.includes("dark knight") ||
+t.includes("justice league") ||
+t.includes("suicide squad") ||
+t.includes("the flash")
+) {
+
+return "Batman / DC";
+
+}
+
+if (
+t.includes("harry potter") ||
+t.includes("fantastic beasts")
+) {
+
+return "Wizarding World";
+
+}
+
+if (
+t.includes("mission") &&
+t.includes("impossible")
+) {
+
+return "Mission: Impossible";
+
+}
+
+if (
+t.trim().startsWith("007")
+) {
+
+return "James Bond";
+
+}
+
+return null;
+
+}
+
+function participantRankScore(
+participant
+) {
+
+if (!participant.result) {
+
+return -1;
+
+}
+
+const bonus =
+{
+champion: 4,
+runner_up: 3,
+third_place: 2,
+eliminated: 0
+}[participant.result] || 0;
+
+return (
+(participant.round || 0) * 10 +
+bonus
+);
+
+}
+
+function computeFranchiseShowdownFact(
+participants
+) {
+
+const groups =
+{};
+
+participants.forEach(
+p => {
+
+const franchise =
+detectFranchise(
+p.movie_title
+);
+
+if (!franchise) {
+
+return;
+
+}
+
+if (!groups[franchise]) {
+
+groups[franchise] =
+[];
+
+}
+
+groups[franchise].push(
+p
+);
+
+}
+);
+
+const eligible =
+Object.entries(groups).filter(
+([, list]) =>
+list.length >= 2
+);
+
+if (eligible.length === 0) {
+
+return null;
+
+}
+
+const [franchiseName, list] =
+eligible[
+Math.floor(
+Math.random() * eligible.length
+)
+];
+
+list.sort(
+(a, b) =>
+participantRankScore(b) -
+participantRankScore(a)
+);
+
+const best =
+list[0];
+
+const placementText =
+best.result === "champion"
+? "won the whole thing"
+: best.result === "runner_up"
+? "made the final"
+: best.result === "third_place"
+? "took 3rd place"
+: "made it deep before falling";
+
+return {
+type: "franchise_showdown",
+text: `🎬 Franchise showdown: of every ${franchiseName} entry, ${best.movie_title} ${placementText}`
+};
+
+}
+
+function buildResultsPodiumSlotHTML(
+finisher,
+label,
+tierClass
+) {
+
+if (!finisher) {
+
+return "";
+
+}
+
+const poster =
+posterForMovieId(
+finisher.movie_id
+);
+
+return (
+`<div class="results-podium-slot ${tierClass}">` +
+`<div class="results-podium-poster" style="background-image:url('${poster}')"></div>` +
+`<div class="results-podium-label">${label}</div>` +
+`<div class="results-podium-title">${finisher.movie_title}</div>` +
+`</div>`
+);
+
+}
+
+function buildResultsStatBoxHTML(
+label,
+valueHtml
+) {
+
+return (
+`<div class="results-stat-box">` +
+`<div class="results-stat-label">${label}</div>` +
+`<div class="results-stat-value">${valueHtml}</div>` +
+`</div>`
+);
+
+}
+
+function fireResultsFireworks() {
+
+const vw =
+window.innerWidth;
+
+const vh =
+window.innerHeight;
+
+[0, 1, 2].forEach(
+i => {
+
+setTimeout(
+() => {
+
+triggerFireworkBurst(
+vw * (0.2 + Math.random() * 0.6),
+vh * (0.15 + Math.random() * 0.3)
+);
+
+},
+i * 250
+);
+
+}
+);
+
+}
+
+function renderTournamentResultsScreen(
+summary,
+category,
+totalRounds
+) {
+
+const content =
+document.getElementById(
+"tournament-content"
+);
+
+if (!content || !summary) {
+
+renderTournamentHub();
+
+return;
+
+}
+
+const franchiseFact =
+computeFranchiseShowdownFact(
+summary.participants || []
+);
+
+const allFacts =
+[...(summary.fun_facts || [])];
+
+if (franchiseFact) {
+
+allFacts.push(
+franchiseFact
+);
+
+}
+
+const chosenFacts =
+shuffleArray(
+allFacts
+).slice(
+0,
+3
+);
+
+const podium =
+summary.podium || {};
+
+let html =
+`<button type="button" class="tournament-back-link" id="tournament-back-to-hub">&larr; Back</button>` +
+`<div class="results-scoresheet" id="results-scoresheet">` +
+`<div class="results-heading">` +
+`<div class="results-subtitle">TOURNAMENT RESULTS</div>` +
+`<div class="results-title">${categoryDisplayName(category).toUpperCase()}</div>` +
+`</div>` +
+`<div class="results-podium">` +
+buildResultsPodiumSlotHTML(podium.runner_up, "🥈 2nd", "tier-silver") +
+buildResultsPodiumSlotHTML(podium.champion, "🏆 Champion", "tier-gold") +
+buildResultsPodiumSlotHTML(podium.third_place, "🥉 3rd", "tier-bronze") +
+`</div>` +
+`<div class="results-stats-row">` +
+buildResultsStatBoxHTML(
+"Fastest defeat",
+summary.fastest_defeat
+? `${summary.fastest_defeat.loser.title}<br><span class="results-highlight">${formatDeliberationTime(summary.fastest_defeat.deliberation_ms)}</span>`
+: "—"
+) +
+buildResultsStatBoxHTML(
+"Overall time",
+summary.overall_time_ms
+? `<span class="results-highlight">${formatDeliberationTime(summary.overall_time_ms)}</span><br>deliberating`
+: "—"
+) +
+buildResultsStatBoxHTML(
+"Longest battle",
+summary.longest_battle
+? `${summary.longest_battle.winner.title} vs<br>${summary.longest_battle.loser.title} — <span class="results-highlight">${formatDeliberationTime(summary.longest_battle.deliberation_ms)}</span>`
+: "—"
+) +
+`</div>`;
+
+if (chosenFacts.length > 0) {
+
+html +=
+`<div class="results-fun-facts">` +
+chosenFacts.map(
+fact =>
+`<div class="results-fun-fact">${fact.text}</div>`
+).join("") +
+`</div>`;
+
+}
+
+html +=
+`</div>`;
+
+content.innerHTML =
+html;
+
+wireTournamentBackLink();
+
+fireResultsFireworks();
+
+requestAnimationFrame(
+() => {
+
+const sheet =
+document.getElementById(
+"results-scoresheet"
+);
+
+if (sheet) {
+
+sheet.classList.add(
+"visible"
+);
+
+}
+
+}
+);
+
+}
 
 function showTournamentCelebration(
 title,
