@@ -2131,8 +2131,33 @@ card
 filteredWishlist.forEach(
 (item, index) => {
 
+/*
+
+* If a real, owned copy has landed in movies.js (the GitHub
+* Action already committed it), show it as owned even if the
+* wishlist row hasn't been cleaned up yet - the cleanup step
+* runs right after the commit, well before GitHub Pages has
+* actually rebuilt/redeployed movies.js, so there's a real
+* window where relying on the wishlist row alone would make
+* the card vanish from every view for a while. Checking for
+* an owned match directly sidesteps that timing gap entirely.
+  */
+
+const ownedMatch =
+movies.find(
+movie =>
+String(
+getMovieId(movie)
+) === String(item.tmdb_id)
+);
+
 const card =
-createOutOfStockCard(
+ownedMatch
+? createNowInStockCard(
+ownedMatch,
+filteredMovies.length + index
+)
+: createOutOfStockCard(
 item,
 filteredMovies.length + index
 );
@@ -3401,6 +3426,58 @@ banner.innerHTML =
 
 coverInner.appendChild(
 banner
+);
+
+}
+
+return card;
+
+}
+
+/*
+
+* Fires when a wishlist item has a real owned match in
+* movies.js already (see the timing-gap comment in
+* renderMovies) - builds the card from the REAL, owned movie
+* object (full color, normal poster) via the standard
+* createMovieCard path, then adds a celebratory starburst
+* instead of the gray-out/banner treatment. This is always a
+* transitional state - once the wishlist row actually gets
+* cleaned up, this same movie just renders as a completely
+* ordinary card everywhere, same as any other owned title.
+  */
+
+function createNowInStockCard(
+movie,
+index
+) {
+
+const card =
+createMovieCard(
+movie,
+index
+);
+
+const coverInner =
+card.querySelector(
+".movie-cover-inner"
+);
+
+if (coverInner) {
+
+const starburst =
+document.createElement(
+"div"
+);
+
+starburst.className =
+"now-in-stock-starburst";
+
+starburst.innerHTML =
+`<span>Now In Stock!</span>`;
+
+coverInner.appendChild(
+starburst
 );
 
 }
