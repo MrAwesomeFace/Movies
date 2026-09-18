@@ -327,6 +327,37 @@ document.getElementById("mobile-filters-toggle");
 const coinSlotButtonMobile =
 document.getElementById("coin-slot-button-mobile");
 
+const pinballOverlay =
+document.getElementById("pinball-overlay");
+
+const pinballTable =
+document.getElementById("pinball-table");
+
+const pinballBall =
+document.getElementById("pinball-ball");
+
+const pinballTilt =
+document.getElementById("pinball-tilt");
+
+const pinballLaunchPoint =
+document.getElementById("pinball-launch-point");
+
+const pinballFlipperLeft =
+document.getElementById("pinball-flipper-left");
+
+const pinballFlipperRight =
+document.getElementById("pinball-flipper-right");
+
+const pinballBumperEls =
+[
+document.getElementById("pinball-bumper-a"),
+document.getElementById("pinball-bumper-b"),
+document.getElementById("pinball-bumper-c")
+];
+
+const pinballHiScoreValue =
+document.getElementById("pinball-hiscore-value");
+
 const marqueeResetButtonMobile =
 document.getElementById("marquee-reset-button-mobile");
 
@@ -15098,6 +15129,623 @@ renderFlavorText();
 let coinSlotBusy =
 false;
 
+/*
+
+* Plain flicker flash - what the coin slot used to do on
+* every click, and what it falls back to now if the pinball
+* overlay is missing or the person has reduced motion turned
+* on (prefers-reduced-motion). Unchanged from before.
+  */
+
+function playCoinFlickerFlash(
+onDone
+) {
+
+if (coinFlickerOverlay) {
+
+coinFlickerOverlay.classList.remove(
+"active"
+);
+
+void coinFlickerOverlay.offsetWidth;
+
+coinFlickerOverlay.classList.add(
+"active"
+);
+
+}
+
+setTimeout(
+onDone,
+700
+);
+
+}
+
+/*
+
+* Reads a pinball element's ACTUAL rendered center point,
+* relative to the table's own bounding box - never a guessed
+* percentage. Every waypoint the ball travels to comes from
+* this, which is why the ball always genuinely lands on a
+* bumper and settles exactly between the flippers, regardless
+* of screen size.
+  */
+
+function pinballCenterOf(
+el,
+tableRect
+) {
+
+const rect =
+el.getBoundingClientRect();
+
+return {
+x: rect.left + rect.width / 2 - tableRect.left,
+y: rect.top + rect.height / 2 - tableRect.top
+};
+
+}
+
+/*
+
+* A bumper is drawn as a filled circle, a gap, then a ring
+* around the outside (see .pinball-bumper's box-shadow in
+* style.css) - the ring is the part the ball should actually
+* touch. Given the bumper's rendered box and a direction
+* (unitX, unitY - doesn't need to be pre-normalized), this
+* returns the point on that outer ring in that direction, e.g.
+* (1, -1) for the ring's upper-right, (-1, 0) for its left
+* side, so specific, chosen contact points can be hit exactly
+* rather than wherever a straight line from the previous point
+* happens to land.
+  */
+
+function pinballRingPointAt(
+el,
+tableRect,
+unitX,
+unitY
+) {
+
+const rect =
+el.getBoundingClientRect();
+
+const center =
+{
+x: rect.left + rect.width / 2 - tableRect.left,
+y: rect.top + rect.height / 2 - tableRect.top
+};
+
+/* rect.width/2 reaches the drawn circle's edge; the ring
+   itself sits a further ~7px out (box-shadow), plus a
+   couple px so the ball's own radius doesn't overlap it. */
+
+const radius =
+rect.width / 2 + 9;
+
+const len =
+Math.sqrt(unitX * unitX + unitY * unitY) || 1;
+
+return {
+x: center.x + (unitX / len) * radius,
+y: center.y + (unitY / len) * radius,
+center: center
+};
+
+}
+
+/*
+
+* Picks a fresh-looking "high score" each time the pinball
+* sequence runs, the way an actual cabinet's HI SCORE line
+* would already have some made-up number sitting on it.
+  */
+
+function pinballRollHiScore() {
+
+if (!pinballHiScoreValue) {
+
+return;
+
+}
+
+const score =
+Math.floor(120000 + Math.random() * 879999);
+
+pinballHiScoreValue.textContent =
+String(score).padStart(6, "0");
+
+}
+
+/*
+
+* Point at fraction t (0-1) along a quadratic Bezier curve
+* from p0 to p1, bowed toward control - this is what makes
+* each leg of the ball's path arc like a real bounce instead
+* of sliding in a straight line.
+  */
+
+function pinballQuadraticPoint(
+p0,
+control,
+p1,
+t
+) {
+
+const mt =
+1 - t;
+
+return {
+x: mt * mt * p0.x + 2 * mt * t * control.x + t * t * p1.x,
+y: mt * mt * p0.y + 2 * mt * t * control.y + t * t * p1.y
+};
+
+}
+
+function spawnPinballScorePop(
+point,
+text
+) {
+
+if (!pinballTable) {
+
+return;
+
+}
+
+const pop =
+document.createElement(
+"div"
+);
+
+pop.className =
+"pinball-score-pop";
+
+pop.textContent =
+text;
+
+pop.style.left =
+(point.x - 14) + "px";
+
+pop.style.top =
+(point.y - 24) + "px";
+
+pinballTable.appendChild(
+pop
+);
+
+requestAnimationFrame(
+() => pop.classList.add("pop")
+);
+
+setTimeout(
+() => pop.remove(),
+900
+);
+
+}
+
+function hitPinballBumper(
+el,
+point,
+scoreText
+) {
+
+if (!el) {
+
+return;
+
+}
+
+el.classList.remove(
+"hit"
+);
+
+void el.offsetWidth;
+
+el.classList.add(
+"hit"
+);
+
+spawnPinballScorePop(
+point,
+scoreText
+);
+
+}
+
+/*
+
+* Both flippers flap several times in quick succession, like
+* they're scrambling to save a ball that's already past them,
+* instead of one calm kick. count/intervalMs let a caller ask
+* for more or fewer flicks.
+  */
+
+function pinballKickFlippers(
+count,
+intervalMs
+) {
+
+const flaps =
+count || 4;
+
+const gap =
+intervalMs || 150;
+
+function flap() {
+
+pinballFlipperLeft.classList.remove(
+"active"
+);
+
+pinballFlipperRight.classList.remove(
+"active"
+);
+
+void pinballFlipperLeft.offsetWidth;
+
+pinballFlipperLeft.classList.add(
+"active"
+);
+
+pinballFlipperRight.classList.add(
+"active"
+);
+
+}
+
+for (let i = 0; i < flaps; i++) {
+
+setTimeout(
+flap,
+i * gap
+);
+
+}
+
+}
+
+/*
+
+* The full launch -> bumpers -> tilt -> settle sequence.
+* Falls back to the plain flicker (playCoinFlickerFlash) if
+* the overlay markup isn't there or the person has reduced
+* motion on - onDone is always called exactly once either
+* way, so the caller doesn't need to know which path ran.
+  */
+
+function runPinballSequence(
+onDone
+) {
+
+const reducedMotion =
+window.matchMedia &&
+window.matchMedia(
+"(prefers-reduced-motion: reduce)"
+).matches;
+
+if (
+reducedMotion ||
+!pinballOverlay ||
+!pinballTable ||
+!pinballBall ||
+!pinballLaunchPoint ||
+!pinballFlipperLeft ||
+!pinballFlipperRight ||
+pinballBumperEls.some(el => !el)
+) {
+
+playCoinFlickerFlash(
+onDone
+);
+
+return;
+
+}
+
+pinballRollHiScore();
+
+pinballOverlay.classList.remove(
+"hidden"
+);
+
+requestAnimationFrame(
+() => {
+
+pinballOverlay.classList.add(
+"visible"
+);
+
+/*
+
+* One more frame so the overlay has actually
+* finished laying out before anything gets
+* measured - getBoundingClientRect on the same
+* frame the overlay becomes visible can still
+* read stale (pre-transition) positions.
+  */
+
+requestAnimationFrame(
+() => {
+
+const tableRect =
+pinballTable.getBoundingClientRect();
+
+const start =
+pinballCenterOf(pinballLaunchPoint, tableRect);
+
+const flipL =
+pinballCenterOf(pinballFlipperLeft, tableRect);
+
+const flipR =
+pinballCenterOf(pinballFlipperRight, tableRect);
+
+/*
+
+* A specific, chosen path rather than a generic one: hits
+* bumper A high on its front-right, bounces back off that
+* same spot toward bumper B's left side, drops straight down
+* off B toward bumper C's near-top, then - after the tilt -
+* falls straight down the middle to the flippers. Each point
+* is picked with pinballRingPointAt so it's still anchored to
+* the bumpers' real on-screen positions, just aimed at a
+* specific side of the ring instead of wherever a straight
+* line from the previous point happens to land.
+  */
+
+const bumperAPoint =
+pinballRingPointAt(pinballBumperEls[0], tableRect, 1, -1);
+
+const bumperBPoint =
+pinballRingPointAt(pinballBumperEls[1], tableRect, -1, 0);
+
+const bumperCPoint =
+pinballRingPointAt(pinballBumperEls[2], tableRect, 0.15, -1);
+
+/* Goes past the flippers and past the table's own bottom
+   edge - the table clips overflow, so once the ball crosses
+   that edge it genuinely disappears rather than resting
+   between the flippers. Paired with a fade in the step loop
+   below so it doesn't look like it just vanishes mid-frame. */
+
+const dropPoint =
+{
+x: bumperCPoint.x,
+y: tableRect.height + 24
+};
+
+const legs =
+[
+{
+from: start,
+to: bumperAPoint,
+control: {
+x: (start.x + bumperAPoint.x) / 2 - 18,
+y: Math.min(start.y, bumperAPoint.y) - 55
+},
+onArrive: () =>
+hitPinballBumper(pinballBumperEls[0], bumperAPoint, "+100")
+},
+{
+/* Exits bumper A from the same spot it hit, banking
+   over to bumper B's left side. */
+from: bumperAPoint,
+to: bumperBPoint,
+control: {
+x: (bumperAPoint.x + bumperBPoint.x) / 2 + 10,
+y: Math.min(bumperAPoint.y, bumperBPoint.y) - 40
+},
+onArrive: () =>
+hitPinballBumper(pinballBumperEls[1], bumperBPoint, "+250")
+},
+{
+/* Falls from that same spot on B down onto C's
+   near-top. */
+from: bumperBPoint,
+to: bumperCPoint,
+control: {
+x: (bumperBPoint.x + bumperCPoint.x) / 2,
+y: (bumperBPoint.y + bumperCPoint.y) / 2 - 8
+},
+onArrive: () => {
+
+hitPinballBumper(pinballBumperEls[2], bumperCPoint, "+500");
+
+pinballTable.classList.remove(
+"shake"
+);
+
+void pinballTable.offsetWidth;
+
+pinballTable.classList.add(
+"shake"
+);
+
+pinballTilt.classList.remove(
+"show"
+);
+
+void pinballTilt.offsetWidth;
+
+pinballTilt.classList.add(
+"show"
+);
+
+/* Flippers start scrambling right as the tilt hits,
+   a beat before the ball actually reaches them, and
+   flick several times instead of once. */
+
+pinballKickFlippers(4, 150);
+
+}
+},
+{
+/* Straight drop, not an arc - a real vertical control
+   point (same x on both ends) keeps this leg a
+   perfectly straight line down. It's marked fade:true
+   so the step loop below fades the ball out as it
+   crosses the flippers and drops past the table's
+   clipped edge, rather than it just resting in place. */
+from: bumperCPoint,
+to: dropPoint,
+control: {
+x: bumperCPoint.x,
+y: (bumperCPoint.y + dropPoint.y) / 2
+},
+fade: true,
+onArrive: () => {}
+}
+];
+
+const legDurationsMs =
+[550, 500, 500, 480];
+
+pinballBall.style.opacity =
+"1";
+
+let legIndex =
+0;
+
+let legStartTime =
+null;
+
+function step(
+timestamp
+) {
+
+if (legStartTime === null) {
+
+legStartTime =
+timestamp;
+
+}
+
+const leg =
+legs[legIndex];
+
+const duration =
+legDurationsMs[legIndex];
+
+const elapsed =
+timestamp - legStartTime;
+
+const t =
+Math.min(1, elapsed / duration);
+
+const point =
+pinballQuadraticPoint(
+leg.from,
+leg.control,
+leg.to,
+t
+);
+
+pinballBall.style.left =
+point.x + "px";
+
+pinballBall.style.top =
+point.y + "px";
+
+if (leg.fade) {
+
+/* Holds full opacity through the flippers, then fades
+   over the second half of the leg so it reads as
+   dropping through the gap rather than snapping away. */
+
+const fadeT =
+Math.max(0, (t - 0.4) / 0.6);
+
+pinballBall.style.opacity =
+String(1 - fadeT);
+
+}
+
+if (t < 1) {
+
+requestAnimationFrame(
+step
+);
+
+return;
+
+}
+
+leg.onArrive();
+
+legIndex++;
+
+if (legIndex >= legs.length) {
+
+setTimeout(
+() => {
+
+pinballFlipperLeft.classList.remove(
+"active"
+);
+
+pinballFlipperRight.classList.remove(
+"active"
+);
+
+pinballOverlay.classList.remove(
+"visible"
+);
+
+setTimeout(
+() => {
+
+pinballOverlay.classList.add(
+"hidden"
+);
+
+pinballBall.style.opacity =
+"0";
+
+pinballTable.classList.remove(
+"shake"
+);
+
+pinballTilt.classList.remove(
+"show"
+);
+
+onDone();
+
+},
+280
+);
+
+},
+480
+);
+
+return;
+
+}
+
+legStartTime =
+timestamp;
+
+requestAnimationFrame(
+step
+);
+
+}
+
+requestAnimationFrame(
+step
+);
+
+}
+);
+
+}
+);
+
+}
+
 function triggerCoinSlot() {
 
 /*
@@ -15105,8 +15753,8 @@ function triggerCoinSlot() {
 * Same guards used everywhere else a movie could open —
 * refuses to fire while something's already opening,
 * closing, or open, plus its own busy flag for the brief
-* window between the flash starting and the random card
-* actually getting clicked.
+* window between the pinball sequence starting and the
+* random card actually getting clicked.
   */
 
 if (
@@ -15134,34 +15782,14 @@ return;
 coinSlotBusy =
 true;
 
-if (coinFlickerOverlay) {
-
-coinFlickerOverlay.classList.remove(
-"active"
-);
-
-/*
-
-* Forces a reflow so the animation restarts cleanly
-* if this ever fires again shortly after finishing.
-  */
-
-void coinFlickerOverlay.offsetWidth;
-
-coinFlickerOverlay.classList.add(
-"active"
-);
-
-}
-
-setTimeout(
+runPinballSequence(
 () => {
 
 /*
 
 * Re-queried here rather than reusing the NodeList
 * captured above, in case a render happened during
-* the flash (reservations loading, etc.) — picks
+* the sequence (reservations loading, etc.) — picks
 * from whatever's actually on screen right now.
   */
 
@@ -15187,8 +15815,7 @@ randomCard.click();
 coinSlotBusy =
 false;
 
-},
-700
+}
 );
 
 }
