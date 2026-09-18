@@ -946,11 +946,99 @@ SPECIAL FILTERS
 /* =========================================================
 WISHLIST ADD PANEL
 =========================================================
-Only ever shown above the shelf while the reservation
-filter is set to "Out of Stock" (see toggleWishlistAddPanel
-in app.js) - hidden the rest of the time via the .hidden
-class already on it in the HTML.
+Full panel is shown open above the shelf while the
+reservation filter is set to "Out of Stock". On a specific
+person's reservation view, .wishlist-add-toggle-button shows
+instead - a small pill that expands this same panel on tap,
+so it doesn't dominate what someone sees first when checking
+their own shelf. See toggleWishlistAddPanel in app.js.
 ========================================================= */
+
+.wishlist-add-toggle-button {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  margin: 0 0 16px;
+
+  padding: 8px 16px;
+
+  border: 1px solid var(--gold-dark);
+
+  border-radius: 999px;
+
+  background: rgba(251, 205, 54, 0.06);
+
+  color: var(--gold);
+
+  font-family: 'VT323', monospace;
+
+  font-size: 17px;
+
+  letter-spacing: 0.02em;
+
+  cursor: pointer;
+}
+
+.wishlist-add-toggle-button:hover {
+  background: rgba(251, 205, 54, 0.16);
+
+  border-color: var(--gold);
+}
+
+.wishlist-add-toggle-button.hidden {
+  display: none;
+}
+
+.wishlist-add-panel-header {
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: space-between;
+
+  gap: 12px;
+}
+
+.wishlist-add-panel-header .wishlist-add-heading {
+  margin: 0 0 4px;
+}
+
+.wishlist-add-collapse-button {
+  flex-shrink: 0;
+
+  width: 28px;
+  height: 28px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: rgba(251, 205, 54, 0.12);
+
+  color: var(--gold);
+
+  font-size: 20px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+.wishlist-add-collapse-button:hover {
+  background: rgba(251, 205, 54, 0.22);
+}
+
+.wishlist-add-collapse-button.hidden {
+  display: none;
+}
 
 .wishlist-add-panel {
   margin: 0 0 26px;
