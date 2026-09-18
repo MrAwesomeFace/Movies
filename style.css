@@ -8188,6 +8188,328 @@ body.theme-arcade .coin-slot-button.lit {
   pointer-events: none;
 }
 
+/* =========================================================
+   PINBALL COIN-SLOT EASTER EGG (arcade theme only)
+   =========================================================
+   Plays instead of the flicker flash above when the coin
+   slot is clicked - see runPinballSequence() in app.js,
+   which measures the bumpers'/flippers' real rendered
+   positions and drives the ball between them, so nothing
+   here needs to match a guessed pixel path.
+========================================================= */
+
+.pinball-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 210;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(2, 1, 6, 0.72);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.pinball-overlay.hidden {
+  display: none;
+}
+
+.pinball-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.pinball-panel {
+  width: min(88vw, 360px);
+  padding: 10px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, #17131f, #0c0a12);
+  border: 1px solid #322a44;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+}
+
+.pinball-cabinet-header {
+  margin: 0 0 8px;
+  padding: 8px 10px 7px;
+  border-radius: 10px;
+  border: 1px solid var(--gold-dark);
+  background: rgba(251, 205, 54, 0.08);
+  text-align: center;
+}
+
+.pinball-cabinet-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.pinball-cabinet-logo {
+  flex-shrink: 0;
+  filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.7));
+}
+
+.pinball-cabinet-title-text {
+  font-family: 'VT323', monospace;
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  word-spacing: -6px;
+  color: var(--gold);
+  text-shadow:
+    2px 3px 1px rgba(0, 0, 0, 0.85),
+    3px 5px 8px rgba(0, 0, 0, 0.55);
+}
+
+.pinball-cabinet-rewind {
+  display: inline-block;
+  font-family: 'Iceland', sans-serif;
+  font-size: 23px;
+  transform: skewX(-26deg);
+}
+
+.pinball-hiscore {
+  margin-top: 4px;
+  font-family: 'VT323', monospace;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  color: #38bdff;
+  text-shadow: 0 0 6px rgba(56, 189, 255, 0.6);
+}
+
+.pinball-hiscore span {
+  color: var(--gold);
+  text-shadow: 0 0 6px rgba(251, 205, 54, 0.6);
+}
+
+.pinball-table {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 2px solid var(--gold-dark);
+  background-color: #05030a;
+  background-image:
+    linear-gradient(rgba(56, 189, 255, 0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 189, 255, 0.16) 1px, transparent 1px);
+  background-size: 26px 26px;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.7);
+}
+
+.pinball-table.shake {
+  animation: pinball-shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+@keyframes pinball-shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(3px, -2px, 0); }
+  30%, 50%, 70% { transform: translate3d(-6px, 2px, 0); }
+  40%, 60% { transform: translate3d(6px, -2px, 0); }
+}
+
+.pinball-bumper {
+  position: absolute;
+  width: 13%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle at 35% 30%, #b06bff, #6d28d9 70%);
+  border: none;
+  /* Circle, then a gap the color of the table (so it reads as
+     empty space), then a ring around the outside — the ring is
+     what the ball is meant to visibly strike. */
+  box-shadow:
+    0 0 0 4px #05030a,
+    0 0 0 7px #38bdff,
+    0 0 10px rgba(56, 189, 255, 0.4);
+}
+
+#pinball-bumper-a { top: 30%; left: 27%; }
+#pinball-bumper-b { top: 20%; left: 73%; }
+#pinball-bumper-c { top: 47%; left: 50%; }
+
+.pinball-bumper.hit {
+  animation: pinball-bumper-hit 0.3s ease-out;
+}
+
+@keyframes pinball-bumper-hit {
+  0% {
+    box-shadow:
+      0 0 0 4px #05030a,
+      0 0 0 7px #38bdff,
+      0 0 10px rgba(56, 189, 255, 0.4);
+    transform: translate(-50%, -50%) scale(1);
+  }
+  35% {
+    box-shadow:
+      0 0 0 4px #05030a,
+      0 0 0 9px #38bdff,
+      0 0 30px rgba(56, 189, 255, 0.95),
+      0 0 44px rgba(176, 107, 255, 0.7);
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+  100% {
+    box-shadow:
+      0 0 0 4px #05030a,
+      0 0 0 7px #38bdff,
+      0 0 10px rgba(56, 189, 255, 0.4);
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.pinball-launch-point {
+  position: absolute;
+  bottom: 14%;
+  left: 50%;
+  width: 1px;
+  height: 1px;
+}
+
+.pinball-ball {
+  position: absolute;
+  width: 4.5%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, #fff, #cfd6e6 45%, #838ba8 100%);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.55), 0 2px 4px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  z-index: 5;
+  will-change: left, top;
+}
+
+.pinball-flippers {
+  position: absolute;
+  bottom: 8%;
+  left: 0;
+  right: 0;
+  height: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 11%;
+}
+
+.pinball-flipper {
+  width: 21%;
+  height: 100%;
+  background: linear-gradient(180deg, var(--gold), var(--gold-dark));
+  box-shadow: 0 0 10px rgba(251, 205, 54, 0.35);
+}
+
+/* Tapered like a real flipper: thick at the pivot end (the
+   outside, toward the table wall), narrowing to a point at
+   the tip (the inside, toward the center gap). */
+
+.pinball-flipper.left {
+  clip-path: polygon(0% 0%, 100% 32%, 100% 68%, 0% 100%);
+}
+
+.pinball-flipper.right {
+  clip-path: polygon(0% 32%, 100% 0%, 100% 100%, 0% 68%);
+}
+
+.pinball-flipper.left {
+  transform: rotate(18deg);
+  transform-origin: left center;
+}
+
+.pinball-flipper.right {
+  transform: rotate(-18deg);
+  transform-origin: right center;
+}
+
+.pinball-flipper.left.active {
+  animation: pinball-flipper-kick-left 0.22s ease-out;
+}
+
+.pinball-flipper.right.active {
+  animation: pinball-flipper-kick-right 0.22s ease-out;
+}
+
+@keyframes pinball-flipper-kick-left {
+  0% { transform: rotate(18deg); filter: brightness(1); }
+  35% { transform: rotate(-6deg); filter: brightness(1.8); }
+  100% { transform: rotate(18deg); filter: brightness(1); }
+}
+
+@keyframes pinball-flipper-kick-right {
+  0% { transform: rotate(-18deg); filter: brightness(1); }
+  35% { transform: rotate(6deg); filter: brightness(1.8); }
+  100% { transform: rotate(-18deg); filter: brightness(1); }
+}
+
+.pinball-score-pop {
+  position: absolute;
+  font-family: 'VT323', monospace;
+  font-size: 18px;
+  color: #38bdff;
+  text-shadow: 0 0 6px rgba(56, 189, 255, 0.8);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 6;
+}
+
+.pinball-score-pop.pop {
+  animation: pinball-score-pop-anim 0.85s ease-out forwards;
+}
+
+@keyframes pinball-score-pop-anim {
+  0% { opacity: 0; transform: translateY(0) scale(0.8); }
+  18% { opacity: 1; transform: translateY(-6px) scale(1.05); }
+  100% { opacity: 0; transform: translateY(-34px) scale(1); }
+}
+
+.pinball-tilt {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 8;
+  opacity: 0;
+}
+
+.pinball-tilt.show {
+  animation: pinball-tilt-flicker 1s steps(1, end) both;
+}
+
+.pinball-tilt span {
+  padding: 8px 22px;
+  border: 4px solid #ff1428;
+  border-radius: 6px;
+  background: rgba(5, 3, 10, 0.6);
+  font-family: 'Anton', sans-serif;
+  font-size: 19vw;
+  color: #ff1428;
+  letter-spacing: 0.02em;
+  -webkit-text-stroke: 1.5px #7a0000;
+  text-shadow:
+    3px 3px 0 #7a0000,
+    6px 6px 0 #4a0000,
+    0 0 18px rgba(255, 20, 40, 0.85),
+    0 0 36px rgba(255, 20, 40, 0.55);
+  transform: rotate(-4deg);
+}
+
+@media (min-width: 380px) {
+  .pinball-tilt span {
+    font-size: 68px;
+  }
+}
+
+@keyframes pinball-tilt-flicker {
+  0%   { opacity: 0; }
+  8%   { opacity: 1; }
+  16%  { opacity: 0.2; }
+  24%  { opacity: 1; }
+  34%  { opacity: 0.3; }
+  42%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
 /*
  * Pi Easter egg button — quiet by design, matching the
  * coin slot / marquee bulb pattern of things that reward
