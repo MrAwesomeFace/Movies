@@ -533,7 +533,8 @@ aria-label="Clear search"
     </div>
 
     <p class="wishlist-add-subtext" id="wishlist-add-subtext">
-      Search and add wishlist items here.
+      Search TMDB and add it here as a reminder to buy or
+      rent - it won't touch your real collection.
     </p>
 
     <div class="wishlist-add-controls">
@@ -630,6 +631,70 @@ aria-label="Clear search"
   -->
 
   <div id="coin-flicker-overlay" aria-hidden="true"></div>
+
+  <!--
+    PINBALL COIN-SLOT EASTER EGG
+
+    Plays instead of the plain flicker flash above when the
+    coin slot is clicked (arcade theme only) - ball launches
+    from the bottom, bounces the three bumpers, the table
+    tilts, and it settles between the flippers before the
+    usual random card gets picked. See triggerCoinSlot() /
+    runPinballSequence() in app.js — it measures the bumpers'
+    and flippers' real on-screen positions rather than a
+    hand-guessed animation path, so the ball always actually
+    lands on them regardless of screen size.
+  -->
+
+  <div id="pinball-overlay" class="pinball-overlay hidden" aria-hidden="true">
+
+    <div class="pinball-panel">
+
+      <div class="pinball-cabinet-header">
+
+        <div class="pinball-cabinet-title">
+
+          <svg
+            class="pinball-cabinet-logo"
+            width="22"
+            height="22"
+            viewBox="0 0 32 32"
+            aria-hidden="true"
+          >
+            <path d="M16 16 L28 6 L28 26 Z" fill="#FBCD36"></path>
+            <path d="M4 16 L16 6 L16 26 Z" fill="#FBCD36"></path>
+          </svg>
+
+          <span class="pinball-cabinet-title-text">Mr. Movies <span class="pinball-cabinet-rewind">Rewind</span></span>
+
+        </div>
+
+        <div class="pinball-hiscore">HI SCORE <span id="pinball-hiscore-value">000000</span></div>
+
+      </div>
+
+      <div class="pinball-table" id="pinball-table">
+
+        <div class="pinball-bumper" id="pinball-bumper-a"></div>
+        <div class="pinball-bumper" id="pinball-bumper-b"></div>
+        <div class="pinball-bumper" id="pinball-bumper-c"></div>
+
+        <div class="pinball-launch-point" id="pinball-launch-point"></div>
+
+        <div class="pinball-ball" id="pinball-ball"></div>
+
+        <div class="pinball-flippers">
+          <div class="pinball-flipper left" id="pinball-flipper-left"></div>
+          <div class="pinball-flipper right" id="pinball-flipper-right"></div>
+        </div>
+
+        <div class="pinball-tilt" id="pinball-tilt"><span>TILT</span></div>
+
+      </div>
+
+    </div>
+
+  </div>
 
   <!--
     Marquee lights' pop flash — same inert-until-.active
