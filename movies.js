@@ -15413,6 +15413,28 @@ const movies = [
     "rated": "R"
   },
   {
+    "title": "Previn and the Pittsburgh",
+    "tmdbTitle": "Previn and the Pittsburgh",
+    "type": "tv",
+    "tmdbId": 49742,
+    "poster": "https://image.tmdb.org/t/p/w500/vEj7xjUVZ63wdDYjjJXndIIKc2e.jpg",
+    "year": "1977",
+    "runtime": "",
+    "genre": "Documentary",
+    "rated": "NR",
+    "director": "",
+    "cast": "",
+    "synopsis": "Renowned composer, conductor, and pianist Andre Previn welcomes one or more musical guests for conversation and performance, either accompanied by Mr. Previn on piano or in concert with the Pittsburgh Symphony Orchestra. Produced by WQED and syndicated nationally on PBS, the series was notable among musical performance programs for its deft camera work and editing. The episode The Music That Made the Movies was nominated for an Emmy for Outstanding Music Direction.",
+    "physical": [
+      "DVD"
+    ],
+    "digital": [],
+    "categories": [
+      "christmas",
+      "animated"
+    ]
+  },
+  {
     "title": "Pride and Glory",
     "tmdbTitle": "Pride and Glory",
     "type": "movie",
