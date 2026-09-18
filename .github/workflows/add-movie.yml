@@ -888,9 +888,3 @@ jobs:
 
           git commit -m "Add/update movie: ${{ inputs.tmdb_id }}"
           git push
-
-      - name: Remove from wishlist if present
-        run: |
-          curl -s -X DELETE \
-            "https://movie-reservations.iconedge.workers.dev/wishlist/${{ inputs.tmdb_id }}" \
-            || true
