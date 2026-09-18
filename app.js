@@ -85,6 +85,48 @@ let tournamentMatchupFirstSeenAt =
 
 /*
 
+* Deliberation timing should only count time someone was
+* actually looking at the matchup, not wall-clock time - if the
+* tab/app gets backgrounded (switched apps, screen locked,
+* walked away) mid-decision, that dead time was getting counted
+* as "deliberation" and blowing up Overall Time / Longest Battle
+* with numbers nobody actually spent thinking. This tracks total
+* hidden time in a running accumulator, plus a snapshot of that
+* accumulator taken when each matchup is first seen, so at pick
+* time the hidden time that occurred DURING that specific
+* matchup's window can be subtracted back out.
+  */
+
+let tournamentHiddenMsTotal =
+0;
+
+let tournamentHiddenSince =
+null;
+
+document.addEventListener(
+"visibilitychange",
+() => {
+
+if (document.hidden) {
+
+tournamentHiddenSince =
+Date.now();
+
+} else if (tournamentHiddenSince) {
+
+tournamentHiddenMsTotal +=
+Date.now() - tournamentHiddenSince;
+
+tournamentHiddenSince =
+null;
+
+}
+
+}
+);
+
+/*
+
 * Two heart shapes, shared by the card badge, the ripple
 * echoes, and the filter flood — smooth for the default
 * theme, a blocky pixel-grid version for arcade. Built as
@@ -5112,6 +5154,75 @@ movie.title
 
 modalFormats.appendChild(
 removeButton
+);
+
+}
+
+/*
+
+* An OWNED movie that's still sitting on the wishlist too
+* (the starburst-badge case on the shelf) - formats/cast/etc
+* all render normally above since this is a real, owned movie,
+* but a small note gets appended so there's still a way to
+* clear the wishlist reminder without needing to dig up the
+* Out of Stock view again.
+  */
+
+if (
+!movie.isWishlistItem &&
+!movie.isEmptyReservationPlaceholder &&
+wishlist.some(
+item =>
+String(item.tmdb_id) ===
+String(getMovieId(movie))
+)
+) {
+
+const stillOnWishlistNote =
+document.createElement(
+"div"
+);
+
+stillOnWishlistNote.className =
+"out-of-stock-back-note";
+
+stillOnWishlistNote.textContent =
+"You now own this - still marked on your wishlist.";
+
+modalFormats.appendChild(
+stillOnWishlistNote
+);
+
+const clearWishlistButton =
+document.createElement(
+"button"
+);
+
+clearWishlistButton.type =
+"button";
+
+clearWishlistButton.className =
+"wishlist-remove-button";
+
+clearWishlistButton.textContent =
+"Clear from wishlist";
+
+clearWishlistButton.addEventListener(
+"click",
+event => {
+
+event.stopPropagation();
+
+removeFromWishlist(
+getMovieId(movie),
+movie.title
+);
+
+}
+);
+
+modalFormats.appendChild(
+clearWishlistButton
 );
 
 }
@@ -16017,7 +16128,10 @@ matchup => {
 if (!tournamentMatchupFirstSeenAt[matchup.id]) {
 
 tournamentMatchupFirstSeenAt[matchup.id] =
-Date.now();
+{
+seen_at: Date.now(),
+hidden_ms_at_start: tournamentHiddenMsTotal
+};
 
 }
 
@@ -16137,7 +16251,11 @@ tournamentMatchupFirstSeenAt[matchupId];
 
 const deliberationMs =
 firstSeenAt
-? Date.now() - firstSeenAt
+? Math.max(
+0,
+(Date.now() - firstSeenAt.seen_at) -
+(tournamentHiddenMsTotal - firstSeenAt.hidden_ms_at_start)
+)
 : null;
 
 const response =
