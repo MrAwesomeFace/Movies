@@ -497,24 +497,43 @@ aria-label="Clear search"
   <!--
     WISHLIST ADD PANEL
 
-    Only ever shown when the reservation filter is set to
-    "Out of Stock" (see toggleWishlistAddPanel in app.js) -
-    hidden by default here so it never flashes visible on a
-    normal page load before JS has run.
+    Shown open (not collapsed) when the reservation filter is
+    "Out of Stock" - this is where everyone browses/manages the
+    whole wishlist. On a specific person's reservation view, the
+    small toggle button below is shown instead, and this panel
+    only opens once they tap it - see toggleWishlistAddPanel in
+    app.js. Hidden by default here so nothing flashes visible on
+    a normal page load before JS has run.
   -->
+
+  <button
+    type="button"
+    id="wishlist-add-toggle"
+    class="wishlist-add-toggle-button hidden"
+  >+ Add to wishlist</button>
 
   <div
     id="wishlist-add-panel"
     class="wishlist-add-panel hidden"
   >
 
-    <h2 class="wishlist-add-heading">
-      Add something you don't own yet
-    </h2>
+    <div class="wishlist-add-panel-header">
 
-    <p class="wishlist-add-subtext">
-      Search TMDB and add it here as a reminder to buy or
-      rent - it won't touch your real collection.
+      <h2 class="wishlist-add-heading">
+        Add something you don't own yet
+      </h2>
+
+      <button
+        type="button"
+        id="wishlist-add-collapse-button"
+        class="wishlist-add-collapse-button hidden"
+        aria-label="Collapse this panel"
+      >&times;</button>
+
+    </div>
+
+    <p class="wishlist-add-subtext" id="wishlist-add-subtext">
+      Search and add wishlist items here.
     </p>
 
     <div class="wishlist-add-controls">
