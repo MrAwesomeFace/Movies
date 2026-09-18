@@ -1251,6 +1251,84 @@ the general grid.
   text-transform: uppercase;
 }
 
+/*
+ * Shown instead of the gray-out/out-of-stock-banner treatment
+ * whenever a wishlist item's real owned copy has landed in
+ * movies.js - the card underneath is a completely normal,
+ * full-color one (see createNowInStockCard), this is a
+ * genuine spiky starburst badge stuck in the corner, not a
+ * banner stretched across the poster like the out-of-stock
+ * treatment - a real sticker, not another stripe.
+ */
+
+.now-in-stock-starburst {
+  position: absolute;
+
+  left: 50%;
+  top: 48%;
+
+  width: 88%;
+
+  aspect-ratio: 1;
+
+  transform: translate(-50%, -50%) rotate(-10deg);
+
+  background:
+    linear-gradient(
+      135deg,
+      #ffe27a,
+      #f5c400 55%,
+      #d99a00
+    );
+
+  clip-path:
+    polygon(
+      50% 0%, 58.3% 19.1%, 75% 6.7%, 72.6% 27.4%,
+      93.3% 25%, 80.9% 41.7%, 100% 50%, 80.9% 58.3%,
+      93.3% 75%, 72.6% 72.6%, 75% 93.3%, 58.3% 80.9%,
+      50% 100%, 41.7% 80.9%, 25% 93.3%, 27.4% 72.6%,
+      6.7% 75%, 19.1% 58.3%, 0% 50%, 19.1% 41.7%,
+      6.7% 25%, 27.4% 27.4%, 25% 6.7%, 41.7% 19.1%
+    );
+
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.65);
+
+  z-index: 4;
+
+  pointer-events: none;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+}
+
+.now-in-stock-starburst span {
+  display: block;
+
+  color: #7a1a1a;
+
+  font-family: 'VT323', monospace;
+
+  font-size: 22px;
+
+  line-height: 1.05;
+
+  font-weight: 400;
+
+  letter-spacing: 0.5px;
+
+  text-transform: uppercase;
+
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+
+  padding: 0 14%;
+}
+
 .out-of-stock-back-note {
   padding: 10px 12px;
 
