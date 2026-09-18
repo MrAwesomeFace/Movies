@@ -278,6 +278,15 @@ document.getElementById("reservation-filter");
 const wishlistAddPanel =
 document.getElementById("wishlist-add-panel");
 
+const wishlistAddToggleButton =
+document.getElementById("wishlist-add-toggle");
+
+const wishlistAddCollapseButton =
+document.getElementById("wishlist-add-collapse-button");
+
+const wishlistAddSubtext =
+document.getElementById("wishlist-add-subtext");
+
 const wishlistSearchInput =
 document.getElementById("wishlist-search-input");
 
@@ -286,6 +295,19 @@ document.getElementById("wishlist-search-results");
 
 const wishlistAddStatus =
 document.getElementById("wishlist-add-status");
+
+/*
+
+* Tracks whether the person has tapped open the (normally
+* collapsed) add panel on THEIR OWN reservation view. Reset to
+* false any time the reservation filter changes, so switching
+* to a different person - or away from a person view entirely -
+* always starts collapsed again rather than staying open from
+* whoever looked last.
+  */
+
+let wishlistAddPanelExpanded =
+false;
 
 const genreFilter =
 document.getElementById("genre-filter");
@@ -12825,6 +12847,16 @@ reservationFilter.classList.toggle(
 event.target.value !== "all"
 );
 
+/*
+ * Always start collapsed on whatever view comes next -
+ * otherwise leaving it open on Angie's view and then
+ * switching to Bryon's would carry the panel over open,
+ * which defeats the point of it being tucked away.
+ */
+
+wishlistAddPanelExpanded =
+false;
+
 if (randomMode) {
 
 generateRandomMovies();
@@ -12832,6 +12864,48 @@ generateRandomMovies();
 }
 
 renderMovies();
+
+}
+);
+
+}
+
+// =========================================================
+// WISHLIST ADD PANEL - EXPAND / COLLAPSE (person views only)
+// =========================================================
+
+if (wishlistAddToggleButton) {
+
+wishlistAddToggleButton.addEventListener(
+"click",
+() => {
+
+wishlistAddPanelExpanded =
+true;
+
+toggleWishlistAddPanel();
+
+if (wishlistSearchInput) {
+
+wishlistSearchInput.focus();
+
+}
+
+}
+);
+
+}
+
+if (wishlistAddCollapseButton) {
+
+wishlistAddCollapseButton.addEventListener(
+"click",
+() => {
+
+wishlistAddPanelExpanded =
+false;
+
+toggleWishlistAddPanel();
 
 }
 );
@@ -13328,6 +13402,37 @@ data.entry
 
 }
 
+/*
+
+* Adding from a specific person's own reservation view is
+* the shortcut this whole panel exists for there - it
+* doesn't just wishlist the title, it reserves it for that
+* person in the same click, whether or not the title was
+* already on the shared wishlist from someone else.
+  */
+
+const isPersonView =
+RESERVATION_PEOPLE.includes(
+activeFilters.reservation
+);
+
+let reservedForPerson =
+null;
+
+if (isPersonView && data.entry) {
+
+reservedForPerson =
+activeFilters.reservation;
+
+await addReservation(
+wishlistItemToMovie(
+data.entry
+),
+reservedForPerson
+);
+
+}
+
 addButton.textContent =
 data.already_on_wishlist
 ? "Already added"
@@ -13336,13 +13441,67 @@ data.already_on_wishlist
 if (wishlistAddStatus) {
 
 wishlistAddStatus.textContent =
-data.already_on_wishlist
+reservedForPerson
+? `"${result.title}" was added to the wishlist and reserved for ${reservedForPerson}.`
+: data.already_on_wishlist
 ? `"${result.title}" is already on the wishlist.`
 : `"${result.title}" was added to the wishlist.`;
 
 }
 
 renderMovies();
+
+/*
+ * Clear the search itself back out after a successful add -
+ * previously the typed query and result list (including this
+ * now-stale "Added" row) just sat there until someone
+ * manually hit the × to clear it. A brief pause first so the
+ * "Added ✓" confirmation is actually seen before it vanishes.
+ */
+
+setTimeout(
+() => {
+
+if (wishlistSearchInput) {
+
+wishlistSearchInput.value =
+"";
+
+}
+
+const clearButton =
+document.getElementById(
+"wishlist-search-clear-button"
+);
+
+if (clearButton) {
+
+clearButton.classList.add(
+"hidden"
+);
+
+}
+
+clearWishlistSearchResults();
+
+},
+900
+);
+
+/*
+ * Collapse the panel back down after a successful add from
+ * a person's view - it's meant to be a quick in-and-out
+ * action, not something that stays parked open.
+ */
+
+if (reservedForPerson) {
+
+wishlistAddPanelExpanded =
+false;
+
+toggleWishlistAddPanel();
+
+}
 
 } catch (error) {
 
@@ -13439,10 +13598,117 @@ return;
 
 }
 
+const isOutOfStockView =
+activeFilters.reservation === "Out of Stock";
+
+const isPersonView =
+RESERVATION_PEOPLE.includes(
+activeFilters.reservation
+);
+
+/*
+
+* Out of Stock: the panel is always open, no toggle/collapse
+* needed - this is the shared, everybody-browses-it view.
+*
+* A specific person's view: collapsed behind the small toggle
+* button until tapped open, so a person checking their own
+* shelf doesn't get the search panel shoved in their face
+* first thing. Adding something here also reserves it for
+* THIS person - see addToWishlist().
+*
+* Anything else (All Movies, Staff Picks, etc.): neither one
+* shows, and the expanded state resets so a later visit to a
+* person's view starts collapsed again.
+  */
+
+if (isOutOfStockView) {
+
+wishlistAddPanel.classList.remove(
+"hidden"
+);
+
+if (wishlistAddToggleButton) {
+
+wishlistAddToggleButton.classList.add(
+"hidden"
+);
+
+}
+
+if (wishlistAddCollapseButton) {
+
+wishlistAddCollapseButton.classList.add(
+"hidden"
+);
+
+}
+
+if (wishlistAddSubtext) {
+
+wishlistAddSubtext.textContent =
+"Search TMDB and add it here as a reminder to buy or rent - it won't touch your real collection.";
+
+}
+
+} else if (isPersonView) {
+
 wishlistAddPanel.classList.toggle(
 "hidden",
-activeFilters.reservation !== "Out of Stock"
+!wishlistAddPanelExpanded
 );
+
+if (wishlistAddToggleButton) {
+
+wishlistAddToggleButton.classList.toggle(
+"hidden",
+wishlistAddPanelExpanded
+);
+
+}
+
+if (wishlistAddCollapseButton) {
+
+wishlistAddCollapseButton.classList.toggle(
+"hidden",
+!wishlistAddPanelExpanded
+);
+
+}
+
+if (wishlistAddSubtext) {
+
+wishlistAddSubtext.textContent =
+`Search TMDB and add it here - it'll go on the wishlist and reserve it for ${activeFilters.reservation} in one step.`;
+
+}
+
+} else {
+
+wishlistAddPanel.classList.add(
+"hidden"
+);
+
+if (wishlistAddToggleButton) {
+
+wishlistAddToggleButton.classList.add(
+"hidden"
+);
+
+}
+
+if (wishlistAddCollapseButton) {
+
+wishlistAddCollapseButton.classList.add(
+"hidden"
+);
+
+}
+
+wishlistAddPanelExpanded =
+false;
+
+}
 
 }
 
