@@ -357,6 +357,243 @@ SEARCH
 
 
 /* =========================================================
+ADVANCED SEARCH PANEL
+
+Off by default (the + button costs nothing when closed).
+Reuses .rated-filter-row/.rated-filter-box for every checkbox
+inside it, including a second set of Rated checkboxes that
+share the exact same activeFilters.rated array (and the exact
+same .rated-filter-checkbox class) as the Rated popover, so
+the two stay in sync automatically - see
+syncRatedFilterCheckboxes() in app.js.
+========================================================= */
+
+.advanced-search-toggle {
+  position: relative;
+
+  width: 44px;
+  height: 100%;
+
+  border: 1px solid var(--gold-dark);
+
+  border-radius: 12px;
+
+  background: var(--surface);
+
+  color: var(--gold);
+
+  font-size: 20px;
+  font-weight: 600;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-shrink: 0;
+}
+
+.advanced-search-toggle.active {
+  border-color: var(--gold);
+
+  background: rgba(251, 205, 54, 0.12);
+}
+
+.advanced-search-count {
+  position: absolute;
+
+  top: -6px;
+  right: -6px;
+
+  background: var(--gold);
+
+  color: #111;
+
+  border-radius: 8px;
+
+  padding: 1px 5px;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.advanced-search-count.hidden {
+  display: none;
+}
+
+.advanced-search-panel {
+  position: absolute;
+
+  top: calc(100% + 8px);
+
+  left: 0;
+  right: 0;
+
+  background: var(--surface);
+
+  border: 1px solid var(--gold-dark);
+
+  border-radius: 12px;
+
+  padding: 14px;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.5);
+
+  z-index: 20;
+}
+
+.advanced-search-panel.hidden {
+  display: none;
+}
+
+.advanced-search-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 10px;
+
+  color: var(--gold);
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.advanced-search-clear {
+  background: none;
+
+  border: none;
+
+  color: #8a8a8a;
+
+  font-size: 12px;
+
+  cursor: pointer;
+
+  padding: 2px 4px;
+}
+
+.advanced-search-clear:hover {
+  color: var(--gold);
+}
+
+.advanced-search-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 10px 14px;
+
+  margin-bottom: 12px;
+}
+
+.advanced-search-field {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+
+  font-size: 12px;
+
+  color: #a8a8a8;
+}
+
+.advanced-search-field input[type="text"],
+.advanced-search-field input[type="number"] {
+  padding: 8px 10px;
+
+  border: 1px solid var(--gold-dark);
+
+  border-radius: 8px;
+
+  outline: none;
+
+  background: var(--background);
+  color: var(--text);
+
+  font-size: 14px;
+
+  width: 100%;
+}
+
+.advanced-search-field input:focus {
+  border-color: var(--gold);
+
+  box-shadow:
+    0 0 0 2px rgba(251, 205, 54, 0.15);
+}
+
+.advanced-search-range-inputs {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+}
+
+.advanced-search-range-inputs input {
+  min-width: 0;
+}
+
+.advanced-search-range-sep {
+  color: #666;
+
+  flex-shrink: 0;
+}
+
+.advanced-search-checkbox-section {
+  margin-bottom: 10px;
+}
+
+.advanced-search-checkbox-section:last-child {
+  margin-bottom: 0;
+}
+
+.advanced-search-subheading {
+  display: block;
+
+  margin-bottom: 6px;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+
+  color: #8a8a8a;
+}
+
+.advanced-search-checkbox-row {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 2px 10px;
+}
+
+.advanced-search-checkbox-row .rated-filter-row {
+  padding: 5px 4px;
+}
+
+@media (max-width: 599px) {
+
+  .advanced-search-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* =========================================================
 RATED FILTER (search bar popover)
 =========================================================
 A compact button next to the search input — no permanent
@@ -7925,6 +8162,62 @@ body.theme-arcade .rated-filter-row:has(input:checked) {
 body.theme-arcade .rated-filter-clear:hover {
 
   color: #00fff2;
+}
+
+body.theme-arcade .advanced-search-toggle {
+
+  color: #00fff2;
+
+  border-color: rgba(0, 255, 242, 0.55);
+
+  box-shadow:
+    0 0 4px 1px rgba(0, 255, 242, 0.5),
+    0 0 10px 2px rgba(0, 255, 242, 0.25);
+}
+
+body.theme-arcade .advanced-search-toggle.active {
+
+  border-color: #00fff2;
+
+  background: rgba(0, 255, 242, 0.12);
+
+  box-shadow:
+    0 0 5px 1px rgba(0, 255, 242, 0.8),
+    0 0 14px 3px rgba(0, 255, 242, 0.5);
+}
+
+body.theme-arcade .advanced-search-count {
+
+  background: #00fff2;
+
+  color: #08080a;
+}
+
+body.theme-arcade .advanced-search-panel {
+
+  border-color: rgba(0, 255, 242, 0.55);
+
+  box-shadow:
+    0 0 5px 1px rgba(0, 255, 242, 0.5),
+    0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+body.theme-arcade .advanced-search-header {
+
+  color: #00fff2;
+}
+
+body.theme-arcade .advanced-search-clear:hover {
+
+  color: #00fff2;
+}
+
+body.theme-arcade .advanced-search-field input:focus {
+
+  border-color: #00fff2;
+
+  box-shadow:
+    0 0 0 2px rgba(0, 255, 242, 0.2);
 }
 
 body.theme-arcade .icon-button {
