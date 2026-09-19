@@ -4373,7 +4373,7 @@ const movies = [
   {
     "title": "Dark Knight Rises, The",
     "tmdbTitle": "The Dark Knight Rises",
-    "type": "movi
+    "type": "movie",
     "tmdbId": 49026,
     "poster": "https://image.tmdb.org/t/p/w500/hr0L2aueqlP2BYUblTTjmtn0hw4.jpg",
     "year": "2012",
