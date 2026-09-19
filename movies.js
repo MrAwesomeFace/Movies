@@ -13958,6 +13958,24 @@ const movies = [
     "rated": "R"
   },
   {
+    "title": "My Fair Lady",
+    "tmdbTitle": "My Fair Lady",
+    "type": "movie",
+    "tmdbId": 11113,
+    "poster": "https://image.tmdb.org/t/p/w500/bTXVc29lGSNclf94VIZ49W4gGKl.jpg",
+    "year": "1964",
+    "runtime": "173m",
+    "genre": "Comedy / Romance / Music / Rom-Com",
+    "rated": "G",
+    "director": "George Cukor",
+    "cast": "Audrey Hepburn, Rex Harrison, Stanley Holloway, Wilfrid Hyde-White, Gladys Cooper, Jeremy Brett",
+    "synopsis": "A snobbish phonetics professor agrees to a wager that he can take a flower girl and make her presentable in high society.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ]
+  },
+  {
     "title": "Naked Gun, The",
     "tmdbTitle": "The Naked Gun",
     "type": "movie",
