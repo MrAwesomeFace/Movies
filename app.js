@@ -383,7 +383,26 @@ genre: null,
 category: null,
 animated: "hide",
 reservation: "all",
-rated: []
+rated: [],
+/*
+
+* Advanced search panel state - the "+" next to the search
+* box. actor/director are substring text matches; the year/
+* runtime pairs are inclusive ranges (null = no bound on that
+* side); tags is a multi-select across genres AND categories
+* together (OR'd internally, same as Rated), separate from
+* the single-select Genre dropdown/category buttons up top
+* since those stay as-is. See movieMatchesAdvancedTag().
+  */
+advanced: {
+actor: "",
+director: "",
+yearMin: null,
+yearMax: null,
+runtimeMin: null,
+runtimeMax: null,
+tags: []
+}
 };
 
 /*
@@ -13855,6 +13874,68 @@ sensitivity:
 }
 
 // =========================================================
+// ADVANCED SEARCH - GENRE/CATEGORY TAG MATCHING
+// =========================================================
+
+/*
+
+* The advanced panel's "Genres & categories" checkboxes mix
+* two different underlying fields - genre (a text field,
+* matched by substring, "classic" being a computed year rule
+* same as the main Genre dropdown) and category (an array of
+* tags like "christmas"/"baseball") - into one flat list, since
+* from the person's side they're all just "things this movie
+* is." ADVANCED_SEARCH_CATEGORY_TAGS is the list of values that
+* come from movie.categories rather than movie.genre.
+  */
+
+const ADVANCED_SEARCH_CATEGORY_TAGS =
+["christmas", "baseball"];
+
+function movieMatchesAdvancedTag(
+movie,
+tag
+) {
+
+if (tag === "classic") {
+
+const movieYear =
+parseInt(
+movie.year,
+10
+);
+
+return (
+!Number.isNaN(movieYear) &&
+movieYear < 1980
+);
+
+}
+
+if (ADVANCED_SEARCH_CATEGORY_TAGS.includes(tag)) {
+
+const categories =
+Array.isArray(movie.categories)
+? movie.categories
+: [];
+
+return categories.includes(
+tag
+);
+
+}
+
+const movieGenre =
+(movie.genre || "")
+.toLowerCase();
+
+return movieGenre.includes(
+tag.toLowerCase()
+);
+
+}
+
+// =========================================================
 // GET CURRENT FILTERED MOVIES
 // =========================================================
 
@@ -14068,6 +14149,156 @@ activeFilters.reservation
 );
 
 if (!reservedForPerson) {
+
+return false;
+
+}
+
+}
+
+// =====================================================
+// ADVANCED SEARCH - ACTOR
+// =====================================================
+
+if (activeFilters.advanced.actor) {
+
+const cast =
+(movie.cast || "")
+.toLowerCase();
+
+if (
+!cast.includes(
+activeFilters.advanced.actor.toLowerCase()
+)
+) {
+
+return false;
+
+}
+
+}
+
+// =====================================================
+// ADVANCED SEARCH - DIRECTOR
+// =====================================================
+
+if (activeFilters.advanced.director) {
+
+const director =
+(movie.director || "")
+.toLowerCase();
+
+if (
+!director.includes(
+activeFilters.advanced.director.toLowerCase()
+)
+) {
+
+return false;
+
+}
+
+}
+
+// =====================================================
+// ADVANCED SEARCH - YEAR RANGE
+// =====================================================
+
+if (
+activeFilters.advanced.yearMin !== null ||
+activeFilters.advanced.yearMax !== null
+) {
+
+const movieYear =
+parseInt(
+movie.year,
+10
+);
+
+if (Number.isNaN(movieYear)) {
+
+return false;
+
+}
+
+if (
+activeFilters.advanced.yearMin !== null &&
+movieYear < activeFilters.advanced.yearMin
+) {
+
+return false;
+
+}
+
+if (
+activeFilters.advanced.yearMax !== null &&
+movieYear > activeFilters.advanced.yearMax
+) {
+
+return false;
+
+}
+
+}
+
+// =====================================================
+// ADVANCED SEARCH - RUNTIME RANGE
+// =====================================================
+
+if (
+activeFilters.advanced.runtimeMin !== null ||
+activeFilters.advanced.runtimeMax !== null
+) {
+
+const movieRuntime =
+parseInt(
+movie.runtime,
+10
+);
+
+if (Number.isNaN(movieRuntime)) {
+
+return false;
+
+}
+
+if (
+activeFilters.advanced.runtimeMin !== null &&
+movieRuntime < activeFilters.advanced.runtimeMin
+) {
+
+return false;
+
+}
+
+if (
+activeFilters.advanced.runtimeMax !== null &&
+movieRuntime > activeFilters.advanced.runtimeMax
+) {
+
+return false;
+
+}
+
+}
+
+// =====================================================
+// ADVANCED SEARCH - GENRES & CATEGORIES (OR within
+// this group, AND with everything else)
+// =====================================================
+
+if (activeFilters.advanced.tags.length > 0) {
+
+const matchesAnyTag =
+activeFilters.advanced.tags.some(
+tag =>
+movieMatchesAdvancedTag(
+movie,
+tag
+)
+);
+
+if (!matchesAnyTag) {
 
 return false;
 
@@ -16109,6 +16340,35 @@ closeRatedFilterPopover();
 
 }
 
+/*
+
+* Rated has two separate sets of checkboxes now - the Rated
+* popover's own, and the second set inside the Advanced
+* Search panel - both sharing the exact same
+* .rated-filter-checkbox class and the exact same value
+* attributes, so ratedFilterCheckboxes (the querySelectorAll
+* above) already includes every one of them. This just makes
+* sure that after ANY of them changes, every instance -
+* including the one(s) the person didn't just click - gets
+* its checked state reset to match activeFilters.rated, so
+* the popover and the advanced panel never drift out of sync.
+  */
+
+function syncRatedFilterCheckboxes() {
+
+ratedFilterCheckboxes.forEach(
+checkbox => {
+
+checkbox.checked =
+activeFilters.rated.includes(
+checkbox.value
+);
+
+}
+);
+
+}
+
 ratedFilterCheckboxes.forEach(
 checkbox => {
 
@@ -16140,7 +16400,11 @@ value !== checkbox.value
 
 }
 
+syncRatedFilterCheckboxes();
+
 updateRatedFilterUI();
+
+updateAdvancedSearchUI();
 
 if (randomMode) {
 
@@ -16167,7 +16431,499 @@ event.stopPropagation();
 activeFilters.rated =
 [];
 
-ratedFilterCheckboxes.forEach(
+syncRatedFilterCheckboxes();
+
+updateRatedFilterUI();
+
+updateAdvancedSearchUI();
+
+if (randomMode) {
+
+generateRandomMovies();
+
+}
+
+renderMovies();
+
+}
+);
+
+}
+
+// =========================================================
+// ADVANCED SEARCH PANEL
+// =========================================================
+
+const advancedSearchToggle =
+document.getElementById(
+"advanced-search-toggle"
+);
+
+const advancedSearchPanel =
+document.getElementById(
+"advanced-search-panel"
+);
+
+const advancedSearchCount =
+document.getElementById(
+"advanced-search-count"
+);
+
+const advancedSearchClear =
+document.getElementById(
+"advanced-search-clear"
+);
+
+const advancedActorInput =
+document.getElementById(
+"advanced-actor-input"
+);
+
+const advancedDirectorInput =
+document.getElementById(
+"advanced-director-input"
+);
+
+const advancedYearMinInput =
+document.getElementById(
+"advanced-year-min"
+);
+
+const advancedYearMaxInput =
+document.getElementById(
+"advanced-year-max"
+);
+
+const advancedRuntimeMinInput =
+document.getElementById(
+"advanced-runtime-min"
+);
+
+const advancedRuntimeMaxInput =
+document.getElementById(
+"advanced-runtime-max"
+);
+
+const advancedTagCheckboxes =
+document.querySelectorAll(
+".advanced-tag-checkbox"
+);
+
+/*
+
+* Badge + active-state on the + button - counts each
+* populated field/group as one, same spirit as the Rated
+* button's count badge (which shows how many ratings are
+* checked, not how many filters are on). Actor/director are
+* trimmed so a lone space doesn't count as "active."
+  */
+
+function updateAdvancedSearchUI() {
+
+const adv =
+activeFilters.advanced;
+
+let count =
+0;
+
+if (adv.actor.trim() !== "") {
+count++;
+}
+
+if (adv.director.trim() !== "") {
+count++;
+}
+
+if (adv.yearMin !== null || adv.yearMax !== null) {
+count++;
+}
+
+if (adv.runtimeMin !== null || adv.runtimeMax !== null) {
+count++;
+}
+
+if (adv.tags.length > 0) {
+count++;
+}
+
+if (activeFilters.rated.length > 0) {
+count++;
+}
+
+if (advancedSearchCount) {
+
+advancedSearchCount.textContent =
+String(count);
+
+advancedSearchCount.classList.toggle(
+"hidden",
+count === 0
+);
+
+}
+
+if (advancedSearchToggle) {
+
+advancedSearchToggle.classList.toggle(
+"active",
+count > 0
+);
+
+}
+
+}
+
+function closeAdvancedSearchPanel() {
+
+if (!advancedSearchPanel) {
+
+return;
+
+}
+
+advancedSearchPanel.classList.add(
+"hidden"
+);
+
+if (advancedSearchToggle) {
+
+advancedSearchToggle.setAttribute(
+"aria-expanded",
+"false"
+);
+
+}
+
+}
+
+/*
+
+* parseInt-or-null for the four range inputs - an emptied
+* field goes back to "no bound" rather than being treated as
+* 0, and anything that doesn't parse (stray text, a lone "-")
+* is also treated as no bound rather than silently filtering
+* everything out.
+  */
+
+function parsedAdvancedRangeValue(
+inputEl
+) {
+
+const raw =
+inputEl.value.trim();
+
+if (raw === "") {
+
+return null;
+
+}
+
+const parsed =
+parseInt(
+raw,
+10
+);
+
+return Number.isNaN(parsed)
+? null
+: parsed;
+
+}
+
+if (advancedSearchToggle && advancedSearchPanel) {
+
+advancedSearchToggle.addEventListener(
+"click",
+event => {
+
+event.stopPropagation();
+
+const isHidden =
+advancedSearchPanel.classList.contains(
+"hidden"
+);
+
+advancedSearchPanel.classList.toggle(
+"hidden",
+!isHidden
+);
+
+advancedSearchToggle.setAttribute(
+"aria-expanded",
+isHidden ? "true" : "false"
+);
+
+}
+);
+
+document.addEventListener(
+"click",
+event => {
+
+if (
+!advancedSearchPanel.contains(
+event.target
+) &&
+!advancedSearchToggle.contains(
+event.target
+)
+) {
+
+closeAdvancedSearchPanel();
+
+}
+
+}
+);
+
+}
+
+if (advancedActorInput) {
+
+advancedActorInput.addEventListener(
+"input",
+() => {
+
+activeFilters.advanced.actor =
+advancedActorInput.value;
+
+updateAdvancedSearchUI();
+
+if (randomMode) {
+
+generateRandomMovies();
+
+}
+
+renderMovies();
+
+}
+);
+
+}
+
+if (advancedDirectorInput) {
+
+advancedDirectorInput.addEventListener(
+"input",
+() => {
+
+activeFilters.advanced.director =
+advancedDirectorInput.value;
+
+updateAdvancedSearchUI();
+
+if (randomMode) {
+
+generateRandomMovies();
+
+}
+
+renderMovies();
+
+}
+);
+
+}
+
+if (advancedYearMinInput) {
+
+advancedYearMinInput.addEventListener(
+"input",
+() => {
+
+activeFilters.advanced.yearMin =
+parsedAdvancedRangeValue(
+advancedYearMinInput
+);
+
+updateAdvancedSearchUI();
+
+if (randomMode) {
+
+generateRandomMovies();
+
+}
+
+renderMovies();
+
+}
+);
+
+}
+
+if (advancedYearMaxInput) {
+
+advancedYearMaxInput.addEventListener(
+"input",
+() => {
+
+activeFilters.advanced.yearMax =
+parsedAdvancedRangeValue(
+advancedYearMaxInput
+);
+
+updateAdvancedSearchUI();
+
+if (randomMode) {
+
+generateRandomMovies();
+
+}
+
+renderMovies();
+
+}
+);
+
+}
+
+if (advancedRuntimeMinInput) {
+
+advancedRuntimeMinInput.addEventListener(
+"input",
+() => {
+
+activeFilters.advanced.runtimeMin =
+parsedAdvancedRangeValue(
+advancedRuntimeMinInput
+);
+
+updateAdvancedSearchUI();
+
+if (randomMode) {
+
+generateRandomMovies();
+
+}
+
+renderMovies();
+
+}
+);
+
+}
+
+if (advancedRuntimeMaxInput) {
+
+advancedRuntimeMaxInput.addEventListener(
+"input",
+() => {
+
+activeFilters.advanced.runtimeMax =
+parsedAdvancedRangeValue(
+advancedRuntimeMaxInput
+);
+
+updateAdvancedSearchUI();
+
+if (randomMode) {
+
+generateRandomMovies();
+
+}
+
+renderMovies();
+
+}
+);
+
+}
+
+advancedTagCheckboxes.forEach(
+checkbox => {
+
+checkbox.addEventListener(
+"change",
+() => {
+
+if (checkbox.checked) {
+
+if (
+!activeFilters.advanced.tags.includes(
+checkbox.value
+)
+) {
+
+activeFilters.advanced.tags.push(
+checkbox.value
+);
+
+}
+
+} else {
+
+activeFilters.advanced.tags =
+activeFilters.advanced.tags.filter(
+value =>
+value !== checkbox.value
+);
+
+}
+
+updateAdvancedSearchUI();
+
+if (randomMode) {
+
+generateRandomMovies();
+
+}
+
+renderMovies();
+
+}
+);
+
+}
+);
+
+if (advancedSearchClear) {
+
+advancedSearchClear.addEventListener(
+"click",
+event => {
+
+event.stopPropagation();
+
+activeFilters.advanced =
+{
+actor: "",
+director: "",
+yearMin: null,
+yearMax: null,
+runtimeMin: null,
+runtimeMax: null,
+tags: []
+};
+
+activeFilters.rated =
+[];
+
+if (advancedActorInput) {
+advancedActorInput.value = "";
+}
+
+if (advancedDirectorInput) {
+advancedDirectorInput.value = "";
+}
+
+if (advancedYearMinInput) {
+advancedYearMinInput.value = "";
+}
+
+if (advancedYearMaxInput) {
+advancedYearMaxInput.value = "";
+}
+
+if (advancedRuntimeMinInput) {
+advancedRuntimeMinInput.value = "";
+}
+
+if (advancedRuntimeMaxInput) {
+advancedRuntimeMaxInput.value = "";
+}
+
+advancedTagCheckboxes.forEach(
 checkbox => {
 
 checkbox.checked =
@@ -16176,7 +16932,11 @@ false;
 }
 );
 
+syncRatedFilterCheckboxes();
+
 updateRatedFilterUI();
+
+updateAdvancedSearchUI();
 
 if (randomMode) {
 
