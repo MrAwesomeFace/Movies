@@ -2947,7 +2947,7 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/79xm4gXw4l7A5D0XukUOJRocFYQ.jpg",
     "year": "1961",
     "runtime": "115m",
-    "genre": "Comedy / Romance / Drama",
+    "genre": "Comedy / Romance / Drama / Rom-Com",
     "rated": "NR",
     "director": "Blake Edwards",
     "cast": "Audrey Hepburn, George Peppard, Patricia Neal, Buddy Ebsen, Martin Balsam, José Luis de Vilallonga",
