@@ -7909,6 +7909,24 @@ const movies = [
     "tmdbTitle": "Go"
   },
   {
+    "title": "Godfather, The",
+    "tmdbTitle": "The Godfather",
+    "type": "movie",
+    "tmdbId": 238,
+    "poster": "https://image.tmdb.org/t/p/w500/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
+    "year": "1972",
+    "runtime": "175m",
+    "genre": "Drama / Crime",
+    "rated": "R",
+    "director": "Francis Ford Coppola",
+    "cast": "Marlon Brando, Al Pacino, James Caan, Robert Duvall, Richard S. Castellano, Diane Keaton",
+    "synopsis": "Spanning the years 1945 to 1955, a chronicle of the fictional Italian-American Corleone crime family. When organized crime family patriarch, Vito Corleone barely survives an attempt on his life, his youngest son, Michael steps in to take care of the would-be killers, launching a campaign of bloody revenge.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ]
+  },
+  {
     "title": "Gone in Sixty Seconds",
     "tmdbTitle": "Gone in Sixty Seconds",
     "type": "movie",
