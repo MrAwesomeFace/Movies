@@ -7909,6 +7909,24 @@ const movies = [
     "tmdbTitle": "Go"
   },
   {
+    "title": "Godfather Part II, The",
+    "tmdbTitle": "The Godfather Part II",
+    "type": "movie",
+    "tmdbId": 240,
+    "poster": "https://image.tmdb.org/t/p/w500/sSuQTCZwqKrNBNIsksO9IAUoWP9.jpg",
+    "year": "1974",
+    "runtime": "202m",
+    "genre": "Drama / Crime",
+    "rated": "R",
+    "director": "Francis Ford Coppola",
+    "cast": "Al Pacino, Robert Duvall, Diane Keaton, Robert De Niro, John Cazale, Talia Shire",
+    "synopsis": "In the continuing saga of the Corleone crime family, a young Vito Corleone grows up in Sicily and in 1910s New York. In the 1950s, Michael Corleone attempts to expand the family business into Las Vegas, Hollywood and Cuba.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ]
+  },
+  {
     "title": "Godfather, The",
     "tmdbTitle": "The Godfather",
     "type": "movie",
