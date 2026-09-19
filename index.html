@@ -222,6 +222,227 @@ aria-label="Clear search"
 
 </div>
 
+<button
+  type="button"
+  id="advanced-search-toggle"
+  class="advanced-search-toggle"
+  aria-expanded="false"
+  aria-haspopup="true"
+  aria-label="Advanced search"
+  title="Advanced search"
+>
+  <span id="advanced-search-toggle-icon">+</span>
+  <span
+    id="advanced-search-count"
+    class="advanced-search-count hidden"
+  ></span>
+</button>
+
+<!--
+  ADVANCED SEARCH PANEL
+
+  Off by default, opened only via the + button next to the
+  search box. Every field here writes into
+  activeFilters.advanced and combines (AND) with whatever
+  else is active, same as every other filter. The Rated
+  checkboxes below reuse the exact same .rated-filter-checkbox
+  class as the Rated popover's own checkboxes (see
+  syncRatedFilterCheckboxes in app.js) - checking one here
+  checks the same value there and vice versa, since they both
+  just read/write activeFilters.rated. Genre/category tags are
+  a separate, additive multi-select (activeFilters.advanced.tags)
+  since the top Genre dropdown and category buttons are
+  single-select and stay as-is.
+-->
+
+<div
+  id="advanced-search-panel"
+  class="advanced-search-panel hidden"
+>
+
+  <div class="advanced-search-header">
+    <span>Advanced search</span>
+    <button
+      type="button"
+      id="advanced-search-clear"
+      class="advanced-search-clear"
+    >Clear</button>
+  </div>
+
+  <div class="advanced-search-grid">
+
+    <label class="advanced-search-field">
+      <span>Actor</span>
+      <input
+        type="text"
+        id="advanced-actor-input"
+        placeholder="e.g. Tom Hanks"
+        autocomplete="off"
+      >
+    </label>
+
+    <label class="advanced-search-field">
+      <span>Director</span>
+      <input
+        type="text"
+        id="advanced-director-input"
+        placeholder="e.g. Spielberg"
+        autocomplete="off"
+      >
+    </label>
+
+    <div class="advanced-search-field advanced-search-range">
+      <span>Year</span>
+      <div class="advanced-search-range-inputs">
+        <input
+          type="number"
+          id="advanced-year-min"
+          placeholder="From"
+          inputmode="numeric"
+        >
+        <span class="advanced-search-range-sep">&ndash;</span>
+        <input
+          type="number"
+          id="advanced-year-max"
+          placeholder="To"
+          inputmode="numeric"
+        >
+      </div>
+    </div>
+
+    <div class="advanced-search-field advanced-search-range">
+      <span>Runtime (min)</span>
+      <div class="advanced-search-range-inputs">
+        <input
+          type="number"
+          id="advanced-runtime-min"
+          placeholder="From"
+          inputmode="numeric"
+        >
+        <span class="advanced-search-range-sep">&ndash;</span>
+        <input
+          type="number"
+          id="advanced-runtime-max"
+          placeholder="To"
+          inputmode="numeric"
+        >
+      </div>
+    </div>
+
+  </div>
+
+  <div class="advanced-search-checkbox-section">
+
+    <span class="advanced-search-subheading">Rated</span>
+
+    <div class="advanced-search-checkbox-row">
+
+      <label class="rated-filter-row">
+        <input type="checkbox" value="G" class="rated-filter-checkbox">
+        <span class="rated-filter-box"></span>
+        G
+      </label>
+
+      <label class="rated-filter-row">
+        <input type="checkbox" value="PG" class="rated-filter-checkbox">
+        <span class="rated-filter-box"></span>
+        PG
+      </label>
+
+      <label class="rated-filter-row">
+        <input type="checkbox" value="PG-13" class="rated-filter-checkbox">
+        <span class="rated-filter-box"></span>
+        PG-13
+      </label>
+
+      <label class="rated-filter-row">
+        <input type="checkbox" value="R" class="rated-filter-checkbox">
+        <span class="rated-filter-box"></span>
+        R
+      </label>
+
+      <label class="rated-filter-row">
+        <input type="checkbox" value="NC-17" class="rated-filter-checkbox">
+        <span class="rated-filter-box"></span>
+        NC-17
+      </label>
+
+      <label class="rated-filter-row">
+        <input type="checkbox" value="NR" class="rated-filter-checkbox">
+        <span class="rated-filter-box"></span>
+        NR
+      </label>
+
+    </div>
+
+  </div>
+
+  <div class="advanced-search-checkbox-section">
+
+    <span class="advanced-search-subheading">Genres &amp; categories</span>
+
+    <div class="advanced-search-checkbox-row">
+
+      <label class="rated-filter-row">
+        <input type="checkbox" value="action" class="advanced-tag-checkbox">
+        <span class="rated-filter-box"></span>
+        Action
+      </label>
+
+      <label class="rated-filter-row">
+        <input type="checkbox" value="classic" class="advanced-tag-checkbox">
+        <span class="rated-filter-box"></span>
+        Classic
+      </label>
+
+      <label class="rated-filter-row">
+        <input type="checkbox" value="comedy" class="advanced-tag-checkbox">
+        <span class="rated-filter-box"></span>
+        Comedy
+      </label>
+
+      <label class="rated-filter-row">
+        <input type="checkbox" value="drama" class="advanced-tag-checkbox">
+        <span class="rated-filter-box"></span>
+        Drama
+      </label>
+
+      <label class="rated-filter-row">
+        <input type="checkbox" value="horror" class="advanced-tag-checkbox">
+        <span class="rated-filter-box"></span>
+        Horror
+      </label>
+
+      <label class="rated-filter-row">
+        <input type="checkbox" value="rom-com" class="advanced-tag-checkbox">
+        <span class="rated-filter-box"></span>
+        Rom-Com
+      </label>
+
+      <label class="rated-filter-row">
+        <input type="checkbox" value="thriller" class="advanced-tag-checkbox">
+        <span class="rated-filter-box"></span>
+        Thriller
+      </label>
+
+      <label class="rated-filter-row">
+        <input type="checkbox" value="christmas" class="advanced-tag-checkbox">
+        <span class="rated-filter-box"></span>
+        Christmas
+      </label>
+
+      <label class="rated-filter-row">
+        <input type="checkbox" value="baseball" class="advanced-tag-checkbox">
+        <span class="rated-filter-box"></span>
+        Baseball
+      </label>
+
+    </div>
+
+  </div>
+
+</div>
+
 </div>
 
 <!-- FILTERS -->
