@@ -15546,6 +15546,25 @@ const movies = [
     "rated": "PG-13"
   },
   {
+    "title": "Protégé, The",
+    "tmdbTitle": "The Protégé",
+    "type": "movie",
+    "tmdbId": 645788,
+    "poster": "https://image.tmdb.org/t/p/w500/iQUj7MptHUlcXpaMLrqRNZRxGA9.jpg",
+    "year": "2021",
+    "runtime": "109m",
+    "genre": "Action / Thriller / Crime",
+    "rated": "R",
+    "director": "Martin Campbell",
+    "cast": "Maggie Q, Samuel L. Jackson, Michael Keaton, David Rintoul, Patrick Malahide, Ray Fearon",
+    "synopsis": "Rescued as a child by the legendary assassin Moody and trained in the family business, Anna is the world’s most skilled contract killer. When Moody, the man who was like a father to her and taught her everything she needs to know about trust and survival, is brutally killed, Anna vows revenge. As she becomes entangled with an enigmatic killer whose attraction to her goes way beyond cat and mouse, their confrontation turns deadly and the loose ends of a life spent killing will weave themselves ever tighter.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Puffs",
     "tmdbTitle": "Puffs: Filmed Live Off Broadway",
     "type": "movie",
