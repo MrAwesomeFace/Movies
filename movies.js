@@ -7554,6 +7554,24 @@ const movies = [
     "rated": "PG-13"
   },
   {
+    "title": "Funny Face",
+    "tmdbTitle": "Funny Face",
+    "type": "movie",
+    "tmdbId": 13320,
+    "poster": "https://image.tmdb.org/t/p/w500/tzTjalpIz6NyFrWPPlOBFoBjb7z.jpg",
+    "year": "1957",
+    "runtime": "103m",
+    "genre": "Music / Comedy / Romance / Rom-Com",
+    "rated": "NR",
+    "director": "Stanley Donen",
+    "cast": "Audrey Hepburn, Fred Astaire, Kay Thompson, Michel Auclair, Robert Flemyng, Dovima",
+    "synopsis": "A shy Greenwich Village book clerk is discovered by a fashion photographer and whisked off to Paris where she becomes a reluctant model.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ]
+  },
+  {
     "title": "G.I. Joe: Retaliation",
     "type": "movie",
     "tmdbId": 72559,
