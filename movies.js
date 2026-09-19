@@ -15491,6 +15491,25 @@ const movies = [
     "rated": "G"
   },
   {
+    "title": "Producers, The",
+    "tmdbTitle": "The Producers",
+    "type": "movie",
+    "tmdbId": 9899,
+    "poster": "https://image.tmdb.org/t/p/w500/nG0Bix2SH2SQcbAIGhb6yqTG5UH.jpg",
+    "year": "2005",
+    "runtime": "134m",
+    "genre": "Comedy",
+    "rated": "PG-13",
+    "director": "Susan Stroman",
+    "cast": "Nathan Lane, Matthew Broderick, Uma Thurman, Will Ferrell, Gary Beach, Roger Bart",
+    "synopsis": "A conniving Broadway producer and his meek accountant plan to profit from charming wealthy old biddies to invest in an overbudget production, and then put on a sure-fire disaster, so nobody will ask for their money back — and what's more disastrous than a tasteless musical celebrating Adolf Hitler.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Program, The",
     "type": "movie",
     "tmdbId": 18133,
