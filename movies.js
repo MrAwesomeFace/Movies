@@ -2940,6 +2940,24 @@ const movies = [
     "tmdbTitle": "The Break-Up"
   },
   {
+    "title": "Breakfast at Tiffany's",
+    "tmdbTitle": "Breakfast at Tiffany's",
+    "type": "movie",
+    "tmdbId": 164,
+    "poster": "https://image.tmdb.org/t/p/w500/79xm4gXw4l7A5D0XukUOJRocFYQ.jpg",
+    "year": "1961",
+    "runtime": "115m",
+    "genre": "Comedy / Romance / Drama",
+    "rated": "NR",
+    "director": "Blake Edwards",
+    "cast": "Audrey Hepburn, George Peppard, Patricia Neal, Buddy Ebsen, Martin Balsam, José Luis de Vilallonga",
+    "synopsis": "Holly Golightly is an eccentric New York City playgirl determined to marry a Brazilian millionaire. But when young writer Paul Varjak moves into her apartment building, her past threatens to get in their way.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ]
+  },
+  {
     "title": "Breakfast Club, The",
     "tmdbTitle": "The Breakfast Club",
     "type": "movie",
