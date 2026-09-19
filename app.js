@@ -13925,6 +13925,27 @@ tag
 
 }
 
+/*
+
+* TMDB names this genre differently for movies ("Science
+* Fiction") than for TV ("Sci-Fi & Fantasy") - a plain
+* substring match on either spelling alone misses the other
+* one, so this checks for both.
+  */
+
+if (tag === "science-fiction") {
+
+const movieGenre =
+(movie.genre || "")
+.toLowerCase();
+
+return (
+movieGenre.includes("science fiction") ||
+movieGenre.includes("sci-fi")
+);
+
+}
+
 const movieGenre =
 (movie.genre || "")
 .toLowerCase();
@@ -16464,6 +16485,16 @@ document.getElementById(
 "advanced-search-panel"
 );
 
+const advancedSearchToggleIcon =
+document.getElementById(
+"advanced-search-toggle-icon"
+);
+
+const advancedSearchSubmit =
+document.getElementById(
+"advanced-search-submit"
+);
+
 const advancedSearchCount =
 document.getElementById(
 "advanced-search-count"
@@ -16573,6 +16604,36 @@ count > 0
 
 }
 
+function openAdvancedSearchPanel() {
+
+if (!advancedSearchPanel) {
+
+return;
+
+}
+
+advancedSearchPanel.classList.remove(
+"hidden"
+);
+
+if (advancedSearchToggle) {
+
+advancedSearchToggle.setAttribute(
+"aria-expanded",
+"true"
+);
+
+}
+
+if (advancedSearchToggleIcon) {
+
+advancedSearchToggleIcon.textContent =
+"−";
+
+}
+
+}
+
 function closeAdvancedSearchPanel() {
 
 if (!advancedSearchPanel) {
@@ -16591,6 +16652,13 @@ advancedSearchToggle.setAttribute(
 "aria-expanded",
 "false"
 );
+
+}
+
+if (advancedSearchToggleIcon) {
+
+advancedSearchToggleIcon.textContent =
+"+";
 
 }
 
@@ -16643,15 +16711,23 @@ advancedSearchPanel.classList.contains(
 "hidden"
 );
 
-advancedSearchPanel.classList.toggle(
-"hidden",
-!isHidden
-);
+/*
 
-advancedSearchToggle.setAttribute(
-"aria-expanded",
-isHidden ? "true" : "false"
-);
+* Same button either way - the + becomes a - while
+* open, so closing it back up (the "submit and put
+* this away" gesture) is exactly as instinctive as
+* opening it was.
+  */
+
+if (isHidden) {
+
+openAdvancedSearchPanel();
+
+} else {
+
+closeAdvancedSearchPanel();
+
+}
 
 }
 );
@@ -16672,6 +16748,30 @@ event.target
 closeAdvancedSearchPanel();
 
 }
+
+}
+);
+
+}
+
+/*
+
+* Apply doesn't run a search that wasn't already running -
+* every field already filters live as it changes. It just
+* closes the panel, since that's the natural "I'm done"
+* gesture people reach for even when nothing further needs
+* to happen on click.
+  */
+
+if (advancedSearchSubmit) {
+
+advancedSearchSubmit.addEventListener(
+"click",
+event => {
+
+event.stopPropagation();
+
+closeAdvancedSearchPanel();
 
 }
 );
