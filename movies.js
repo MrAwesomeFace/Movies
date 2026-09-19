@@ -13235,6 +13235,28 @@ const movies = [
     "rated": "PG-13"
   },
   {
+    "title": "Miracle on 34th Street",
+    "tmdbTitle": "Miracle on 34th Street",
+    "type": "movie",
+    "tmdbId": 11881,
+    "poster": "https://image.tmdb.org/t/p/w500/vehuIm3y6BeMI7mYjxzaA1H8M0k.jpg",
+    "year": "1947",
+    "runtime": "96m",
+    "genre": "Comedy / Drama / Family",
+    "rated": "NR",
+    "director": "George Seaton",
+    "cast": "Maureen O'Hara, John Payne, Edmund Gwenn, Gene Lockhart, Natalie Wood, Porter Hall",
+    "synopsis": "Kris Kringle, seemingly the embodiment of Santa Claus, is asked to portray the jolly old fellow at Macy's following his performance in the Thanksgiving Day parade. His portrayal is so complete that many begin to question if he truly is Santa Claus, while others question his sanity.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
+    "categories": [
+      "christmas"
+    ]
+  },
+  {
     "title": "Miss Congeniality",
     "type": "movie",
     "tmdbId": 1493,
