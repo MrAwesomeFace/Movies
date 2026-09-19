@@ -14927,6 +14927,24 @@ const movies = [
     "tmdbTitle": "Pan"
   },
   {
+    "title": "Paris When It Sizzles",
+    "tmdbTitle": "Paris When It Sizzles",
+    "type": "movie",
+    "tmdbId": 22829,
+    "poster": "https://image.tmdb.org/t/p/w500/aojHngnnK0kTYjvCwtlfAj8xf4B.jpg",
+    "year": "1964",
+    "runtime": "110m",
+    "genre": "Romance / Comedy / Rom-Com",
+    "rated": "NR",
+    "director": "Richard Quine",
+    "cast": "William Holden, Audrey Hepburn, Grégoire Aslan, Raymond Bussières, Christian Duvaleix, Michel Thomass",
+    "synopsis": "Hollywood producer Alexander Meyerheimer has hired drunken writer Richard Benson to write his latest movie. Benson has been in Paris supposedly working on the script for months, but instead has spent the time living it up. Benson now has just two days to the deadline and thus hires a temporary secretary, Gabrielle Simpson, to help him finish on time.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ]
+  },
+  {
     "title": "Parks and Recreation - Complete Fifth Season",
     "tmdbTitle": "Parks and Recreation",
     "type": "tv",
