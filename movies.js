@@ -7927,6 +7927,24 @@ const movies = [
     ]
   },
   {
+    "title": "Godfather Part III, The",
+    "tmdbTitle": "The Godfather Part III",
+    "type": "movie",
+    "tmdbId": 242,
+    "poster": "https://image.tmdb.org/t/p/w500/lm3pQ2QoQ16pextRsmnUbG2onES.jpg",
+    "year": "1990",
+    "runtime": "162m",
+    "genre": "Crime / Drama / Thriller",
+    "rated": "R",
+    "director": "Francis Ford Coppola",
+    "cast": "Al Pacino, Diane Keaton, Talia Shire, Andy Garcia, Eli Wallach, Joe Mantegna",
+    "synopsis": "In the midst of trying to legitimize his business dealings in 1979 New York and Italy, aging mafia don, Michael Corleone seeks forgiveness for his sins while taking a young protege under his wing.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ]
+  },
+  {
     "title": "Godfather, The",
     "tmdbTitle": "The Godfather",
     "type": "movie",
