@@ -20454,6 +20454,24 @@ const movies = [
     "rated": "R"
   },
   {
+    "title": "War and Peace",
+    "tmdbTitle": "War and Peace",
+    "type": "movie",
+    "tmdbId": 11706,
+    "poster": "https://image.tmdb.org/t/p/w500/f3a1MyH12PSl3LFDahnooGy6mv8.jpg",
+    "year": "1956",
+    "runtime": "208m",
+    "genre": "War / Romance / Drama / History",
+    "rated": "PG",
+    "director": "King Vidor",
+    "cast": "Audrey Hepburn, Henry Fonda, Mel Ferrer, Vittorio Gassman, Herbert Lom, Oskar Homolka",
+    "synopsis": "The love story of young Countess Natasha Rostova and Count Pierre Bezukhov is interwoven with the Great Patriotic War of 1812 against Napoleon's invading army.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ]
+  },
+  {
     "title": "War of the Roses, The",
     "tmdbTitle": "The War of the Roses",
     "type": "movie",
