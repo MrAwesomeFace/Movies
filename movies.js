@@ -15565,6 +15565,25 @@ const movies = [
     ]
   },
   {
+    "title": "Psycho",
+    "tmdbTitle": "Psycho",
+    "type": "movie",
+    "tmdbId": 11252,
+    "poster": "https://image.tmdb.org/t/p/w500/6pQpZu6JjPsbHzjhG545OsjU2TG.jpg",
+    "year": "1998",
+    "runtime": "104m",
+    "genre": "Horror / Mystery / Thriller",
+    "rated": "R",
+    "director": "Gus Van Sant",
+    "cast": "Vince Vaughn, Anne Heche, Julianne Moore, Viggo Mortensen, William H. Macy, Robert Forster",
+    "synopsis": "A young female embezzler arrives at the Bates Motel, which has terrible secrets of its own.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Puffs",
     "tmdbTitle": "Puffs: Filmed Live Off Broadway",
     "type": "movie",
