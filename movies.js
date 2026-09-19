@@ -16610,6 +16610,24 @@ const movies = [
     "rated": "PG-13"
   },
   {
+    "title": "Sabrina",
+    "tmdbTitle": "Sabrina",
+    "type": "movie",
+    "tmdbId": 6620,
+    "poster": "https://image.tmdb.org/t/p/w500/e1Po9NDrH7IJZhv89467gJH5FS0.jpg",
+    "year": "1954",
+    "runtime": "114m",
+    "genre": "Comedy / Romance / Drama / Rom-Com",
+    "rated": "NR",
+    "director": "Billy Wilder",
+    "cast": "Humphrey Bogart, Audrey Hepburn, William Holden, Walter Hampden, John Williams, Martha Hyer",
+    "synopsis": "After two years in Paris, chauffeur's daughter Sabrina returns home elegantly transformed and immediately catches the attention of David, the playboy son of her father's rich employers. David woos and wins Sabrina, who has always been in love with him, however their romance is threatened by David's serious older brother Linus, who runs the family business and is relying on David to marry an heiress in order for a crucial merger to take place.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ]
+  },
+  {
     "title": "Salt",
     "tmdbTitle": "Salt",
     "type": "movie",
