@@ -425,6 +425,62 @@ aria-label="Clear search"
         Thriller
       </label>
 
+      <!--
+        Added after checking actual genre counts in movies.js -
+        these all clear 25+ real entries (Adventure/Crime/
+        Romance/Family/Fantasy easily outnumber Horror).
+        Animation was left out on purpose since the existing
+        Animated: Hide/Only toggle already covers that ground.
+      -->
+
+      <label class="rated-filter-row">
+        <input type="checkbox" value="adventure" class="advanced-tag-checkbox">
+        <span class="rated-filter-box"></span>
+        Adventure
+      </label>
+
+      <label class="rated-filter-row">
+        <input type="checkbox" value="crime" class="advanced-tag-checkbox">
+        <span class="rated-filter-box"></span>
+        Crime
+      </label>
+
+      <label class="rated-filter-row">
+        <input type="checkbox" value="romance" class="advanced-tag-checkbox">
+        <span class="rated-filter-box"></span>
+        Romance
+      </label>
+
+      <label class="rated-filter-row">
+        <input type="checkbox" value="family" class="advanced-tag-checkbox">
+        <span class="rated-filter-box"></span>
+        Family
+      </label>
+
+      <label class="rated-filter-row">
+        <input type="checkbox" value="fantasy" class="advanced-tag-checkbox">
+        <span class="rated-filter-box"></span>
+        Fantasy
+      </label>
+
+      <label class="rated-filter-row">
+        <input type="checkbox" value="science-fiction" class="advanced-tag-checkbox">
+        <span class="rated-filter-box"></span>
+        Sci-Fi
+      </label>
+
+      <label class="rated-filter-row">
+        <input type="checkbox" value="mystery" class="advanced-tag-checkbox">
+        <span class="rated-filter-box"></span>
+        Mystery
+      </label>
+
+      <label class="rated-filter-row">
+        <input type="checkbox" value="music" class="advanced-tag-checkbox">
+        <span class="rated-filter-box"></span>
+        Music
+      </label>
+
       <label class="rated-filter-row">
         <input type="checkbox" value="christmas" class="advanced-tag-checkbox">
         <span class="rated-filter-box"></span>
@@ -439,6 +495,14 @@ aria-label="Clear search"
 
     </div>
 
+  </div>
+
+  <div class="advanced-search-footer">
+    <button
+      type="button"
+      id="advanced-search-submit"
+      class="advanced-search-submit"
+    >Apply</button>
   </div>
 
 </div>
