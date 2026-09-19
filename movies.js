@@ -4373,7 +4373,7 @@ const movies = [
   {
     "title": "Dark Knight Rises, The",
     "tmdbTitle": "The Dark Knight Rises",
-    "type": "movie",
+    "type": "movi
     "tmdbId": 49026,
     "poster": "https://image.tmdb.org/t/p/w500/hr0L2aueqlP2BYUblTTjmtn0hw4.jpg",
     "year": "2012",
@@ -13235,28 +13235,6 @@ const movies = [
     "rated": "PG-13"
   },
   {
-    "title": "Miracle on 34th Street",
-    "tmdbTitle": "Miracle on 34th Street",
-    "type": "movie",
-    "tmdbId": 10510,
-    "poster": "https://image.tmdb.org/t/p/w500/iUTPKkljdEjPlcPPYgbUz7APnHu.jpg",
-    "year": "1994",
-    "runtime": "114m",
-    "genre": "Fantasy / Drama / Family",
-    "director": "Les Mayfield",
-    "cast": "Mara Wilson, Richard Attenborough, Dylan McDermott, Elizabeth Perkins, J.T. Walsh, James Remar",
-    "synopsis": "Six-year-old Susan Walker has doubts about childhood's most enduring miracle—Santa Claus. Her mother told her the secret about Santa a long time ago, but, after meeting a special department store Santa who's convinced he's the real thing, Susan is given the most precious gift of all—something to believe in.",
-    "physical": [],
-    "digital": [
-      "Fandango",
-      "Movies Anywhere"
-    ],
-    "categories": [
-      "christmas"
-    ],
-    "rated": "PG"
-  },
-  {
     "title": "Miss Congeniality",
     "type": "movie",
     "tmdbId": 1493,
@@ -15491,25 +15469,6 @@ const movies = [
     "rated": "G"
   },
   {
-    "title": "Producers, The",
-    "tmdbTitle": "The Producers",
-    "type": "movie",
-    "tmdbId": 30197,
-    "poster": "https://image.tmdb.org/t/p/w500/9qCIkNWGuRj5lMyeOXwJs8z9nRz.jpg",
-    "year": "1968",
-    "runtime": "89m",
-    "genre": "Comedy",
-    "director": "Mel Brooks",
-    "cast": "Zero Mostel, Gene Wilder, Dick Shawn, Kenneth Mars, Estelle Winwood, Christopher Hewett",
-    "synopsis": "A conniving Broadway producer and his meek accountant plan to profit from charming wealthy old biddies to invest in an overbudget production, and then put on a sure-fire disaster, so nobody will ask for their money back — and what's more disastrous than a tasteless musical celebrating Adolf Hitler.",
-    "physical": [],
-    "digital": [
-      "Fandango",
-      "Movies Anywhere"
-    ],
-    "rated": "PG"
-  },
-  {
     "title": "Program, The",
     "type": "movie",
     "tmdbId": 18133,
@@ -15544,24 +15503,6 @@ const movies = [
     ],
     "digital": [],
     "rated": "PG-13"
-  },
-  {
-    "title": "Psycho",
-    "tmdbTitle": "Psycho",
-    "type": "movie",
-    "tmdbId": 539,
-    "poster": "https://image.tmdb.org/t/p/w500/yz4QVqPx3h1hD1DfqqQkCq3rmxW.jpg",
-    "year": "1960",
-    "runtime": "109m",
-    "genre": "Horror / Thriller / Mystery",
-    "director": "Alfred Hitchcock",
-    "cast": "Anthony Perkins, Janet Leigh, Vera Miles, John Gavin, Martin Balsam, John McIntire",
-    "synopsis": "When larcenous real estate clerk Marion Crane goes on the lam with a wad of cash and hopes of starting a new life, she ends up at the notorious Bates Motel, where manager Norman Bates cares for his housebound mother.",
-    "physical": [],
-    "digital": [
-      "Fandango"
-    ],
-    "rated": "R"
   },
   {
     "title": "Puffs",
