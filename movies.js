@@ -16319,6 +16319,25 @@ const movies = [
     "tmdbTitle": "Rudy"
   },
   {
+    "title": "Ruins, The",
+    "tmdbTitle": "The Ruins",
+    "type": "movie",
+    "tmdbId": 11152,
+    "poster": "https://image.tmdb.org/t/p/w500/6HpicbiT7xmlMjQXOSCeNoLZGpf.jpg",
+    "year": "2008",
+    "runtime": "91m",
+    "genre": "Horror",
+    "rated": "R",
+    "director": "Carter Smith",
+    "cast": "Jonathan Tucker, Jena Malone, Shawn Ashmore, Laura Ramsey, Joe Anderson, Sergio Calderón",
+    "synopsis": "Americans Amy, Stacy, Jeff and Eric look for fun during a sunny holiday in Mexico, but they get much more than that after visiting an archaeological dig in the jungle.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Runaway Bride",
     "type": "movie",
     "tmdbId": 4806,
