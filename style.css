@@ -584,6 +584,43 @@ syncRatedFilterCheckboxes() in app.js.
   padding: 5px 4px;
 }
 
+.advanced-search-footer {
+  display: flex;
+
+  justify-content: flex-end;
+
+  margin-top: 12px;
+}
+
+/*
+
+* Filtering already happens live as each field changes - this
+* doesn't "run" a search that wasn't already running. It just
+* closes the panel, since that's the natural gesture once
+* someone feels done, same job as clicking the toggle again.
+  */
+
+.advanced-search-submit {
+  padding: 9px 22px;
+
+  border: none;
+
+  border-radius: 999px;
+
+  background: var(--gold);
+
+  color: #111;
+
+  font-weight: 700;
+  font-size: 14px;
+
+  cursor: pointer;
+}
+
+.advanced-search-submit:hover {
+  background: #ffdb5c;
+}
+
 @media (max-width: 599px) {
 
   .advanced-search-grid {
@@ -4834,6 +4871,19 @@ same reasoning as the comic-pop-wrap z-index fix.
   z-index: 1;
 
   /*
+   * Having its own z-index promotes this into its own paint
+   * layer, and some browsers (Safari/WebKit in particular)
+   * then stop honoring the PARENT's backface-visibility for
+   * it specifically — the envelope's tan background correctly
+   * disappears on flip, but this text, sitting in its own
+   * layer, keeps rendering (mirrored) right through it. Has
+   * to be set here directly, not just on .hp-envelope-face.
+   */
+
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+
+  /*
    * Starts invisible — while the envelope is growing from
    * card size to full size, a fixed-pixel font size (correct
    * for the FINAL size) looks like it's constantly reflowing
@@ -6517,6 +6567,71 @@ BACK
 
 .back-rated-badge:empty {
   display: none;
+}
+
+.watched-toggle {
+  margin-top: 6px;
+
+  width: 55px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+
+  color: #f0e6c8;
+
+  border: 1px solid rgba(240, 230, 200, 0.4);
+
+  border-radius: 4px;
+
+  padding: 3px 0;
+
+  cursor: pointer;
+
+  user-select: none;
+}
+
+.watched-toggle input {
+  width: 10px;
+  height: 10px;
+
+  margin: 0;
+
+  cursor: pointer;
+}
+
+.watched-toggle.hidden {
+  display: none;
+}
+
+.watched-toggle.is-watched {
+  color: #05030a;
+
+  background: #f0e6c8;
+
+  border-color: #f0e6c8;
+}
+
+body.theme-arcade .watched-toggle {
+  color: #00fff2;
+
+  border-color: rgba(0, 255, 242, 0.5);
+}
+
+body.theme-arcade .watched-toggle.is-watched {
+  color: #05030a;
+
+  background: #00fff2;
+
+  border-color: #00fff2;
+
+  text-shadow: none;
 }
 
 .back-synopsis {
@@ -8218,6 +8333,18 @@ body.theme-arcade .advanced-search-field input:focus {
 
   box-shadow:
     0 0 0 2px rgba(0, 255, 242, 0.2);
+}
+
+body.theme-arcade .advanced-search-submit {
+
+  background: #00fff2;
+
+  color: #08080a;
+}
+
+body.theme-arcade .advanced-search-submit:hover {
+
+  background: #66fff8;
 }
 
 body.theme-arcade .icon-button {
