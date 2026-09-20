@@ -497,6 +497,22 @@ aria-label="Clear search"
 
   </div>
 
+  <div class="advanced-search-checkbox-section">
+
+    <span class="advanced-search-subheading">Watched status</span>
+
+    <div class="advanced-search-checkbox-row">
+
+      <label class="rated-filter-row">
+        <input type="checkbox" class="unwatched-filter-checkbox">
+        <span class="rated-filter-box"></span>
+        Unwatched
+      </label>
+
+    </div>
+
+  </div>
+
   <div class="advanced-search-footer">
     <button
       type="button"
@@ -700,6 +716,12 @@ aria-label="Clear search"
     <option value="thriller">Thriller</option>
   </select>
 
+  <label class="rated-filter-row unwatched-filter-row">
+    <input type="checkbox" class="unwatched-filter-checkbox">
+    <span class="rated-filter-box"></span>
+    Unwatched
+  </label>
+
 </div>
 
 
@@ -732,14 +754,6 @@ aria-label="Clear search"
     data-filter-value="mixed"
   >
     Animated: Hide
-  </button>
-
-  <button
-    class="filter category-filter watched-filter"
-    data-filter-group="watched"
-    data-filter-value="all"
-  >
-    Watched: All
   </button>
 
 </div>
