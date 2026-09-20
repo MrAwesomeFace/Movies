@@ -2136,6 +2136,95 @@ relocateGenreForMobile,
 }
 );
 
+/*
+
+* Unwatched pill — lives at the end of the Type/Media row on
+* desktop (its own divider, right of Physical/Digital). On
+* mobile it physically moves inside .type-pills-wrap instead,
+* right alongside Movies/TV/Misc, so it's governed by the
+* exact same mobile-filters-open reveal those pills already
+* use rather than needing its own show/hide rule. The divider
+* itself never moves — just hidden on mobile via CSS — since
+* it has nothing to separate once the pill leaves.
+  */
+
+function relocateUnwatchedForMobile() {
+
+const unwatchedPill =
+document.querySelector(
+'[data-filter-group="unwatched"]'
+);
+
+const unwatchedDivider =
+document.querySelector(
+".unwatched-divider"
+);
+
+const typePillsWrap =
+document.querySelector(
+".type-pills-wrap"
+);
+
+if (
+!unwatchedPill ||
+!unwatchedDivider ||
+!typePillsWrap
+) {
+
+return;
+
+}
+
+const isMobile =
+window.innerWidth <= 599;
+
+if (
+isMobile &&
+unwatchedPill.parentElement !==
+typePillsWrap
+) {
+
+typePillsWrap.appendChild(
+unwatchedPill
+);
+
+} else if (
+!isMobile &&
+unwatchedPill.parentElement !==
+unwatchedDivider.parentElement
+) {
+
+unwatchedDivider.parentElement.insertBefore(
+unwatchedPill,
+unwatchedDivider.nextSibling
+);
+
+}
+
+}
+
+relocateUnwatchedForMobile();
+
+let unwatchedRelocateResizeTimeout =
+null;
+
+window.addEventListener(
+"resize",
+() => {
+
+clearTimeout(
+unwatchedRelocateResizeTimeout
+);
+
+unwatchedRelocateResizeTimeout =
+setTimeout(
+relocateUnwatchedForMobile,
+150
+);
+
+}
+);
+
 // =========================================================
 // MOBILE FILTERS TOGGLE
 // =========================================================
@@ -12820,6 +12909,24 @@ syncMediaFilterUI();
 }
 
 // =====================================================
+// UNWATCHED
+//
+// Simple on/off pill, same toggle-off pattern as Type and
+// Media - clicking it again turns it back off. Shares
+// activeFilters.unwatchedOnly with the checkbox in the
+// Advanced Search panel, so either control updates both.
+// =====================================================
+
+if (group === "unwatched") {
+
+activeFilters.unwatchedOnly =
+!activeFilters.unwatchedOnly;
+
+syncUnwatchedFilterUI();
+
+}
+
+// =====================================================
 // CATEGORY
 // =====================================================
 
@@ -16755,13 +16862,12 @@ renderMovies();
 
 /*
 
-* Unwatched checkbox — same "shared class, sync every
-* instance" trick as Rated above, but for a single boolean
-* rather than a multi-select array: one checkbox lives next
-* to the Genre dropdown, a second lives in the Advanced
-* Search panel, both share .unwatched-filter-checkbox and
-* both stay in sync with each other and with
-* activeFilters.unwatchedOnly.
+* Unwatched — a pill button (next to Type on mobile, next to
+* Physical/Digital on desktop - see relocateUnwatchedForMobile
+* below) AND a checkbox in the Advanced Search panel, both
+* driving the same activeFilters.unwatchedOnly boolean. This
+* keeps every control in sync with each other whichever one
+* the person actually touches.
   */
 
 const unwatchedFilterCheckboxes =
@@ -16769,7 +16875,12 @@ document.querySelectorAll(
 ".unwatched-filter-checkbox"
 );
 
-function syncUnwatchedFilterCheckboxes() {
+const unwatchedFilterPill =
+document.querySelector(
+'[data-filter-group="unwatched"]'
+);
+
+function syncUnwatchedFilterUI() {
 
 unwatchedFilterCheckboxes.forEach(
 checkbox => {
@@ -16779,6 +16890,15 @@ activeFilters.unwatchedOnly;
 
 }
 );
+
+if (unwatchedFilterPill) {
+
+unwatchedFilterPill.classList.toggle(
+"active",
+activeFilters.unwatchedOnly
+);
+
+}
 
 }
 
@@ -16792,7 +16912,7 @@ checkbox.addEventListener(
 activeFilters.unwatchedOnly =
 checkbox.checked;
 
-syncUnwatchedFilterCheckboxes();
+syncUnwatchedFilterUI();
 
 updateAdvancedSearchUI();
 
@@ -17345,7 +17465,7 @@ activeFilters.rated =
 activeFilters.unwatchedOnly =
 false;
 
-syncUnwatchedFilterCheckboxes();
+syncUnwatchedFilterUI();
 
 if (advancedActorInput) {
 advancedActorInput.value = "";
