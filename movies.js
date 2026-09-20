@@ -1918,6 +1918,27 @@ const movies = [
     "rated": "PG-13"
   },
   {
+    "title": "Bang the Drum Slowly",
+    "tmdbTitle": "Bang the Drum Slowly",
+    "type": "movie",
+    "tmdbId": 42459,
+    "poster": "https://image.tmdb.org/t/p/w500/2MojRzTHI2UMmhEANYZZCsMPHr.jpg",
+    "year": "1973",
+    "runtime": "96m",
+    "genre": "Drama",
+    "rated": "PG",
+    "director": "John D. Hancock",
+    "cast": "Michael Moriarty, Robert De Niro, Vincent Gardenia, Phil Foster, Ann Wedgeworth, Patrick McVey",
+    "synopsis": "The story of a New York pro baseball team and two of its players. Henry Wiggen is the star pitcher and Bruce Pearson is the normal, everyday catcher who is far from the star player on the team and friend to all of his teammates. During the off-season, Bruce learns that he is terminally ill, and Henry, his only true friend, is determined to be the one person there for him during his last season with the club. Throughout the course of the season, Henry and his teammates attempt to deal with Bruce's impending illness, all the while attempting to make his last year a memorable one.",
+    "physical": [
+      "DVD"
+    ],
+    "digital": [],
+    "categories": [
+      "baseball"
+    ]
+  },
+  {
     "title": "Barbie",
     "tmdbTitle": "Barbie",
     "type": "movie",
