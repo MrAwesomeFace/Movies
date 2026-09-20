@@ -7713,6 +7713,20 @@ regardless of search state, all left-justified.
   }
 
   /*
+   * The Unwatched pill's OWN divider (desktop-only, next to
+   * Physical/Digital) - the pill itself gets physically moved
+   * into .type-pills-wrap on mobile (see
+   * relocateUnwatchedForMobile in app.js), where it's governed
+   * by that wrap's own show/hide instead, so only the divider
+   * needs hiding here.
+   */
+
+  .unwatched-divider {
+
+    display: none;
+  }
+
+  /*
    * Type, Category, and Reservations are hidden by default
    * and only appear once the filters toggle is opened —
    * Genre, Staff Picks, and the new Format dropdown stay
