@@ -202,6 +202,15 @@ const BIRTHDAY_CONFETTI_COLORS =
 
 let reservations = [];
 
+/*
+
+* One shared "have I watched this" flag, sourced from
+* Letterboxd - not per-person, by design (see
+* movieWatchedKey() below for the lookup key).
+  */
+
+let watchedKeys = new Set();
+
 // =========================================================
 // ELEMENTS
 // =========================================================
@@ -383,6 +392,7 @@ genre: null,
 category: null,
 animated: "hide",
 reservation: "all",
+watched: "all",
 rated: [],
 /*
 
@@ -849,6 +859,189 @@ error
 reservations = [];
 
 updateReservationCounts();
+
+}
+
+}
+
+/*
+
+* Lookup key for the watched Set - deliberately independent
+* of getMovieId() (which has a known TMDB-id-collision issue
+* between movies and TV that hasn't been fixed yet). This
+* only ever needs to match a catalog entry's own tmdbId+type
+* against a row the Worker already stores the same way, so
+* it doesn't inherit that problem.
+  */
+
+function movieWatchedKey(movie) {
+
+return (
+(movie.type || "movie") +
+":" +
+movie.tmdbId
+);
+
+}
+
+function isMovieWatched(movie) {
+
+return watchedKeys.has(
+movieWatchedKey(movie)
+);
+
+}
+
+/*
+
+* Manual toggle from the case-back checkbox. Updates the
+* local Set immediately (so the UI never waits on the round
+* trip) and re-renders the shelf so the Watched filter picks
+* up the change right away; rolls back on a failed request.
+  */
+
+async function setMovieWatched(movie, watched) {
+
+const key =
+movieWatchedKey(movie);
+
+if (watched) {
+watchedKeys.add(key);
+} else {
+watchedKeys.delete(key);
+}
+
+if (activeFilters.watched !== "all") {
+
+renderMovies();
+
+}
+
+try {
+
+const response =
+await fetch(
+`${RESERVATIONS_API}/watched`,
+{
+method: watched ? "POST" : "DELETE",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+tmdb_id: movie.tmdbId,
+type: movie.type || "movie",
+source: "manual"
+})
+}
+);
+
+if (!response.ok) {
+
+throw new Error(
+`Watched endpoint returned ${response.status}`
+);
+
+}
+
+} catch (error) {
+
+console.error(
+"Could not update watched status:",
+error
+);
+
+if (watched) {
+watchedKeys.delete(key);
+} else {
+watchedKeys.add(key);
+}
+
+const checkbox =
+document.getElementById(
+"modal-watched-checkbox"
+);
+
+const toggle =
+document.getElementById(
+"modal-watched-toggle"
+);
+
+if (checkbox) {
+checkbox.checked = !watched;
+}
+
+if (toggle) {
+
+toggle.classList.toggle(
+"is-watched",
+!watched
+);
+
+}
+
+alert(
+"That couldn't be saved. Please try again."
+);
+
+if (activeFilters.watched !== "all") {
+
+renderMovies();
+
+}
+
+}
+
+}
+
+// =========================================================
+// LOAD WATCHED (Letterboxd)
+// =========================================================
+
+async function loadWatched() {
+
+try {
+
+const response =
+await fetch(
+`${RESERVATIONS_API}/watched`,
+{
+method: "GET",
+cache: "no-store"
+}
+);
+
+if (!response.ok) {
+
+throw new Error(
+`Watched endpoint returned ${response.status}`
+);
+
+}
+
+const data =
+await response.json();
+
+watchedKeys =
+new Set(
+(Array.isArray(data) ? data : []).map(
+row => `${row.type}:${row.tmdb_id}`
+)
+);
+
+if (!currentMovie) {
+
+renderMovies();
+
+}
+
+} catch (error) {
+
+console.error(
+"Could not load watched status:",
+error
+);
+
+watchedKeys = new Set();
 
 }
 
@@ -1993,6 +2186,8 @@ renderMovies();
 loadReservations();
 
 loadWishlist();
+
+loadWatched();
 
 loadTournamentChampions();
 
@@ -4860,6 +5055,69 @@ if (backRatedBadge) {
 backRatedBadge.textContent =
 movie.rated ||
 "";
+
+}
+
+/*
+
+* Watched toggle — one shared flag sourced from Letterboxd,
+* hidden entirely for wishlist/placeholder entries (nothing
+* real to mark watched yet) and for anything without a
+* tmdbId, same as the reservation panel's own hide rule.
+  */
+
+const watchedToggleEl =
+document.getElementById(
+"modal-watched-toggle"
+);
+
+const watchedCheckboxEl =
+document.getElementById(
+"modal-watched-checkbox"
+);
+
+if (watchedToggleEl && watchedCheckboxEl) {
+
+const eligible =
+!movie.isEmptyReservationPlaceholder &&
+!movie.isWishlistItem &&
+movie.tmdbId;
+
+watchedToggleEl.classList.toggle(
+"hidden",
+!eligible
+);
+
+if (eligible) {
+
+const watched =
+isMovieWatched(
+movie
+);
+
+watchedCheckboxEl.checked =
+watched;
+
+watchedToggleEl.classList.toggle(
+"is-watched",
+watched
+);
+
+watchedCheckboxEl.onchange = () => {
+
+setMovieWatched(
+movie,
+watchedCheckboxEl.checked
+);
+
+watchedToggleEl.classList.toggle(
+"is-watched",
+watchedCheckboxEl.checked
+);
+
+};
+
+}
 
 }
 
@@ -12666,6 +12924,39 @@ triggerSparkleArc();
 }
 
 // =====================================================
+// WATCHED
+// =====================================================
+
+if (group === "watched") {
+
+if (
+activeFilters.watched ===
+"all"
+) {
+
+activeFilters.watched =
+"only";
+
+} else if (
+activeFilters.watched ===
+"only"
+) {
+
+activeFilters.watched =
+"hide";
+
+} else {
+
+activeFilters.watched =
+"all";
+
+}
+
+updateWatchedButton();
+
+}
+
+// =====================================================
 // RANDOM MODE
 // =====================================================
 
@@ -13638,6 +13929,61 @@ animatedButton.classList.add(
 
 }
 
+function updateWatchedButton() {
+
+const watchedButton =
+document.querySelector(
+'[data-filter-group="watched"]'
+);
+
+if (!watchedButton) {
+return;
+}
+
+if (
+activeFilters.watched ===
+"all"
+) {
+
+watchedButton.textContent =
+"Watched: All";
+
+watchedButton.classList.remove(
+"active"
+);
+
+}
+
+if (
+activeFilters.watched ===
+"only"
+) {
+
+watchedButton.textContent =
+"Watched: Only";
+
+watchedButton.classList.add(
+"active"
+);
+
+}
+
+if (
+activeFilters.watched ===
+"hide"
+) {
+
+watchedButton.textContent =
+"Watched: Hide";
+
+watchedButton.classList.add(
+"active"
+);
+
+}
+
+}
+
 // =========================================================
 // WISHLIST ADD PANEL VISIBILITY
 // =========================================================
@@ -14148,6 +14494,42 @@ activeFilters.animated === "only" &&
 ) {
 
 return false;
+
+}
+
+// =====================================================
+// WATCHED FILTER
+//
+// Same "hide" / "only" pattern as Animated - one shared
+// flag sourced from Letterboxd, not per-person.
+// =====================================================
+
+if (
+activeFilters.watched !== "all"
+) {
+
+const watched =
+isMovieWatched(
+movie
+);
+
+if (
+activeFilters.watched === "hide" &&
+watched
+) {
+
+return false;
+
+}
+
+if (
+activeFilters.watched === "only" &&
+!watched
+) {
+
+return false;
+
+}
 
 }
 
