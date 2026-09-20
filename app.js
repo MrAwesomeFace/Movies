@@ -390,9 +390,11 @@ rated: [],
 * box. actor/director are substring text matches; the year/
 * runtime pairs are inclusive ranges (null = no bound on that
 * side); tags is a multi-select across genres AND categories
-* together (OR'd internally, same as Rated), separate from
-* the single-select Genre dropdown/category buttons up top
-* since those stay as-is. See movieMatchesAdvancedTag().
+* together - checking more than one requires a movie match
+* ALL of them (unlike Rated, which is OR - any checked rating
+* passes), separate from the single-select Genre dropdown/
+* category buttons up top since those stay as-is. See
+* movieMatchesAdvancedTag().
   */
 advanced: {
 actor: "",
@@ -14304,14 +14306,16 @@ return false;
 }
 
 // =====================================================
-// ADVANCED SEARCH - GENRES & CATEGORIES (OR within
-// this group, AND with everything else)
+// ADVANCED SEARCH - GENRES & CATEGORIES (every checked
+// one has to match, same as every other filter here -
+// checking Comedy AND Christmas means a Christmas
+// comedy, not "either one")
 // =====================================================
 
 if (activeFilters.advanced.tags.length > 0) {
 
-const matchesAnyTag =
-activeFilters.advanced.tags.some(
+const matchesEveryTag =
+activeFilters.advanced.tags.every(
 tag =>
 movieMatchesAdvancedTag(
 movie,
@@ -14319,7 +14323,7 @@ tag
 )
 );
 
-if (!matchesAnyTag) {
+if (!matchesEveryTag) {
 
 return false;
 
