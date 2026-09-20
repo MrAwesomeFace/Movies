@@ -9790,6 +9790,24 @@ const movies = [
     "rated": "PG-13"
   },
   {
+    "title": "I Know What You Did Last Summer",
+    "tmdbTitle": "I Know What You Did Last Summer",
+    "type": "movie",
+    "tmdbId": 3597,
+    "poster": "https://image.tmdb.org/t/p/w500/dQyaJx0SptDqvQcAewAr8FAtLB2.jpg",
+    "year": "1997",
+    "runtime": "102m",
+    "genre": "Horror / Thriller / Mystery",
+    "rated": "R",
+    "director": "Jim Gillespie",
+    "cast": "Jennifer Love Hewitt, Freddie Prinze Jr., Sarah Michelle Gellar, Ryan Phillippe, Bridgette Wilson, Johnny Galecki",
+    "synopsis": "After an accident on a winding road, four teens make the fatal mistake of dumping their victim's body into the sea. Exactly one year later, the deadly secret resurfaces as they're stalked by a hook-handed figure.",
+    "physical": [
+      "DVD"
+    ],
+    "digital": []
+  },
+  {
     "title": "I Love You, Man",
     "tmdbTitle": "I Love You, Man",
     "type": "movie",
