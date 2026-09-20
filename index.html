@@ -734,6 +734,14 @@ aria-label="Clear search"
     Animated: Hide
   </button>
 
+  <button
+    class="filter category-filter watched-filter"
+    data-filter-group="watched"
+    data-filter-value="all"
+  >
+    Watched: All
+  </button>
+
 </div>
 
 
@@ -1174,6 +1182,17 @@ aria-label="Close"
                 id="modal-rated"
                 class="back-rated-badge"
               ></div>
+
+              <label
+                id="modal-watched-toggle"
+                class="watched-toggle hidden"
+              >
+                <input
+                  type="checkbox"
+                  id="modal-watched-checkbox"
+                />
+                <span>Watched</span>
+              </label>
 
             </div>
 
