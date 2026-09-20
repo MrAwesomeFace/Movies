@@ -392,7 +392,7 @@ genre: null,
 category: null,
 animated: "hide",
 reservation: "all",
-watched: "all",
+unwatchedOnly: false,
 rated: [],
 /*
 
@@ -911,7 +911,7 @@ watchedKeys.add(key);
 watchedKeys.delete(key);
 }
 
-if (activeFilters.watched !== "all") {
+if (activeFilters.unwatchedOnly) {
 
 renderMovies();
 
@@ -983,7 +983,7 @@ alert(
 "That couldn't be saved. Please try again."
 );
 
-if (activeFilters.watched !== "all") {
+if (activeFilters.unwatchedOnly) {
 
 renderMovies();
 
@@ -12924,39 +12924,6 @@ triggerSparkleArc();
 }
 
 // =====================================================
-// WATCHED
-// =====================================================
-
-if (group === "watched") {
-
-if (
-activeFilters.watched ===
-"all"
-) {
-
-activeFilters.watched =
-"only";
-
-} else if (
-activeFilters.watched ===
-"only"
-) {
-
-activeFilters.watched =
-"hide";
-
-} else {
-
-activeFilters.watched =
-"all";
-
-}
-
-updateWatchedButton();
-
-}
-
-// =====================================================
 // RANDOM MODE
 // =====================================================
 
@@ -13929,61 +13896,6 @@ animatedButton.classList.add(
 
 }
 
-function updateWatchedButton() {
-
-const watchedButton =
-document.querySelector(
-'[data-filter-group="watched"]'
-);
-
-if (!watchedButton) {
-return;
-}
-
-if (
-activeFilters.watched ===
-"all"
-) {
-
-watchedButton.textContent =
-"Watched: All";
-
-watchedButton.classList.remove(
-"active"
-);
-
-}
-
-if (
-activeFilters.watched ===
-"only"
-) {
-
-watchedButton.textContent =
-"Watched: Only";
-
-watchedButton.classList.add(
-"active"
-);
-
-}
-
-if (
-activeFilters.watched ===
-"hide"
-) {
-
-watchedButton.textContent =
-"Watched: Hide";
-
-watchedButton.classList.add(
-"active"
-);
-
-}
-
-}
-
 // =========================================================
 // WISHLIST ADD PANEL VISIBILITY
 // =========================================================
@@ -14500,36 +14412,20 @@ return false;
 // =====================================================
 // WATCHED FILTER
 //
-// Same "hide" / "only" pattern as Animated - one shared
-// flag sourced from Letterboxd, not per-person.
+// One shared flag sourced from Letterboxd, not per-person.
+// A single "Unwatched" checkbox (next to Genre, and mirrored
+// in the Advanced Search panel) rather than a three-state
+// pill - most of the catalog IS watched, so the useful
+// direction is filtering down to the small unwatched slice,
+// not the reverse.
 // =====================================================
 
 if (
-activeFilters.watched !== "all"
-) {
-
-const watched =
-isMovieWatched(
-movie
-);
-
-if (
-activeFilters.watched === "hide" &&
-watched
+activeFilters.unwatchedOnly &&
+isMovieWatched(movie)
 ) {
 
 return false;
-
-}
-
-if (
-activeFilters.watched === "only" &&
-!watched
-) {
-
-return false;
-
-}
 
 }
 
@@ -16857,6 +16753,63 @@ renderMovies();
 
 }
 
+/*
+
+* Unwatched checkbox — same "shared class, sync every
+* instance" trick as Rated above, but for a single boolean
+* rather than a multi-select array: one checkbox lives next
+* to the Genre dropdown, a second lives in the Advanced
+* Search panel, both share .unwatched-filter-checkbox and
+* both stay in sync with each other and with
+* activeFilters.unwatchedOnly.
+  */
+
+const unwatchedFilterCheckboxes =
+document.querySelectorAll(
+".unwatched-filter-checkbox"
+);
+
+function syncUnwatchedFilterCheckboxes() {
+
+unwatchedFilterCheckboxes.forEach(
+checkbox => {
+
+checkbox.checked =
+activeFilters.unwatchedOnly;
+
+}
+);
+
+}
+
+unwatchedFilterCheckboxes.forEach(
+checkbox => {
+
+checkbox.addEventListener(
+"change",
+() => {
+
+activeFilters.unwatchedOnly =
+checkbox.checked;
+
+syncUnwatchedFilterCheckboxes();
+
+updateAdvancedSearchUI();
+
+if (randomMode) {
+
+generateRandomMovies();
+
+}
+
+renderMovies();
+
+}
+);
+
+}
+);
+
 // =========================================================
 // ADVANCED SEARCH PANEL
 // =========================================================
@@ -16964,6 +16917,10 @@ count++;
 }
 
 if (activeFilters.rated.length > 0) {
+count++;
+}
+
+if (activeFilters.unwatchedOnly) {
 count++;
 }
 
@@ -17384,6 +17341,11 @@ tags: []
 
 activeFilters.rated =
 [];
+
+activeFilters.unwatchedOnly =
+false;
+
+syncUnwatchedFilterCheckboxes();
 
 if (advancedActorInput) {
 advancedActorInput.value = "";
