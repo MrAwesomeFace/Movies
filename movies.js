@@ -1918,27 +1918,6 @@ const movies = [
     "rated": "PG-13"
   },
   {
-    "title": "Bang the Drum Slowly",
-    "type": "movie",
-    "tmdbId": 365498,
-    "poster": "https://image.tmdb.org/t/p/w500/7D9wFc4NdgwJIkwc1x9h5CvpkMF.jpg",
-    "year": "1956",
-    "runtime": "57m",
-    "genre": "Drama / TV Movie",
-    "director": "Daniel Petrie",
-    "cast": "Paul Newman, Albert Salmi, Rudy Bond, Clu Gulager, Arch Johnson, Georgann Johnson",
-    "synopsis": "A pitcher of a major-league baseball team finds out that his teammate and pal is desperately trying to hide that he is dying of a terminal disease so the owner won't find out and fire him.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": [],
-    "categories": [
-      "baseball"
-    ],
-    "rated": "NR",
-    "tmdbTitle": "Bang the Drum Slowly"
-  },
-  {
     "title": "Barbie",
     "tmdbTitle": "Barbie",
     "type": "movie",
@@ -9809,24 +9788,6 @@ const movies = [
     "digital": [],
     "tmdbTitle": "Hush",
     "rated": "PG-13"
-  },
-  {
-    "title": "I Know What You Did Last Summer",
-    "type": "movie",
-    "tmdbId": 1083433,
-    "poster": "https://image.tmdb.org/t/p/w500/8FP2ObEGIiQYQCf83gL4ZVzwZF8.jpg",
-    "year": "2025",
-    "runtime": "111m",
-    "genre": "Horror / Thriller / Mystery",
-    "director": "Jennifer Kaytin Robinson",
-    "cast": "Chase Sui Wonders, Madelyn Cline, Jonah Hauer-King, Tyriq Withers, Sarah Pidgeon, Jennifer Love Hewitt",
-    "synopsis": "When five friends inadvertently cause a deadly car accident, they cover up their involvement and make a pact to keep it a secret rather than face the consequences. A year later, their past comes back to haunt them and they're forced to confront a horrifying truth: someone knows what they did last summer…and is hell-bent on revenge.",
-    "physical": [
-      "DVD"
-    ],
-    "digital": [],
-    "rated": "R",
-    "tmdbTitle": "I Know What You Did Last Summer"
   },
   {
     "title": "I Love You, Man",
