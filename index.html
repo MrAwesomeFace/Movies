@@ -269,6 +269,28 @@ aria-label="Clear search"
     >Clear</button>
   </div>
 
+  <!--
+    Hidden unless activeFilters.advanced.similarTo is set (see
+    handleMoreLikeThis/syncSimilarToUI in app.js) - the visible
+    sign that "More Like This" is active and this box's own way
+    to turn it back off. Never checked by hand to start a
+    search (only the movie's own "More Like This" button does
+    that); unchecking it just clears similarTo.
+  -->
+  <div
+    id="advanced-similar-to-row"
+    class="advanced-similar-to-row hidden"
+  >
+    <label class="rated-filter-row">
+      <input
+        type="checkbox"
+        id="advanced-similar-to-checkbox"
+      >
+      <span class="rated-filter-box"></span>
+      Similar to: <strong id="advanced-similar-to-name"></strong>
+    </label>
+  </div>
+
   <div class="advanced-search-grid">
 
     <label class="advanced-search-field">
