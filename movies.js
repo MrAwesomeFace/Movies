@@ -11731,6 +11731,25 @@ const movies = [
     "rated": "PG"
   },
   {
+    "title": "Les Misérables",
+    "tmdbTitle": "Les Misérables",
+    "type": "movie",
+    "tmdbId": 82695,
+    "poster": "https://image.tmdb.org/t/p/w500/6CuzBs2Lb8At7qQr64mLXg2RYRb.jpg",
+    "year": "2012",
+    "runtime": "158m",
+    "genre": "History / Drama",
+    "rated": "PG-13",
+    "director": "Tom Hooper",
+    "cast": "Hugh Jackman, Russell Crowe, Amanda Seyfried, Anne Hathaway, Eddie Redmayne, Sacha Baron Cohen",
+    "synopsis": "An adaptation of the successful stage musical based on Victor Hugo's classic novel set in 19th-century France. Jean Valjean, a man imprisoned for stealing bread, must flee a relentless policeman named Javert. The pursuit consumes both men's lives, and soon Valjean finds himself in the midst of the student revolutions in France.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Lethal Weapon",
     "type": "movie",
     "tmdbId": 941,
