@@ -3889,6 +3889,36 @@ card.querySelector(
 
 if (coverInner) {
 
+/*
+
+* The badges below need to render in full, undesaturated
+* color, but coverInner is exactly what
+* ".out-of-stock-card .movie-cover-inner" grayscales/dims
+* in style.css - and a CSS filter on a parent can't be
+* undone by anything a child does, since the filter applies
+* to the parent's whole rendered subtree as one unit. So
+* the badges live in their own sibling layer instead,
+* positioned and clipped to match coverInner exactly (same
+* offset/rounding) but never touched by that filter.
+    */
+
+const coverEl =
+card.querySelector(
+".movie-cover"
+);
+
+const badgeLayer =
+document.createElement(
+"div"
+);
+
+badgeLayer.className =
+"out-of-stock-badge-layer";
+
+(coverEl || coverInner.parentElement || coverInner).appendChild(
+badgeLayer
+);
+
 const banner =
 document.createElement(
 "div"
@@ -3900,7 +3930,7 @@ banner.className =
 banner.innerHTML =
 `<span>Out of Stock</span>`;
 
-coverInner.appendChild(
+badgeLayer.appendChild(
 banner
 );
 
@@ -3946,7 +3976,7 @@ isRental
 ? `<span>New to Rent!</span>`
 : `<span>Now on ${topService}</span>`;
 
-coverInner.appendChild(
+badgeLayer.appendChild(
 streamingBadge
 );
 
