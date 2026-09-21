@@ -56,6 +56,21 @@
     </div>
     <p id="movie-count">Loading collection...</p>
     <p id="flavor-text" class="flavor-text"></p>
+
+    <!--
+      Shown only while the "More Like This" view is active
+      (see renderSimilarToView/exitSimilarToView in app.js) -
+      replaces the normal shelf with a small curated set and
+      this is the one way back to it.
+    -->
+    <div id="similar-to-banner" class="similar-to-banner hidden">
+      <span id="similar-to-text"></span>
+      <button
+        type="button"
+        id="similar-to-clear"
+        class="similar-to-clear-button"
+      >Clear</button>
+    </div>
   </div>
 
 <div class="header-icon-buttons">
@@ -1284,6 +1299,17 @@ aria-label="Close"
               id="modal-formats"
               class="format-list"
             ></div>
+
+            <!--
+              Hidden for wishlist/suggestion entries and
+              anything without a tmdbId - see the eligibility
+              check in populateMovie in app.js.
+            -->
+            <button
+              type="button"
+              id="modal-more-like-this"
+              class="more-like-this-button hidden"
+            >More Like This</button>
 
           </div>
 
