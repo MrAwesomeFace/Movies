@@ -244,6 +244,9 @@ document.getElementById("movie-grid");
 const movieCount =
 document.getElementById("movie-count");
 
+const similarToRemoveButton =
+document.getElementById("similar-to-remove-button");
+
 const searchToggle =
 document.getElementById("search-toggle");
 
@@ -419,6 +422,23 @@ unwatchedOnly: false,
 rated: [],
 /*
 
+* "More Like This" - set only via handleMoreLikeThis, never
+* through any filter control - { tmdbId, type, title,
+* ownedIds, unowned }. Lives at this top level (a sibling of
+* type/genre/etc.) rather than inside `advanced` below - it's
+* not part of the advanced search panel at all; it just reuses
+* the same getFilteredMovies()/renderMovies() plumbing every
+* other filter does. When set, getFilteredMovies() returns
+* just that title plus its owned matches (see the short-
+* circuit there), and the rest of the normal filter UI (search
+* box, genre dropdown, type/media pills, etc.) hides entirely
+* rather than sitting there doing nothing - see
+* syncSimilarToUI() and body.similar-to-mode in style.css.
+* Cleared by its own dedicated "Remove filter" button.
+  */
+similarTo: null,
+/*
+
 * Advanced search panel state - the "+" next to the search
 * box. actor/director are substring text matches; the year/
 * runtime pairs are inclusive ranges (null = no bound on that
@@ -427,14 +447,7 @@ rated: [],
 * ALL of them (unlike Rated, which is OR - any checked rating
 * passes), separate from the single-select Genre dropdown/
 * category buttons up top since those stay as-is. See
-* movieMatchesAdvancedTag(). similarTo is a different kind of
-* criterion - set only by "More Like This" (see
-* handleMoreLikeThis), never through the panel's own inputs -
-* { tmdbId, type, title, ownedIds, unowned }. When set,
-* getFilteredMovies() returns just that title plus its owned
-* matches (see the short-circuit there) instead of the usual
-* type/genre/etc. predicates. Cleared the same way every other
-* advanced criterion is: the panel's own Clear button.
+* movieMatchesAdvancedTag().
   */
 advanced: {
 actor: "",
@@ -443,8 +456,7 @@ yearMin: null,
 yearMax: null,
 runtimeMin: null,
 runtimeMax: null,
-tags: [],
-similarTo: null
+tags: []
 }
 };
 
@@ -2534,7 +2546,7 @@ getFilteredMovies();
 toggleWishlistAddPanel();
 
 const similarTo =
-activeFilters.advanced.similarTo;
+activeFilters.similarTo;
 
 // =========================================================
 // WISHLIST (OUT OF STOCK) ITEMS
@@ -2842,17 +2854,16 @@ scheduleShelfUpdate();
 * into "already own it" vs "don't own it yet" using the whole
 * catalog (sent along so the Worker can do that split
 * server-side, since it has no idea what movies.js contains),
-* and sets activeFilters.advanced.similarTo so "More Like
-* This" flows through the exact same getFilteredMovies()/
-* renderMovies() path as every other filter, instead of a
-* separate view - see the similarTo short-circuit in
-* getFilteredMovies() and the advanced-search Clear button,
-* which is also this view's exit. One request, whatever
-* happens next (owned matches plus just enough unowned
-* suggestions - streaming availability already checked - to
-* reach 10 titles total) comes back in a single response - see
-* POST /recommendations in
-* worker.js.
+* and sets activeFilters.similarTo so "More Like This" flows
+* through the exact same getFilteredMovies()/renderMovies()
+* path as every other filter, instead of a separate view - see
+* the similarTo short-circuit in getFilteredMovies() and
+* syncSimilarToUI(), which hides the rest of the filter UI and
+* shows the one "Remove filter" button that's this view's
+* exit. One request, whatever happens next (owned matches plus
+* just enough unowned suggestions - streaming availability
+* already checked - to reach 10 titles total) comes back in a
+* single response - see POST /recommendations in worker.js.
   */
 
 async function handleMoreLikeThis(
@@ -2908,7 +2919,7 @@ data.error ||
 
 }
 
-activeFilters.advanced.similarTo = {
+activeFilters.similarTo = {
 tmdbId: String(
 getMovieId(movie)
 ),
@@ -2924,19 +2935,7 @@ Array.isArray(data.unowned)
 : []
 };
 
-updateAdvancedSearchUI();
-
 syncSimilarToUI();
-
-/*
-
-* Opened right away rather than left for the person to
-* notice the toggle's count badge on their own - this is the
-* whole reason "More Like This" is visible/undoable at all,
-* so it should be in front of them the moment it kicks in.
-  */
-
-openAdvancedSearchPanel();
 
 pendingSimilarToRender =
 true;
@@ -14994,19 +14993,19 @@ function getFilteredMovies() {
 
 /*
 
-* "More Like This" - set via activeFilters.advanced.similarTo
-* (see handleMoreLikeThis). Returns just the original title
-* (first, so it's the first card on the shelf) followed by its
-* owned matches, ignoring every other filter the same way
-* Sandra Bullock mode does below - guarantees the title you
-* clicked from is actually visible even if the current type/
-* genre/search filters would otherwise have hidden it.
+* "More Like This" - set via activeFilters.similarTo (see
+* handleMoreLikeThis). Returns just the original title (first,
+* so it's the first card on the shelf) followed by its owned
+* matches, ignoring every other filter the same way Sandra
+* Bullock mode does below - guarantees the title you clicked
+* from is actually visible even if the current type/genre/
+* search filters would otherwise have hidden it.
   */
 
-if (activeFilters.advanced.similarTo) {
+if (activeFilters.similarTo) {
 
 const similarTo =
-activeFilters.advanced.similarTo;
+activeFilters.similarTo;
 
 const original =
 movies.find(
@@ -17219,14 +17218,6 @@ searchInput.addEventListener(
 "input",
 event => {
 
-/*
-
-* No similarTo-clearing needed here - the box is read-only
-* while "More Like This" is active (see syncSimilarToUI),
-* so this only ever fires from real typing once it's back
-* to a normal, editable search box.
-  */
-
 sandraBullockModeActive =
 false;
 
@@ -17290,12 +17281,6 @@ if (searchClearButton) {
 searchClearButton.addEventListener(
 "click",
 () => {
-
-if (activeFilters.advanced.similarTo) {
-
-clearSimilarTo();
-
-}
 
 searchInput.value =
 "";
@@ -17683,21 +17668,6 @@ document.getElementById(
 "advanced-search-clear"
 );
 
-const advancedSimilarToRow =
-document.getElementById(
-"advanced-similar-to-row"
-);
-
-const advancedSimilarToCheckbox =
-document.getElementById(
-"advanced-similar-to-checkbox"
-);
-
-const advancedSimilarToName =
-document.getElementById(
-"advanced-similar-to-name"
-);
-
 const advancedActorInput =
 document.getElementById(
 "advanced-actor-input"
@@ -17770,10 +17740,6 @@ if (adv.tags.length > 0) {
 count++;
 }
 
-if (adv.similarTo) {
-count++;
-}
-
 if (activeFilters.rated.length > 0) {
 count++;
 }
@@ -17808,129 +17774,42 @@ count > 0
 /*
 
 * Keeps the visible "More Like This is active" cues in sync
-* with activeFilters.advanced.similarTo - the checkbox row in
-* the advanced panel, and the main search box (shown read-only
-* with the movie's name so it's obvious the box isn't free to
-* type in right now, rather than just silently ignoring
-* whatever's typed there). Called any time similarTo is set or
-* cleared. Does not touch panel open/closed state or trigger a
-* render - callers handle those themselves.
+* with activeFilters.similarTo. Rather than threading a lock
+* through every individual filter control (search box, genre
+* dropdown, type/media pills, advanced panel, etc.), this just
+* toggles one class on <body> - body.similar-to-mode - and
+* style.css hides that entire cluster of controls at once (see
+* the body.similar-to-mode rules there) since none of them do
+* anything useful while similarTo overrides getFilteredMovies()
+* anyway. The one thing left visible is similarToRemoveButton,
+* which is this view's only exit. Called any time similarTo is
+* set or cleared; doesn't trigger a render itself - callers
+* handle that.
   */
 
 function syncSimilarToUI() {
 
 const similarTo =
-activeFilters.advanced.similarTo;
+activeFilters.similarTo;
 
-if (advancedSimilarToRow) {
+document.body.classList.toggle(
+"similar-to-mode",
+!!similarTo
+);
 
-advancedSimilarToRow.classList.toggle(
+if (similarToRemoveButton) {
+
+similarToRemoveButton.classList.toggle(
 "hidden",
 !similarTo
 );
 
-}
+if (similarTo) {
 
-if (advancedSimilarToCheckbox) {
-
-advancedSimilarToCheckbox.checked =
-!!similarTo;
+similarToRemoveButton.textContent =
+`Remove "Similar to ${similarTo.title}" filter`;
 
 }
-
-if (advancedSimilarToName) {
-
-advancedSimilarToName.textContent =
-similarTo
-? similarTo.title
-: "";
-
-}
-
-if (searchInput) {
-
-searchInput.readOnly =
-!!similarTo;
-
-searchInput.value =
-similarTo
-? `Similar to "${similarTo.title}"`
-: currentSearch;
-
-}
-
-if (searchClearButton) {
-
-searchClearButton.classList.toggle(
-"hidden",
-!similarTo &&
-currentSearch === ""
-);
-
-}
-
-// =========================================================
-// LOCK EVERY OTHER ADVANCED FIELD
-//
-// While "Similar to" is set, getFilteredMovies() ignores
-// actor/director/year/runtime/tags/rated/unwatched entirely
-// (see the similarTo short-circuit there) - so leaving those
-// fields editable would let someone fill them in, hit Apply,
-// and see nothing happen with no explanation why. Disabling
-// them here makes that limitation visible instead of silent;
-// the only way out is the checkbox, the search box's own
-// clear, or the panel's Clear button - all three already call
-// clearSimilarTo(), which unlocks everything again via this
-// same function.
-// =========================================================
-
-const advancedTextFields =
-[
-advancedActorInput,
-advancedDirectorInput,
-advancedYearMinInput,
-advancedYearMaxInput,
-advancedRuntimeMinInput,
-advancedRuntimeMaxInput,
-advancedSearchSubmit
-];
-
-advancedTextFields.forEach(
-field => {
-
-if (field) {
-
-field.disabled =
-!!similarTo;
-
-}
-
-}
-);
-
-advancedTagCheckboxes.forEach(
-checkbox => {
-
-checkbox.disabled =
-!!similarTo;
-
-}
-);
-
-if (advancedSearchPanel) {
-
-advancedSearchPanel
-.querySelectorAll(
-".rated-filter-checkbox, .unwatched-filter-checkbox"
-)
-.forEach(
-checkbox => {
-
-checkbox.disabled =
-!!similarTo;
-
-}
-);
 
 }
 
@@ -17939,21 +17818,33 @@ checkbox.disabled =
 /*
 
 * The one place that turns "More Like This" back off - clears
-* activeFilters.advanced.similarTo and puts the checkbox row/
-* search box back to normal. Doesn't render or touch the
-* advanced panel's open/closed state; every caller (unchecking
-* the box, typing in or clearing the search box, the advanced
-* panel's own Clear button) already handles those itself.
+* activeFilters.similarTo and puts the shelf's normal filter
+* controls back. Doesn't render itself; every caller (the
+* Remove filter button today, potentially others later) already
+* handles that.
   */
 
 function clearSimilarTo() {
 
-activeFilters.advanced.similarTo =
+activeFilters.similarTo =
 null;
 
 syncSimilarToUI();
 
-updateAdvancedSearchUI();
+}
+
+if (similarToRemoveButton) {
+
+similarToRemoveButton.addEventListener(
+"click",
+() => {
+
+clearSimilarTo();
+
+renderMovies();
+
+}
+);
 
 }
 
@@ -18330,31 +18221,6 @@ renderMovies();
 }
 );
 
-/*
-
-* The "Similar to: ___" checkbox only ever toggles OFF in
-* practice - there's nothing to turn it back on by hand, since
-* only a movie's own "More Like This" button can start one.
-* Any interaction with it (checking or unchecking) just clears
-* similarTo; syncSimilarToUI() then re-settles the checkbox to
-* its real (unchecked) state.
-  */
-
-if (advancedSimilarToCheckbox) {
-
-advancedSimilarToCheckbox.addEventListener(
-"change",
-() => {
-
-clearSimilarTo();
-
-renderMovies();
-
-}
-);
-
-}
-
 if (advancedSearchClear) {
 
 advancedSearchClear.addEventListener(
@@ -18371,11 +18237,8 @@ yearMin: null,
 yearMax: null,
 runtimeMin: null,
 runtimeMax: null,
-tags: [],
-similarTo: null
+tags: []
 };
-
-syncSimilarToUI();
 
 activeFilters.rated =
 [];
