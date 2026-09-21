@@ -239,6 +239,66 @@ h1 {
   display: none;
 }
 
+/*
+ * "More Like This"'s only exit - hidden unless
+ * activeFilters.similarTo is set (see syncSimilarToUI in
+ * app.js). Sits right under the count line it's describing
+ * rather than as a floating banner elsewhere on the page. Not
+ * given a theme-arcade variant on purpose - same precedent as
+ * .more-like-this-button, .wishlist-streaming-badge, and
+ * .now-in-stock-starburst elsewhere in this file: these are
+ * feature-specific accent colors, not part of the gold/cyan
+ * branding swap the rest of the theme does.
+ */
+
+.similar-to-remove-button {
+  display: inline-block;
+
+  margin-top: 4px;
+
+  padding: 3px 11px;
+
+  border: 1px solid rgba(94, 195, 236, 0.5);
+  border-radius: 999px;
+
+  background: transparent;
+
+  color: #7dd3f5;
+
+  font-size: 12px;
+
+  cursor: pointer;
+}
+
+.similar-to-remove-button:hover {
+  border-color: #7dd3f5;
+
+  background: rgba(94, 195, 236, 0.12);
+}
+
+.similar-to-remove-button.hidden {
+  display: none;
+}
+
+/*
+ * While "More Like This" is active, the shelf's entire normal
+ * filter/search UI hides rather than sitting there doing
+ * nothing (see the similarTo short-circuit in
+ * getFilteredMovies(), app.js - none of these controls affect
+ * that view at all). Selectors are class-based rather than ID-
+ * based to match this file's existing body.mobile-filters-open
+ * pattern elsewhere, and beat each element's own base display
+ * rule on specificity alone (two classes beats one) without
+ * needing !important.
+ */
+
+body.similar-to-mode .filters,
+body.similar-to-mode .search-area,
+body.similar-to-mode #search-toggle,
+body.similar-to-mode #mobile-filters-toggle {
+  display: none;
+}
+
 body.theme-arcade #movie-count {
 
   margin: 4px 0 0;
@@ -296,27 +356,6 @@ SEARCH
 
   box-shadow:
     0 0 0 3px rgba(251, 205, 54, 0.15);
-}
-
-/*
- * While "More Like This" is active the box shows the movie's
- * name and is set read-only rather than free to type in (see
- * syncSimilarToUI in app.js) - styled to look intentionally
- * locked (light-blue border matching the More Like This
- * button/badge, no text cursor) rather than just broken.
- */
-
-#search-input:read-only {
-  border-color: rgba(94, 195, 236, 0.6);
-
-  color: #7dd3f5;
-
-  cursor: default;
-}
-
-#search-input:read-only:focus {
-  box-shadow:
-    0 0 0 3px rgba(94, 195, 236, 0.15);
 }
 
 /*
@@ -506,34 +545,6 @@ syncRatedFilterCheckboxes() in app.js.
   color: var(--gold);
 }
 
-/*
- * The visible "More Like This is active" indicator - hidden
- * unless activeFilters.advanced.similarTo is set (see
- * syncSimilarToUI in app.js). Sits above the rest of the panel
- * so it's the first thing seen when the panel opens for this
- * reason, with its own light-blue accent to match the "More
- * Like This" button and badge elsewhere.
- */
-
-.advanced-similar-to-row {
-  margin-bottom: 12px;
-
-  padding: 8px 10px;
-
-  border: 1px solid rgba(94, 195, 236, 0.4);
-  border-radius: 8px;
-
-  background: rgba(94, 195, 236, 0.08);
-}
-
-.advanced-similar-to-row .rated-filter-row {
-  color: #7dd3f5;
-}
-
-.advanced-similar-to-row strong {
-  color: #fff;
-}
-
 .advanced-search-grid {
   display: grid;
 
@@ -668,36 +679,6 @@ syncRatedFilterCheckboxes() in app.js.
 
 .advanced-search-submit:hover {
   background: #ffdb5c;
-}
-
-/*
- * Every other advanced field locks while "Similar to" is set
- * (see the LOCK EVERY OTHER ADVANCED FIELD block in
- * syncSimilarToUI, app.js) - dimmed and un-interactive rather
- * than left clickable but silently ignored. The rated/tag/
- * unwatched checkboxes use their own custom .rated-filter-box
- * square rather than a native checkbox, so the row itself dims
- * via :has() instead of relying on the (invisible) input.
- */
-
-.advanced-search-field input:disabled {
-  opacity: 0.4;
-
-  cursor: not-allowed;
-}
-
-.advanced-search-submit:disabled {
-  opacity: 0.4;
-
-  cursor: not-allowed;
-
-  background: var(--gold);
-}
-
-.advanced-search-checkbox-section .rated-filter-row:has(input:disabled) {
-  opacity: 0.4;
-
-  cursor: not-allowed;
 }
 
 @media (max-width: 599px) {
