@@ -251,12 +251,20 @@ h1 {
  * branding swap the rest of the theme does.
  */
 
+/*
+ * Sized to match .filter (the pill buttons this replaces the
+ * whole row of while active) - same padding, radius and font
+ * size - so it doesn't read as a small, easy-to-miss link
+ * sitting under the count line, even though it isn't part of
+ * that same button row.
+ */
+
 .similar-to-remove-button {
   display: inline-block;
 
-  margin-top: 4px;
+  margin-top: 8px;
 
-  padding: 3px 11px;
+  padding: 8px 14px;
 
   border: 1px solid rgba(94, 195, 236, 0.5);
   border-radius: 999px;
@@ -265,7 +273,7 @@ h1 {
 
   color: #7dd3f5;
 
-  font-size: 12px;
+  font-size: 14px;
 
   cursor: pointer;
 }
