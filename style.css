@@ -1592,7 +1592,22 @@ the general grid.
 
   pointer-events: none;
 
-  z-index: 3;
+  /*
+   * One above movie-cover-inner's own z-index (3) so it's
+   * unambiguously on top, not relying on DOM order as a
+   * tiebreak.
+   */
+
+  z-index: 4;
+
+  /*
+   * Matches movie-cover-inner's own transition exactly, so
+   * the hover-lift below animates in lockstep instead of
+   * snapping while the poster eases.
+   */
+
+  transition:
+    transform 0.20s ease;
 }
 
 .out-of-stock-banner {
@@ -6218,6 +6233,25 @@ NORMAL HOVER
 
   .movie-card:hover
   .case-spine-face {
+
+    transform:
+      translateY(-16px);
+
+  }
+
+  /*
+   * The badge layer sits outside movie-cover-inner (see the
+   * comment on .out-of-stock-badge-layer above) specifically
+   * so it escapes that element's grayscale filter - but that
+   * also means it doesn't automatically share in
+   * movie-cover-inner's own transforms, like this hover lift.
+   * Repeating the same translateY here keeps the banner/badge
+   * moving in lockstep with the case instead of staying put
+   * while everything else lifts.
+   */
+
+  .movie-card:hover
+  .out-of-stock-badge-layer {
 
     transform:
       translateY(-16px);
