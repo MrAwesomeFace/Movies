@@ -211,6 +211,19 @@ let reservations = [];
 
 let watchedKeys = new Set();
 
+/*
+
+* Which whitelisted streaming service(s) each wishlist title
+* is currently on, keyed the same way as watchedKeys
+* ("type:tmdbId") - synced weekly server-side (see
+* syncWishlistStreaming() in worker.js), just read here.
+* Value is an array already sorted into priority order
+* (Kanopy, Hulu, Disney+, Amazon Prime Video, Netflix,
+* HBO Max, Peacock); an empty array means nothing matched.
+  */
+
+let wishlistStreaming = new Map();
+
 // =========================================================
 // ELEMENTS
 // =========================================================
@@ -741,7 +754,11 @@ cast: item.cast,
 synopsis: item.synopsis,
 physical: [],
 digital: [],
-isWishlistItem: true
+isWishlistItem: true,
+streamingServices:
+wishlistStreaming.get(
+`${item.media_type}:${item.tmdb_id}`
+) || []
 
 };
 
@@ -1094,6 +1111,63 @@ error
 );
 
 wishlist = [];
+
+}
+
+}
+
+// =========================================================
+// LOAD WISHLIST STREAMING AVAILABILITY
+// =========================================================
+
+async function loadWishlistStreaming() {
+
+try {
+
+const response =
+await fetch(
+`${RESERVATIONS_API}/wishlist-streaming`,
+{
+method: "GET",
+cache: "no-store"
+}
+);
+
+if (!response.ok) {
+
+throw new Error(
+`Wishlist streaming endpoint returned ${response.status}`
+);
+
+}
+
+const data =
+await response.json();
+
+wishlistStreaming =
+new Map(
+(Array.isArray(data) ? data : []).map(
+row => [
+`${row.media_type}:${row.tmdb_id}`,
+Array.isArray(row.services) ? row.services : []
+]
+)
+);
+
+if (!currentMovie) {
+
+renderMovies();
+
+}
+
+} catch (error) {
+
+console.error(
+"Could not load wishlist streaming availability:",
+error
+);
+
+wishlistStreaming = new Map();
 
 }
 
@@ -2275,6 +2349,8 @@ renderMovies();
 loadReservations();
 
 loadWishlist();
+
+loadWishlistStreaming();
 
 loadWatched();
 
@@ -3827,6 +3903,54 @@ banner.innerHTML =
 coverInner.appendChild(
 banner
 );
+
+/*
+
+* Streaming badge - only the single top-priority match goes
+* on the front of the card (the corner, so it never collides
+* with the diagonal Out of Stock banner across the middle);
+* any additional matches are listed on the case back instead
+* (see the isWishlistItem block in populateMovie).
+    */
+
+const topService =
+movieObj.streamingServices[0];
+
+if (topService) {
+
+const streamingBadge =
+document.createElement(
+"div"
+);
+
+/*
+
+* Amazon Rental is the one entry in the priority list that
+* isn't "included with something you already subscribe
+* to" - it only ever becomes the top (and therefore
+* badge-worthy) match when nothing else did, so it gets
+* its own wording and its own color cue instead of
+* claiming to be a subscription streaming option.
+      */
+
+const isRental =
+topService === "Amazon Rental";
+
+streamingBadge.className =
+isRental
+? "wishlist-streaming-badge wishlist-rental-badge"
+: "wishlist-streaming-badge";
+
+streamingBadge.innerHTML =
+isRental
+? `<span>New to Rent!</span>`
+: `<span>Now on ${topService}</span>`;
+
+coverInner.appendChild(
+streamingBadge
+);
+
+}
 
 }
 
@@ -5544,6 +5668,35 @@ note.textContent =
 modalFormats.appendChild(
 note
 );
+
+/*
+
+* Any streaming matches beyond the single top-priority one
+* shown on the front-of-card badge - only rendered when
+* there's actually a second (or third, etc) match, so a
+* title with just one match doesn't get a redundant note
+* back here repeating the front badge.
+    */
+
+if (movie.streamingServices && movie.streamingServices.length > 1) {
+
+const streamingNote =
+document.createElement(
+"div"
+);
+
+streamingNote.className =
+"out-of-stock-back-note wishlist-streaming-back-note";
+
+streamingNote.textContent =
+"Also available on: " +
+movie.streamingServices.slice(1).join(", ");
+
+modalFormats.appendChild(
+streamingNote
+);
+
+}
 
 const removeButton =
 document.createElement(
@@ -13815,6 +13968,22 @@ data.entry
 
 wishlist.push(
 data.entry
+);
+
+/*
+
+* The Worker already checked streaming availability the
+* moment it added this title (see POST /wishlist in
+* worker.js) rather than making it wait for Sunday's sync -
+* folding that result in here means the badge can show up
+* on the very first render instead of a week later.
+      */
+
+wishlistStreaming.set(
+`${data.entry.media_type}:${data.entry.tmdb_id}`,
+Array.isArray(data.streaming_services)
+? data.streaming_services
+: []
 );
 
 }
