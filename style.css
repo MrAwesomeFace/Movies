@@ -1692,50 +1692,67 @@ the general grid.
 }
 
 /*
- * "Now on X" streaming badge - a small corner ribbon on
- * out-of-stock wishlist cards (see createOutOfStockCard in
- * app.js), tucked in the top-left corner specifically so it
- * never collides with the diagonal Out of Stock banner
- * crossing the middle of the poster. Only ever shows the
- * single top-priority match (Kanopy, Hulu, Disney+, Amazon
- * Prime Video, Netflix, HBO Max, Peacock, Amazon Rental, in
- * that order) - any additional matches are listed on the case
- * back instead (.wishlist-streaming-back-note below).
+ * "Now on X" streaming badge - a real spiky starburst sticker
+ * on out-of-stock wishlist cards (see createOutOfStockCard in
+ * app.js), same shape/construction as .now-in-stock-starburst
+ * above (just smaller and tucked in the top-left corner
+ * instead of centered, so it doesn't collide with the diagonal
+ * Out of Stock banner crossing the middle of the poster). Only
+ * ever shows the single top-priority match (Kanopy, Hulu,
+ * Disney+, Amazon Prime Video, Netflix, HBO Max, Peacock,
+ * Amazon Rental, in that order) - any additional matches are
+ * listed on the case back instead
+ * (.wishlist-streaming-back-note below).
  *
- * .wishlist-rental-badge overrides the teal gradient with an
- * amber one specifically for the "New to Rent!" case - Amazon
- * Rental is a standalone charge, not something already
+ * .wishlist-rental-badge overrides the light-blue gradient
+ * with an amber one specifically for the "New to Rent!" case -
+ * Amazon Rental is a standalone charge, not something already
  * included with a subscription like every other entry, so it
- * gets a visually distinct (not celebratory-teal) treatment.
+ * gets a visually distinct (not celebratory-blue) treatment.
  */
 
 .wishlist-streaming-badge {
   position: absolute;
 
-  left: 6%;
-  top: 4%;
+  left: 2%;
+  top: 2%;
 
-  max-width: 60%;
+  width: 46%;
 
-  padding: 4px 9px;
+  aspect-ratio: 1;
 
-  border-radius: 5px;
+  transform: rotate(-8deg);
 
   background:
     linear-gradient(
       135deg,
-      #3fd8c2,
-      #2196a8
+      #d6f1ff,
+      #5ec3ec 55%,
+      #2a93c4
+    );
+
+  clip-path:
+    polygon(
+      50% 0%, 58.3% 19.1%, 75% 6.7%, 72.6% 27.4%,
+      93.3% 25%, 80.9% 41.7%, 100% 50%, 80.9% 58.3%,
+      93.3% 75%, 72.6% 72.6%, 75% 93.3%, 58.3% 80.9%,
+      50% 100%, 41.7% 80.9%, 25% 93.3%, 27.4% 72.6%,
+      6.7% 75%, 19.1% 58.3%, 0% 50%, 19.1% 41.7%,
+      6.7% 25%, 27.4% 27.4%, 25% 6.7%, 41.7% 19.1%
     );
 
   box-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.55);
-
-  transform: rotate(-6deg);
+    0 3px 10px rgba(0, 0, 0, 0.6);
 
   z-index: 5;
 
   pointer-events: none;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
 
   text-align: center;
 }
@@ -1743,26 +1760,31 @@ the general grid.
 .wishlist-streaming-badge span {
   display: block;
 
-  color: #04211f;
+  color: #063049;
 
   font-family: 'VT323', monospace;
 
-  font-size: 12px;
+  font-size: 10.5px;
 
-  line-height: 1.15;
+  line-height: 1.1;
 
   font-weight: 400;
 
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
 
   text-transform: uppercase;
+
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+
+  padding: 0 20%;
 }
 
 .wishlist-rental-badge {
   background:
     linear-gradient(
       135deg,
-      #ffb35c,
+      #ffe0ad,
+      #ffb35c 55%,
       #d97a1f
     );
 }
