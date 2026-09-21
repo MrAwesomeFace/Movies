@@ -4209,6 +4209,35 @@ return card;
 
 /*
 
+* Shortened display name for the front-of-card starburst badge
+* only - the case back's "Available on: ..." list and the
+* Worker's STREAMING_PRIORITY/matching logic all keep using the
+* full names, since those need the real values. This is purely
+* cosmetic, for fitting cleanly on a small badge.
+  */
+
+function shortServiceName(
+service
+) {
+
+if (service === "HBO Max") {
+
+return "HBO";
+
+}
+
+if (service === "Amazon Prime Video") {
+
+return "Prime";
+
+}
+
+return service;
+
+}
+
+/*
+
 * Shared by createOutOfStockCard (real wishlist rows) and
 * createSimilarSuggestionCard (ephemeral "More Like This"
 * suggestions, never written to the wishlist table unless
@@ -4319,7 +4348,7 @@ isRental
 streamingBadge.innerHTML =
 isRental
 ? `<span>New to Rent!</span>`
-: `<span>Now on ${topService}</span>`;
+: `<span>Now on ${shortServiceName(topService)}</span>`;
 
 badgeLayer.appendChild(
 streamingBadge
@@ -8532,15 +8561,48 @@ false;
 
 * Action — bullet holes with radiating cracks, reusing the
 * same "sudden impact mark" concept as the glass-shatter
-* effect. No flash/glow, just the hole itself.
+* effect. The hole's core stays dark either way (still reads
+* as a hole, not a flash); the rim and crack lines are a light
+* "scorch" tone instead of the original near-black - the dark-
+* on-dark version was nearly invisible against the page's own
+* dark background. Classic gets a warm bone/cream scorch color;
+* arcade gets a cyan one to match that theme's own accent,
+* same precedent as the drop-shadow glow on each - a feature-
+* specific color choice, not part of the gold/cyan branding
+* swap the rest of the theme does automatically.
   */
 
 function makeBulletHoleSVG() {
 
-return `<svg viewBox="0 0 100 100" width="100%" height="100%">
-<circle cx="50" cy="50" r="16" fill="#1a1512"/>
-<circle cx="50" cy="50" r="16" fill="none" stroke="#3a2f28" stroke-width="3"/>
-<path d="M50,34 L30,5 M50,34 L14,18 M66,38 L95,8 M68,50 L98,46 M62,64 L84,94 M42,66 L22,96 M34,50 L4,58" stroke="#2a221d" stroke-width="2.5" fill="none" opacity="0.8"/>
+const isArcade =
+document.body.classList.contains(
+"theme-arcade"
+);
+
+const holeFill =
+isArcade
+? "#140a14"
+: "#1a1512";
+
+const scorchColor =
+isArcade
+? "#00fff2"
+: "#f0e3c8";
+
+const crackColor =
+isArcade
+? "#7dfff5"
+: "#e2cfa8";
+
+const glowColor =
+isArcade
+? "rgba(0, 255, 242, 0.45)"
+: "rgba(240, 227, 200, 0.35)";
+
+return `<svg viewBox="0 0 100 100" width="100%" height="100%" style="filter: drop-shadow(0 0 3px ${glowColor});">
+<circle cx="50" cy="50" r="16" fill="${holeFill}"/>
+<circle cx="50" cy="50" r="16" fill="none" stroke="${scorchColor}" stroke-width="3"/>
+<path d="M50,34 L30,5 M50,34 L14,18 M66,38 L95,8 M68,50 L98,46 M62,64 L84,94 M42,66 L22,96 M34,50 L4,58" stroke="${crackColor}" stroke-width="2.5" fill="none" opacity="0.9"/>
 </svg>`;
 
 }
