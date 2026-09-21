@@ -55,6 +55,20 @@
       </div>
     </div>
     <p id="movie-count">Loading collection...</p>
+    <!--
+      The only exit from "More Like This" - hidden unless
+      activeFilters.similarTo is set (see syncSimilarToUI in
+      app.js). The rest of the shelf's filter controls (search,
+      genre, type/media, etc.) hide entirely while this is
+      active - see body.similar-to-mode in style.css - since
+      none of them do anything while it's on, so this is the
+      one thing left to interact with besides the shelf itself.
+    -->
+    <button
+      type="button"
+      id="similar-to-remove-button"
+      class="similar-to-remove-button hidden"
+    >Remove filter</button>
     <p id="flavor-text" class="flavor-text"></p>
   </div>
 
@@ -267,28 +281,6 @@ aria-label="Clear search"
       id="advanced-search-clear"
       class="advanced-search-clear"
     >Clear</button>
-  </div>
-
-  <!--
-    Hidden unless activeFilters.advanced.similarTo is set (see
-    handleMoreLikeThis/syncSimilarToUI in app.js) - the visible
-    sign that "More Like This" is active and this box's own way
-    to turn it back off. Never checked by hand to start a
-    search (only the movie's own "More Like This" button does
-    that); unchecking it just clears similarTo.
-  -->
-  <div
-    id="advanced-similar-to-row"
-    class="advanced-similar-to-row hidden"
-  >
-    <label class="rated-filter-row">
-      <input
-        type="checkbox"
-        id="advanced-similar-to-checkbox"
-      >
-      <span class="rated-filter-box"></span>
-      Similar to: <strong id="advanced-similar-to-name"></strong>
-    </label>
   </div>
 
   <div class="advanced-search-grid">
