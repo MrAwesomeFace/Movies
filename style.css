@@ -1691,6 +1691,86 @@ the general grid.
   padding: 0 14%;
 }
 
+/*
+ * "Now on X" streaming badge - a small corner ribbon on
+ * out-of-stock wishlist cards (see createOutOfStockCard in
+ * app.js), tucked in the top-left corner specifically so it
+ * never collides with the diagonal Out of Stock banner
+ * crossing the middle of the poster. Only ever shows the
+ * single top-priority match (Kanopy, Hulu, Disney+, Amazon
+ * Prime Video, Netflix, HBO Max, Peacock, Amazon Rental, in
+ * that order) - any additional matches are listed on the case
+ * back instead (.wishlist-streaming-back-note below).
+ *
+ * .wishlist-rental-badge overrides the teal gradient with an
+ * amber one specifically for the "New to Rent!" case - Amazon
+ * Rental is a standalone charge, not something already
+ * included with a subscription like every other entry, so it
+ * gets a visually distinct (not celebratory-teal) treatment.
+ */
+
+.wishlist-streaming-badge {
+  position: absolute;
+
+  left: 6%;
+  top: 4%;
+
+  max-width: 60%;
+
+  padding: 4px 9px;
+
+  border-radius: 5px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #3fd8c2,
+      #2196a8
+    );
+
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.55);
+
+  transform: rotate(-6deg);
+
+  z-index: 5;
+
+  pointer-events: none;
+
+  text-align: center;
+}
+
+.wishlist-streaming-badge span {
+  display: block;
+
+  color: #04211f;
+
+  font-family: 'VT323', monospace;
+
+  font-size: 12px;
+
+  line-height: 1.15;
+
+  font-weight: 400;
+
+  letter-spacing: 0.5px;
+
+  text-transform: uppercase;
+}
+
+.wishlist-rental-badge {
+  background:
+    linear-gradient(
+      135deg,
+      #ffb35c,
+      #d97a1f
+    );
+}
+
+.wishlist-rental-badge span {
+  color: #2e1500;
+}
+
 .out-of-stock-back-note {
   padding: 10px 12px;
 
@@ -1703,6 +1783,12 @@ the general grid.
   font-style: italic;
 
   color: #ddd;
+}
+
+.wishlist-streaming-back-note {
+  margin-top: 8px;
+
+  font-style: normal;
 }
 
 .wishlist-remove-button {
