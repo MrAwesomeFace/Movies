@@ -1635,6 +1635,14 @@ the general grid.
   pointer-events: none;
 
   text-align: center;
+
+  /*
+   * Slight caution-tape tilt - higher on the left, sloping down
+   * to the right - instead of a dead-straight band across the
+   * case. Rotates around its own center, which is fine at this
+   * small an angle; transform-origin doesn't need adjusting.
+   */
+  transform: rotate(15deg);
 }
 
 .out-of-stock-banner span {
@@ -1917,50 +1925,6 @@ the general grid.
   opacity: 0.6;
 
   cursor: default;
-}
-
-/*
- * Banner shown in place of the normal shelf while "More Like
- * This" is active (see renderSimilarToView/exitSimilarToView
- * in app.js) - the one way back to the regular shelf.
- */
-
-.similar-to-banner {
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 10px;
-
-  margin-top: 6px;
-
-  font-size: 13px;
-
-  color: #cfd8dc;
-}
-
-.similar-to-clear-button {
-  padding: 3px 11px;
-
-  border: 1px solid rgba(255, 255, 255, 0.3);
-
-  border-radius: 999px;
-
-  background: transparent;
-
-  color: #ddd;
-
-  font-size: 12px;
-
-  cursor: pointer;
-}
-
-.similar-to-clear-button:hover {
-  border-color: #ff6b6b;
-
-  color: #ff6b6b;
 }
 
 
