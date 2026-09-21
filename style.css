@@ -299,6 +299,27 @@ SEARCH
 }
 
 /*
+ * While "More Like This" is active the box shows the movie's
+ * name and is set read-only rather than free to type in (see
+ * syncSimilarToUI in app.js) - styled to look intentionally
+ * locked (light-blue border matching the More Like This
+ * button/badge, no text cursor) rather than just broken.
+ */
+
+#search-input:read-only {
+  border-color: rgba(94, 195, 236, 0.6);
+
+  color: #7dd3f5;
+
+  cursor: default;
+}
+
+#search-input:read-only:focus {
+  box-shadow:
+    0 0 0 3px rgba(94, 195, 236, 0.15);
+}
+
+/*
  * type="search" inputs already show a native clear "x" in
  * some browsers once there's text - hidden here so it never
  * doubles up with the custom button below, which needs to
@@ -485,6 +506,34 @@ syncRatedFilterCheckboxes() in app.js.
   color: var(--gold);
 }
 
+/*
+ * The visible "More Like This is active" indicator - hidden
+ * unless activeFilters.advanced.similarTo is set (see
+ * syncSimilarToUI in app.js). Sits above the rest of the panel
+ * so it's the first thing seen when the panel opens for this
+ * reason, with its own light-blue accent to match the "More
+ * Like This" button and badge elsewhere.
+ */
+
+.advanced-similar-to-row {
+  margin-bottom: 12px;
+
+  padding: 8px 10px;
+
+  border: 1px solid rgba(94, 195, 236, 0.4);
+  border-radius: 8px;
+
+  background: rgba(94, 195, 236, 0.08);
+}
+
+.advanced-similar-to-row .rated-filter-row {
+  color: #7dd3f5;
+}
+
+.advanced-similar-to-row strong {
+  color: #fff;
+}
+
 .advanced-search-grid {
   display: grid;
 
@@ -619,6 +668,36 @@ syncRatedFilterCheckboxes() in app.js.
 
 .advanced-search-submit:hover {
   background: #ffdb5c;
+}
+
+/*
+ * Every other advanced field locks while "Similar to" is set
+ * (see the LOCK EVERY OTHER ADVANCED FIELD block in
+ * syncSimilarToUI, app.js) - dimmed and un-interactive rather
+ * than left clickable but silently ignored. The rated/tag/
+ * unwatched checkboxes use their own custom .rated-filter-box
+ * square rather than a native checkbox, so the row itself dims
+ * via :has() instead of relying on the (invisible) input.
+ */
+
+.advanced-search-field input:disabled {
+  opacity: 0.4;
+
+  cursor: not-allowed;
+}
+
+.advanced-search-submit:disabled {
+  opacity: 0.4;
+
+  cursor: not-allowed;
+
+  background: var(--gold);
+}
+
+.advanced-search-checkbox-section .rated-filter-row:has(input:disabled) {
+  opacity: 0.4;
+
+  cursor: not-allowed;
 }
 
 @media (max-width: 599px) {
