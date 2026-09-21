@@ -1881,6 +1881,88 @@ the general grid.
   color: #ff6b6b;
 }
 
+/*
+ * "More Like This" - sits under "Where to find it" on the
+ * case back for an owned movie (hidden for wishlist/suggestion
+ * entries, same eligibility as the watched toggle). Styled as
+ * its own small pill rather than reusing wishlist-remove-button
+ * so it doesn't read as a destructive/removal action.
+ */
+
+.more-like-this-button {
+  margin-top: 10px;
+
+  padding: 7px 13px;
+
+  border: 1px solid rgba(94, 195, 236, 0.5);
+
+  border-radius: 999px;
+
+  background: transparent;
+
+  color: #7dd3f5;
+
+  font-size: 12px;
+
+  cursor: pointer;
+}
+
+.more-like-this-button:hover {
+  border-color: #7dd3f5;
+
+  background: rgba(94, 195, 236, 0.12);
+}
+
+.more-like-this-button:disabled {
+  opacity: 0.6;
+
+  cursor: default;
+}
+
+/*
+ * Banner shown in place of the normal shelf while "More Like
+ * This" is active (see renderSimilarToView/exitSimilarToView
+ * in app.js) - the one way back to the regular shelf.
+ */
+
+.similar-to-banner {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  margin-top: 6px;
+
+  font-size: 13px;
+
+  color: #cfd8dc;
+}
+
+.similar-to-clear-button {
+  padding: 3px 11px;
+
+  border: 1px solid rgba(255, 255, 255, 0.3);
+
+  border-radius: 999px;
+
+  background: transparent;
+
+  color: #ddd;
+
+  font-size: 12px;
+
+  cursor: pointer;
+}
+
+.similar-to-clear-button:hover {
+  border-color: #ff6b6b;
+
+  color: #ff6b6b;
+}
+
 
 /* =========================================================
 VCR INTRO ("MOVIE TOURNAMENT TAKEOVER")
