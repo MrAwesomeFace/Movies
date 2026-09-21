@@ -252,11 +252,17 @@ h1 {
  */
 
 /*
- * Sized to match .filter (the pill buttons this replaces the
- * whole row of while active) - same padding, radius and font
- * size - so it doesn't read as a small, easy-to-miss link
- * sitting under the count line, even though it isn't part of
- * that same button row.
+ * Sized AND colored to match .filter.active (the "this filter
+ * is currently engaged" look every other pill already has) -
+ * same padding, radius, font size, and the same solid color
+ * fill rather than a plain outline, since "Similar to" really
+ * is just another active filter as far as the shelf is
+ * concerned. Deliberately breaks from this feature's usual
+ * light-blue accent (used on the More Like This button and the
+ * streaming badges) specifically here, since the goal is to
+ * read as one of the filter pills, not as its own thing. The
+ * arcade override right below matches .filter.active there too,
+ * pulse included.
  */
 
 .similar-to-remove-button {
@@ -266,26 +272,40 @@ h1 {
 
   padding: 8px 14px;
 
-  border: 1px solid rgba(94, 195, 236, 0.5);
+  border: 1px solid var(--gold);
   border-radius: 999px;
 
-  background: transparent;
+  background: var(--gold);
 
-  color: #7dd3f5;
+  color: #111111;
 
   font-size: 14px;
+  font-weight: 600;
 
   cursor: pointer;
 }
 
 .similar-to-remove-button:hover {
-  border-color: #7dd3f5;
-
-  background: rgba(94, 195, 236, 0.12);
+  background: #ffdb5c;
+  border-color: #ffdb5c;
 }
 
 .similar-to-remove-button.hidden {
   display: none;
+}
+
+body.theme-arcade .similar-to-remove-button {
+  background: #0a0a0d;
+
+  border-color: rgba(255, 47, 209, 0.5);
+
+  color: #fff0fa;
+
+  animation: arcade-pill-pulse 2.4s ease-in-out infinite;
+}
+
+body.theme-arcade .similar-to-remove-button:hover {
+  background: #14060f;
 }
 
 /*
