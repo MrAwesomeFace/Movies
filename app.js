@@ -224,6 +224,28 @@ let watchedKeys = new Set();
 
 let wishlistStreaming = new Map();
 
+/*
+
+* Non-null only while the "More Like This" view is showing -
+* { title, ownedIds, unowned }. ownedIds are the recommended
+* titles you already own (rendered as completely normal
+* cards); unowned are up to 3 TMDB suggestions you don't own
+* yet (rendered as ephemeral Out of Stock-style cards - see
+* createSimilarSuggestionCard). Cleared by exitSimilarToView().
+  */
+
+let similarToState = null;
+
+/*
+
+* Set right before closeMovie() is called specifically to
+* enter the "More Like This" view - tells finishCloseMovie()
+* to do the one full renderMovies() it otherwise deliberately
+* skips on every ordinary close (see the comment there).
+  */
+
+let pendingSimilarToRender = false;
+
 // =========================================================
 // ELEMENTS
 // =========================================================
@@ -233,6 +255,15 @@ document.getElementById("movie-grid");
 
 const movieCount =
 document.getElementById("movie-count");
+
+const similarToBanner =
+document.getElementById("similar-to-banner");
+
+const similarToText =
+document.getElementById("similar-to-text");
+
+const similarToClearButton =
+document.getElementById("similar-to-clear");
 
 const searchToggle =
 document.getElementById("search-toggle");
@@ -761,6 +792,88 @@ wishlistStreaming.get(
 ) || []
 
 };
+
+}
+
+/*
+
+* Adapter for a "More Like This" suggestion - a title TMDB
+* recommended that isn't in the collection, conjured live at
+* click time (see handleMoreLikeThis) rather than pulled from
+* the real wishlist table. Shaped just enough like a movie
+* object to flow through the same createMovieCard/populateMovie
+* path as everything else - isSimilarSuggestion is the one flag
+* that tells populateMovie this isn't a real wishlist row, so
+* the case back offers "Add to Wishlist" instead of "Remove
+* from wishlist" (see the isWishlistItem block there). Fields
+* TMDB's recommendations endpoint doesn't provide up front
+* (runtime, director, cast, rated) stay blank - if it gets
+* added for real, POST /wishlist fetches full details anyway,
+* same as adding from search.
+  */
+
+function similarSuggestionToMovie(suggestion) {
+
+return {
+
+title: suggestion.title,
+tmdbTitle: suggestion.title,
+type: suggestion.media_type,
+tmdbId: suggestion.tmdb_id,
+poster: suggestion.poster,
+year: suggestion.year,
+runtime: "",
+genre: "",
+rated: "",
+director: "",
+cast: "",
+synopsis: suggestion.synopsis,
+physical: [],
+digital: [],
+isWishlistItem: true,
+isSimilarSuggestion: true,
+streamingServices:
+Array.isArray(suggestion.services)
+? suggestion.services
+: []
+
+};
+
+}
+
+/*
+
+* Same "reuse createMovieCard, bolt the Out of Stock treatment
+* on after" pattern as createOutOfStockCard - see that function
+* and applyOutOfStockBadgeLayer for why.
+  */
+
+function createSimilarSuggestionCard(
+suggestion,
+index
+) {
+
+const movieObj =
+similarSuggestionToMovie(
+suggestion
+);
+
+const card =
+createMovieCard(
+movieObj,
+index
+);
+
+card.classList.add(
+"out-of-stock-card"
+);
+
+applyOutOfStockBadgeLayer(
+card,
+movieObj
+);
+
+return card;
 
 }
 
@@ -2421,6 +2534,25 @@ match.name
 
 function renderMovies() {
 
+/*
+
+* "More Like This" replaces the normal grid entirely with a
+* small curated set (see handleMoreLikeThis/renderSimilarToView)
+* rather than layering onto the existing genre/type/reservation
+* filters - short-circuiting here means every other place that
+* calls renderMovies() (adding to the wishlist, a background
+* data refresh, and so on) keeps showing that curated set
+* instead of silently snapping back to the full shelf.
+  */
+
+if (similarToState) {
+
+renderSimilarToView();
+
+return;
+
+}
+
 movieGrid.innerHTML =
 "";
 
@@ -2650,6 +2782,298 @@ card
 // =========================================================
 
 scheduleShelfUpdate();
+
+}
+
+// =========================================================
+// "MORE LIKE THIS" VIEW
+//
+// A self-contained alternate rendering path rather than one
+// more branch threaded through getFilteredMovies() - this
+// isn't a filter on top of genre/type/reservation (it ignores
+// all of those), it's a wholly separate curated set, so it's
+// simpler and safer to keep it in its own function that
+// renderMovies() just defers to (see the short-circuit at the
+// top of renderMovies).
+// =========================================================
+
+function renderSimilarToView() {
+
+movieGrid.innerHTML =
+"";
+
+movieGrid.classList.remove(
+"single-card-centered"
+);
+
+if (similarToBanner && similarToText) {
+
+similarToBanner.classList.remove(
+"hidden"
+);
+
+similarToText.textContent =
+`Similar to "${similarToState.title}"`;
+
+}
+
+const ownedMatches =
+movies.filter(
+movie =>
+similarToState.ownedIds.includes(
+String(
+getMovieId(movie)
+)
+)
+);
+
+ownedMatches.sort(
+(a, b) =>
+a.title.localeCompare(
+b.title,
+undefined,
+{
+sensitivity: "base"
+}
+)
+);
+
+/*
+
+* Re-filtered on every render (rather than trusting the
+* snapshot taken when "More Like This" was first clicked) so
+* a suggestion that gets added to the wishlist - or shows up
+* as genuinely owned - during this view drops out immediately
+* instead of lingering as a stale duplicate.
+  */
+
+const unownedToShow =
+similarToState.unowned.filter(
+suggestion =>
+!movies.some(
+movie =>
+String(
+getMovieId(movie)
+) === String(suggestion.tmdb_id)
+) &&
+!wishlist.some(
+item =>
+String(item.tmdb_id) ===
+String(suggestion.tmdb_id)
+)
+);
+
+const totalCount =
+ownedMatches.length +
+unownedToShow.length;
+
+movieCount.textContent =
+totalCount === 0
+? `No similar titles found`
+: `${totalCount} similar to "${similarToState.title}"`;
+
+if (totalCount === 0) {
+
+noResults.classList.remove(
+"hidden"
+);
+
+return;
+
+}
+
+noResults.classList.add(
+"hidden"
+);
+
+ownedMatches.forEach(
+(movie, index) => {
+
+const card =
+createMovieCard(
+movie,
+index
+);
+
+movieGrid.appendChild(
+card
+);
+
+}
+);
+
+unownedToShow.forEach(
+(suggestion, index) => {
+
+const card =
+createSimilarSuggestionCard(
+suggestion,
+ownedMatches.length + index
+);
+
+movieGrid.appendChild(
+card
+);
+
+}
+);
+
+scheduleShelfUpdate();
+
+}
+
+/*
+
+* Clears the "More Like This" curated view's state without also
+* triggering a render - used by exitSimilarToView() (which does
+* want its own render) AND by every normal filter-interaction
+* entry point below (genre, type/media pills, search, random
+* toggle), each of which already calls renderMovies() right
+* after, same pattern as sandraBullockModeActive = false above.
+*/
+function clearSimilarToState() {
+
+similarToState =
+null;
+
+if (similarToBanner) {
+
+similarToBanner.classList.add(
+"hidden"
+);
+
+}
+
+}
+
+function exitSimilarToView() {
+
+clearSimilarToState();
+
+renderMovies();
+
+}
+
+if (similarToClearButton) {
+
+similarToClearButton.addEventListener(
+"click",
+() => {
+
+exitSimilarToView();
+
+}
+);
+
+}
+
+/*
+
+* Fetches TMDB's recommendations for one movie, splits them
+* into "already own it" vs "don't own it yet" using the whole
+* catalog (sent along so the Worker can do that split
+* server-side, since it has no idea what movies.js contains),
+* and enters the More Like This view. One request, whatever
+* happens next (owned matches, up to 3 unowned suggestions
+* with their streaming availability already checked) comes
+* back in a single response - see POST /recommendations in
+* worker.js.
+  */
+
+async function handleMoreLikeThis(
+movie,
+button
+) {
+
+const originalText =
+button.textContent;
+
+button.disabled =
+true;
+
+button.textContent =
+"Finding similar titles...";
+
+try {
+
+const ownedIds =
+movies
+.filter(
+m => m.type === movie.type
+)
+.map(
+m => getMovieId(m)
+);
+
+const response =
+await fetch(
+`${RESERVATIONS_API}/recommendations`,
+{
+method: "POST",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+tmdb_id: getMovieId(movie),
+media_type: movie.type,
+owned_ids: ownedIds
+})
+}
+);
+
+const data =
+await response.json();
+
+if (!response.ok) {
+
+throw new Error(
+data.error ||
+`Server returned ${response.status}`
+);
+
+}
+
+similarToState = {
+title: movie.title,
+ownedIds:
+(data.owned_tmdb_ids || []).map(
+String
+),
+unowned:
+Array.isArray(data.unowned)
+? data.unowned
+: []
+};
+
+pendingSimilarToRender =
+true;
+
+closeMovie();
+
+} catch (error) {
+
+console.error(
+"More Like This failed:",
+error
+);
+
+button.textContent =
+"Couldn't load suggestions";
+
+setTimeout(
+() => {
+
+button.textContent =
+originalText;
+
+button.disabled =
+false;
+
+},
+2200
+);
+
+}
 
 }
 
@@ -3882,12 +4306,41 @@ card.classList.add(
 "out-of-stock-card"
 );
 
+applyOutOfStockBadgeLayer(
+card,
+movieObj
+);
+
+return card;
+
+}
+
+/*
+
+* Shared by createOutOfStockCard (real wishlist rows) and
+* createSimilarSuggestionCard (ephemeral "More Like This"
+* suggestions, never written to the wishlist table unless
+* someone actually clicks Add) - both need the exact same
+* Out of Stock banner + streaming badge treatment, just built
+* from different source objects, so the DOM-building logic
+* lives here once.
+  */
+
+function applyOutOfStockBadgeLayer(
+card,
+movieObj
+) {
+
 const coverInner =
 card.querySelector(
 ".movie-cover-inner"
 );
 
-if (coverInner) {
+if (!coverInner) {
+
+return;
+
+}
 
 /*
 
@@ -3900,7 +4353,7 @@ if (coverInner) {
 * the badges live in their own sibling layer instead,
 * positioned and clipped to match coverInner exactly (same
 * offset/rounding) but never touched by that filter.
-    */
+  */
 
 const coverEl =
 card.querySelector(
@@ -3941,10 +4394,10 @@ banner
 * with the diagonal Out of Stock banner across the middle);
 * any additional matches are listed on the case back instead
 * (see the isWishlistItem block in populateMovie).
-    */
+  */
 
 const topService =
-movieObj.streamingServices[0];
+(movieObj.streamingServices || [])[0];
 
 if (topService) {
 
@@ -3961,7 +4414,7 @@ document.createElement(
 * badge-worthy) match when nothing else did, so it gets
 * its own wording and its own color cue instead of
 * claiming to be a subscription streaming option.
-      */
+    */
 
 const isRental =
 topService === "Amazon Rental";
@@ -3981,10 +4434,6 @@ streamingBadge
 );
 
 }
-
-}
-
-return card;
 
 }
 
@@ -5366,6 +5815,54 @@ watchedCheckboxEl.checked
 
 /*
 
+* More Like This — same eligibility as the watched toggle
+* (a real, owned title with a tmdbId), plus it makes no sense
+* on a suggestion card that's already showing "you don't own
+* this yet" for the exact same reason.
+  */
+
+const moreLikeThisButtonEl =
+document.getElementById(
+"modal-more-like-this"
+);
+
+if (moreLikeThisButtonEl) {
+
+const moreLikeThisEligible =
+!movie.isEmptyReservationPlaceholder &&
+!movie.isWishlistItem &&
+movie.tmdbId;
+
+moreLikeThisButtonEl.classList.toggle(
+"hidden",
+!moreLikeThisEligible
+);
+
+if (moreLikeThisEligible) {
+
+moreLikeThisButtonEl.disabled =
+false;
+
+moreLikeThisButtonEl.textContent =
+"More Like This";
+
+moreLikeThisButtonEl.onclick = event => {
+
+event.stopPropagation();
+
+handleMoreLikeThis(
+movie,
+moreLikeThisButtonEl
+);
+
+};
+
+}
+
+}
+
+/*
+
 * Barcode number — 0, the real release year, the real TMDB
 * id, 0. Falls back to a placeholder digit only if a movie
 * is genuinely missing that data, rather than showing
@@ -5693,7 +6190,9 @@ note.className =
 "out-of-stock-back-note";
 
 note.textContent =
-"You don't own this — added as a reminder to buy or rent it.";
+movie.isSimilarSuggestion
+? "You don't own this — suggested because it's similar to what you were just looking at."
+: "You don't own this — added as a reminder to buy or rent it.";
 
 modalFormats.appendChild(
 note
@@ -5701,14 +6200,13 @@ note
 
 /*
 
-* Any streaming matches beyond the single top-priority one
-* shown on the front-of-card badge - only rendered when
-* there's actually a second (or third, etc) match, so a
-* title with just one match doesn't get a redundant note
-* back here repeating the front badge.
+* Every streaming match, including the one already shown as
+* the front-of-card badge - this is "Where to find it", so it
+* should be the complete answer on its own rather than
+* assuming someone remembers what the front badge said.
     */
 
-if (movie.streamingServices && movie.streamingServices.length > 1) {
+if (movie.streamingServices && movie.streamingServices.length > 0) {
 
 const streamingNote =
 document.createElement(
@@ -5719,14 +6217,64 @@ streamingNote.className =
 "out-of-stock-back-note wishlist-streaming-back-note";
 
 streamingNote.textContent =
-"Also available on: " +
-movie.streamingServices.slice(1).join(", ");
+"Available on: " +
+movie.streamingServices.join(", ");
 
 modalFormats.appendChild(
 streamingNote
 );
 
 }
+
+/*
+
+* A "More Like This" suggestion isn't a real wishlist row -
+* offering "Add to Wishlist" instead of a remove button
+* reuses the exact same addToWishlist() flow the search panel
+* uses, so a full detail fetch happens then and there rather
+* than needing the lighter recommendation data to be complete
+* up front.
+      */
+
+if (movie.isSimilarSuggestion) {
+
+const addButton =
+document.createElement(
+"button"
+);
+
+addButton.type =
+"button";
+
+addButton.className =
+"wishlist-remove-button";
+
+addButton.textContent =
+"Add to Wishlist";
+
+addButton.addEventListener(
+"click",
+event => {
+
+event.stopPropagation();
+
+addToWishlist(
+{
+tmdb_id: movie.tmdbId,
+media_type: movie.type,
+title: movie.title
+},
+addButton
+);
+
+}
+);
+
+modalFormats.appendChild(
+addButton
+);
+
+} else {
 
 const removeButton =
 document.createElement(
@@ -5759,6 +6307,8 @@ movie.title
 modalFormats.appendChild(
 removeButton
 );
+
+}
 
 }
 
@@ -6445,6 +6995,27 @@ closedMovie
 renderPersistentCrack(
 closedCard
 );
+
+}
+
+/*
+
+* "More Like This" is the one close that DOES need a full
+* renderMovies() right after - it's replacing the shelf's
+* entire contents with a different curated set, not just
+* returning to the same one, so the single-card patch above
+* isn't enough. pendingSimilarToRender is only ever set right
+* before a close triggered specifically for this reason (see
+* handleMoreLikeThis), so every ordinary close still skips the
+* rebuild exactly as before.
+  */
+
+if (pendingSimilarToRender) {
+
+pendingSimilarToRender =
+false;
+
+renderMovies();
 
 }
 
@@ -12954,6 +13525,8 @@ button.addEventListener(
 sandraBullockModeActive =
 false;
 
+clearSimilarToState();
+
 const group =
 button.dataset.filterGroup;
 
@@ -13279,6 +13852,8 @@ event => {
 sandraBullockModeActive =
 false;
 
+clearSimilarToState();
+
 activeFilters.media =
 event.target.value;
 
@@ -13316,6 +13891,8 @@ event => {
 
 sandraBullockModeActive =
 false;
+
+clearSimilarToState();
 
 activeFilters.genre =
 event.target.value ||
@@ -15036,6 +15613,8 @@ randomButton.addEventListener(
 sandraBullockModeActive =
 false;
 
+clearSimilarToState();
+
 randomMode =
 !randomMode;
 
@@ -16716,6 +17295,8 @@ event => {
 sandraBullockModeActive =
 false;
 
+clearSimilarToState();
+
 currentSearch =
 event.target.value.trim();
 
@@ -16782,6 +17363,8 @@ searchInput.value =
 
 sandraBullockModeActive =
 false;
+
+clearSimilarToState();
 
 currentSearch =
 "";
