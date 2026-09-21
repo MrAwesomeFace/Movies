@@ -226,18 +226,6 @@ let wishlistStreaming = new Map();
 
 /*
 
-* Non-null only while the "More Like This" view is showing -
-* { title, ownedIds, unowned }. ownedIds are the recommended
-* titles you already own (rendered as completely normal
-* cards); unowned are up to 3 TMDB suggestions you don't own
-* yet (rendered as ephemeral Out of Stock-style cards - see
-* createSimilarSuggestionCard). Cleared by exitSimilarToView().
-  */
-
-let similarToState = null;
-
-/*
-
 * Set right before closeMovie() is called specifically to
 * enter the "More Like This" view - tells finishCloseMovie()
 * to do the one full renderMovies() it otherwise deliberately
@@ -255,15 +243,6 @@ document.getElementById("movie-grid");
 
 const movieCount =
 document.getElementById("movie-count");
-
-const similarToBanner =
-document.getElementById("similar-to-banner");
-
-const similarToText =
-document.getElementById("similar-to-text");
-
-const similarToClearButton =
-document.getElementById("similar-to-clear");
 
 const searchToggle =
 document.getElementById("search-toggle");
@@ -448,7 +427,14 @@ rated: [],
 * ALL of them (unlike Rated, which is OR - any checked rating
 * passes), separate from the single-select Genre dropdown/
 * category buttons up top since those stay as-is. See
-* movieMatchesAdvancedTag().
+* movieMatchesAdvancedTag(). similarTo is a different kind of
+* criterion - set only by "More Like This" (see
+* handleMoreLikeThis), never through the panel's own inputs -
+* { tmdbId, type, title, ownedIds, unowned }. When set,
+* getFilteredMovies() returns just that title plus its owned
+* matches (see the short-circuit there) instead of the usual
+* type/genre/etc. predicates. Cleared the same way every other
+* advanced criterion is: the panel's own Clear button.
   */
 advanced: {
 actor: "",
@@ -457,7 +443,8 @@ yearMin: null,
 yearMax: null,
 runtimeMin: null,
 runtimeMax: null,
-tags: []
+tags: [],
+similarTo: null
 }
 };
 
@@ -2534,25 +2521,6 @@ match.name
 
 function renderMovies() {
 
-/*
-
-* "More Like This" replaces the normal grid entirely with a
-* small curated set (see handleMoreLikeThis/renderSimilarToView)
-* rather than layering onto the existing genre/type/reservation
-* filters - short-circuiting here means every other place that
-* calls renderMovies() (adding to the wishlist, a background
-* data refresh, and so on) keeps showing that curated set
-* instead of silently snapping back to the full shelf.
-  */
-
-if (similarToState) {
-
-renderSimilarToView();
-
-return;
-
-}
-
 movieGrid.innerHTML =
 "";
 
@@ -2565,14 +2533,17 @@ getFilteredMovies();
 
 toggleWishlistAddPanel();
 
+const similarTo =
+activeFilters.advanced.similarTo;
+
 // =========================================================
 // WISHLIST (OUT OF STOCK) ITEMS
 //
 // Only ever computed for the "Out of Stock" view or a
 // specific person's reservation view — never for "all
-// movies", staff picks, or Sandra Bullock mode, since
-// wishlist items are only supposed to appear inside a
-// reservation-scoped view (see getFilteredWishlist).
+// movies", staff picks, Sandra Bullock mode, or "More Like
+// This" (which has its own unowned suggestions below, and
+// isn't scoped to a reservation) — see getFilteredWishlist.
 // =========================================================
 
 let filteredWishlist =
@@ -2580,7 +2551,8 @@ let filteredWishlist =
 
 if (
 !randomMode &&
-!sandraBullockModeActive
+!sandraBullockModeActive &&
+!similarTo
 ) {
 
 filteredWishlist =
@@ -2597,12 +2569,13 @@ getFilteredWishlist();
 * Skipped entirely when a special view is active — randomMovies
 * was computed from the whole catalog before this mode
 * existed, so intersecting against it would silently corrupt
-* or empty out the Sandra Bullock result.
+* or empty out the Sandra Bullock/More Like This result.
   */
 
 if (
 randomMode &&
-!sandraBullockModeActive
+!sandraBullockModeActive &&
+!similarTo
 ) {
 
 filteredMovies =
@@ -2617,9 +2590,16 @@ movie
 
 // =========================================================
 // SORT ALPHABETICALLY
+//
+// Skipped for "More Like This" - getFilteredMovies() already
+// put the original title first followed by its matches, and
+// an alphabetical re-sort here would scramble that order.
 // =========================================================
 
-if (!randomMode) {
+if (
+!randomMode &&
+!similarTo
+) {
 
 filteredMovies.sort(
 (a, b) =>
@@ -2630,6 +2610,42 @@ undefined,
 sensitivity:
 "base"
 }
+)
+);
+
+}
+
+// =========================================================
+// "MORE LIKE THIS" UNOWNED SUGGESTIONS
+//
+// Up to 3 TMDB recommendations you don't own, rendered as
+// ephemeral Out of Stock-style cards right after the owned
+// matches (see createSimilarSuggestionCard). Re-filtered on
+// every render, rather than trusting the snapshot taken when
+// "More Like This" was first clicked, so a suggestion that
+// gets added to the wishlist - or shows up as genuinely
+// owned - drops out immediately instead of lingering as a
+// stale duplicate.
+// =========================================================
+
+let unownedSuggestions =
+[];
+
+if (similarTo) {
+
+unownedSuggestions =
+similarTo.unowned.filter(
+suggestion =>
+!movies.some(
+movie =>
+String(
+getMovieId(movie)
+) === String(suggestion.tmdb_id)
+) &&
+!wishlist.some(
+item =>
+String(item.tmdb_id) ===
+String(suggestion.tmdb_id)
 )
 );
 
@@ -2648,7 +2664,18 @@ activeFilters.animated !== "mixed" ||
 activeFilters.reservation !== "all" ||
 activeFilters.rated.length > 0;
 
-if (randomMode) {
+if (similarTo) {
+
+const totalCount =
+filteredMovies.length +
+unownedSuggestions.length;
+
+movieCount.textContent =
+totalCount === 0
+? `No similar titles found`
+: `${totalCount} similar to "${similarTo.title}"`;
+
+} else if (randomMode) {
 
 movieCount.textContent =
 `${filteredMovies.length} Staff Picks`;
@@ -2681,11 +2708,13 @@ movieCount.textContent =
 
 if (
 filteredMovies.length === 0 &&
-filteredWishlist.length === 0
+filteredWishlist.length === 0 &&
+unownedSuggestions.length === 0
 ) {
 
 if (
-activeFilters.reservation !== "all"
+activeFilters.reservation !== "all" &&
+!similarTo
 ) {
 
 noResults.classList.add(
@@ -2777,121 +2806,16 @@ card
 }
 );
 
-// =========================================================
-// SHELVES
-// =========================================================
+if (similarTo) {
 
-scheduleShelfUpdate();
-
-}
-
-// =========================================================
-// "MORE LIKE THIS" VIEW
-//
-// A self-contained alternate rendering path rather than one
-// more branch threaded through getFilteredMovies() - this
-// isn't a filter on top of genre/type/reservation (it ignores
-// all of those), it's a wholly separate curated set, so it's
-// simpler and safer to keep it in its own function that
-// renderMovies() just defers to (see the short-circuit at the
-// top of renderMovies).
-// =========================================================
-
-function renderSimilarToView() {
-
-movieGrid.innerHTML =
-"";
-
-movieGrid.classList.remove(
-"single-card-centered"
-);
-
-if (similarToBanner && similarToText) {
-
-similarToBanner.classList.remove(
-"hidden"
-);
-
-similarToText.textContent =
-`Similar to "${similarToState.title}"`;
-
-}
-
-const ownedMatches =
-movies.filter(
-movie =>
-similarToState.ownedIds.includes(
-String(
-getMovieId(movie)
-)
-)
-);
-
-ownedMatches.sort(
-(a, b) =>
-a.title.localeCompare(
-b.title,
-undefined,
-{
-sensitivity: "base"
-}
-)
-);
-
-/*
-
-* Re-filtered on every render (rather than trusting the
-* snapshot taken when "More Like This" was first clicked) so
-* a suggestion that gets added to the wishlist - or shows up
-* as genuinely owned - during this view drops out immediately
-* instead of lingering as a stale duplicate.
-  */
-
-const unownedToShow =
-similarToState.unowned.filter(
-suggestion =>
-!movies.some(
-movie =>
-String(
-getMovieId(movie)
-) === String(suggestion.tmdb_id)
-) &&
-!wishlist.some(
-item =>
-String(item.tmdb_id) ===
-String(suggestion.tmdb_id)
-)
-);
-
-const totalCount =
-ownedMatches.length +
-unownedToShow.length;
-
-movieCount.textContent =
-totalCount === 0
-? `No similar titles found`
-: `${totalCount} similar to "${similarToState.title}"`;
-
-if (totalCount === 0) {
-
-noResults.classList.remove(
-"hidden"
-);
-
-return;
-
-}
-
-noResults.classList.add(
-"hidden"
-);
-
-ownedMatches.forEach(
-(movie, index) => {
+unownedSuggestions.forEach(
+(suggestion, index) => {
 
 const card =
-createMovieCard(
-movie,
+createSimilarSuggestionCard(
+suggestion,
+filteredMovies.length +
+filteredWishlist.length +
 index
 );
 
@@ -2902,68 +2826,13 @@ card
 }
 );
 
-unownedToShow.forEach(
-(suggestion, index) => {
-
-const card =
-createSimilarSuggestionCard(
-suggestion,
-ownedMatches.length + index
-);
-
-movieGrid.appendChild(
-card
-);
-
 }
-);
+
+// =========================================================
+// SHELVES
+// =========================================================
 
 scheduleShelfUpdate();
-
-}
-
-/*
-
-* Clears the "More Like This" curated view's state without also
-* triggering a render - used by exitSimilarToView() (which does
-* want its own render) AND by every normal filter-interaction
-* entry point below (genre, type/media pills, search, random
-* toggle), each of which already calls renderMovies() right
-* after, same pattern as sandraBullockModeActive = false above.
-*/
-function clearSimilarToState() {
-
-similarToState =
-null;
-
-if (similarToBanner) {
-
-similarToBanner.classList.add(
-"hidden"
-);
-
-}
-
-}
-
-function exitSimilarToView() {
-
-clearSimilarToState();
-
-renderMovies();
-
-}
-
-if (similarToClearButton) {
-
-similarToClearButton.addEventListener(
-"click",
-() => {
-
-exitSimilarToView();
-
-}
-);
 
 }
 
@@ -2973,7 +2842,12 @@ exitSimilarToView();
 * into "already own it" vs "don't own it yet" using the whole
 * catalog (sent along so the Worker can do that split
 * server-side, since it has no idea what movies.js contains),
-* and enters the More Like This view. One request, whatever
+* and sets activeFilters.advanced.similarTo so "More Like
+* This" flows through the exact same getFilteredMovies()/
+* renderMovies() path as every other filter, instead of a
+* separate view - see the similarTo short-circuit in
+* getFilteredMovies() and the advanced-search Clear button,
+* which is also this view's exit. One request, whatever
 * happens next (owned matches, up to 3 unowned suggestions
 * with their streaming availability already checked) comes
 * back in a single response - see POST /recommendations in
@@ -3033,7 +2907,11 @@ data.error ||
 
 }
 
-similarToState = {
+activeFilters.advanced.similarTo = {
+tmdbId: String(
+getMovieId(movie)
+),
+type: movie.type,
 title: movie.title,
 ownedIds:
 (data.owned_tmdb_ids || []).map(
@@ -3044,6 +2922,8 @@ Array.isArray(data.unowned)
 ? data.unowned
 : []
 };
+
+updateAdvancedSearchUI();
 
 pendingSimilarToRender =
 true;
@@ -13525,8 +13405,6 @@ button.addEventListener(
 sandraBullockModeActive =
 false;
 
-clearSimilarToState();
-
 const group =
 button.dataset.filterGroup;
 
@@ -13852,8 +13730,6 @@ event => {
 sandraBullockModeActive =
 false;
 
-clearSimilarToState();
-
 activeFilters.media =
 event.target.value;
 
@@ -13891,8 +13767,6 @@ event => {
 
 sandraBullockModeActive =
 false;
-
-clearSimilarToState();
 
 activeFilters.genre =
 event.target.value ||
@@ -15105,6 +14979,48 @@ tag.toLowerCase()
 
 function getFilteredMovies() {
 
+/*
+
+* "More Like This" - set via activeFilters.advanced.similarTo
+* (see handleMoreLikeThis). Returns just the original title
+* (first, so it's the first card on the shelf) followed by its
+* owned matches, ignoring every other filter the same way
+* Sandra Bullock mode does below - guarantees the title you
+* clicked from is actually visible even if the current type/
+* genre/search filters would otherwise have hidden it.
+  */
+
+if (activeFilters.advanced.similarTo) {
+
+const similarTo =
+activeFilters.advanced.similarTo;
+
+const original =
+movies.find(
+movie =>
+movie.type === similarTo.type &&
+String(
+getMovieId(movie)
+) === similarTo.tmdbId
+);
+
+const matches =
+movies.filter(
+movie =>
+movie.type === similarTo.type &&
+similarTo.ownedIds.includes(
+String(
+getMovieId(movie)
+)
+)
+);
+
+return original
+? [original, ...matches]
+: matches;
+
+}
+
 if (sandraBullockModeActive) {
 
 return movies.filter(
@@ -15612,8 +15528,6 @@ randomButton.addEventListener(
 
 sandraBullockModeActive =
 false;
-
-clearSimilarToState();
 
 randomMode =
 !randomMode;
@@ -17295,8 +17209,6 @@ event => {
 sandraBullockModeActive =
 false;
 
-clearSimilarToState();
-
 currentSearch =
 event.target.value.trim();
 
@@ -17363,8 +17275,6 @@ searchInput.value =
 
 sandraBullockModeActive =
 false;
-
-clearSimilarToState();
 
 currentSearch =
 "";
@@ -17818,6 +17728,10 @@ if (adv.tags.length > 0) {
 count++;
 }
 
+if (adv.similarTo) {
+count++;
+}
+
 if (activeFilters.rated.length > 0) {
 count++;
 }
@@ -18238,7 +18152,8 @@ yearMin: null,
 yearMax: null,
 runtimeMin: null,
 runtimeMax: null,
-tags: []
+tags: [],
+similarTo: null
 };
 
 activeFilters.rated =
