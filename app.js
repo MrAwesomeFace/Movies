@@ -2907,13 +2907,25 @@ button.textContent =
 
 try {
 
-const ownedIds =
+/*
+
+* Each owned title of the same type, WITH its own rating -
+* not just a bare id list - so the Worker can drop an owned
+* match that's tonally way off from the original (see
+* isRatingCompatible()/RATING_COMPATIBILITY in worker.js)
+* instead of only being able to filter by id.
+  */
+
+const owned =
 movies
 .filter(
 m => m.type === movie.type
 )
 .map(
-m => getMovieId(m)
+m => ({
+id: getMovieId(m),
+rated: m.rated || ""
+})
 );
 
 const response =
@@ -2927,7 +2939,8 @@ headers: {
 body: JSON.stringify({
 tmdb_id: getMovieId(movie),
 media_type: movie.type,
-owned_ids: ownedIds
+rated: movie.rated || "",
+owned: owned
 })
 }
 );
@@ -4283,6 +4296,30 @@ card.querySelector(
 );
 
 if (!coverInner) {
+
+return;
+
+}
+
+/*
+
+* On the "More Like This" shelf, every card is out-of-stock
+* styled (the original if it's a wishlist item, every
+* suggestion), so the diagonal Out of Stock banner and the
+* streaming starburst end up plastered across most of the
+* shelf at once - much harder to tell titles apart at a
+* glance than on the normal Wishlist section, where they're
+* the exception rather than the rule. The grayscale itself
+* (".out-of-stock-card .movie-cover-inner", applied by
+* whichever caller added the out-of-stock-card class) still
+* makes clear these aren't owned - only this front-of-card
+* overlay is skipped, and only in this view. The case back
+* still shows the full "you don't own this" note and the
+* streaming list either way (see the isWishlistItem block in
+* populateMovie), so nothing here is actually lost.
+  */
+
+if (activeFilters.similarTo) {
 
 return;
 
