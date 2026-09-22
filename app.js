@@ -2533,6 +2533,23 @@ match.name
 
 function renderMovies() {
 
+/*
+
+* movieGrid gets fully rebuilt below (nothing is reused
+* between renders), so any cards the poster observer is still
+* watching from the PREVIOUS render are about to be destroyed
+* - disconnect first so those stale observations don't sit
+* around forever (they'd never fire once removed from the
+* document, but there's no reason to let them pile up over a
+* long session either). New cards below re-observe fresh.
+  */
+
+if (posterObserver) {
+
+posterObserver.disconnect();
+
+}
+
 movieGrid.innerHTML =
 "";
 
@@ -3808,6 +3825,96 @@ return (
 
 }
 
+/*
+
+* Poster lazy-loading — createMovieCard() used to set every
+* card's poster as an inline background-image the instant the
+* card was built, so a shelf of (say) 150 cards fired off 150
+* simultaneous image requests/decodes on every render, whether
+* or not most of them were ever scrolled to. background-image
+* can't use the native <img loading="lazy">, so this does the
+* same job with IntersectionObserver instead: a card's poster
+* URL is stashed on the element and only actually loaded once
+* that card is on-screen or about to be (see the rootMargin
+* below), then the observer stops watching it - it only ever
+* needs to fire once per card.
+*
+* rootMargin extends the "counts as visible" area 600px below
+* the viewport, so posters for the next row or two down start
+* loading a beat before you scroll to them, rather than only
+* the instant they appear - closer to "loads in shelf order as
+* you scroll" than a hard on/off switch. Because renderMovies()
+* fully rebuilds movieGrid on every filter change (nothing
+* carries over between renders), a card that a filter click
+* puts at the very top gets watched fresh and checked
+* immediately - IntersectionObserver checks "is this on-screen
+* right now" as soon as observe() is called, not only in
+* response to scrolling, so an instant filter jump still loads
+* right away with no scroll needed.
+  */
+
+const posterObserver =
+window.IntersectionObserver
+? new IntersectionObserver(
+entries => {
+
+entries.forEach(
+entry => {
+
+if (!entry.isIntersecting) {
+
+return;
+
+}
+
+const coverInner =
+entry.target;
+
+posterObserver.unobserve(
+coverInner
+);
+
+applyPosterBackground(
+coverInner,
+coverInner.dataset.posterUrl
+);
+
+delete coverInner.dataset.posterUrl;
+
+}
+);
+
+},
+{
+rootMargin: "600px 0px"
+}
+)
+: null;
+
+/*
+
+* Shared by the lazy-load path above and the immediate-set
+* fallback below (for browsers with no IntersectionObserver) -
+* one place for the actual background-image properties so the
+* two paths can't drift apart.
+  */
+
+function applyPosterBackground(coverInner, posterUrl) {
+
+coverInner.style.backgroundImage =
+`url("${posterUrl}")`;
+
+coverInner.style.backgroundSize =
+"cover";
+
+coverInner.style.backgroundPosition =
+"center";
+
+coverInner.style.backgroundRepeat =
+"no-repeat";
+
+}
+
 function createMovieCard(
 movie,
 index
@@ -3871,17 +3978,27 @@ coverInner.className =
 
 if (movie.poster) {
 
-coverInner.style.backgroundImage =
-`url("${movie.poster}")`;
+if (posterObserver) {
 
-coverInner.style.backgroundSize =
-"cover";
+coverInner.dataset.posterUrl =
+movie.poster;
 
-coverInner.style.backgroundPosition =
-"center";
+posterObserver.observe(
+coverInner
+);
 
-coverInner.style.backgroundRepeat =
-"no-repeat";
+} else {
+
+// No IntersectionObserver in this browser - fall back
+// to the old immediate-load behavior rather than never
+// loading a poster at all.
+
+applyPosterBackground(
+coverInner,
+movie.poster
+);
+
+}
 
 } else {
 
@@ -17463,7 +17580,7 @@ searchInput.focus();
 }
 
 // =========================================================
-// RATED FILTER (popover in the search bar)
+// RATED FILTER (Advanced Search panel only)
 // =========================================================
 
 /*
@@ -17472,152 +17589,30 @@ searchInput.focus();
 * touches activeFilters.rated, the same way Genre and
 * Category touch their own fields, so a rating filters the
 * shelf whether or not anything is typed in the search box.
+* Used to also have its own standalone popover next to the
+* search box, with its own open/close button and its own
+* "Clear ratings" button — removed as redundant clutter for
+* something rarely used, since the exact same checkboxes
+* (same class, same values) already live in the Advanced
+* Search panel, and the panel's own Clear button already
+* resets activeFilters.rated too (see advancedSearchClear's
+* handler below). Nothing else needed to change — Rated still
+* just writes into the top-level activeFilters.rated field,
+* same as before.
   */
-
-const ratedFilterButton =
-document.getElementById(
-"rated-filter-button"
-);
-
-const ratedFilterPopover =
-document.getElementById(
-"rated-filter-popover"
-);
-
-const ratedFilterCount =
-document.getElementById(
-"rated-filter-count"
-);
-
-const ratedFilterClear =
-document.getElementById(
-"rated-filter-clear"
-);
 
 const ratedFilterCheckboxes =
 document.querySelectorAll(
 ".rated-filter-checkbox"
 );
 
-function updateRatedFilterUI() {
-
-const count =
-activeFilters.rated.length;
-
-if (ratedFilterCount) {
-
-ratedFilterCount.textContent =
-String(count);
-
-ratedFilterCount.classList.toggle(
-"hidden",
-count === 0
-);
-
-}
-
-if (ratedFilterButton) {
-
-ratedFilterButton.classList.toggle(
-"active",
-count > 0
-);
-
-}
-
-}
-
-function closeRatedFilterPopover() {
-
-if (!ratedFilterPopover) {
-
-return;
-
-}
-
-ratedFilterPopover.classList.add(
-"hidden"
-);
-
-if (ratedFilterButton) {
-
-ratedFilterButton.setAttribute(
-"aria-expanded",
-"false"
-);
-
-}
-
-}
-
-if (ratedFilterButton && ratedFilterPopover) {
-
-ratedFilterButton.addEventListener(
-"click",
-event => {
-
-event.stopPropagation();
-
-const isHidden =
-ratedFilterPopover.classList.contains(
-"hidden"
-);
-
-ratedFilterPopover.classList.toggle(
-"hidden",
-!isHidden
-);
-
-ratedFilterButton.setAttribute(
-"aria-expanded",
-isHidden ? "true" : "false"
-);
-
-}
-);
-
 /*
 
-* Closes on any click outside the button/popover pair —
-* checked on every document click rather than a one-off
-* listener per open, since the popover can open and close
-* many times across a session.
-  */
-
-document.addEventListener(
-"click",
-event => {
-
-if (
-!ratedFilterPopover.contains(
-event.target
-) &&
-!ratedFilterButton.contains(
-event.target
-)
-) {
-
-closeRatedFilterPopover();
-
-}
-
-}
-);
-
-}
-
-/*
-
-* Rated has two separate sets of checkboxes now - the Rated
-* popover's own, and the second set inside the Advanced
-* Search panel - both sharing the exact same
-* .rated-filter-checkbox class and the exact same value
-* attributes, so ratedFilterCheckboxes (the querySelectorAll
-* above) already includes every one of them. This just makes
-* sure that after ANY of them changes, every instance -
-* including the one(s) the person didn't just click - gets
-* its checked state reset to match activeFilters.rated, so
-* the popover and the advanced panel never drift out of sync.
+* Only one set of these checkboxes exists now (in the
+* Advanced Search panel), but this still loops over every
+* match from ratedFilterCheckboxes rather than assuming
+* there's exactly one, so a future second set (a mobile-only
+* copy, say) would just work without this needing to change.
   */
 
 function syncRatedFilterCheckboxes() {
@@ -17668,8 +17663,6 @@ value !== checkbox.value
 
 syncRatedFilterCheckboxes();
 
-updateRatedFilterUI();
-
 updateAdvancedSearchUI();
 
 if (randomMode) {
@@ -17685,36 +17678,6 @@ renderMovies();
 
 }
 );
-
-if (ratedFilterClear) {
-
-ratedFilterClear.addEventListener(
-"click",
-event => {
-
-event.stopPropagation();
-
-activeFilters.rated =
-[];
-
-syncRatedFilterCheckboxes();
-
-updateRatedFilterUI();
-
-updateAdvancedSearchUI();
-
-if (randomMode) {
-
-generateRandomMovies();
-
-}
-
-renderMovies();
-
-}
-);
-
-}
 
 /*
 
@@ -18434,8 +18397,6 @@ false;
 );
 
 syncRatedFilterCheckboxes();
-
-updateRatedFilterUI();
 
 updateAdvancedSearchUI();
 
