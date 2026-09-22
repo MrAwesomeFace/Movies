@@ -449,10 +449,10 @@ ADVANCED SEARCH PANEL
 
 Off by default (the + button costs nothing when closed).
 Reuses .rated-filter-row/.rated-filter-box for every checkbox
-inside it, including a second set of Rated checkboxes that
-share the exact same activeFilters.rated array (and the exact
-same .rated-filter-checkbox class) as the Rated popover, so
-the two stay in sync automatically - see
+inside it, including Rated (a standalone Rated popover used to
+exist too, sharing the exact same activeFilters.rated array
+and the exact same .rated-filter-checkbox class - it was
+removed as redundant, and Rated now only lives here) - see
 syncRatedFilterCheckboxes() in app.js.
 ========================================================= */
 
@@ -719,97 +719,18 @@ syncRatedFilterCheckboxes() in app.js.
 
 
 /* =========================================================
-RATED FILTER (search bar popover)
+RATED FILTER (Advanced Search panel only)
 =========================================================
-A compact button next to the search input — no permanent
-space cost when closed. Opens into a floating checkbox
-panel for multi-select. Independent of search text entirely:
-this drives its own activeFilters.rated array, combined with
-whatever else is active, same as Genre or Category.
+Used to also have a compact standalone button + floating
+popover next to the search input — removed as redundant
+clutter for something rarely used, since the exact same
+checkboxes (.rated-filter-row/.rated-filter-box below) already
+live in the Advanced Search panel and drive the same
+activeFilters.rated array. .rated-filter-row/.rated-filter-box
+are kept here (not dead code) - the Advanced Search panel
+reuses them as its generic checkbox-row styling for Rated,
+Genre/category tags, and the Unwatched checkbox alike.
 ========================================================= */
-
-.rated-filter-wrapper {
-  position: relative;
-
-  flex-shrink: 0;
-}
-
-.rated-filter-button {
-  height: 100%;
-
-  padding: 0 14px;
-
-  border: 1px solid var(--gold-dark);
-
-  border-radius: 12px;
-
-  background: var(--surface);
-
-  color: var(--gold);
-
-  font-size: 14px;
-  font-weight: 600;
-
-  cursor: pointer;
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 6px;
-
-  white-space: nowrap;
-}
-
-.rated-filter-button.active {
-  border-color: var(--gold);
-
-  background: rgba(251, 205, 54, 0.12);
-}
-
-.rated-filter-count {
-  background: var(--gold);
-
-  color: #111;
-
-  border-radius: 8px;
-
-  padding: 1px 6px;
-
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.rated-filter-count.hidden {
-  display: none;
-}
-
-.rated-filter-popover {
-  position: absolute;
-
-  top: calc(100% + 8px);
-
-  left: 0;
-
-  background: var(--surface);
-
-  border: 1px solid var(--gold-dark);
-
-  border-radius: 12px;
-
-  padding: 10px;
-
-  width: 170px;
-
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.5);
-
-  z-index: 20;
-}
-
-.rated-filter-popover.hidden {
-  display: none;
-}
 
 .rated-filter-row {
   display: flex;
@@ -879,36 +800,6 @@ whatever else is active, same as Genre or Category.
 }
 
 .rated-filter-row:has(input:checked) {
-  color: var(--gold);
-}
-
-.rated-filter-divider {
-  height: 1px;
-
-  background: rgba(255, 255, 255, 0.1);
-
-  margin: 6px 0;
-}
-
-.rated-filter-clear {
-  width: 100%;
-
-  text-align: center;
-
-  color: #8a8a8a;
-
-  font-size: 11px;
-
-  padding: 6px 0 2px;
-
-  background: none;
-
-  border: none;
-
-  cursor: pointer;
-}
-
-.rated-filter-clear:hover {
   color: var(--gold);
 }
 
@@ -3373,6 +3264,18 @@ POSTER (FRONT COVER)
   right: 0;
   top: 0;
   bottom: 0;
+
+  /*
+   * Placeholder fill for the brief window before a poster's
+   * background-image is actually set (see the lazy-loading
+   * comment above createMovieCard() in app.js) - without this,
+   * a not-yet-loaded card would show as a transparent gap
+   * straight through to the page behind it instead of reading
+   * as "a case that hasn't loaded its cover yet". Always
+   * overridden by the inline background once the real poster
+   * (or the no-poster gradient) is set.
+   */
+  background: var(--surface);
 
   display: flex;
 
@@ -8538,44 +8441,6 @@ body.theme-arcade .search-clear-button:hover {
   background: rgba(0, 255, 242, 0.2);
 }
 
-body.theme-arcade .rated-filter-button {
-
-  color: #00fff2;
-
-  border-color: rgba(0, 255, 242, 0.55);
-
-  box-shadow:
-    0 0 4px 1px rgba(0, 255, 242, 0.5),
-    0 0 10px 2px rgba(0, 255, 242, 0.25);
-}
-
-body.theme-arcade .rated-filter-button.active {
-
-  border-color: #00fff2;
-
-  background: rgba(0, 255, 242, 0.12);
-
-  box-shadow:
-    0 0 5px 1px rgba(0, 255, 242, 0.8),
-    0 0 14px 3px rgba(0, 255, 242, 0.5);
-}
-
-body.theme-arcade .rated-filter-count {
-
-  background: #00fff2;
-
-  color: #08080a;
-}
-
-body.theme-arcade .rated-filter-popover {
-
-  border-color: rgba(0, 255, 242, 0.55);
-
-  box-shadow:
-    0 0 5px 1px rgba(0, 255, 242, 0.5),
-    0 10px 30px rgba(0, 0, 0, 0.5);
-}
-
 body.theme-arcade .rated-filter-row:hover {
 
   background: rgba(0, 255, 242, 0.08);
@@ -8589,11 +8454,6 @@ body.theme-arcade .rated-filter-row input:checked + .rated-filter-box {
 }
 
 body.theme-arcade .rated-filter-row:has(input:checked) {
-
-  color: #00fff2;
-}
-
-body.theme-arcade .rated-filter-clear:hover {
 
   color: #00fff2;
 }
