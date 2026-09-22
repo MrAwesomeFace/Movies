@@ -5736,10 +5736,16 @@ watchedCheckboxEl.checked
 
 /*
 
-* More Like This — same eligibility as the watched toggle
-* (a real, owned title with a tmdbId), plus it makes no sense
-* on a suggestion card that's already showing "you don't own
-* this yet" for the exact same reason.
+* More Like This — needs a real tmdbId to look up, so it's
+* fine on owned titles AND out-of-stock wishlist items alike.
+* The one thing it's hidden on is an ephemeral "More Like
+* This" suggestion card itself (isSimilarSuggestion) - that
+* card is already showing "you don't own this yet" for the
+* exact same reason, so offering to chain another search off
+* of it would be redundant. isWishlistItem is deliberately NOT
+* checked here - it's also true on suggestion cards, and
+* excluding it would wrongly hide the button on real wishlist
+* rows too.
   */
 
 const moreLikeThisButtonEl =
@@ -5751,7 +5757,7 @@ if (moreLikeThisButtonEl) {
 
 const moreLikeThisEligible =
 !movie.isEmptyReservationPlaceholder &&
-!movie.isWishlistItem &&
+!movie.isSimilarSuggestion &&
 movie.tmdbId;
 
 moreLikeThisButtonEl.classList.toggle(
