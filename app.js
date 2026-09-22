@@ -15069,6 +15069,17 @@ if (activeFilters.similarTo) {
 const similarTo =
 activeFilters.similarTo;
 
+/*
+
+* The title "More Like This" was launched from might be an
+* out-of-stock wishlist item rather than something in movies[]
+* - wishlist rows live in the separate `wishlist` array, so a
+* movies.find() alone would miss it and silently drop the
+* original off the shelf (see wishlistItemToMovie(), which
+* shapes wishlist rows with the same type/tmdbId fields a real
+* movie has, so it slots in here the same way).
+  */
+
 const original =
 movies.find(
 movie =>
@@ -15076,7 +15087,18 @@ movie.type === similarTo.type &&
 String(
 getMovieId(movie)
 ) === similarTo.tmdbId
+) ||
+(() => {
+const wishlistRow =
+wishlist.find(
+item =>
+item.media_type === similarTo.type &&
+String(item.tmdb_id) === similarTo.tmdbId
 );
+return wishlistRow
+? wishlistItemToMovie(wishlistRow)
+: undefined;
+})();
 
 const matches =
 movies.filter(
