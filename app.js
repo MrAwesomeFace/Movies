@@ -241,6 +241,106 @@ let pendingSimilarToRender = false;
 const movieGrid =
 document.getElementById("movie-grid");
 
+/*
+
+* Poster lazy-loading — createMovieCard() used to set every
+* card's poster as an inline background-image the instant the
+* card was built, so a shelf of (say) 150 cards fired off 150
+* simultaneous image requests/decodes on every render, whether
+* or not most of them were ever scrolled to. background-image
+* can't use the native <img loading="lazy">, so this does the
+* same job with IntersectionObserver instead: a card's poster
+* URL is stashed on the element and only actually loaded once
+* that card is on-screen or about to be (see the rootMargin
+* below), then the observer stops watching it - it only ever
+* needs to fire once per card.
+*
+* rootMargin extends the "counts as visible" area 600px below
+* the viewport, so posters for the next row or two down start
+* loading a beat before you scroll to them, rather than only
+* the instant they appear - closer to "loads in shelf order as
+* you scroll" than a hard on/off switch. Because renderMovies()
+* fully rebuilds movieGrid on every filter change (nothing
+* carries over between renders), a card that a filter click
+* puts at the very top gets watched fresh and checked
+* immediately - IntersectionObserver checks "is this on-screen
+* right now" as soon as observe() is called, not only in
+* response to scrolling, so an instant filter jump still loads
+* right away with no scroll needed.
+*
+* Declared here, early (same reason as SMOOTH_HEART_SVG further
+* down) - createMovieCard() needs this from the very first
+* renderMovies() call at page load (see the INITIALIZE section
+* far below), which runs synchronously, before the rest of the
+* script has finished. A first attempt at this put the
+* declaration right above createMovieCard() instead, much later
+* in the file - that broke the page outright, since that first
+* renderMovies() call reached this code before the "const" line
+* declaring it had actually run.
+  */
+
+const posterObserver =
+window.IntersectionObserver
+? new IntersectionObserver(
+entries => {
+
+entries.forEach(
+entry => {
+
+if (!entry.isIntersecting) {
+
+return;
+
+}
+
+const coverInner =
+entry.target;
+
+posterObserver.unobserve(
+coverInner
+);
+
+applyPosterBackground(
+coverInner,
+coverInner.dataset.posterUrl
+);
+
+delete coverInner.dataset.posterUrl;
+
+}
+);
+
+},
+{
+rootMargin: "600px 0px"
+}
+)
+: null;
+
+/*
+
+* Shared by the lazy-load path above and the immediate-set
+* fallback below (for browsers with no IntersectionObserver) -
+* one place for the actual background-image properties so the
+* two paths can't drift apart.
+  */
+
+function applyPosterBackground(coverInner, posterUrl) {
+
+coverInner.style.backgroundImage =
+`url("${posterUrl}")`;
+
+coverInner.style.backgroundSize =
+"cover";
+
+coverInner.style.backgroundPosition =
+"center";
+
+coverInner.style.backgroundRepeat =
+"no-repeat";
+
+}
+
 const movieCount =
 document.getElementById("movie-count");
 
@@ -3822,96 +3922,6 @@ return (
 `<div class="belt-block" style="width:14px;height:13px;border-radius:2px"></div>` +
 `<div class="belt-block" style="width:9px;height:9px;border-radius:2px"></div>`
 );
-
-}
-
-/*
-
-* Poster lazy-loading — createMovieCard() used to set every
-* card's poster as an inline background-image the instant the
-* card was built, so a shelf of (say) 150 cards fired off 150
-* simultaneous image requests/decodes on every render, whether
-* or not most of them were ever scrolled to. background-image
-* can't use the native <img loading="lazy">, so this does the
-* same job with IntersectionObserver instead: a card's poster
-* URL is stashed on the element and only actually loaded once
-* that card is on-screen or about to be (see the rootMargin
-* below), then the observer stops watching it - it only ever
-* needs to fire once per card.
-*
-* rootMargin extends the "counts as visible" area 600px below
-* the viewport, so posters for the next row or two down start
-* loading a beat before you scroll to them, rather than only
-* the instant they appear - closer to "loads in shelf order as
-* you scroll" than a hard on/off switch. Because renderMovies()
-* fully rebuilds movieGrid on every filter change (nothing
-* carries over between renders), a card that a filter click
-* puts at the very top gets watched fresh and checked
-* immediately - IntersectionObserver checks "is this on-screen
-* right now" as soon as observe() is called, not only in
-* response to scrolling, so an instant filter jump still loads
-* right away with no scroll needed.
-  */
-
-const posterObserver =
-window.IntersectionObserver
-? new IntersectionObserver(
-entries => {
-
-entries.forEach(
-entry => {
-
-if (!entry.isIntersecting) {
-
-return;
-
-}
-
-const coverInner =
-entry.target;
-
-posterObserver.unobserve(
-coverInner
-);
-
-applyPosterBackground(
-coverInner,
-coverInner.dataset.posterUrl
-);
-
-delete coverInner.dataset.posterUrl;
-
-}
-);
-
-},
-{
-rootMargin: "600px 0px"
-}
-)
-: null;
-
-/*
-
-* Shared by the lazy-load path above and the immediate-set
-* fallback below (for browsers with no IntersectionObserver) -
-* one place for the actual background-image properties so the
-* two paths can't drift apart.
-  */
-
-function applyPosterBackground(coverInner, posterUrl) {
-
-coverInner.style.backgroundImage =
-`url("${posterUrl}")`;
-
-coverInner.style.backgroundSize =
-"cover";
-
-coverInner.style.backgroundPosition =
-"center";
-
-coverInner.style.backgroundRepeat =
-"no-repeat";
 
 }
 
