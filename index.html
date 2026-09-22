@@ -148,74 +148,16 @@ aria-label="Reset marquee lights"
   class="search-area hidden"
 >
 
-<div class="rated-filter-wrapper">
-
-  <button
-    type="button"
-    id="rated-filter-button"
-    class="rated-filter-button"
-    aria-expanded="false"
-    aria-haspopup="true"
-  >
-    Rated
-    <span
-      id="rated-filter-count"
-      class="rated-filter-count hidden"
-    ></span>
-  </button>
-
-  <div
-    id="rated-filter-popover"
-    class="rated-filter-popover hidden"
-  >
-
-    <label class="rated-filter-row">
-      <input type="checkbox" value="G" class="rated-filter-checkbox">
-      <span class="rated-filter-box"></span>
-      G
-    </label>
-
-    <label class="rated-filter-row">
-      <input type="checkbox" value="PG" class="rated-filter-checkbox">
-      <span class="rated-filter-box"></span>
-      PG
-    </label>
-
-    <label class="rated-filter-row">
-      <input type="checkbox" value="PG-13" class="rated-filter-checkbox">
-      <span class="rated-filter-box"></span>
-      PG-13
-    </label>
-
-    <label class="rated-filter-row">
-      <input type="checkbox" value="R" class="rated-filter-checkbox">
-      <span class="rated-filter-box"></span>
-      R
-    </label>
-
-    <label class="rated-filter-row">
-      <input type="checkbox" value="NC-17" class="rated-filter-checkbox">
-      <span class="rated-filter-box"></span>
-      NC-17
-    </label>
-
-    <label class="rated-filter-row">
-      <input type="checkbox" value="NR" class="rated-filter-checkbox">
-      <span class="rated-filter-box"></span>
-      NR
-    </label>
-
-    <div class="rated-filter-divider"></div>
-
-    <button
-      type="button"
-      id="rated-filter-clear"
-      class="rated-filter-clear"
-    >Clear ratings</button>
-
-  </div>
-
-</div>
+<!--
+  The standalone Rated popover that used to live here was
+  removed - Rated is now only in the Advanced Search panel
+  (see the "Rated" section inside #advanced-search-panel
+  below), since it's a rarely-used filter that didn't need
+  its own dedicated spot next to the search box. The advanced
+  panel's checkboxes still write/read the same
+  activeFilters.rated the popover used to - see
+  syncRatedFilterCheckboxes in app.js.
+-->
 
 <div class="search-input-wrapper">
 
@@ -259,11 +201,13 @@ aria-label="Clear search"
   search box. Every field here writes into
   activeFilters.advanced and combines (AND) with whatever
   else is active, same as every other filter. The Rated
-  checkboxes below reuse the exact same .rated-filter-checkbox
-  class as the Rated popover's own checkboxes (see
-  syncRatedFilterCheckboxes in app.js) - checking one here
-  checks the same value there and vice versa, since they both
-  just read/write activeFilters.rated. Genre/category tags are
+  checkboxes below are the site's only Rated filter now (a
+  separate standalone popover used to sit next to the search
+  box too, but was removed as redundant clutter for something
+  rarely used) - see syncRatedFilterCheckboxes in app.js. Note
+  Rated writes into the top-level activeFilters.rated, not
+  activeFilters.advanced, since it predates this panel and
+  other code still reads it from there. Genre/category tags are
   a separate, additive multi-select (activeFilters.advanced.tags)
   since the top Genre dropdown and category buttons are
   single-select and stay as-is.
