@@ -2770,6 +2770,31 @@ movie,
 index
 );
 
+/*
+
+* filteredMovies is normally only ever real owned titles, so
+* createMovieCard() alone was enough here. But the "More Like
+* This" original can now be a wishlist item that
+* getFilteredMovies() pulled in and converted with
+* wishlistItemToMovie() (see the similarTo branch there) -
+* without this, it rendered full-color as if it were owned,
+* since only createOutOfStockCard() normally adds the
+* out-of-stock-card class and badge/streaming layer.
+  */
+
+if (movie.isWishlistItem) {
+
+card.classList.add(
+"out-of-stock-card"
+);
+
+applyOutOfStockBadgeLayer(
+card,
+movie
+);
+
+}
+
 movieGrid.appendChild(
 card
 );
