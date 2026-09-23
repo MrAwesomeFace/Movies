@@ -13729,6 +13729,9 @@ let extended =
 let message =
 "";
 
+let ownedDigitalLabel =
+"";
+
 if (movie.isSimilarSuggestion) {
 
 message =
@@ -13750,8 +13753,21 @@ Array.isArray(movie.digital) &&
 movie.digital.length > 0
 ) {
 
-message =
-"You already own this digitally - see “Where to find it” above.";
+/*
+
+* Own it digitally already - show those formats right here
+* instead of bouncing to the Info tab for two lines of text.
+* Unlike the "Where to find it" band (which caps at 2, prioritizing
+* Movies Anywhere/Fandango - see the FORMATS section above),
+* every owned digital format gets a chip here since this tab
+* has the room for it.
+  */
+
+ownedDigitalLabel =
+"You own this digitally on:";
+
+extended =
+movie.digital;
 
 } else {
 
@@ -13784,7 +13800,13 @@ return;
 
 }
 
+const headingHtml =
+ownedDigitalLabel
+? `<p class="streaming-tab-heading">${ownedDigitalLabel}</p>`
+: "";
+
 panel.innerHTML =
+headingHtml +
 `<div class="streaming-tab-list">` +
 extended
 .map(
