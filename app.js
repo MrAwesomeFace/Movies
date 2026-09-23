@@ -18744,6 +18744,51 @@ renderMovies();
 
 }
 
+/*
+
+* The panel's CSS max-height (calc(100vh - 140px)) assumes it
+* opens right near the top of the viewport, which mobile breaks
+* two ways: the search bar (and this panel's anchor point below
+* it) can sit further down the page than that assumes, and
+* mobile "100vh" itself is unreliable since it doesn't shrink
+* when the browser's address bar is showing. Both mean the
+* panel's real on-screen bottom - and the Apply button riding
+* along with it - can end up past the edge of what's actually
+* visible, with no amount of scrolling inside the panel able to
+* bring it back into view (the panel's rendered height is capped
+* by that miscalculated max-height, not by the true remaining
+* screen space). This recomputes max-height from the panel's own
+* actual position and the browser's actual visible viewport
+* (window.visualViewport, when available, tracks the real visible
+* area - not the address-bar-inflated one) every time the panel
+* opens, so its bottom - and the Apply button - always lands
+* inside the visible screen with a little breathing room.
+  */
+
+function updateAdvancedSearchPanelMaxHeight() {
+
+if (!advancedSearchPanel) {
+
+return;
+
+}
+
+const viewportHeight =
+window.visualViewport ?
+window.visualViewport.height :
+window.innerHeight;
+
+const panelTop =
+advancedSearchPanel.getBoundingClientRect().top;
+
+const available =
+viewportHeight - panelTop - 16;
+
+advancedSearchPanel.style.maxHeight =
+Math.max(200, available) + "px";
+
+}
+
 function openAdvancedSearchPanel() {
 
 if (!advancedSearchPanel) {
@@ -18755,6 +18800,8 @@ return;
 advancedSearchPanel.classList.remove(
 "hidden"
 );
+
+updateAdvancedSearchPanelMaxHeight();
 
 if (advancedSearchToggle) {
 
@@ -18890,6 +18937,50 @@ closeAdvancedSearchPanel();
 }
 
 }
+);
+
+}
+
+/*
+
+* Keeps the panel's max-height (see
+* updateAdvancedSearchPanelMaxHeight above) correct if the
+* visible viewport changes while the panel is already open -
+* rotating the phone, or the on-screen keyboard opening/closing
+* when the Actor/Director text fields are focused. No-op while
+* the panel is hidden.
+  */
+
+function refreshAdvancedSearchPanelMaxHeightIfOpen() {
+
+if (
+!advancedSearchPanel ||
+advancedSearchPanel.classList.contains("hidden")
+) {
+
+return;
+
+}
+
+updateAdvancedSearchPanelMaxHeight();
+
+}
+
+window.addEventListener(
+"resize",
+refreshAdvancedSearchPanelMaxHeightIfOpen
+);
+
+window.addEventListener(
+"orientationchange",
+refreshAdvancedSearchPanelMaxHeightIfOpen
+);
+
+if (window.visualViewport) {
+
+window.visualViewport.addEventListener(
+"resize",
+refreshAdvancedSearchPanelMaxHeightIfOpen
 );
 
 }
