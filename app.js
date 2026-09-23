@@ -5894,11 +5894,34 @@ document.getElementById(
 
 if (caseBackTabs) {
 
+/*
+
+* Whole row only hidden for the empty-reservation placeholder -
+* there's no real movie there at all, so no tab (Info included)
+* has anything to show. Wishlist items DO get the row now -
+* Trailer and Stream are two of the most useful tabs for a
+* title you don't own yet, they just don't get a History tab
+* (see below) since tournament history only exists for titles
+* that have actually been through the tournament bracket
+* system.
+  */
+
 caseBackTabs.style.display =
-(
-movie.isEmptyReservationPlaceholder ||
+movie.isEmptyReservationPlaceholder
+? "none"
+: "";
+
+}
+
+const historyTabButtonEl =
+document.querySelector(
+'.case-back-tab[data-tab="history"]'
+);
+
+if (historyTabButtonEl) {
+
+historyTabButtonEl.style.display =
 movie.isWishlistItem
-)
 ? "none"
 : "";
 
@@ -6125,6 +6148,15 @@ watchedCheckboxEl.checked
 * checked here - it's also true on suggestion cards, and
 * excluding it would wrongly hide the button on real wishlist
 * rows too.
+*
+* Also hidden whenever a "More Like This" shelf is already the
+* active view (activeFilters.similarTo) - opening one of the
+* matches on that shelf and offering ANOTHER "More Like This"
+* off of it looked like it should chain into a new shelf, but
+* doesn't actually do anything useful (chaining recommendations
+* wasn't something worth building) - simplest fix is just not
+* showing the button at all in that context, rather than
+* leaving up a button that does nothing.
   */
 
 const moreLikeThisButtonEl =
@@ -6137,6 +6169,7 @@ if (moreLikeThisButtonEl) {
 const moreLikeThisEligible =
 !movie.isEmptyReservationPlaceholder &&
 !movie.isSimilarSuggestion &&
+!activeFilters.similarTo &&
 movie.tmdbId;
 
 moreLikeThisButtonEl.classList.toggle(
