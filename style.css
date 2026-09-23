@@ -3075,6 +3075,14 @@ recipe so all three tabs feel like one system.
   border: 0;
 }
 
+.streaming-tab-heading {
+  margin: 0 0 10px;
+
+  color: #f0e6c8;
+
+  font-size: 14px;
+}
+
 .streaming-tab-list {
   display: flex;
 
