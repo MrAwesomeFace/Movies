@@ -1123,6 +1123,18 @@ aria-label="Close"
             data-tab="history"
           >History</button>
 
+          <button
+            type="button"
+            class="case-back-tab"
+            data-tab="trailer"
+          >Trailer</button>
+
+          <button
+            type="button"
+            class="case-back-tab"
+            data-tab="streaming"
+          >Stream</button>
+
         </div>
 
         <div class="back-band back-band-1">
@@ -1323,6 +1335,37 @@ aria-label="Close"
         <div
           id="modal-history-panel"
           class="modal-history-panel hidden"
+        ></div>
+
+        <!--
+          TRAILER PANEL
+
+          Same sibling pattern as the history panel above -
+          hidden by default, toggled by the same case-back-tab
+          click handler in app.js, and only fetched from the
+          Worker the first time someone actually clicks the
+          Trailer tab for this movie (see renderTrailerPanel).
+        -->
+
+        <div
+          id="modal-trailer-panel"
+          class="modal-trailer-panel hidden"
+        ></div>
+
+        <!--
+          STREAMING PANEL ("Stream" tab)
+
+          The expanded where-else-to-stream list, separate from
+          the "Where to find it" band (which only ever lists
+          formats you already own). Populated from data the
+          Worker already has cached (wishlistStreaming /
+          catalogStreaming in app.js) - no live fetch on click,
+          unlike the trailer panel.
+        -->
+
+        <div
+          id="modal-streaming-panel"
+          class="modal-streaming-panel hidden"
         ></div>
 
       </div>
