@@ -534,6 +534,23 @@ syncRatedFilterCheckboxes() in app.js.
     0 10px 30px rgba(0, 0, 0, 0.5);
 
   z-index: 20;
+
+  /* Without a height cap of its own, a tall panel (lots of
+  filters checked open on a small phone screen) just extends
+  past the bottom of the viewport as normal page flow - there's
+  nothing here for a scroll gesture to grab onto, so it scrolls
+  the whole page (the movie grid behind it) instead of the
+  panel. Capping the height and giving it its own scrollbar
+  means a touch that starts inside the panel scrolls just the
+  panel's contents. */
+
+  max-height: calc(100vh - 140px);
+
+  overflow-y: auto;
+
+  overscroll-behavior: contain;
+
+  -webkit-overflow-scrolling: touch;
 }
 
 .advanced-search-panel.hidden {
@@ -2855,6 +2872,8 @@ CASE BACK - INFO / HISTORY TABS
 
   display: flex;
 
+  flex-wrap: wrap;
+
   gap: 8px;
 
   padding: 14px 18px 0;
@@ -2996,6 +3015,88 @@ CASE BACK - INFO / HISTORY TABS
   font-size: 13px;
 
   font-style: italic;
+}
+
+
+/* =========================================================
+TRAILER / STREAMING TABS
+
+Same "genuine sibling of the back-band divs, shown/hidden by
+the shared case-back-tab click handler" treatment as the
+History panel above - .modal-trailer-panel and
+.modal-streaming-panel reuse its exact background/padding
+recipe so all three tabs feel like one system.
+========================================================= */
+
+.modal-trailer-panel,
+.modal-streaming-panel {
+  padding: 16px 18px 20px;
+
+  background:
+    linear-gradient(
+      180deg,
+      var(--case-accent-start, #6b1414),
+      var(--case-accent-end, #4b6cb7)
+    );
+}
+
+.modal-trailer-panel.hidden,
+.modal-streaming-panel.hidden {
+  display: none;
+}
+
+.trailer-embed-wrap {
+  position: relative;
+
+  width: 100%;
+
+  /* 16:9, done with padding-bottom instead of aspect-ratio so
+  it degrades the same way on older WebViews the rest of this
+  site already has to support. */
+
+  padding-bottom: 56.25%;
+
+  background: #000;
+
+  border-radius: 8px;
+
+  overflow: hidden;
+}
+
+.trailer-embed-wrap iframe {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  border: 0;
+}
+
+.streaming-tab-list {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 8px;
+}
+
+.streaming-tab-chip {
+  padding: 5px 12px;
+
+  border-radius: 999px;
+
+  border: 1px solid rgba(240, 230, 200, 0.4);
+
+  background: rgba(0, 0, 0, 0.2);
+
+  color: #f0e6c8;
+
+  font-family: 'VT323', monospace;
+
+  font-size: 14px;
 }
 
 
