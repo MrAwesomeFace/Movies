@@ -664,9 +664,7 @@ syncRatedFilterCheckboxes() in app.js.
 }
 
 .advanced-search-subheading {
-  display: block;
-
-  margin-bottom: 6px;
+  display: inline;
 
   font-size: 11px;
   font-weight: 700;
@@ -677,16 +675,194 @@ syncRatedFilterCheckboxes() in app.js.
   color: #8a8a8a;
 }
 
-.advanced-search-checkbox-row {
+/*
+
+* Genres/Rated/Where-to-find-it all collapse behind one of
+* these now instead of showing every checkbox at once (44
+* checkboxes across the three was too much wall-of-boxes at
+* once, especially with Where To Find's 21) - click to expand,
+* click again (or the row's own chevron) to collapse. Watched
+* status is left as a single always-visible checkbox since
+* there's nothing to collapse there.
+  */
+
+.advanced-search-collapsible-header {
   display: flex;
 
-  flex-wrap: wrap;
+  align-items: center;
 
-  gap: 2px 10px;
+  gap: 8px;
+
+  width: 100%;
+
+  margin-bottom: 6px;
+
+  padding: 0;
+
+  background: none;
+  border: none;
+
+  font: inherit;
+  color: inherit;
+
+  text-align: left;
+
+  cursor: pointer;
+}
+
+.advanced-search-section-count {
+  font-size: 11px;
+  font-weight: 700;
+
+  color: var(--gold);
+}
+
+.advanced-search-section-count.hidden {
+  display: none;
+}
+
+/*
+
+* Plus/minus indicator instead of an arrow - reads more clearly
+* as "expandable" than a chevron did, and stays in the gold
+* theme color rather than the muted gray used for the label
+* text. The glyph itself lives in CSS (::before), not the HTML,
+* so swapping "+" for "−" on expand is just a state change, not
+* a text-content swap.
+  */
+
+.advanced-search-collapsible-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 16px;
+  height: 16px;
+
+  border: 1px solid var(--gold-dark);
+  border-radius: 4px;
+
+  color: var(--gold);
+
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.advanced-search-collapsible-chevron::before {
+  content: "+";
+}
+
+.advanced-search-collapsible-header[aria-expanded="true"] .advanced-search-collapsible-chevron {
+  border-color: var(--gold);
+}
+
+.advanced-search-collapsible-header[aria-expanded="true"] .advanced-search-collapsible-chevron::before {
+  content: "\2212";
+}
+
+.advanced-search-collapsible-content.hidden {
+  display: none;
+}
+
+/*
+
+* CSS multi-column instead of a grid or a wrapped flex row - a
+* wrapped row's line breaks land wherever labels happen to run
+* out of width (ragged), and a row-major grid reads left-to-right
+* first (so an alphabetized list reads "across" each row instead
+* of "down"). Multi-column flows each label top-to-bottom filling
+* one column before starting the next, so the alphabetical order
+* in the HTML reads vertically down a column - and it still never
+* needs horizontal scrolling on a phone.
+  */
+
+.advanced-search-checkbox-row {
+  columns: 2;
+
+  column-gap: 10px;
+}
+
+@media (min-width: 600px) {
+
+  .advanced-search-checkbox-row {
+    columns: 3;
+  }
+
 }
 
 .advanced-search-checkbox-row .rated-filter-row {
   padding: 5px 4px;
+
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+}
+
+/*
+
+* Generic gold outline used to box in a group of checkboxes once
+* a section is expanded - Rated, Genres & categories, and the
+* small Physical/Digital ownership pair all use this directly;
+* the Preferred/More streaming services boxes below define their
+* own (same look, plus a label) since they need room for that
+* label above the checkboxes.
+  */
+
+.advanced-search-outline-box {
+  border: 1px solid var(--gold-dark);
+  border-radius: 8px;
+
+  padding: 8px 8px 6px;
+}
+
+/*
+
+* "Where to find it" is split into three visually distinct
+* clusters instead of one flat list: Physical/Digital (how you
+* own it, not a streaming service at all - kept in that order on
+* purpose, not alphabetized), a "Preferred" box for the original
+* 8 services this collection was built around, and a "More
+* streaming services" box for the wider list added later. The
+* outline is what actually separates the two boxes since they'd
+* otherwise blend into one wall of checkboxes again.
+  */
+
+.advanced-availability-ownership {
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+
+  max-width: 170px;
+
+  margin-bottom: 12px;
+}
+
+.advanced-availability-group {
+  border: 1px solid var(--gold-dark);
+  border-radius: 8px;
+
+  padding: 8px 8px 6px;
+
+  margin-bottom: 10px;
+}
+
+.advanced-availability-group:last-child {
+  margin-bottom: 0;
+}
+
+.advanced-availability-group-label {
+  display: block;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+
+  color: var(--gold);
+
+  margin-bottom: 4px;
 }
 
 .advanced-search-footer {
