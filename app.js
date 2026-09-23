@@ -18234,6 +18234,8 @@ currentSearch === ""
 
 }
 
+updateSearchFilterClearControlsUI();
+
 if (randomMode) {
 
 generateRandomMovies();
@@ -18265,6 +18267,8 @@ currentSearch =
 searchClearButton.classList.add(
 "hidden"
 );
+
+updateSearchFilterClearControlsUI();
 
 if (randomMode) {
 
@@ -18485,6 +18489,16 @@ document.getElementById(
 "advanced-search-clear"
 );
 
+const searchFiltersResetButton =
+document.getElementById(
+"search-filters-reset-button"
+);
+
+const searchFiltersClearLink =
+document.getElementById(
+"search-filters-clear-link"
+);
+
 const advancedActorInput =
 document.getElementById(
 "advanced-actor-input"
@@ -18646,6 +18660,221 @@ count > 0
 
 updateAdvancedSearchSectionCounts();
 
+updateSearchFilterClearControlsUI();
+
+}
+
+/*
+
+* Shows/hides the two "clear search and filters" entry points -
+* the small × next to the Advanced Search toggle, and the text
+* link under the results count - together, since they always do
+* the exact same thing (see clearSearchAndAdvancedFilters below).
+* Visible whenever there's a typed search term OR any Advanced
+* Search field is active. Recomputes the "any Advanced field
+* active" check itself (same fields updateAdvancedSearchUI's own
+* count badge checks) rather than requiring a count to be passed
+* in, since this also needs calling from the plain search box's
+* own handlers below, which have no reason to touch
+* updateAdvancedSearchUI at all.
+  */
+
+function updateSearchFilterClearControlsUI() {
+
+const adv =
+activeFilters.advanced;
+
+const hasActiveAdvancedFilter =
+adv.actor.trim() !== "" ||
+adv.director.trim() !== "" ||
+adv.yearMin !== null ||
+adv.yearMax !== null ||
+adv.runtimeMin !== null ||
+adv.runtimeMax !== null ||
+adv.tags.length > 0 ||
+adv.availability.length > 0 ||
+activeFilters.rated.length > 0 ||
+activeFilters.unwatchedOnly;
+
+/*
+
+* Also hidden outright during "More Like This" - the search box
+* and Advanced Search panel are already hidden entirely then
+* (see body.similar-to-mode in style.css), but that CSS only
+* covers the button next to them since it lives inside
+* .search-area - the text link sits down by the results count
+* instead, outside that hidden block, so without this it could
+* keep showing a stale "Clear search & filters" link over a
+* "similar to X" result list whose filters aren't even in play
+* right now.
+  */
+
+const hasAnythingToClear =
+!activeFilters.similarTo &&
+(
+currentSearch !== "" ||
+hasActiveAdvancedFilter
+);
+
+if (searchFiltersResetButton) {
+
+searchFiltersResetButton.classList.toggle(
+"hidden",
+!hasAnythingToClear
+);
+
+}
+
+if (searchFiltersClearLink) {
+
+searchFiltersClearLink.classList.toggle(
+"hidden",
+!hasAnythingToClear
+);
+
+}
+
+}
+
+/*
+
+* One reset for both entry points above - clears the plain
+* search box AND everything inside the Advanced Search panel
+* (Rated, Genres & categories, Where to find it, actor/director/
+* year/runtime, Watched status). Deliberately mirrors, rather
+* than reuses, advancedSearchClear's own steps below - that
+* button's scope (Advanced Search fields only) is staying
+* exactly as it is, so this is a separate, wider action rather
+* than a change to what that one already does.
+  */
+
+function clearSearchAndAdvancedFilters() {
+
+if (searchInput) {
+
+searchInput.value =
+"";
+
+}
+
+sandraBullockModeActive =
+false;
+
+currentSearch =
+"";
+
+if (searchClearButton) {
+
+searchClearButton.classList.add(
+"hidden"
+);
+
+}
+
+activeFilters.advanced =
+{
+actor: "",
+director: "",
+yearMin: null,
+yearMax: null,
+runtimeMin: null,
+runtimeMax: null,
+tags: [],
+availability: []
+};
+
+activeFilters.rated =
+[];
+
+activeFilters.unwatchedOnly =
+false;
+
+syncUnwatchedFilterUI();
+
+if (advancedActorInput) {
+advancedActorInput.value = "";
+}
+
+if (advancedDirectorInput) {
+advancedDirectorInput.value = "";
+}
+
+if (advancedYearMinInput) {
+advancedYearMinInput.value = "";
+}
+
+if (advancedYearMaxInput) {
+advancedYearMaxInput.value = "";
+}
+
+if (advancedRuntimeMinInput) {
+advancedRuntimeMinInput.value = "";
+}
+
+if (advancedRuntimeMaxInput) {
+advancedRuntimeMaxInput.value = "";
+}
+
+advancedTagCheckboxes.forEach(
+checkbox => {
+
+checkbox.checked =
+false;
+
+}
+);
+
+advancedAvailabilityCheckboxes.forEach(
+checkbox => {
+
+checkbox.checked =
+false;
+
+}
+);
+
+syncRatedFilterCheckboxes();
+
+updateAdvancedSearchUI();
+
+if (randomMode) {
+
+generateRandomMovies();
+
+}
+
+renderMovies();
+
+}
+
+if (searchFiltersResetButton) {
+
+searchFiltersResetButton.addEventListener(
+"click",
+event => {
+
+event.stopPropagation();
+
+clearSearchAndAdvancedFilters();
+
+}
+);
+
+}
+
+if (searchFiltersClearLink) {
+
+searchFiltersClearLink.addEventListener(
+"click",
+event => {
+
+event.stopPropagation();
+
+clearSearchAndAdvancedFilters();
+
+}
+);
+
 }
 
 /*
@@ -18735,6 +18964,8 @@ similarToRemoveButton.textContent =
 }
 
 }
+
+updateSearchFilterClearControlsUI();
 
 }
 
