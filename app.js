@@ -925,11 +925,12 @@ wishlistStreaming.get(
 * path as everything else - isSimilarSuggestion is the one flag
 * that tells populateMovie this isn't a real wishlist row, so
 * the case back offers "Add to Wishlist" instead of "Remove
-* from wishlist" (see the isWishlistItem block there). Fields
-* TMDB's recommendations endpoint doesn't provide up front
-* (runtime, director, cast, rated) stay blank - if it gets
-* added for real, POST /wishlist fetches full details anyway,
-* same as adding from search.
+* from wishlist" (see the isWishlistItem block there). Runtime/
+* genre/rated/director/cast come from POST /recommendations'
+* own detail lookup (see fetchCandidateDetails in worker.js) -
+* if this gets added for real, POST /wishlist fetches its own
+* fresh copy of the same fields anyway, same as adding from
+* search, so there's no staleness risk in reusing these here.
   */
 
 function similarSuggestionToMovie(suggestion) {
@@ -942,11 +943,11 @@ type: suggestion.media_type,
 tmdbId: suggestion.tmdb_id,
 poster: suggestion.poster,
 year: suggestion.year,
-runtime: "",
-genre: "",
-rated: "",
-director: "",
-cast: "",
+runtime: suggestion.runtime || "",
+genre: suggestion.genre || "",
+rated: suggestion.rated || "",
+director: suggestion.director || "",
+cast: suggestion.cast || "",
 synopsis: suggestion.synopsis,
 physical: [],
 digital: [],
@@ -955,6 +956,10 @@ isSimilarSuggestion: true,
 streamingServices:
 Array.isArray(suggestion.services)
 ? suggestion.services
+: [],
+streamingExtended:
+Array.isArray(suggestion.extended_services)
+? suggestion.extended_services
 : []
 
 };
@@ -13768,8 +13773,30 @@ let ownedDigitalLabel =
 
 if (movie.isSimilarSuggestion) {
 
+/*
+
+* POST /recommendations already runs the same
+* fetchWhitelistedServices() live streaming check the wishlist
+* sync uses (see worker.js) to decide the shelf badge - this
+* just also keeps the expanded list it returns, so a "More
+* Like This" suggestion's Stream tab can show real results
+* instead of always bouncing to "add it to your wishlist
+* first." The wishlist nudge only shows now when there's
+* genuinely nothing to show (checked and came up empty), not
+* as the default for every suggestion.
+  */
+
+extended =
+Array.isArray(movie.streamingExtended)
+? movie.streamingExtended
+: [];
+
+if (extended.length === 0) {
+
 message =
-"Add this to your wishlist to start tracking where it's streaming.";
+"Not currently streaming anywhere we track. Add it to your wishlist to keep checking.";
+
+}
 
 } else if (movie.isWishlistItem) {
 
@@ -19057,6 +19084,64 @@ renderMovies();
 
 }
 
+/*
+
+* Year/runtime are typed digit-by-digit ("80" then "1", "10",
+* "100"), and re-rendering the whole grid on every single
+* keystroke means a mid-typing value like max=1 or max=10 (with
+* min=80 already set) briefly matches almost nothing - the grid
+* collapses to near-empty, the page shrinks, and since the input
+* is still focused the browser jumps the scroll position to keep
+* it in view. It jumps again once the final digit completes a
+* sane range and the grid repopulates. Debouncing the actual
+* filter/render to after a short pause in typing means only the
+* digits you meant to finish typing ever get rendered against,
+* so the page stops lurching after every keystroke. The field's
+* own value and activeFilters are still updated immediately -
+* only the re-render is delayed.
+  */
+
+function debounce(fn, delayMs) {
+
+let timeoutId =
+null;
+
+return (...args) => {
+
+if (timeoutId) {
+
+clearTimeout(timeoutId);
+
+}
+
+timeoutId =
+setTimeout(
+() => fn(...args),
+delayMs
+);
+
+};
+
+}
+
+const runDebouncedAdvancedRangeFilter =
+debounce(
+() => {
+
+updateAdvancedSearchUI();
+
+if (randomMode) {
+
+generateRandomMovies();
+
+}
+
+renderMovies();
+
+},
+400
+);
+
 if (advancedYearMinInput) {
 
 advancedYearMinInput.addEventListener(
@@ -19068,15 +19153,7 @@ parsedAdvancedRangeValue(
 advancedYearMinInput
 );
 
-updateAdvancedSearchUI();
-
-if (randomMode) {
-
-generateRandomMovies();
-
-}
-
-renderMovies();
+runDebouncedAdvancedRangeFilter();
 
 }
 );
@@ -19094,15 +19171,7 @@ parsedAdvancedRangeValue(
 advancedYearMaxInput
 );
 
-updateAdvancedSearchUI();
-
-if (randomMode) {
-
-generateRandomMovies();
-
-}
-
-renderMovies();
+runDebouncedAdvancedRangeFilter();
 
 }
 );
@@ -19120,15 +19189,7 @@ parsedAdvancedRangeValue(
 advancedRuntimeMinInput
 );
 
-updateAdvancedSearchUI();
-
-if (randomMode) {
-
-generateRandomMovies();
-
-}
-
-renderMovies();
+runDebouncedAdvancedRangeFilter();
 
 }
 );
@@ -19146,15 +19207,7 @@ parsedAdvancedRangeValue(
 advancedRuntimeMaxInput
 );
 
-updateAdvancedSearchUI();
-
-if (randomMode) {
-
-generateRandomMovies();
-
-}
-
-renderMovies();
+runDebouncedAdvancedRangeFilter();
 
 }
 );
