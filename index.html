@@ -291,9 +291,13 @@ aria-label="Clear search"
 
   <div class="advanced-search-checkbox-section">
 
-    <span class="advanced-search-subheading">Rated</span>
+    <button type="button" class="advanced-search-collapsible-header" aria-expanded="false" data-section="rated">
+      <span class="advanced-search-collapsible-chevron" aria-hidden="true"></span>
+      <span class="advanced-search-subheading">Rated</span>
+      <span class="advanced-search-section-count hidden">0</span>
+    </button>
 
-    <div class="advanced-search-checkbox-row">
+    <div class="advanced-search-checkbox-row advanced-search-outline-box advanced-search-collapsible-content hidden">
 
       <label class="rated-filter-row">
         <input type="checkbox" value="G" class="rated-filter-checkbox">
@@ -337,9 +341,13 @@ aria-label="Clear search"
 
   <div class="advanced-search-checkbox-section">
 
-    <span class="advanced-search-subheading">Genres &amp; categories</span>
+    <button type="button" class="advanced-search-collapsible-header" aria-expanded="false" data-section="genres">
+      <span class="advanced-search-collapsible-chevron" aria-hidden="true"></span>
+      <span class="advanced-search-subheading">Genres &amp; categories</span>
+      <span class="advanced-search-section-count hidden">0</span>
+    </button>
 
-    <div class="advanced-search-checkbox-row">
+    <div class="advanced-search-checkbox-row advanced-search-outline-box advanced-search-collapsible-content hidden">
 
       <label class="rated-filter-row">
         <input type="checkbox" value="action" class="advanced-tag-checkbox">
@@ -450,6 +458,201 @@ aria-label="Clear search"
         <span class="rated-filter-box"></span>
         Baseball
       </label>
+
+    </div>
+
+  </div>
+
+  <div class="advanced-search-checkbox-section">
+
+    <button type="button" class="advanced-search-collapsible-header" aria-expanded="false" data-section="availability">
+      <span class="advanced-search-collapsible-chevron" aria-hidden="true"></span>
+      <span class="advanced-search-subheading">Where to find it</span>
+      <span class="advanced-search-section-count hidden">0</span>
+    </button>
+
+    <!--
+      OR, not AND, unlike Genres & categories above - checking
+      Digital and Netflix means either one, same logic as Rated.
+      Physical/Digital read the movie's own fields; everything
+      else is a streaming service name checked against
+      wishlistStreaming/catalogStreaming (see
+      movieMatchesAdvancedAvailability in app.js) - the exact
+      same expanded whitelist the case-back Stream tab uses.
+    -->
+
+    <div class="advanced-search-collapsible-content hidden">
+
+      <!--
+        Ownership comes first and isn't alphabetized on purpose -
+        Physical then Digital reflects how you own it, not a
+        streaming service at all, so it's kept separate from and
+        above both service groups below.
+      -->
+
+      <div class="advanced-availability-ownership advanced-search-outline-box">
+
+        <label class="rated-filter-row">
+          <input type="checkbox" value="physical" class="advanced-availability-checkbox">
+          <span class="rated-filter-box"></span>
+          Physical
+        </label>
+
+        <label class="rated-filter-row">
+          <input type="checkbox" value="digital" class="advanced-availability-checkbox">
+          <span class="rated-filter-box"></span>
+          Digital
+        </label>
+
+      </div>
+
+      <!--
+        The original 8-service whitelist this collection was
+        built around, alphabetized within its own outlined box so
+        it stands apart from the wider list added later below.
+      -->
+
+      <div class="advanced-availability-group">
+
+        <span class="advanced-availability-group-label">Preferred</span>
+
+        <div class="advanced-search-checkbox-row">
+
+          <label class="rated-filter-row">
+            <input type="checkbox" value="Amazon Prime Video" class="advanced-availability-checkbox">
+            <span class="rated-filter-box"></span>
+            Prime Video
+          </label>
+
+          <label class="rated-filter-row">
+            <input type="checkbox" value="Amazon Rental" class="advanced-availability-checkbox">
+            <span class="rated-filter-box"></span>
+            Amazon Rental
+          </label>
+
+          <label class="rated-filter-row">
+            <input type="checkbox" value="Disney+" class="advanced-availability-checkbox">
+            <span class="rated-filter-box"></span>
+            Disney+
+          </label>
+
+          <label class="rated-filter-row">
+            <input type="checkbox" value="HBO Max" class="advanced-availability-checkbox">
+            <span class="rated-filter-box"></span>
+            HBO Max
+          </label>
+
+          <label class="rated-filter-row">
+            <input type="checkbox" value="Hulu" class="advanced-availability-checkbox">
+            <span class="rated-filter-box"></span>
+            Hulu
+          </label>
+
+          <label class="rated-filter-row">
+            <input type="checkbox" value="Kanopy" class="advanced-availability-checkbox">
+            <span class="rated-filter-box"></span>
+            Kanopy
+          </label>
+
+          <label class="rated-filter-row">
+            <input type="checkbox" value="Netflix" class="advanced-availability-checkbox">
+            <span class="rated-filter-box"></span>
+            Netflix
+          </label>
+
+          <label class="rated-filter-row">
+            <input type="checkbox" value="Peacock" class="advanced-availability-checkbox">
+            <span class="rated-filter-box"></span>
+            Peacock
+          </label>
+
+        </div>
+
+      </div>
+
+      <!--
+        The wider list added afterward, alphabetized in its own
+        outlined box (OR logic across everything in this whole
+        section still applies the same regardless of which box a
+        checkbox lives in - see movieMatchesAdvancedAvailability
+        in app.js).
+      -->
+
+      <div class="advanced-availability-group">
+
+        <span class="advanced-availability-group-label">More streaming services</span>
+
+        <div class="advanced-search-checkbox-row">
+
+          <label class="rated-filter-row">
+            <input type="checkbox" value="AMC+" class="advanced-availability-checkbox">
+            <span class="rated-filter-box"></span>
+            AMC+
+          </label>
+
+          <label class="rated-filter-row">
+            <input type="checkbox" value="Apple TV+" class="advanced-availability-checkbox">
+            <span class="rated-filter-box"></span>
+            Apple TV+
+          </label>
+
+          <label class="rated-filter-row">
+            <input type="checkbox" value="Crackle" class="advanced-availability-checkbox">
+            <span class="rated-filter-box"></span>
+            Crackle
+          </label>
+
+          <label class="rated-filter-row">
+            <input type="checkbox" value="MGM+" class="advanced-availability-checkbox">
+            <span class="rated-filter-box"></span>
+            MGM+
+          </label>
+
+          <label class="rated-filter-row">
+            <input type="checkbox" value="Paramount+" class="advanced-availability-checkbox">
+            <span class="rated-filter-box"></span>
+            Paramount+
+          </label>
+
+          <label class="rated-filter-row">
+            <input type="checkbox" value="Pluto TV" class="advanced-availability-checkbox">
+            <span class="rated-filter-box"></span>
+            Pluto TV
+          </label>
+
+          <label class="rated-filter-row">
+            <input type="checkbox" value="Showtime" class="advanced-availability-checkbox">
+            <span class="rated-filter-box"></span>
+            Showtime
+          </label>
+
+          <label class="rated-filter-row">
+            <input type="checkbox" value="Starz" class="advanced-availability-checkbox">
+            <span class="rated-filter-box"></span>
+            Starz
+          </label>
+
+          <label class="rated-filter-row">
+            <input type="checkbox" value="The Roku Channel" class="advanced-availability-checkbox">
+            <span class="rated-filter-box"></span>
+            Roku Channel
+          </label>
+
+          <label class="rated-filter-row">
+            <input type="checkbox" value="Tubi" class="advanced-availability-checkbox">
+            <span class="rated-filter-box"></span>
+            Tubi
+          </label>
+
+          <label class="rated-filter-row">
+            <input type="checkbox" value="YouTube" class="advanced-availability-checkbox">
+            <span class="rated-filter-box"></span>
+            YouTube
+          </label>
+
+        </div>
+
+      </div>
 
     </div>
 
