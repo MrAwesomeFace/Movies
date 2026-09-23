@@ -574,7 +574,8 @@ yearMin: null,
 yearMax: null,
 runtimeMin: null,
 runtimeMax: null,
-tags: []
+tags: [],
+availability: []
 }
 };
 
@@ -15791,6 +15792,95 @@ tag.toLowerCase()
 
 }
 
+/*
+
+* "Where to find it" advanced-search checkboxes - "physical"/
+* "digital" read straight off the movie's own fields (the same
+* ones the case-back Where To Find band and the top Physical/
+* Digital pills already use); anything else is a streaming
+* service name, checked against whichever of wishlistStreaming/
+* catalogStreaming actually applies to this movie - the exact
+* same lookup renderStreamingPanel uses for the case-back Stream
+* tab, just reused here for filtering instead of display. A
+* movie owned digitally never has streaming data (that's
+* deliberately never checked for those - see
+* syncCatalogStreamingTargets), so it can only ever match
+* "digital" here, never a streaming-service checkbox - which is
+* correct, since streaming availability was never looked up for
+* it.
+  */
+
+function movieMatchesAdvancedAvailability(
+movie,
+value
+) {
+
+if (value === "physical") {
+
+return (
+Array.isArray(movie.physical) &&
+movie.physical.length > 0
+);
+
+}
+
+if (value === "digital") {
+
+return (
+Array.isArray(movie.digital) &&
+movie.digital.length > 0
+);
+
+}
+
+if (movie.isSimilarSuggestion) {
+
+return false;
+
+}
+
+const key =
+`${movie.type}:${getMovieId(movie)}`;
+
+if (movie.isWishlistItem) {
+
+const entry =
+wishlistStreaming.get(
+key
+);
+
+return (
+(entry && entry.extended) ||
+[]
+).includes(
+value
+);
+
+}
+
+if (
+Array.isArray(movie.digital) &&
+movie.digital.length > 0
+) {
+
+return false;
+
+}
+
+const entry =
+catalogStreaming.get(
+key
+);
+
+return (
+(entry && entry.services) ||
+[]
+).includes(
+value
+);
+
+}
+
 // =========================================================
 // GET CURRENT FILTERED MOVIES
 // =========================================================
@@ -16241,6 +16331,32 @@ tag
 );
 
 if (!matchesEveryTag) {
+
+return false;
+
+}
+
+}
+
+// =====================================================
+// ADVANCED SEARCH - WHERE TO FIND IT (OR, not AND - these
+// are alternative ways to access the same movie, checking
+// Netflix and Digital means either one, not both at once,
+// same logic as Rated)
+// =====================================================
+
+if (activeFilters.advanced.availability.length > 0) {
+
+const matchesAnyAvailability =
+activeFilters.advanced.availability.some(
+value =>
+movieMatchesAdvancedAvailability(
+movie,
+value
+)
+);
+
+if (!matchesAnyAvailability) {
 
 return false;
 
@@ -18377,6 +18493,60 @@ document.querySelectorAll(
 ".advanced-tag-checkbox"
 );
 
+const advancedAvailabilityCheckboxes =
+document.querySelectorAll(
+".advanced-availability-checkbox"
+);
+
+const advancedCollapsibleHeaders =
+document.querySelectorAll(
+".advanced-search-collapsible-header"
+);
+
+/*
+
+* Accordion behavior for the Rated, Genres & categories, and
+* Where to find it sections - each header toggles its own
+* aria-expanded state and its next sibling (the checkbox-row
+* content wrapper) independently of the others; no single-open
+* enforcement, since the user asked for plain click-to-expand,
+* not a strict accordion. Doesn't touch or need to touch the
+* overall advancedSearchCount / advancedSearchToggle - the
+* existing Apply button at the bottom of the panel remains the
+* one action that closes the whole Advanced Search panel.
+  */
+
+advancedCollapsibleHeaders.forEach(
+header => {
+
+header.addEventListener(
+"click",
+() => {
+
+const expanded =
+header.getAttribute("aria-expanded") === "true";
+
+header.setAttribute(
+"aria-expanded",
+expanded ? "false" : "true"
+);
+
+const content =
+header.nextElementSibling;
+
+if (content) {
+content.classList.toggle(
+"hidden",
+expanded
+);
+}
+
+}
+);
+
+}
+);
+
 /*
 
 * Badge + active-state on the + button - counts each
@@ -18414,6 +18584,10 @@ if (adv.tags.length > 0) {
 count++;
 }
 
+if (adv.availability.length > 0) {
+count++;
+}
+
 if (activeFilters.rated.length > 0) {
 count++;
 }
@@ -18442,6 +18616,54 @@ count > 0
 );
 
 }
+
+updateAdvancedSearchSectionCounts();
+
+}
+
+/*
+
+* Per-section count badges for the collapsible Rated, Genres &
+* categories, and Where to find it headers - shows how many
+* checkboxes are checked within that section specifically
+* (independent of the overall advancedSearchCount badge above).
+* Matched to each header by its data-section attribute.
+  */
+
+function updateAdvancedSearchSectionCounts() {
+
+const sectionCounts = {
+rated: activeFilters.rated.length,
+genres: activeFilters.advanced.tags.length,
+availability: activeFilters.advanced.availability.length
+};
+
+advancedCollapsibleHeaders.forEach(
+header => {
+
+const section =
+header.dataset.section;
+
+const badge =
+header.querySelector(".advanced-search-section-count");
+
+if (!badge || !(section in sectionCounts)) {
+return;
+}
+
+const sectionCount =
+sectionCounts[section];
+
+badge.textContent =
+String(sectionCount);
+
+badge.classList.toggle(
+"hidden",
+sectionCount === 0
+);
+
+}
+);
 
 }
 
@@ -18895,6 +19117,53 @@ renderMovies();
 }
 );
 
+advancedAvailabilityCheckboxes.forEach(
+checkbox => {
+
+checkbox.addEventListener(
+"change",
+() => {
+
+if (checkbox.checked) {
+
+if (
+!activeFilters.advanced.availability.includes(
+checkbox.value
+)
+) {
+
+activeFilters.advanced.availability.push(
+checkbox.value
+);
+
+}
+
+} else {
+
+activeFilters.advanced.availability =
+activeFilters.advanced.availability.filter(
+value =>
+value !== checkbox.value
+);
+
+}
+
+updateAdvancedSearchUI();
+
+if (randomMode) {
+
+generateRandomMovies();
+
+}
+
+renderMovies();
+
+}
+);
+
+}
+);
+
 if (advancedSearchClear) {
 
 advancedSearchClear.addEventListener(
@@ -18911,7 +19180,8 @@ yearMin: null,
 yearMax: null,
 runtimeMin: null,
 runtimeMax: null,
-tags: []
+tags: [],
+availability: []
 };
 
 activeFilters.rated =
@@ -18947,6 +19217,15 @@ advancedRuntimeMaxInput.value = "";
 }
 
 advancedTagCheckboxes.forEach(
+checkbox => {
+
+checkbox.checked =
+false;
+
+}
+);
+
+advancedAvailabilityCheckboxes.forEach(
 checkbox => {
 
 checkbox.checked =
