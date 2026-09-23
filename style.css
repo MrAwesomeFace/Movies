@@ -514,6 +514,92 @@ syncRatedFilterCheckboxes() in app.js.
   display: none;
 }
 
+/*
+
+* Only ever visible once a search term or an Advanced Search
+* field is actually active (see updateSearchFilterClearControlsUI
+* in app.js) - same shape/border language as .advanced-search-
+* toggle right next to it so the two read as a matched pair, not
+* two unrelated buttons, but its own muted color rather than gold
+* since this one resets things rather than opening something.
+  */
+
+.search-filters-reset-button {
+  width: 44px;
+  height: 100%;
+
+  border: 1px solid #8a8a8a;
+
+  border-radius: 12px;
+
+  background: var(--surface);
+
+  color: #cfcfcf;
+
+  font-size: 22px;
+  font-weight: 600;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-shrink: 0;
+}
+
+.search-filters-reset-button:hover {
+  border-color: #cfcfcf;
+
+  color: #fff;
+}
+
+.search-filters-reset-button.hidden {
+  display: none;
+}
+
+/*
+
+* The second, equivalent entry point to the exact same reset -
+* sits right under the results count instead of up in the search
+* bar, for whichever is more convenient to reach at the moment
+* (see the HTML comment above it). Text-link styling on purpose,
+* not a button/pill, so it reads as a quiet secondary action next
+* to the count rather than competing with it.
+  */
+
+.search-filters-clear-link {
+  display: inline-block;
+
+  margin-top: 2px;
+
+  padding: 0;
+
+  border: none;
+  background: none;
+
+  color: var(--gold);
+
+  font-size: 13px;
+  font-weight: 600;
+
+  text-decoration: underline;
+
+  cursor: pointer;
+}
+
+.search-filters-clear-link:hover {
+  color: #ffdb5c;
+}
+
+.search-filters-clear-link.hidden {
+  display: none;
+}
+
 .advanced-search-panel {
   position: absolute;
 
