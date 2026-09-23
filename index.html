@@ -56,6 +56,20 @@
     </div>
     <p id="movie-count">Loading collection...</p>
     <!--
+      Same reset as the button next to the + (Advanced Search)
+      button up top - see clearSearchAndAdvancedFilters() in
+      app.js - just placed here too since this is often where
+      your eye already is when you decide you want back to
+      default (looking at the results/count, not back up at a
+      search bar you may have already closed). Only shown when
+      a search term or an Advanced Search field is active.
+    -->
+    <button
+      type="button"
+      id="search-filters-clear-link"
+      class="search-filters-clear-link hidden"
+    >Clear search &amp; filters</button>
+    <!--
       The only exit from "More Like This" - hidden unless
       activeFilters.similarTo is set (see syncSimilarToUI in
       app.js). The rest of the shelf's filter controls (search,
@@ -193,6 +207,26 @@ aria-label="Clear search"
     class="advanced-search-count hidden"
   ></span>
 </button>
+
+<!--
+  Only appears once a search term or an Advanced Search field is
+  actually active - stays out of the way otherwise. Resets the
+  search box AND everything inside the Advanced Search panel
+  (Rated, Genres, Where to find it, actor/director/year/runtime,
+  Watched status) in one tap, without needing to open the panel
+  first just to reach its own Clear button. See
+  clearSearchAndAdvancedFilters() in app.js - a second control
+  doing the exact same thing also sits next to the results count
+  below, for whichever one is more convenient to reach.
+-->
+
+<button
+  type="button"
+  id="search-filters-reset-button"
+  class="search-filters-reset-button hidden"
+  aria-label="Clear search and filters"
+  title="Clear search and filters"
+>&times;</button>
 
 <!--
   ADVANCED SEARCH PANEL
