@@ -429,8 +429,11 @@ aria-label="Clear search"
         Added after checking actual genre counts in movies.js -
         these all clear 25+ real entries (Adventure/Crime/
         Romance/Family/Fantasy easily outnumber Horror).
-        Animation was left out on purpose since the existing
-        Animated: Hide/Only toggle already covers that ground.
+        Animation is left out on purpose - it's now hidden from
+        every view except the Genre dropdown's own "Animated"
+        option (see the ANIMATED check in getFilteredMovies() in
+        app.js), so a multi-select checkbox here would fight
+        with that exclusion rather than combine with it.
       -->
 
       <label class="rated-filter-row">
@@ -730,6 +733,13 @@ aria-label="Clear search"
   <!-- =====================================================
        ROW 1: TYPE + MEDIA (left)
        STAFF PICKS / SHOW ALL + RESERVATIONS (right)
+
+       Unwatched used to live at the end of this row (its own
+       divider, right of Physical/Digital) - moved to Row 2 next
+       to Genre for better left/right balance between the two
+       rows. See relocateUnwatchedForMobile() in app.js, which
+       still works unchanged since it locates the pill/divider
+       by class/data-attribute rather than by row.
        ===================================================== -->
 
   <div class="filter-row filter-row-main">
@@ -790,18 +800,6 @@ aria-label="Clear search"
     data-filter-value="digital"
   >
     Digital
-  </button>
-
-  <div class="filter-divider unwatched-divider">
-    |
-  </div>
-
-  <button
-    class="filter unwatched-pill"
-    data-filter-group="unwatched"
-    data-filter-value="only"
-  >
-    Unwatched
   </button>
 
 </div>
@@ -890,13 +888,60 @@ aria-label="Clear search"
   </div>
 
   <!-- =====================================================
-       ROW 2: GENRE DROPDOWN (left), CATEGORY + ANIMATED (right)
+       ROW 2: SORT + GENRE DROPDOWN + UNWATCHED (left),
+       RESERVATIONS (right)
+
+       Baseball, Christmas and Animated used to live here as
+       their own pill buttons (data-filter-group="category" /
+       "animated") - all three are now options inside the Genre
+       dropdown instead (see getFilteredMovies()'s GENRE block
+       in app.js for how each is matched). Animated is also
+       special: it's hidden from every other view now, not just
+       excluded by default, and only surfaces when "Animated" is
+       the exact genre picked - see the ANIMATED check right
+       after GENRE in app.js. Unwatched moved in from the end of
+       Row 1 for better left/right balance between the two rows.
        ===================================================== -->
 
   <div class="filter-row genre-category-row" id="genre-category-row">
 
 
 <div class="genre-category-left">
+
+
+<button
+  id="sort-alpha-button"
+  class="sort-toggle-button sort-alpha-button active"
+  type="button"
+  aria-label="Sorted A to Z - click to reverse to Z to A"
+  title="Sorted A to Z - click to reverse to Z to A"
+>
+  <span class="sort-toggle-icon sort-alpha-icon" aria-hidden="true">Aa</span>
+  <span class="sort-toggle-direction" aria-hidden="true">▲</span>
+</button>
+
+
+<button
+  id="sort-date-button"
+  class="sort-toggle-button sort-date-button"
+  type="button"
+  aria-label="Sort by release year, newest to oldest"
+  title="Sort by release year, newest to oldest"
+>
+  <svg
+    class="sort-toggle-icon sort-date-icon"
+    viewBox="0 0 16 16"
+    width="14"
+    height="14"
+    aria-hidden="true"
+  >
+    <rect x="2" y="3.5" width="12" height="10.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.2"></rect>
+    <line x1="2" y1="6.5" x2="14" y2="6.5" stroke="currentColor" stroke-width="1.2"></line>
+    <line x1="5" y1="1.5" x2="5" y2="4.5" stroke="currentColor" stroke-width="1.2"></line>
+    <line x1="11" y1="1.5" x2="11" y2="4.5" stroke="currentColor" stroke-width="1.2"></line>
+  </svg>
+  <span class="sort-toggle-direction" aria-hidden="true">▼</span>
+</button>
 
 
 <div class="filter-group" id="genre-filter-group">
@@ -915,6 +960,9 @@ aria-label="Clear search"
   >
     <option value="">All Genres</option>
     <option value="action">Action</option>
+    <option value="animated">Animated</option>
+    <option value="baseball">Baseball</option>
+    <option value="christmas">Christmas</option>
     <option value="classic">Classic</option>
     <option value="comedy">Comedy</option>
     <option value="drama">Drama</option>
@@ -926,38 +974,17 @@ aria-label="Clear search"
 </div>
 
 
-<div class="filter-divider category-divider mobile-collapsible">
+<div class="filter-divider unwatched-divider">
   |
 </div>
 
-
-<div class="filter-group category-group mobile-collapsible">
-
-  <button
-    class="filter category-filter"
-    data-filter-group="category"
-    data-filter-value="baseball"
-  >
-    Baseball
-  </button>
-
-  <button
-    class="filter category-filter"
-    data-filter-group="category"
-    data-filter-value="christmas"
-  >
-    Christmas
-  </button>
-
-  <button
-    class="filter category-filter animated-filter"
-    data-filter-group="animated"
-    data-filter-value="mixed"
-  >
-    Animated: Hide
-  </button>
-
-</div>
+<button
+  class="filter unwatched-pill"
+  data-filter-group="unwatched"
+  data-filter-value="only"
+>
+  Unwatched
+</button>
 
 
 </div>
