@@ -9516,7 +9516,19 @@ false;
 let dramaCurtainBusy =
 false;
 
-function triggerDramaCurtain() {
+/*
+
+* onFullyClosed fires the moment the screen is completely
+* covered (right as the hold period begins) - the caller uses
+* it to swap the underlying content (e.g. re-filter to Drama)
+* while it's hidden, so opening the curtain actually reveals
+* something new instead of a shelf that already changed before
+* the curtain finished closing.
+  */
+
+function triggerDramaCurtain(
+onFullyClosed
+) {
 
 if (dramaCurtainBusy) {
 
@@ -9527,6 +9539,45 @@ return;
 dramaCurtainBusy =
 true;
 
+/*
+
+* position:fixed on a dynamically-inserted element is known to
+* misbehave on mobile Safari - it can end up sized/positioned
+* against the full scrollable DOCUMENT instead of the viewport,
+* which is exactly "runs the full length of the screen" (with
+* the rounded bottom edge rendered somewhere far below, off the
+* visible screen entirely). Rather than rely on the browser's
+* fixed-position handling at all, this overlay is plain
+* position:absolute, sized to the viewport and offset by the
+* CURRENT scroll position explicitly via JS - and since
+* scrolling is locked for the whole effect (below), that offset
+* stays correct for the entire close/hold/open sequence with
+* nothing left to misbehave.
+  */
+
+const previousHtmlOverflow =
+document.documentElement.style.overflow;
+
+const previousBodyOverflow =
+document.body.style.overflow;
+
+document.documentElement.style.overflow =
+"hidden";
+
+document.body.style.overflow =
+"hidden";
+
+const scrollTop =
+window.scrollY ||
+document.documentElement.scrollTop ||
+0;
+
+const vw =
+window.innerWidth;
+
+const vh =
+window.innerHeight;
+
 const overlay =
 document.createElement(
 "div"
@@ -9534,6 +9585,18 @@ document.createElement(
 
 overlay.className =
 "drama-curtain-overlay";
+
+overlay.style.top =
+`${scrollTop}px`;
+
+overlay.style.left =
+"0px";
+
+overlay.style.width =
+`${vw}px`;
+
+overlay.style.height =
+`${vh}px`;
 
 const valanceScallops =
 Array.from(
@@ -9564,13 +9627,26 @@ overlay.classList.add(
 );
 
 const closeDuration =
-2600;
+3600;
 
 const holdDuration =
-1100;
+1300;
 
 const openDuration =
-1500;
+1900;
+
+setTimeout(
+() => {
+
+if (onFullyClosed) {
+
+onFullyClosed();
+
+}
+
+},
+closeDuration
+);
 
 setTimeout(
 () => {
@@ -9591,6 +9667,12 @@ setTimeout(
 () => {
 
 overlay.remove();
+
+document.documentElement.style.overflow =
+previousHtmlOverflow;
+
+document.body.style.overflow =
+previousBodyOverflow;
 
 dramaCurtainBusy =
 false;
@@ -14816,7 +14898,28 @@ triggerComedyHaha();
 
 if (event.target.value === "drama") {
 
-triggerDramaCurtain();
+/*
+
+* The actual re-render is deferred into the curtain's
+* onFullyClosed callback below (see the skipped renderMovies()
+* call at the bottom of this handler) - Full Collection stays
+* on screen until the curtain covers it, then swaps to Drama
+* underneath while hidden, so opening the curtain reveals it.
+  */
+
+triggerDramaCurtain(
+() => {
+
+if (randomMode) {
+
+generateRandomMovies();
+
+}
+
+renderMovies();
+
+}
+);
 
 }
 
@@ -14894,6 +14997,8 @@ genreFilter.classList.toggle(
 event.target.value !== ""
 );
 
+if (event.target.value !== "drama") {
+
 if (randomMode) {
 
 generateRandomMovies();
@@ -14901,6 +15006,8 @@ generateRandomMovies();
 }
 
 renderMovies();
+
+}
 
 }
 );
