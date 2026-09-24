@@ -12229,6 +12229,25 @@ const movies = [
     "rated": "R"
   },
   {
+    "title": "Lolita",
+    "tmdbTitle": "Lolita",
+    "type": "movie",
+    "tmdbId": 802,
+    "poster": "https://image.tmdb.org/t/p/w500/8Puqbeh0D95DpXFWep1rmH78btu.jpg",
+    "year": "1962",
+    "runtime": "154m",
+    "genre": "Drama",
+    "rated": "NR",
+    "director": "Stanley Kubrick",
+    "cast": "James Mason, Shelley Winters, Sue Lyon, Gary Cockrell, Jerry Stovin, Diana Decker",
+    "synopsis": "Humbert Humbert is a middle-aged British novelist who is both appalled by and attracted to the vulgarity of American culture. When he comes to stay at the boarding house run by Charlotte Haze, he soon becomes obsessed with Lolita, the woman's teenaged daughter.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "London Has Fallen",
     "tmdbTitle": "London Has Fallen",
     "type": "movie",
