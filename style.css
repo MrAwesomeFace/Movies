@@ -4677,17 +4677,26 @@ body.classic-mode {
   transform: translateX(115%) skewX(0deg);
 }
 
+/*
+
+* One monotonic pass with no overshoot past the resting
+* position - the previous version pushed translateX past 0%
+* (to +1.2%/-1.2%) and then pulled it back, which read as a
+* stutter right at the end. This version approaches 0% from
+* one side only; the skew still builds up mid-travel and
+* relaxes back to 0 for a bit of fabric "flex," but never
+* reverses direction on translateX itself.
+  */
+
 @keyframes curtainCloseLeft {
   0%   { transform: translateX(-115%) skewX(0deg); }
-  58%  { transform: translateX(-9%) skewX(-4deg); }
-  82%  { transform: translateX(1.2%) skewX(1.5deg); }
+  65%  { transform: translateX(-7%) skewX(-3deg); }
   100% { transform: translateX(0%) skewX(0deg); }
 }
 
 @keyframes curtainCloseRight {
   0%   { transform: translateX(115%) skewX(0deg); }
-  58%  { transform: translateX(9%) skewX(4deg); }
-  82%  { transform: translateX(-1.2%) skewX(-1.5deg); }
+  65%  { transform: translateX(7%) skewX(3deg); }
   100% { transform: translateX(0%) skewX(0deg); }
 }
 
