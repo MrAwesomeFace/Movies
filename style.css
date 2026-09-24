@@ -4582,17 +4582,29 @@ body.classic-mode {
 
 * Drama — theater curtain sweep, replacing the old teardrop-
 * rain effect. A full-viewport overlay (.drama-curtain-overlay)
-* holds a bunting-style scalloped valance plus two fabric
-* panels that close together with a slight overshoot-and-
-* settle motion, hold briefly, then reopen. Built/removed
-* dynamically by triggerDramaCurtain() below, same pattern as
-* the other full-screen genre effects.
+* holds a bunting-style scalloped valance and matching rounded
+* hem, plus two fabric panels that close together, hold while
+* the shelf swaps to the Drama-only results underneath, then
+* reopen to reveal them. Built/removed dynamically by
+* triggerDramaCurtain() below, same pattern as the other full-
+* screen genre effects.
   */
 
 .drama-curtain-overlay {
-  position: fixed;
+  /*
 
-  inset: 0;
+  * position:fixed on an element inserted into the page after
+  * load is a known trouble spot in some mobile browsers - it
+  * can end up sized/positioned against the full scrollable
+  * document instead of the viewport. JS sets top/left/width/
+  * height explicitly (from window.innerWidth/innerHeight plus
+  * the current scroll offset, captured once while scrolling is
+  * locked for the whole effect), so this only needs to be a
+  * plain, unambiguous absolute box - nothing here depends on
+  * any browser's fixed-position implementation at all.
+    */
+
+  position: absolute;
 
   z-index: 67;
 
@@ -4610,7 +4622,7 @@ body.classic-mode {
 }
 
 .curtain-valance {
-  position: fixed;
+  position: absolute;
 
   top: 0;
   left: 0;
@@ -4634,8 +4646,24 @@ body.classic-mode {
   border-radius: 0 0 50% 50% / 0 0 65% 65%;
 }
 
+/*
+
+* One single piece, same as the original clip-path version -
+* just swapping the pointed diamond cuts for rounded ones.
+* clip-path: polygon() can only draw straight edges between
+* points (hence the old jagged look), and clip-path: path()
+* needs fixed pixel coordinates that don't work well against a
+* fluid, percentage-sized element like this. mask-image sidesteps
+* both problems: a small repeating radial-gradient tile draws
+* actual round bumps along the bottom, and a second plain mask
+* layer keeps everything above that band fully solid, unioned
+* together (the default way multiple mask layers combine) into
+* one continuous cutout on the SAME element - no separate hem
+* piece, no seam, nothing stacked on top of anything.
+  */
+
 .curtain-panel {
-  position: fixed;
+  position: absolute;
 
   top: 11%;
   bottom: 0;
@@ -4645,12 +4673,19 @@ body.classic-mode {
 
   box-shadow: inset 0 0 55px rgba(0, 0, 0, 0.55), 4px 0 16px rgba(0, 0, 0, 0.35);
 
-  clip-path: polygon(
-    0 0, 100% 0,
-    100% 94%, 88% 100%, 76% 90%,
-    64% 100%, 52% 90%, 40% 100%,
-    28% 90%, 16% 100%, 4% 90%, 0 100%
-  );
+  -webkit-mask-image:
+    radial-gradient(circle at 50% 0, #000 20px, transparent 20.5px),
+    linear-gradient(#000, #000);
+  -webkit-mask-size: 40px 20px, 100% calc(100% - 20px);
+  -webkit-mask-position: bottom, top;
+  -webkit-mask-repeat: repeat-x, no-repeat;
+
+  mask-image:
+    radial-gradient(circle at 50% 0, #000 20px, transparent 20.5px),
+    linear-gradient(#000, #000);
+  mask-size: 40px 20px, 100% calc(100% - 20px);
+  mask-position: bottom, top;
+  mask-repeat: repeat-x, no-repeat;
 }
 
 .curtain-panel::before {
@@ -4679,53 +4714,69 @@ body.classic-mode {
 
 /*
 
-* One monotonic pass with no overshoot past the resting
-* position - the previous version pushed translateX past 0%
-* (to +1.2%/-1.2%) and then pulled it back, which read as a
-* stutter right at the end. This version approaches 0% from
-* one side only; the skew still builds up mid-travel and
-* relaxes back to 0 for a bit of fabric "flex," but never
-* reverses direction on translateX itself.
+* Deceleration is baked directly into the keyframe positions
+* themselves (a quadratic ease-out: each step covers less
+* distance than the last, by a constant, predictable amount)
+* rather than left to an opaque cubic-bezier timing-function.
+* Two different bezier curves in a row still produced a visible
+* "zooms almost shut, pauses, creeps the rest of the way" -
+* this removes that risk entirely: animation-timing-function is
+* plain `linear`, so the browser only ever interpolates in a
+* straight line between two explicit, already-decelerating
+* positions - there's no curve left that could flatten out and
+* read as a stall.
   */
 
 @keyframes curtainCloseLeft {
-  0%   { transform: translateX(-115%) skewX(0deg); }
-  65%  { transform: translateX(-7%) skewX(-3deg); }
-  100% { transform: translateX(0%) skewX(0deg); }
+  0%   { transform: translateX(-115.0%) skewX(0deg); }
+  20%  { transform: translateX(-73.6%)  skewX(-2deg); }
+  40%  { transform: translateX(-41.4%)  skewX(-3deg); }
+  60%  { transform: translateX(-18.4%)  skewX(-2deg); }
+  80%  { transform: translateX(-4.6%)   skewX(-1deg); }
+  100% { transform: translateX(0%)      skewX(0deg); }
 }
 
 @keyframes curtainCloseRight {
-  0%   { transform: translateX(115%) skewX(0deg); }
-  65%  { transform: translateX(7%) skewX(3deg); }
-  100% { transform: translateX(0%) skewX(0deg); }
+  0%   { transform: translateX(115.0%) skewX(0deg); }
+  20%  { transform: translateX(73.6%)  skewX(2deg); }
+  40%  { transform: translateX(41.4%)  skewX(3deg); }
+  60%  { transform: translateX(18.4%)  skewX(2deg); }
+  80%  { transform: translateX(4.6%)   skewX(1deg); }
+  100% { transform: translateX(0%)     skewX(0deg); }
 }
 
 @keyframes curtainOpenLeft {
-  0%   { transform: translateX(0%) skewX(0deg); }
-  22%  { transform: translateX(-6%) skewX(4deg); }
-  100% { transform: translateX(-115%) skewX(0deg); }
+  0%   { transform: translateX(0%)      skewX(0deg); }
+  20%  { transform: translateX(-4.6%)   skewX(3deg); }
+  40%  { transform: translateX(-18.4%)  skewX(2deg); }
+  60%  { transform: translateX(-41.4%)  skewX(0deg); }
+  80%  { transform: translateX(-73.6%)  skewX(0deg); }
+  100% { transform: translateX(-115.0%) skewX(0deg); }
 }
 
 @keyframes curtainOpenRight {
-  0%   { transform: translateX(0%) skewX(0deg); }
-  22%  { transform: translateX(6%) skewX(-4deg); }
-  100% { transform: translateX(115%) skewX(0deg); }
+  0%   { transform: translateX(0%)      skewX(0deg); }
+  20%  { transform: translateX(4.6%)    skewX(-3deg); }
+  40%  { transform: translateX(18.4%)   skewX(-2deg); }
+  60%  { transform: translateX(41.4%)   skewX(0deg); }
+  80%  { transform: translateX(73.6%)   skewX(0deg); }
+  100% { transform: translateX(115.0%)  skewX(0deg); }
 }
 
 .drama-curtain-overlay.curtain-closing .curtain-left {
-  animation: curtainCloseLeft 2.6s cubic-bezier(0.32, 0.9, 0.35, 1) forwards;
+  animation: curtainCloseLeft 3.6s linear forwards;
 }
 
 .drama-curtain-overlay.curtain-closing .curtain-right {
-  animation: curtainCloseRight 2.6s cubic-bezier(0.32, 0.9, 0.35, 1) forwards;
+  animation: curtainCloseRight 3.6s linear forwards;
 }
 
 .drama-curtain-overlay.curtain-opening .curtain-left {
-  animation: curtainOpenLeft 1.5s cubic-bezier(0.5, 0, 0.6, 1) forwards;
+  animation: curtainOpenLeft 1.9s linear forwards;
 }
 
 .drama-curtain-overlay.curtain-opening .curtain-right {
-  animation: curtainOpenRight 1.5s cubic-bezier(0.5, 0, 0.6, 1) forwards;
+  animation: curtainOpenRight 1.9s linear forwards;
 }
 
 /*
