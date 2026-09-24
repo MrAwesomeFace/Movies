@@ -1263,6 +1263,87 @@ GENRE FILTER (dropdown — reuses the reservation-filter look)
 
 
 /* =========================================================
+SORT TOGGLE (left of the Genre dropdown)
+
+Two independent pills - alphabetical ("Aa") and release year
+(calendar) - each pairing its icon with a small ascending/
+descending arrow for its OWN current direction. Sized off the
+same padding/border formula as .reservation-filter so they
+land at the same height as the Genre select without a
+hardcoded px value - keeps Row 2 the height it already is, so
+Row 1 and Row 2 stay flush. The filled/"active" pill is
+whichever axis is actually driving the current order (see
+updateSortToggleButtonsUI() in app.js) - not a preview of what
+clicking gives you.
+========================================================= */
+
+.sort-toggle-button {
+  flex-shrink: 0;
+
+  padding: 9px 10px;
+
+  border: 1px solid var(--gold-dark);
+
+  border-radius: 999px;
+
+  background-color: transparent;
+
+  color: var(--gold);
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 4px;
+}
+
+.sort-toggle-button:hover {
+  border-color: var(--gold);
+}
+
+.sort-toggle-button.active {
+  background-color: var(--gold);
+
+  border-color: var(--gold);
+
+  color: #111111;
+}
+
+.sort-toggle-icon {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-shrink: 0;
+}
+
+.sort-alpha-icon {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+
+  letter-spacing: 0.01em;
+}
+
+.sort-date-icon {
+  flex-shrink: 0;
+}
+
+.sort-toggle-direction {
+  font-size: 9px;
+  line-height: 1;
+
+  flex-shrink: 0;
+}
+
+
+/* =========================================================
 FILTER BAR
 ========================================================= */
 
@@ -6698,7 +6779,9 @@ SELECTED MOVIE
 .movie-card.selected
 .movie-cover-inner,
 .movie-card.selected
-.case-spine-face {
+.case-spine-face,
+.movie-card.selected
+.out-of-stock-badge-layer {
   opacity: 0;
 }
 
@@ -8306,15 +8389,15 @@ regardless of search state, all left-justified.
   }
 
   /*
-   * Type, Category, and Reservations are hidden by default
-   * and only appear once the filters toggle is opened —
-   * Genre, Staff Picks, and the new Format dropdown stay
-   * visible always, matching what was decided on to keep.
+   * Type and Reservations are hidden by default and only
+   * appear once the filters toggle is opened — Genre, Staff
+   * Picks, and the new Format dropdown stay visible always,
+   * matching what was decided on to keep. Category no longer
+   * has its own group here - Baseball/Christmas/Animated all
+   * moved into the Genre dropdown, which was always visible.
    */
 
   .type-pills-wrap,
-  .category-group,
-  .category-divider,
   .reservation-filter-wrapper {
 
     display: none;
@@ -8326,16 +8409,9 @@ regardless of search state, all left-justified.
 
   }
 
-  body.mobile-filters-open .category-group,
   body.mobile-filters-open .reservation-filter-wrapper {
 
     display: flex;
-
-  }
-
-  body.mobile-filters-open .category-divider {
-
-    display: block;
 
   }
 
@@ -8409,6 +8485,14 @@ SMALL PHONES
   .genre-filter-select {
 
     min-width: 110px;
+
+  }
+
+  .sort-toggle-button {
+
+    padding: 8px 10px;
+
+    font-size: 11px;
 
   }
 
@@ -8772,6 +8856,46 @@ body.theme-arcade .reservation-filter:focus {
 }
 
 body.theme-arcade .reservation-filter.active {
+
+  background-color: #0a0a0d;
+
+  border-color: #ff2fd1;
+
+  color: #fff0fa;
+
+  animation: arcade-pill-pulse 2.4s ease-in-out infinite;
+}
+
+/*
+
+* Sort toggle (Aa / calendar) - same convention as the
+* reservation pills above: resting cyan outline, magenta on
+* hover, and the currently-active button flips to a dark fill
+* with a pulsing magenta glow. currentColor on the calendar
+* SVG's strokes means it follows these color rules for free.
+  */
+
+body.theme-arcade .sort-toggle-button {
+
+  background-color: transparent;
+
+  color: #00fff2;
+
+  border-color: #00fff2;
+
+  box-shadow:
+    0 0 4px 1px rgba(0, 255, 242, 0.6),
+    0 0 10px 2px rgba(0, 255, 242, 0.35);
+}
+
+body.theme-arcade .sort-toggle-button:hover {
+
+  border-color: #ff2fd1;
+
+  color: #ff2fd1;
+}
+
+body.theme-arcade .sort-toggle-button.active {
 
   background-color: #0a0a0d;
 
