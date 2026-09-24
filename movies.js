@@ -12229,25 +12229,6 @@ const movies = [
     "rated": "R"
   },
   {
-    "title": "Lolita",
-    "tmdbTitle": "Lolita",
-    "type": "movie",
-    "tmdbId": 9769,
-    "poster": "https://image.tmdb.org/t/p/w500/9INcC14WZjCMKGE360VXmklCLdZ.jpg",
-    "year": "1997",
-    "runtime": "137m",
-    "genre": "Drama",
-    "director": "Adrian Lyne",
-    "cast": "Jeremy Irons, Dominique Swain, Melanie Griffith, Frank Langella, Suzanne Shepherd, Keith Reddin",
-    "synopsis": "Humbert Humbert is a middle-aged British novelist who is both appalled by and attracted to the vulgarity of American culture. When he comes to stay at the boarding house run by Charlotte Haze, he soon becomes obsessed with Lolita, the woman's teenaged daughter.",
-    "physical": [],
-    "digital": [
-      "Fandango",
-      "Movies Anywhere"
-    ],
-    "rated": "R"
-  },
-  {
     "title": "London Has Fallen",
     "tmdbTitle": "London Has Fallen",
     "type": "movie",
