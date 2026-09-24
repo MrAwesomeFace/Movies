@@ -71,6 +71,30 @@ let tournamentHistoryCache =
 
 /*
 
+* Overall Time / Longest Battle are computed server-side from
+* raw decided_at gaps between consecutive picks, which by
+* themselves don't know about pause time at all. These two
+* track, per gap (i.e. since whichever came more recently -
+* the previous pick, or first opening this tournament this
+* session), how much of tournamentHiddenMsTotal accumulated
+* in that window, so it can be reported alongside the pick as
+* hidden_gap_ms and subtracted server-side from that specific
+* gap. Reset to the current running total whenever a different
+* tournament is opened (tournamentHiddenGapTournamentId keeps
+* track of which one), and again right after every successful
+* pick - never on a mere re-open of the SAME still-in-progress
+* tournament, since hidden time between two opens of the same
+* one is exactly what needs to carry through to the next pick.
+  */
+
+let tournamentHiddenMsAtLastDecision =
+0;
+
+let tournamentHiddenGapTournamentId =
+null;
+
+/*
+
 * Bracket busters - timestamps each matchup was first rendered
 * on screen, keyed by matchup id. Session-only (in-memory, not
 * persisted) - a matchup left pending across a page reload
@@ -20816,6 +20840,16 @@ return;
 const tournament =
 current.tournament;
 
+if (tournamentHiddenGapTournamentId !== tournament.id) {
+
+tournamentHiddenGapTournamentId =
+tournament.id;
+
+tournamentHiddenMsAtLastDecision =
+tournamentHiddenMsTotal;
+
+}
+
 const round =
 current.round;
 
@@ -20978,6 +21012,12 @@ firstSeenAt
 )
 : null;
 
+const hiddenGapMs =
+Math.max(
+0,
+tournamentHiddenMsTotal - tournamentHiddenMsAtLastDecision
+);
+
 const response =
 await fetch(
 `${RESERVATIONS_API}/tournaments/${tournament.id}/pick`,
@@ -20989,7 +21029,8 @@ headers: {
 body: JSON.stringify({
 matchup_id: matchupId,
 winner_movie_id: winnerMovieId,
-deliberation_ms: deliberationMs
+deliberation_ms: deliberationMs,
+hidden_gap_ms: hiddenGapMs
 })
 }
 );
@@ -21004,6 +21045,17 @@ data.error || "Server error"
 );
 
 }
+
+/*
+
+* Reset the moment this pick is confirmed, not before - if
+* the fetch fails and pickRoundListWinner is effectively
+* retried, the hidden time in between should still count
+* toward the next successful attempt's gap.
+  */
+
+tournamentHiddenMsAtLastDecision =
+tournamentHiddenMsTotal;
 
 if (data.tournament_complete) {
 
