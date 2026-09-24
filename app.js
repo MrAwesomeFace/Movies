@@ -465,6 +465,12 @@ false;
 const genreFilter =
 document.getElementById("genre-filter");
 
+const sortAlphaButton =
+document.getElementById("sort-alpha-button");
+
+const sortDateButton =
+document.getElementById("sort-date-button");
+
 const themeToggle =
 document.getElementById("theme-toggle");
 
@@ -529,12 +535,33 @@ let randomMode = false;
 
 let randomMovies = [];
 
+/*
+
+* Manual sort, left of the Genre dropdown - two independent
+* buttons (alphabetical / release year), each toggling its own
+* direction, only one active at a time. sortAxis picks which
+* button is currently driving the order; alphaDirection/
+* dateDirection each remember that button's own last direction
+* so switching back to a button resumes where you left it rather
+* than resetting. Defaults match the site's long-standing
+* behavior: alphabetical, A-Z. Deliberately NOT part of
+* activeFilters/the advanced search panel - it's a display order
+* preference, not a filter, so "Clear search & filters" leaves it
+* alone. See compareBySortMode(), updateSortToggleButtonsUI() and
+* the two click listeners below.
+  */
+
+let sortAxis = "alpha";
+
+let alphaDirection = "asc";
+
+let dateDirection = "desc";
+
 let activeFilters = {
 type: "movie",
 media: "all",
 genre: null,
 category: null,
-animated: "hide",
 reservation: "all",
 unwatchedOnly: false,
 rated: [],
@@ -2927,15 +2954,7 @@ if (
 ) {
 
 filteredMovies.sort(
-(a, b) =>
-a.title.localeCompare(
-b.title,
-undefined,
-{
-sensitivity:
-"base"
-}
-)
+compareBySortMode
 );
 
 }
@@ -2985,7 +3004,6 @@ activeFilters.type !== "all" ||
 activeFilters.media !== "all" ||
 activeFilters.genre !== null ||
 activeFilters.category !== null ||
-activeFilters.animated !== "mixed" ||
 activeFilters.reservation !== "all" ||
 activeFilters.rated.length > 0;
 
@@ -6953,14 +6971,14 @@ modal.querySelector(
 
 /*
 
-* "That's all, Folks!" only plays while Animated: Only is
-* the active filter - otherwise the movie just closes
+* "That's all, Folks!" only plays while the Genre dropdown is
+* set to "Animated" - otherwise the movie just closes
 * normally, same as it always did before this effect
 * existed.
   */
 
 const irisActive =
-activeFilters.animated === "only";
+activeFilters.genre === "animated";
 
 if (irisActive) {
 
@@ -14406,109 +14424,16 @@ syncUnwatchedFilterUI();
 
 }
 
-// =====================================================
-// CATEGORY
-// =====================================================
-
-if (group === "category") {
-
-if (
-activeFilters.category ===
-value
-) {
-
-activeFilters.category =
-null;
-
-button.classList.remove(
-"active"
-);
-
-} else {
-
-activeFilters.category =
-value;
-
 /*
 
-* Fires only when switching TO these specific categories,
-* not on toggle-off (that's the branch above) or when
-* switching between other category filters.
+* Baseball, Christmas and Animated moved into the Genre
+* dropdown - see its "change" listener below for where
+* activeFilters.category/genre now gets set for these and
+* where triggerChristmasLights()/triggerBaseballScoreboard()/
+* triggerSparkleArc() now fire instead. Category/Animated no
+* longer have their own pill buttons, so there's nothing left
+* to handle in this delegated click listener for either group.
   */
-
-if (value === "christmas") {
-
-triggerChristmasLights();
-
-}
-
-if (value === "baseball") {
-
-triggerBaseballScoreboard();
-
-}
-
-document
-.querySelectorAll(
-'[data-filter-group="category"]'
-)
-.forEach(
-b =>
-b.classList.toggle(
-"active",
-b.dataset.filterValue ===
-value
-)
-);
-
-}
-
-}
-
-// =====================================================
-// ANIMATED
-// =====================================================
-
-if (group === "animated") {
-
-if (
-activeFilters.animated ===
-"mixed"
-) {
-
-activeFilters.animated =
-"hide";
-
-} else if (
-activeFilters.animated ===
-"hide"
-) {
-
-activeFilters.animated =
-"only";
-
-} else {
-
-activeFilters.animated =
-"mixed";
-
-}
-
-updateAnimatedButton();
-
-/*
-
-* Sparkle arc fires only when switching TO "only" — not on
-* "hide" or "mixed".
-  */
-
-if (activeFilters.animated === "only") {
-
-triggerSparkleArc();
-
-}
-
-}
 
 // =====================================================
 // RANDOM MODE
@@ -14600,9 +14525,12 @@ renderMovies();
 
 /*
 
-* Genre lives as a <select>, not pills — includes
-* "Classic", which getFilteredMovies() treats as a
-* computed year rule, not a text tag (see below).
+* Genre lives as a <select>, not pills — includes "Classic"
+* (a computed year rule), "Baseball"/"Christmas" (category
+* tags, matched the same way the old pill buttons used to)
+* and "Animated" (also a category tag, but hidden everywhere
+* else - see getFilteredMovies()'s GENRE/ANIMATED blocks for
+* all four).
   */
 
 if (genreFilter) {
@@ -14669,6 +14597,24 @@ triggerThrillerFlashlight();
 
 }
 
+if (event.target.value === "christmas") {
+
+triggerChristmasLights();
+
+}
+
+if (event.target.value === "baseball") {
+
+triggerBaseballScoreboard();
+
+}
+
+if (event.target.value === "animated") {
+
+triggerSparkleArc();
+
+}
+
 if (event.target.value === "rom-com") {
 
 triggerHeartFlood();
@@ -14725,6 +14671,177 @@ renderMovies();
 );
 
 }
+
+/*
+
+* SORT TOGGLE - two buttons, each its own axis (alphabetical /
+* release year), each toggling its own ascending<->descending
+* direction. Only one axis drives the actual order at a time -
+* clicking the INACTIVE button switches to it (resuming that
+* button's own last-used direction rather than resetting it);
+* clicking the ALREADY-ACTIVE button flips its direction instead.
+* The filled/"active" button is always the one currently applied
+* (not a preview of what clicking gives you), and each button's
+* arrow (▲ ascending / ▼ descending) shows its OWN current
+* direction whether or not it's the active axis, so switching
+* back to a button shows what you'll get before you even click it.
+  */
+
+function updateSortToggleButtonsUI() {
+
+if (sortAlphaButton) {
+
+sortAlphaButton.classList.toggle(
+"active",
+sortAxis === "alpha"
+);
+
+const alphaArrow =
+sortAlphaButton.querySelector(
+".sort-toggle-direction"
+);
+
+if (alphaArrow) {
+
+alphaArrow.textContent =
+alphaDirection === "desc"
+? "▼"
+: "▲";
+
+}
+
+const alphaLabel =
+sortAxis === "alpha"
+? (
+alphaDirection === "desc"
+? "Sorted Z to A - click to reverse to A to Z"
+: "Sorted A to Z - click to reverse to Z to A"
+)
+: (
+alphaDirection === "desc"
+? "Sort alphabetically, Z to A"
+: "Sort alphabetically, A to Z"
+);
+
+sortAlphaButton.setAttribute(
+"aria-label",
+alphaLabel
+);
+
+sortAlphaButton.setAttribute(
+"title",
+alphaLabel
+);
+
+}
+
+if (sortDateButton) {
+
+sortDateButton.classList.toggle(
+"active",
+sortAxis === "date"
+);
+
+const dateArrow =
+sortDateButton.querySelector(
+".sort-toggle-direction"
+);
+
+if (dateArrow) {
+
+dateArrow.textContent =
+dateDirection === "desc"
+? "▼"
+: "▲";
+
+}
+
+const dateLabel =
+sortAxis === "date"
+? (
+dateDirection === "desc"
+? "Sorted newest to oldest - click to reverse to oldest to newest"
+: "Sorted oldest to newest - click to reverse to newest to oldest"
+)
+: (
+dateDirection === "desc"
+? "Sort by release year, newest to oldest"
+: "Sort by release year, oldest to newest"
+);
+
+sortDateButton.setAttribute(
+"aria-label",
+dateLabel
+);
+
+sortDateButton.setAttribute(
+"title",
+dateLabel
+);
+
+}
+
+}
+
+if (sortAlphaButton) {
+
+sortAlphaButton.addEventListener(
+"click",
+() => {
+
+if (sortAxis === "alpha") {
+
+alphaDirection =
+alphaDirection === "asc"
+? "desc"
+: "asc";
+
+} else {
+
+sortAxis =
+"alpha";
+
+}
+
+updateSortToggleButtonsUI();
+
+renderMovies();
+
+}
+);
+
+}
+
+if (sortDateButton) {
+
+sortDateButton.addEventListener(
+"click",
+() => {
+
+if (sortAxis === "date") {
+
+dateDirection =
+dateDirection === "desc"
+? "asc"
+: "desc";
+
+} else {
+
+sortAxis =
+"date";
+
+}
+
+updateSortToggleButtonsUI();
+
+renderMovies();
+
+}
+);
+
+}
+
+updateSortToggleButtonsUI();
 
 // =========================================================
 // RESERVATION DROPDOWN
@@ -15441,65 +15558,6 @@ wishlistAddStatus.textContent =
 }
 
 // =========================================================
-// UPDATE ANIMATED BUTTON
-// =========================================================
-
-function updateAnimatedButton() {
-
-const animatedButton =
-document.querySelector(
-'[data-filter-group="animated"]'
-);
-
-if (!animatedButton) {
-return;
-}
-
-if (
-activeFilters.animated ===
-"mixed"
-) {
-
-animatedButton.textContent =
-"Animated: Mixed";
-
-animatedButton.classList.add(
-"active"
-);
-
-}
-
-if (
-activeFilters.animated ===
-"hide"
-) {
-
-animatedButton.textContent =
-"Animated: Hide";
-
-animatedButton.classList.remove(
-"active"
-);
-
-}
-
-if (
-activeFilters.animated ===
-"only"
-) {
-
-animatedButton.textContent =
-"Animated: Only";
-
-animatedButton.classList.add(
-"active"
-);
-
-}
-
-}
-
-// =========================================================
 // WISHLIST ADD PANEL VISIBILITY
 // =========================================================
 
@@ -15723,15 +15781,7 @@ searchText
 }
 
 return [...items].sort(
-(a, b) =>
-(a.title || "").localeCompare(
-b.title || "",
-undefined,
-{
-sensitivity:
-"base"
-}
-)
+compareBySortMode
 );
 
 }
@@ -15909,6 +15959,77 @@ value
 }
 
 // =========================================================
+// SORT TOGGLE - shared comparator
+//
+// Used both by renderMovies()'s owned-titles sort and by
+// getFilteredWishlist()'s sort, so the owned shelf and the
+// out-of-stock/wishlist rows always agree on the current order.
+// When sorting by date, a tie (same year, or one/both sides
+// missing a usable year) falls back to a plain title A-Z
+// tiebreaker - titles with no year sink below ones that have it
+// rather than clumping at the top from parseInt(undefined) =>
+// NaN. alphaDirection only applies when sortAxis is "alpha" -
+// the date tiebreaker always reads A-Z regardless of it.
+// =========================================================
+
+function compareBySortMode(a, b) {
+
+if (sortAxis === "date") {
+
+const yearA =
+parseInt(a.year, 10);
+
+const yearB =
+parseInt(b.year, 10);
+
+const hasYearA =
+!isNaN(yearA);
+
+const hasYearB =
+!isNaN(yearB);
+
+if (hasYearA && hasYearB && yearA !== yearB) {
+
+return dateDirection === "desc"
+? yearB - yearA
+: yearA - yearB;
+
+}
+
+if (hasYearA !== hasYearB) {
+
+return hasYearA ? -1 : 1;
+
+}
+
+return (a.title || "").localeCompare(
+b.title || "",
+undefined,
+{
+sensitivity:
+"base"
+}
+);
+
+}
+
+const titleCompare =
+(a.title || "").localeCompare(
+b.title || "",
+undefined,
+{
+sensitivity:
+"base"
+}
+);
+
+return alphaDirection === "desc"
+? -titleCompare
+: titleCompare;
+
+}
+
+// =========================================================
 // GET CURRENT FILTERED MOVIES
 // =========================================================
 
@@ -16036,16 +16157,25 @@ return false;
 
 // =====================================================
 // GENRE
+//
+// "Classic" is a computed rule (year < 1980), not a text tag
+// on the movie — so it stays correct on its own as movies are
+// added. "Baseball" and "Christmas" are category tags (moved
+// here from their old standalone pill buttons), matched
+// against movie.categories the same way the CATEGORY block
+// below still matches activeFilters.category. "Animated" is
+// also a category tag, but computed once here as isAnimated
+// and reused by the ANIMATED block right after RATED below,
+// which hides animated titles everywhere EXCEPT when this is
+// the exact genre picked. Every other genre still matches by
+// text as before.
 // =====================================================
 
-/*
-
-* "Classic" is a computed rule (year < 1980), not a
-* text tag on the movie — so it stays correct on its
-* own as movies are added, with nothing to manually
-* tag in movies.js. Every other genre still matches
-* by text as before.
-  */
+const isAnimated =
+Array.isArray(movie.categories) &&
+movie.categories.includes(
+"animated"
+);
 
 if (activeFilters.genre) {
 
@@ -16061,6 +16191,34 @@ if (
 Number.isNaN(movieYear) ||
 movieYear >= 1980
 ) {
+
+return false;
+
+}
+
+} else if (
+activeFilters.genre === "baseball" ||
+activeFilters.genre === "christmas"
+) {
+
+const categories =
+Array.isArray(movie.categories)
+? movie.categories
+: [];
+
+if (
+!categories.includes(
+activeFilters.genre
+)
+) {
+
+return false;
+
+}
+
+} else if (activeFilters.genre === "animated") {
+
+if (!isAnimated) {
 
 return false;
 
@@ -16139,26 +16297,17 @@ return false;
 
 // =====================================================
 // ANIMATED
+//
+// Hidden from every view except when "Animated" is the exact
+// Genre selected (isAnimated computed up in the GENRE block
+// above, right before it's used there too). No more three-way
+// Mixed/Hide/Only toggle - animated titles just stay out of
+// the way until you specifically go looking for them.
 // =====================================================
 
-const isAnimated =
-Array.isArray(movie.categories) &&
-movie.categories.includes(
-"animated"
-);
-
 if (
-activeFilters.animated === "hide" &&
-isAnimated
-) {
-
-return false;
-
-}
-
-if (
-activeFilters.animated === "only" &&
-!isAnimated
+isAnimated &&
+activeFilters.genre !== "animated"
 ) {
 
 return false;
