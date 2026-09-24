@@ -45,6 +45,7 @@ let wishlist =
 const GENRE_TOURNAMENT_CATEGORIES =
 [
 "action",
+"christmas",
 "classic",
 "comedy",
 "drama",
@@ -103,14 +104,37 @@ let tournamentHiddenMsTotal =
 let tournamentHiddenSince =
 null;
 
-document.addEventListener(
-"visibilitychange",
-() => {
+/*
 
-if (document.hidden) {
+* "Hidden" for deliberation-timing purposes means either the
+* browser tab itself is hidden (OS/browser-level, tracked via
+* visibilitychange) OR the in-app tournament overlay has been
+* closed while the person browses the rest of the site - which
+* is the realistic way most people actually "pause" a bracket,
+* since the tab stays visible the whole time. Both signals feed
+* the same shouldBeHidden check so time is never double-counted
+* when both happen to be true at once.
+  */
+
+let tournamentTabHidden =
+document.hidden;
+
+let tournamentOverlayOpen =
+false;
+
+function updateTournamentHiddenState() {
+
+const shouldBeHidden =
+tournamentTabHidden || !tournamentOverlayOpen;
+
+if (shouldBeHidden) {
+
+if (!tournamentHiddenSince) {
 
 tournamentHiddenSince =
 Date.now();
+
+}
 
 } else if (tournamentHiddenSince) {
 
@@ -121,6 +145,17 @@ tournamentHiddenSince =
 null;
 
 }
+
+}
+
+document.addEventListener(
+"visibilitychange",
+() => {
+
+tournamentTabHidden =
+document.hidden;
+
+updateTournamentHiddenState();
 
 }
 );
@@ -4109,6 +4144,9 @@ genreCategory
 const isGold =
 !genreCategory;
 
+const isChristmas =
+genreCategory === "christmas";
+
 const engraveColor =
 isGold
 ? "#7a5c10"
@@ -4119,8 +4157,29 @@ const crownSvg =
 `<polyline points="2,10 2,4 9,8 15,2 21,8 27,4 27,10" fill="none" stroke="${engraveColor}" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>` +
 `</svg>`;
 
+/*
+
+* Christmas gets its own plate icon (a tree with a star on
+* top) instead of the crown+text used for every other genre -
+* gaudy on purpose per request: red/gold belt blocks (set via
+* the belt-christmas class the caller applies), green tree,
+* yellow star. No text label since the tree+star already
+* reads clearly at this size and the plate has no extra room.
+  */
+
+const treeSvg =
+`<svg viewBox="0 0 30 28" width="30" height="28" style="display:block;margin:0 auto">` +
+`<polygon points="15,0 16,1.6 18,1.8 16.5,3 17,4.8 15,3.8 13,4.8 13.5,3 12,1.8 14,1.6" fill="#fff200" stroke="#c99f1f" stroke-width="0.4"/>` +
+`<polygon points="11,10 19,10 15,4" fill="#3fae44" stroke="#1f5c22" stroke-width="0.6"/>` +
+`<polygon points="9,16 21,16 15,9" fill="#3fae44" stroke="#1f5c22" stroke-width="0.6"/>` +
+`<polygon points="6,23 24,23 15,15" fill="#3fae44" stroke="#1f5c22" stroke-width="0.6"/>` +
+`<rect x="13" y="23" width="4" height="4" fill="#6b3e1f"/>` +
+`</svg>`;
+
 const plateContent =
-crownSvg +
+isChristmas
+? treeSvg
+: crownSvg +
 (
 genreCategory
 ? `<span class="belt-label" style="font-size:9px">${genreCategory.toUpperCase()}</span>`
@@ -4501,6 +4560,8 @@ belt.className =
 `championship-belt ${
 champEntry === fullChampEntry
 ? "belt-gold"
+: champEntry.category === "christmas"
+? "belt-christmas"
 : "belt-silver"
 }`;
 
@@ -9234,7 +9295,8 @@ chainStartDelay + chainCount * 70 + 800
   */
 
 const COMEDY_WORDS =
-["Ha!", "Ha ha!", "Ha!", "Haha!", "Ha!", "Ha ha ha!", "Ha!", "Haha!", "Ha ha!", "Ha!", "Hahaha!"];
+["Ha!", "Ha ha!", "Ha!", "Haha!", "Ha!", "Ha ha ha!", "Ha!", "Haha!", "Ha ha!", "Ha!", "Hahaha!",
+"Ho ho!", "Tee hee!", "Hardy har!", "Bwahaha!", "Heehee!", "Yuk yuk!", "Snort!", "Guffaw!", "Whoop!"];
 
 let comedyHahaBusy =
 false;
@@ -9301,6 +9363,15 @@ el.style.top =
 
 el.style.opacity =
 "1";
+
+const pulseDuration =
+0.45 + Math.random() * 0.35;
+
+const pulseDelay =
+Math.random() * 0.4;
+
+el.style.animation =
+`haha-laugh-pulse ${pulseDuration}s ease-in-out ${pulseDelay}s infinite`;
 
 document.body.appendChild(
 el
@@ -9409,115 +9480,204 @@ false;
 
 /*
 
-* Drama — many small teardrop particles falling like rain,
-* point-up/bulb-down orientation (confirmed correct via
-* isolated testing after an earlier version had it backwards).
+* Drama — theater curtain sweep. Replaces the old teardrop-
+* rain effect. Builds a full-viewport overlay with a bunting
+* valance and two fabric panels, closes them together with a
+* slight overshoot-and-settle, holds briefly, then reopens and
+* tears the whole thing down. CSS (drama-curtain-overlay,
+* curtain-fabric/-valance/-panel, curtainClose/OpenLeft/Right
+* keyframes) lives in style.css.
   */
 
-let dramaTearsBusy =
+let dramaCurtainBusy =
 false;
 
-function triggerDramaTears() {
+function triggerDramaCurtain() {
 
-if (dramaTearsBusy) {
+if (dramaCurtainBusy) {
 
 return;
 
 }
 
-dramaTearsBusy =
+dramaCurtainBusy =
 true;
 
-const vh =
-window.innerHeight;
-
-const count =
-22;
-
-const drops =
-[];
-
-for (
-let i = 0;
-i < count;
-i++
-) {
-
-const drop =
+const overlay =
 document.createElement(
 "div"
 );
 
-drop.className =
-"teardrop-particle";
+overlay.className =
+"drama-curtain-overlay";
 
-const size =
-7 + Math.random() * 6;
-
-drop.style.width =
-`${size}px`;
-
-drop.style.height =
-`${size * 1.3}px`;
-
-/*
-
-* Was a flat random spread across the full width (read as
-* generic rain, not tears). Now concentrated around two
-* "eye" zones at 35% and 65% width, each with a modest
-* spread of its own, so it reads as falling from two eyes
-* rather than scattered evenly across the screen.
-  */
-
-const eyeZones =
-[35, 65];
-
-const zoneCenter =
-eyeZones[
-Math.floor(
-Math.random() * eyeZones.length
-)
-];
-
-const zoneOffset =
-(Math.random() - 0.5) * 12;
-
-drop.style.left =
-`${zoneCenter + zoneOffset}%`;
-
-drop.style.setProperty(
-"--fall-distance",
-`${vh + 60}px`
+const valanceScallops =
+Array.from(
+{ length: 7 }
+).map(
+() => `<div class="valance-scallop curtain-fabric"></div>`
+).join(
+""
 );
 
-drop.style.animationDuration =
-`${3.2 + Math.random() * 1.6}s`;
-
-drop.style.animationDelay =
-`${Math.random() * 1.8}s`;
+overlay.innerHTML =
+`<div class="curtain-valance">${valanceScallops}</div>` +
+`<div class="curtain-panel curtain-fabric curtain-left"></div>` +
+`<div class="curtain-panel curtain-fabric curtain-right"></div>`;
 
 document.body.appendChild(
-drop
+overlay
 );
 
-drops.push(
-drop
+requestAnimationFrame(
+() => {
+
+overlay.classList.add(
+"curtain-closing"
 );
 
 }
+);
+
+const closeDuration =
+2600;
+
+const holdDuration =
+1100;
+
+const openDuration =
+1500;
 
 setTimeout(
 () => {
 
-drops.forEach(
-d => d.remove()
+overlay.classList.remove(
+"curtain-closing"
 );
 
-dramaTearsBusy =
+overlay.classList.add(
+"curtain-opening"
+);
+
+},
+closeDuration + holdDuration
+);
+
+setTimeout(
+() => {
+
+overlay.remove();
+
+dramaCurtainBusy =
 false;
 
 },
-6800
+closeDuration + holdDuration + openDuration + 200
+);
+
+}
+
+/*
+
+* Unwatched — shrink-wrap peel. Builds a full-viewport overlay
+* with a straight seam, a pull-tab that drags horizontally
+* edge-to-edge (the bright "cut" trail is glued to the tab's
+* own edge so it can never drift out of sync with the tab's
+* travel), then the top strip flies off followed by the bottom
+* piece. CSS (unwatched-wrap-overlay, wrap-plastic/-top-piece/
+* -bottom-piece/-seam/-pull-tab, tabTravel/tabWobble keyframes)
+* lives in style.css.
+  */
+
+let unwatchedWrapBusy =
+false;
+
+function triggerUnwatchedShrinkWrap() {
+
+if (unwatchedWrapBusy) {
+
+return;
+
+}
+
+unwatchedWrapBusy =
+true;
+
+const overlay =
+document.createElement(
+"div"
+);
+
+overlay.className =
+"unwatched-wrap-overlay";
+
+overlay.innerHTML =
+`<div class="wrap-bottom-piece wrap-plastic"></div>` +
+`<div class="wrap-top-piece wrap-plastic"></div>` +
+`<div class="wrap-seam"></div>` +
+`<div class="wrap-pull-tab"><div class="wrap-pull-tab-visual"></div></div>`;
+
+document.body.appendChild(
+overlay
+);
+
+requestAnimationFrame(
+() => {
+
+overlay.classList.add(
+"wrap-tab-travel"
+);
+
+}
+);
+
+const tabTravelDuration =
+1100;
+
+const bottomStagger =
+550;
+
+const topPeelDuration =
+700;
+
+const bottomPeelDuration =
+800;
+
+setTimeout(
+() => {
+
+overlay.classList.add(
+"wrap-top-off"
+);
+
+},
+tabTravelDuration
+);
+
+setTimeout(
+() => {
+
+overlay.classList.add(
+"wrap-bottom-off"
+);
+
+},
+tabTravelDuration + bottomStagger
+);
+
+setTimeout(
+() => {
+
+overlay.remove();
+
+unwatchedWrapBusy =
+false;
+
+},
+tabTravelDuration +
+bottomStagger +
+Math.max(topPeelDuration, bottomPeelDuration) +
+200
 );
 
 }
@@ -9792,7 +9952,7 @@ setTimeout(
 () => {
 
 beam.style.transition =
-"left 2.4s linear";
+"left 3.3s linear";
 
 beam.style.left =
 `${vw + beamWidth}px`;
@@ -9809,7 +9969,7 @@ darken.classList.remove(
 );
 
 },
-3400
+4300
 );
 
 setTimeout(
@@ -9825,7 +9985,7 @@ thrillerFlashlightBusy =
 false;
 
 },
-4000
+4900
 );
 
 }
@@ -12685,16 +12845,9 @@ attemptFire();
 
 }
 
-function triggerStathamSkids() {
-
-if (stathamSkidsBusy) {
-
-return;
-
-}
-
-stathamSkidsBusy =
-true;
+function spawnStathamSkidSet(
+setIndex
+) {
 
 const vw =
 window.innerWidth;
@@ -12735,7 +12888,7 @@ vh * 0.18
 );
 
 const filterId =
-`statham-roughen-${Date.now()}`;
+`statham-roughen-${Date.now()}-${setIndex}`;
 
 const svg =
 document.createElement(
@@ -12753,10 +12906,10 @@ svg.innerHTML =
 <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G"/>
 </filter>
 </defs>
-<path id="statham-guide-1" d="M ${startX},${startY} Q ${midX},${midY} ${endX},${endY}" fill="none" stroke="none"/>
-<path id="statham-guide-2" d="M ${startX},${startY + trackGap} Q ${midX},${midY + trackGap} ${endX},${endY + trackGap}" fill="none" stroke="none"/>
-<g id="statham-tread-1" filter="url(#${filterId})"></g>
-<g id="statham-tread-2" filter="url(#${filterId})"></g>
+<path id="statham-guide-1-${setIndex}" d="M ${startX},${startY} Q ${midX},${midY} ${endX},${endY}" fill="none" stroke="none"/>
+<path id="statham-guide-2-${setIndex}" d="M ${startX},${startY + trackGap} Q ${midX},${midY + trackGap} ${endX},${endY + trackGap}" fill="none" stroke="none"/>
+<g id="statham-tread-1-${setIndex}" filter="url(#${filterId})"></g>
+<g id="statham-tread-2-${setIndex}" filter="url(#${filterId})"></g>
 </svg>`;
 
 document.body.appendChild(
@@ -12765,22 +12918,22 @@ svg
 
 const guide1 =
 svg.querySelector(
-"#statham-guide-1"
+`#statham-guide-1-${setIndex}`
 );
 
 const guide2 =
 svg.querySelector(
-"#statham-guide-2"
+`#statham-guide-2-${setIndex}`
 );
 
 const tread1 =
 svg.querySelector(
-"#statham-tread-1"
+`#statham-tread-1-${setIndex}`
 );
 
 const tread2 =
 svg.querySelector(
-"#statham-tread-2"
+`#statham-tread-2-${setIndex}`
 );
 
 const drawDuration =
@@ -12805,11 +12958,63 @@ setTimeout(
 
 svg.remove();
 
+},
+drawDuration + 2500
+);
+
+}
+
+function triggerStathamSkids() {
+
+if (stathamSkidsBusy) {
+
+return;
+
+}
+
+stathamSkidsBusy =
+true;
+
+/*
+
+* Three staggered sets of tracks (not simultaneous) so it
+* reads as more than one pass driving all over the screen -
+* each set is its own independent randomized path, offset
+* by a few hundred ms so they visibly overlap rather than
+* all fire at once.
+  */
+
+const setDelays =
+[0, 450, 950];
+
+setDelays.forEach(
+(delay, index) => {
+
+setTimeout(
+() => {
+
+spawnStathamSkidSet(
+index
+);
+
+},
+delay
+);
+
+}
+);
+
+const lastDelay =
+setDelays[setDelays.length - 1];
+
+setTimeout(
+() => {
+
 stathamSkidsBusy =
 false;
 
 },
-drawDuration + 2500
+lastDelay + 1100 + 2500
 );
 
 }
@@ -14422,6 +14627,12 @@ activeFilters.unwatchedOnly =
 
 syncUnwatchedFilterUI();
 
+if (activeFilters.unwatchedOnly) {
+
+triggerUnwatchedShrinkWrap();
+
+}
+
 }
 
 /*
@@ -14581,7 +14792,7 @@ triggerComedyHaha();
 
 if (event.target.value === "drama") {
 
-triggerDramaTears();
+triggerDramaCurtain();
 
 }
 
@@ -18588,6 +18799,12 @@ checkbox.checked;
 
 syncUnwatchedFilterUI();
 
+if (activeFilters.unwatchedOnly) {
+
+triggerUnwatchedShrinkWrap();
+
+}
+
 updateAdvancedSearchUI();
 
 if (randomMode) {
@@ -19952,6 +20169,22 @@ movieYear < 1980
 
 }
 
+if (
+genreValue === "baseball" ||
+genreValue === "christmas"
+) {
+
+const categories =
+Array.isArray(movie.categories)
+? movie.categories
+: [];
+
+return categories.includes(
+genreValue
+);
+
+}
+
 const movieGenre =
 (movie.genre || "")
 .toLowerCase();
@@ -20190,6 +20423,11 @@ overlay.classList.add(
 }
 );
 
+tournamentOverlayOpen =
+true;
+
+updateTournamentHiddenState();
+
 renderTournamentHub();
 
 }
@@ -20210,6 +20448,11 @@ return;
 overlay.classList.remove(
 "visible"
 );
+
+tournamentOverlayOpen =
+false;
+
+updateTournamentHiddenState();
 
 setTimeout(
 () => {
@@ -21516,6 +21759,190 @@ return facts;
 
 }
 
+/*
+
+* Genre clash / franchise clash - the "similar movies against
+* each other" concept: two movies sharing a notable genre tag
+* (sports, musical, superhero, etc.) facing off in a decided
+* matchup, or two movies from two DIFFERENT detected franchises
+* meeting head-to-head (as opposed to Franchise Showdown above,
+* which is the SAME franchise beating itself). Same shared-
+* matchup scan as computeCastCrewShowdownFacts, reused here
+* rather than looping all_matchups a third time.
+  */
+
+const CLASH_GENRE_KEYWORDS =
+["sports", "musical", "superhero", "western", "war", "heist", "spy", "monster", "zombie"];
+
+function genreWordsFrom(
+genreText
+) {
+
+return (genreText || "")
+.split(/[\/,]/)
+.map(
+word =>
+word.trim().toLowerCase()
+)
+.filter(
+Boolean
+);
+
+}
+
+function computeClashFacts(
+allMatchups
+) {
+
+const genreCandidates =
+[];
+
+const franchiseClashCandidates =
+[];
+
+(allMatchups || []).forEach(
+matchup => {
+
+if (!matchup.winner_movie_id) {
+
+return;
+
+}
+
+const movieA =
+movies.find(
+m =>
+String(
+getMovieId(m)
+) === String(matchup.movie_id_a)
+);
+
+const movieB =
+movies.find(
+m =>
+String(
+getMovieId(m)
+) === String(matchup.movie_id_b)
+);
+
+if (!movieA || !movieB) {
+
+return;
+
+}
+
+const isAWinner =
+String(matchup.winner_movie_id) ===
+String(matchup.movie_id_a);
+
+const winnerTitle =
+isAWinner
+? matchup.movie_title_a
+: matchup.movie_title_b;
+
+const loserTitle =
+isAWinner
+? matchup.movie_title_b
+: matchup.movie_title_a;
+
+const genresA =
+genreWordsFrom(
+movieA.genre
+);
+
+const genresB =
+genreWordsFrom(
+movieB.genre
+);
+
+const sharedClashGenre =
+CLASH_GENRE_KEYWORDS.find(
+word =>
+genresA.includes(word) &&
+genresB.includes(word)
+);
+
+if (sharedClashGenre) {
+
+genreCandidates.push({
+genre: sharedClashGenre,
+winnerTitle,
+loserTitle
+});
+
+}
+
+const franchiseA =
+detectFranchise(
+movieA.title
+);
+
+const franchiseB =
+detectFranchise(
+movieB.title
+);
+
+if (
+franchiseA &&
+franchiseB &&
+franchiseA !== franchiseB
+) {
+
+franchiseClashCandidates.push({
+franchiseA,
+franchiseB,
+winnerTitle,
+loserTitle
+});
+
+}
+
+}
+);
+
+const facts =
+[];
+
+if (genreCandidates.length > 0) {
+
+const pick =
+genreCandidates[
+Math.floor(
+Math.random() * genreCandidates.length
+)
+];
+
+const label =
+pick.genre.charAt(0).toUpperCase() +
+pick.genre.slice(1);
+
+facts.push({
+type: "genre_clash",
+text: `🎟️ ${label} showdown: ${pick.winnerTitle} outlasted fellow ${pick.genre} pick ${pick.loserTitle}`
+});
+
+}
+
+if (franchiseClashCandidates.length > 0) {
+
+const pick =
+franchiseClashCandidates[
+Math.floor(
+Math.random() * franchiseClashCandidates.length
+)
+];
+
+facts.push({
+type: "franchise_clash",
+text: `⚔️ Clash of franchises: ${pick.winnerTitle} (${pick.franchiseA}) took down ${pick.loserTitle} (${pick.franchiseB})`
+});
+
+}
+
+return facts;
+
+}
+
 function buildResultsPodiumSlotHTML(
 finisher,
 label,
@@ -21614,13 +22041,59 @@ computeCastCrewShowdownFacts(
 summary.all_matchups || []
 );
 
+const clashFacts =
+computeClashFacts(
+summary.all_matchups || []
+);
+
+/*
+
+* Iron Movie / Field legend ("has competed in N tournaments" /
+* "has won N tournaments over its lifetime") are the least
+* interesting facts in the pool - they're about a movie's
+* history across ALL past tournaments, not anything that
+* happened in the one just played. Deprioritized to filler:
+* they only get pulled in if the more specific, "something
+* happened right here" facts don't add up to 3 on their own.
+  */
+
+const FILLER_FACT_TYPES =
+["iron_movie", "legend"];
+
+const serverFacts =
+summary.fun_facts || [];
+
+const priorityFacts =
+serverFacts.filter(
+fact =>
+!FILLER_FACT_TYPES.includes(fact.type)
+);
+
+const fillerFacts =
+serverFacts.filter(
+fact =>
+FILLER_FACT_TYPES.includes(fact.type)
+);
+
 const allFacts =
-[...(summary.fun_facts || []), ...castCrewFacts];
+[
+...priorityFacts,
+...castCrewFacts,
+...clashFacts
+];
 
 if (franchiseFact) {
 
 allFacts.push(
 franchiseFact
+);
+
+}
+
+if (allFacts.length < 3) {
+
+allFacts.push(
+...shuffleArray(fillerFacts)
 );
 
 }
@@ -22189,7 +22662,7 @@ overlay.remove();
 );
 
 },
-5200
+4200
 );
 
 }
