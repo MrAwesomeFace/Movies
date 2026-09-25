@@ -1838,6 +1838,52 @@ their own shelf. See toggleWishlistAddPanel in app.js.
   font-size: 12px;
 }
 
+/*
+
+* Live streaming preview pills (see renderWishlistSearchResults
+* in app.js) - a plain flex sibling of .wishlist-result-info,
+* sitting between it and the Add button in normal DOM/flex
+* order. On desktop/tablet .wishlist-result-row has room to
+* just let this sit inline to the right of the title/year, no
+* extra rules needed. Phones need their own layout below - see
+* that comment for why.
+  */
+
+.wishlist-result-streaming {
+  display: flex;
+
+  align-items: center;
+
+  gap: 4px;
+
+  flex-shrink: 0;
+}
+
+.wishlist-result-streaming-pill {
+  padding: 3px 8px;
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.08);
+
+  color: var(--muted);
+
+  font-size: 10px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+.wishlist-result-streaming-more {
+  background: transparent;
+
+  color: var(--muted);
+
+  font-weight: 400;
+
+  font-style: italic;
+}
+
 .wishlist-result-add-button {
   flex-shrink: 0;
 
@@ -1865,6 +1911,57 @@ their own shelf. See toggleWishlistAddPanel in app.js.
   opacity: 0.5;
 
   cursor: default;
+}
+
+/*
+
+* Phones don't have the desktop/tablet's spare width to sit
+* the streaming pills to the right of title/year, next to the
+* Add button - everything's already packed in (poster, title,
+* year, Add button). Same flex-wrap + flex-basis: 100% trick
+* PHONES (ALL SIZES) already uses above for the filter rows:
+* .wishlist-result-streaming still sits in normal flex/DOM
+* order after .wishlist-result-info, but at this width it no
+* longer fits on the same line as poster/info/Add button, so it
+* wraps onto its own line below them - a third row under
+* title/year, indented past the poster (margin-left matches
+* poster width + row gap) so it reads as a continuation of the
+* title/year column rather than a new full-bleed row. Title/
+* year shrink slightly here too, just enough to keep the row's
+* overall height in check now that it's carrying three lines
+* instead of two.
+  */
+
+@media (max-width: 599px) {
+
+  .wishlist-result-row {
+    flex-wrap: wrap;
+
+    row-gap: 4px;
+  }
+
+  .wishlist-result-title {
+    font-size: 13px;
+
+    line-height: 1.25;
+  }
+
+  .wishlist-result-year {
+    font-size: 11px;
+  }
+
+  .wishlist-result-streaming {
+    flex-basis: 100%;
+
+    margin-left: 52px;
+  }
+
+  .wishlist-result-streaming-pill {
+    padding: 2px 7px;
+
+    font-size: 9px;
+  }
+
 }
 
 .wishlist-add-status {
