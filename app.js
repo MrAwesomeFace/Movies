@@ -16085,6 +16085,45 @@ activeFilters.reservation
 
 }
 
+/*
+
+* "Where to find it" advanced-search checkboxes - same OR
+* logic as getFilteredMovies (checking Kanopy and Digital
+* means either one, not both at once). Wrapped through
+* wishlistItemToMovie() so movieMatchesAdvancedAvailability
+* sees the isWishlistItem shape it already knows how to read
+* (physical/digital always empty for a wishlist row, so only
+* its wishlistStreaming lookup can ever match a streaming
+* service like Kanopy here). This block was missing entirely,
+* which is why the availability checkboxes never touched the
+* Out of Stock/wishlist view at all - not just streaming
+* services, physical/digital never did either.
+  */
+
+if (activeFilters.advanced.availability.length > 0) {
+
+items =
+items.filter(
+item => {
+
+const movieObj =
+wishlistItemToMovie(
+item
+);
+
+return activeFilters.advanced.availability.some(
+value =>
+movieMatchesAdvancedAvailability(
+movieObj,
+value
+)
+);
+
+}
+);
+
+}
+
 if (currentSearch) {
 
 const searchText =
