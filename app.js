@@ -15615,6 +15615,89 @@ ownedNote
 
 }
 
+/*
+
+* Live streaming preview - result.services only exists on
+* the first few results (see SEARCH_STREAMING_PREVIEW_COUNT
+* in GET /tmdb-search), already sorted into the same
+* Kanopy > Hulu > Disney+ > ... priority order used
+* everywhere else on the site. Capped at 3 badges here: the
+* top 2 plus a "+N more" pill when there's more than that,
+* rather than letting a title with a lot of streaming homes
+* blow out the row - shown right in the results list so you
+* can see where something's already streaming before you
+* even add it, not just after.
+  */
+
+if (
+!alreadyOwned &&
+Array.isArray(result.services) &&
+result.services.length > 0
+) {
+
+const streamingRow =
+document.createElement(
+"div"
+);
+
+streamingRow.className =
+"wishlist-result-streaming";
+
+const overflow =
+result.services.length > 3;
+
+const shownServices =
+overflow
+? result.services.slice(0, 2)
+: result.services.slice(0, 3);
+
+shownServices.forEach(
+service => {
+
+const pill =
+document.createElement(
+"span"
+);
+
+pill.className =
+"wishlist-result-streaming-pill";
+
+pill.textContent =
+service;
+
+streamingRow.appendChild(
+pill
+);
+
+}
+);
+
+if (overflow) {
+
+const morePill =
+document.createElement(
+"span"
+);
+
+morePill.className =
+"wishlist-result-streaming-pill " +
+"wishlist-result-streaming-more";
+
+morePill.textContent =
+`+${result.services.length - 2} more`;
+
+streamingRow.appendChild(
+morePill
+);
+
+}
+
+row.appendChild(
+streamingRow
+);
+
+}
+
 const addButton =
 document.createElement(
 "button"
