@@ -10352,6 +10352,25 @@ const movies = [
     "rated": "PG"
   },
   {
+    "title": "Interstellar",
+    "tmdbTitle": "Interstellar",
+    "type": "movie",
+    "tmdbId": 157336,
+    "poster": "https://image.tmdb.org/t/p/w500/yQvGrMoipbRoddT0ZR8tPoR7NfX.jpg",
+    "year": "2014",
+    "runtime": "169m",
+    "genre": "Adventure / Drama / Science Fiction",
+    "rated": "PG-13",
+    "director": "Christopher Nolan",
+    "cast": "Matthew McConaughey, Anne Hathaway, Michael Caine, Jessica Chastain, Casey Affleck, Wes Bentley",
+    "synopsis": "The adventures of a group of explorers who make use of a newly discovered wormhole to surpass the limitations on human space travel and conquer the vast distances involved in an interstellar voyage.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Invention of Lying, The",
     "type": "movie",
     "tmdbId": 23082,
