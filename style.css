@@ -8676,11 +8676,48 @@ regardless of search state, all left-justified.
 
 @media (max-width: 599px) {
 
+  /*
+   * Defaulting the filters panel open (body.mobile-filters-open
+   * on <body> by default now - see index.html) means Type/
+   * Unwatched go from a permanently-collapsed empty line to a
+   * real always-visible row, which is genuine new height, not
+   * waste - but the padding/gaps around it were sized back when
+   * that row was rare/collapsed-by-default, so they're trimmed
+   * here to keep the header from growing as much as it otherwise
+   * would once that row is always showing.
+     */
+
+  .site-header {
+
+    padding: 14px 18px 10px;
+
+  }
+
+  .filters {
+
+    gap: 5px;
+
+  }
+
   .filter-row-main {
 
     flex-wrap: wrap;
 
-    row-gap: 10px;
+    row-gap: 6px;
+
+  }
+
+  .type-pills-wrap {
+
+    gap: 6px;
+
+  }
+
+  .filter {
+
+    padding: 6px 12px;
+
+    font-size: 13px;
 
   }
 
@@ -9272,9 +9309,23 @@ body.theme-arcade .action-filter.active {
 
 @media (max-width: 599px) {
 
+  /*
+   * This padding exists so the arcade theme's pulsing active-
+   * pill glow (arcade-pill-pulse below, up to a 22px box-shadow
+   * blur) doesn't get clipped - these rows use overflow-x: auto
+   * for horizontal scrolling, and per spec that silently turns
+   * overflow-y into auto as well, which would otherwise crop the
+   * glow top/bottom. 10px was generous breathing room for that;
+   * trimmed down since this padding (on TWO wrapped lines in
+   * filter-row-main, plus genre-category-row) was the real
+   * source of arcade mode's extra header height on phones - non-
+   * arcade has none of this padding at all. Still enough left
+   * to avoid an outright hard crop of the glow, just tighter.
+     */
+
   body.theme-arcade .genre-category-row {
 
-    padding: 10px 0;
+    padding: 3px 0;
   }
 
 }
@@ -9284,7 +9335,7 @@ body.theme-arcade .action-filter.active {
   body.theme-arcade .filter-row-main > .filter-group,
   body.theme-arcade .filter-row-main > .filter-group-actions {
 
-    padding: 10px 0;
+    padding: 3px 0;
   }
 
 }
