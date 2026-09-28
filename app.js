@@ -23055,7 +23055,7 @@ const IDLE_STATIC_REDRAW_MS =
 100;
 
 const IDLE_STATIC_PIXEL_SIZE =
-6;
+5;
 
 const idleStaticOverlay =
 document.createElement(
@@ -23133,20 +23133,17 @@ i += 4
 
 /*
 
-* Pure black/white, no mid-grey speckle at all now - even a
-* small percentage of true grey pixels was enough to read as
-* "a lot of gray" once fine noise blurs together at a glance
-* (that's just how the eye averages small fast-changing dots,
-* not a bug in the ratio). Heavily weighted toward white (82%)
-* rather than an even split, since an even black/white dither
-* itself averages out to flat mid-grey the same way. If this
-* still reads grey, the next lever is IDLE_STATIC_PIXEL_SIZE
-* (below) - bigger blocks let the eye resolve individual black/
-* white cells instead of blending them.
+* The gray-haze problem was never the ratio - it was the canvas
+* being stretched to screen size by a fractional CSS scale factor
+* (see the comment on idleStaticCanvas.style.width in
+* startIdleStatic below), which let the browser smooth every
+* black/white edge into gray regardless of how the pixels here
+* were mixed. With that scaling forced to an exact integer factor,
+* a near-even split (55% white) reads as real snow.
   */
 
 const value =
-Math.random() < 0.82
+Math.random() < 0.55
 ? 255
 : 0;
 
@@ -23176,21 +23173,58 @@ return;
 idleStaticShowing =
 true;
 
-idleStaticCanvas.width =
+/*
+* Backing canvas is tiny on purpose (one pixel per block, for
+* fast redraws), then stretched up with CSS to fill the screen.
+* That only stays crisp if the stretch factor is a whole number
+* of REAL screen pixels - not just a whole number of CSS pixels.
+* A CSS pixel isn't a screen pixel once display scaling is
+* involved: at a devicePixelRatio like 1.5 or 1.25 (125%/150%
+* Windows scaling, common on desktop monitors - vs. a clean 1 or
+* 2 in a dev-tools mobile emulator, which is why this looked
+* fixed there), a whole number of CSS pixels can still land on a
+* fractional number of actual screen pixels, so the browser
+* resamples anyway and blends every black/white edge back into
+* gray. Folding devicePixelRatio into the block size here forces
+* the scale to be a whole number of real screen pixels no matter
+* what the display's scaling is set to.
+*/
+const idleStaticDpr =
+window.devicePixelRatio || 1;
+
+const idleStaticDevicePixelsPerBlock =
+Math.max(
+1,
+Math.round(IDLE_STATIC_PIXEL_SIZE * idleStaticDpr)
+);
+
+const idleStaticCols =
 Math.max(
 1,
 Math.ceil(
-window.innerWidth / IDLE_STATIC_PIXEL_SIZE
+(window.innerWidth * idleStaticDpr) / idleStaticDevicePixelsPerBlock
 )
 );
 
-idleStaticCanvas.height =
+const idleStaticRows =
 Math.max(
 1,
 Math.ceil(
-window.innerHeight / IDLE_STATIC_PIXEL_SIZE
+(window.innerHeight * idleStaticDpr) / idleStaticDevicePixelsPerBlock
 )
 );
+
+idleStaticCanvas.width =
+idleStaticCols;
+
+idleStaticCanvas.height =
+idleStaticRows;
+
+idleStaticCanvas.style.width =
+((idleStaticCols * idleStaticDevicePixelsPerBlock) / idleStaticDpr) + "px";
+
+idleStaticCanvas.style.height =
+((idleStaticRows * idleStaticDevicePixelsPerBlock) / idleStaticDpr) + "px";
 
 idleStaticOverlay.classList.add(
 "showing"
