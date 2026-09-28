@@ -12330,7 +12330,7 @@ const movies = [
     "poster": "https://image.tmdb.org/t/p/w500/1F9AItQ6fhrfhBVQlmC8ReOQAFG.jpg",
     "year": "2019",
     "runtime": "125m",
-    "genre": "Comedy / Romance",
+    "genre": "Comedy / Romance / Rom-Com",
     "rated": "R",
     "director": "Jonathan Levine",
     "cast": "Charlize Theron, Seth Rogen, O'Shea Jackson Jr., June Diane Raphael, Ravi Patel, Andy Serkis",
