@@ -5186,6 +5186,25 @@ const movies = [
     "tmdbTitle": "Dirty Dancing"
   },
   {
+    "title": "Dirty Grandpa",
+    "tmdbTitle": "Dirty Grandpa",
+    "type": "movie",
+    "tmdbId": 291870,
+    "poster": "https://image.tmdb.org/t/p/w500/k0Lz1TfSlbcQthQKYGwE7blDfwN.jpg",
+    "year": "2016",
+    "runtime": "102m",
+    "genre": "Comedy",
+    "rated": "R",
+    "director": "Dan Mazer",
+    "cast": "Robert De Niro, Zac Efron, Aubrey Plaza, Zoey Deutch, Julianne Hough, Dermot Mulroney",
+    "synopsis": "Jason Kelly is one week away from marrying his boss's uber-controlling daughter, putting him on the fast track for a partnership at the law firm. However, when the straight-laced Jason is tricked into driving his foul-mouthed grandfather, Dick, to Daytona for spring break, his pending nuptials are suddenly in jeopardy. Between riotous frat parties, bar fights, and an epic night of karaoke, Dick is on a quest to live his life to the fullest and bring Jason along for the ride.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Dirty Work",
     "tmdbTitle": "Dirty Work",
     "type": "movie",
