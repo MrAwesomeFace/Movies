@@ -23133,25 +23133,22 @@ i += 4
 
 /*
 
-* Weighted toward white rather than an even 50/50 split - a
-* true even black/white dither reads as flat mid-grey to the
-* eye once it's small and fast-moving (adjacent pixels average
-* out), so tilting the split whiter keeps it looking like snow
-* instead of a grey haze. The occasional speckle is biased
-* light too (128-255, not the full 0-255 range) and cut down in
-* frequency, so it still breaks up the pattern without dumping
-* in true mid-grey pixels that read as murky.
+* Pure black/white, no mid-grey speckle at all now - even a
+* small percentage of true grey pixels was enough to read as
+* "a lot of gray" once fine noise blurs together at a glance
+* (that's just how the eye averages small fast-changing dots,
+* not a bug in the ratio). Heavily weighted toward white (82%)
+* rather than an even split, since an even black/white dither
+* itself averages out to flat mid-grey the same way. If this
+* still reads grey, the next lever is IDLE_STATIC_PIXEL_SIZE
+* (below) - bigger blocks let the eye resolve individual black/
+* white cells instead of blending them.
   */
 
-const shade =
-Math.random() < 0.32
-? 0
-: 255;
-
 const value =
-Math.random() < 0.05
-? Math.floor(128 + Math.random() * 127)
-: shade;
+Math.random() < 0.82
+? 255
+: 0;
 
 data[i] = value;
 data[i + 1] = value;
