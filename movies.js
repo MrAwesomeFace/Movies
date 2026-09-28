@@ -12304,6 +12304,25 @@ const movies = [
     "rated": "R"
   },
   {
+    "title": "Long Shot",
+    "tmdbTitle": "Long Shot",
+    "type": "movie",
+    "tmdbId": 459992,
+    "poster": "https://image.tmdb.org/t/p/w500/1F9AItQ6fhrfhBVQlmC8ReOQAFG.jpg",
+    "year": "2019",
+    "runtime": "125m",
+    "genre": "Comedy / Romance",
+    "rated": "R",
+    "director": "Jonathan Levine",
+    "cast": "Charlize Theron, Seth Rogen, O'Shea Jackson Jr., June Diane Raphael, Ravi Patel, Andy Serkis",
+    "synopsis": "Journalist Fred Flarsky reunites with his childhood crush, Charlotte Field, now one of the most influential women in the world. As she prepares to make a run for the Presidency, Charlotte hires Fred as her speechwriter — much to the dismay of her trusted advisers.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Longest Yard, The",
     "tmdbTitle": "The Longest Yard",
     "type": "movie",
