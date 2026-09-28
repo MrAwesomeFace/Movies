@@ -23049,7 +23049,7 @@ closeTournamentOverlay();
 // =========================================================
 
 const IDLE_STATIC_DELAY_MS =
-10000;
+20000;
 
 const IDLE_STATIC_REDRAW_MS =
 100;
