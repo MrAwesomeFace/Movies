@@ -23133,19 +23133,24 @@ i += 4
 
 /*
 
-* Mostly a 50/50 black/white dither (real analog snow),
-* with an occasional mid-grey speckle mixed in so it
-* doesn't read as a flat, mechanical checkerboard.
+* Weighted toward white rather than an even 50/50 split - a
+* true even black/white dither reads as flat mid-grey to the
+* eye once it's small and fast-moving (adjacent pixels average
+* out), so tilting the split whiter keeps it looking like snow
+* instead of a grey haze. The occasional speckle is biased
+* light too (128-255, not the full 0-255 range) and cut down in
+* frequency, so it still breaks up the pattern without dumping
+* in true mid-grey pixels that read as murky.
   */
 
 const shade =
-Math.random() < 0.5
+Math.random() < 0.32
 ? 0
 : 255;
 
 const value =
-Math.random() < 0.08
-? Math.floor(Math.random() * 255)
+Math.random() < 0.05
+? Math.floor(128 + Math.random() * 127)
 : shade;
 
 data[i] = value;
