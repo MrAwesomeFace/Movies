@@ -4603,7 +4603,14 @@ locked scroll snapshot.
 }
 
 .idle-static-overlay.showing {
-  opacity: 0.85;
+  /* Was 0.85 - fading the whole overlay (not just fading it in)
+     blends every pixel with the page behind it. Black barely
+     changes against a dark background, but white gets pulled way
+     down toward gray and can never reach a true white. Full
+     opacity here keeps the canvas's own black/white pixels
+     undiluted; the fade-in feel still comes from the 0.6s
+     transition on the way up to this value. */
+  opacity: 1;
 }
 
 .idle-static-overlay canvas {
