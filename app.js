@@ -20390,12 +20390,21 @@ function getTournamentEligibleMovies() {
 
 * Tournaments are movies-only - TV entries and Misc-type
 * items never enter a bracket, even though they're normal
-* citizens everywhere else on the shelf.
+* citizens everywhere else on the shelf. Unwatched titles are
+* excluded too now - a head-to-head "which is better" pick
+* doesn't mean much for something you haven't actually seen
+* yet, and isMovieWatched() is already loaded for every catalog
+* movie by the time a bracket gets built, so this is a free
+* filter, not a new data dependency. Applies to every bracket
+* (genre pools call this same function, and full-collection
+* uses it directly), so an unwatched title never enters ANY
+* tournament category.
   */
 
 return movies.filter(
 movie =>
-movie.type === "movie"
+movie.type === "movie" &&
+isMovieWatched(movie)
 );
 
 }
@@ -23011,3 +23020,272 @@ closeTournamentOverlay();
 );
 
 }
+
+// =========================================================
+// IDLE STATIC — "NO SIGNAL"
+//
+// Real black-and-white TV snow (canvas noise, not a CSS
+// scanline pattern like the VCR intro/color bars/rewind
+// glitch effects use) that fades in after IDLE_STATIC_DELAY_MS
+// of no mouse/touch/scroll/key activity anywhere on the page,
+// and fades right back out the moment any of that resumes.
+// Created once here at load, appended to <body> hidden - NOT
+// built fresh at trigger time - deliberately, since a
+// position:fixed element inserted into the page AFTER load is
+// the known mobile-Safari sizing bug the drama curtain effect
+// ran into earlier (see triggerDramaCurtain above). Building it
+// once up front and just toggling a class/opacity sidesteps
+// that entirely, and fixed positioning is actually correct
+// here (unlike the curtain) since this effect explicitly wants
+// to track the live viewport, not a locked scroll snapshot -
+// scrolling is exactly one of the things that should dismiss
+// it.
+//
+// Skipped while the tournament overlay, the movie viewer, the
+// wishlist add panel, or the advanced search panel are open -
+// those are all "actively reading/using something" states even
+// when the mouse happens to be still, and popping static over
+// them would just be annoying rather than a fun surprise.
+// =========================================================
+
+const IDLE_STATIC_DELAY_MS =
+10000;
+
+const IDLE_STATIC_REDRAW_MS =
+100;
+
+const IDLE_STATIC_PIXEL_SIZE =
+6;
+
+const idleStaticOverlay =
+document.createElement(
+"div"
+);
+
+idleStaticOverlay.className =
+"idle-static-overlay";
+
+const idleStaticCanvas =
+document.createElement(
+"canvas"
+);
+
+idleStaticOverlay.appendChild(
+idleStaticCanvas
+);
+
+document.body.appendChild(
+idleStaticOverlay
+);
+
+const idleStaticCtx =
+idleStaticCanvas.getContext(
+"2d"
+);
+
+let idleStaticShowing =
+false;
+
+let idleStaticRedrawTimer =
+null;
+
+let idleStaticLastActivity =
+Date.now();
+
+function isSiteBusyForIdleStatic() {
+
+return (
+tournamentOverlayOpen ||
+!!currentMovie ||
+wishlistAddPanelExpanded ||
+(
+advancedSearchPanel &&
+!advancedSearchPanel.classList.contains(
+"hidden"
+)
+)
+);
+
+}
+
+function paintIdleStatic() {
+
+const width =
+idleStaticCanvas.width;
+
+const height =
+idleStaticCanvas.height;
+
+const imageData =
+idleStaticCtx.createImageData(
+width,
+height
+);
+
+const data =
+imageData.data;
+
+for (
+let i = 0;
+i < data.length;
+i += 4
+) {
+
+/*
+
+* Mostly a 50/50 black/white dither (real analog snow),
+* with an occasional mid-grey speckle mixed in so it
+* doesn't read as a flat, mechanical checkerboard.
+  */
+
+const shade =
+Math.random() < 0.5
+? 0
+: 255;
+
+const value =
+Math.random() < 0.08
+? Math.floor(Math.random() * 255)
+: shade;
+
+data[i] = value;
+data[i + 1] = value;
+data[i + 2] = value;
+data[i + 3] = 255;
+
+}
+
+idleStaticCtx.putImageData(
+imageData,
+0,
+0
+);
+
+}
+
+function startIdleStatic() {
+
+if (idleStaticShowing) {
+
+return;
+
+}
+
+idleStaticShowing =
+true;
+
+idleStaticCanvas.width =
+Math.max(
+1,
+Math.ceil(
+window.innerWidth / IDLE_STATIC_PIXEL_SIZE
+)
+);
+
+idleStaticCanvas.height =
+Math.max(
+1,
+Math.ceil(
+window.innerHeight / IDLE_STATIC_PIXEL_SIZE
+)
+);
+
+idleStaticOverlay.classList.add(
+"showing"
+);
+
+idleStaticRedrawTimer =
+setInterval(
+paintIdleStatic,
+IDLE_STATIC_REDRAW_MS
+);
+
+paintIdleStatic();
+
+}
+
+function stopIdleStatic() {
+
+if (!idleStaticShowing) {
+
+return;
+
+}
+
+idleStaticShowing =
+false;
+
+idleStaticOverlay.classList.remove(
+"showing"
+);
+
+if (idleStaticRedrawTimer) {
+
+clearInterval(
+idleStaticRedrawTimer
+);
+
+idleStaticRedrawTimer =
+null;
+
+}
+
+}
+
+function registerIdleStaticActivity() {
+
+idleStaticLastActivity =
+Date.now();
+
+if (idleStaticShowing) {
+
+stopIdleStatic();
+
+}
+
+}
+
+[
+"mousemove",
+"mousedown",
+"touchstart",
+"touchmove",
+"wheel",
+"scroll",
+"keydown"
+].forEach(
+eventName =>
+window.addEventListener(
+eventName,
+registerIdleStaticActivity,
+{ passive: true }
+)
+);
+
+setInterval(
+() => {
+
+if (isSiteBusyForIdleStatic()) {
+
+idleStaticLastActivity =
+Date.now();
+
+return;
+
+}
+
+const idleForMs =
+Date.now() - idleStaticLastActivity;
+
+if (
+!idleStaticShowing &&
+idleForMs >= IDLE_STATIC_DELAY_MS
+) {
+
+startIdleStatic();
+
+}
+
+},
+200
+);
