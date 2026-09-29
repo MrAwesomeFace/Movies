@@ -8742,6 +8742,19 @@ regardless of search state, all left-justified.
 
   }
 
+  /*
+   * Movie count + flavor text add little on a phone-width
+   * banner relative to the vertical space they cost - hidden
+   * on mobile only, desktop/tablet keep both.
+   */
+
+  #movie-count,
+  .flavor-text {
+
+    display: none;
+
+  }
+
   .filters {
 
     gap: 5px;
