@@ -197,6 +197,31 @@
     font-style: italic;
   }
 
+  .search-bar{
+    margin: 4px 0 14px;
+  }
+
+  .search-bar input{
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--bg-raised);
+    color: var(--text);
+    font-family: 'Oswald', system-ui, sans-serif;
+    font-size: 15px;
+  }
+
+  .search-bar input:focus{
+    outline: none;
+    border-color: var(--gold);
+  }
+
+  .search-bar input::placeholder{
+    color: var(--text-dim);
+  }
+
   .year-block{
     margin-top: 22px;
   }
@@ -369,6 +394,10 @@
   <div><span>★</span> Oscar-nominated that year</div>
   <div><span class="legend-ww">⚔</span> war film or western (Oscar-nominated, so it's in here anyway)</div>
   <div>Tap a title to check it off</div>
+</div>
+
+<div class="search-bar">
+  <input type="text" id="title-search" placeholder="Search titles..." autocomplete="off">
 </div>
 
 <div id="year-container"></div>
@@ -2463,6 +2492,53 @@
     });
     document.getElementById("total-count").textContent = total;
     document.getElementById("watched-count").textContent = done;
+
+    decadeMetaRefs.forEach(function(ref){
+      ref.el.textContent = decadeMetaText(ref.d);
+    });
+  }
+
+  // Filters title rows by a case-insensitive substring match,
+  // hiding empty years/decades and auto-expanding decades that
+  // still have a match. Clearing the box restores everything to
+  // its normal collapsed state.
+  function applySearch(rawQuery){
+    var query = rawQuery.trim().toLowerCase();
+    searchActive = query.length > 0;
+
+    document.querySelectorAll("details.decade").forEach(function(details){
+      var decadeHasMatch = false;
+
+      details.querySelectorAll(".year-block").forEach(function(yearBlock){
+        var yearHasMatch = false;
+
+        yearBlock.querySelectorAll(".title-row").forEach(function(row){
+          var label = row.querySelector("label");
+          var text = label ? label.textContent.toLowerCase() : "";
+          var isMatch = !searchActive || text.indexOf(query) !== -1;
+          row.style.display = isMatch ? "" : "none";
+          if (isMatch) yearHasMatch = true;
+        });
+
+        yearBlock.style.display = (!searchActive || yearHasMatch) ? "" : "none";
+        if (yearHasMatch) decadeHasMatch = true;
+      });
+
+      if (searchActive){
+        details.style.display = decadeHasMatch ? "" : "none";
+        details.open = decadeHasMatch;
+      } else {
+        details.style.display = "";
+        details.open = false;
+      }
+    });
+  }
+
+  var searchInput = document.getElementById("title-search");
+  if (searchInput){
+    searchInput.addEventListener("input", function(){
+      applySearch(searchInput.value);
+    });
   }
 
   function buildYearBlock(y){
@@ -2538,22 +2614,53 @@
     return count;
   }
 
+  function decadeWatchedCount(d){
+    var done = 0;
+    d.years.forEach(function(y){
+      y.titles.forEach(function(item){
+        if (watched[keyFor(y.year, item.t)]) done++;
+      });
+    });
+    return done;
+  }
+
+  function decadeMetaText(d){
+    var total = decadeTitleCount(d);
+    if (total === 0) return "not filled in yet";
+    return decadeWatchedCount(d) + " of " + total + " watched";
+  }
+
+  // Refs to each decade's meta span, refreshed by updateProgress()
+  // whenever a checkbox changes, so the collapsed summary line
+  // stays accurate without a full re-render.
+  var decadeMetaRefs = [];
+
+  // True while the search box has text in it - lets the toggle
+  // listener below know to leave multiple decades open together
+  // (search results) instead of enforcing the normal one-at-a-time
+  // accordion behavior.
+  var searchActive = false;
+
   function render(){
     var container = document.getElementById("year-container");
     container.innerHTML = "";
+    decadeMetaRefs = [];
 
     DECADES.forEach(function(d){
       var details = document.createElement("details");
       details.className = "decade";
 
       var summary = document.createElement("summary");
-      var count = decadeTitleCount(d);
       summary.innerHTML =
         '<span class="chevron">▸</span>' +
-        '<span class="decade-label">' + d.label + '</span>' +
-        '<span class="decade-meta">' +
-        (count > 0 ? (count + ' titles across ' + d.years.length + (d.years.length === 1 ? ' year' : ' years')) : 'not filled in yet') +
-        '</span>';
+        '<span class="decade-label">' + d.label + '</span>';
+
+      var meta = document.createElement("span");
+      meta.className = "decade-meta";
+      meta.textContent = decadeMetaText(d);
+      summary.appendChild(meta);
+      decadeMetaRefs.push({ d: d, el: meta });
+
       details.appendChild(summary);
 
       var body = document.createElement("div");
@@ -2579,6 +2686,7 @@
        */
       details.addEventListener("toggle", function(){
         if (!details.open) return;
+        if (searchActive) return;
         container.querySelectorAll("details.decade[open]").forEach(function(other){
           if (other !== details) other.open = false;
         });
