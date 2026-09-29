@@ -222,6 +222,124 @@
     color: var(--text-dim);
   }
 
+  .title-row label:hover{
+    text-decoration: underline;
+    text-decoration-color: var(--line-strong);
+  }
+
+  .case-modal{
+    position: fixed;
+    inset: 0;
+    background: rgba(4, 8, 16, 0.72);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 50;
+  }
+
+  .case-modal.hidden{
+    display: none;
+  }
+
+  .case-panel{
+    position: relative;
+    background: var(--bg-raised);
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    max-width: 420px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 20px;
+  }
+
+  .case-close{
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px 8px;
+  }
+
+  .case-close:hover{
+    color: var(--text);
+  }
+
+  .case-loading{
+    padding: 20px 4px;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  .case-body{
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .case-poster{
+    align-self: center;
+    width: 160px;
+    height: 240px;
+    background-size: cover;
+    background-position: center;
+    background-color: var(--bg-card);
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dim);
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+
+  .case-title{
+    font-family: 'Iceland', system-ui, sans-serif;
+    font-size: 24px;
+    color: var(--gold-bright);
+    text-align: center;
+  }
+
+  .case-year{
+    text-align: center;
+    color: var(--text-dim);
+    font-family: 'VT323', monospace;
+    font-size: 15px;
+    margin-top: 2px;
+  }
+
+  .case-streaming{
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+  }
+
+  .case-pill{
+    background: var(--gold);
+    color: var(--bg);
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .case-no-streaming{
+    color: var(--text-dim);
+    font-size: 13px;
+    font-style: italic;
+    text-align: center;
+  }
+
   .year-block{
     margin-top: 22px;
   }
@@ -2480,6 +2598,134 @@
       });
   }
 
+  /*
+   * "The case" - a read-only preview popup, triggered by clicking
+   * a title's text. Reuses the same public GET /tmdb-search the
+   * reservation shelf's "search to add" picker already calls (it
+   * already returns a poster + streaming services for the top few
+   * results) - nothing here is saved, added, or stored anywhere.
+   */
+
+  var caseModal, caseModalBody;
+
+  function ensureCaseModal(){
+    if (caseModal) return;
+
+    caseModal = document.createElement("div");
+    caseModal.className = "case-modal hidden";
+    caseModal.addEventListener("click", function(e){
+      if (e.target === caseModal) closeCasePreview();
+    });
+
+    var panel = document.createElement("div");
+    panel.className = "case-panel";
+
+    var closeBtn = document.createElement("button");
+    closeBtn.type = "button";
+    closeBtn.className = "case-close";
+    closeBtn.setAttribute("aria-label", "Close");
+    closeBtn.textContent = "×";
+    closeBtn.addEventListener("click", closeCasePreview);
+    panel.appendChild(closeBtn);
+
+    caseModalBody = document.createElement("div");
+    caseModalBody.className = "case-body";
+    panel.appendChild(caseModalBody);
+
+    caseModal.appendChild(panel);
+    document.body.appendChild(caseModal);
+
+    document.addEventListener("keydown", function(e){
+      if (e.key === "Escape") closeCasePreview();
+    });
+  }
+
+  function closeCasePreview(){
+    if (caseModal) caseModal.classList.add("hidden");
+  }
+
+  function openCasePreview(year, title){
+    ensureCaseModal();
+    caseModalBody.innerHTML = '<div class="case-loading">Looking up "' + title + '"...</div>';
+    caseModal.classList.remove("hidden");
+
+    fetch(API_BASE + "/tmdb-search?query=" + encodeURIComponent(title) + "&media_type=movie")
+      .then(function(res){
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then(function(results){
+        renderCasePreview(year, title, results || []);
+      })
+      .catch(function(err){
+        console.error("Case lookup failed for", title, err);
+        caseModalBody.innerHTML = '<div class="case-loading">Couldn\'t look that up right now.</div>';
+      });
+  }
+
+  function renderCasePreview(year, title, results){
+    if (!results.length){
+      caseModalBody.innerHTML = '<div class="case-loading">No TMDB match found for "' + title + '".</div>';
+      return;
+    }
+
+    // Prefer an exact year match, then +/-1 (release-date/production-
+    // year quirks), otherwise just take the top result.
+    var match =
+      results.find(function(r){ return String(r.year) === String(year); }) ||
+      results.find(function(r){ return Math.abs(parseInt(r.year, 10) - year) === 1; }) ||
+      results[0];
+
+    caseModalBody.innerHTML = "";
+
+    var poster = document.createElement("div");
+    poster.className = "case-poster";
+    if (match.poster){
+      poster.style.backgroundImage = 'url("' + match.poster + '")';
+    } else {
+      poster.textContent = "No poster";
+    }
+    caseModalBody.appendChild(poster);
+
+    var info = document.createElement("div");
+    info.className = "case-info";
+
+    var infoTitle = document.createElement("div");
+    infoTitle.className = "case-title";
+    infoTitle.textContent = match.title || title;
+    info.appendChild(infoTitle);
+
+    var infoYear = document.createElement("div");
+    infoYear.className = "case-year";
+    infoYear.textContent = match.year || year;
+    info.appendChild(infoYear);
+
+    var streamingWrap = document.createElement("div");
+    streamingWrap.className = "case-streaming";
+
+    if (Array.isArray(match.services) && match.services.length > 0){
+      match.services.forEach(function(service){
+        var pill = document.createElement("span");
+        pill.className = "case-pill";
+        pill.textContent = service;
+        streamingWrap.appendChild(pill);
+      });
+    } else if (Array.isArray(match.services)){
+      var none = document.createElement("div");
+      none.className = "case-no-streaming";
+      none.textContent = "Not currently on any of your tracked services.";
+      streamingWrap.appendChild(none);
+    } else {
+      var unknown = document.createElement("div");
+      unknown.className = "case-no-streaming";
+      unknown.textContent = "Streaming info wasn't checked for this result.";
+      streamingWrap.appendChild(unknown);
+    }
+
+    info.appendChild(streamingWrap);
+    caseModalBody.appendChild(info);
+  }
+
   function updateProgress(){
     var total = 0, done = 0;
     DECADES.forEach(function(d){
@@ -2598,6 +2844,17 @@
         wwFlag.textContent = "⚔";
         label.appendChild(wwFlag);
       }
+
+      /*
+       * The checkbox itself still toggles watched/unwatched (native
+       * label-for behavior). Clicking the title TEXT instead opens
+       * a quick read-only lookup ("the case") - preventDefault stops
+       * the click from also toggling the checkbox underneath.
+       */
+      label.addEventListener("click", function(e){
+        e.preventDefault();
+        openCasePreview(y.year, item.t);
+      });
 
       row.appendChild(cb);
       row.appendChild(label);
