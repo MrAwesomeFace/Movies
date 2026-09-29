@@ -2570,6 +2570,20 @@
         body.appendChild(empty);
       }
 
+      /*
+       * Accordion behavior: opening one decade closes any other
+       * open decade, so only one is ever expanded at a time.
+       * The "toggle" event fires whenever [open] changes, in
+       * either direction, so this only acts when THIS details
+       * just opened (not on every one closing).
+       */
+      details.addEventListener("toggle", function(){
+        if (!details.open) return;
+        container.querySelectorAll("details.decade[open]").forEach(function(other){
+          if (other !== details) other.open = false;
+        });
+      });
+
       details.appendChild(body);
       container.appendChild(details);
     });
