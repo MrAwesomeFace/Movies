@@ -13592,11 +13592,53 @@ document.getElementById(
 "pi-easter-egg"
 );
 
+/*
+* A second hidden layer on top of the normal Pi egg: click it once
+* and the usual Matrix/Sandra Bullock thing fires, unchanged. Click
+* it again within PI_SECOND_CLICK_WINDOW_MS of the first click and
+* instead of firing the egg again, it navigates to the classics
+* watchlist page - a separate, unlinked page nobody would find by
+* browsing the site normally. No visible second control, no
+* indication anywhere that the button does anything but the one
+* obvious thing on a single click.
+*/
+
+const PI_SECOND_CLICK_WINDOW_MS =
+600;
+
+let piLastClickAt =
+0;
+
 if (piButton) {
 
 piButton.addEventListener(
 "click",
-triggerPiEasterEgg
+function () {
+
+const now =
+Date.now();
+
+const isSecondClick =
+(now - piLastClickAt) <= PI_SECOND_CLICK_WINDOW_MS;
+
+if (isSecondClick) {
+
+piLastClickAt =
+0;
+
+window.location.href =
+"classics.html";
+
+return;
+
+}
+
+piLastClickAt =
+now;
+
+triggerPiEasterEgg();
+
+}
 );
 
 }
@@ -23049,7 +23091,7 @@ closeTournamentOverlay();
 // =========================================================
 
 const IDLE_STATIC_DELAY_MS =
-20000;
+10000;
 
 const IDLE_STATIC_REDRAW_MS =
 100;
