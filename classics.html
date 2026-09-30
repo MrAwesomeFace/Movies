@@ -25,6 +25,7 @@
     --gold-bright: #f0cd82;
     --watched: #4a5568;
     --ww-flag: #c1664a;
+    --horror-flag: #9b5fc9;
     color-scheme: dark;
   }
 
@@ -462,6 +463,25 @@
     color: var(--watched);
   }
 
+  .title-row .horror-flag{
+    color: var(--horror-flag);
+    font-size: 12px;
+    margin-left: 4px;
+    white-space: nowrap;
+  }
+
+  .title-row.watched .horror-flag{
+    color: var(--watched);
+  }
+
+  .title-row.horror label{
+    color: var(--horror-flag);
+  }
+
+  .title-row.horror.watched label{
+    color: var(--watched);
+  }
+
   .legend{
     display: flex;
     gap: 18px;
@@ -475,6 +495,8 @@
   .legend span{ color: var(--gold); }
 
   .legend span.legend-ww{ color: var(--ww-flag); }
+
+  .legend span.legend-horror{ color: var(--horror-flag); }
 
   @media (max-width: 560px){
     .title-grid{
@@ -511,6 +533,7 @@
 <div class="legend">
   <div><span>★</span> Oscar-nominated that year</div>
   <div><span class="legend-ww">⚔</span> war film or western (Oscar-nominated, so it's in here anyway)</div>
+  <div><span class="legend-horror">☠</span> horror</div>
   <div>Tap a title to check it off</div>
 </div>
 
@@ -527,32 +550,19 @@
   var DECADES = [
     {
       label: "1920s",
-      note: "Talkies proper start here (The Jazz Singer, 1927) — thin years before sound caught on, so some years run shorter than 15 rather than padded out.",
+      note: "Silent films are excluded (not looking to watch those right now, even Oscar nominees) — so these years only cover the handful of genuine talkies that existed before sound took over, run shorter than 15 rather than padded out.",
       years: [
         {
           year: 1927,
           titles: [
-            { t: "Wings", oscar: true, ww: true },
-            { t: "7th Heaven", oscar: true },
-            { t: "Sunrise: A Song of Two Humans", oscar: false },
-            { t: "Metropolis", oscar: false },
-            { t: "The Jazz Singer", oscar: false },
-            { t: "Underworld", oscar: false },
-            { t: "Napoleon", oscar: false }
+            { t: "The Jazz Singer", oscar: false }
           ]
         },
         {
           year: 1928,
           titles: [
-            { t: "The Racket", oscar: true },
             { t: "In Old Arizona", oscar: true },
-            { t: "The Patriot", oscar: true },
-            { t: "The Passion of Joan of Arc", oscar: false },
-            { t: "The Crowd", oscar: false },
-            { t: "Steamboat Willie", oscar: false },
-            { t: "The Man Who Laughs", oscar: false },
-            { t: "The Wind", oscar: false },
-            { t: "Show People", oscar: false }
+            { t: "Steamboat Willie", oscar: false }
           ]
         },
         {
@@ -564,8 +574,6 @@
             { t: "Disraeli", oscar: true },
             { t: "The Love Parade", oscar: true },
             { t: "Blackmail", oscar: false },
-            { t: "Pandora's Box", oscar: false },
-            { t: "Un Chien Andalou", oscar: false },
             { t: "The Cocoanuts", oscar: false },
             { t: "Applause", oscar: false },
             { t: "Hallelujah", oscar: false }
@@ -587,7 +595,8 @@
             { t: "The Blue Angel", oscar: false },
             { t: "Animal Crackers", oscar: false },
             { t: "Min and Bill", oscar: false },
-            { t: "L'Age d'Or", oscar: false }
+            { t: "L'Age d'Or", oscar: false },
+            { t: "Hell's Angels", oscar: false }
           ]
         },
         {
@@ -604,10 +613,13 @@
             { t: "Five Star Final", oscar: true },
             { t: "The Smiling Lieutenant", oscar: true },
             { t: "City Lights", oscar: false },
-            { t: "Dracula", oscar: false },
-            { t: "Frankenstein", oscar: false },
+            { t: "Dracula", oscar: false, horror: true },
+            { t: "Frankenstein", oscar: false, horror: true },
             { t: "M", oscar: false },
-            { t: "The Public Enemy", oscar: false }
+            { t: "The Public Enemy", oscar: false },
+            { t: "Monkey Business", oscar: false },
+            { t: "Little Caesar", oscar: false },
+            { t: "Waterloo Bridge", oscar: false }
           ]
         },
         {
@@ -627,7 +639,7 @@
             { t: "Love Me Tonight", oscar: false },
             { t: "One Way Passage", oscar: false },
             { t: "Rain", oscar: false },
-            { t: "The Mummy", oscar: false }
+            { t: "The Mummy", oscar: false, horror: true }
           ]
         },
         {
@@ -646,8 +658,9 @@
             { t: "Footlight Parade", oscar: false },
             { t: "Dinner at Eight", oscar: false },
             { t: "Queen Christina", oscar: false },
-            { t: "The Invisible Man", oscar: false },
-            { t: "Design for Living", oscar: false }
+            { t: "The Invisible Man", oscar: false, horror: true },
+            { t: "Design for Living", oscar: false },
+            { t: "Baby Face", oscar: false }
           ]
         },
         {
@@ -666,8 +679,9 @@
             { t: "Viva Villa!", oscar: true },
             { t: "The White Parade", oscar: true },
             { t: "Twentieth Century", oscar: false },
-            { t: "The Black Cat", oscar: false },
-            { t: "The Merry Widow", oscar: false }
+            { t: "The Black Cat", oscar: false, horror: true },
+            { t: "The Merry Widow", oscar: false },
+            { t: "It's a Gift", oscar: false }
           ]
         },
         {
@@ -686,7 +700,7 @@
             { t: "Ruggles of Red Gap", oscar: true },
             { t: "Top Hat", oscar: true },
             { t: "A Night at the Opera", oscar: false },
-            { t: "Bride of Frankenstein", oscar: false },
+            { t: "Bride of Frankenstein", oscar: false, horror: true },
             { t: "The 39 Steps", oscar: false }
           ]
         },
@@ -707,7 +721,8 @@
             { t: "My Man Godfrey", oscar: false },
             { t: "Swing Time", oscar: false },
             { t: "Fury", oscar: false },
-            { t: "The Petrified Forest", oscar: false }
+            { t: "The Petrified Forest", oscar: false },
+            { t: "Things to Come", oscar: false }
           ]
         },
         {
@@ -723,7 +738,6 @@
             { t: "One Hundred Men and a Girl", oscar: true },
             { t: "Stage Door", oscar: true },
             { t: "A Star Is Born", oscar: true },
-            { t: "Snow White and the Seven Dwarfs", oscar: false },
             { t: "Camille", oscar: false },
             { t: "Nothing Sacred", oscar: false },
             { t: "Easy Living", oscar: false },
@@ -767,7 +781,9 @@
             { t: "Only Angels Have Wings", oscar: false },
             { t: "Midnight", oscar: false },
             { t: "Young Mr. Lincoln", oscar: false },
-            { t: "The Women", oscar: false }
+            { t: "The Women", oscar: false },
+            { t: "Gunga Din", oscar: false },
+            { t: "Le Jour se leve (Daybreak)", oscar: false }
           ]
         }
       ]
@@ -789,10 +805,9 @@
             { t: "Our Town", oscar: true },
             { t: "The Philadelphia Story", oscar: true },
             { t: "His Girl Friday", oscar: false },
-            { t: "Fantasia", oscar: false },
-            { t: "Pinocchio", oscar: false },
             { t: "The Shop Around the Corner", oscar: false },
-            { t: "The Mark of Zorro", oscar: false }
+            { t: "The Mark of Zorro", oscar: false },
+            { t: "The Bank Dick", oscar: false }
           ]
         },
         {
@@ -808,11 +823,11 @@
             { t: "One Foot in Heaven", oscar: true },
             { t: "Sergeant York", oscar: true, ww: true },
             { t: "Suspicion", oscar: true },
-            { t: "Dumbo", oscar: false },
             { t: "The Lady Eve", oscar: false },
             { t: "Sullivan's Travels", oscar: false },
             { t: "High Sierra", oscar: false },
-            { t: "Meet John Doe", oscar: false }
+            { t: "Meet John Doe", oscar: false },
+            { t: "The Wolf Man", oscar: false, horror: true }
           ]
         },
         {
@@ -828,11 +843,11 @@
             { t: "The Talk of the Town", oscar: true },
             { t: "Wake Island", oscar: true, ww: true },
             { t: "Yankee Doodle Dandy", oscar: true },
-            { t: "Bambi", oscar: false },
             { t: "To Be or Not to Be", oscar: false },
             { t: "The Man Who Came to Dinner", oscar: false },
             { t: "Woman of the Year", oscar: false },
-            { t: "Now, Voyager", oscar: false }
+            { t: "Now, Voyager", oscar: false },
+            { t: "Cat People", oscar: false, horror: true }
           ]
         },
         {
@@ -852,7 +867,9 @@
             { t: "Jane Eyre", oscar: false },
             { t: "Cabin in the Sky", oscar: false },
             { t: "The Gang's All Here", oscar: false },
-            { t: "Lassie Come Home", oscar: false }
+            { t: "Lassie Come Home", oscar: false },
+            { t: "I Walked with a Zombie", oscar: false, horror: true },
+            { t: "The Outlaw", oscar: false }
           ]
         },
         {
@@ -869,7 +886,7 @@
             { t: "Arsenic and Old Lace", oscar: false },
             { t: "The Woman in the Window", oscar: false },
             { t: "Hail the Conquering Hero", oscar: false },
-            { t: "The Uninvited", oscar: false },
+            { t: "The Uninvited", oscar: false, horror: true },
             { t: "Murder, My Sweet", oscar: false },
             { t: "To Have and Have Not", oscar: false },
             { t: "Cover Girl", oscar: false }
@@ -887,7 +904,7 @@
             { t: "Detour", oscar: false },
             { t: "Scarlet Street", oscar: false },
             { t: "And Then There Were None", oscar: false },
-            { t: "The Picture of Dorian Gray", oscar: false },
+            { t: "The Picture of Dorian Gray", oscar: false, horror: true },
             { t: "Leave Her to Heaven", oscar: false },
             { t: "Christmas in Connecticut", oscar: false },
             { t: "The Clock", oscar: false },
@@ -912,7 +929,9 @@
             { t: "A Matter of Life and Death", oscar: false },
             { t: "The Killers", oscar: false },
             { t: "The Stranger", oscar: false },
-            { t: "The Blue Dahlia", oscar: false }
+            { t: "The Blue Dahlia", oscar: false },
+            { t: "My Darling Clementine", oscar: false, ww: true },
+            { t: "Duel in the Sun", oscar: false }
           ]
         },
         {
@@ -932,7 +951,9 @@
             { t: "Nightmare Alley", oscar: false },
             { t: "Kiss of Death", oscar: false },
             { t: "Shoeshine", oscar: false },
-            { t: "Dark Passage", oscar: false }
+            { t: "Dark Passage", oscar: false },
+            { t: "The Lady from Shanghai", oscar: false },
+            { t: "Forever Amber", oscar: false }
           ]
         },
         {
@@ -952,7 +973,9 @@
             { t: "The Naked City", oscar: false },
             { t: "Oliver Twist", oscar: false },
             { t: "Portrait of Jennie", oscar: false },
-            { t: "The Pirate", oscar: false }
+            { t: "The Pirate", oscar: false },
+            { t: "Red River", oscar: false, ww: true },
+            { t: "The Miracle", oscar: false }
           ]
         },
         {
@@ -992,7 +1015,6 @@
             { t: "In a Lonely Place", oscar: false },
             { t: "Harvey", oscar: false },
             { t: "The Asphalt Jungle", oscar: false },
-            { t: "Cinderella", oscar: false },
             { t: "Panic in the Streets", oscar: false },
             { t: "Los Olvidados", oscar: false },
             { t: "Orpheus", oscar: false },
@@ -1013,11 +1035,12 @@
             { t: "The Day the Earth Stood Still", oscar: false },
             { t: "Ace in the Hole", oscar: false },
             { t: "The Man in the White Suit", oscar: false },
-            { t: "Alice in Wonderland", oscar: false },
             { t: "A Christmas Carol", oscar: false },
             { t: "Diary of a Country Priest", oscar: false },
             { t: "The Tales of Hoffmann", oscar: false },
-            { t: "Detective Story", oscar: false }
+            { t: "Detective Story", oscar: false },
+            { t: "The Thing from Another World", oscar: false },
+            { t: "The Lavender Hill Mob", oscar: false }
           ]
         },
         {
@@ -1037,7 +1060,8 @@
             { t: "Scaramouche", oscar: false },
             { t: "Pat and Mike", oscar: false },
             { t: "Casque d'Or", oscar: false },
-            { t: "Come Back, Little Sheba", oscar: false }
+            { t: "Come Back, Little Sheba", oscar: false },
+            { t: "Limelight", oscar: false }
           ]
         },
         {
@@ -1054,10 +1078,12 @@
             { t: "Gentlemen Prefer Blondes", oscar: false },
             { t: "The Wages of Fear", oscar: false },
             { t: "Ugetsu", oscar: false },
-            { t: "House of Wax", oscar: false },
-            { t: "Peter Pan", oscar: false },
+            { t: "House of Wax", oscar: false, horror: true },
             { t: "I Confess", oscar: false },
-            { t: "The Big Heat", oscar: false }
+            { t: "The Big Heat", oscar: false },
+            { t: "Stalag 17", oscar: false, ww: true },
+            { t: "The Wild One", oscar: false },
+            { t: "The Moon Is Blue", oscar: false }
           ]
         },
         {
@@ -1074,7 +1100,7 @@
             { t: "Sabrina", oscar: false },
             { t: "Dial M for Murder", oscar: false },
             { t: "La Strada", oscar: false },
-            { t: "Godzilla", oscar: false },
+            { t: "Godzilla", oscar: false, horror: true },
             { t: "Journey to Italy", oscar: false },
             { t: "White Christmas", oscar: false },
             { t: "Animal Farm", oscar: false }
@@ -1093,11 +1119,11 @@
             { t: "Kiss Me Deadly", oscar: false },
             { t: "East of Eden", oscar: false },
             { t: "Ordet", oscar: false },
-            { t: "Diabolique", oscar: false },
-            { t: "Lady and the Tramp", oscar: false },
+            { t: "Diabolique", oscar: false, horror: true },
             { t: "The Ladykillers", oscar: false },
             { t: "Rififi", oscar: false },
-            { t: "Summertime", oscar: false }
+            { t: "Summertime", oscar: false },
+            { t: "Blackboard Jungle", oscar: false }
           ]
         },
         {
@@ -1108,7 +1134,7 @@
             { t: "Giant", oscar: true },
             { t: "The King and I", oscar: true },
             { t: "The Ten Commandments", oscar: true },
-            { t: "Invasion of the Body Snatchers", oscar: false },
+            { t: "Invasion of the Body Snatchers", oscar: false, horror: true },
             { t: "The Man Who Knew Too Much", oscar: false },
             { t: "Forbidden Planet", oscar: false },
             { t: "The Killing", oscar: false },
@@ -1136,7 +1162,7 @@
             { t: "Throne of Blood", oscar: false },
             { t: "Nights of Cabiria", oscar: false },
             { t: "An Affair to Remember", oscar: false },
-            { t: "The Incredible Shrinking Man", oscar: false },
+            { t: "The Incredible Shrinking Man", oscar: false, horror: true },
             { t: "Jailhouse Rock", oscar: false }
           ]
         },
@@ -1151,11 +1177,11 @@
             { t: "Vertigo", oscar: false },
             { t: "Touch of Evil", oscar: false },
             { t: "Some Came Running", oscar: false },
-            { t: "The Fly", oscar: false },
+            { t: "The Fly", oscar: false, horror: true },
             { t: "Ashes and Diamonds", oscar: false },
             { t: "Mon Oncle", oscar: false },
             { t: "Indiscreet", oscar: false },
-            { t: "Horror of Dracula", oscar: false },
+            { t: "Horror of Dracula", oscar: false, horror: true },
             { t: "Bell, Book and Candle", oscar: false },
             { t: "Damn Yankees!", oscar: false }
           ]
@@ -1175,9 +1201,8 @@
             { t: "Imitation of Life", oscar: false },
             { t: "Black Orpheus", oscar: false },
             { t: "Hiroshima Mon Amour", oscar: false },
-            { t: "Sleeping Beauty", oscar: false },
             { t: "Suddenly, Last Summer", oscar: false },
-            { t: "The Mummy", oscar: false }
+            { t: "The Mummy", oscar: false, horror: true }
           ]
         }
       ]
@@ -1193,11 +1218,11 @@
             { t: "Elmer Gantry", oscar: true },
             { t: "Sons and Lovers", oscar: true },
             { t: "The Sundowners", oscar: true },
-            { t: "Psycho", oscar: false },
+            { t: "Psycho", oscar: false, horror: true },
             { t: "Spartacus", oscar: false },
             { t: "La Dolce Vita", oscar: false },
             { t: "Breathless", oscar: false },
-            { t: "Peeping Tom", oscar: false },
+            { t: "Peeping Tom", oscar: false, horror: true },
             { t: "L'Avventura", oscar: false },
             { t: "The Virgin Spring", oscar: false },
             { t: "Inherit the Wind", oscar: false },
@@ -1214,7 +1239,7 @@
             { t: "The Hustler", oscar: true },
             { t: "Judgment at Nuremberg", oscar: true },
             { t: "Breakfast at Tiffany's", oscar: false },
-            { t: "The Innocents", oscar: false },
+            { t: "The Innocents", oscar: false, horror: true },
             { t: "Yojimbo", oscar: false },
             { t: "Last Year at Marienbad", oscar: false },
             { t: "Through a Glass Darkly", oscar: false },
@@ -1235,14 +1260,15 @@
             { t: "To Kill a Mockingbird", oscar: true },
             { t: "Dr. No", oscar: false },
             { t: "The Manchurian Candidate", oscar: false },
-            { t: "What Ever Happened to Baby Jane?", oscar: false },
+            { t: "What Ever Happened to Baby Jane?", oscar: false, horror: true },
             { t: "Jules and Jim", oscar: false },
             { t: "Lolita", oscar: false },
             { t: "The Miracle Worker", oscar: false },
             { t: "Cape Fear", oscar: false },
             { t: "L'Eclisse", oscar: false },
             { t: "Days of Wine and Roses", oscar: false },
-            { t: "Knife in the Water", oscar: false }
+            { t: "Knife in the Water", oscar: false },
+            { t: "Advise & Consent", oscar: false }
           ]
         },
         {
@@ -1257,12 +1283,15 @@
             { t: "The Birds", oscar: false },
             { t: "The Pink Panther", oscar: false },
             { t: "Charade", oscar: false },
-            { t: "The Haunting", oscar: false },
+            { t: "The Haunting", oscar: false, horror: true },
             { t: "The Servant", oscar: false },
             { t: "This Sporting Life", oscar: false },
             { t: "The Leopard", oscar: false },
             { t: "Contempt", oscar: false },
-            { t: "The Nutty Professor", oscar: false }
+            { t: "The Nutty Professor", oscar: false },
+            { t: "The Great Escape", oscar: false, ww: true },
+            { t: "It's a Mad, Mad, Mad, Mad World", oscar: false },
+            { t: "Flaming Creatures", oscar: false }
           ]
         },
         {
@@ -1281,8 +1310,9 @@
             { t: "Seven Days in May", oscar: false },
             { t: "The Night of the Iguana", oscar: false },
             { t: "Topkapi", oscar: false },
-            { t: "Kwaidan", oscar: false },
-            { t: "Onibaba", oscar: false }
+            { t: "Kwaidan", oscar: false, horror: true },
+            { t: "Onibaba", oscar: false, horror: true },
+            { t: "A Fistful of Dollars", oscar: false, ww: true }
           ]
         },
         {
@@ -1293,7 +1323,7 @@
             { t: "Doctor Zhivago", oscar: true, ww: true },
             { t: "Ship of Fools", oscar: true },
             { t: "A Thousand Clowns", oscar: true },
-            { t: "Repulsion", oscar: false },
+            { t: "Repulsion", oscar: false, horror: true },
             { t: "Juliet of the Spirits", oscar: false },
             { t: "The Ipcress File", oscar: false },
             { t: "Pierrot le Fou", oscar: false },
@@ -1302,7 +1332,9 @@
             { t: "The Collector", oscar: false },
             { t: "Alphaville", oscar: false },
             { t: "Simon of the Desert", oscar: false },
-            { t: "The Shop on Main Street", oscar: false }
+            { t: "The Shop on Main Street", oscar: false },
+            { t: "Thunderball", oscar: false },
+            { t: "The Pawnbroker", oscar: false }
           ]
         },
         {
@@ -1322,7 +1354,8 @@
             { t: "Masculin Féminin", oscar: false },
             { t: "A Man and a Woman", oscar: false },
             { t: "The Endless Summer", oscar: false },
-            { t: "Torn Curtain", oscar: false }
+            { t: "Torn Curtain", oscar: false },
+            { t: "The Good, the Bad and the Ugly", oscar: false, ww: true }
           ]
         },
         {
@@ -1337,7 +1370,6 @@
             { t: "Point Blank", oscar: false },
             { t: "Le Samouraï", oscar: false },
             { t: "Belle de Jour", oscar: false },
-            { t: "The Jungle Book", oscar: false },
             { t: "Wait Until Dark", oscar: false },
             { t: "In Cold Blood", oscar: false },
             { t: "Playtime", oscar: false },
@@ -1354,15 +1386,16 @@
             { t: "Rachel, Rachel", oscar: true },
             { t: "Romeo and Juliet", oscar: true },
             { t: "2001: A Space Odyssey", oscar: false },
-            { t: "Rosemary's Baby", oscar: false },
-            { t: "Night of the Living Dead", oscar: false },
+            { t: "Rosemary's Baby", oscar: false, horror: true },
+            { t: "Night of the Living Dead", oscar: false, horror: true },
             { t: "The Producers", oscar: false },
             { t: "Bullitt", oscar: false },
             { t: "Planet of the Apes", oscar: false },
             { t: "Faces", oscar: false },
             { t: "If....", oscar: false },
             { t: "Yellow Submarine", oscar: false },
-            { t: "Petulia", oscar: false }
+            { t: "Petulia", oscar: false },
+            { t: "Once Upon a Time in the West", oscar: false, ww: true }
           ]
         },
         {
@@ -1401,7 +1434,6 @@
             { t: "Woodstock", oscar: false },
             { t: "The Conformist", oscar: false },
             { t: "Performance", oscar: false },
-            { t: "The Aristocats", oscar: false },
             { t: "Le Cercle Rouge", oscar: false },
             { t: "Gimme Shelter", oscar: false },
             { t: "Diary of a Mad Housewife", oscar: false },
@@ -1456,18 +1488,19 @@
             { t: "The Sting", oscar: true },
             { t: "American Graffiti", oscar: true },
             { t: "Cries and Whispers", oscar: true },
-            { t: "The Exorcist", oscar: true },
+            { t: "The Exorcist", oscar: true, horror: true },
             { t: "A Touch of Class", oscar: true },
             { t: "Mean Streets", oscar: false },
-            { t: "Don't Look Now", oscar: false },
+            { t: "Don't Look Now", oscar: false, horror: true },
             { t: "Badlands", oscar: false },
             { t: "The Long Goodbye", oscar: false },
             { t: "Serpico", oscar: false },
             { t: "Paper Moon", oscar: false },
             { t: "Enter the Dragon", oscar: false },
             { t: "Sleeper", oscar: false },
-            { t: "The Wicker Man", oscar: false },
-            { t: "Day for Night", oscar: false }
+            { t: "The Wicker Man", oscar: false, horror: true },
+            { t: "Day for Night", oscar: false },
+            { t: "The Way We Were", oscar: false }
           ]
         },
         {
@@ -1480,14 +1513,15 @@
             { t: "The Towering Inferno", oscar: true },
             { t: "Young Frankenstein", oscar: false },
             { t: "A Woman Under the Influence", oscar: false },
-            { t: "The Texas Chain Saw Massacre", oscar: false },
+            { t: "The Texas Chain Saw Massacre", oscar: false, horror: true },
             { t: "Alice Doesn't Live Here Anymore", oscar: false },
             { t: "Scenes from a Marriage", oscar: false },
             { t: "The Taking of Pelham One Two Three", oscar: false },
             { t: "The Parallax View", oscar: false },
             { t: "Murder on the Orient Express", oscar: false },
             { t: "Female Trouble", oscar: false },
-            { t: "Black Christmas", oscar: false }
+            { t: "Black Christmas", oscar: false, horror: true },
+            { t: "Blazing Saddles", oscar: false }
           ]
         },
         {
@@ -1496,7 +1530,7 @@
             { t: "One Flew Over the Cuckoo's Nest", oscar: true },
             { t: "Barry Lyndon", oscar: true },
             { t: "Dog Day Afternoon", oscar: true },
-            { t: "Jaws", oscar: true },
+            { t: "Jaws", oscar: true, horror: true },
             { t: "Nashville", oscar: true },
             { t: "Monty Python and the Holy Grail", oscar: false },
             { t: "The Rocky Horror Picture Show", oscar: false },
@@ -1507,7 +1541,8 @@
             { t: "Love and Death", oscar: false },
             { t: "Shampoo", oscar: false },
             { t: "The Man Who Would Be King", oscar: false },
-            { t: "The Stepford Wives", oscar: false }
+            { t: "The Stepford Wives", oscar: false, horror: true },
+            { t: "Tommy", oscar: false }
           ]
         },
         {
@@ -1518,8 +1553,8 @@
             { t: "Bound for Glory", oscar: true },
             { t: "Network", oscar: true },
             { t: "Taxi Driver", oscar: true },
-            { t: "Carrie", oscar: false },
-            { t: "The Omen", oscar: false },
+            { t: "Carrie", oscar: false, horror: true },
+            { t: "The Omen", oscar: false, horror: true },
             { t: "Marathon Man", oscar: false },
             { t: "Assault on Precinct 13", oscar: false },
             { t: "The Man Who Fell to Earth", oscar: false },
@@ -1540,14 +1575,15 @@
             { t: "The Turning Point", oscar: true },
             { t: "Close Encounters of the Third Kind", oscar: false },
             { t: "Saturday Night Fever", oscar: false },
-            { t: "Eraserhead", oscar: false },
-            { t: "Suspiria", oscar: false },
+            { t: "Eraserhead", oscar: false, horror: true },
+            { t: "Suspiria", oscar: false, horror: true },
             { t: "Sorcerer", oscar: false },
             { t: "The American Friend", oscar: false },
-            { t: "House (Hausu)", oscar: false },
+            { t: "House (Hausu)", oscar: false, horror: true },
             { t: "3 Women", oscar: false },
-            { t: "The Hills Have Eyes", oscar: false },
-            { t: "The Duellists", oscar: false }
+            { t: "The Hills Have Eyes", oscar: false, horror: true },
+            { t: "The Duellists", oscar: false },
+            { t: "Slap Shot", oscar: false }
           ]
         },
         {
@@ -1558,16 +1594,17 @@
             { t: "Heaven Can Wait", oscar: true },
             { t: "Midnight Express", oscar: true },
             { t: "An Unmarried Woman", oscar: true },
-            { t: "Halloween", oscar: false },
+            { t: "Halloween", oscar: false, horror: true },
             { t: "Days of Heaven", oscar: false },
             { t: "Grease", oscar: false },
             { t: "Animal House", oscar: false },
             { t: "Superman", oscar: false },
             { t: "Interiors", oscar: false },
-            { t: "Dawn of the Dead", oscar: false },
-            { t: "Invasion of the Body Snatchers", oscar: false },
+            { t: "Dawn of the Dead", oscar: false, horror: true },
+            { t: "Invasion of the Body Snatchers", oscar: false, horror: true },
             { t: "Autumn Sonata", oscar: false },
-            { t: "Pretty Baby", oscar: false }
+            { t: "Pretty Baby", oscar: false },
+            { t: "I Spit on Your Grave", oscar: false }
           ]
         },
         {
@@ -1584,10 +1621,13 @@
             { t: "Being There", oscar: false },
             { t: "The Warriors", oscar: false },
             { t: "Life of Brian", oscar: false },
-            { t: "Nosferatu the Vampyre", oscar: false },
+            { t: "Nosferatu the Vampyre", oscar: false, horror: true },
             { t: "Stalker", oscar: false },
             { t: "The Tin Drum", oscar: false },
-            { t: "Quadrophenia", oscar: false }
+            { t: "Quadrophenia", oscar: false },
+            { t: "Mad Max", oscar: false },
+            { t: "The Jerk", oscar: false },
+            { t: "Caligula", oscar: false }
           ]
         }
       ]
@@ -1604,15 +1644,16 @@
             { t: "Raging Bull", oscar: true },
             { t: "Tess", oscar: true },
             { t: "The Empire Strikes Back", oscar: false },
-            { t: "The Shining", oscar: false },
+            { t: "The Shining", oscar: false, horror: true },
             { t: "Airplane!", oscar: false },
             { t: "Caddyshack", oscar: false },
             { t: "The Blues Brothers", oscar: false },
             { t: "9 to 5", oscar: false },
             { t: "Fame", oscar: false },
             { t: "American Gigolo", oscar: false },
-            { t: "Dressed to Kill", oscar: false },
-            { t: "Melvin and Howard", oscar: false }
+            { t: "Dressed to Kill", oscar: false, horror: true },
+            { t: "Melvin and Howard", oscar: false },
+            { t: "Cruising", oscar: false }
           ]
         },
         {
@@ -1625,14 +1666,15 @@
             { t: "Reds", oscar: true },
             { t: "Arthur", oscar: false },
             { t: "Body Heat", oscar: false },
-            { t: "An American Werewolf in London", oscar: false },
+            { t: "An American Werewolf in London", oscar: false, horror: true },
             { t: "Time Bandits", oscar: false },
             { t: "Excalibur", oscar: false },
             { t: "Blow Out", oscar: false },
             { t: "My Dinner with Andre", oscar: false },
             { t: "Mad Max 2: The Road Warrior", oscar: false },
             { t: "Stripes", oscar: false },
-            { t: "Escape from New York", oscar: false }
+            { t: "Escape from New York", oscar: false },
+            { t: "Possession", oscar: false }
           ]
         },
         {
@@ -1644,15 +1686,16 @@
             { t: "Tootsie", oscar: true },
             { t: "The Verdict", oscar: true },
             { t: "Blade Runner", oscar: false },
-            { t: "The Thing", oscar: false },
-            { t: "Poltergeist", oscar: false },
+            { t: "The Thing", oscar: false, horror: true },
+            { t: "Poltergeist", oscar: false, horror: true },
             { t: "Fast Times at Ridgemont High", oscar: false },
             { t: "Diner", oscar: false },
             { t: "Sophie's Choice", oscar: false },
             { t: "48 Hrs.", oscar: false },
             { t: "An Officer and a Gentleman", oscar: false },
             { t: "First Blood", oscar: false },
-            { t: "Conan the Barbarian", oscar: false }
+            { t: "Conan the Barbarian", oscar: false },
+            { t: "Star Trek II: The Wrath of Khan", oscar: false }
           ]
         },
         {
@@ -1692,7 +1735,9 @@
             { t: "The Karate Kid", oscar: false },
             { t: "Footloose", oscar: false },
             { t: "Purple Rain", oscar: false },
-            { t: "Sixteen Candles", oscar: false }
+            { t: "Sixteen Candles", oscar: false },
+            { t: "Gremlins", oscar: false, horror: true },
+            { t: "Body Double", oscar: false }
           ]
         },
         {
@@ -1712,7 +1757,8 @@
             { t: "Weird Science", oscar: false },
             { t: "Better Off Dead", oscar: false },
             { t: "Rocky IV", oscar: false },
-            { t: "Mad Max Beyond Thunderdome", oscar: false }
+            { t: "Mad Max Beyond Thunderdome", oscar: false },
+            { t: "Clue", oscar: false }
           ]
         },
         {
@@ -1723,16 +1769,17 @@
             { t: "Hannah and Her Sisters", oscar: true },
             { t: "The Mission", oscar: true },
             { t: "A Room with a View", oscar: true },
-            { t: "Aliens", oscar: false },
+            { t: "Aliens", oscar: false, horror: true },
             { t: "Ferris Bueller's Day Off", oscar: false },
             { t: "Stand by Me", oscar: false },
             { t: "Blue Velvet", oscar: false },
             { t: "Top Gun", oscar: false },
-            { t: "The Fly", oscar: false },
+            { t: "The Fly", oscar: false, horror: true },
             { t: "Crocodile Dundee", oscar: false },
             { t: "Something Wild", oscar: false },
             { t: "Down and Out in Beverly Hills", oscar: false },
-            { t: "Peggy Sue Got Married", oscar: false }
+            { t: "Peggy Sue Got Married", oscar: false },
+            { t: "Labyrinth", oscar: false }
           ]
         },
         {
@@ -1752,7 +1799,8 @@
             { t: "Dirty Dancing", oscar: false },
             { t: "The Untouchables", oscar: false },
             { t: "Withnail and I", oscar: false },
-            { t: "Planes, Trains and Automobiles", oscar: false }
+            { t: "Planes, Trains and Automobiles", oscar: false },
+            { t: "Full Metal Jacket", oscar: false, ww: true }
           ]
         },
         {
@@ -1767,12 +1815,13 @@
             { t: "Who Framed Roger Rabbit", oscar: false },
             { t: "A Fish Called Wanda", oscar: false },
             { t: "Big", oscar: false },
-            { t: "Beetlejuice", oscar: false },
+            { t: "Beetlejuice", oscar: false, horror: true },
             { t: "Coming to America", oscar: false },
             { t: "Cinema Paradiso", oscar: false },
             { t: "The Naked Gun", oscar: false },
             { t: "Bull Durham", oscar: false },
-            { t: "Heathers", oscar: false }
+            { t: "Heathers", oscar: false },
+            { t: "They Live", oscar: false }
           ]
         },
         {
@@ -1788,11 +1837,13 @@
             { t: "Indiana Jones and the Last Crusade", oscar: false },
             { t: "When Harry Met Sally...", oscar: false },
             { t: "Sex, Lies, and Videotape", oscar: false },
-            { t: "The Little Mermaid", oscar: false },
             { t: "Parenthood", oscar: false },
             { t: "Say Anything...", oscar: false },
             { t: "Uncle Buck", oscar: false },
-            { t: "Crimes and Misdemeanors", oscar: false }
+            { t: "Crimes and Misdemeanors", oscar: false },
+            { t: "Glory", oscar: false, ww: true },
+            { t: "The Abyss", oscar: false },
+            { t: "The Cook, the Thief, His Wife & Her Lover", oscar: false }
           ]
         }
       ]
@@ -1812,7 +1863,7 @@
             { t: "Edward Scissorhands", oscar: false },
             { t: "Total Recall", oscar: false },
             { t: "Pretty Woman", oscar: false },
-            { t: "Misery", oscar: false },
+            { t: "Misery", oscar: false, horror: true },
             { t: "The Hunt for Red October", oscar: false },
             { t: "Wild at Heart", oscar: false },
             { t: "Miller's Crossing", oscar: false },
@@ -1824,7 +1875,6 @@
           year: 1991,
           titles: [
             { t: "The Silence of the Lambs", oscar: true },
-            { t: "Beauty and the Beast", oscar: true },
             { t: "Bugsy", oscar: true },
             { t: "JFK", oscar: true },
             { t: "The Prince of Tides", oscar: true },
@@ -1837,7 +1887,8 @@
             { t: "Hook", oscar: false },
             { t: "Delicatessen", oscar: false },
             { t: "Backdraft", oscar: false },
-            { t: "Naked Lunch", oscar: false }
+            { t: "Naked Lunch", oscar: false, horror: true },
+            { t: "Barton Fink", oscar: false }
           ]
         },
         {
@@ -1850,14 +1901,14 @@
             { t: "Scent of a Woman", oscar: true },
             { t: "Reservoir Dogs", oscar: false },
             { t: "A League of Their Own", oscar: false },
-            { t: "Aladdin", oscar: false },
             { t: "The Player", oscar: false },
             { t: "Glengarry Glen Ross", oscar: false },
             { t: "Malcolm X", oscar: false },
             { t: "Basic Instinct", oscar: false },
             { t: "My Cousin Vinny", oscar: false },
             { t: "Batman Returns", oscar: false },
-            { t: "Bad Lieutenant", oscar: false }
+            { t: "Bad Lieutenant", oscar: false },
+            { t: "Wayne's World", oscar: false }
           ]
         },
         {
@@ -1877,7 +1928,8 @@
             { t: "What's Eating Gilbert Grape", oscar: false },
             { t: "Carlito's Way", oscar: false },
             { t: "Menace II Society", oscar: false },
-            { t: "The Sandlot", oscar: false }
+            { t: "The Sandlot", oscar: false },
+            { t: "The Nightmare Before Christmas", oscar: false }
           ]
         },
         {
@@ -1888,7 +1940,6 @@
             { t: "Pulp Fiction", oscar: true },
             { t: "Quiz Show", oscar: true },
             { t: "The Shawshank Redemption", oscar: true },
-            { t: "The Lion King", oscar: false },
             { t: "Speed", oscar: false },
             { t: "True Lies", oscar: false },
             { t: "Léon: The Professional", oscar: false },
@@ -1896,8 +1947,10 @@
             { t: "Clerks", oscar: false },
             { t: "Heavenly Creatures", oscar: false },
             { t: "Natural Born Killers", oscar: false },
-            { t: "Interview with the Vampire", oscar: false },
-            { t: "Hoop Dreams", oscar: false }
+            { t: "Interview with the Vampire", oscar: false, horror: true },
+            { t: "Hoop Dreams", oscar: false },
+            { t: "The Last Seduction", oscar: false },
+            { t: "Exotica", oscar: false }
           ]
         },
         {
@@ -1908,8 +1961,7 @@
             { t: "Babe", oscar: true },
             { t: "Il Postino: The Postman", oscar: true },
             { t: "Sense and Sensibility", oscar: true },
-            { t: "Toy Story", oscar: false },
-            { t: "Se7en", oscar: false },
+            { t: "Se7en", oscar: false, horror: true },
             { t: "The Usual Suspects", oscar: false },
             { t: "Heat", oscar: false },
             { t: "Twelve Monkeys", oscar: false },
@@ -1917,7 +1969,8 @@
             { t: "Clueless", oscar: false },
             { t: "Before Sunrise", oscar: false },
             { t: "Get Shorty", oscar: false },
-            { t: "Leaving Las Vegas", oscar: false }
+            { t: "Leaving Las Vegas", oscar: false },
+            { t: "Jumanji", oscar: false }
           ]
         },
         {
@@ -1929,7 +1982,7 @@
             { t: "Secrets & Lies", oscar: true },
             { t: "Shine", oscar: true },
             { t: "Trainspotting", oscar: false },
-            { t: "Scream", oscar: false },
+            { t: "Scream", oscar: false, horror: true },
             { t: "Independence Day", oscar: false },
             { t: "Swingers", oscar: false },
             { t: "The Rock", oscar: false },
@@ -1937,7 +1990,9 @@
             { t: "Sling Blade", oscar: false },
             { t: "Big Night", oscar: false },
             { t: "Bottle Rocket", oscar: false },
-            { t: "Emma", oscar: false }
+            { t: "Emma", oscar: false },
+            { t: "Mission: Impossible", oscar: false },
+            { t: "Crash", oscar: false }
           ]
         },
         {
@@ -1977,7 +2032,9 @@
             { t: "Fear and Loathing in Las Vegas", oscar: false },
             { t: "Dark City", oscar: false },
             { t: "Run Lola Run", oscar: false },
-            { t: "Pleasantville", oscar: false }
+            { t: "Pleasantville", oscar: false },
+            { t: "Ronin", oscar: false },
+            { t: "Happiness", oscar: false }
           ]
         },
         {
@@ -1992,12 +2049,12 @@
             { t: "Fight Club", oscar: false },
             { t: "Being John Malkovich", oscar: false },
             { t: "Magnolia", oscar: false },
-            { t: "The Iron Giant", oscar: false },
             { t: "Office Space", oscar: false },
             { t: "Election", oscar: false },
-            { t: "Toy Story 2", oscar: false },
-            { t: "The Blair Witch Project", oscar: false },
-            { t: "Eyes Wide Shut", oscar: false }
+            { t: "The Blair Witch Project", oscar: false, horror: true },
+            { t: "Eyes Wide Shut", oscar: false },
+            { t: "Boys Don't Cry", oscar: false },
+            { t: "Galaxy Quest", oscar: false }
           ]
         }
       ]
@@ -2022,7 +2079,9 @@
             { t: "High Fidelity", oscar: false },
             { t: "Best in Show", oscar: false },
             { t: "O Brother, Where Art Thou?", oscar: false },
-            { t: "Cast Away", oscar: false }
+            { t: "Cast Away", oscar: false },
+            { t: "Dancer in the Dark", oscar: false },
+            { t: "American Psycho", oscar: false }
           ]
         },
         {
@@ -2036,13 +2095,12 @@
             { t: "Amélie", oscar: false },
             { t: "Mulholland Drive", oscar: false },
             { t: "The Royal Tenenbaums", oscar: false },
-            { t: "Monsters, Inc.", oscar: false },
             { t: "Training Day", oscar: false },
             { t: "Ocean's Eleven", oscar: false },
-            { t: "Shrek", oscar: false },
             { t: "Spirited Away", oscar: false },
             { t: "Y Tu Mamá También", oscar: false },
-            { t: "Donnie Darko", oscar: false }
+            { t: "Donnie Darko", oscar: false },
+            { t: "Ghost World", oscar: false }
           ]
         },
         {
@@ -2062,7 +2120,8 @@
             { t: "Bowling for Columbine", oscar: false },
             { t: "Far from Heaven", oscar: false },
             { t: "25th Hour", oscar: false },
-            { t: "Russian Ark", oscar: false }
+            { t: "Russian Ark", oscar: false },
+            { t: "Punch-Drunk Love", oscar: false }
           ]
         },
         {
@@ -2074,7 +2133,6 @@
             { t: "Mystic River", oscar: true },
             { t: "Seabiscuit", oscar: true },
             { t: "Kill Bill: Volume 1", oscar: false },
-            { t: "Finding Nemo", oscar: false },
             { t: "American Splendor", oscar: false },
             { t: "Big Fish", oscar: false },
             { t: "Monster", oscar: false },
@@ -2082,7 +2140,9 @@
             { t: "Whale Rider", oscar: false },
             { t: "21 Grams", oscar: false },
             { t: "Elephant", oscar: false },
-            { t: "School of Rock", oscar: false }
+            { t: "School of Rock", oscar: false },
+            { t: "Pirates of the Caribbean: The Curse of the Black Pearl", oscar: false },
+            { t: "Oldboy", oscar: false }
           ]
         },
         {
@@ -2094,7 +2154,6 @@
             { t: "Ray", oscar: true },
             { t: "Sideways", oscar: true },
             { t: "Eternal Sunshine of the Spotless Mind", oscar: false },
-            { t: "The Incredibles", oscar: false },
             { t: "Collateral", oscar: false },
             { t: "Kill Bill: Volume 2", oscar: false },
             { t: "Hotel Rwanda", oscar: false },
@@ -2102,7 +2161,8 @@
             { t: "Shaun of the Dead", oscar: false },
             { t: "Mean Girls", oscar: false },
             { t: "Spider-Man 2", oscar: false },
-            { t: "Napoleon Dynamite", oscar: false }
+            { t: "Napoleon Dynamite", oscar: false },
+            { t: "Anchorman: The Legend of Ron Burgundy", oscar: false }
           ]
         },
         {
@@ -2122,7 +2182,8 @@
             { t: "Pride & Prejudice", oscar: false },
             { t: "Junebug", oscar: false },
             { t: "Sin City", oscar: false },
-            { t: "Wallace & Gromit: The Curse of the Were-Rabbit", oscar: false }
+            { t: "The 40-Year-Old Virgin", oscar: false },
+            { t: "Hard Candy", oscar: false }
           ]
         },
         {
@@ -2134,7 +2195,7 @@
             { t: "Little Miss Sunshine", oscar: true },
             { t: "The Queen", oscar: true },
             { t: "Children of Men", oscar: false },
-            { t: "Pan's Labyrinth", oscar: false },
+            { t: "Pan's Labyrinth", oscar: false, horror: true },
             { t: "The Lives of Others", oscar: false },
             { t: "United 93", oscar: false },
             { t: "Half Nelson", oscar: false },
@@ -2142,7 +2203,9 @@
             { t: "Borat", oscar: false },
             { t: "Dreamgirls", oscar: false },
             { t: "Volver", oscar: false },
-            { t: "Stranger than Fiction", oscar: false }
+            { t: "Stranger than Fiction", oscar: false },
+            { t: "Casino Royale", oscar: false },
+            { t: "Shortbus", oscar: false }
           ]
         },
         {
@@ -2154,7 +2217,6 @@
             { t: "Michael Clayton", oscar: true },
             { t: "There Will Be Blood", oscar: true },
             { t: "Zodiac", oscar: false },
-            { t: "Ratatouille", oscar: false },
             { t: "Into the Wild", oscar: false },
             { t: "The Diving Bell and the Butterfly", oscar: false },
             { t: "Gone Baby Gone", oscar: false },
@@ -2174,7 +2236,6 @@
             { t: "Milk", oscar: true },
             { t: "The Reader", oscar: true },
             { t: "The Dark Knight", oscar: false },
-            { t: "WALL-E", oscar: false },
             { t: "In Bruges", oscar: false },
             { t: "Doubt", oscar: false },
             { t: "Rachel Getting Married", oscar: false },
@@ -2182,7 +2243,9 @@
             { t: "Revolutionary Road", oscar: false },
             { t: "Gran Torino", oscar: false },
             { t: "The Wrestler", oscar: false },
-            { t: "Synecdoche, New York", oscar: false }
+            { t: "Synecdoche, New York", oscar: false },
+            { t: "Iron Man", oscar: false },
+            { t: "Let the Right One In", oscar: false, horror: true }
           ]
         },
         {
@@ -2196,7 +2259,6 @@
             { t: "Inglourious Basterds", oscar: true, ww: true },
             { t: "Precious", oscar: true },
             { t: "A Serious Man", oscar: true },
-            { t: "Up", oscar: true },
             { t: "Up in the Air", oscar: true },
             { t: "Fantastic Mr. Fox", oscar: false },
             { t: "(500) Days of Summer", oscar: false },
@@ -2220,10 +2282,9 @@
             { t: "The Kids Are All Right", oscar: true },
             { t: "127 Hours", oscar: true },
             { t: "The Social Network", oscar: true },
-            { t: "Toy Story 3", oscar: true },
             { t: "True Grit", oscar: true },
             { t: "Winter's Bone", oscar: true },
-            { t: "Shutter Island", oscar: false },
+            { t: "Shutter Island", oscar: false, horror: true },
             { t: "The Ghost Writer", oscar: false },
             { t: "Exit Through the Gift Shop", oscar: false },
             { t: "Another Year", oscar: false },
@@ -2244,10 +2305,11 @@
             { t: "War Horse", oscar: true, ww: true },
             { t: "Drive", oscar: false },
             { t: "Bridesmaids", oscar: false },
-            { t: "Take Shelter", oscar: false },
+            { t: "Take Shelter", oscar: false, horror: true },
             { t: "A Separation", oscar: false },
             { t: "Warrior", oscar: false },
-            { t: "Shame", oscar: false }
+            { t: "Shame", oscar: false },
+            { t: "Rise of the Planet of the Apes", oscar: false }
           ]
         },
         {
@@ -2267,7 +2329,9 @@
             { t: "Skyfall", oscar: false },
             { t: "The Master", oscar: false },
             { t: "Looper", oscar: false },
-            { t: "Cloud Atlas", oscar: false }
+            { t: "Cloud Atlas", oscar: false },
+            { t: "21 Jump Street", oscar: false },
+            { t: "Spring Breakers", oscar: false }
           ]
         },
         {
@@ -2287,7 +2351,8 @@
             { t: "Prisoners", oscar: false },
             { t: "Short Term 12", oscar: false },
             { t: "Blue Jasmine", oscar: false },
-            { t: "Frances Ha", oscar: false }
+            { t: "Frances Ha", oscar: false },
+            { t: "Blue Is the Warmest Colour", oscar: false }
           ]
         },
         {
@@ -2307,7 +2372,8 @@
             { t: "Guardians of the Galaxy", oscar: false },
             { t: "Foxcatcher", oscar: false },
             { t: "Ida", oscar: false },
-            { t: "The Lego Movie", oscar: false }
+            { t: "John Wick", oscar: false },
+            { t: "Nymphomaniac", oscar: false }
           ]
         },
         {
@@ -2321,7 +2387,6 @@
             { t: "The Martian", oscar: true },
             { t: "The Revenant", oscar: true },
             { t: "Room", oscar: true },
-            { t: "Inside Out", oscar: false },
             { t: "Ex Machina", oscar: false },
             { t: "Sicario", oscar: false },
             { t: "Carol", oscar: false },
@@ -2342,12 +2407,12 @@
             { t: "La La Land", oscar: true },
             { t: "Lion", oscar: true },
             { t: "Manchester by the Sea", oscar: true },
-            { t: "Zootopia", oscar: false },
             { t: "The Handmaiden", oscar: false },
             { t: "O.J.: Made in America", oscar: false },
             { t: "Kubo and the Two Strings", oscar: false },
             { t: "Captain Fantastic", oscar: false },
-            { t: "Toni Erdmann", oscar: false }
+            { t: "Toni Erdmann", oscar: false },
+            { t: "Elle", oscar: false }
           ]
         },
         {
@@ -2367,7 +2432,8 @@
             { t: "The Florida Project", oscar: false },
             { t: "I, Tonya", oscar: false },
             { t: "Logan", oscar: false },
-            { t: "Coco", oscar: false }
+            { t: "The Big Sick", oscar: false },
+            { t: "mother!", oscar: false }
           ]
         },
         {
@@ -2381,13 +2447,13 @@
             { t: "Roma", oscar: true },
             { t: "A Star Is Born", oscar: true },
             { t: "Vice", oscar: true },
-            { t: "Spider-Man: Into the Spider-Verse", oscar: false },
             { t: "Eighth Grade", oscar: false },
             { t: "First Reformed", oscar: false },
             { t: "If Beale Street Could Talk", oscar: false },
             { t: "Widows", oscar: false },
-            { t: "A Quiet Place", oscar: false },
-            { t: "Won't You Be My Neighbor?", oscar: false }
+            { t: "A Quiet Place", oscar: false, horror: true },
+            { t: "Won't You Be My Neighbor?", oscar: false },
+            { t: "Paddington 2", oscar: false }
           ]
         },
         {
@@ -2404,10 +2470,11 @@
             { t: "Once Upon a Time in Hollywood", oscar: true },
             { t: "Knives Out", oscar: false },
             { t: "Uncut Gems", oscar: false },
-            { t: "The Lighthouse", oscar: false },
+            { t: "The Lighthouse", oscar: false, horror: true },
             { t: "Portrait of a Lady on Fire", oscar: false },
             { t: "Avengers: Endgame", oscar: false },
-            { t: "Booksmart", oscar: false }
+            { t: "Booksmart", oscar: false },
+            { t: "Us", oscar: false, horror: true }
           ]
         }
       ]
@@ -2427,7 +2494,6 @@
             { t: "Promising Young Woman", oscar: true },
             { t: "Sound of Metal", oscar: true },
             { t: "The Trial of the Chicago 7", oscar: true },
-            { t: "Soul", oscar: false },
             { t: "Palm Springs", oscar: false },
             { t: "One Night in Miami", oscar: false },
             { t: "Ma Rainey's Black Bottom", oscar: false },
@@ -2453,7 +2519,8 @@
             { t: "Pig", oscar: false },
             { t: "The Green Knight", oscar: false },
             { t: "Red Rocket", oscar: false },
-            { t: "The Lost Daughter", oscar: false }
+            { t: "The Lost Daughter", oscar: false },
+            { t: "Spider-Man: No Way Home", oscar: false }
           ]
         },
         {
@@ -2472,7 +2539,7 @@
             { t: "RRR", oscar: false },
             { t: "Aftersun", oscar: false },
             { t: "Decision to Leave", oscar: false },
-            { t: "Nope", oscar: false },
+            { t: "Nope", oscar: false, horror: true },
             { t: "Glass Onion: A Knives Out Mystery", oscar: false }
           ]
         },
@@ -2489,11 +2556,11 @@
             { t: "Past Lives", oscar: true },
             { t: "Poor Things", oscar: true },
             { t: "The Zone of Interest", oscar: true },
-            { t: "Spider-Man: Across the Spider-Verse", oscar: false },
             { t: "The Boy and the Heron", oscar: false },
             { t: "Godzilla Minus One", oscar: false },
             { t: "All of Us Strangers", oscar: false },
-            { t: "May December", oscar: false }
+            { t: "May December", oscar: false },
+            { t: "Bottoms", oscar: false }
           ]
         },
         {
@@ -2507,13 +2574,13 @@
             { t: "Emilia Pérez", oscar: true },
             { t: "I'm Still Here", oscar: true },
             { t: "Nickel Boys", oscar: true },
-            { t: "The Substance", oscar: true },
+            { t: "The Substance", oscar: true, horror: true },
             { t: "Wicked", oscar: true },
             { t: "Challengers", oscar: false },
             { t: "A Real Pain", oscar: false },
             { t: "Sing Sing", oscar: false },
             { t: "Flow", oscar: false },
-            { t: "The Wild Robot", oscar: false }
+            { t: "Hit Man", oscar: false }
           ]
         },
         {
@@ -2527,9 +2594,9 @@
             { t: "Marty Supreme", oscar: true },
             { t: "The Secret Agent", oscar: true },
             { t: "Sentimental Value", oscar: true },
-            { t: "Sinners", oscar: true },
+            { t: "Sinners", oscar: true, horror: true },
             { t: "Train Dreams", oscar: true },
-            { t: "Weapons", oscar: false },
+            { t: "Weapons", oscar: false, horror: true },
             { t: "The Life of Chuck", oscar: false },
             { t: "Sorry, Baby", oscar: false },
             { t: "It Was Just an Accident", oscar: false },
@@ -2828,6 +2895,9 @@
       if (item.ww){
         row.classList.add("ww");
       }
+      if (item.horror){
+        row.classList.add("horror");
+      }
 
       var label = document.createElement("label");
       label.setAttribute("for", id);
@@ -2843,6 +2913,12 @@
         wwFlag.className = "ww-flag";
         wwFlag.textContent = "⚔";
         label.appendChild(wwFlag);
+      }
+      if (item.horror){
+        var horrorFlag = document.createElement("span");
+        horrorFlag.className = "horror-flag";
+        horrorFlag.textContent = "☠";
+        label.appendChild(horrorFlag);
       }
 
       /*
