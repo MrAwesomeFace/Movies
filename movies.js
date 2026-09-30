@@ -3045,7 +3045,11 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere",
+      "Prime"
+    ],
     "rated": "PG",
     "tmdbTitle": "Bride Wars"
   },
