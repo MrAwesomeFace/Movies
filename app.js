@@ -21037,8 +21037,20 @@ const seenPool =
 typeof seenPoolActive === "function" &&
 seenPoolActive();
 
+/*
+
+* Christmas is a hand-picked tag on owned movies, and TMDB has
+* no Christmas/holiday genre to match it with, so there's no
+* Seen Christmas bracket.
+  */
+
 const categories =
-["full", ...GENRE_TOURNAMENT_CATEGORIES].map(
+["full", ...GENRE_TOURNAMENT_CATEGORIES]
+.filter(
+category =>
+!(seenPool && category === "christmas")
+)
+.map(
 category =>
 seenPool
 ? "seen:" + category

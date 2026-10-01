@@ -515,7 +515,8 @@
   const tournaments = D.tournaments.filter((t) => String(t.category).startsWith("seen:") === seenMode);
   const tById = new Map(tournaments.map((t) => [t.id, t]));
   const picks = D.picks.filter((p) => tById.has(p.tournament_id)).sort((a, b) => a.decided_at - b.decided_at);
-  const cats = CATEGORIES.map((c) => (seenMode ? "seen:" : "") + c);
+  // No Seen Christmas bracket: Christmas is a hand-picked tag on owned movies only.
+  const cats = CATEGORIES.filter((c) => !(seenMode && c === "christmas")).map((c) => (seenMode ? "seen:" : "") + c);
   document.querySelectorAll("#tournament [data-seen]").forEach((el) => {
     if (el.dataset.owned === undefined) el.dataset.owned = el.textContent;
     el.textContent = seenMode ? el.dataset.seen : el.dataset.owned;

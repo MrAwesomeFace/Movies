@@ -340,6 +340,14 @@ jobs:
 
               credits = info.get("credits") or {}
 
+              genres = [g["name"] for g in info.get("genres", [])]
+
+              # Owned movies get "Rom-Com" by hand in Add Movie; here it's
+              # any movie TMDB lists as both Romance and Comedy, so it can
+              # join Rom-Com brackets the same way.
+              if "Romance" in genres and "Comedy" in genres:
+                  genres.append("Rom-Com")
+
               return {
                   "title": site_title(title),
                   "tmdbTitle": title,
@@ -351,7 +359,7 @@ jobs:
                   ),
                   "year": (info.get("release_date") or "")[:4],
                   "runtime": f"{info['runtime']}m" if info.get("runtime") else "",
-                  "genre": " / ".join(g["name"] for g in info.get("genres", [])),
+                  "genre": " / ".join(genres),
                   "director": ", ".join(
                       p["name"] for p in credits.get("crew", [])
                       if p.get("job") == "Director"
@@ -359,6 +367,7 @@ jobs:
                   "cast": ", ".join(
                       p["name"] for p in credits.get("cast", [])[:6]
                   ),
+                  "synopsis": info.get("overview") or "",
                   "rated": rated,
               }
 

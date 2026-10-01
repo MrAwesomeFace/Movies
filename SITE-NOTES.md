@@ -71,6 +71,9 @@ was never loaded by any page and was deleted on 2026-10-01.
   `seen:comedy`), so they never touch the Owned belts; the site shows plain names everywhere. The
   Worker skips belts and lifetime belt counts for them, `app.js` leaves their winners out of the
   shelf/hub crowns, and the stats page has an Owned | Seen switch on its Tournament tab.
+- **Seen movies carry the same details as owned ones** (from TMDB), except hand-picked tags: a
+  seen movie counts as Rom-Com when TMDB lists both Romance and Comedy, and there's no Seen
+  Christmas bracket because TMDB has no Christmas/holiday genre to match the hand-picked tag.
 - **Server endpoints the newer features need** (all read-only):
   - `/tournament-log` — stats page Tournament tab, and the smarter draw.
   - `/tournaments/:id/matchups` — the Bracket view.
