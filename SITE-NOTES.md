@@ -30,9 +30,21 @@ never in the code.
 | `images/autobot.webp`, `images/decepticon.webp` | The insignias for that animation | `transform-transition.js` |
 | `classics.html` | Classics watchlist page (self-contained) | — |
 | `worker/worker.js` | Backup of the Cloudflare Worker code | Nothing — copy only |
-| `reservations.js` | Older reservations code. No page loads it any more | Nothing |
 | `.github/workflows/add-movie.yml` | Adds or updates a movie in `movies.js` from a TMDB id | Run from the Actions tab |
 | `.github/workflows/resync-metadata.yml` | Fills in missing movie details from TMDB | Run from the Actions tab |
+
+## Where to change what
+
+| To change... | Edit |
+|---|---|
+| The shelf: cards, filters, reservations, wishlist, the basic tournament | `index.html`, `app.js`, `style.css` |
+| Tournament extras: the draw, seeding, Bracket view, Face-off | `tournament-bracket.js` (styles are in `style.css`) |
+| The stats page | `stats.html` |
+| The logo animation | `transform-transition.js` |
+| Anything stored or fetched from the server | `worker/worker.js`, then paste it into Cloudflare and Deploy |
+
+Reservations live entirely in `app.js` (and the Worker). An old separate `reservations.js`
+was never loaded by any page and was deleted on 2026-10-01.
 
 ## What depends on what
 
