@@ -10,7 +10,8 @@ name: Update Seen Movies
 #
 # Letterboxd export import: if data/letterboxd-import.csv exists (a
 # trimmed Date,Name,Year copy of a Letterboxd export's watched.csv), each
-# film is matched to TMDB by title and year and marked watched on the
+# film is matched to TMDB by title and year (or taken from an optional
+# "TMDB ID" column when one is filled in) and marked watched on the
 # Worker first - this catches films that were only marked seen with the
 # eye icon, which never appear in the RSS feed. Films that can't be
 # matched are listed in data/letterboxd-unmatched.md. The import file is
@@ -257,7 +258,14 @@ jobs:
 
               for i, row in enumerate(rows, start=1):
 
-                  tmdb_id = match_film(row["Name"], row["Year"])
+                  # An optional "TMDB ID" column skips the title search
+                  # for films whose Letterboxd title doesn't match TMDB.
+                  given_id = (row.get("TMDB ID") or "").strip()
+
+                  tmdb_id = (
+                      int(given_id) if given_id.isdigit()
+                      else match_film(row["Name"], row["Year"])
+                  )
 
                   if not tmdb_id:
                       unmatched.append(row)
