@@ -10765,6 +10765,20 @@ bracket view is open so a quarter's rounds fit side by side.
   width: min(1100px, 100%);
 }
 
+.tv-pool {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  margin-bottom: 4px;
+}
+
+.tv-pool-note {
+  color: #8a93ab;
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+
 .tv-switch {
   display: inline-flex;
   gap: 2px;

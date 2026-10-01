@@ -8,7 +8,8 @@ Loaded after app.js and uses its globals (movies, RESERVATIONS_API,
 getMovieId, shuffleArray, posterForMovieId, roundLabel,
 pickRoundListWinner, renderRoundList, trackTournamentMatchupTiming,
 wireTournamentBackLink, categoryDisplayName, tournamentChampions,
-tournamentOverlayOpen) - see SITE-NOTES.md. app.js only calls into
+tournamentOverlayOpen, findTournamentMovie, renderTournamentHub) - see
+SITE-NOTES.md. app.js only calls into
 this file through safety checks, so tournaments still work if this
 file is missing or throws.
 
@@ -46,6 +47,145 @@ const SEED_SECTION_ORDER = {
 
 const TOURNAMENT_VIEW_KEY =
   "mrMoviesTournamentView";
+
+const TOURNAMENT_POOL_KEY =
+  "mrMoviesTournamentPool";
+
+
+// =========================================================
+// "EVERYTHING I'VE SEEN" POOL (seen.js)
+// =========================================================
+/*
+ * seen.js lists movies watched on Letterboxd that aren't on the
+ * shelf - built daily by .github/workflows/update-seen.yml. It's
+ * only loaded when the tournament opens (never by the shelf
+ * itself), and the hub toggle decides whether new brackets draw
+ * from it. In-progress brackets can hold non-owned movies
+ * whichever way the toggle is set, so it's loaded either way to
+ * show their posters and details.
+ */
+
+let seenMoviesPromise =
+  null;
+
+let seenMovieList =
+  [];
+
+let seenMovieById =
+  new Map();
+
+function loadSeenMovies() {
+
+  if (!seenMoviesPromise) {
+
+    seenMoviesPromise =
+      new Promise(
+        resolve => {
+          const script = document.createElement("script");
+          script.src = "seen.js";
+          script.onload = () => resolve(true);
+          script.onerror = () => resolve(false);
+          document.head.appendChild(script);
+        }
+      )
+        .then(
+          loaded => {
+            let list = [];
+            try {
+              // seen.js declares a top-level const, not a window property.
+              list = loaded && typeof seenMovies !== "undefined" && Array.isArray(seenMovies)
+                ? seenMovies
+                : [];
+            } catch (error) {}
+            // Anything since added to the shelf is shown from movies.js instead.
+            const owned = new Set(movies.map(movie => String(getMovieId(movie))));
+            seenMovieList =
+              list
+                .filter(movie => !owned.has(String(movie.tmdbId)))
+                .map(movie => Object.assign({}, movie, { notOwned: true }));
+            seenMovieById =
+              new Map(seenMovieList.map(movie => [String(movie.tmdbId), movie]));
+            return seenMovieList;
+          }
+        );
+
+  }
+
+  return seenMoviesPromise;
+
+}
+
+function findSeenMovie(movieId) {
+
+  return seenMovieById.get(String(movieId)) || null;
+
+}
+
+function getTournamentPool() {
+
+  try {
+    return localStorage.getItem(TOURNAMENT_POOL_KEY) === "seen" ? "seen" : "shelf";
+  } catch (error) {
+    return "shelf";
+  }
+
+}
+
+/*
+ * Extra movies app.js adds to every tournament pool - none unless
+ * "Everything I've Seen" is chosen on the hub.
+ */
+function extraTournamentMovies() {
+
+  return getTournamentPool() === "seen"
+    ? seenMovieList
+    : [];
+
+}
+
+function tournamentPoolToggleHTML() {
+
+  const pool =
+    getTournamentPool();
+
+  const button =
+    (value, label) =>
+      `<button type="button" class="tv-switch-button${pool === value ? " active" : ""}" data-tv-pool="${value}" aria-pressed="${pool === value}">${label}</button>`;
+
+  const note =
+    seenMovieList.length
+      ? `New brackets draw from ${pool === "seen" ? `your shelf plus ${seenMovieList.length.toLocaleString("en-US")} more you've seen` : "your shelf"}.`
+      : (pool === "seen" ? "Your seen list hasn't loaded yet, so brackets use your shelf." : "");
+
+  return `<div class="tv-pool">` +
+    `<div class="tv-switch" role="group" aria-label="Movies to draw from">` +
+    button("shelf", "My shelf") +
+    button("seen", "Everything I've seen") +
+    `</div>` +
+    (note ? `<span class="tv-pool-note">${note}</span>` : "") +
+    `</div>`;
+
+}
+
+function wireTournamentPoolToggle() {
+
+  document
+    .querySelectorAll("#tournament-content [data-tv-pool]")
+    .forEach(
+      button => {
+        button.addEventListener(
+          "click",
+          () => {
+            try {
+              localStorage.setItem(TOURNAMENT_POOL_KEY, button.dataset.tvPool);
+            } catch (error) {}
+            renderTournamentHub();
+          }
+        );
+      }
+    );
+
+}
 
 
 // =========================================================
@@ -1028,7 +1168,7 @@ function renderTournamentFaceoff(current) {
     side => {
       const id = matchup[`movie_id_${side}`];
       const title = displayTitle(matchup[`movie_title_${side}`]);
-      const movie = movies.find(m => String(getMovieId(m)) === String(id));
+      const movie = findTournamentMovie(id);
       const meta =
         movie
           ? [movie.year, movie.runtime, (movie.genre || "").split(" / ")[0]].filter(Boolean).join(" · ")

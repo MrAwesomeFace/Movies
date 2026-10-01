@@ -330,6 +330,17 @@
   const all = movies;
   const films = all.filter((m) => m.type === "movie");
   const byId = new Map(all.map((m) => [String(m.tmdbId), m]));
+
+  // Movies watched but not owned (seen.js) can play in tournaments; they're
+  // only looked up here for names and details in the tournament stats, never
+  // counted in the shelf numbers.
+  const seenLoaded = new Promise((resolve) => {
+    const script = document.createElement("script");
+    script.src = "seen.js";
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.head.appendChild(script);
+  });
   const titleOf = (id) => (byId.get(String(id)) || {}).title || `#${id}`;
 
   // Same pool rules as the tournament in app.js.
@@ -431,6 +442,14 @@
   if (!D.hasLog && !D.offline) {
     $("t-notice").hidden = false;
     $("t-notice").textContent = "Tournament stats appear here once the server has the /tournament-log update installed.";
+  }
+
+  if (await seenLoaded) {
+    try {
+      if (typeof seenMovies !== "undefined" && Array.isArray(seenMovies)) {
+        seenMovies.forEach((m) => { if (!byId.has(String(m.tmdbId))) byId.set(String(m.tmdbId), m); });
+      }
+    } catch (e) {}
   }
 
   const isWatched = (m) => D.watched.has(`${m.type}:${m.tmdbId}`);

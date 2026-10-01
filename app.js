@@ -20443,11 +20443,29 @@ function getTournamentEligibleMovies() {
 * tournament category.
   */
 
-return movies.filter(
+const ownedAndWatched =
+movies.filter(
 movie =>
 movie.type === "movie" &&
 isMovieWatched(movie)
 );
+
+/*
+
+* "Everything I've Seen" pool (toggle on the tournament hub) -
+* adds watched-but-not-owned movies from seen.js. Only applies
+* when tournament-bracket.js has loaded and that pool is chosen.
+  */
+
+if (typeof extraTournamentMovies === "function") {
+
+return ownedAndWatched.concat(
+extraTournamentMovies()
+);
+
+}
+
+return ownedAndWatched;
 
 }
 
@@ -20525,16 +20543,47 @@ category.slice(1)
 
 }
 
-function posterForMovieId(
+/*
+
+* Finds a tournament entrant by id - on the shelf first, then
+* (when it has loaded) the "Everything I've Seen" list from
+* seen.js, so movies watched but not owned still get a poster,
+* year, cast and so on. See tournament-bracket.js.
+  */
+
+function findTournamentMovie(
 movieId
 ) {
 
-const match =
+const owned =
 movies.find(
 m =>
 String(
 getMovieId(m)
 ) === String(movieId)
+);
+
+if (owned) {
+
+return owned;
+
+}
+
+return typeof findSeenMovie === "function"
+? findSeenMovie(
+movieId
+)
+: null;
+
+}
+
+function posterForMovieId(
+movieId
+) {
+
+const match =
+findTournamentMovie(
+movieId
 );
 
 return (
@@ -20910,6 +20959,12 @@ content.innerHTML =
 `<h2 class="tournament-heading">Movie tournament</h2>` +
 `<p class="tournament-subtext">Loading...</p>`;
 
+if (typeof loadSeenMovies === "function") {
+
+await loadSeenMovies();
+
+}
+
 const categories =
 ["full", ...GENRE_TOURNAMENT_CATEGORIES];
 
@@ -20926,6 +20981,11 @@ category
 let html =
 `<h2 class="tournament-heading">Movie tournament</h2>` +
 `<p class="tournament-subtext">A quick random bracket for one sitting, or a longer one that remembers where you left off.</p>` +
+(
+typeof tournamentPoolToggleHTML === "function"
+? tournamentPoolToggleHTML()
+: ""
+) +
 `<div class="tournament-category-grid">`;
 
 html +=
@@ -20988,6 +21048,12 @@ html +=
 
 content.innerHTML =
 html;
+
+if (typeof wireTournamentPoolToggle === "function") {
+
+wireTournamentPoolToggle();
+
+}
 
 content
 .querySelectorAll(
@@ -21456,11 +21522,8 @@ entry.category === tournament.category
 
 const winnerMovie =
 champEntry
-? movies.find(
-m =>
-String(
-getMovieId(m)
-) === String(champEntry.movie_id)
+? findTournamentMovie(
+champEntry.movie_id
 )
 : null;
 
@@ -22057,19 +22120,13 @@ return;
 }
 
 const movieA =
-movies.find(
-m =>
-String(
-getMovieId(m)
-) === String(matchup.movie_id_a)
+findTournamentMovie(
+matchup.movie_id_a
 );
 
 const movieB =
-movies.find(
-m =>
-String(
-getMovieId(m)
-) === String(matchup.movie_id_b)
+findTournamentMovie(
+matchup.movie_id_b
 );
 
 if (!movieA || !movieB) {
@@ -22253,19 +22310,13 @@ return;
 }
 
 const movieA =
-movies.find(
-m =>
-String(
-getMovieId(m)
-) === String(matchup.movie_id_a)
+findTournamentMovie(
+matchup.movie_id_a
 );
 
 const movieB =
-movies.find(
-m =>
-String(
-getMovieId(m)
-) === String(matchup.movie_id_b)
+findTournamentMovie(
+matchup.movie_id_b
 );
 
 if (!movieA || !movieB) {

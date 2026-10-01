@@ -1,0 +1,428 @@
+name: Update Seen Movies
+
+# Keeps seen.js - every movie watched on Letterboxd that ISN'T in
+# movies.js - up to date, for the tournament's "Everything I've Seen"
+# pool.
+#
+# Daily: asks the Worker for the watched list (which the Worker's own
+# 9:00 UTC Letterboxd RSS sync keeps current), and fetches TMDB details
+# for anything new.
+#
+# Letterboxd export import: if data/letterboxd-import.csv exists (a
+# trimmed Date,Name,Year copy of a Letterboxd export's watched.csv), each
+# film is matched to TMDB by title and year and marked watched on the
+# Worker first - this catches films that were only marked seen with the
+# eye icon, which never appear in the RSS feed. Films that can't be
+# matched are listed in data/letterboxd-unmatched.md. The import file is
+# deleted once it has been processed. To re-import later, export from
+# Letterboxd again, trim watched.csv to Date,Name,Year, upload it as
+# data/letterboxd-import.csv and run this workflow from the Actions tab.
+
+on:
+  schedule:
+    # About an hour after the Worker's daily Letterboxd sync.
+    - cron: "15 10 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: update-seen
+  cancel-in-progress: false
+
+jobs:
+  update-seen:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Import Letterboxd export and update seen.js
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+
+        run: |
+          cat > update_seen.py <<'PYTHON'
+          import csv
+          import difflib
+          import json
+          import os
+          import re
+          import time
+          import urllib.error
+          import urllib.parse
+          import urllib.request
+
+
+          # =========================================================
+          # SETUP
+          # =========================================================
+
+          API_KEY = os.environ["TMDB_API_KEY"]
+
+          WORKER_URL = os.environ.get(
+              "WORKER_URL",
+              "https://movie-reservations.iconedge.workers.dev"
+          )
+
+          TMDB_URL = os.environ.get(
+              "TMDB_URL",
+              "https://api.themoviedb.org/3"
+          )
+
+          IMPORT_FILE = "data/letterboxd-import.csv"
+          UNMATCHED_FILE = "data/letterboxd-unmatched.md"
+
+          # TMDB allows far more than this; the pause just keeps a
+          # first run of a few thousand lookups comfortably polite.
+          REQUEST_DELAY_SECONDS = 0.05
+
+
+          def fetch_json(request):
+
+              for attempt in range(5):
+
+                  try:
+                      with urllib.request.urlopen(request, timeout=30) as response:
+                          return json.load(response)
+
+                  except urllib.error.HTTPError as e:
+                      if e.code == 429 or e.code >= 500:
+                          time.sleep(2 ** attempt)
+                          continue
+                      raise
+
+                  except urllib.error.URLError:
+                      time.sleep(2 ** attempt)
+
+              raise SystemExit(f"ERROR: gave up on {request.full_url}")
+
+
+          def tmdb_get(path, params=None):
+
+              query = {"language": "en-US"}
+              query.update(params or {})
+
+              time.sleep(REQUEST_DELAY_SECONDS)
+
+              return fetch_json(
+                  urllib.request.Request(
+                      f"{TMDB_URL}/{path}?"
+                      + urllib.parse.urlencode(query),
+                      headers={
+                          "User-Agent": "BW-Movie-Collection",
+                          "Authorization": f"Bearer {API_KEY}",
+                          "accept": "application/json",
+                      }
+                  )
+              )
+
+
+          def worker_request(method, path, body=None):
+
+              return fetch_json(
+                  urllib.request.Request(
+                      WORKER_URL + path,
+                      method=method,
+                      data=json.dumps(body).encode() if body is not None else None,
+                      headers={
+                          "User-Agent": "BW-Movie-Collection",
+                          "Content-Type": "application/json",
+                      }
+                  )
+              )
+
+
+          def load_js_array(path):
+
+              if not os.path.exists(path):
+                  return []
+
+              with open(path, "r", encoding="utf-8") as f:
+                  text = f.read()
+
+              start = text.find("[")
+              end = text.rfind("]")
+
+              if start == -1 or end == -1:
+                  raise SystemExit(f"ERROR: Could not locate the array in {path}.")
+
+              return json.loads(
+                  re.sub(r",(\s*[\}\]])", r"\1", text[start:end + 1])
+              )
+
+
+          def watched_movie_ids():
+
+              return {
+                  str(row["tmdb_id"])
+                  for row in worker_request("GET", "/watched")
+                  if (row.get("type") or "movie") == "movie"
+              }
+
+
+          # =========================================================
+          # LETTERBOXD EXPORT IMPORT (only when the import file exists)
+          # =========================================================
+
+          def normalize(title):
+
+              title = title.lower().replace("&", "and")
+              return re.sub(r"[^a-z0-9]", "", title)
+
+
+          def release_year(result):
+
+              date = result.get("release_date") or ""
+              return int(date[:4]) if date[:4].isdigit() else None
+
+
+          def match_film(name, year):
+
+              """
+              TMDB id for a Letterboxd title + year, or None. Takes an
+              exact title match released within a year either side
+              (release years differ between sites now and then), or
+              failing that the top result from that exact year if its
+              title is nearly identical (punctuation, small wording
+              differences). Anything less certain stays unmatched and
+              goes to the review list rather than risk marking the
+              wrong film watched.
+              """
+
+              wanted = normalize(name)
+              year = int(year) if str(year).isdigit() else None
+
+              searches = []
+
+              if year:
+                  searches.append({"query": name, "primary_release_year": year})
+                  searches.append({"query": name, "year": year})
+
+              searches.append({"query": name})
+
+              fallback = None
+
+              for params in searches:
+
+                  results = tmdb_get("search/movie", params).get("results", [])[:10]
+
+                  for result in results:
+                      titles = {
+                          normalize(result.get("title") or ""),
+                          normalize(result.get("original_title") or ""),
+                      }
+                      result_year = release_year(result)
+                      close = (
+                          year is None or
+                          (result_year is not None and abs(result_year - year) <= 1)
+                      )
+                      if wanted in titles and close:
+                          return result["id"]
+
+                  if (
+                      fallback is None and
+                      results and
+                      year and
+                      release_year(results[0]) == year and
+                      difflib.SequenceMatcher(
+                          None,
+                          wanted,
+                          normalize(results[0].get("title") or "")
+                      ).ratio() >= 0.85
+                  ):
+                      fallback = results[0]["id"]
+
+              return fallback
+
+
+          if os.path.exists(IMPORT_FILE):
+
+              with open(IMPORT_FILE, "r", encoding="utf-8") as f:
+                  rows = list(csv.DictReader(f))
+
+              print(f"Importing {len(rows)} Letterboxd films...")
+
+              already = watched_movie_ids()
+              unmatched = []
+              marked = 0
+
+              for i, row in enumerate(rows, start=1):
+
+                  tmdb_id = match_film(row["Name"], row["Year"])
+
+                  if not tmdb_id:
+                      unmatched.append(row)
+                      continue
+
+                  if str(tmdb_id) not in already:
+                      worker_request(
+                          "POST",
+                          "/watched",
+                          {
+                              "tmdb_id": tmdb_id,
+                              "type": "movie",
+                              "source": "letterboxd-export",
+                              "watched_at": row.get("Date") or None,
+                          }
+                      )
+                      already.add(str(tmdb_id))
+                      marked += 1
+
+                  if i % 250 == 0:
+                      print(f"  {i}/{len(rows)} checked")
+
+              print(f"Marked {marked} newly watched, {len(unmatched)} couldn't be matched.")
+
+              if unmatched:
+                  with open(UNMATCHED_FILE, "w", encoding="utf-8") as f:
+                      f.write("# Letterboxd films that couldn't be matched to TMDB\n\n")
+                      f.write("These weren't marked watched. Add any that matter by hand.\n\n")
+                      f.write("| Title | Year |\n|---|---|\n")
+                      for row in unmatched:
+                          f.write(f"| {row['Name']} | {row['Year']} |\n")
+              elif os.path.exists(UNMATCHED_FILE):
+                  os.remove(UNMATCHED_FILE)
+
+              # Everything it needed is now on the Worker; the public repo
+              # doesn't need to keep the list.
+              os.remove(IMPORT_FILE)
+
+
+          # =========================================================
+          # UPDATE seen.js
+          # =========================================================
+
+          def site_title(title):
+
+              """Same "Dark Knight, The" convention movies.js uses."""
+
+              match = re.match(r"^(The|A|An) (.+)$", title)
+              return f"{match.group(2)}, {match.group(1)}" if match else title
+
+
+          def build_entry(tmdb_id):
+
+              try:
+                  info = tmdb_get(
+                      f"movie/{tmdb_id}",
+                      {"append_to_response": "credits,release_dates"}
+                  )
+              except urllib.error.HTTPError as e:
+                  if e.code == 404:
+                      return None
+                  raise
+
+              title = info.get("title") or ""
+
+              if not title:
+                  return None
+
+              rated = "NR"
+
+              for entry in (info.get("release_dates") or {}).get("results", []):
+                  if entry.get("iso_3166_1") != "US":
+                      continue
+                  for release in entry.get("release_dates", []):
+                      cert = (release.get("certification") or "").strip()
+                      if cert:
+                          rated = cert
+                          break
+                  break
+
+              credits = info.get("credits") or {}
+
+              return {
+                  "title": site_title(title),
+                  "tmdbTitle": title,
+                  "type": "movie",
+                  "tmdbId": int(tmdb_id),
+                  "poster": (
+                      "https://image.tmdb.org/t/p/w500" + info["poster_path"]
+                      if info.get("poster_path") else ""
+                  ),
+                  "year": (info.get("release_date") or "")[:4],
+                  "runtime": f"{info['runtime']}m" if info.get("runtime") else "",
+                  "genre": " / ".join(g["name"] for g in info.get("genres", [])),
+                  "director": ", ".join(
+                      p["name"] for p in credits.get("crew", [])
+                      if p.get("job") == "Director"
+                  ),
+                  "cast": ", ".join(
+                      p["name"] for p in credits.get("cast", [])[:6]
+                  ),
+                  "rated": rated,
+              }
+
+
+          owned_ids = {
+              str(m.get("tmdbId"))
+              for m in load_js_array("movies.js")
+              if m.get("type") == "movie"
+          }
+
+          watched_ids = watched_movie_ids()
+
+          # Drop anything since added to the shelf (or un-watched).
+          seen = [
+              m for m in load_js_array("seen.js")
+              if str(m["tmdbId"]) not in owned_ids and str(m["tmdbId"]) in watched_ids
+          ]
+
+          have = {str(m["tmdbId"]) for m in seen}
+
+          needed = sorted(watched_ids - owned_ids - have, key=int)
+
+          print(f"{len(watched_ids)} watched, {len(owned_ids)} owned, "
+                f"{len(seen)} already in seen.js, {len(needed)} to look up.")
+
+          for i, tmdb_id in enumerate(needed, start=1):
+              entry = build_entry(tmdb_id)
+              if entry:
+                  seen.append(entry)
+              if i % 250 == 0:
+                  print(f"  {i}/{len(needed)} looked up")
+
+          seen.sort(key=lambda m: (m["title"].lower(), m["year"]))
+
+          with open("seen.js", "w", encoding="utf-8") as f:
+              f.write(
+                  "// Generated by .github/workflows/update-seen.yml - movies watched on\n"
+                  "// Letterboxd that aren't in movies.js. Don't edit by hand: the next\n"
+                  "// run rewrites this file.\n"
+                  "const seenMovies = [\n"
+              )
+              f.write(",\n".join(
+                  json.dumps(m, ensure_ascii=False, separators=(",", ":"))
+                  for m in seen
+              ))
+              f.write("\n];\n")
+
+          print(f"seen.js now has {len(seen)} movies.")
+          PYTHON
+
+          python update_seen.py
+
+      - name: Commit changes
+        run: |
+          git config user.name "BW Movie Catalog"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add -A seen.js data
+
+          if git diff --cached --quiet; then
+            echo "No changes were made."
+            exit 0
+          fi
+
+          git commit -m "Update seen movies from Letterboxd"
+          git pull --rebase
+          git push
