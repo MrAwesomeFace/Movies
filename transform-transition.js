@@ -3,7 +3,7 @@
 TRANSFORMERS TRANSITION
 =========================================================
 Old-cartoon bumper between the shelf and the stats page:
-the insignia spins in on black, catches a chrome glint,
+the insignia zooms in on black, catches a chrome glint,
 then flips over to the other faction before the next page
 loads.
 
@@ -163,20 +163,12 @@ entirely and just follow the link.
       window.location.href = href;
     }
 
-    // Spin in from deep space, two full turns, landing face-on.
+    // Zoom in face-on, no spin - the only flip is the one below.
     stage.animate(
       [
         { transform: "scale(0.12)", opacity: 0 },
         { transform: "scale(0.6)", opacity: 1, offset: 0.35 },
         { transform: "scale(1)", opacity: 1 }
-      ],
-      { duration: 750, easing: "cubic-bezier(.2,.7,.3,1)", fill: "forwards" }
-    );
-    card.animate(
-      [
-        { transform: "rotateY(-720deg)" },
-        { transform: "rotateY(-300deg)", offset: 0.35 },
-        { transform: "rotateY(0deg)" }
       ],
       { duration: 750, easing: "cubic-bezier(.2,.7,.3,1)", fill: "forwards" }
     );
