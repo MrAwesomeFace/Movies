@@ -156,13 +156,15 @@
   /* head-to-head split bars */
   .h2h { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
   .h2h li { display: grid; gap: 4px; }
-  .h2h .names { display: flex; justify-content: space-between; gap: 10px; font-size: 13.5px; }
+  .h2h .names { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: baseline; gap: 10px; font-size: 13.5px; }
   .h2h .names span:last-child { color: var(--ink-3); text-align: right; }
   .h2h .sb { display: flex; height: 12px; gap: 2px; border-radius: 4px; overflow: hidden; }
   .h2h .sb i { background: var(--gold); }
   .h2h .sb i + i { background: var(--cool); opacity: 0.55; }
-  .h2h .names b { font-family: var(--label); font-weight: 500; color: var(--gold); margin-right: 6px; font-variant-numeric: tabular-nums; }
-  .h2h .names span:last-child b { color: var(--ink-2); margin: 0 0 0 6px; }
+  .h2h .names b { font-family: var(--label); font-weight: 500; font-variant-numeric: tabular-nums; }
+  .h2h .names span:first-child b { color: var(--gold); }
+  .h2h .names span:last-child b { color: var(--ink-2); }
+  .h2h .names .pct { font-family: var(--label); font-weight: 700; font-size: 16px; color: var(--gold); text-align: center; }
 
   .big { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
   .big .a { font-family: var(--display); font-size: 44px; line-height: 1; color: var(--gold); }
@@ -693,7 +695,10 @@
   const gl = [...gp.values()].filter((e) => e.wx + e.wy >= 8).sort((a, b) => (b.wx + b.wy) - (a.wx + a.wy)).slice(0, 7)
     .map((e) => e.wx >= e.wy ? e : { x: e.y, y: e.x, wx: e.wy, wy: e.wx });
   $("genreh2h").innerHTML = gl.length ? gl.map((e) =>
-    `<li title="${esc(e.x)} ${e.wx}, ${esc(e.y)} ${e.wy}"><div class="names"><span><b>${pct(e.wx / (e.wx + e.wy))}</b>${esc(e.x)}</span><span>${esc(e.y)}<b>${e.wy}–${e.wx}</b></span></div>` +
+    `<li title="${esc(e.x)} won ${e.wx} of ${e.wx + e.wy} meetings with ${esc(e.y)}"><div class="names">` +
+    `<span>${esc(e.x)} · <b>${e.wx} wins</b></span>` +
+    `<span class="pct">${pct(e.wx / (e.wx + e.wy))}</span>` +
+    `<span><b>${e.wy} wins</b> · ${esc(e.y)}</span></div>` +
     `<div class="sb"><i style="flex:${e.wx}"></i><i style="flex:${e.wy}"></i></div></li>`).join("")
     : `<li class="empty">Needs more cross-genre matchups.</li>`;
 
