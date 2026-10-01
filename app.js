@@ -20565,6 +20565,121 @@ match && match.poster
 * bracket already works.
   */
 
+/*
+
+* SAFETY NET FOR tournament-bracket.js
+*
+* The smarter draw/seeding and the Bracket/Face-off views live
+* in tournament-bracket.js. Everything below checks that file
+* actually loaded (and didn't throw) before using it, and falls
+* back to the original behavior otherwise - a plain random draw
+* that keeps the reigning champion in, and the plain round list
+* - so a missing or broken tournament-bracket.js can never stop
+* a bracket from being started or played.
+  */
+
+async function drawTournamentField(
+category,
+pool,
+size
+) {
+
+if (typeof buildTournamentField === "function") {
+
+try {
+
+return await buildTournamentField(
+category,
+pool,
+size
+);
+
+} catch (error) {
+
+console.error(
+"Seeded draw failed, using a plain random draw:",
+error
+);
+
+}
+
+}
+
+const champEntry =
+tournamentChampions.find(
+entry =>
+entry.category === category
+);
+
+const championMovie =
+champEntry
+? pool.find(
+movie =>
+String(
+getMovieId(movie)
+) === String(champEntry.movie_id)
+)
+: null;
+
+if (championMovie && size < pool.length) {
+
+const others =
+shuffleArray(
+pool.filter(
+movie =>
+movie !== championMovie
+)
+).slice(
+0,
+size - 1
+);
+
+return shuffleArray(
+[championMovie, ...others]
+);
+
+}
+
+return shuffleArray(
+pool
+).slice(
+0,
+size
+);
+
+}
+
+function showTournamentRound(
+current
+) {
+
+if (typeof renderTournamentRound === "function") {
+
+try {
+
+renderTournamentRound(
+current
+);
+
+return;
+
+} catch (error) {
+
+console.error(
+"Tournament view failed, showing the round list:",
+error
+);
+
+}
+
+}
+
+renderRoundList(
+current
+);
+
+}
+
 async function buildCappedTournamentPayload(
 category,
 pool,
@@ -20588,16 +20703,8 @@ return null;
 
 }
 
-/*
-
-* The draw (contenders, fresh faces, bad luck, open draw) and
-* the light seeding both live in tournament-bracket.js - see
-* buildTournamentField. It keeps the reigning champion in, the
-* same as the plain random draw this replaced.
-  */
-
 const drawn =
-await buildTournamentField(
+await drawTournamentField(
 category,
 pool,
 size
@@ -20992,7 +21099,7 @@ category
 activeTournamentCategory =
 category;
 
-renderTournamentRound(
+showTournamentRound(
 current
 );
 
@@ -21158,7 +21265,11 @@ let html =
 `<h2 class="tournament-heading">${categoryDisplayName(tournament.category)}</h2>` +
 `<div class="tournament-round-label">${label}</div>` +
 `<div class="tournament-round-progress">${matchups.length} matchup${matchups.length === 1 ? "" : "s"} to decide</div>` +
-tournamentViewSwitcherHTML() +
+(
+typeof tournamentViewSwitcherHTML === "function"
+? tournamentViewSwitcherHTML()
+: ""
+) +
 `<div class="tournament-matchup-list">`;
 
 matchups.forEach(
@@ -21195,9 +21306,13 @@ html;
 
 wireTournamentBackLink();
 
+if (typeof wireTournamentViewSwitcher === "function") {
+
 wireTournamentViewSwitcher(
 current
 );
+
+}
 
 content
 .querySelectorAll(
@@ -21388,7 +21503,7 @@ await fetchCurrentTournament(
 tournament.category
 );
 
-renderTournamentRound(
+showTournamentRound(
 refreshed
 );
 
@@ -21431,7 +21546,7 @@ getTournamentEligibleMovies();
 
 const pool =
 eligible.length >= 16
-? await buildTournamentField(
+? await drawTournamentField(
 "quick16",
 eligible,
 16

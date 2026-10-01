@@ -6,8 +6,11 @@ Tournament draw, seeding, bracket view and face-off mode
 
 Loaded after app.js and uses its globals (movies, RESERVATIONS_API,
 getMovieId, shuffleArray, posterForMovieId, roundLabel,
-pickRoundListWinner, renderRoundList, wireTournamentBackLink,
-categoryDisplayName, tournamentChampions).
+pickRoundListWinner, renderRoundList, trackTournamentMatchupTiming,
+wireTournamentBackLink, categoryDisplayName, tournamentChampions,
+tournamentOverlayOpen) - see SITE-NOTES.md. app.js only calls into
+this file through safety checks, so tournaments still work if this
+file is missing or throws.
 
 THE DRAW
 Every new bracket is built from four groups, each drawn at random:
