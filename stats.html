@@ -104,6 +104,7 @@
   .bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
   .bar { display: grid; grid-template-columns: minmax(96px, 34%) 1fr 56px; align-items: center; gap: 10px; font-size: 14px; }
   .bar .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bar .why { grid-column: 1 / -1; margin-top: -6px; font-size: 12.5px; color: var(--ink-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .bar .track { height: 14px; background: var(--track); border-radius: 0 4px 4px 0; position: relative; display: flex; gap: 2px; overflow: hidden; }
   .bar .fill { background: var(--gold); min-width: 2px; height: 100%; }
   .bar .fill.rest { background: var(--cool); opacity: 0.55; }
@@ -717,18 +718,40 @@
   if ($("oldnew")) $("oldnew").querySelectorAll(".fill").forEach((el, i) => { const g = gaps.filter((g) => g.all)[i]; el.style.width = pct(g.old / g.all); });
 
   // ---------- director / actor win rates
+  // Win rate per person, plus the 1-2 movies with the most wins behind it.
   function winRates(keysOf, min) {
     const o = new Map();
     picks.forEach((p) => [p.a, p.b].forEach((id) => {
       const m = byId.get(id); if (!m) return;
-      keysOf(m).forEach((k) => { if (!o.has(k)) o.set(k, { w: 0, n: 0 }); const e = o.get(k); e.n++; if (p.winner === id) e.w++; });
+      const won = p.winner === id;
+      keysOf(m).forEach((k) => {
+        if (!o.has(k)) o.set(k, { w: 0, n: 0, movies: new Map() });
+        const e = o.get(k);
+        e.n++; if (won) e.w++;
+        const r = e.movies.get(id) || { w: 0, l: 0 };
+        won ? r.w++ : r.l++;
+        e.movies.set(id, r);
+      });
     }));
     return [...o.entries()].filter(([, e]) => e.n >= min).sort((a, b) => b[1].w / b[1].n - a[1].w / a[1].n)
-      .slice(0, 8).map(([k, e]) => [k, e.w / e.n, `${pct(e.w / e.n)}`, `${k}: ${e.w}–${e.n - e.w}`]);
+      .slice(0, 8).map(([k, e]) => ({
+        name: k, rate: e.w / e.n, w: e.w, l: e.n - e.w,
+        leaders: [...e.movies.entries()].filter(([, r]) => r.w > 0)
+          .sort((a, b) => b[1].w - a[1].w || a[1].l - b[1].l).slice(0, 2)
+          .map(([id, r]) => `${titleOf(id)} ${r.w}–${r.l}`),
+      }));
   }
-  bars("dirwin", winRates((m) => split(m.director), 12));
-  bars("actwin", winRates((m) => split(m.cast).slice(0, 4), 15));
-  ["dirwin", "actwin"].forEach((id) => $(id) && $(id).querySelectorAll(".fill").forEach((el) => { el.style.width = el.parentNode.parentNode.querySelector(".val").textContent; }));
+  function winRateBars(id, list) {
+    if (!list.length) { $(id).outerHTML = `<p class="empty">Nothing yet.</p>`; return; }
+    $(id).innerHTML = list.map((r) =>
+      `<li class="bar" title="${esc(r.name)}: ${r.w}–${r.l}"><span class="name">${esc(r.name)}</span>` +
+      `<span class="track"><span class="fill" style="width:${pct(r.rate)}"></span></span>` +
+      `<span class="val">${pct(r.rate)}</span>` +
+      (r.leaders.length ? `<span class="why">(${esc(r.leaders.join(", "))})</span>` : "") +
+      `</li>`).join("");
+  }
+  winRateBars("dirwin", winRates((m) => split(m.director), 12));
+  winRateBars("actwin", winRates((m) => split(m.cast).slice(0, 4), 15));
 
   // ---------- watch backlog by genre
   const genreRows = tally(films, genresOf).slice(0, 12);
