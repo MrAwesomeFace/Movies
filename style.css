@@ -10752,3 +10752,454 @@ body.theme-arcade .marquee-reset-button {
     drop-shadow(0 0 4px rgba(251, 205, 54, 0.8))
     drop-shadow(0 0 9px rgba(251, 205, 54, 0.5));
 }
+
+
+/* =========================================================
+TOURNAMENT VIEWS - LIST / BRACKET / FACE-OFF
+=========================================================
+Built by tournament-bracket.js. The panel widens while the
+bracket view is open so a quarter's rounds fit side by side.
+========================================================= */
+
+.tournament-panel:has(.tv-wide) {
+  width: min(1100px, 100%);
+}
+
+.tv-switch {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  margin: 2px 0 16px;
+  border: 1px solid var(--gold-dark);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.tv-switch-button {
+  padding: 6px 14px;
+  border: 0;
+  border-radius: 7px;
+  background: none;
+  color: #b9c6e5;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.tv-switch-button.active {
+  background: var(--gold);
+  color: #1a1300;
+  font-weight: 700;
+}
+
+.tv-switch-button:focus-visible,
+.tv-chip:focus-visible,
+.tv-entrant:focus-visible,
+.fo-card:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.tv-hint {
+  color: #8a93ab;
+  font-size: 12px;
+  margin: 10px 0 0;
+}
+
+/* quarter picker */
+
+.tv-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.tv-chip {
+  display: grid;
+  padding: 6px 12px;
+  border: 1px solid rgba(251, 205, 54, 0.25);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #b9c6e5;
+  text-align: left;
+  cursor: pointer;
+}
+
+.tv-chip small {
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8a93ab;
+}
+
+.tv-chip span {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.tv-chip em {
+  font-style: normal;
+  font-size: 11px;
+  color: var(--gold);
+}
+
+.tv-chip.active {
+  border-color: var(--gold);
+  background: rgba(251, 205, 54, 0.1);
+}
+
+/* bracket tree */
+
+.tv-tree-scroll {
+  --tv-unit: 30px;
+  --tv-gap: 26px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 6px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.tv-tree {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  column-gap: var(--tv-gap);
+  min-width: 820px;
+  padding: 12px 14px 6px;
+}
+
+.tv-col {
+  display: grid;
+  align-content: start;
+  scroll-snap-align: start;
+}
+
+.tv-col h3 {
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8a93ab;
+}
+
+.tv-col h3.now {
+  color: var(--gold);
+}
+
+.tv-slots {
+  display: grid;
+  grid-auto-rows: var(--tv-unit);
+}
+
+.tv-cell {
+  display: grid;
+}
+
+.tv-match {
+  position: relative;
+  align-self: center;
+  display: grid;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tv-match.live {
+  border-color: var(--gold);
+}
+
+/* stub toward the next round */
+.tv-cell.has-next > .tv-match::after {
+  content: "";
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  width: calc(var(--tv-gap) / 2);
+  border-top: 2px solid rgba(185, 198, 229, 0.35);
+}
+
+/* arm joining the two feeders, then into this matchup */
+.tv-cell.fed > .tv-match::before {
+  content: "";
+  position: absolute;
+  right: 100%;
+  top: calc(50% - var(--span) / 4);
+  width: calc(var(--tv-gap) / 2);
+  height: calc(var(--span) / 2);
+  border: 2px solid rgba(185, 198, 229, 0.35);
+  border-left: 0;
+}
+
+.tv-entrant {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  height: 26px;
+  padding: 0 8px;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 12.5px;
+  text-align: left;
+}
+
+.tv-entrant + .tv-entrant {
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.tv-entrant .t {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tv-entrant .seed {
+  flex-shrink: 0;
+  min-width: 16px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #8a93ab;
+  text-align: center;
+}
+
+.tv-entrant.won .t {
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.tv-entrant.won::after {
+  content: "\2713";
+  color: var(--gold);
+  font-size: 11px;
+}
+
+.tv-entrant.lost {
+  color: #8a93ab;
+}
+
+.tv-entrant.lost .t {
+  text-decoration: line-through;
+  text-decoration-color: rgba(138, 147, 171, 0.5);
+}
+
+.tv-entrant.tbd {
+  color: #8a93ab;
+  font-style: italic;
+}
+
+.tv-entrant.pick {
+  cursor: pointer;
+}
+
+.tv-entrant.pick:hover {
+  background: rgba(251, 205, 54, 0.12);
+}
+
+.tv-end {
+  align-self: center;
+  padding: 8px 10px;
+  border: 2px solid var(--gold);
+  border-radius: 8px;
+  background: rgba(251, 205, 54, 0.08);
+  text-align: center;
+}
+
+.tv-end small {
+  display: block;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.tv-end strong {
+  font-size: 13px;
+}
+
+.tv-third {
+  align-self: end;
+}
+
+/* face-off */
+
+.fo-progress {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 14px;
+  color: #b9c6e5;
+  font-size: 12.5px;
+}
+
+.fo-bar {
+  height: 6px;
+  overflow: hidden;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.fo-bar i {
+  display: block;
+  height: 100%;
+  background: var(--gold);
+}
+
+.fo-note {
+  margin-bottom: 8px;
+  color: var(--gold);
+  font-size: 13px;
+}
+
+.fo-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+  max-width: 600px;
+  margin: 0 auto;
+  animation: fo-slide-in 0.3s ease-out;
+}
+
+@keyframes fo-slide-in {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: none; }
+}
+
+.fo-card {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.25s, opacity 0.25s, filter 0.25s;
+}
+
+.fo-poster {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  background-color: #10307f;
+  background-size: cover;
+  background-position: center;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.fo-card:hover .fo-poster {
+  border-color: var(--gold);
+}
+
+.fo-title {
+  width: 100%;
+  padding: 36px 10px 10px;
+  background: linear-gradient(transparent, rgba(2, 10, 35, 0.92) 45%);
+  font-size: clamp(14px, 3vw, 19px);
+  font-weight: 700;
+  line-height: 1.15;
+  text-align: left;
+}
+
+.fo-meta {
+  color: #8a93ab;
+  font-size: 12.5px;
+}
+
+.fo-vs {
+  align-self: center;
+  font-family: 'VT323', monospace;
+  color: var(--gold);
+  font-size: clamp(26px, 6vw, 40px);
+}
+
+.fo-card.win {
+  transform: scale(1.04);
+}
+
+.fo-card.win .fo-poster {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 4px rgba(251, 205, 54, 0.15), 0 0 28px rgba(251, 205, 54, 0.35);
+}
+
+.fo-card.lose {
+  opacity: 0.25;
+  transform: scale(0.94);
+  filter: grayscale(1);
+}
+
+.fo-break {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+  padding: 28px 16px;
+  border: 1px solid rgba(251, 205, 54, 0.25);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.fo-break strong {
+  font-family: 'VT323', monospace;
+  color: var(--gold);
+  font-size: 30px;
+  font-weight: 400;
+}
+
+.fo-start {
+  padding: 9px 16px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--gold);
+  color: #1a1300;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+
+  .tv-chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .tv-chip {
+    flex: 0 0 auto;
+  }
+
+  .tv-tree {
+    grid-auto-columns: 70vw;
+    min-width: max-content;
+  }
+
+  .fo-stage {
+    gap: 6px;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .fo-stage {
+    animation: none;
+  }
+
+  .fo-card {
+    transition: none;
+  }
+
+}

@@ -20565,7 +20565,7 @@ match && match.poster
 * bracket already works.
   */
 
-function buildCappedTournamentPayload(
+async function buildCappedTournamentPayload(
 category,
 pool,
 cap
@@ -20588,67 +20588,20 @@ return null;
 
 }
 
-let drawn;
+/*
 
-if (size < pool.length) {
+* The draw (contenders, fresh faces, bad luck, open draw) and
+* the light seeding both live in tournament-bracket.js - see
+* buildTournamentField. It keeps the reigning champion in, the
+* same as the plain random draw this replaced.
+  */
 
-const champEntry =
-tournamentChampions.find(
-entry =>
-entry.category === category
-);
-
-const championMovie =
-champEntry
-? pool.find(
-movie =>
-String(
-getMovieId(movie)
-) === String(champEntry.movie_id)
-)
-: null;
-
-if (championMovie) {
-
-const others =
-shuffleArray(
-pool.filter(
-movie =>
-movie !== championMovie
-)
-).slice(
-0,
-size - 1
-);
-
-drawn =
-shuffleArray(
-[championMovie, ...others]
-);
-
-} else {
-
-drawn =
-shuffleArray(
-pool
-).slice(
-0,
+const drawn =
+await buildTournamentField(
+category,
+pool,
 size
 );
-
-}
-
-} else {
-
-drawn =
-shuffleArray(
-pool
-).slice(
-0,
-size
-);
-
-}
 
 const round1 =
 [];
@@ -21000,9 +20953,11 @@ category
 if (!current || !current.tournament) {
 
 const payload =
+await (
 category === "full"
 ? buildFullCollectionPayload()
-: buildGenreTournamentPayload(category);
+: buildGenreTournamentPayload(category)
+);
 
 if (!payload) {
 
@@ -21037,7 +20992,7 @@ category
 activeTournamentCategory =
 category;
 
-renderRoundList(
+renderTournamentRound(
 current
 );
 
@@ -21102,6 +21057,56 @@ return `Field of ${entrants}`;
 
 }
 
+/*
+
+* Shared by every in-progress view (list, bracket, face-off -
+* see tournament-bracket.js) so pick timing works the same
+* whichever one a pick is made from.
+  */
+
+function trackTournamentMatchupTiming(
+current
+) {
+
+const tournament =
+current.tournament;
+
+if (tournamentHiddenGapTournamentId !== tournament.id) {
+
+tournamentHiddenGapTournamentId =
+tournament.id;
+
+tournamentHiddenMsAtLastDecision =
+tournamentHiddenMsTotal;
+
+}
+
+/*
+
+* Bracket busters - record the FIRST time each matchup is
+* seen, never overwritten on a later render, so re-fetching
+* the same still-pending round (after picking a different
+* matchup in it, for example) doesn't restart its clock.
+  */
+
+(current.matchups || []).forEach(
+matchup => {
+
+if (!tournamentMatchupFirstSeenAt[matchup.id]) {
+
+tournamentMatchupFirstSeenAt[matchup.id] =
+{
+seen_at: Date.now(),
+hidden_ms_at_start: tournamentHiddenMsTotal
+};
+
+}
+
+}
+);
+
+}
+
 function renderRoundList(
 current
 ) {
@@ -21120,15 +21125,9 @@ return;
 const tournament =
 current.tournament;
 
-if (tournamentHiddenGapTournamentId !== tournament.id) {
-
-tournamentHiddenGapTournamentId =
-tournament.id;
-
-tournamentHiddenMsAtLastDecision =
-tournamentHiddenMsTotal;
-
-}
+trackTournamentMatchupTiming(
+current
+);
 
 const round =
 current.round;
@@ -21148,30 +21147,6 @@ return;
 
 }
 
-/*
-
-* Bracket busters - record the FIRST time each matchup is
-* seen, never overwritten on a later render, so re-fetching
-* the same still-pending round (after picking a different
-* matchup in it, for example) doesn't restart its clock.
-  */
-
-matchups.forEach(
-matchup => {
-
-if (!tournamentMatchupFirstSeenAt[matchup.id]) {
-
-tournamentMatchupFirstSeenAt[matchup.id] =
-{
-seen_at: Date.now(),
-hidden_ms_at_start: tournamentHiddenMsTotal
-};
-
-}
-
-}
-);
-
 const label =
 roundLabel(
 round,
@@ -21183,6 +21158,7 @@ let html =
 `<h2 class="tournament-heading">${categoryDisplayName(tournament.category)}</h2>` +
 `<div class="tournament-round-label">${label}</div>` +
 `<div class="tournament-round-progress">${matchups.length} matchup${matchups.length === 1 ? "" : "s"} to decide</div>` +
+tournamentViewSwitcherHTML() +
 `<div class="tournament-matchup-list">`;
 
 matchups.forEach(
@@ -21218,6 +21194,10 @@ content.innerHTML =
 html;
 
 wireTournamentBackLink();
+
+wireTournamentViewSwitcher(
+current
+);
 
 content
 .querySelectorAll(
@@ -21408,7 +21388,7 @@ await fetchCurrentTournament(
 tournament.category
 );
 
-renderRoundList(
+renderTournamentRound(
 refreshed
 );
 
@@ -21432,15 +21412,31 @@ alert(
 // QUICK 16 (IN-MEMORY, NO PERSISTENCE, NO BELT)
 // =========================================================
 
-function startQuickSixteen() {
+async function startQuickSixteen() {
+
+const loadingContent =
+document.getElementById(
+"tournament-content"
+);
+
+if (loadingContent) {
+
+loadingContent.innerHTML =
+`<p class="tournament-subtext">Drawing the field...</p>`;
+
+}
+
+const eligible =
+getTournamentEligibleMovies();
 
 const pool =
-shuffleArray(
-getTournamentEligibleMovies()
-).slice(
-0,
+eligible.length >= 16
+? await buildTournamentField(
+"quick16",
+eligible,
 16
-);
+)
+: eligible;
 
 if (pool.length < 16) {
 
