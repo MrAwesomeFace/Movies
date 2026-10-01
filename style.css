@@ -181,6 +181,22 @@ body.theme-arcade .marquee-frame {
   gap: 10px;
 }
 
+/* The logo + title link to stats.html. */
+
+a.site-title {
+  color: inherit;
+
+  text-decoration: none;
+
+  border-radius: 6px;
+}
+
+a.site-title:focus-visible {
+  outline: 2px solid var(--gold);
+
+  outline-offset: 4px;
+}
+
 .site-logo {
   flex-shrink: 0;
 

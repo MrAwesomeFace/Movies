@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#041D58">
+  <title>Mr. Movies Rewind Stats</title>
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;500;700&display=swap">
+  <style>
+  body { margin: 0; }
+  /* Layout: marquee tiles; Tournament act (belts, power rankings, what wins, then paired almanac panels); Shelf act (backlog, decades, people, records). Single dark theme to match the main site. */
+  :root {
+    --bg: #041D58;
+    --panel: #06246b;
+    --panel-2: #0a2e80;
+    --panel-edge: rgba(251, 205, 54, 0.18);
+    --ink: #f5f5f5;
+    --ink-2: #c9d2ea;
+    --ink-3: #8f9bc0;
+    --gold: #FBCD36;
+    --gold-dim: rgba(251, 205, 54, 0.14);
+    --silver: #cfd6e6;
+    --bronze: #d9925b;
+    --cool: #7f93c9;
+    --track: rgba(255, 255, 255, 0.07);
+    --display: "Anton", Impact, "Arial Narrow", sans-serif;
+    --label: "Oswald", "Arial Narrow", Arial, sans-serif;
+    --body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 56px; display: grid; gap: 26px; }
+
+  header { display: grid; gap: 6px; }
+  .back { font-family: var(--label); font-size: 14px; letter-spacing: 0.06em; color: var(--ink-2); text-decoration: none; justify-self: start; margin-bottom: 6px; }
+  .back:hover, .back:focus-visible { color: var(--gold); }
+  .notice { padding: 16px 18px; border: 1px dashed var(--ink-3); border-radius: 10px; color: var(--ink-2); }
+  .eyebrow { font-family: var(--label); text-transform: uppercase; letter-spacing: 0.14em; font-size: 13px; color: var(--gold); }
+  h1 { font-family: var(--display); font-weight: 400; font-size: clamp(34px, 7vw, 60px); line-height: 1; margin: 0; letter-spacing: 0.01em; text-wrap: balance; }
+  .sub { color: var(--ink-2); margin: 4px 0 0; max-width: 62ch; }
+  .banner { display: flex; gap: 10px; align-items: baseline; padding: 10px 14px; border: 1px dashed var(--gold); border-radius: 8px; color: var(--ink-2); font-size: 14px; background: var(--gold-dim); }
+  .banner b { color: var(--gold); font-family: var(--label); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; white-space: nowrap; }
+
+  .marquee { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 2px; background: var(--panel-edge); border: 2px solid var(--gold); border-radius: 10px; overflow: hidden; }
+  @media (max-width: 1000px) { .marquee { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 520px) { .marquee { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .tile { background: var(--panel); padding: 16px 18px; display: grid; gap: 2px; align-content: start; }
+  .tile .num { font-family: var(--display); font-size: 40px; line-height: 1.05; color: var(--gold); font-variant-numeric: tabular-nums; }
+  .tile .lbl { font-family: var(--label); text-transform: uppercase; letter-spacing: 0.1em; font-size: 12.5px; }
+  .tile .note { font-size: 13px; color: var(--ink-3); }
+
+  .tabs { display: flex; gap: 4px; border-bottom: 2px solid var(--panel-edge); position: sticky; top: env(safe-area-inset-top, 0px); background: var(--bg); z-index: 5; padding-top: 6px; }
+  .tab { appearance: none; border: 0; background: none; color: var(--ink-3); font-family: var(--display); font-size: 22px; letter-spacing: 0.03em; padding: 6px 16px 8px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; }
+  .tab:hover { color: var(--ink); }
+  .tab[aria-selected="true"] { color: var(--gold); border-bottom-color: var(--gold); }
+  .tab:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 4px; }
+  .panel { display: grid; gap: 22px; }
+  .act { font-family: var(--display); font-weight: 400; font-size: 28px; letter-spacing: 0.02em; margin: 10px 0 -8px; display: flex; align-items: center; gap: 14px; }
+  .act::after { content: ""; flex: 1; height: 2px; background: linear-gradient(90deg, var(--gold), transparent); }
+
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .grid .wide { grid-column: 1 / -1; }
+  @media (max-width: 760px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+
+  section { background: var(--panel); border: 1px solid var(--panel-edge); border-radius: 10px; padding: 18px 18px 20px; min-width: 0; display: grid; gap: 14px; align-content: start; }
+  h2 { font-family: var(--label); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; font-size: 17px; margin: 0; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  h2 small { font-weight: 400; letter-spacing: 0.04em; font-size: 12.5px; color: var(--ink-3); text-transform: none; }
+
+  /* belt wall */
+  .belts { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 12px; }
+  @media (max-width: 1000px) { .belts { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .belt { display: grid; gap: 6px; align-content: start; min-width: 0; }
+  .belt .cat { font-family: var(--label); text-transform: uppercase; letter-spacing: 0.12em; font-size: 12px; color: var(--gold); }
+  .poster { aspect-ratio: 2 / 3; max-width: 100%; border-radius: 6px; border: 2px solid var(--gold); background: linear-gradient(160deg, var(--panel-2), #031445) center / cover no-repeat; position: relative; overflow: hidden; display: flex; align-items: flex-end; }
+  .poster .pt { width: 100%; padding: 26px 8px 8px; background: linear-gradient(transparent, rgba(2, 10, 35, 0.92) 45%); font-weight: 700; font-size: 13.5px; line-height: 1.25; }
+  .poster.vacant { border-style: dashed; border-color: var(--ink-3); align-items: center; justify-content: center; }
+  .poster.vacant .pt { background: none; text-align: center; color: var(--ink-3); font-weight: 500; padding: 8px; }
+  .belt .meta { font-size: 12.5px; color: var(--ink-3); line-height: 1.35; }
+  .chip { display: inline-block; font-family: var(--label); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 6px; line-height: 1.35; border: 1px solid var(--cool); color: var(--ink-2); }
+  .chip.live { border-color: var(--gold); color: var(--gold); }
+
+  /* leaderboard */
+  .board { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+  .board th { font-family: var(--label); font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; font-size: 12px; color: var(--ink-3); text-align: right; padding: 0 8px 8px; }
+  .board th:nth-child(2), .board td:nth-child(2) { text-align: left; }
+  .board td { padding: 7px 8px; border-top: 1px solid var(--track); text-align: right; }
+  .board td:first-child { font-family: var(--display); color: var(--gold); font-size: 18px; width: 34px; text-align: left; }
+  .board .t { font-weight: 600; }
+  .board .y { color: var(--ink-3); font-weight: 400; margin-left: 6px; }
+  .medal { display: inline-block; min-width: 22px; text-align: center; border-radius: 4px; padding: 0 4px; font-family: var(--label); }
+  .m1 { color: #1a1300; background: var(--gold); }
+  .m2 { color: #111a2c; background: var(--silver); }
+  .m3 { color: #2a1305; background: var(--bronze); }
+  .zero { color: var(--ink-3); }
+  .tablewrap { overflow-x: auto; }
+
+  /* ranked bars */
+  .bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+  .bar { display: grid; grid-template-columns: minmax(96px, 34%) 1fr 56px; align-items: center; gap: 10px; font-size: 14px; }
+  .bar .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bar .track { height: 14px; background: var(--track); border-radius: 0 4px 4px 0; position: relative; display: flex; gap: 2px; overflow: hidden; }
+  .bar .fill { background: var(--gold); min-width: 2px; height: 100%; }
+  .bar .fill.rest { background: var(--cool); opacity: 0.55; }
+  .bar .fill:last-child { border-radius: 0 4px 4px 0; }
+  .bar .val { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-2); font-family: var(--label); }
+  .bar:hover .name { color: var(--gold); }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--ink-2); }
+  .legend span { display: inline-flex; align-items: center; gap: 7px; }
+  .legend i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+
+  /* versus compare (champions vs collection) */
+  .dna { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+  .dna-card { display: grid; gap: 4px; padding: 12px 14px; background: var(--panel-2); border-radius: 8px; min-width: 0; }
+  .dna-card .k { font-family: var(--label); text-transform: uppercase; letter-spacing: 0.1em; font-size: 12px; color: var(--ink-3); }
+  .dna-card .vs { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .dna-card .a { font-family: var(--display); font-size: 28px; color: var(--gold); line-height: 1.1; }
+  .dna-card .b { color: var(--ink-3); font-size: 13.5px; }
+
+  /* decades */
+  .cols { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 6px; align-items: end; height: 210px; padding-top: 20px; border-bottom: 1px solid var(--ink-3); }
+  .col { display: grid; grid-template-rows: auto 1fr; height: 100%; align-items: end; justify-items: center; gap: 4px; }
+  .col .cv { font-family: var(--label); font-size: 13px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .col .stack { width: 100%; max-width: 56px; display: flex; flex-direction: column; justify-content: flex-end; gap: 2px; height: 100%; }
+  .col .cb { width: 100%; background: var(--gold); }
+  .col .cb.rest { background: var(--cool); opacity: 0.55; border-radius: 4px 4px 0 0; }
+  .col .stack .cb:only-child { border-radius: 4px 4px 0 0; }
+  .col-labels { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 6px; margin-top: -8px; }
+  .col-labels span { text-align: center; font-family: var(--label); font-size: 12.5px; color: var(--ink-3); }
+
+  /* records */
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+  .fact { display: grid; gap: 2px; padding: 12px 14px; border-left: 3px solid var(--gold); background: var(--gold-dim); border-radius: 0 6px 6px 0; min-width: 0; }
+  .fact .k { font-family: var(--label); text-transform: uppercase; letter-spacing: 0.1em; font-size: 12px; color: var(--gold); }
+  .fact .v { font-weight: 600; font-size: 15.5px; }
+  .fact .d { font-size: 13px; color: var(--ink-3); }
+
+  .empty { color: var(--ink-3); font-size: 14px; margin: 0; }
+  footer { color: var(--ink-3); font-size: 13px; max-width: 80ch; }
+
+  /* almanac rows: name + detail on the left, a value on the right */
+  .rows { list-style: none; margin: 0; padding: 0; display: grid; }
+  .row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 14px; align-items: baseline; padding: 8px 0; border-top: 1px solid var(--track); }
+  .row:first-child { border-top: 0; padding-top: 0; }
+  .row .n { font-weight: 600; min-width: 0; }
+  .row .n em { font-style: normal; color: var(--ink-3); font-weight: 400; }
+  .row .d { grid-column: 1 / -1; font-size: 13px; color: var(--ink-3); margin-top: -2px; }
+  .row .v { font-family: var(--label); color: var(--gold); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .tag { font-family: var(--label); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--bg); background: var(--gold); border-radius: 3px; padding: 0 5px; margin-left: 6px; vertical-align: 2px; }
+
+  /* head-to-head split bars */
+  .h2h { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .h2h li { display: grid; gap: 4px; }
+  .h2h .names { display: flex; justify-content: space-between; gap: 10px; font-size: 13.5px; }
+  .h2h .names span:last-child { color: var(--ink-3); text-align: right; }
+  .h2h .sb { display: flex; height: 12px; gap: 2px; border-radius: 4px; overflow: hidden; }
+  .h2h .sb i { background: var(--gold); }
+  .h2h .sb i + i { background: var(--cool); opacity: 0.55; }
+  .h2h .names b { font-family: var(--label); font-weight: 500; color: var(--gold); margin-right: 6px; font-variant-numeric: tabular-nums; }
+  .h2h .names span:last-child b { color: var(--ink-2); margin: 0 0 0 6px; }
+
+  .big { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .big .a { font-family: var(--display); font-size: 44px; line-height: 1; color: var(--gold); }
+  .big .b { color: var(--ink-2); max-width: 40ch; }
+  .split2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+  @media (max-width: 520px) { .split2 { grid-template-columns: minmax(0, 1fr); } }
+  h3 { font-family: var(--label); font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; font-size: 12.5px; color: var(--ink-3); margin: 0 0 6px; }
+  .cols.short { height: 170px; }
+  .board .rating { font-family: var(--display); font-size: 17px; color: var(--ink); }
+  .board .wl { color: var(--ink-2); }
+  .board .sub { display: block; font-size: 12.5px; color: var(--ink-3); font-weight: 400; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="back" id="back" href="index.html">&larr; Back to the shelf</a>
+    <div class="eyebrow">Mr. Movies Rewind · Stats</div>
+    <h1>The collection by the numbers</h1>
+    <p class="sub">What's on the shelf, what's been watched, and which movies keep winning the belt.</p>
+  </header>
+
+  <div class="banner" id="banner" hidden><b>Sample data</b><span id="banner-text"></span></div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tab-btn-shelf" aria-controls="shelf" aria-selected="true">Shelf</button>
+    <button class="tab" role="tab" id="tab-btn-tournament" aria-controls="tournament" aria-selected="false">Tournament</button>
+  </div>
+
+  <div class="panel" id="tournament" role="tabpanel" hidden>
+  <div class="notice" id="t-notice" hidden></div>
+  <div class="marquee" id="marquee-t"></div>
+  <div class="grid">
+    <section class="wide">
+      <h2>Belt holders <small>reigning champion in each bracket</small></h2>
+      <div class="belts" id="belts"></div>
+    </section>
+
+    <section class="wide">
+      <h2>Power rankings <small>rating from every pick ever made, starting at 1500</small></h2>
+      <div class="tablewrap"><table class="board" id="power"></table></div>
+    </section>
+
+    <section class="wide">
+      <h2>What wins <small>belt winners compared with every watched movie</small></h2>
+      <div class="dna" id="dna"></div>
+    </section>
+
+    <section>
+      <h2>Rivalries <small>pairs that keep meeting</small></h2>
+      <ul class="rows" id="rivals"></ul>
+    </section>
+    <section>
+      <h2>Biggest upsets <small>lowest odds to win, by rating</small></h2>
+      <ul class="rows" id="upsets"></ul>
+    </section>
+
+    <section>
+      <h2>Giant killers <small>wins over belt winners</small></h2>
+      <ul class="rows" id="giants"></ul>
+    </section>
+    <section>
+      <h2>Cinderella runs <small>deep runs from a low starting rank</small></h2>
+      <ul class="rows" id="cinderella"></ul>
+    </section>
+
+    <section>
+      <h2>One and done <small>most first-round exits</small></h2>
+      <ul class="rows" id="onedone"></ul>
+    </section>
+    <section>
+      <h2>Longest reigns <small>days holding a belt</small></h2>
+      <ul class="rows" id="reigns"></ul>
+    </section>
+
+    <section class="wide">
+      <h2>How you decide <small>median time to make a pick, by round</small></h2>
+      <div class="cols short" id="speed"></div>
+      <div class="col-labels" id="speed-labels"></div>
+      <div class="split2">
+        <div><h3>Snap picks</h3><ul class="rows" id="snaps"></ul></div>
+        <div><h3>Agonizers</h3><ul class="rows" id="agonies"></ul></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Genre head-to-head <small>when two genres meet</small></h2>
+      <ul class="h2h" id="genreh2h"></ul>
+    </section>
+    <section>
+      <h2>Old vs new <small>matchups between different release years</small></h2>
+      <div class="big" id="oldnew-big"></div>
+      <ul class="bars" id="oldnew"></ul>
+    </section>
+
+    <section>
+      <h2>Director win rates <small>at least 12 matchups</small></h2>
+      <ul class="bars" id="dirwin"></ul>
+    </section>
+    <section>
+      <h2>Actor win rates <small>at least 15 matchups</small></h2>
+      <ul class="bars" id="actwin"></ul>
+    </section>
+  </div>
+
+  </div>
+
+  <div class="panel" id="shelf" role="tabpanel">
+  <div class="marquee" id="marquee-s"></div>
+  <div class="grid">
+    <section class="wide">
+      <h2>Watch backlog by genre <small>movies only</small></h2>
+      <div class="legend"><span><i style="background:var(--gold)"></i>Watched</span><span><i style="background:var(--cool);opacity:.55"></i>Not yet</span></div>
+      <ul class="bars" id="backlog"></ul>
+    </section>
+
+    <section class="wide">
+      <h2>Release decades <small>watched and not yet, all titles</small></h2>
+      <div class="cols" id="decades"></div>
+      <div class="col-labels" id="decade-labels"></div>
+    </section>
+
+    <section>
+      <h2>Most-collected directors <small>movies only</small></h2>
+      <ul class="bars" id="directors"></ul>
+    </section>
+    <section>
+      <h2>Most-collected actors <small>top-billed cast, movies only</small></h2>
+      <ul class="bars" id="actors"></ul>
+    </section>
+
+    <section class="wide">
+      <h2>Shelf records</h2>
+      <div class="facts" id="facts"></div>
+    </section>
+  </div>
+  </div>
+
+  <footer id="foot"></footer>
+</div>
+
+<script src="movies.js"></script>
+<script>
+(async function () {
+  const API = "https://movie-reservations.iconedge.workers.dev";
+  const CATEGORIES = ["full", "action", "christmas", "classic", "comedy", "drama", "horror", "rom-com", "thriller"];
+  const DAY = 86400000;
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const fmt = (n) => Number(n).toLocaleString("en-US");
+  const pct = (x) => `${Math.round(x * 100)}%`;
+  const catName = (c) => c === "full" ? "Full Collection" : c === "rom-com" ? "Rom-Com" : c[0].toUpperCase() + c.slice(1);
+  const mins = (m) => { const r = /^(\d+)m$/.exec(m.runtime || ""); return r ? +r[1] : null; };
+  const genresOf = (m) => (m.genre || "").split(" / ").map((g) => g.trim()).filter(Boolean);
+  const split = (s) => (s || "").split(",").map((x) => x.trim()).filter(Boolean);
+  const hm = (n) => `${Math.floor(n / 60)}h ${n % 60}m`;
+  const dur = (ms) => { const s = Math.round(ms / 1000); return s < 60 ? `${s}s` : `${Math.floor(s / 60)}m ${String(s % 60).padStart(2, "0")}s`; };
+  const date = (t) => new Date(t).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  const median = (v) => { const s = [...v].sort((a, b) => a - b); return s.length ? s[Math.floor(s.length / 2)] : 0; };
+
+  const all = movies;
+  const films = all.filter((m) => m.type === "movie");
+  const byId = new Map(all.map((m) => [String(m.tmdbId), m]));
+  const titleOf = (id) => (byId.get(String(id)) || {}).title || `#${id}`;
+
+  // Same pool rules as the tournament in app.js.
+  function inCategory(m, cat) {
+    if (cat === "full") return true;
+    if (cat === "classic") { const y = parseInt(m.year, 10); return y && y < 1980; }
+    if (cat === "baseball" || cat === "christmas") return (m.categories || []).includes(cat);
+    return (m.genre || "").toLowerCase().includes(cat);
+  }
+
+  // ---------- data
+  // Live: /watched and /tournaments/current already exist on the Worker.
+  // /tournament-log is the one new endpoint this page needs:
+  //   { tournaments: [{ id, category, total_rounds, finished_at, champion_id }],
+  //     picks: [{ tournament_id, round, a, b, winner, deliberation_ms, decided_at }] }
+  async function getJSON(path) {
+    const r = await fetch(API + path, { cache: "no-store" });
+    if (!r.ok) throw new Error(r.status);
+    return r.json();
+  }
+
+  // Deliberation comes back as the gap since the previous pick (minus time the tab was hidden),
+  // or null when that gap is too long to be one decision.
+  async function loadLive() {
+    const watchedRows = await getJSON("/watched");
+    let log = null;
+    try { log = await getJSON("/tournament-log"); } catch (e) {}
+    const current = {};
+    await Promise.all(CATEGORIES.map(async (c) => {
+      try { current[c] = await getJSON(`/tournaments/current?category=${encodeURIComponent(c)}`); } catch (e) {}
+    }));
+    return {
+      watched: new Set(watchedRows.map((r) => `${r.type}:${r.tmdb_id}`)),
+      tournaments: log ? log.tournaments.map((t) => ({ ...t, finished_at: t.finished_at ? +new Date(t.finished_at) : null })) : [],
+      picks: log ? log.picks.map((p) => ({ ...p, decided_at: +new Date(p.decided_at) })) : [],
+      current, hasLog: !!log, sample: false,
+    };
+  }
+
+  // Simulates a year of brackets over the real catalog: each movie gets a hidden
+  // quality score, picks follow it with some noise, close calls take longer.
+  function loadSample() {
+    let seed = 11;
+    const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const shuffle = (a) => { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+    const watched = new Set(all.filter(() => rnd() < 0.64).map((m) => `${m.type}:${m.tmdbId}`));
+    const seen = films.filter((m) => watched.has(`movie:${m.tmdbId}`));
+    const q = new Map(seen.map((m) => [m, (rnd() + rnd() + rnd() - 1.5) * 2.2]));
+    const tournaments = [], picks = [];
+    const start = Date.UTC(2025, 9, 1), end = Date.UTC(2026, 8, 28);
+    const plan = [];
+    CATEGORIES.forEach((cat) => {
+      const n = cat === "full" ? 5 : 2 + Math.floor(rnd() * 3);
+      for (let i = 0; i < n; i++) plan.push({ cat, at: start + ((i + rnd() * 0.8) / n) * (end - start) });
+    });
+    plan.sort((a, b) => a.at - b.at).forEach(({ cat, at }, idx) => {
+      const pool = seen.filter((m) => inCategory(m, cat));
+      let size = 2; while (size * 2 <= Math.min(pool.length, cat === "full" ? 64 : 32)) size *= 2;
+      if (size < 8) return;
+      const id = idx + 1, total = Math.log2(size);
+      let field = shuffle(pool).slice(0, size), t = at;
+      for (let round = 1; round <= total; round++) {
+        const next = [];
+        for (let i = 0; i < field.length; i += 2) {
+          const a = field[i], b = field[i + 1];
+          const pA = 1 / (1 + Math.exp(-(q.get(a) - q.get(b)) * 1.5));
+          const w = rnd() < pA ? a : b;
+          const close = 1 - Math.abs(pA - 0.5) * 2;
+          t += (0.05 + rnd() * 0.4) * DAY / (round < total ? 3 : 1);
+          const ms = Math.round(2500 + round * 2500 + close * close * rnd() * 90000 * (1 + round / 3) + (rnd() < 0.03 ? rnd() * 600000 : 0));
+          picks.push({ tournament_id: id, round, a: String(a.tmdbId), b: String(b.tmdbId), winner: String(w.tmdbId), deliberation_ms: ms, decided_at: t });
+          next.push(w);
+        }
+        field = next;
+      }
+      tournaments.push({ id, category: cat, total_rounds: total, finished_at: t, champion_id: String(field[0].tmdbId) });
+    });
+    const current = {};
+    [["comedy", 2, 5, 5], ["action", 3, 2, 5], ["full", 1, 21, 6]].forEach(([c, round, left, total]) => {
+      current[c] = { tournament: { category: c, total_rounds: total }, round, matchups: new Array(left).fill({}) };
+    });
+    return { watched, tournaments, picks, current, hasLog: true, sample: true };
+  }
+
+  const onSite = /github\.io$/.test(location.hostname);
+  if (!onSite) $("back").hidden = true;
+  let D;
+  try { D = await loadLive(); } catch (e) {
+    D = onSite ? { watched: new Set(), tournaments: [], picks: [], current: {}, hasLog: false, sample: false, offline: true } : loadSample();
+  }
+  if (D.sample) {
+    $("banner").hidden = false;
+    $("banner-text").textContent = "This preview can't reach your reservations server, so watched status and every tournament number below come from a simulated year of brackets using your real titles. The collection numbers are real.";
+  } else if (D.offline) {
+    $("banner").hidden = false;
+    $("banner").querySelector("b").textContent = "Offline";
+    $("banner-text").textContent = "The reservations server didn't answer, so watched and tournament numbers are missing. Reload the page to try again.";
+  }
+  if (!D.hasLog && !D.offline) {
+    $("t-notice").hidden = false;
+    $("t-notice").textContent = "Tournament stats appear here once the server has the /tournament-log update installed.";
+  }
+
+  const isWatched = (m) => D.watched.has(`${m.type}:${m.tmdbId}`);
+  const seenFilms = films.filter(isWatched);
+  const tById = new Map(D.tournaments.map((t) => [t.id, t]));
+  const picks = [...D.picks].sort((a, b) => a.decided_at - b.decided_at);
+  const loser = (p) => (p.winner === p.a ? p.b : p.a);
+
+  function tally(list, keysOf) {
+    const o = new Map();
+    list.forEach((m) => [...new Set(keysOf(m))].forEach((k) => { if (k) o.set(k, (o.get(k) || 0) + 1); }));
+    return [...o.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  }
+  function bars(id, rows, limit) {
+    const shown = limit ? rows.slice(0, limit) : rows;
+    if (!shown.length) { $(id).outerHTML = `<p class="empty">Nothing yet.</p>`; return; }
+    const max = Math.max(...shown.map((r) => r[1]), 1);
+    $(id).innerHTML = shown.map(([name, n, label, tip]) =>
+      `<li class="bar" title="${esc(tip || `${name}: ${label || fmt(n)}`)}"><span class="name">${esc(name)}</span>` +
+      `<span class="track"><span class="fill" style="width:${(n / max) * 100}%"></span></span>` +
+      `<span class="val">${esc(label || fmt(n))}</span></li>`).join("");
+  }
+  function rows(id, items) {
+    $(id).innerHTML = items.length
+      ? items.map(([n, d, v]) => `<li class="row"><span class="n">${n}</span><span class="v">${esc(v)}</span>${d ? `<span class="d">${d}</span>` : ""}</li>`).join("")
+      : `<li class="row"><span class="n empty">Nothing yet.</span></li>`;
+  }
+  function roundName(round, total, third) {
+    if (third) return "3rd-place match";
+    if (round === 0) return "Play-in";
+    const left = 2 ** (total - round + 1);
+    return left === 2 ? "Final" : left === 4 ? "Final Four" : left === 8 ? "Great Eight" : left === 16 ? "Sweet Sixteen" : `Round of ${left}`;
+  }
+  const T = (id) => `<strong>${esc(titleOf(id))}</strong>`;
+
+  // ---------- ratings: replay every pick in order (Elo, K = 32)
+  const rating = new Map(), rec = new Map();
+  const R = (id) => rating.get(id) ?? 1500;
+  const recOf = (id) => { if (!rec.has(id)) rec.set(id, { w: 0, l: 0, r1Loss: 0, entries: new Set() }); return rec.get(id); };
+  const upsets = [];
+  const ratingAtStart = new Map(); // tournament id -> Map(movie -> rating when its first pick was made)
+  picks.forEach((p) => {
+    const ra = R(p.a), rb = R(p.b);
+    if (!ratingAtStart.has(p.tournament_id)) ratingAtStart.set(p.tournament_id, new Map());
+    const snap = ratingAtStart.get(p.tournament_id);
+    if (!snap.has(p.a)) snap.set(p.a, ra);
+    if (!snap.has(p.b)) snap.set(p.b, rb);
+    const ea = 1 / (1 + 10 ** ((rb - ra) / 400));
+    const aWon = p.winner === p.a;
+    const pWin = aWon ? ea : 1 - ea;
+    if (pWin < 0.5) upsets.push({ p, pWin });
+    rating.set(p.a, ra + 32 * ((aWon ? 1 : 0) - ea));
+    rating.set(p.b, rb + 32 * ((aWon ? 0 : 1) - (1 - ea)));
+    const w = recOf(p.winner), l = recOf(loser(p));
+    w.w++; l.l++;
+    w.entries.add(p.tournament_id); l.entries.add(p.tournament_id);
+    if (p.round === 1) l.r1Loss++;
+  });
+
+  // ---------- belts, reigns and defenses
+  const finished = D.tournaments.filter((t) => t.finished_at && t.champion_id).sort((a, b) => a.finished_at - b.finished_at);
+  const belts = new Map(), finals = new Map(), reigns = [];
+  CATEGORIES.forEach((cat) => {
+    const list = finished.filter((t) => t.category === cat);
+    let cur = null;
+    list.forEach((t) => {
+      belts.set(t.champion_id, (belts.get(t.champion_id) || 0) + 1);
+      if (cur && cur.id === t.champion_id) { cur.defenses++; return; }
+      if (cur) { cur.end = t.finished_at; reigns.push(cur); }
+      cur = { id: t.champion_id, cat, start: t.finished_at, end: null, defenses: 0 };
+    });
+    if (cur) reigns.push(cur);
+  });
+  const now = Date.now();
+  reigns.forEach((r) => { r.days = Math.max(1, Math.round(((r.end || now) - r.start) / DAY)); });
+  picks.forEach((p) => {
+    const t = tById.get(p.tournament_id);
+    if (t && p.round === t.total_rounds && !p.third_place) [p.a, p.b].forEach((id) => finals.set(id, (finals.get(id) || 0) + 1));
+  });
+  const everWon = [...belts.keys()];
+
+  // ---------- headline tiles
+  const totalMin = films.map(mins).filter(Boolean).reduce((a, b) => a + b, 0);
+  const seenCount = all.filter(isWatched).length;
+  const tile = ([n, l, d]) => `<div class="tile"><span class="num">${n}</span><span class="lbl">${l}</span><span class="note">${esc(d)}</span></div>`;
+  const unseenMin = films.filter((m) => !isWatched(m)).map(mins).filter(Boolean).reduce((a, b) => a + b, 0);
+  const directorCount = new Set(films.flatMap((m) => split(m.director))).size;
+  const classics = films.filter((m) => { const y = parseInt(m.year, 10); return y && y < 1980; }).length;
+  $("marquee-s").innerHTML = [
+    [fmt(all.length), "Titles", `${fmt(films.length)} movies · ${fmt(all.length - films.length)} TV and extras`],
+    [pct(seenCount / all.length), "Watched", `${fmt(seenCount)} of ${fmt(all.length)} titles`],
+    [(totalMin / 60 / 24).toFixed(1), "Days of movies", "every movie back to back"],
+    [(unseenMin / 60 / 24).toFixed(1), "Days left to watch", "every unwatched movie"],
+    [fmt(directorCount), "Directors", "different directors on the shelf"],
+    [fmt(classics), "Classics", "movies from before 1980"],
+  ].map(tile).join("");
+
+  const top = [...rating.entries()].filter(([id]) => { const r = rec.get(id); return r && r.w + r.l >= 4; }).sort((a, b) => b[1] - a[1])[0];
+  const topReign = [...reigns].sort((a, b) => b.days - a.days)[0];
+  $("marquee-t").innerHTML = [
+    [fmt(finished.length), "Brackets finished", "each one crowned a champion"],
+    [fmt(everWon.length), "Champions", "different movies with a belt"],
+    [fmt(picks.length), "Picks made", "head-to-head decisions"],
+    [(picks.reduce((a, p) => a + (p.deliberation_ms || 0), 0) / 3600000).toFixed(1), "Hours deciding", "time spent making picks"],
+    [top ? Math.round(top[1]) : "–", "Top rating", top ? `${titleOf(top[0])} is #1` : "no picks yet"],
+    [topReign ? topReign.days : "–", "Longest reign", topReign ? `days, ${titleOf(topReign.id)}` : "no belts yet"],
+  ].map(tile).join("");
+
+  // ---------- belt wall
+  $("belts").innerHTML = CATEGORIES.map((cat) => {
+    const reign = reigns.filter((r) => r.cat === cat && !r.end)[0];
+    const m = reign && byId.get(reign.id);
+    const pool = seenFilms.filter((f) => inCategory(f, cat)).length;
+    const cur = D.current[cat];
+    const live = cur && cur.tournament && cur.matchups && cur.matchups.length
+      ? `<span class="chip live">${roundName(cur.round, cur.tournament.total_rounds)} · ${cur.matchups.length} to pick</span>`
+      : `<span class="chip">No bracket running</span>`;
+    const poster = reign
+      ? `<div class="poster" style="background-image:url('${esc(m && m.poster)}')"><div class="pt">${esc(titleOf(reign.id))}</div></div>`
+      : `<div class="poster vacant"><div class="pt">Belt vacant</div></div>`;
+    const meta = reign
+      ? `${reign.days} days${reign.defenses ? ` · ${reign.defenses} defense${reign.defenses > 1 ? "s" : ""}` : ""}`
+      : `${fmt(pool)} watched in pool`;
+    return `<div class="belt"><span class="cat">${catName(cat)}</span>${poster}<span class="meta">${meta}</span>${live}</div>`;
+  }).join("");
+
+  // ---------- power rankings
+  const ranked = [...rating.entries()].filter(([id]) => { const r = rec.get(id); return r && r.w + r.l >= 4; })
+    .sort((a, b) => b[1] - a[1]);
+  const medal = (n, cls) => n ? `<span class="medal ${cls}">${n}</span>` : `<span class="zero">–</span>`;
+  $("power").innerHTML = ranked.length
+    ? `<thead><tr><th></th><th>Movie</th><th>Rating</th><th>W–L</th><th>Win %</th><th>Belts</th><th>Finals</th></tr></thead><tbody>` +
+      ranked.slice(0, 15).map(([id, r], i) => {
+        const x = rec.get(id), m = byId.get(id);
+        return `<tr><td>${i + 1}</td><td><span class="t">${esc(titleOf(id))}</span><span class="y">${esc(m ? m.year : "")}</span></td>` +
+          `<td class="rating">${Math.round(r)}</td><td class="wl">${x.w}–${x.l}</td><td>${pct(x.w / (x.w + x.l))}</td>` +
+          `<td>${medal(belts.get(id) || 0, "m1")}</td><td>${medal(finals.get(id) || 0, "m2")}</td></tr>`;
+      }).join("") + `</tbody>`
+    : `<tbody><tr><td colspan="7" class="empty">Rankings appear after a few picks.</td></tr></tbody>`;
+
+  // ---------- what wins
+  const champMovies = everWon.map((id) => byId.get(id)).filter(Boolean);
+  const avg = (list, f) => { const v = list.map(f).filter((x) => x); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : 0; };
+  const topOf = (list, f) => (tally(list, f)[0] || ["–"])[0];
+  const dna = [
+    ["Typical release year", Math.round(avg(champMovies, (m) => parseInt(m.year, 10))), Math.round(avg(seenFilms, (m) => parseInt(m.year, 10)))],
+    ["Typical runtime", hm(Math.round(avg(champMovies, mins))), hm(Math.round(avg(seenFilms, mins)))],
+    ["Top genre", topOf(champMovies, genresOf), topOf(seenFilms, genresOf)],
+    ["Top decade", topOf(champMovies, (m) => [m.year && m.year.slice(0, 3) + "0s"]), topOf(seenFilms, (m) => [m.year && m.year.slice(0, 3) + "0s"])],
+  ];
+  $("dna").innerHTML = champMovies.length ? dna.map(([k, a, b]) =>
+    `<div class="dna-card"><span class="k">${k}</span><div class="vs"><span class="a">${esc(a)}</span><span class="b">vs ${esc(b)} for all watched</span></div></div>`).join("")
+    : `<p class="empty">Shows up after the first belt is won.</p>`;
+
+  // ---------- rivalries
+  const pairs = new Map();
+  picks.forEach((p) => {
+    const [x, y] = [p.a, p.b].sort();
+    const k = x + "|" + y;
+    if (!pairs.has(k)) pairs.set(k, { x, y, wx: 0, wy: 0, last: null });
+    const e = pairs.get(k);
+    p.winner === x ? e.wx++ : e.wy++;
+    e.last = p;
+  });
+  const rivals = [...pairs.values()].filter((e) => e.wx + e.wy >= 2)
+    .sort((a, b) => (b.wx + b.wy) - (a.wx + a.wy) || Math.abs(a.wx - a.wy) - Math.abs(b.wx - b.wy)).slice(0, 6);
+  rows("rivals", rivals.map((e) => {
+    const lead = e.wx === e.wy ? "Series tied" : `${esc(titleOf(e.wx > e.wy ? e.x : e.y))} leads`;
+    const t = tById.get(e.last.tournament_id);
+    return [`${T(e.x)} <em>vs</em> ${T(e.y)}`, `${lead} · last met in the ${catName(t.category)} ${roundName(e.last.round, t.total_rounds, e.last.third_place)}`, `${Math.max(e.wx, e.wy)}–${Math.min(e.wx, e.wy)}`];
+  }));
+
+  // ---------- upsets
+  upsets.sort((a, b) => a.pWin - b.pWin);
+  rows("upsets", upsets.slice(0, 6).map(({ p, pWin }) => {
+    const t = tById.get(p.tournament_id);
+    return [`${T(p.winner)} <em>over</em> ${T(loser(p))}`, `${catName(t.category)} · ${roundName(p.round, t.total_rounds, p.third_place)} · ${date(p.decided_at)}`, `${pct(pWin)} odds`];
+  }));
+
+  // ---------- giant killers: wins over movies that had already won a belt at the time
+  const firstBelt = new Map();
+  finished.forEach((t) => { if (!firstBelt.has(t.champion_id)) firstBelt.set(t.champion_id, t.finished_at); });
+  const kills = new Map();
+  picks.forEach((p) => {
+    const l = loser(p), fb = firstBelt.get(l);
+    if (fb && fb < p.decided_at) { if (!kills.has(p.winner)) kills.set(p.winner, []); kills.get(p.winner).push(l); }
+  });
+  rows("giants", [...kills.entries()].sort((a, b) => b[1].length - a[1].length).slice(0, 6).map(([id, victims]) => {
+    const names = [...new Set(victims)].map(titleOf);
+    return [T(id), `Beat ${esc(names.slice(0, 3).join(", "))}${names.length > 3 ? ` and ${names.length - 3} more` : ""}`, `${victims.length} champ${victims.length > 1 ? "s" : ""}`];
+  }));
+
+  // ---------- cinderella runs: furthest round reached vs starting rank in that bracket
+  const runs = [];
+  finished.forEach((t) => {
+    const snap = ratingAtStart.get(t.id); if (!snap) return;
+    const order = [...snap.entries()].sort((a, b) => b[1] - a[1]).map(([id]) => id);
+    const reached = new Map();
+    picks.filter((p) => p.tournament_id === t.id && !p.third_place).forEach((p) => {
+      reached.set(p.a, Math.max(reached.get(p.a) || 0, p.round));
+      reached.set(p.b, Math.max(reached.get(p.b) || 0, p.round));
+    });
+    reached.forEach((round, id) => {
+      const seed = order.indexOf(id) + 1;
+      const won = t.champion_id === id;
+      if (round >= t.total_rounds - 1 && seed > order.length / 2) runs.push({ id, t, round, seed, of: order.length, won, score: seed / order.length + (round === t.total_rounds) * 0.3 + won * 0.3 });
+    });
+  });
+  runs.sort((a, b) => b.score - a.score);
+  rows("cinderella", runs.slice(0, 6).map((r) => [
+    `${T(r.id)}${r.won ? '<span class="tag">Won it</span>' : ""}`,
+    `${catName(r.t.category)} · reached the ${r.won ? "title" : roundName(r.round, r.t.total_rounds)} · ${date(r.t.finished_at)}`,
+    `ranked ${r.seed} of ${r.of}`,
+  ]));
+
+  // ---------- one and done
+  const od = [...rec.entries()].filter(([, r]) => r.r1Loss >= 2).sort((a, b) => b[1].r1Loss - a[1].r1Loss || b[1].entries.size - a[1].entries.size).slice(0, 6);
+  rows("onedone", od.map(([id, r]) => [T(id), `Lost in round 1 in ${r.r1Loss} of ${r.entries.size} brackets · ${r.w}–${r.l} overall`, `${r.r1Loss} exits`]));
+
+  // ---------- longest reigns
+  rows("reigns", [...reigns].sort((a, b) => b.days - a.days).slice(0, 6).map((r) => [
+    `${T(r.id)}${!r.end ? '<span class="tag">Current</span>' : ""}`,
+    `${catName(r.cat)} belt · won ${date(r.start)}${r.defenses ? ` · ${r.defenses} title defense${r.defenses > 1 ? "s" : ""}` : ""}`,
+    `${r.days} days`,
+  ]));
+
+  // ---------- decision speed by round (rounds counted back from the final so brackets of any size line up)
+  const fromFinal = new Map();
+  picks.forEach((p) => {
+    const t = tById.get(p.tournament_id);
+    if (!t || !p.deliberation_ms || p.round === 0 || p.third_place) return;
+    const k = t.total_rounds - p.round; // 0 = final
+    if (!fromFinal.has(k)) fromFinal.set(k, []);
+    fromFinal.get(k).push(p.deliberation_ms);
+  });
+  const ks = [...fromFinal.keys()].sort((a, b) => b - a);
+  const meds = ks.map((k) => median(fromFinal.get(k)));
+  const smax = Math.max(...meds, 1);
+  const kName = (k) => k === 0 ? "Final" : k === 1 ? "Final 4" : k === 2 ? "Great 8" : k === 3 ? "Sweet 16" : `Rd of ${2 ** (k + 1)}`;
+  $("speed").innerHTML = ks.map((k, i) =>
+    `<div class="col" title="${kName(k)}: median ${dur(meds[i])} over ${fromFinal.get(k).length} picks"><span class="cv">${dur(meds[i])}</span>` +
+    `<div class="stack" style="height:${(meds[i] / smax) * 100}%"><div class="cb"></div></div></div>`).join("");
+  $("speed").querySelectorAll(".cb").forEach((el) => { el.style.flex = "1"; el.style.borderRadius = "4px 4px 0 0"; });
+  $("speed-labels").innerHTML = ks.map((k) => `<span>${kName(k)}</span>`).join("");
+  const timed = picks.filter((p) => p.deliberation_ms);
+  const pickRow = (p) => { const t = tById.get(p.tournament_id); return [`${T(p.winner)} <em>over</em> ${T(loser(p))}`, `${catName(t.category)} · ${roundName(p.round, t.total_rounds, p.third_place)}`, dur(p.deliberation_ms)]; };
+  const byTime = [...timed].sort((a, b) => a.deliberation_ms - b.deliberation_ms);
+  // Snap picks: fastest calls in the later rounds, where a quick call means something.
+  rows("snaps", byTime.filter((p) => p.round > 0 && tById.get(p.tournament_id).total_rounds - p.round <= 2).slice(0, 4).map(pickRow));
+  rows("agonies", byTime.slice(-4).reverse().map(pickRow));
+
+  // ---------- genre head-to-head (first-listed genre is the movie's main genre)
+  const main = (id) => { const m = byId.get(id); return m ? genresOf(m)[0] : null; };
+  const gp = new Map();
+  picks.forEach((p) => {
+    const ga = main(p.a), gb = main(p.b);
+    if (!ga || !gb || ga === gb) return;
+    const [x, y] = [ga, gb].sort(), k = x + "|" + y;
+    if (!gp.has(k)) gp.set(k, { x, y, wx: 0, wy: 0 });
+    const e = gp.get(k), wg = main(p.winner);
+    wg === x ? e.wx++ : e.wy++;
+  });
+  const gl = [...gp.values()].filter((e) => e.wx + e.wy >= 8).sort((a, b) => (b.wx + b.wy) - (a.wx + a.wy)).slice(0, 7)
+    .map((e) => e.wx >= e.wy ? e : { x: e.y, y: e.x, wx: e.wy, wy: e.wx });
+  $("genreh2h").innerHTML = gl.length ? gl.map((e) =>
+    `<li title="${esc(e.x)} ${e.wx}, ${esc(e.y)} ${e.wy}"><div class="names"><span><b>${pct(e.wx / (e.wx + e.wy))}</b>${esc(e.x)}</span><span>${esc(e.y)}<b>${e.wy}–${e.wx}</b></span></div>` +
+    `<div class="sb"><i style="flex:${e.wx}"></i><i style="flex:${e.wy}"></i></div></li>`).join("")
+    : `<li class="empty">Needs more cross-genre matchups.</li>`;
+
+  // ---------- old vs new
+  const gaps = [["1–9 years apart", 1, 9], ["10–19 years apart", 10, 19], ["20+ years apart", 20, 999]].map(([n, lo, hi]) => ({ n, lo, hi, old: 0, all: 0 }));
+  let oldW = 0, cmp = 0;
+  picks.forEach((p) => {
+    const ya = parseInt((byId.get(p.a) || {}).year, 10), yb = parseInt((byId.get(p.b) || {}).year, 10);
+    if (!ya || !yb || ya === yb) return;
+    const older = ya < yb ? p.a : p.b, gap = Math.abs(ya - yb);
+    cmp++; if (p.winner === older) oldW++;
+    const g = gaps.find((g) => gap >= g.lo && gap <= g.hi); g.all++; if (p.winner === older) g.old++;
+  });
+  $("oldnew-big").innerHTML = cmp ? `<span class="a">${pct(oldW / cmp)}</span><span class="b">of the time the older movie wins, across ${fmt(cmp)} matchups.</span>` : `<span class="b">Not enough matchups yet.</span>`;
+  bars("oldnew", gaps.filter((g) => g.all).map((g) => [g.n, g.old / g.all, `${pct(g.old / g.all)}`, `${g.n}: older movie won ${g.old} of ${g.all}`]));
+  if ($("oldnew")) $("oldnew").querySelectorAll(".fill").forEach((el, i) => { const g = gaps.filter((g) => g.all)[i]; el.style.width = pct(g.old / g.all); });
+
+  // ---------- director / actor win rates
+  function winRates(keysOf, min) {
+    const o = new Map();
+    picks.forEach((p) => [p.a, p.b].forEach((id) => {
+      const m = byId.get(id); if (!m) return;
+      keysOf(m).forEach((k) => { if (!o.has(k)) o.set(k, { w: 0, n: 0 }); const e = o.get(k); e.n++; if (p.winner === id) e.w++; });
+    }));
+    return [...o.entries()].filter(([, e]) => e.n >= min).sort((a, b) => b[1].w / b[1].n - a[1].w / a[1].n)
+      .slice(0, 8).map(([k, e]) => [k, e.w / e.n, `${pct(e.w / e.n)}`, `${k}: ${e.w}–${e.n - e.w}`]);
+  }
+  bars("dirwin", winRates((m) => split(m.director), 12));
+  bars("actwin", winRates((m) => split(m.cast).slice(0, 4), 15));
+  ["dirwin", "actwin"].forEach((id) => $(id) && $(id).querySelectorAll(".fill").forEach((el) => { el.style.width = el.parentNode.parentNode.querySelector(".val").textContent; }));
+
+  // ---------- watch backlog by genre
+  const genreRows = tally(films, genresOf).slice(0, 12);
+  const gmax = Math.max(...genreRows.map((r) => r[1]));
+  $("backlog").innerHTML = genreRows.map(([g, total]) => {
+    const w = films.filter((m) => genresOf(m).includes(g) && isWatched(m)).length;
+    return `<li class="bar" title="${esc(g)}: ${w} watched, ${total - w} not yet"><span class="name">${esc(g)}</span>` +
+      `<span class="track" style="width:${(total / gmax) * 100}%"><span class="fill" style="flex:${w}"></span><span class="fill rest" style="flex:${total - w}"></span></span>` +
+      `<span class="val">${total - w} left</span></li>`;
+  }).join("");
+
+  // ---------- decades
+  const dec = new Map();
+  all.forEach((m) => {
+    const y = parseInt(m.year, 10); if (!y) return;
+    const d = Math.floor(y / 10) * 10, e = dec.get(d) || [0, 0];
+    e[isWatched(m) ? 0 : 1]++; dec.set(d, e);
+  });
+  const ds = [...dec.keys()].sort();
+  const decRows = [];
+  for (let d = ds[0]; d <= ds[ds.length - 1]; d += 10) decRows.push([d, ...(dec.get(d) || [0, 0])]);
+  const dmax = Math.max(...decRows.map((r) => r[1] + r[2]));
+  $("decades").innerHTML = decRows.map(([d, w, u]) =>
+    `<div class="col" title="${d}s: ${w} watched, ${u} not yet"><span class="cv">${fmt(w + u)}</span>` +
+    `<div class="stack" style="height:${((w + u) / dmax) * 100}%">${u ? `<div class="cb rest" style="flex:${u}"></div>` : ""}${w ? `<div class="cb" style="flex:${w}"></div>` : ""}</div></div>`).join("");
+  $("decade-labels").innerHTML = decRows.map(([d]) => `<span>${String(d).slice(2)}s</span>`).join("");
+
+  // ---------- people
+  bars("directors", tally(films, (m) => split(m.director)), 10);
+  bars("actors", tally(films, (m) => split(m.cast)), 10);
+
+  // ---------- records
+  const dated = all.filter((m) => parseInt(m.year, 10)).sort((a, b) => a.year - b.year);
+  const lengthy = films.filter((m) => mins(m) >= 40).sort((a, b) => mins(a) - mins(b));
+  const unseen = films.filter((m) => !isWatched(m));
+  const oldestUnseen = unseen.filter((m) => parseInt(m.year, 10)).sort((a, b) => a.year - b.year)[0];
+  const longestUnseen = unseen.filter(mins).sort((a, b) => mins(b) - mins(a))[0];
+  const dirsUnseen = tally(unseen, (m) => split(m.director))[0];
+  const facts = [
+    ["Oldest title", dated[0].title, dated[0].year],
+    ["Newest title", dated[dated.length - 1].title, dated[dated.length - 1].year],
+    ["Longest movie", lengthy[lengthy.length - 1].title, hm(mins(lengthy[lengthy.length - 1]))],
+    ["Average movie", hm(Math.round(totalMin / films.filter(mins).length)), `across ${fmt(films.length)} movies`],
+    oldestUnseen && ["Oldest unwatched", oldestUnseen.title, oldestUnseen.year],
+    longestUnseen && ["Longest unwatched", longestUnseen.title, hm(mins(longestUnseen))],
+    dirsUnseen && ["Biggest director backlog", dirsUnseen[0], `${dirsUnseen[1]} movies not watched yet`],
+    (() => { const y = tally(films, (m) => [m.year])[0]; return y && ["Biggest year", y[0], `${y[1]} movies released that year`]; })(),
+  ].filter(Boolean);
+  $("facts").innerHTML = facts.map(([k, v, d]) =>
+    `<div class="fact"><span class="k">${k}</span><span class="v">${esc(v)}</span><span class="d">${esc(d)}</span></div>`).join("");
+
+  // ---------- tabs (remembered per browser, deep link with #tournament)
+  const tabs = ["shelf", "tournament"];
+  function show(name) {
+    tabs.forEach((t) => {
+      $(t).hidden = t !== name;
+      $("tab-btn-" + t).setAttribute("aria-selected", String(t === name));
+    });
+    try { localStorage.setItem("stats-tab", name); } catch (e) {}
+  }
+  tabs.forEach((t) => $("tab-btn-" + t).addEventListener("click", () => show(t)));
+  let startTab = location.hash === "#tournament" ? "tournament" : null;
+  if (!startTab) { try { startTab = localStorage.getItem("stats-tab"); } catch (e) {} }
+  show(tabs.includes(startTab) ? startTab : "shelf");
+
+  $("foot").textContent = `Collection numbers come from movies.js (${fmt(all.length)} entries). ` +
+    (D.sample ? "Watched status and every tournament number are simulated in this preview." : "Watched status and tournament results come live from the reservations server.") +
+    " Power ratings replay every pick in order: a win over a higher-rated movie earns more points. Runtime totals skip TV seasons.";
+})();
+</script>
+</body>
+</html>
