@@ -1691,9 +1691,22 @@ throw new Error(
 const data =
 await response.json();
 
+/*
+
+* Seen brackets ("seen:<category>", drawn from everything
+* watched - see tournament-bracket.js) never hold a belt, so
+* their winners are left out of the belts/crowns shown on the
+* shelf and the hub.
+  */
+
 tournamentChampions =
 Array.isArray(data.champions)
-? data.champions
+? data.champions.filter(
+entry =>
+!isSeenTournamentCategory(
+entry.category
+)
+)
 : [];
 
 tournamentEverWonIds =
@@ -13913,12 +13926,12 @@ let line =
 if (entry.result === "champion") {
 
 line =
-`${label} ${entry.category === "full" ? "Full Collection" : entry.category} tournament`;
+`${label} ${historyCategoryName(entry.category)} tournament`;
 
 } else if (entry.result === "eliminated") {
 
 line =
-`${label} in the ${roundLabel(entry.round, entry.total_rounds)} of the ${entry.category === "full" ? "Full Collection" : entry.category} tournament` +
+`${label} in the ${roundLabel(entry.round, entry.total_rounds)} of the ${historyCategoryName(entry.category)} tournament` +
 (
 entry.beaten_by_title
 ? ` by ${entry.beaten_by_title}`
@@ -13933,7 +13946,7 @@ line =
 } else {
 
 line =
-`${label} ${entry.category === "full" ? "Full Collection" : entry.category} tournament`;
+`${label} ${historyCategoryName(entry.category)} tournament`;
 
 }
 
@@ -20452,7 +20465,7 @@ isMovieWatched(movie)
 
 /*
 
-* "Everything I've Seen" pool (toggle on the tournament hub) -
+* Seen pool (Owned | Seen toggle on the tournament hub) -
 * adds watched-but-not-owned movies from seen.js. Only applies
 * when tournament-bracket.js has loaded and that pool is chosen.
   */
@@ -20520,9 +20533,61 @@ genreValue.toLowerCase()
 
 }
 
+/*
+
+* Seen brackets are stored as "seen:<category>" so they never
+* touch the Owned belts. Everything shown on screen uses the
+* plain category name.
+  */
+
+function isSeenTournamentCategory(
+category
+) {
+
+return String(
+category || ""
+).startsWith(
+"seen:"
+);
+
+}
+
+function baseTournamentCategory(
+category
+) {
+
+return String(
+category || ""
+).replace(
+/^seen:/,
+""
+);
+
+}
+
+function historyCategoryName(
+category
+) {
+
+const base =
+baseTournamentCategory(
+category
+);
+
+return base === "full"
+? "Full Collection"
+: base;
+
+}
+
 function categoryDisplayName(
 category
 ) {
+
+category =
+baseTournamentCategory(
+category
+);
 
 if (category === "full") {
 
@@ -20546,7 +20611,7 @@ category.slice(1)
 /*
 
 * Finds a tournament entrant by id - on the shelf first, then
-* (when it has loaded) the "Everything I've Seen" list from
+* (when it has loaded) the Seen list from
 * seen.js, so movies watched but not owned still get a poster,
 * year, cast and so on. See tournament-bracket.js.
   */
@@ -20783,21 +20848,24 @@ round1
 }
 
 function buildGenreTournamentPayload(
-genreValue
+genreValue,
+category
 ) {
 
 return buildCappedTournamentPayload(
-genreValue,
+category || genreValue,
 getTournamentGenrePool(genreValue),
 128
 );
 
 }
 
-function buildFullCollectionPayload() {
+function buildFullCollectionPayload(
+category
+) {
 
 return buildCappedTournamentPayload(
-"full",
+category || "full",
 getTournamentEligibleMovies(),
 256
 );
@@ -20965,8 +21033,17 @@ await loadSeenMovies();
 
 }
 
+const seenPool =
+typeof seenPoolActive === "function" &&
+seenPoolActive();
+
 const categories =
-["full", ...GENRE_TOURNAMENT_CATEGORIES];
+["full", ...GENRE_TOURNAMENT_CATEGORIES].map(
+category =>
+seenPool
+? "seen:" + category
+: category
+);
 
 const statuses =
 await Promise.all(
@@ -21003,13 +21080,18 @@ statuses[i];
 const inProgress =
 status && status.tournament;
 
+const baseCategory =
+baseTournamentCategory(
+category
+);
+
 const poolSize =
-category === "full"
+baseCategory === "full"
 ? getTournamentEligibleMovies().length
-: getTournamentGenrePool(category).length;
+: getTournamentGenrePool(baseCategory).length;
 
 const cap =
-category === "full"
+baseCategory === "full"
 ? 256
 : 128;
 
@@ -21125,11 +21207,16 @@ category
 
 if (!current || !current.tournament) {
 
+const baseCategory =
+baseTournamentCategory(
+category
+);
+
 const payload =
 await (
-category === "full"
-? buildFullCollectionPayload()
-: buildGenreTournamentPayload(category)
+baseCategory === "full"
+? buildFullCollectionPayload(category)
+: buildGenreTournamentPayload(baseCategory, category)
 );
 
 if (!payload) {
@@ -21514,11 +21601,23 @@ await loadTournamentChampions();
 * final and 3rd-place match get decided in.
   */
 
+/*
+
+* Seen brackets have no belt entry, so their winner comes
+* from the results podium the server just returned.
+  */
+
 const champEntry =
 tournamentChampions.find(
 entry =>
 entry.category === tournament.category
-);
+) ||
+(
+data.results_summary &&
+data.results_summary.podium &&
+data.results_summary.podium.champion
+) ||
+null;
 
 const winnerMovie =
 champEntry

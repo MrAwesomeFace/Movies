@@ -1354,20 +1354,32 @@ export default {
           new Date().toISOString();
 
         /*
+         * Seen brackets ("seen:<category>", drawn from everything
+         * watched rather than just the owned shelf) crown a winner
+         * and keep full history, but never hold a belt: no
+         * current_champions row and no lifetime championship count.
+         */
+
+        const isSeenBracket =
+          String(tournamentRow.category || "").startsWith("seen:");
+
+        /*
          * Captured BEFORE the upsert below overwrites it - this
          * is the only chance to know who's being dethroned, if
          * anyone.
          */
 
         const previousChampion =
-          await env.DB
-            .prepare(`
-              SELECT * FROM current_champions WHERE category = ?
-            `)
-            .bind(
-              tournamentRow.category
-            )
-            .first();
+          isSeenBracket
+            ? null
+            : await env.DB
+              .prepare(`
+                SELECT * FROM current_champions WHERE category = ?
+              `)
+              .bind(
+                tournamentRow.category
+              )
+              .first();
 
         await env.DB
           .prepare(`
@@ -1381,34 +1393,38 @@ export default {
           )
           .run();
 
-        await env.DB
-          .prepare(`
-            INSERT OR REPLACE INTO current_champions
-              (category, movie_id, movie_title, tournament_id, crowned_at)
-            VALUES (?, ?, ?, ?, ?)
-          `)
-          .bind(
-            tournamentRow.category,
-            championMovieId,
-            championTitle,
-            tournamentId,
-            now
-          )
-          .run();
+        if (!isSeenBracket) {
 
-        await env.DB
-          .prepare(`
-            INSERT INTO movie_tournament_stats
-              (movie_id, total_championships, has_ever_won)
-            VALUES (?, 1, 1)
-            ON CONFLICT(movie_id) DO UPDATE SET
-              total_championships = total_championships + 1,
-              has_ever_won = 1
-          `)
-          .bind(
-            championMovieId
-          )
-          .run();
+          await env.DB
+            .prepare(`
+              INSERT OR REPLACE INTO current_champions
+                (category, movie_id, movie_title, tournament_id, crowned_at)
+              VALUES (?, ?, ?, ?, ?)
+            `)
+            .bind(
+              tournamentRow.category,
+              championMovieId,
+              championTitle,
+              tournamentId,
+              now
+            )
+            .run();
+
+          await env.DB
+            .prepare(`
+              INSERT INTO movie_tournament_stats
+                (movie_id, total_championships, has_ever_won)
+              VALUES (?, 1, 1)
+              ON CONFLICT(movie_id) DO UPDATE SET
+                total_championships = total_championships + 1,
+                has_ever_won = 1
+            `)
+            .bind(
+              championMovieId
+            )
+            .run();
+
+        }
 
         await insertHistory(
           championMovieId,
@@ -1530,6 +1546,16 @@ export default {
 
         const category =
           tournamentRow.category;
+
+        // Plain name for fun-fact text - Seen brackets are stored as
+        // "seen:<category>" but read the same as Owned ones.
+        const baseCategory =
+          String(category || "").replace(/^seen:/, "");
+
+        const categoryName =
+          baseCategory === "full"
+            ? "Full Collection"
+            : baseCategory;
 
         /*
          * Tier-only, deliberately NOT multiplied by round. round
@@ -1838,7 +1864,7 @@ export default {
 
           funFacts.push({
             type: "repeat_elimination",
-            text: `😅 ${repeatElim.movie_title} has now been knocked out of the ${category === "full" ? "Full Collection" : category} tournament ${repeatElim.elim_count} times${beatenByText}`
+            text: `😅 ${repeatElim.movie_title} has now been knocked out of the ${categoryName} tournament ${repeatElim.elim_count} times${beatenByText}`
           });
 
         }
@@ -1883,7 +1909,7 @@ export default {
 
             funFacts.push({
               type: "career_best",
-              text: `📈 Career-best: this is ${champion.movie_title}'s best-ever finish in the ${category === "full" ? "Full Collection" : category} tournament`
+              text: `📈 Career-best: this is ${champion.movie_title}'s best-ever finish in the ${categoryName} tournament`
             });
 
           }

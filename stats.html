@@ -61,6 +61,10 @@
   .tab[aria-selected="true"] { color: var(--gold); border-bottom-color: var(--gold); }
   .tab:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 4px; }
   .panel { display: grid; gap: 22px; }
+.tmode { display: inline-flex; justify-self: start; gap: 2px; padding: 3px; border: 1px solid var(--panel-edge); border-radius: 10px; background: var(--panel); }
+.tmode-btn { appearance: none; border: 0; border-radius: 7px; background: none; color: var(--ink-2); font-family: var(--label); font-size: 14px; letter-spacing: 0.06em; text-transform: uppercase; padding: 6px 16px; cursor: pointer; }
+.tmode-btn[aria-pressed="true"] { background: var(--gold); color: #1a1300; }
+.tmode-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
   .act { font-family: var(--display); font-weight: 400; font-size: 28px; letter-spacing: 0.02em; margin: 10px 0 -8px; display: flex; align-items: center; gap: 14px; }
   .act::after { content: ""; flex: 1; height: 2px; background: linear-gradient(90deg, var(--gold), transparent); }
 
@@ -198,10 +202,14 @@
 
   <div class="panel" id="tournament" role="tabpanel" hidden>
   <div class="notice" id="t-notice" hidden></div>
+  <div class="tmode" role="group" aria-label="Which brackets">
+    <button class="tmode-btn" id="tmode-owned" data-tmode="owned" aria-pressed="true">Owned</button>
+    <button class="tmode-btn" id="tmode-seen" data-tmode="seen" aria-pressed="false">Seen</button>
+  </div>
   <div class="marquee" id="marquee-t"></div>
   <div class="grid">
     <section class="wide">
-      <h2>Belt holders <small>reigning champion in each bracket</small></h2>
+      <h2><span data-seen="Seen champions">Belt holders</span> <small data-seen="latest winner of each bracket">reigning champion in each bracket</small></h2>
       <div class="belts" id="belts"></div>
     </section>
 
@@ -211,7 +219,7 @@
     </section>
 
     <section class="wide">
-      <h2>What wins <small>belt winners compared with every watched movie</small></h2>
+      <h2>What wins <small data-seen="winners compared with every watched movie">belt winners compared with every watched movie</small></h2>
       <div class="dna" id="dna"></div>
     </section>
 
@@ -225,7 +233,7 @@
     </section>
 
     <section>
-      <h2>Giant killers <small>wins over belt winners</small></h2>
+      <h2>Giant killers <small data-seen="wins over past winners">wins over belt winners</small></h2>
       <ul class="rows" id="giants"></ul>
     </section>
     <section>
@@ -238,7 +246,7 @@
       <ul class="rows" id="onedone"></ul>
     </section>
     <section>
-      <h2>Longest reigns <small>days holding a belt</small></h2>
+      <h2>Longest reigns <small data-seen="days as the latest winner">days holding a belt</small></h2>
       <ul class="rows" id="reigns"></ul>
     </section>
 
@@ -318,7 +326,7 @@
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const fmt = (n) => Number(n).toLocaleString("en-US");
   const pct = (x) => `${Math.round(x * 100)}%`;
-  const catName = (c) => c === "full" ? "Full Collection" : c === "rom-com" ? "Rom-Com" : c[0].toUpperCase() + c.slice(1);
+  const catName = (c) => { c = String(c).replace(/^seen:/, ""); return c === "full" ? "Full Collection" : c === "rom-com" ? "Rom-Com" : c[0].toUpperCase() + c.slice(1); };
   const mins = (m) => { const r = /^(\d+)m$/.exec(m.runtime || ""); return r ? +r[1] : null; };
   const genresOf = (m) => (m.genre || "").split(" / ").map((g) => g.trim()).filter(Boolean);
   const split = (s) => (s || "").split(",").map((x) => x.trim()).filter(Boolean);
@@ -369,7 +377,7 @@
     let log = null;
     try { log = await getJSON("/tournament-log"); } catch (e) {}
     const current = {};
-    await Promise.all(CATEGORIES.map(async (c) => {
+    await Promise.all(CATEGORIES.concat(CATEGORIES.map((c) => "seen:" + c)).map(async (c) => {
       try { current[c] = await getJSON(`/tournaments/current?category=${encodeURIComponent(c)}`); } catch (e) {}
     }));
     return {
@@ -454,8 +462,6 @@
 
   const isWatched = (m) => D.watched.has(`${m.type}:${m.tmdbId}`);
   const seenFilms = films.filter(isWatched);
-  const tById = new Map(D.tournaments.map((t) => [t.id, t]));
-  const picks = [...D.picks].sort((a, b) => a.decided_at - b.decided_at);
   const loser = (p) => (p.winner === p.a ? p.b : p.a);
 
   function tally(list, keysOf) {
@@ -465,7 +471,7 @@
   }
   function bars(id, rows, limit) {
     const shown = limit ? rows.slice(0, limit) : rows;
-    if (!shown.length) { $(id).outerHTML = `<p class="empty">Nothing yet.</p>`; return; }
+    if (!shown.length) { $(id).innerHTML = `<li class="empty">Nothing yet.</li>`; return; }
     const max = Math.max(...shown.map((r) => r[1]), 1);
     $(id).innerHTML = shown.map(([name, n, label, tip]) =>
       `<li class="bar" title="${esc(tip || `${name}: ${label || fmt(n)}`)}"><span class="name">${esc(name)}</span>` +
@@ -484,6 +490,36 @@
     return left === 2 ? "Final" : left === 4 ? "Final Four" : left === 8 ? "Great Eight" : left === 16 ? "Sweet Sixteen" : `Round of ${left}`;
   }
   const T = (id) => `<strong>${esc(titleOf(id))}</strong>`;
+
+  // ---------- headline tiles
+  const totalMin = films.map(mins).filter(Boolean).reduce((a, b) => a + b, 0);
+  const seenCount = all.filter(isWatched).length;
+  const tile = ([n, l, d]) => `<div class="tile"><span class="num">${n}</span><span class="lbl">${l}</span><span class="note">${esc(d)}</span></div>`;
+  const unseenMin = films.filter((m) => !isWatched(m)).map(mins).filter(Boolean).reduce((a, b) => a + b, 0);
+  const directorCount = new Set(films.flatMap((m) => split(m.director))).size;
+  const classics = films.filter((m) => { const y = parseInt(m.year, 10); return y && y < 1980; }).length;
+  $("marquee-s").innerHTML = [
+    [fmt(all.length), "Titles", `${fmt(films.length)} movies · ${fmt(all.length - films.length)} TV and extras`],
+    [pct(seenCount / all.length), "Watched", `${fmt(seenCount)} of ${fmt(all.length)} titles`],
+    [(totalMin / 60 / 24).toFixed(1), "Days of movies", "every movie back to back"],
+    [(unseenMin / 60 / 24).toFixed(1), "Days left to watch", "every unwatched movie"],
+    [fmt(directorCount), "Directors", "different directors on the shelf"],
+    [fmt(classics), "Classics", "movies from before 1980"],
+  ].map(tile).join("");
+
+  function renderTournamentStats(mode) {
+  // Owned brackets play for belts; Seen brackets (stored as "seen:<category>")
+  // are drawn from everything watched and just crown a winner. Same sections
+  // for both, built from that kind of bracket only.
+  const seenMode = mode === "seen";
+  const tournaments = D.tournaments.filter((t) => String(t.category).startsWith("seen:") === seenMode);
+  const tById = new Map(tournaments.map((t) => [t.id, t]));
+  const picks = D.picks.filter((p) => tById.has(p.tournament_id)).sort((a, b) => a.decided_at - b.decided_at);
+  const cats = CATEGORIES.map((c) => (seenMode ? "seen:" : "") + c);
+  document.querySelectorAll("#tournament [data-seen]").forEach((el) => {
+    if (el.dataset.owned === undefined) el.dataset.owned = el.textContent;
+    el.textContent = seenMode ? el.dataset.seen : el.dataset.owned;
+  });
 
   // ---------- ratings: replay every pick in order (Elo, K = 32)
   const rating = new Map(), rec = new Map();
@@ -510,9 +546,9 @@
   });
 
   // ---------- belts, reigns and defenses
-  const finished = D.tournaments.filter((t) => t.finished_at && t.champion_id).sort((a, b) => a.finished_at - b.finished_at);
+  const finished = tournaments.filter((t) => t.finished_at && t.champion_id).sort((a, b) => a.finished_at - b.finished_at);
   const belts = new Map(), finals = new Map(), reigns = [];
-  CATEGORIES.forEach((cat) => {
+  cats.forEach((cat) => {
     const list = finished.filter((t) => t.category === cat);
     let cur = null;
     list.forEach((t) => {
@@ -531,45 +567,29 @@
   });
   const everWon = [...belts.keys()];
 
-  // ---------- headline tiles
-  const totalMin = films.map(mins).filter(Boolean).reduce((a, b) => a + b, 0);
-  const seenCount = all.filter(isWatched).length;
-  const tile = ([n, l, d]) => `<div class="tile"><span class="num">${n}</span><span class="lbl">${l}</span><span class="note">${esc(d)}</span></div>`;
-  const unseenMin = films.filter((m) => !isWatched(m)).map(mins).filter(Boolean).reduce((a, b) => a + b, 0);
-  const directorCount = new Set(films.flatMap((m) => split(m.director))).size;
-  const classics = films.filter((m) => { const y = parseInt(m.year, 10); return y && y < 1980; }).length;
-  $("marquee-s").innerHTML = [
-    [fmt(all.length), "Titles", `${fmt(films.length)} movies · ${fmt(all.length - films.length)} TV and extras`],
-    [pct(seenCount / all.length), "Watched", `${fmt(seenCount)} of ${fmt(all.length)} titles`],
-    [(totalMin / 60 / 24).toFixed(1), "Days of movies", "every movie back to back"],
-    [(unseenMin / 60 / 24).toFixed(1), "Days left to watch", "every unwatched movie"],
-    [fmt(directorCount), "Directors", "different directors on the shelf"],
-    [fmt(classics), "Classics", "movies from before 1980"],
-  ].map(tile).join("");
-
   const top = [...rating.entries()].filter(([id]) => { const r = rec.get(id); return r && r.w + r.l >= 4; }).sort((a, b) => b[1] - a[1])[0];
   const topReign = [...reigns].sort((a, b) => b.days - a.days)[0];
   $("marquee-t").innerHTML = [
     [fmt(finished.length), "Brackets finished", "each one crowned a champion"],
-    [fmt(everWon.length), "Champions", "different movies with a belt"],
+    [fmt(everWon.length), "Champions", seenMode ? "different winners" : "different movies with a belt"],
     [fmt(picks.length), "Picks made", "head-to-head decisions"],
     [(picks.reduce((a, p) => a + (p.deliberation_ms || 0), 0) / 3600000).toFixed(1), "Hours deciding", "time spent making picks"],
     [top ? Math.round(top[1]) : "–", "Top rating", top ? `${titleOf(top[0])} is #1` : "no picks yet"],
-    [topReign ? topReign.days : "–", "Longest reign", topReign ? `days, ${titleOf(topReign.id)}` : "no belts yet"],
+    [topReign ? topReign.days : "–", "Longest reign", topReign ? `days, ${titleOf(topReign.id)}` : (seenMode ? "no winners yet" : "no belts yet")],
   ].map(tile).join("");
 
   // ---------- belt wall
-  $("belts").innerHTML = CATEGORIES.map((cat) => {
+  $("belts").innerHTML = cats.map((cat) => {
     const reign = reigns.filter((r) => r.cat === cat && !r.end)[0];
     const m = reign && byId.get(reign.id);
-    const pool = seenFilms.filter((f) => inCategory(f, cat)).length;
+    const pool = seenFilms.filter((f) => inCategory(f, cat.replace(/^seen:/, ""))).length;
     const cur = D.current[cat];
     const live = cur && cur.tournament && cur.matchups && cur.matchups.length
       ? `<span class="chip live">${roundName(cur.round, cur.tournament.total_rounds)} · ${cur.matchups.length} to pick</span>`
       : `<span class="chip">No bracket running</span>`;
     const poster = reign
       ? `<div class="poster" style="background-image:url('${esc(m && m.poster)}')"><div class="pt">${esc(titleOf(reign.id))}</div></div>`
-      : `<div class="poster vacant"><div class="pt">Belt vacant</div></div>`;
+      : `<div class="poster vacant"><div class="pt">${seenMode ? "No winner yet" : "Belt vacant"}</div></div>`;
     const meta = reign
       ? `${reign.days} days${reign.defenses ? ` · ${reign.defenses} defense${reign.defenses > 1 ? "s" : ""}` : ""}`
       : `${fmt(pool)} watched in pool`;
@@ -581,7 +601,7 @@
     .sort((a, b) => b[1] - a[1]);
   const medal = (n, cls) => n ? `<span class="medal ${cls}">${n}</span>` : `<span class="zero">–</span>`;
   $("power").innerHTML = ranked.length
-    ? `<thead><tr><th></th><th>Movie</th><th>Rating</th><th>W–L</th><th>Win %</th><th>Belts</th><th>Finals</th></tr></thead><tbody>` +
+    ? `<thead><tr><th></th><th>Movie</th><th>Rating</th><th>W–L</th><th>Win %</th><th>${seenMode ? "Wins" : "Belts"}</th><th>Finals</th></tr></thead><tbody>` +
       ranked.slice(0, 15).map(([id, r], i) => {
         const x = rec.get(id), m = byId.get(id);
         return `<tr><td>${i + 1}</td><td><span class="t">${esc(titleOf(id))}</span><span class="y">${esc(m ? m.year : "")}</span></td>` +
@@ -672,7 +692,7 @@
   // ---------- longest reigns
   rows("reigns", [...reigns].sort((a, b) => b.days - a.days).slice(0, 6).map((r) => [
     `${T(r.id)}${!r.end ? '<span class="tag">Current</span>' : ""}`,
-    `${catName(r.cat)} belt · won ${date(r.start)}${r.defenses ? ` · ${r.defenses} title defense${r.defenses > 1 ? "s" : ""}` : ""}`,
+    `${catName(r.cat)} ${seenMode ? "title" : "belt"} · won ${date(r.start)}${r.defenses ? ` · ${r.defenses} title defense${r.defenses > 1 ? "s" : ""}` : ""}`,
     `${r.days} days`,
   ]));
 
@@ -761,7 +781,7 @@
       }));
   }
   function winRateBars(id, list) {
-    if (!list.length) { $(id).outerHTML = `<p class="empty">Nothing yet.</p>`; return; }
+    if (!list.length) { $(id).innerHTML = `<li class="empty">Nothing yet.</li>`; return; }
     $(id).innerHTML = list.map((r) =>
       `<li class="bar" title="${esc(r.name)}: ${r.w}–${r.l}"><span class="name">${esc(r.name)}</span>` +
       `<span class="track"><span class="fill" style="width:${pct(r.rate)}"></span></span>` +
@@ -771,6 +791,8 @@
   }
   winRateBars("dirwin", winRates((m) => split(m.director), 12));
   winRateBars("actwin", winRates((m) => split(m.cast).slice(0, 4), 15));
+
+  }
 
   // ---------- watch backlog by genre
   const genreRows = tally(films, genresOf).slice(0, 12);
@@ -835,6 +857,17 @@
   let startTab = location.hash === "#tournament" ? "tournament" : null;
   if (!startTab) { try { startTab = localStorage.getItem("stats-tab"); } catch (e) {} }
   show(tabs.includes(startTab) ? startTab : "shelf");
+
+  // ---------- Owned / Seen switch for the tournament tab (remembered per browser)
+  function showMode(mode) {
+    ["owned", "seen"].forEach((m) => $("tmode-" + m).setAttribute("aria-pressed", String(m === mode)));
+    try { localStorage.setItem("stats-tmode", mode); } catch (e) {}
+    renderTournamentStats(mode);
+  }
+  document.querySelectorAll("[data-tmode]").forEach((b) => b.addEventListener("click", () => showMode(b.dataset.tmode)));
+  let startMode = "owned";
+  try { if (localStorage.getItem("stats-tmode") === "seen") startMode = "seen"; } catch (e) {}
+  showMode(startMode);
 
   $("foot").textContent = `Collection numbers come from movies.js (${fmt(all.length)} entries). ` +
     (D.sample ? "Watched status and every tournament number are simulated in this preview." : "Watched status and tournament results come live from the reservations server.") +

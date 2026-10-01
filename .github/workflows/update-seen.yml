@@ -1,7 +1,7 @@
 name: Update Seen Movies
 
 # Keeps seen.js - every movie watched on Letterboxd that ISN'T in
-# movies.js - up to date, for the tournament's "Everything I've Seen"
+# movies.js - up to date, for the tournament's Seen
 # pool.
 #
 # Daily: asks the Worker for the watched list (which the Worker's own

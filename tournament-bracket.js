@@ -53,7 +53,7 @@ const TOURNAMENT_POOL_KEY =
 
 
 // =========================================================
-// "EVERYTHING I'VE SEEN" POOL (seen.js)
+// SEEN POOL (seen.js)
 // =========================================================
 /*
  * seen.js lists movies watched on Letterboxd that aren't on the
@@ -132,12 +132,23 @@ function getTournamentPool() {
 }
 
 /*
+ * True when the hub is set to Seen and the seen list actually has
+ * movies - app.js then shows the Seen brackets ("seen:<category>"),
+ * which crown a winner but never move a belt.
+ */
+function seenPoolActive() {
+
+  return getTournamentPool() === "seen" && seenMovieList.length > 0;
+
+}
+
+/*
  * Extra movies app.js adds to every tournament pool - none unless
- * "Everything I've Seen" is chosen on the hub.
+ * Seen is chosen on the hub.
  */
 function extraTournamentMovies() {
 
-  return getTournamentPool() === "seen"
+  return seenPoolActive()
     ? seenMovieList
     : [];
 
@@ -153,14 +164,16 @@ function tournamentPoolToggleHTML() {
       `<button type="button" class="tv-switch-button${pool === value ? " active" : ""}" data-tv-pool="${value}" aria-pressed="${pool === value}">${label}</button>`;
 
   const note =
-    seenMovieList.length
-      ? `New brackets draw from ${pool === "seen" ? `your shelf plus ${seenMovieList.length.toLocaleString("en-US")} more you've seen` : "your shelf"}.`
-      : (pool === "seen" ? "Your seen list hasn't loaded yet, so brackets use your shelf." : "");
+    pool === "seen"
+      ? (seenMovieList.length
+        ? `Everything you've watched: your shelf plus ${seenMovieList.length.toLocaleString("en-US")} more. Winners don't take belts.`
+        : "Your seen list hasn't loaded yet, so these are your Owned brackets.")
+      : "";
 
   return `<div class="tv-pool">` +
-    `<div class="tv-switch" role="group" aria-label="Movies to draw from">` +
-    button("shelf", "My shelf") +
-    button("seen", "Everything I've seen") +
+    `<div class="tv-switch" role="group" aria-label="Owned or seen brackets">` +
+    button("shelf", "Owned") +
+    button("seen", "Seen") +
     `</div>` +
     (note ? `<span class="tv-pool-note">${note}</span>` : "") +
     `</div>`;
