@@ -76,7 +76,9 @@ was never loaded by any page and was deleted on 2026-10-01.
   Christmas bracket because TMDB has no Christmas/holiday genre to match the hand-picked tag.
 - **Server endpoints the newer features need** (all read-only):
   - `/tournament-log` — stats page Tournament tab, and the smarter draw.
-  - `/tournaments/:id/matchups` — the Bracket view.
+  - `/tournaments/:id/matchups` — the Bracket view, and the stats page's bracket viewer
+    (tap a Belt holders poster to see the latest finished bracket in that category, read-only;
+    if this endpoint fails it falls back to the picks from `/tournament-log`).
   - `/watched`, `/tournaments/current` — stats page.
 - **The logo link** in `index.html` is a plain link to `stats.html`; the animation is
   added on top. If the animation script fails, the link still works.

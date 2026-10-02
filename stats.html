@@ -88,6 +88,28 @@
   .belt .meta { font-size: 12.5px; color: var(--ink-3); line-height: 1.35; }
   .chip { display: inline-block; font-family: var(--label); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 6px; line-height: 1.35; border: 1px solid var(--cool); color: var(--ink-2); }
   .chip.live { border-color: var(--gold); color: var(--gold); }
+  button.poster { appearance: none; padding: 0; width: 100%; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+  button.poster:hover, button.poster:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  /* bracket viewer: the latest finished bracket behind a belt, read-only */
+  .bk { width: min(960px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); overflow: auto; padding: 0; border: 2px solid var(--gold); border-radius: 12px; background: var(--panel); color: var(--ink); }
+  .bk::backdrop { background: rgba(2, 10, 35, 0.78); }
+  .bk-head { position: sticky; top: 0; z-index: 1; display: flex; align-items: flex-start; gap: 14px; padding: 16px 18px 12px; background: var(--panel); border-bottom: 1px solid var(--panel-edge); }
+  .bk-head .bk-poster { width: 54px; aspect-ratio: 2 / 3; flex: none; border-radius: 4px; border: 1px solid var(--gold); background: var(--panel-2) center / cover no-repeat; }
+  .bk-head .bk-title { flex: 1; min-width: 0; display: grid; gap: 2px; }
+  .bk-head .bk-cat { font-family: var(--label); text-transform: uppercase; letter-spacing: 0.12em; font-size: 12px; color: var(--gold); }
+  .bk-head .bk-champ { font-family: var(--display); font-size: 26px; line-height: 1.1; }
+  .bk-head .bk-sub { font-size: 13px; color: var(--ink-3); }
+  .bk-close { appearance: none; flex: none; border: 1px solid var(--ink-3); background: none; color: var(--ink-2); border-radius: 8px; font-family: var(--label); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; padding: 5px 12px; cursor: pointer; }
+  .bk-close:hover, .bk-close:focus-visible { border-color: var(--gold); color: var(--gold); }
+  .bk-body { padding: 6px 18px 20px; display: grid; gap: 18px; }
+  .bk-round h3 { margin: 12px 0 8px; color: var(--gold); }
+  .bk-games { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+  .bk-game { display: grid; border: 1px solid var(--panel-edge); border-radius: 6px; overflow: hidden; background: var(--panel-2); font-size: 13.5px; }
+  .bk-game span { padding: 5px 9px; color: var(--ink-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bk-game span + span { border-top: 1px solid var(--track); }
+  .bk-game .won { color: var(--ink); font-weight: 600; box-shadow: inset 3px 0 0 var(--gold); }
+  .bk-game .won::after { content: " ✓"; color: var(--gold); }
 
   /* leaderboard */
   .board { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
@@ -314,6 +336,14 @@
   </div>
 
   <footer id="foot"></footer>
+  <dialog class="bk" id="bk" aria-labelledby="bk-champ">
+    <div class="bk-head">
+      <div class="bk-poster" id="bk-poster"></div>
+      <div class="bk-title"><span class="bk-cat" id="bk-cat"></span><span class="bk-champ" id="bk-champ"></span><span class="bk-sub" id="bk-sub"></span></div>
+      <button type="button" class="bk-close" id="bk-close">Close</button>
+    </div>
+    <div class="bk-body" id="bk-body"></div>
+  </dialog>
 </div>
 
 <script src="movies.js"></script>
@@ -582,6 +612,8 @@
   // ---------- belt wall
   $("belts").innerHTML = cats.map((cat) => {
     const reign = reigns.filter((r) => r.cat === cat && !r.end)[0];
+    // The current holder always won the latest finished bracket in this category.
+    const latest = finished.filter((t) => t.category === cat).pop();
     const m = reign && byId.get(reign.id);
     const pool = seenFilms.filter((f) => inCategory(f, cat.replace(/^seen:/, ""))).length;
     const cur = D.current[cat];
@@ -589,13 +621,14 @@
       ? `<span class="chip live">${roundName(cur.round, cur.tournament.total_rounds)} · ${cur.matchups.length} to pick</span>`
       : `<span class="chip">No bracket running</span>`;
     const poster = reign
-      ? `<div class="poster" style="background-image:url('${esc(m && m.poster)}')"><div class="pt">${esc(titleOf(reign.id))}</div></div>`
+      ? `<button type="button" class="poster" data-bracket="${latest.id}" title="See the bracket it won" style="background-image:url('${esc(m && m.poster)}')"><div class="pt">${esc(titleOf(reign.id))}</div></button>`
       : `<div class="poster vacant"><div class="pt">${seenMode ? "No winner yet" : "Belt vacant"}</div></div>`;
     const meta = reign
-      ? `${reign.days} days${reign.defenses ? ` · ${reign.defenses} defense${reign.defenses > 1 ? "s" : ""}` : ""}`
+      ? `${reign.days} day${reign.days === 1 ? "" : "s"}${reign.defenses ? ` · ${reign.defenses} defense${reign.defenses > 1 ? "s" : ""}` : ""}`
       : `${fmt(pool)} watched in pool`;
     return `<div class="belt"><span class="cat">${catName(cat)}</span>${poster}<span class="meta">${meta}</span>${live}</div>`;
   }).join("");
+  $("belts").querySelectorAll("[data-bracket]").forEach((b) => b.addEventListener("click", () => openBracket(+b.dataset.bracket)));
 
   // ---------- power rankings
   const ranked = [...rating.entries()].filter(([id]) => { const r = rec.get(id); return r && r.w + r.l >= 4; })
@@ -844,6 +877,60 @@
   ].filter(Boolean);
   $("facts").innerHTML = facts.map(([k, v, d]) =>
     `<div class="fact"><span class="k">${k}</span><span class="v">${esc(v)}</span><span class="d">${esc(d)}</span></div>`).join("");
+
+  // ---------- bracket viewer (read-only)
+  // Matchup rows come from /tournaments/:id/matchups, which keeps every finished
+  // bracket. If that can't be reached (or in the sample preview), the picks
+  // already loaded from /tournament-log give the same games, just without slot order.
+  async function openBracket(id) {
+    const t = D.tournaments.find((x) => x.id === id);
+    if (!t) return;
+    const champ = byId.get(String(t.champion_id));
+    $("bk-poster").style.backgroundImage = champ && champ.poster ? `url('${champ.poster}')` : "";
+    $("bk-cat").textContent = catName(t.category) + (String(t.category).startsWith("seen:") ? " · Seen" : "");
+    $("bk-champ").textContent = titleOf(t.champion_id);
+    $("bk-sub").textContent = `Won the bracket finished ${date(t.finished_at)}`;
+    $("bk-body").innerHTML = `<p class="empty">Loading the bracket...</p>`;
+    if (!$("bk").open) $("bk").showModal();
+
+    let games = null;
+    if (!D.sample) {
+      try {
+        const data = await getJSON(`/tournaments/${id}/matchups`);
+        games = (data.matchups || []).filter((g) => g.winner_movie_id != null).map((g) => ({
+          round: g.round, slot: g.slot, third: g.is_third_place_match === 1,
+          a: String(g.movie_id_a), b: String(g.movie_id_b), winner: String(g.winner_movie_id),
+          ta: g.movie_title_a, tb: g.movie_title_b,
+        }));
+      } catch (e) {}
+    }
+    if (!games || !games.length) {
+      games = D.picks.filter((p) => p.tournament_id === id)
+        .map((p, i) => ({ round: p.round, slot: i, third: !!p.third_place, a: p.a, b: p.b, winner: p.winner }));
+    }
+    if (!games.length) { $("bk-body").innerHTML = `<p class="empty">This bracket couldn't be loaded.</p>`; return; }
+
+    const entrants = new Set(games.flatMap((g) => [g.a, g.b]));
+    $("bk-sub").textContent = `Won a ${fmt(entrants.size)}-movie bracket · finished ${date(t.finished_at)}`;
+    // Champion's round first, back to the opening round; 3rd place sits right after the final.
+    const groups = new Map();
+    games.forEach((g) => {
+      const key = g.third ? `${g.round}t` : `${g.round}`;
+      if (!groups.has(key)) groups.set(key, { round: g.round, third: g.third, list: [] });
+      groups.get(key).list.push(g);
+    });
+    const order = [...groups.values()].sort((x, y) => y.round - x.round || x.third - y.third);
+    const side = (id, title, won) => `<span class="${won ? "won" : ""}">${esc(byId.has(id) ? titleOf(id) : title || titleOf(id))}</span>`;
+    $("bk-body").innerHTML = order.map((grp) =>
+      `<div class="bk-round"><h3>${roundName(grp.round, t.total_rounds, grp.third)}</h3><div class="bk-games">` +
+      grp.list.sort((x, y) => x.slot - y.slot).map((g) =>
+        `<div class="bk-game">${side(g.a, g.ta, g.winner === g.a)}${side(g.b, g.tb, g.winner === g.b)}</div>`).join("") +
+      `</div></div>`).join("");
+    $("bk-body").scrollTop = 0;
+  }
+  $("bk-close").addEventListener("click", () => $("bk").close());
+  // Tapping the dimmed area outside closes it too.
+  $("bk").addEventListener("click", (e) => { if (e.target === $("bk")) $("bk").close(); });
 
   // ---------- tabs (remembered per browser, deep link with #tournament)
   const tabs = ["shelf", "tournament"];
