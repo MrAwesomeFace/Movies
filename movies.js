@@ -17479,6 +17479,26 @@ const movies = [
     "tmdbTitle": "Sevendust Retrospect"
   },
   {
+    "title": "Sex Tape",
+    "tmdbTitle": "Sex Tape",
+    "type": "movie",
+    "tmdbId": 225886,
+    "poster": "https://image.tmdb.org/t/p/w500/u2h7UnSHrbAA5WBoKhdH1rlDZfz.jpg",
+    "year": "2014",
+    "runtime": "94m",
+    "genre": "Comedy",
+    "rated": "R",
+    "director": "Jake Kasdan",
+    "cast": "Cameron Diaz, Jason Segel, Rob Corddry, Ellie Kemper, Rob Lowe, Jolene Blalock",
+    "synopsis": "When Jay and Annie first got together, their romantic connection was intense – but ten years and two kids later, the flame of their love needs a spark.  To kick things up a notch, they decide – why not? – to make a video of themselves trying out every position in The Joy of Sex in one marathon three-hour session.  It seems like a great idea – until they discover that their most private video is no longer private.  With their reputations on the line, they know they’re just one click away from being laid bare to the world... but as their race to reclaim their video leads to a night they'll never forget, they'll find that their video will expose even more than they bargained for.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere",
+      "Prime"
+    ]
+  },
+  {
     "title": "Shade",
     "type": "movie",
     "tmdbId": 14576,
