@@ -298,7 +298,7 @@ function summarizeTournamentLog(log) {
     }
   );
 
-  return { rating, record, ratingOf };
+  return { rating, record, ratingOf, tournaments: log.tournaments || [] };
 
 }
 
@@ -370,6 +370,35 @@ async function buildTournamentField(category, pool, size) {
     take(
       pool.filter(movie => idOf(movie) === String(champEntry.movie_id)),
       1
+    );
+  }
+
+  // Seen Full Collection: the latest winner of Seen Full itself and
+  // of each decade bracket (Classic, 80s ... 20s) is always in. Seen
+  // brackets hold no belts, so these come from the log, not the belts.
+  if (category === "seen:full") {
+    const feeders =
+      ["full", "classic"]
+        .concat(
+          typeof DECADE_TOURNAMENT_CATEGORIES === "object"
+            ? Object.keys(DECADE_TOURNAMENT_CATEGORIES)
+            : []
+        )
+        .map(name => "seen:" + name);
+
+    feeders.forEach(
+      feeder => {
+        const latest =
+          summary.tournaments
+            .filter(t => t.category === feeder && t.finished_at && t.champion_id)
+            .sort((a, b) => new Date(b.finished_at) - new Date(a.finished_at))[0];
+        if (latest) {
+          take(
+            pool.filter(movie => idOf(movie) === String(latest.champion_id)),
+            1
+          );
+        }
+      }
     );
   }
 

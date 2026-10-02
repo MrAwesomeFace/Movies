@@ -2674,6 +2674,27 @@ HUB - CATEGORY LIST
   gap: 10px;
 }
 
+.tournament-group-label {
+  margin: 16px 0 8px;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.12em;
+
+  text-transform: uppercase;
+
+  color: #8a93ab;
+}
+
+/* Two cards per row on phones instead of one long column. */
+@media (max-width: 480px) {
+  .tournament-category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 .tournament-category-card {
   padding: 14px 12px;
 

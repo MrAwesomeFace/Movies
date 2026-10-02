@@ -55,8 +55,8 @@ was never loaded by any page and was deleted on 2026-10-01.
 - **`tournament-bracket.js` uses functions from `app.js`** by name: `getMovieId`,
   `shuffleArray`, `posterForMovieId`, `roundLabel`, `pickRoundListWinner`,
   `renderRoundList`, `trackTournamentMatchupTiming`, `wireTournamentBackLink`,
-  `categoryDisplayName`, `findTournamentMovie`, `renderTournamentHub`, plus the `movies`, `RESERVATIONS_API`, `tournamentChampions` and
-  `tournamentOverlayOpen` values. Renaming any of those in `app.js` breaks the Bracket and
+  `categoryDisplayName`, `findTournamentMovie`, `renderTournamentHub`, plus the `movies`, `RESERVATIONS_API`, `tournamentChampions`,
+  `DECADE_TOURNAMENT_CATEGORIES` and `tournamentOverlayOpen` values. Renaming any of those in `app.js` breaks the Bracket and
   Face-off views (and the smarter draw).
 - **`app.js` uses `tournament-bracket.js` only through safety checks**
   (`drawTournamentField`, `showTournamentRound`, and `typeof` checks before
@@ -71,6 +71,13 @@ was never loaded by any page and was deleted on 2026-10-01.
   `seen:comedy`), so they never touch the Owned belts; the site shows plain names everywhere. The
   Worker skips belts and lifetime belt counts for them, `app.js` leaves their winners out of the
   shelf/hub crowns, and the stats page has an Owned | Seen switch on its Tournament tab.
+- **Decade brackets are Seen-only**: 80s, 90s, 00s, 10s and 20s (`DECADE_TOURNAMENT_CATEGORIES` in
+  `app.js`, mirrored in `stats.html`). Up to 1979 is the existing Classic bracket. The hub groups its
+  cards as Quick, Categories and (in Seen) Decades with Classic first; the stats page's Seen wall has
+  a matching Decades row. Like every Seen bracket they never move a belt or a crown.
+- **Seen Full Collection always includes** the latest winner of Seen Full Collection itself and of
+  each Decades bracket (Classic, 80s ... 20s), read from `/tournament-log` in
+  `tournament-bracket.js`. They still get seeded by rating like everyone else.
 - **Seen movies carry the same details as owned ones** (from TMDB), except hand-picked tags: a
   seen movie counts as Rom-Com when TMDB lists both Romance and Comedy, and there's no Seen
   Christmas bracket because TMDB has no Christmas/holiday genre to match the hand-picked tag.

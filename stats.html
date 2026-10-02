@@ -85,6 +85,8 @@
   .poster .pt { width: 100%; padding: 26px 8px 8px; background: linear-gradient(transparent, rgba(2, 10, 35, 0.92) 45%); font-weight: 700; font-size: 13.5px; line-height: 1.25; }
   .poster.vacant { border-style: dashed; border-color: var(--ink-3); align-items: center; justify-content: center; }
   .poster.vacant .pt { background: none; text-align: center; color: var(--ink-3); font-weight: 500; padding: 8px; }
+  .belt .cat.decade { text-transform: none; }
+  .belt-row-label { grid-column: 1 / -1; font-family: var(--label); text-transform: uppercase; letter-spacing: 0.12em; font-size: 13px; color: var(--ink-2); border-top: 1px solid var(--track); padding-top: 10px; margin-top: 4px; }
   .belt .meta { font-size: 12.5px; color: var(--ink-3); line-height: 1.35; }
   .chip { display: inline-block; font-family: var(--label); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 6px; line-height: 1.35; border: 1px solid var(--cool); color: var(--ink-2); }
   .chip.live { border-color: var(--gold); color: var(--gold); }
@@ -380,6 +382,9 @@
 (async function () {
   const API = "https://movie-reservations.iconedge.workers.dev";
   const CATEGORIES = ["full", "action", "christmas", "classic", "comedy", "drama", "horror", "rom-com", "thriller"];
+  // Seen-only decade brackets (same years as app.js). Classic (up to 1979) leads the Decades row.
+  const DECADE_START = { "80s": 1980, "90s": 1990, "00s": 2000, "10s": 2010, "20s": 2020 };
+  const DECADES = Object.keys(DECADE_START);
   const DAY = 86400000;
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -414,6 +419,7 @@
   function inCategory(m, cat) {
     if (cat === "full") return true;
     if (cat === "classic") { const y = parseInt(m.year, 10); return y && y < 1980; }
+    if (DECADE_START[cat]) { const y = parseInt(m.year, 10); return y >= DECADE_START[cat] && y < DECADE_START[cat] + 10; }
     if (cat === "baseball" || cat === "christmas") return (m.categories || []).includes(cat);
     return (m.genre || "").toLowerCase().includes(cat);
   }
@@ -436,7 +442,7 @@
     let log = null;
     try { log = await getJSON("/tournament-log"); } catch (e) {}
     const current = {};
-    await Promise.all(CATEGORIES.concat(CATEGORIES.map((c) => "seen:" + c)).map(async (c) => {
+    await Promise.all(CATEGORIES.concat(CATEGORIES.concat(DECADES).map((c) => "seen:" + c)).map(async (c) => {
       try { current[c] = await getJSON(`/tournaments/current?category=${encodeURIComponent(c)}`); } catch (e) {}
     }));
     return {
@@ -521,6 +527,15 @@
 
   const isWatched = (m) => D.watched.has(`${m.type}:${m.tmdbId}`);
   const seenFilms = films.filter(isWatched);
+  // The Seen bracket pool, as the hub counts it: watched shelf movies plus seen.js.
+  let seenPoolFilms = seenFilms;
+  // Same rule as the hub: a seen.js movie that's since been added to the shelf counts once, from the shelf.
+  try {
+    if (typeof seenMovies !== "undefined" && Array.isArray(seenMovies)) {
+      const onShelf = new Set(all.map((m) => String(m.tmdbId)));
+      seenPoolFilms = seenFilms.concat(seenMovies.filter((m) => !onShelf.has(String(m.tmdbId))));
+    }
+  } catch (e) {}
   const loser = (p) => (p.winner === p.a ? p.b : p.a);
 
   function tally(list, keysOf) {
@@ -575,7 +590,9 @@
   const tById = new Map(tournaments.map((t) => [t.id, t]));
   const picks = D.picks.filter((p) => tById.has(p.tournament_id)).sort((a, b) => a.decided_at - b.decided_at);
   // No Seen Christmas bracket: Christmas is a hand-picked tag on owned movies only.
-  const cats = CATEGORIES.filter((c) => !(seenMode && c === "christmas")).map((c) => (seenMode ? "seen:" : "") + c);
+  const cats = CATEGORIES.concat(seenMode ? DECADES : []).filter((c) => !(seenMode && c === "christmas")).map((c) => (seenMode ? "seen:" : "") + c);
+  // Seen mode shows a Decades row: Classic first, then 80s to 20s.
+  const decadeRow = (c) => seenMode && (c === "seen:classic" || DECADES.includes(c.replace(/^seen:/, "")));
   document.querySelectorAll("#tournament [data-seen]").forEach((el) => {
     if (el.dataset.owned === undefined) el.dataset.owned = el.textContent;
     el.textContent = seenMode ? el.dataset.seen : el.dataset.owned;
@@ -639,12 +656,12 @@
   ].map(tile).join("");
 
   // ---------- belt wall
-  $("belts").innerHTML = cats.map((cat) => {
+  const beltHTML = (cat) => {
     const reign = reigns.filter((r) => r.cat === cat && !r.end)[0];
     // The current holder always won the latest finished bracket in this category.
     const latest = finished.filter((t) => t.category === cat).pop();
     const m = reign && byId.get(reign.id);
-    const pool = seenFilms.filter((f) => inCategory(f, cat.replace(/^seen:/, ""))).length;
+    const pool = (seenMode ? seenPoolFilms : seenFilms).filter((f) => inCategory(f, cat.replace(/^seen:/, ""))).length;
     const cur = D.current[cat];
     const live = cur && cur.tournament && cur.matchups && cur.matchups.length
       ? `<span class="chip live">${roundName(cur.round, cur.tournament.total_rounds)} · ${cur.matchups.length} to pick</span>`
@@ -655,8 +672,12 @@
     const meta = reign
       ? `${reign.days} day${reign.days === 1 ? "" : "s"}${reign.defenses ? ` · ${reign.defenses} defense${reign.defenses > 1 ? "s" : ""}` : ""}`
       : `${fmt(pool)} watched in pool`;
-    return `<div class="belt"><span class="cat">${catName(cat)}</span>${poster}<span class="meta">${meta}</span>${live}</div>`;
-  }).join("");
+    const isDecade = DECADES.includes(cat.replace(/^seen:/, ""));
+    return `<div class="belt"><span class="cat${isDecade ? " decade" : ""}">${catName(cat)}</span>${poster}<span class="meta">${meta}</span>${live}</div>`;
+  };
+  const decadeCats = cats.filter(decadeRow).sort((a, b) => (b === "seen:classic") - (a === "seen:classic"));
+  $("belts").innerHTML = cats.filter((c) => !decadeRow(c)).map(beltHTML).join("") +
+    (decadeCats.length ? `<div class="belt-row-label">Decades</div>` + decadeCats.map(beltHTML).join("") : "");
   $("belts").querySelectorAll("[data-bracket]").forEach((b) => b.addEventListener("click", () => openBracket(+b.dataset.bracket)));
 
   // ---------- power rankings

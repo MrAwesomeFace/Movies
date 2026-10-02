@@ -54,6 +54,23 @@ const GENRE_TOURNAMENT_CATEGORIES =
 "thriller"
 ];
 
+/*
+
+* Decade brackets - Seen only (the hub shows them only when Seen is
+* chosen), so like every Seen bracket they never move a belt or a
+* crown. Up to 1979 is the existing "classic" bracket, shown first
+* in the Decades group. Each key's [from, to] years are inclusive.
+  */
+
+const DECADE_TOURNAMENT_CATEGORIES =
+{
+"80s": [1980, 1989],
+"90s": [1990, 1999],
+"00s": [2000, 2009],
+"10s": [2010, 2019],
+"20s": [2020, 2029]
+};
+
 let tournamentChampions =
 [];
 
@@ -20489,6 +20506,24 @@ genreValue
 return getTournamentEligibleMovies().filter(
 movie => {
 
+const decadeYears =
+DECADE_TOURNAMENT_CATEGORIES[genreValue];
+
+if (decadeYears) {
+
+const movieYear =
+parseInt(
+movie.year,
+10
+);
+
+return (
+movieYear >= decadeYears[0] &&
+movieYear <= decadeYears[1]
+);
+
+}
+
 if (genreValue === "classic") {
 
 const movieYear =
@@ -21045,7 +21080,11 @@ seenPoolActive();
   */
 
 const categories =
-["full", ...GENRE_TOURNAMENT_CATEGORIES]
+[
+"full",
+...GENRE_TOURNAMENT_CATEGORIES,
+...(seenPool ? Object.keys(DECADE_TOURNAMENT_CATEGORIES) : [])
+]
 .filter(
 category =>
 !(seenPool && category === "christmas")
@@ -21075,13 +21114,16 @@ typeof tournamentPoolToggleHTML === "function"
 ? tournamentPoolToggleHTML()
 : ""
 ) +
-`<div class="tournament-category-grid">`;
+"";
 
-html +=
+const quickCard =
 `<button type="button" class="tournament-category-card" data-quick16="1">` +
 `<strong>Staff Picks Showdown</strong>` +
 `<span class="tc-count">Same 16, tournament style</span>` +
 `</button>`;
+
+const cardHTML =
+{};
 
 categories.forEach(
 (category, i) => {
@@ -21102,26 +21144,16 @@ baseCategory === "full"
 ? getTournamentEligibleMovies().length
 : getTournamentGenrePool(baseCategory).length;
 
-const cap =
-baseCategory === "full"
-? 256
-: 128;
-
-const cappedNote =
-poolSize > cap
-? ` (${cap} drawn per run)`
-: "";
-
 const champEntry =
 tournamentChampions.find(
 entry =>
 entry.category === category
 );
 
-html +=
+cardHTML[category] =
 `<button type="button" class="tournament-category-card" data-category="${category}">` +
 `<strong>${categoryDisplayName(category)}</strong>` +
-`<span class="tc-count">${poolSize} in the pool${cappedNote}</span>` +
+`<span class="tc-count">${poolSize} in the pool</span>` +
 (
 champEntry
 ? `<span class="tc-champion">👑 ${champEntry.movie_title}</span>`
@@ -21137,8 +21169,44 @@ inProgress
 }
 );
 
+/*
+
+* Grouped so the list stays scannable: Quick, then Categories, then
+* (Seen only) Decades - Classic first, since it covers up to 1979.
+  */
+
+const inDecadeGroup =
+category =>
+seenPool &&
+(
+baseTournamentCategory(category) === "classic" ||
+!!DECADE_TOURNAMENT_CATEGORIES[baseTournamentCategory(category)]
+);
+
+const groupHTML =
+(label, list) =>
+list.length
+? `<h3 class="tournament-group-label">${label}</h3>` +
+`<div class="tournament-category-grid">${list.join("")}</div>`
+: "";
+
 html +=
-`</div>`;
+groupHTML("Quick", [quickCard]) +
+groupHTML(
+"Categories",
+categories
+.filter(category => !inDecadeGroup(category))
+.map(category => cardHTML[category])
+) +
+groupHTML(
+"Decades",
+[
+...categories.filter(category => baseTournamentCategory(category) === "classic"),
+...categories.filter(category => !!DECADE_TOURNAMENT_CATEGORIES[baseTournamentCategory(category)])
+]
+.filter(inDecadeGroup)
+.map(category => cardHTML[category])
+);
 
 content.innerHTML =
 html;
