@@ -15846,6 +15846,26 @@ const movies = [
     ]
   },
   {
+    "title": "Psycho",
+    "tmdbTitle": "Psycho",
+    "type": "movie",
+    "tmdbId": 539,
+    "poster": "https://image.tmdb.org/t/p/w500/yz4QVqPx3h1hD1DfqqQkCq3rmxW.jpg",
+    "year": "1960",
+    "runtime": "109m",
+    "genre": "Horror / Thriller / Mystery",
+    "rated": "R",
+    "director": "Alfred Hitchcock",
+    "cast": "Anthony Perkins, Janet Leigh, Vera Miles, John Gavin, Martin Balsam, John McIntire",
+    "synopsis": "When larcenous real estate clerk Marion Crane goes on the lam with a wad of cash and hopes of starting a new life, she ends up at the notorious Bates Motel, where manager Norman Bates cares for his housebound mother.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere",
+      "Prime"
+    ]
+  },
+  {
     "title": "Puffs",
     "tmdbTitle": "Puffs: Filmed Live Off Broadway",
     "type": "movie",
