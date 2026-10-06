@@ -3054,6 +3054,26 @@ const movies = [
     "tmdbTitle": "Bride Wars"
   },
   {
+    "title": "Bridesmaids",
+    "tmdbTitle": "Bridesmaids",
+    "type": "movie",
+    "tmdbId": 55721,
+    "poster": "https://image.tmdb.org/t/p/w500/gJtA7hYsBMQ7EM3sPBMUdBfU7a0.jpg",
+    "year": "2011",
+    "runtime": "125m",
+    "genre": "Comedy / Romance",
+    "rated": "R",
+    "director": "Paul Feig",
+    "cast": "Kristen Wiig, Maya Rudolph, Rose Byrne, Chris O'Dowd, Melissa McCarthy, Wendi McLendon-Covey",
+    "synopsis": "Annie's life is a mess. But when she finds out her lifetime best friend is engaged, she simply must serve as Lillian's maid of honor. Though lovelorn and broke, Annie bluffs her way through the expensive and bizarre rituals. With one chance to get it perfect, she’ll show Lillian and her bridesmaids just how far you’ll go for someone you love.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere",
+      "Apple"
+    ]
+  },
+  {
     "title": "Bring It On",
     "tmdbTitle": "Bring It On",
     "type": "movie",
