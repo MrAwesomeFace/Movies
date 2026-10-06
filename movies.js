@@ -10586,6 +10586,25 @@ const movies = [
     "rated": "PG-13"
   },
   {
+    "title": "Jaws",
+    "tmdbTitle": "Jaws",
+    "type": "movie",
+    "tmdbId": 578,
+    "poster": "https://image.tmdb.org/t/p/w500/lxM6kqilAdpdhqUl2biYp5frUxE.jpg",
+    "year": "1975",
+    "runtime": "124m",
+    "genre": "Horror / Thriller / Adventure",
+    "rated": "PG",
+    "director": "Steven Spielberg",
+    "cast": "Roy Scheider, Robert Shaw, Richard Dreyfuss, Lorraine Gary, Murray Hamilton, Carl Gottlieb",
+    "synopsis": "When the seaside community of Amity finds itself under attack by a dangerous great white shark, the town's chief of police, a young marine biologist, and a grizzled shark hunter embark on a desperate quest to kill the beast before it strikes again.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Jay and Silent Bob Strike Back",
     "tmdbTitle": "Jay and Silent Bob Strike Back",
     "type": "movie",
