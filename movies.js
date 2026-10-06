@@ -19445,6 +19445,24 @@ const movies = [
     "rated": "TV-PG"
   },
   {
+    "title": "Titanic",
+    "tmdbTitle": "Titanic",
+    "type": "movie",
+    "tmdbId": 597,
+    "poster": "https://image.tmdb.org/t/p/w500/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg",
+    "year": "1997",
+    "runtime": "194m",
+    "genre": "Drama / Romance",
+    "rated": "PG-13",
+    "director": "James Cameron",
+    "cast": "Leonardo DiCaprio, Kate Winslet, Billy Zane, Kathy Bates, Frances Fisher, Gloria Stuart",
+    "synopsis": "101-year-old Rose DeWitt Bukater tells the story of her life aboard the Titanic, 84 years later. A young Rose boards the ship with her mother and fiancé. Meanwhile, Jack Dawson and Fabrizio De Rossi win third-class tickets aboard the ship. Rose tells the whole story from Titanic's departure through to its death—on its first and last voyage—on April 15, 1912.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ]
+  },
+  {
     "title": "To Catch a Thief",
     "tmdbTitle": "To Catch a Thief",
     "type": "movie",
