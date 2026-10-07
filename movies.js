@@ -19524,6 +19524,25 @@ const movies = [
     "rated": "TV-PG"
   },
   {
+    "title": "Ticket to Paradise",
+    "tmdbTitle": "Ticket to Paradise",
+    "type": "movie",
+    "tmdbId": 800939,
+    "poster": "https://image.tmdb.org/t/p/w500/1tzERH50P5c2mFWtLbgixzLZS1L.jpg",
+    "year": "2022",
+    "runtime": "104m",
+    "genre": "Drama / Comedy / Romance / Rom-Com",
+    "rated": "PG-13",
+    "director": "Ol Parker",
+    "cast": "Julia Roberts, George Clooney, Kaitlyn Dever, Billie Lourd, Maxime Bouttier, Lucas Bravo",
+    "synopsis": "Divorced couple Georgia and David find themselves on a shared mission: they team up and travel to Bali to stop their daughter Lily from making the same mistake they once made 25 years ago.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Titanic",
     "tmdbTitle": "Titanic",
     "type": "movie",
