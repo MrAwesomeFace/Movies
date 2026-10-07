@@ -1976,6 +1976,25 @@ const movies = [
     ]
   },
   {
+    "title": "Barb & Star Go to Vista Del Mar",
+    "tmdbTitle": "Barb & Star Go to Vista Del Mar",
+    "type": "movie",
+    "tmdbId": 595813,
+    "poster": "https://image.tmdb.org/t/p/w500/m0kQFuMSe6ImokuyG9xfRPtWLQ4.jpg",
+    "year": "2021",
+    "runtime": "107m",
+    "genre": "Comedy",
+    "rated": "PG-13",
+    "director": "Josh Greenbaum",
+    "cast": "Kristen Wiig, Annie Mumolo, Jamie Dornan, Damon Wayans Jr., Vanessa Bayer, Fortune Feimster",
+    "synopsis": "The story of best friends Barb and Star, who leave their small midwestern town for the first time to go on vacation in Vista Del Mar, Florida, where they soon find themselves tangled up in adventure, love, and a villain’s evil plot to kill everyone in town.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Barbie",
     "tmdbTitle": "Barbie",
     "type": "movie",
