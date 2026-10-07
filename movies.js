@@ -20726,7 +20726,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": [],
+    "digital": [
+      "Fandango"
+    ],
     "rated": "R"
   },
   {
