@@ -1958,6 +1958,24 @@ const movies = [
     ]
   },
   {
+    "title": "Bank Job, The",
+    "tmdbTitle": "The Bank Job",
+    "type": "movie",
+    "tmdbId": 8848,
+    "poster": "https://image.tmdb.org/t/p/w500/bfXjFTytfFTdo9WeO7lYqzkHG7g.jpg",
+    "year": "2008",
+    "runtime": "112m",
+    "genre": "Thriller / Crime / Drama",
+    "rated": "R",
+    "director": "Roger Donaldson",
+    "cast": "Jason Statham, Saffron Burrows, Stephen Campbell Moore, Daniel Mays, James Faulkner, Andrew Brooke",
+    "synopsis": "Terry is a small-time car dealer trying to leave his shady past behind and start a family. Martine is a beautiful model from Terry's old neighbourhood who knows that Terry is no angel. When Martine proposes a foolproof plan to rob a bank, Terry recognises the danger but realises this may be the opportunity of a lifetime.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ]
+  },
+  {
     "title": "Barbie",
     "tmdbTitle": "Barbie",
     "type": "movie",
