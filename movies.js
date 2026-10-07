@@ -4209,6 +4209,25 @@ const movies = [
     "rated": "R"
   },
   {
+    "title": "Crank: High Voltage",
+    "tmdbTitle": "Crank: High Voltage",
+    "type": "movie",
+    "tmdbId": 15092,
+    "poster": "https://image.tmdb.org/t/p/w500/tzTC4EEvF0OPL63frEiogxL2T8M.jpg",
+    "year": "2009",
+    "runtime": "96m",
+    "genre": "Action / Thriller / Crime",
+    "rated": "R",
+    "director": "Mark Neveldine, Brian Taylor",
+    "cast": "Jason Statham, Amy Smart, Dwight Yoakam, Efren Ramirez, Julanne Chidi Hill, Jose Pablo Cantillo",
+    "synopsis": "Chelios faces a Chinese mobster who has stolen his nearly indestructible heart and replaced it with a battery-powered ticker that requires regular jolts of electricity to keep working.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Crazy, Stupid, Love.",
     "tmdbTitle": "Crazy, Stupid, Love.",
     "type": "movie",
