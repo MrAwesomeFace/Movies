@@ -21186,6 +21186,25 @@ const movies = [
     "tmdbTitle": "Wicked: For Good"
   },
   {
+    "title": "Wild Card",
+    "tmdbTitle": "Wild Card",
+    "type": "movie",
+    "tmdbId": 265208,
+    "poster": "https://image.tmdb.org/t/p/w500/zN80Tlly8oMpKbVJv2TfRIj8dHG.jpg",
+    "year": "2015",
+    "runtime": "92m",
+    "genre": "Thriller / Crime / Action",
+    "rated": "R",
+    "director": "Simon West",
+    "cast": "Jason Statham, Michael Angarano, Dominik Garcia, Milo Ventimiglia, Hope Davis, Max Casella",
+    "synopsis": "When a Las Vegas bodyguard with lethal skills and a gambling problem gets in trouble with the mob, he has one last play… and it's all or nothing.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Willy Wonka & the Chocolate Factory",
     "tmdbTitle": "Willy Wonka & the Chocolate Factory",
     "type": "movie",
