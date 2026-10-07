@@ -5479,6 +5479,25 @@ const movies = [
     "rated": "R"
   },
   {
+    "title": "Draft Day",
+    "tmdbTitle": "Draft Day",
+    "type": "movie",
+    "tmdbId": 200505,
+    "poster": "https://image.tmdb.org/t/p/w500/bnl2ocjS1io4UCPhjoFuPKmJ9bf.jpg",
+    "year": "2014",
+    "runtime": "110m",
+    "genre": "Drama",
+    "rated": "PG-13",
+    "director": "Ivan Reitman",
+    "cast": "Kevin Costner, Jennifer Garner, Denis Leary, Chadwick Boseman, Frank Langella, Josh Pence",
+    "synopsis": "At the NFL Draft, general manager Sonny Weaver has the opportunity to rebuild his team when he trades for the number one pick. He must decide what he's willing to sacrifice on a life-changing day for a few hundred young men with NFL dreams.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Dreamgirls",
     "tmdbTitle": "Dreamgirls",
     "type": "movie",
