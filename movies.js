@@ -5923,6 +5923,25 @@ const movies = [
     "rated": "R"
   },
   {
+    "title": "Equalizer 2, The",
+    "tmdbTitle": "The Equalizer 2",
+    "type": "movie",
+    "tmdbId": 345887,
+    "poster": "https://image.tmdb.org/t/p/w500/cQvc9N6JiMVKqol3wcYrGshsIdZ.jpg",
+    "year": "2018",
+    "runtime": "121m",
+    "genre": "Action / Thriller / Crime",
+    "rated": "R",
+    "director": "Antoine Fuqua",
+    "cast": "Denzel Washington, Pedro Pascal, Ashton Sanders, Orson Bean, Bill Pullman, Melissa Leo",
+    "synopsis": "Robert McCall, who serves an unflinching justice for the exploited and oppressed, embarks on a relentless, globe-trotting quest for vengeance when his former partner is murdered.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Equalizer, The",
     "tmdbTitle": "The Equalizer",
     "type": "movie",
