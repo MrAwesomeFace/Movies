@@ -4612,6 +4612,25 @@ const movies = [
     "rated": "PG-13"
   },
   {
+    "title": "Days of Thunder",
+    "tmdbTitle": "Days of Thunder",
+    "type": "movie",
+    "tmdbId": 2119,
+    "poster": "https://image.tmdb.org/t/p/w500/8UvcoeMJag8UWGF8sg7eYspzq0Q.jpg",
+    "year": "1990",
+    "runtime": "107m",
+    "genre": "Adventure / Action / Drama",
+    "rated": "PG-13",
+    "director": "Tony Scott",
+    "cast": "Tom Cruise, Robert Duvall, Nicole Kidman, Randy Quaid, Cary Elwes, Michael Rooker",
+    "synopsis": "Talented but unproven stock car driver Cole Trickle gets a break and with the guidance of veteran Harry Hogge turns heads on the track. The young hotshot develops a rivalry with a fellow racer that threatens his career when the two smash their cars. But with the help of his doctor, Cole just might overcome his injuries-- and his fear.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Dead Man on Campus",
     "tmdbTitle": "Dead Man on Campus",
     "type": "movie",
