@@ -4627,7 +4627,7 @@ const movies = [
     "physical": [],
     "digital": [
       "Fandango"
-    ],
+    ]
   },
   {
     "title": "Dead Man on Campus",
@@ -12645,6 +12645,25 @@ const movies = [
     ],
     "digital": [],
     "rated": "R"
+  },
+  {
+    "title": "Lucy",
+    "tmdbTitle": "Lucy",
+    "type": "movie",
+    "tmdbId": 240832,
+    "poster": "https://image.tmdb.org/t/p/w500/kRbpUTRNm6QbLQFPFWUcNC4czEm.jpg",
+    "year": "2014",
+    "runtime": "89m",
+    "genre": "Action / Science Fiction",
+    "rated": "R",
+    "director": "Luc Besson",
+    "cast": "Scarlett Johansson, Morgan Freeman, Choi Min-sik, Amr Waked, Julian Rhind-Tutt, Pilou Asbæk",
+    "synopsis": "A woman, accidentally caught in a dark deal, turns the tables on her captors and transforms into a merciless warrior evolved beyond human logic.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
   },
   {
     "title": "MacGruber",
