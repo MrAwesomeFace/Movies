@@ -986,6 +986,25 @@ const movies = [
     "rated": "G"
   },
   {
+    "title": "Alita: Battle Angel",
+    "tmdbTitle": "Alita: Battle Angel",
+    "type": "movie",
+    "tmdbId": 399579,
+    "poster": "https://image.tmdb.org/t/p/w500/xRWht48C2V8XNfzvPehyClOvDni.jpg",
+    "year": "2019",
+    "runtime": "122m",
+    "genre": "Action / Science Fiction / Adventure",
+    "rated": "PG-13",
+    "director": "Robert Rodriguez",
+    "cast": "Rosa Salazar, Christoph Waltz, Jennifer Connelly, Mahershala Ali, Ed Skrein, Jackie Earle Haley",
+    "synopsis": "When Alita awakens with no memory of who she is in a future world she does not recognize, she is taken in by Ido, a compassionate doctor who realizes that somewhere in this abandoned cyborg shell is the heart and soul of a young woman with an extraordinary past.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "All About Steve",
     "type": "movie",
     "tmdbId": 23706,
