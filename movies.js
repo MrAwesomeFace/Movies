@@ -3526,6 +3526,24 @@ const movies = [
     "rated": "PG-13"
   },
   {
+    "title": "Carrie",
+    "tmdbTitle": "Carrie",
+    "type": "movie",
+    "tmdbId": 7340,
+    "poster": "https://image.tmdb.org/t/p/w500/8tT1rqlsTguyfUBMrbHR9cv1rxM.jpg",
+    "year": "1976",
+    "runtime": "98m",
+    "genre": "Horror / Thriller",
+    "rated": "R",
+    "director": "Brian De Palma",
+    "cast": "Sissy Spacek, Piper Laurie, Amy Irving, William Katt, John Travolta, Nancy Allen",
+    "synopsis": "Withdrawn and sensitive teenager Carrie White faces bullying from her classmates and abuse from her fanatically pious mother. When she begins to suspect that she has supernatural powers, things take a dark and violent turn.",
+    "physical": [],
+    "digital": [
+      "Prime"
+    ]
+  },
+  {
     "title": "Cars",
     "tmdbTitle": "Cars",
     "type": "movie",
