@@ -18951,7 +18951,9 @@ const movies = [
     "cast": "Tom Burke, Holliday Grainger, Jack Greenlees, Ruth Sheen, Emma Fielding, Stephen Hagan",
     "synopsis": "A war veteran turned private detective operates out of a tiny office in London’s Denmark Street. Although wounded both physically and psychologically, his unique insight and background as a military police investigator prove crucial in solving complex crimes that have baffled the police. Based on the bestselling novels written by J.K. Rowling under the pseudonym Robert Galbraith.",
     "physical": [],
-    "digital": [],
+    "digital": [
+      "Prime"
+    ],
     "season": 2
   },
   {
@@ -18968,7 +18970,9 @@ const movies = [
     "cast": "Tom Burke, Holliday Grainger, Jack Greenlees, Ruth Sheen, Emma Fielding, Stephen Hagan",
     "synopsis": "A war veteran turned private detective operates out of a tiny office in London’s Denmark Street. Although wounded both physically and psychologically, his unique insight and background as a military police investigator prove crucial in solving complex crimes that have baffled the police. Based on the bestselling novels written by J.K. Rowling under the pseudonym Robert Galbraith.",
     "physical": [],
-    "digital": [],
+    "digital": [
+      "Prime"
+    ],
     "season": 3
   },
   {
