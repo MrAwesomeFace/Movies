@@ -134,6 +134,24 @@ const movies = [
     "rated": "G"
   },
   {
+    "title": "12 Angry Men",
+    "tmdbTitle": "12 Angry Men",
+    "type": "movie",
+    "tmdbId": 389,
+    "poster": "https://image.tmdb.org/t/p/w500/zhG3vKWyDRaZYoaww1UVAi29T9h.jpg",
+    "year": "1957",
+    "runtime": "97m",
+    "genre": "Drama",
+    "rated": "NR",
+    "director": "Sidney Lumet",
+    "cast": "Martin Balsam, John Fiedler, Lee J. Cobb, E.G. Marshall, Jack Klugman, Edward Binns",
+    "synopsis": "The defense and the prosecution have rested and the jury is filing into the jury room to decide if a young Spanish-American is guilty or innocent of murdering his father. What begins as an open and shut case soon becomes a mini-drama of each of the jurors' prejudices and preconceptions about the trial, the accused, and each other.",
+    "physical": [],
+    "digital": [
+      "Prime"
+    ]
+  },
+  {
     "title": "2001: A Space Odyssey",
     "tmdbTitle": "2001: A Space Odyssey",
     "type": "movie",
