@@ -11488,6 +11488,24 @@ const movies = [
     "rated": "R"
   },
   {
+    "title": "Killers",
+    "tmdbTitle": "Killers",
+    "type": "movie",
+    "tmdbId": 37821,
+    "poster": "https://image.tmdb.org/t/p/w500/9VB8vGV4Aznf6GUc9C7a1EzGHLz.jpg",
+    "year": "2010",
+    "runtime": "100m",
+    "genre": "Action / Comedy / Thriller / Romance",
+    "rated": "PG-13",
+    "director": "Robert Luketic",
+    "cast": "Ashton Kutcher, Katherine Heigl, Tom Selleck, Catherine O'Hara, Katheryn Winnick, Kevin Sussman",
+    "synopsis": "When an elite assassin marries a beautiful computer whiz after a whirlwind romance, he gives up the gun and settles down with his new bride. That is, until he learns that someone from his past has put a contract out on his life.",
+    "physical": [],
+    "digital": [
+      "Prime"
+    ]
+  },
+  {
     "title": "Kingpin",
     "tmdbTitle": "Kingpin",
     "type": "movie",
