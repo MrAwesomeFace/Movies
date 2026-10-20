@@ -17396,6 +17396,24 @@ const movies = [
     "rated": "R"
   },
   {
+    "title": "Scream",
+    "tmdbTitle": "Scream",
+    "type": "movie",
+    "tmdbId": 646385,
+    "poster": "https://image.tmdb.org/t/p/w500/nD4M4Bx457ryLuKYpxFwQ2IBJ5w.jpg",
+    "year": "2022",
+    "runtime": "114m",
+    "genre": "Horror / Mystery",
+    "rated": "R",
+    "director": "Tyler Gillett, Matt Bettinelli-Olpin",
+    "cast": "Melissa Barrera, Jenna Ortega, Mason Gooding, Jasmin Savoy Brown, Jack Quaid, Mikey Madison",
+    "synopsis": "Twenty-five years after a streak of brutal murders shocked the quiet town of Woodsboro, a new killer has donned the Ghostface mask and begins targeting a group of teenagers to resurrect secrets from the town’s deadly past.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ]
+  },
+  {
     "title": "Scream 2",
     "tmdbTitle": "Scream 2",
     "type": "movie",
