@@ -17451,6 +17451,24 @@ const movies = [
     "rated": "R"
   },
   {
+    "title": "Scream VI",
+    "tmdbTitle": "Scream VI",
+    "type": "movie",
+    "tmdbId": 934433,
+    "poster": "https://image.tmdb.org/t/p/w500/wDWwtvkRRlgTiUr6TyLSMX8FCuZ.jpg",
+    "year": "2023",
+    "runtime": "123m",
+    "genre": "Horror / Thriller / Crime",
+    "rated": "R",
+    "director": "Matt Bettinelli-Olpin, Tyler Gillett",
+    "cast": "Melissa Barrera, Jenna Ortega, Jasmin Savoy Brown, Mason Gooding, Jack Champion, Roger L. Jackson",
+    "synopsis": "Following the latest Ghostface killings, the four survivors leave Woodsboro behind and start a fresh chapter.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ]
+  },
+  {
     "title": "Scrooged",
     "type": "movie",
     "tmdbId": 9647,
