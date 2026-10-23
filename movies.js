@@ -17469,6 +17469,24 @@ const movies = [
     "rated": "R"
   },
   {
+    "title": "Scream 7",
+    "tmdbTitle": "Scream 7",
+    "type": "movie",
+    "tmdbId": 1159559,
+    "poster": "https://image.tmdb.org/t/p/w500/jjyuk0edLiW8vOSnlfwWCCLpbh5.jpg",
+    "year": "2026",
+    "runtime": "114m",
+    "genre": "Horror / Mystery / Crime",
+    "rated": "R",
+    "director": "Kevin Williamson",
+    "cast": "Neve Campbell, Courteney Cox, Isabel May, Jasmin Savoy Brown, Mason Gooding, Roger L. Jackson",
+    "synopsis": "When a new Ghostface killer emerges in the quiet town where Sidney Prescott has built a new life, her darkest fears are realized as her daughter becomes the next target. Determined to protect her family, Sidney must face the horrors of her past to put an end to the bloodshed once and for all.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ]
+  },
+  {
     "title": "Scream VI",
     "tmdbTitle": "Scream VI",
     "type": "movie",
