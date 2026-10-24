@@ -7245,6 +7245,25 @@ const movies = [
     "rated": "R"
   },
   {
+    "title": "Final Destination Bloodlines",
+    "tmdbTitle": "Final Destination Bloodlines",
+    "type": "movie",
+    "tmdbId": 574475,
+    "poster": "https://image.tmdb.org/t/p/w500/6WxhEvFsauuACfv8HyoVX6mZKFj.jpg",
+    "year": "2025",
+    "runtime": "110m",
+    "genre": "Horror / Mystery",
+    "rated": "R",
+    "director": "Adam Stein, Zach Lipovsky",
+    "cast": "Kaitlyn Santa Juana, Teo Briones, Rya Kihlstedt, Richard Harmon, Owen Patrick Joyner, Anna Lore",
+    "synopsis": "Plagued by a violent recurring nightmare, college student Stefanie heads home to track down the one person who might be able to break the cycle and save her family from the grisly demise that inevitably awaits them all.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Finding Nemo",
     "tmdbTitle": "Finding Nemo",
     "type": "movie",
