@@ -2707,6 +2707,25 @@ const movies = [
     "tmdbTitle": "Blade"
   },
   {
+    "title": "Blade II",
+    "tmdbTitle": "Blade II",
+    "type": "movie",
+    "tmdbId": 36586,
+    "poster": "https://image.tmdb.org/t/p/w500/wAn6VYamKbnOtfyTZ6arVtkMzDv.jpg",
+    "year": "2002",
+    "runtime": "117m",
+    "genre": "Fantasy / Horror / Action / Thriller",
+    "rated": "R",
+    "director": "Guillermo del Toro",
+    "cast": "Wesley Snipes, Kris Kristofferson, Ron Perlman, Leonor Varela, Norman Reedus, Thomas Kretschmann",
+    "synopsis": "Blade forms an uneasy alliance with the vampire council in order to combat the Reapers, who are feeding on vampires.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Blade Runner 2049",
     "tmdbTitle": "Blade Runner 2049",
     "type": "movie",
