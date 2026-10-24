@@ -18381,6 +18381,25 @@ const movies = [
     "rated": "PG-13"
   },
   {
+    "title": "Sinners",
+    "tmdbTitle": "Sinners",
+    "type": "movie",
+    "tmdbId": 1233413,
+    "poster": "https://image.tmdb.org/t/p/w500/fWPgbnt2LSqkQ6cdQc0SZN9CpLm.jpg",
+    "year": "2025",
+    "runtime": "138m",
+    "genre": "Horror / Action / Thriller",
+    "rated": "R",
+    "director": "Ryan Coogler",
+    "cast": "Michael B. Jordan, Hailee Steinfeld, Miles Caton, Jack O'Connell, Wunmi Mosaku, Jayme Lawson",
+    "synopsis": "Trying to leave their troubled lives behind, twin brothers return to their hometown to start again, only to discover that an even greater evil is waiting to welcome them back.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Sixteen Candles",
     "tmdbTitle": "Sixteen Candles",
     "type": "movie",
