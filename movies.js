@@ -17098,6 +17098,25 @@ const movies = [
     ]
   },
   {
+    "title": "Safe",
+    "tmdbTitle": "Safe",
+    "type": "movie",
+    "tmdbId": 72387,
+    "poster": "https://image.tmdb.org/t/p/w500/kOCpkoMUVae9UIf85gO71SyjLbW.jpg",
+    "year": "2012",
+    "runtime": "94m",
+    "genre": "Action / Crime / Thriller",
+    "rated": "R",
+    "director": "Boaz Yakin",
+    "cast": "Jason Statham, Chris Sarandon, James Hong, Catherine Chan, Robert John Burke, Anson Mount",
+    "synopsis": "After a former elite agent rescues a 12-year-old Chinese girl who's been abducted, they find themselves in the middle of a standoff between Triads, the Russian Mafia and high-level corrupt New York City politicians and police.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Salt",
     "tmdbTitle": "Salt",
     "type": "movie",
