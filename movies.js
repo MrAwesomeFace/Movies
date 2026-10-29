@@ -16318,6 +16318,25 @@ const movies = [
     "rated": "R"
   },
   {
+    "title": "Rambo: Last Blood",
+    "tmdbTitle": "Rambo: Last Blood",
+    "type": "movie",
+    "tmdbId": 522938,
+    "poster": "https://image.tmdb.org/t/p/w500/kTQ3J8oTTKofAVLYnds2cHUz9KO.jpg",
+    "year": "2019",
+    "runtime": "89m",
+    "genre": "Action / Thriller / Drama",
+    "rated": "R",
+    "director": "Adrian Grünberg",
+    "cast": "Sylvester Stallone, Paz Vega, Sergio Peris-Mencheta, Adriana Barraza, Yvette Monreal, Joaquín Cosío",
+    "synopsis": "After fighting his demons for decades, John Rambo now lives in peace on his family ranch in Arizona, but his rest is interrupted when Gabriela, the granddaughter of his housekeeper María, disappears after crossing the border into Mexico to meet her biological father. Rambo, who has become a true father figure for Gabriela over the years, undertakes a desperate and dangerous journey to find her.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Rango",
     "tmdbTitle": "Rango",
     "type": "movie",
