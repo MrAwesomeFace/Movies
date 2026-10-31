@@ -1098,7 +1098,10 @@ const movies = [
       "DVD",
       "Blu-ray"
     ],
-    "digital": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "rated": "R"
   },
   {
