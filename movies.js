@@ -5789,8 +5789,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": [],
-    "categories": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "rated": "PG-13"
   },
   {
