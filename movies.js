@@ -4329,6 +4329,25 @@ const movies = [
     "rated": "PG-13"
   },
   {
+    "title": "Craft, The",
+    "tmdbTitle": "The Craft",
+    "type": "movie",
+    "tmdbId": 9100,
+    "poster": "https://image.tmdb.org/t/p/w500/8bW2RdRkloYtEPhbQZN4wcdmJP4.jpg",
+    "year": "1996",
+    "runtime": "101m",
+    "genre": "Horror / Drama / Fantasy",
+    "rated": "R",
+    "director": "Andrew Fleming",
+    "cast": "Robin Tunney, Fairuza Balk, Neve Campbell, Rachel True, Skeet Ulrich, Christine Taylor",
+    "synopsis": "A Catholic school newcomer falls in with a clique of teen witches who wield their powers against all who dare to cross them -- be they teachers, rivals or meddlesome parents.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Crank",
     "tmdbTitle": "Crank",
     "type": "movie",
