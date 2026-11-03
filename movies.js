@@ -2767,6 +2767,25 @@ const movies = [
     ]
   },
   {
+    "title": "Blade Runner",
+    "tmdbTitle": "Blade Runner",
+    "type": "movie",
+    "tmdbId": 78,
+    "poster": "https://image.tmdb.org/t/p/w500/63N9uy8nd9j7Eog2axPQ8lbr3Wj.jpg",
+    "year": "1982",
+    "runtime": "118m",
+    "genre": "Science Fiction / Drama / Thriller",
+    "rated": "R",
+    "director": "Ridley Scott",
+    "cast": "Harrison Ford, Rutger Hauer, Sean Young, Edward James Olmos, M. Emmet Walsh, Daryl Hannah",
+    "synopsis": "In the smog-choked dystopian Los Angeles of 2019, blade runner Rick Deckard is called out of retirement to terminate a quartet of replicants who have escaped to Earth seeking their creator for a way to extend their short life spans.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Blade Runner 2049",
     "tmdbTitle": "Blade Runner 2049",
     "type": "movie",
