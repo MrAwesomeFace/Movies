@@ -4451,6 +4451,25 @@ const movies = [
     ]
   },
   {
+    "title": "Crazy Rich Asians",
+    "tmdbTitle": "Crazy Rich Asians",
+    "type": "movie",
+    "tmdbId": 455207,
+    "poster": "https://image.tmdb.org/t/p/w500/1XxL4LJ5WHdrcYcihEZUCgNCpAW.jpg",
+    "year": "2018",
+    "runtime": "121m",
+    "genre": "Comedy / Romance",
+    "rated": "PG-13",
+    "director": "Jon M. Chu",
+    "cast": "Constance Wu, Henry Golding, Michelle Yeoh, Gemma Chan, Lisa Lu, Awkwafina",
+    "synopsis": "An American-born Chinese economics professor accompanies her boyfriend to Singapore for his best friend's wedding, only to get thrust into the lives of Asia's rich and famous.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Crazy, Stupid, Love.",
     "tmdbTitle": "Crazy, Stupid, Love.",
     "type": "movie",
