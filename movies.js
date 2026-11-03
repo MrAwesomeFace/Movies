@@ -1695,6 +1695,25 @@ const movies = [
     ]
   },
   {
+    "title": "Austin Powers: International Man of Mystery",
+    "tmdbTitle": "Austin Powers: International Man of Mystery",
+    "type": "movie",
+    "tmdbId": 816,
+    "poster": "https://image.tmdb.org/t/p/w500/5uD4dxNX8JKFjWKYMHyOsqhi5pN.jpg",
+    "year": "1997",
+    "runtime": "89m",
+    "genre": "Comedy / Crime",
+    "rated": "PG-13",
+    "director": "Jay Roach",
+    "cast": "Mike Myers, Elizabeth Hurley, Michael York, Mimi Rogers, Robert Wagner, Seth Green",
+    "synopsis": "As a swinging fashion photographer by day and a groovy British superagent by night, Austin Powers is the '60s' most shagadelic spy. But can he stop megalomaniac Dr. Evil after the bald villain freezes himself and unthaws in the '90s? With the help of sexy sidekick Vanessa Kensington, he just might.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Avengers, The",
     "type": "movie",
     "tmdbId": 24428,
