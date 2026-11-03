@@ -10739,6 +10739,25 @@ const movies = [
     "rated": "PG"
   },
   {
+    "title": "Intern, The",
+    "tmdbTitle": "The Intern",
+    "type": "movie",
+    "tmdbId": 257211,
+    "poster": "https://image.tmdb.org/t/p/w500/bTQ46fupPbjBfFBHuzfD3hxxL0Q.jpg",
+    "year": "2015",
+    "runtime": "121m",
+    "genre": "Comedy",
+    "rated": "PG-13",
+    "director": "Nancy Meyers",
+    "cast": "Robert De Niro, Anne Hathaway, Rene Russo, Anders Holm, JoJo Kushner, Andrew Rannells",
+    "synopsis": "70-year-old widower Ben Whittaker has discovered that retirement isn't all it's cracked up to be. Seizing an opportunity to get back in the game, he becomes a senior intern at an online fashion site, founded and run by Jules Ostin.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Interstellar",
     "tmdbTitle": "Interstellar",
     "type": "movie",
