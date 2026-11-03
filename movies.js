@@ -4149,7 +4149,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "rated": "R",
     "tmdbTitle": "Cobra"
   },
