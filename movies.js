@@ -13131,6 +13131,25 @@ const movies = [
     "tmdbTitle": "Maleficent"
   },
   {
+    "title": "Maltese Falcon, The",
+    "tmdbTitle": "The Maltese Falcon",
+    "type": "movie",
+    "tmdbId": 963,
+    "poster": "https://image.tmdb.org/t/p/w500/bf4o6Uzw5wqLjdKwRuiDrN1xyvl.jpg",
+    "year": "1941",
+    "runtime": "100m",
+    "genre": "Mystery / Crime / Thriller",
+    "rated": "PG",
+    "director": "John Huston",
+    "cast": "Humphrey Bogart, Mary Astor, Gladys George, Peter Lorre, Barton MacLane, Lee Patrick",
+    "synopsis": "A private detective takes on a case that involves him with three eccentric criminals, a beautiful liar, and their quest for a priceless statuette.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Mamma Mia!",
     "tmdbTitle": "Mamma Mia!",
     "type": "movie",
