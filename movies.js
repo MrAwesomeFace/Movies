@@ -16686,7 +16686,10 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
     "rated": "PG-13",
     "tmdbTitle": "The Replacements"
   },
