@@ -11379,6 +11379,25 @@ const movies = [
     "rated": "PG-13"
   },
   {
+    "title": "Just Friends",
+    "tmdbTitle": "Just Friends",
+    "type": "movie",
+    "tmdbId": 10033,
+    "poster": "https://image.tmdb.org/t/p/w500/lh2EUTVOcESkdEOcsjYEW6qS1U0.jpg",
+    "year": "2005",
+    "runtime": "94m",
+    "genre": "Comedy / Romance",
+    "rated": "PG-13",
+    "director": "Roger Kumble",
+    "cast": "Ryan Reynolds, Amy Smart, Anna Faris, Chris Klein, Christopher Rodriguez Marquette, Julie Hagerty",
+    "synopsis": "While visiting his hometown during Christmas, a man comes face-to-face with his old high school crush whom he was best friends with – a woman whose rejection of him turned him into a ferocious womanizer.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Just Go with It",
     "tmdbTitle": "Just Go with It",
     "type": "movie",
