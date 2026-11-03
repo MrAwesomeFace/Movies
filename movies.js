@@ -20078,6 +20078,25 @@ const movies = [
     ]
   },
   {
+    "title": "Tin Cup",
+    "tmdbTitle": "Tin Cup",
+    "type": "movie",
+    "tmdbId": 10478,
+    "poster": "https://image.tmdb.org/t/p/w500/rB7OvMmjcBFoogleORaUqrRgp8g.jpg",
+    "year": "1996",
+    "runtime": "135m",
+    "genre": "Romance / Comedy",
+    "rated": "R",
+    "director": "Ron Shelton",
+    "cast": "Kevin Costner, Rene Russo, Don Johnson, Cheech Marin, Linda Hart, Dennis Burkley",
+    "synopsis": "A washed up golf pro working at a driving range tries to qualify for the US Open in order to win the heart of his succesful rival's girlfriend.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Titanic",
     "tmdbTitle": "Titanic",
     "type": "movie",
