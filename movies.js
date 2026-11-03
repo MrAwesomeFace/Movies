@@ -1676,6 +1676,25 @@ const movies = [
     ]
   },
   {
+    "title": "Austin Powers in Goldmember",
+    "tmdbTitle": "Austin Powers in Goldmember",
+    "type": "movie",
+    "tmdbId": 818,
+    "poster": "https://image.tmdb.org/t/p/w500/n8V61f1v7idya4WJzGEJNoIp9iL.jpg",
+    "year": "2002",
+    "runtime": "94m",
+    "genre": "Comedy / Crime",
+    "rated": "PG-13",
+    "director": "Jay Roach",
+    "cast": "Mike Myers, Beyoncé, Seth Green, Michael York, Robert Wagner, Mindy Sterling",
+    "synopsis": "The world's most shagadelic spy continues his fight against Dr. Evil. This time, the diabolical doctor and his clone, Mini-Me, team up with a new foe—'70s kingpin Goldmember. While pursuing the team of villains to stop them from world domination, Austin gets help from his dad and an old girlfriend.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Avengers, The",
     "type": "movie",
     "tmdbId": 24428,
