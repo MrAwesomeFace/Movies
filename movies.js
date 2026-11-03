@@ -2825,6 +2825,25 @@ const movies = [
     "rated": "PG-13"
   },
   {
+    "title": "Blast from the Past",
+    "tmdbTitle": "Blast from the Past",
+    "type": "movie",
+    "tmdbId": 11622,
+    "poster": "https://image.tmdb.org/t/p/w500/qVN4bbVX2tzaNbAdEJT5eOPq26c.jpg",
+    "year": "1999",
+    "runtime": "112m",
+    "genre": "Drama / Romance / Comedy",
+    "rated": "PG-13",
+    "director": "Hugh Wilson",
+    "cast": "Brendan Fraser, Alicia Silverstone, Christopher Walken, Sissy Spacek, Dave Foley, Joey Slotnick",
+    "synopsis": "Following a bomb scare in the 1960s that locked the Webbers into their bomb shelter for 35 years, Adam now ventures forth into Los Angeles to obtain food and supplies for his family, and a non-mutant wife for himself.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Blind Side, The",
     "tmdbTitle": "The Blind Side",
     "type": "movie",
