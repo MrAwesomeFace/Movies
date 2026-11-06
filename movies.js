@@ -1917,6 +1917,25 @@ const movies = [
     "tmdbTitle": "Bad Boys"
   },
   {
+    "title": "Bad Boys for Life",
+    "tmdbTitle": "Bad Boys for Life",
+    "type": "movie",
+    "tmdbId": 38700,
+    "poster": "https://image.tmdb.org/t/p/w500/y95lQLnuNKdPAzw9F9Ab8kJ80c3.jpg",
+    "year": "2020",
+    "runtime": "124m",
+    "genre": "Thriller / Action / Crime",
+    "rated": "R",
+    "director": "Bilall Fallah, Adil El Arbi",
+    "cast": "Will Smith, Martin Lawrence, Vanessa Hudgens, Alexander Ludwig, Charles Melton, Paola Nuñez",
+    "synopsis": "Marcus and Mike are forced to confront new threats, career changes, and midlife crises as they join the newly created elite team AMMO of the Miami police department to take down the ruthless Armando Armas, the vicious leader of a Miami drug cartel.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Bad Boys II",
     "tmdbTitle": "Bad Boys II",
     "type": "movie",
