@@ -152,6 +152,25 @@ const movies = [
     ]
   },
   {
+    "title": "2 Fast 2 Furious",
+    "tmdbTitle": "2 Fast 2 Furious",
+    "type": "movie",
+    "tmdbId": 584,
+    "poster": "https://image.tmdb.org/t/p/w500/6nDZExrDKIXvSAghsFKVFRVJuSf.jpg",
+    "year": "2003",
+    "runtime": "108m",
+    "genre": "Action / Crime / Thriller",
+    "rated": "PG-13",
+    "director": "John Singleton",
+    "cast": "Paul Walker, Tyrese Gibson, Eva Mendes, Cole Hauser, Ludacris, James Remar",
+    "synopsis": "It's a major double-cross when former police officer Brian O'Conner teams up with his ex-con buddy Roman Pearce to transport a shipment of \"dirty\" money for shady Miami-based import-export dealer Carter Verone. But the guys are actually working with undercover agent Monica Fuentes to bring Verone down.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "2001: A Space Odyssey",
     "tmdbTitle": "2001: A Space Odyssey",
     "type": "movie",
