@@ -210,6 +210,25 @@ const movies = [
     "rated": "PG-13"
   },
   {
+    "title": "21 Jump Street",
+    "tmdbTitle": "21 Jump Street",
+    "type": "movie",
+    "tmdbId": 64688,
+    "poster": "https://image.tmdb.org/t/p/w500/8v3Sqv9UcIUC4ebmpKWROqPBINZ.jpg",
+    "year": "2012",
+    "runtime": "109m",
+    "genre": "Action / Comedy / Crime",
+    "rated": "R",
+    "director": "Phil Lord, Christopher Miller",
+    "cast": "Jonah Hill, Channing Tatum, Brie Larson, Dave Franco, Rob Riggle, DeRay Davis",
+    "synopsis": "When cops Schmidt and Jenko join the secret Jump Street unit, they use their youthful appearances to go undercover as high school students. They trade in their guns and badges for backpacks, and set out to shut down a dangerous drug ring. But, as time goes on, Schmidt and Jenko discover that high school is nothing like it was just a few years earlier -- and, what's more, they must again confront the teenage terror and anxiety they thought they had left behind.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "25th Hour",
     "tmdbTitle": "25th Hour",
     "type": "movie",
