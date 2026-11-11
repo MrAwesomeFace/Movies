@@ -4343,6 +4343,25 @@ const movies = [
     "rated": "R"
   },
   {
+    "title": "Con Air",
+    "tmdbTitle": "Con Air",
+    "type": "movie",
+    "tmdbId": 1701,
+    "poster": "https://image.tmdb.org/t/p/w500/kOKjgrEzGOP92rVQ6srA9jtp60l.jpg",
+    "year": "1997",
+    "runtime": "116m",
+    "genre": "Action / Thriller / Crime",
+    "rated": "R",
+    "director": "Simon West",
+    "cast": "Nicolas Cage, John Cusack, John Malkovich, Ving Rhames, Mykelti Williamson, Dave Chappelle",
+    "synopsis": "Newly-paroled former US Army ranger Cameron Poe is headed back to his wife, but must fly home aboard a prison transport flight dubbed \"Jailbird\" taking the “worst of the worst” prisoners, a group described as “pure predators”, to a new super-prison. Poe faces impossible odds when the transport plane is skyjacked mid-flight by the most vicious criminals in the country led by the mastermind — genius serial killer Cyrus \"The Virus\" Grissom, and backed by black militant Diamond Dog and psychopath Billy Bedlam.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Conan the Barbarian",
     "tmdbTitle": "Conan the Barbarian",
     "type": "movie",
