@@ -14655,6 +14655,26 @@ const movies = [
     "rated": "PG-13"
   },
   {
+    "title": "Mutiny",
+    "tmdbTitle": "Mutiny",
+    "type": "movie",
+    "tmdbId": 1288445,
+    "poster": "https://image.tmdb.org/t/p/w500/pu2VxGlpGwffOx292w18b1tv96j.jpg",
+    "year": "2026",
+    "runtime": "96m",
+    "genre": "Action / Thriller",
+    "rated": "R",
+    "director": "Jean-François Richet",
+    "cast": "Jason Statham, Annabelle Wallis, Roland Møller, Ramon Tikaram, Arnas Fedaravičius, Jason Wong",
+    "synopsis": "After witnessing his billionaire boss' murder and being framed for the crime, Cole Reed boards a cargo ship on a one-man crusade to avenge his boss' death only to discover an international conspiracy.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere",
+      "Apple"
+    ]
+  },
+  {
     "title": "My Bloody Valentine",
     "type": "movie",
     "tmdbId": 14435,
