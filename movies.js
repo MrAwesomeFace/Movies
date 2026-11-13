@@ -16724,6 +16724,25 @@ const movies = [
     "tmdbTitle": "Real Steel"
   },
   {
+    "title": "Rear Window",
+    "tmdbTitle": "Rear Window",
+    "type": "movie",
+    "tmdbId": 567,
+    "poster": "https://image.tmdb.org/t/p/w500/ILVF0eJxHMddjxeQhswFtpMtqx.jpg",
+    "year": "1954",
+    "runtime": "113m",
+    "genre": "Thriller / Mystery / Drama",
+    "rated": "PG",
+    "director": "Alfred Hitchcock",
+    "cast": "James Stewart, Grace Kelly, Wendell Corey, Thelma Ritter, Raymond Burr, Judith Evelyn",
+    "synopsis": "A wheelchair-bound photographer spies on his neighbors from his apartment window and becomes convinced one of them has committed murder.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Recruit, The",
     "type": "movie",
     "tmdbId": 1647,
