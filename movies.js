@@ -2691,6 +2691,24 @@ const movies = [
     "rated": "PG"
   },
   {
+    "title": "Big Short, The",
+    "tmdbTitle": "The Big Short",
+    "type": "movie",
+    "tmdbId": 318846,
+    "poster": "https://image.tmdb.org/t/p/w500/scVEaJEwP8zUix8vgmMoJJ9Nq0w.jpg",
+    "year": "2015",
+    "runtime": "131m",
+    "genre": "Comedy / Drama",
+    "rated": "R",
+    "director": "Adam McKay",
+    "cast": "Steve Carell, Christian Bale, Ryan Gosling, Brad Pitt, Marisa Tomei, Melissa Leo",
+    "synopsis": "In 2008, Wall Street outsider Michael Burry discovers that the U.S. housing market is on the verge of collapse due to widespread defaults on subprime mortgages, causing him to bet against the housing market by throwing more than $1 billion of his investors' money into credit default swaps. His actions attract the attention of banker Jared Vennett, hedge-fund specialist Mark Baum, and other greedy opportunists. Together, these men make a fortune by taking full advantage of the impending economic collapse in America.",
+    "physical": [],
+    "digital": [
+      "Fandango"
+    ]
+  },
+  {
     "title": "Big Trouble in Little China",
     "tmdbTitle": "Big Trouble in Little China",
     "type": "movie",
