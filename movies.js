@@ -1080,6 +1080,25 @@ const movies = [
     ]
   },
   {
+    "title": "Aliens",
+    "tmdbTitle": "Aliens",
+    "type": "movie",
+    "tmdbId": 679,
+    "poster": "https://image.tmdb.org/t/p/w500/r1x5JGpyqZU8PYhbs4UcrO1Xb6x.jpg",
+    "year": "1986",
+    "runtime": "137m",
+    "genre": "Action / Thriller / Science Fiction",
+    "rated": "R",
+    "director": "James Cameron",
+    "cast": "Sigourney Weaver, Carrie Henn, Michael Biehn, Paul Reiser, Lance Henriksen, Bill Paxton",
+    "synopsis": "Ripley, the sole survivor of the Nostromo's deadly encounter with the monstrous Alien, returns to Earth after drifting through space in hypersleep for 57 years. Although her story is initially met with skepticism, she agrees to accompany a team of Colonial Marines back to LV-426.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Alita: Battle Angel",
     "tmdbTitle": "Alita: Battle Angel",
     "type": "movie",
