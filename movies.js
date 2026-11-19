@@ -1061,6 +1061,25 @@ const movies = [
     "rated": "G"
   },
   {
+    "title": "Alien",
+    "tmdbTitle": "Alien",
+    "type": "movie",
+    "tmdbId": 348,
+    "poster": "https://image.tmdb.org/t/p/w500/vfrQk5IPloGg1v9Rzbh2Eg3VGyM.jpg",
+    "year": "1979",
+    "runtime": "117m",
+    "genre": "Horror / Science Fiction",
+    "rated": "R",
+    "director": "Ridley Scott",
+    "cast": "Tom Skerritt, Sigourney Weaver, Veronica Cartwright, Harry Dean Stanton, John Hurt, Ian Holm",
+    "synopsis": "During its return to the earth, commercial spaceship Nostromo intercepts a distress signal from a distant planet. When a three-member team of the crew discovers a chamber containing thousands of eggs on the planet, a creature inside one of the eggs attacks an explorer. The entire crew is unaware of the impending nightmare set to descend upon them when the alien parasite planted inside its unfortunate host is birthed.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Alita: Battle Angel",
     "tmdbTitle": "Alita: Battle Angel",
     "type": "movie",
