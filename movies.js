@@ -8132,6 +8132,25 @@ const movies = [
     ]
   },
   {
+    "title": "Furious, The",
+    "tmdbTitle": "The Furious",
+    "type": "movie",
+    "tmdbId": 1280738,
+    "poster": "https://image.tmdb.org/t/p/w500/ivQ1Z3lI1xWvAeGDHBw3CCYZDGJ.jpg",
+    "year": "2026",
+    "runtime": "113m",
+    "genre": "Action / Crime / Thriller",
+    "rated": "R",
+    "director": "Kenji Tanigaki",
+    "cast": "Xie Miao, Joe Taslim, Yang Enyou, Yayan Ruhian, JeeJa Yanin, Brian Le",
+    "synopsis": "When Wang Wei's daughter is abducted by a criminal organization and law enforcement declines to intervene due to corruption, Wei embarks on a solo mission to find her. His sole ally is Navin, a determined journalist whose wife has also mysteriously disappeared. Together, this improbable pair confronts the kidnappers in a fierce martial arts confrontation, driven by an intense desire for retribution.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "G.I. Joe: Retaliation",
     "type": "movie",
     "tmdbId": 72559,
