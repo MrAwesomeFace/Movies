@@ -14569,6 +14569,28 @@ const movies = [
     "tmdbTitle": "Mortal Kombat"
   },
   {
+    "title": "Mortal Kombat II",
+    "tmdbTitle": "Mortal Kombat II",
+    "type": "movie",
+    "tmdbId": 931285,
+    "poster": "https://image.tmdb.org/t/p/w500/hwRdDFIhaEmpRgoki805YvyyjZf.jpg",
+    "year": "2026",
+    "runtime": "116m",
+    "genre": "Action / Fantasy / Adventure",
+    "rated": "R",
+    "director": "Simon McQuoid",
+    "cast": "Karl Urban, Adeline Rudolph, Ludi Lin, Jessica McNamee, Martyn Ford, Josh Lawson",
+    "synopsis": "The fan favorite champions—now joined by Johnny Cage himself—are pitted against one another in the ultimate, no-holds barred, gory battle to defeat the dark rule of Shao Kahn that threatens the very existence of the Earthrealm and its defenders.",
+    "physical": [
+      "4K"
+    ],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere",
+      "Prime"
+    ]
+  },
+  {
     "title": "Mr. & Mrs. Smith",
     "type": "movie",
     "tmdbId": 787,
