@@ -19781,6 +19781,31 @@ const movies = [
     "rated": "PG"
   },
   {
+    "title": "Super Mario Galaxy Movie, The",
+    "tmdbTitle": "The Super Mario Galaxy Movie",
+    "type": "movie",
+    "tmdbId": 1226863,
+    "poster": "https://image.tmdb.org/t/p/w500/eJGWx219ZcEMVQJhAgMiqo8tYY.jpg",
+    "year": "2026",
+    "runtime": "98m",
+    "genre": "Family / Comedy / Adventure / Fantasy / Animation",
+    "rated": "PG",
+    "director": "Aaron Horvath, Michael Jelenic",
+    "cast": "Chris Pratt, Charlie Day, Anya Taylor-Joy, Jack Black, Keegan-Michael Key, Benny Safdie",
+    "synopsis": "Having thwarted Bowser's previous plot to marry Princess Peach, Mario and Luigi now face a fresh threat in Bowser Jr., who is determined to liberate his father from captivity and restore the family legacy. Alongside companions new and old, the brothers travel across the stars to stop the young heir's crusade.",
+    "physical": [
+      "Blu-ray",
+      "4K"
+    ],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ],
+    "categories": [
+      "animated"
+    ]
+  },
+  {
     "title": "Super Troopers",
     "tmdbTitle": "Super Troopers",
     "type": "movie",
