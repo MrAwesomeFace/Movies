@@ -15702,6 +15702,25 @@ const movies = [
     "rated": "G"
   },
   {
+    "title": "Olympus Has Fallen",
+    "tmdbTitle": "Olympus Has Fallen",
+    "type": "movie",
+    "tmdbId": 117263,
+    "poster": "https://image.tmdb.org/t/p/w500/u3GTFGwesNBNd0t1hiLaEk1iqZU.jpg",
+    "year": "2013",
+    "runtime": "120m",
+    "genre": "Action / Thriller",
+    "rated": "R",
+    "director": "Antoine Fuqua",
+    "cast": "Gerard Butler, Aaron Eckhart, Finley Jacobsen, Dylan McDermott, Rick Yune, Morgan Freeman",
+    "synopsis": "When the White House (Secret Service Code: \"Olympus\") is captured by a terrorist mastermind and the President is kidnapped, disgraced former Presidential guard Mike Banning finds himself trapped within the building. As the national security team scrambles to respond, they are forced to rely on Banning's inside knowledge to help retake the White House, save the President and avert an even bigger disaster.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Open Season",
     "tmdbTitle": "Open Season: Call of Nature",
     "type": "tv",
