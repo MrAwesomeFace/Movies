@@ -15950,6 +15950,25 @@ const movies = [
     ]
   },
   {
+    "title": "Parker",
+    "tmdbTitle": "Parker",
+    "type": "movie",
+    "tmdbId": 119283,
+    "poster": "https://image.tmdb.org/t/p/w500/ocTaizFzASVPClHsx6VRBi5yP9Z.jpg",
+    "year": "2013",
+    "runtime": "118m",
+    "genre": "Action / Crime",
+    "rated": "R",
+    "director": "Taylor Hackford",
+    "cast": "Jason Statham, Jennifer Lopez, Michael Chiklis, Wendell Pierce, Clifton Collins Jr., Bobby Cannavale",
+    "synopsis": "A thief with a unique code of professional ethics is double-crossed by his crew and left for dead. Assuming a new disguise and forming an unlikely alliance with a woman on the inside, he looks to hijack the score of the crew's latest heist.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Parks and Recreation - Complete Fifth Season",
     "tmdbTitle": "Parks and Recreation",
     "type": "tv",
