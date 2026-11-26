@@ -8694,6 +8694,25 @@ const movies = [
     "rated": "PG"
   },
   {
+    "title": "Gran Turismo",
+    "tmdbTitle": "Gran Turismo",
+    "type": "movie",
+    "tmdbId": 980489,
+    "poster": "https://image.tmdb.org/t/p/w500/51tqzRtKMMZEYUpSYkrUE7v9ehm.jpg",
+    "year": "2023",
+    "runtime": "135m",
+    "genre": "Drama",
+    "rated": "PG-13",
+    "director": "Neill Blomkamp",
+    "cast": "Archie Madekwe, David Harbour, Orlando Bloom, Djimon Hounsou, Darren Barnet, Maeve Courtier-Lilley",
+    "synopsis": "The ultimate wish-fulfillment tale of a teenage Gran Turismo player whose gaming skills won him a series of Nissan competitions to become an actual professional racecar driver.",
+    "physical": [],
+    "digital": [
+      "Fandango",
+      "Movies Anywhere"
+    ]
+  },
+  {
     "title": "Grass Is Greener, The",
     "tmdbTitle": "The Grass Is Greener",
     "type": "movie",
