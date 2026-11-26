@@ -2062,7 +2062,9 @@ const movies = [
     "physical": [
       "DVD"
     ],
-    "digital": [],
+    "digital": [
+      "Fandango"
+    ],
     "categories": [
       "christmas"
     ],
